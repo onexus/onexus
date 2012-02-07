@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+	<cm:property-placeholder persistent-id="org.onexus.resource.manager.fs" update-strategy="reload">
+		<cm:default-properties>
+			<cm:property name="baseUrl" value="http://localhost:8181/onx" />
+			<cm:property name="basePath" value="workspaces" />
+		</cm:default-properties>
+	</cm:property-placeholder>
+
+	<reference id="serializerRef" interface="org.onexus.core.IResourceSerializer" />
+	
+	<service id="org.onexus.resource.manager.fs" interface="org.onexus.core.IResourceManager">
+		<bean class="org.onexus.resource.manager.fs.ResourceManager" init-method="init">
+			<property name="baseUrl" value="${baseUrl}" />
+			<property name="basePath" value="${basePath}" />
+			<property name="serializer" ref="serializerRef" />
+		</bean>
+	</service>
+	
+	<service interface="org.onexus.core.ISourceManager">
+		<bean class="org.onexus.resource.manager.fs.SourceManager" />
+	</service>	
+	
+</blueprint>

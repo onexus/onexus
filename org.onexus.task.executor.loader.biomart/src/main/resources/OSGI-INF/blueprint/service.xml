@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+	<cm:property-placeholder persistent-id="org.onexus.task.executor.loader.biomart" update-strategy="reload">
+		<cm:default-properties>
+			<cm:property name="defaultMartService" value="http://www.biomart.org/biomart/martservice" />
+			<cm:property name="defaultVirtualSchema" value="default" />			
+		</cm:default-properties>
+	</cm:property-placeholder>
+
+	<service id="org.onexus.task.executor.loader.biomart" interface="org.onexus.core.ITaskExecutor" >
+		<bean class="org.onexus.task.executor.loader.biomart.TaskExecutor" init-method="init">
+			<property name="defaultMartService" value="${defaultMartService}"></property>
+			<property name="defaultVirtualSchema" value="${defaultVirtualSchema}"></property>
+		</bean>
+	</service>
+</blueprint>

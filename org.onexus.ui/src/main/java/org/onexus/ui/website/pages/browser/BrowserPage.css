@@ -1,0 +1,112 @@
+
+div.data > div.tab-row {
+	height: 28px;
+	margin: 0px 0px;
+	padding: 0px 0px;
+}
+
+div.data > div.tab-row ul {
+	margin: 0px 0px;
+	padding: 0px 0px;
+	list-style:none;
+}
+
+div.data > div.tab-row ul li {
+	float:left;
+	height: 20px;
+	margin: 0px 0px 0px 0px;
+	padding: 4px 12px 4px 12px;
+	background-color: #f4f4f4;
+	border: 1px solid #e4e0e1;
+}
+
+div.data > div.tab-row ul li select {
+    width: 130px;
+color:#868686;
+font-size:12px;
+font-weight:bold;
+text-decoration:none;
+cursor:pointer;	
+	background-color: #f4f4f4;
+border:0px;
+}
+
+div.data > div.tab-row ul { 
+	-moz-box-shadow: -4px 7px 7px #c3c3c3;
+	-o-box-shadow: -4px 7px 7px #c3c3c3;
+	-icab-box-shadow: -4px 7px 7px #c3c3c3;
+	-khtml-box-shadow: -4px 7px 7px #c3c3c3;
+	box-shadow: -4px 7px 7px #c3c3c3;
+	overflow: auto;
+}
+
+div.data > div.tab-row ul li:hover select {
+  background-color: #e4e4e4;
+  color: #000000;
+}
+
+div.data > div.tab-row ul li.selected select {
+	background-color: #FFFFFF;
+	color: #475560;
+	border: 1px solid red;
+}
+
+div.data > div.tab-row ul li:hover {
+	background-color: #e4e4e4;
+}
+
+div.data > div.tab-row ul li:hover a {
+	color: #000000;
+}
+
+div.data > div.tab-row ul li a {
+	color: #868686;
+	font-weight: bold;
+	text-decoration: none;
+	font-size: 16px;
+}
+
+div.data > div.tab-row ul li {
+	border: 1px solid #BBB;
+}
+
+div.data > div.tab-row ul li.selected {
+	background-color: #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+div.data > div.tab-row ul li.selected a {
+	color: #475560;
+}
+
+div.data > div.tab-panel {
+	clear: left;
+	background-color: #FFFFFF;
+	margin: 0px 0px;
+	padding: 0px 0px;
+	/* la seguent linia es un path pel Firefox 3.1 (en principi no caldira) */
+	border: 1px solid white;
+	
+	-moz-box-shadow: -4px 7px 7px #c3c3c3;
+	-o-box-shadow: -4px 7px 7px #c3c3c3;
+	-icab-box-shadow: -4px 7px 7px #c3c3c3;
+	-khtml-box-shadow: -4px 7px 7px #c3c3c3;
+	box-shadow: -4px 7px 7px #c3c3c3;
+}
+
+div.position {
+	padding: 10px 10px;
+    border-bottom: 1px solid #6b95a5;
+    border-top: 1px solid #6b95a5;
+	background-color: #FFFFFF;
+	overflow: auto;
+	margin-bottom: 15px;
+}
+
+div.shadowbox {
+	-moz-box-shadow: -4px 7px 7px #c3c3c3;
+	-o-box-shadow: -4px 7px 7px #c3c3c3;
+	-icab-box-shadow: -4px 7px 7px #c3c3c3;
+	-khtml-box-shadow: -4px 7px 7px #c3c3c3;
+	box-shadow: -4px 7px 7px #c3c3c3;
+}

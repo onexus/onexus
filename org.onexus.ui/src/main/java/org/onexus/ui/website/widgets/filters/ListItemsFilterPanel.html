@@ -1,0 +1,27 @@
+ 
+<html xmlns:wicket>
+<wicket:panel>
+<div style="margin: 5% 5%;">
+	<form wicket:id="simpleUpload">
+		<fieldset>
+			<!--<legend>Upload a list of <span wicket:id="type">modules</span></legend>-->
+			<p>Filter Name : <input wicket:id="filterName" /></p>
+			<p wicket:id="properties">Select type of ID: <select wicket:id="select"></select></p>
+			<p>Write values separated by a comma or one per line<br /><textarea wicket:id="textarea" cols="60" rows="8"></textarea></p>
+			<p>or upload a file<br/><input wicket:id="fileInput" id="upload" type="file" /></p>
+		</fieldset>
+
+		<span style="width: 50%">
+		<input type="button" wicket:id="okButton" value="Create the filter" />
+		</span>
+		<span style="width: 50%; text-align: right;">
+		<input type="button" wicket:id="cancelButton" value="Cancel" />
+		</span>
+		<!--<input style="margin-left:250px;"  type="submit" value="Create the filter" />-->
+		<span wicket:id="p-feedback" />
+	</form>
+	
+	<div><span wicket:id="uploadFeedback" /></div>
+</div>
+</wicket:panel>
+</html>

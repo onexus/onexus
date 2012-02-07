@@ -1,0 +1,99 @@
+<website>
+<title>Sample website</title>
+<pages>
+<page-browser>
+	<id>sample</id>
+    <name>Sample</name>
+    <tabs>
+		<tab-topleft>
+			<id>widgets</id>
+			<title>Widgets</title>
+			<widgets>
+
+				<widget-bookmark>
+					<id>bookmark</id>
+					<region>left</region>
+				</widget-bookmark>
+
+				<widget-export>
+					<id>export</id>
+					<region>left</region>
+				</widget-export>
+
+				<widget-filters>
+					<id>filters</id>
+					<region>left</region>
+					<title>Filters checkbox</title>
+				</widget-filters>
+
+				<widget-filters-selector>
+					<id>filters-selector</id>
+					<region>left</region>
+					<title>Filters selector</title>
+				</widget-filters-selector>
+
+				<widget-search>	
+					<id>search</id>
+					<region>top</region>
+					<fields>
+						<search-field>
+							<collection>tcga-coad</collection>
+							<fieldNames>GeneID</fieldNames>
+						</search-field>
+					</fields>
+				</widget-search>
+
+				<widget-tags>
+					<id>tags</id>
+					<region>left</region>
+				</widget-tags>
+
+				<widget-text>
+					<id>text</id>
+					<region>left</region>
+					<title>Text Widget</title>
+					<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at neque eu orci pharetra consectetur. Ut tincidunt nisi vitae mi malesuada condimentum. Etiam ultrices tellus id tortor hendrerit a cursus lorem interdum.</text>
+				</widget-text>
+
+				<widget-viewer-selector>
+					<id>viewer-selector</id>
+					<region>top-right</region>
+				</widget-viewer-selector>
+				
+			</widgets>
+
+			<viewers>
+                                <viewer-table>
+                                        <id>gene-expression</id>
+                                        <title>Gene expression</title>
+                                        <mainCollection>tcga-coad</mainCollection>
+                                        <columns>
+                                                <column-tags>
+                                                        <collection>tcga-coad</collection>
+                                                </column-tags>
+                                                <column>
+                                                        <collection>tcga-coad</collection>
+                                                        <fieldNames>GeneID,*{^GeneExpression(.*)}</fieldNames>
+                                                </column>
+                                        </columns>
+                                </viewer-table>
+				<viewer-table>
+					<id>allcolumns</id>
+					<title>All columns</title>
+					<mainCollection>tcga-coad</mainCollection>
+					<columns>
+						<column-tags>
+							<collection>tcga-coad</collection>
+						</column-tags>
+						<column>
+							<collection>tcga-coad</collection>
+							<fieldNames>*{.*}</fieldNames>
+						</column>
+					</columns>
+				</viewer-table>
+			</viewers>
+		</tab-topleft>
+	</tabs>
+</page-browser>
+</pages>
+</website>
