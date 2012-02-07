@@ -29,11 +29,9 @@ import org.onexus.ui.website.formaters.ITextFormater;
 import org.onexus.ui.website.formaters.StringFormater;
 
 /**
- * 
  * Simple field decorator using a ITextFormater.
- * 
+ *
  * @author Jordi Deu-Pons
- * 
  */
 public class FieldDecorator implements IDecorator {
 
@@ -42,58 +40,55 @@ public class FieldDecorator implements IDecorator {
     private String cssClass;
 
     /**
-     * @param field
-     *            The field to use to show the value.
+     * @param field The field to use to show the value.
      */
     public FieldDecorator(Field field) {
-	this(field, null, null);
+        this(field, null, null);
     }
 
     /**
-     * @param field
-     *            The field to use to show the value.
-     * @param cssClass
-     *            The CSS class of the cell.
+     * @param field    The field to use to show the value.
+     * @param cssClass The CSS class of the cell.
      */
     public FieldDecorator(Field field, String cssClass) {
-	this(field, null, cssClass);
+        this(field, null, cssClass);
     }
 
     public FieldDecorator(Field field, ITextFormater textFormater) {
-	this(field, textFormater, null);
+        this(field, textFormater, null);
     }
 
     public FieldDecorator(Field field, ITextFormater textFormater,
-	    String cssClass) {
-	super();
-	this.field = field;
-	this.textFormater = (textFormater == null ? getTextFormater(field) : textFormater);
-	this.cssClass = cssClass;
+                          String cssClass) {
+        super();
+        this.field = field;
+        this.textFormater = (textFormater == null ? getTextFormater(field) : textFormater);
+        this.cssClass = cssClass;
     }
 
     protected Object getValue(IEntity data) {
-	return (data == null ? null : data.get(field.getName()));
+        return (data == null ? null : data.get(field.getName()));
     }
 
     public String getFormatValue(final IEntity entity) {
 
-	Object value = getValue(entity);
+        Object value = getValue(entity);
 
-	if (textFormater != null) {
-	    return textFormater.format(value);
-	}
+        if (textFormater != null) {
+            return textFormater.format(value);
+        }
 
-	if (value == null) {
-	    return "";
-	}
+        if (value == null) {
+            return "";
+        }
 
-	return value.toString();
+        return value.toString();
 
     }
 
     @Override
     public String getColor(final IEntity data) {
-	return "#000000";
+        return "#000000";
     }
 
     @Override
@@ -102,45 +97,45 @@ public class FieldDecorator implements IDecorator {
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer,
-	    String componentId, IModel<IEntity> data) {
-	Object value = getValue(data.getObject());
-	cellContainer.add(new Label(componentId, getFormatValue(data
-		.getObject())));
-	cellContainer.add(new AttributeModifier("title", new Model<String>(
-		(value == null ? "No data" : value.toString()))));
+                             String componentId, IModel<IEntity> data) {
+        Object value = getValue(data.getObject());
+        cellContainer.add(new Label(componentId, getFormatValue(data
+                .getObject())));
+        cellContainer.add(new AttributeModifier("title", new Model<String>(
+                (value == null ? "No data" : value.toString()))));
 
-	if (cssClass != null) {
-	    cellContainer.add(new AttributeModifier("class", new Model<String>(
-		    cssClass)));
-	}
+        if (cssClass != null) {
+            cellContainer.add(new AttributeModifier("class", new Model<String>(
+                    cssClass)));
+        }
     }
 
     public Field getValueProperty() {
-	return field;
+        return field;
     }
 
     @Deprecated
     private static ITextFormater getTextFormater(Field field) {
-	if (field.getDataType().equals(String.class)) {
-	    int maxLength;
-	    String value = field.getProperty("MAX_LENGTH");
+        if (field.getDataType().equals(String.class)) {
+            int maxLength;
+            String value = field.getProperty("MAX_LENGTH");
 
-	    try {
-		maxLength = Integer.valueOf(value);
-	    } catch (Exception e) {
-		maxLength = 20;
-	    }
+            try {
+                maxLength = Integer.valueOf(value);
+            } catch (Exception e) {
+                maxLength = 20;
+            }
 
-	    return new StringFormater(maxLength, true);
-	}
+            return new StringFormater(maxLength, true);
+        }
 
-	if (field.getDataType().equals(Double.class)
-		|| field.getDataType().equals(Long.class)
-		|| field.getDataType().equals(Integer.class)) {
-	    return DoubleFormater.INSTANCE;
-	}
+        if (field.getDataType().equals(Double.class)
+                || field.getDataType().equals(Long.class)
+                || field.getDataType().equals(Integer.class)) {
+            return DoubleFormater.INSTANCE;
+        }
 
-	return null;
+        return null;
     }
 
 }

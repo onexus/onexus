@@ -25,15 +25,15 @@ public abstract class WidgetConfig implements IWebsiteConfig {
     private String region;
 
     public WidgetConfig() {
-	super();
+        super();
     }
 
     public WidgetConfig(String id, String region) {
-	super();
-	this.id = id;
-	this.region = region;
+        super();
+        this.id = id;
+        this.region = region;
     }
-    
+
     public String getId() {
         return id;
     }
@@ -43,11 +43,11 @@ public abstract class WidgetConfig implements IWebsiteConfig {
     }
 
     public String getRegion() {
-	return region;
+        return region;
     }
 
     public void setRegion(String region) {
-	this.region = region;
+        this.region = region;
     }
 
     @Override
@@ -55,7 +55,6 @@ public abstract class WidgetConfig implements IWebsiteConfig {
 
     @Override
     public abstract WidgetStatus createEmptyStatus();
-    
-    
+
 
 }

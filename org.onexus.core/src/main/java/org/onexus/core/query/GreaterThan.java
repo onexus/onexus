@@ -22,21 +22,21 @@ public class GreaterThan extends FieldFilter {
     private Object value;
 
     public GreaterThan() {
-	this(null, null, null);
+        this(null, null, null);
     }
 
     public GreaterThan(String collectionId, String fieldName, Object value) {
-	super(collectionId, fieldName);
-	this.value = value;
+        super(collectionId, fieldName);
+        this.value = value;
     }
 
     public Object getValue() {
-	return value;
+        return value;
     }
 
     @Override
     public String toString() {
-	return getFieldName() + " > " + getValue();
+        return getFieldName() + " > " + getValue();
     }
 
 }

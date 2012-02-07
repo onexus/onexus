@@ -17,14 +17,13 @@
  */
 package org.onexus.ui;
 
+import org.onexus.core.IResourceSerializer;
+import org.osgi.framework.ServiceReference;
+
+import javax.swing.event.TreeModelListener;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.swing.event.TreeModelListener;
-
-import org.onexus.core.IResourceSerializer;
-import org.osgi.framework.ServiceReference;
 
 public class DefaultResourceRegister implements IResourceRegister {
 
@@ -36,69 +35,69 @@ public class DefaultResourceRegister implements IResourceRegister {
 
     @Override
     public void register(Class<?> resourceType) {
-	serializer.register(resourceType);
-	registeredLoaders.add(resourceType.getClassLoader());
+        serializer.register(resourceType);
+        registeredLoaders.add(resourceType.getClassLoader());
     }
 
     @Override
     public ClassLoader getResourcesClassLoader() {
-	return classLoader;
+        return classLoader;
     }
 
     public IResourceSerializer getSerializer() {
-	return serializer;
+        return serializer;
     }
 
     public void setSerializer(IResourceSerializer serializer) {
-	this.serializer = serializer;
+        this.serializer = serializer;
     }
 
     public List<IResourceActivator> getResourceActivators() {
-	return resourceActivators;
+        return resourceActivators;
     }
 
     public void setResourceActivators(List<IResourceActivator> resourceActivators) {
-	this.resourceActivators = resourceActivators;
+        this.resourceActivators = resourceActivators;
     }
 
     public void bindActivators(ServiceReference serviceRef) {
 
-	if (resourceActivators != null) {
-	    for (IResourceActivator ra : resourceActivators) {
-		ra.bind(this);
-	    }
-	}
+        if (resourceActivators != null) {
+            for (IResourceActivator ra : resourceActivators) {
+                ra.bind(this);
+            }
+        }
 
     }
 
     public void unbindActivators(ServiceReference serviceRef) {
 
-	if (resourceActivators != null) {
-	    for (IResourceActivator ra : resourceActivators) {
-		ra.unbind(this);
-	    }
-	}
+        if (resourceActivators != null) {
+            for (IResourceActivator ra : resourceActivators) {
+                ra.unbind(this);
+            }
+        }
 
     }
 
     private class RegisteredClassLoader extends ClassLoader {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Class loadClass(String name) throws ClassNotFoundException {
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        public Class loadClass(String name) throws ClassNotFoundException {
 
-	    for (ClassLoader loader : registeredLoaders) {
-		try {
-		    return loader.loadClass(name);
-		} catch (ClassNotFoundException e) {
-		    // Continue
-		}
-	    }
+            for (ClassLoader loader : registeredLoaders) {
+                try {
+                    return loader.loadClass(name);
+                } catch (ClassNotFoundException e) {
+                    // Continue
+                }
+            }
 
-	    // Without this we have a ClassNotFoundException when
-	    // unserializating
-	    // the DefaultTreeModel object that uses WorkspaceTree. (may be the
-	    // problem was that we weren't importing javax.swing.event package)
-	    return TreeModelListener.class.getClassLoader().loadClass(name);
-	}
+            // Without this we have a ClassNotFoundException when
+            // unserializating
+            // the DefaultTreeModel object that uses WorkspaceTree. (may be the
+            // problem was that we weren't importing javax.swing.event package)
+            return TreeModelListener.class.getClassLoader().loadClass(name);
+        }
     }
 }

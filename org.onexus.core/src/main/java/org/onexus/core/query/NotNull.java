@@ -22,16 +22,16 @@ public class NotNull extends Filter {
     private String[] cellCollections;
 
     public NotNull() {
-	this(null, new String[0]);
+        this(null, new String[0]);
     }
 
     public NotNull(String axisCollection, String... collectionIds) {
-	super(axisCollection);
-	this.cellCollections = collectionIds;
+        super(axisCollection);
+        this.cellCollections = collectionIds;
     }
 
     public String[] getCellCollections() {
-	return cellCollections;
+        return cellCollections;
     }
 
 }

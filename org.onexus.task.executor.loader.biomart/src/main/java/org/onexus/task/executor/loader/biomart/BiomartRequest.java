@@ -22,51 +22,51 @@ import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Task;
 
 public class BiomartRequest {
-    
+
     private Collection collection;
     private String martService;
     private StringBuilder query;
 
     public BiomartRequest(Collection collection, String defaultMartService,
-	    String defaultVirtualSchema) {
-	
-	this.collection = collection;
-	
-	Task task = collection.getTask();
-	String parameterMartService = task.getParameter("MART_SERVICE");
-	String parameterVirtualSchema = task.getParameter("VIRTUAL_SCHEMA");
-	String parameterDataset = task.getParameter("DATASET");
-	String parameterQuery = task.getParameter("QUERY");
-	
-	this.martService = (parameterMartService == null ? defaultMartService : parameterMartService);
-	
-	this.query = new StringBuilder();
-	this.query.append("query=");
-	
-	if (parameterQuery != null) {
-	    this.query.append(parameterQuery);
-	} else {
-	    
-	    String virtualSchema = (parameterVirtualSchema == null ? defaultVirtualSchema : parameterVirtualSchema);
-	    String dataset = (parameterDataset == null ? collection.getName() : parameterDataset );
-	    
-	    this.query.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-	    this.query.append("<!DOCTYPE Query>");
-	    this.query.append("<Query  virtualSchemaName = \"").append(virtualSchema).append("\" formatter=\"TSV\" header = \"0\" uniqueRows = \"0\" count = \"\" datasetConfigVersion = \"0.6\" >");
-	    this.query.append("<Dataset name = \"").append(dataset).append("\" interface = \"default\" >");
-	    
-	    for (Field field : collection.getFields()) {
-		this.query.append("<Attribute name = \"").append(field.getName()).append("\" />");
-	    }
-	    
-	    this.query.append("</Dataset>");
-	    this.query.append("</Query>");
-	}
-	
+                          String defaultVirtualSchema) {
+
+        this.collection = collection;
+
+        Task task = collection.getTask();
+        String parameterMartService = task.getParameter("MART_SERVICE");
+        String parameterVirtualSchema = task.getParameter("VIRTUAL_SCHEMA");
+        String parameterDataset = task.getParameter("DATASET");
+        String parameterQuery = task.getParameter("QUERY");
+
+        this.martService = (parameterMartService == null ? defaultMartService : parameterMartService);
+
+        this.query = new StringBuilder();
+        this.query.append("query=");
+
+        if (parameterQuery != null) {
+            this.query.append(parameterQuery);
+        } else {
+
+            String virtualSchema = (parameterVirtualSchema == null ? defaultVirtualSchema : parameterVirtualSchema);
+            String dataset = (parameterDataset == null ? collection.getName() : parameterDataset);
+
+            this.query.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            this.query.append("<!DOCTYPE Query>");
+            this.query.append("<Query  virtualSchemaName = \"").append(virtualSchema).append("\" formatter=\"TSV\" header = \"0\" uniqueRows = \"0\" count = \"\" datasetConfigVersion = \"0.6\" >");
+            this.query.append("<Dataset name = \"").append(dataset).append("\" interface = \"default\" >");
+
+            for (Field field : collection.getFields()) {
+                this.query.append("<Attribute name = \"").append(field.getName()).append("\" />");
+            }
+
+            this.query.append("</Dataset>");
+            this.query.append("</Query>");
+        }
+
     }
-    
+
     public Collection getCollection() {
-	return collection;
+        return collection;
     }
 
     public String getMartService() {
@@ -76,7 +76,6 @@ public class BiomartRequest {
     public String getQuery() {
         return query.toString();
     }
-    
-    
+
 
 }

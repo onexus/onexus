@@ -27,39 +27,39 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
     private String resourceURI;
 
     public ResourceModel() {
-	super();
+        super();
     }
 
     public ResourceModel(String resourceURI) {
-	super();
-	this.resourceURI = resourceURI;
+        super();
+        this.resourceURI = resourceURI;
     }
 
     public ResourceModel(Resource resource) {
-	super(resource);
+        super(resource);
     }
 
     @Override
     protected Resource load() {
 
-	if (resourceURI != null) {
-	    return getResourceManager().load(Resource.class, resourceURI);
-	}
+        if (resourceURI != null) {
+            return getResourceManager().load(Resource.class, resourceURI);
+        }
 
-	return null;
+        return null;
     }
 
     @Override
     protected void onDetach() {
-	if (getObject() != null) {
-	    this.resourceURI = getObject().getURI();
-	} else {
-	    this.resourceURI = null;
-	}
+        if (getObject() != null) {
+            this.resourceURI = getObject().getURI();
+        } else {
+            this.resourceURI = null;
+        }
     }
 
     private IResourceManager getResourceManager() {
-	return OnexusWebSession.get().getResourceManager();
+        return OnexusWebSession.get().getResourceManager();
     }
 
 }

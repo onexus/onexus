@@ -24,19 +24,19 @@ public class ViewerSelectorWidgetStatus extends WidgetStatus {
     private String viewer;
 
     public ViewerSelectorWidgetStatus() {
-	super();
+        super();
     }
 
     public ViewerSelectorWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
     public String getViewer() {
-	return viewer;
+        return viewer;
     }
 
     public void setViewer(String viewer) {
-	this.viewer = viewer;
+        this.viewer = viewer;
     }
 
 }

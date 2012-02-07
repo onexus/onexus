@@ -30,60 +30,60 @@ public class FieldHeader extends ElementHeader {
     private Field attribute;
 
     public FieldHeader(Collection collection, Field field, IHeader parentHeader) {
-	super(field, parentHeader, new StringFormater(getMaxLength(field),
-		false));
-	this.attribute = field;
-	this.dataType = collection;
+        super(field, parentHeader, new StringFormater(getMaxLength(field),
+                false));
+        this.attribute = field;
+        this.dataType = collection;
     }
 
     public FieldHeader(Collection dataType, Field attribute) {
-	this(dataType, attribute, new CollectionHeader(dataType));
+        this(dataType, attribute, new CollectionHeader(dataType));
     }
 
     @Override
     public String getSortProperty() {
-	StringBuilder sortProperty = new StringBuilder();
+        StringBuilder sortProperty = new StringBuilder();
 
-	sortProperty.append(dataType.getURI()).append(SORT_PROPERTY_SEPARATOR);
-	sortProperty.append(attribute.getName());
+        sortProperty.append(dataType.getURI()).append(SORT_PROPERTY_SEPARATOR);
+        sortProperty.append(attribute.getName());
 
-	return sortProperty.toString();
+        return sortProperty.toString();
     }
 
     @Override
     public String getLabel() {
-	String label = attribute.getShortName();
-	return (label == null ? attribute.getName() : label);
+        String label = attribute.getShortName();
+        return (label == null ? attribute.getName() : label);
     }
 
     @Override
     public String getTitle() {
-	String title = attribute.getTitle();
-	return (title == null ? attribute.getName() : title);
+        String title = attribute.getTitle();
+        return (title == null ? attribute.getName() : title);
     }
 
     @Override
     public boolean isSortable() {
-	String annotation = attribute.getProperty("SORTABLE");
-	return (annotation == null ? true : annotation.equalsIgnoreCase("TRUE"));
+        String annotation = attribute.getProperty("SORTABLE");
+        return (annotation == null ? true : annotation.equalsIgnoreCase("TRUE"));
     }
 
     public static int getMaxLength(Field attribute) {
-	int maxLength;
-	String value = attribute.getProperty("MAX_LENGTH");
+        int maxLength;
+        String value = attribute.getProperty("MAX_LENGTH");
 
-	try {
-	    maxLength = Integer.valueOf(value);
-	} catch (Exception e) {
-	    maxLength = DEFAULT_MAX_LENGTH;
-	}
+        try {
+            maxLength = Integer.valueOf(value);
+        } catch (Exception e) {
+            maxLength = DEFAULT_MAX_LENGTH;
+        }
 
-	return maxLength;
+        return maxLength;
 
     }
 
     public Collection getDataType() {
-	return dataType;
+        return dataType;
     }
 
 }

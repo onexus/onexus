@@ -17,12 +17,12 @@
  */
 package org.onexus.ui.workspace.tree;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Workspace;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class WorkspaceListModel extends AbstractReadOnlyModel<List<Workspace>> {
 
@@ -31,13 +31,13 @@ public abstract class WorkspaceListModel extends AbstractReadOnlyModel<List<Work
     @Override
     public List<Workspace> getObject() {
 
-	if (workspaces == null) {
-	    workspaces = new ArrayList<Workspace>();
-	    
-	    workspaces = getResourceManager().loadChildren(Workspace.class, null);
-	}
+        if (workspaces == null) {
+            workspaces = new ArrayList<Workspace>();
 
-	return workspaces;
+            workspaces = getResourceManager().loadChildren(Workspace.class, null);
+        }
+
+        return workspaces;
     }
 
     protected abstract IResourceManager getResourceManager();

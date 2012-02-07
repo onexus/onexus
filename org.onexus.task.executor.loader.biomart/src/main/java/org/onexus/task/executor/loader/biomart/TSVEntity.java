@@ -17,126 +17,126 @@
  */
 package org.onexus.task.executor.loader.biomart;
 
-import java.lang.reflect.Constructor;
-import java.util.List;
-
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 
+import java.lang.reflect.Constructor;
+import java.util.List;
+
 public class TSVEntity implements IEntity {
-    
+
     private String line;
     private Collection collection;
-    
+
     protected String NULL_CHAR = "-";
     protected String SEPARATOR = "\t";
 
     public TSVEntity(Collection collection, String line) {
-	super();
-	this.collection = collection;
-	this.line = line;
+        super();
+        this.collection = collection;
+        this.line = line;
     }
 
     @Override
     public String getId() {
-	return null;
+        return null;
     }
 
     @Override
     public Collection getCollection() {
-	return collection;
+        return collection;
     }
 
     @Override
     public Object get(String fieldName) {
 
-	List<Field> fields = collection.getFields();
-	
-	int position=0;
-	Field field = null;
-	for(; position < fields.size(); position++) {
-	    field = fields.get(position);
-	    if (field.getName().equals(fieldName)) {
-		break;
-	    }
-	}
-	
-	String value = parseField(line, position);
-	
-	if (value == null) {
-	    return null;
-	} else {
+        List<Field> fields = collection.getFields();
 
-	    // Remove "
-	    value = value.replace('"', ' ');
+        int position = 0;
+        Field field = null;
+        for (; position < fields.size(); position++) {
+            field = fields.get(position);
+            if (field.getName().equals(fieldName)) {
+                break;
+            }
+        }
 
-	    // Trim blank spaces
-	    value = value.trim();
+        String value = parseField(line, position);
 
-	}
+        if (value == null) {
+            return null;
+        } else {
 
-	try {
+            // Remove "
+            value = value.replace('"', ' ');
 
-	    Class<?> fieldClass = field.getDataType();
+            // Trim blank spaces
+            value = value.trim();
 
-	    // TODO use adapter factory as in SQL manager
-	    if (fieldClass.equals(Boolean.class)) {
-		return Boolean.valueOf(value.trim().equalsIgnoreCase("1"));
-	    }
+        }
 
-	    // For number types return null if the value is empty
-	    if (Number.class.isAssignableFrom(fieldClass)) {
-		if (value.equals("")) {
-		    return null;
-		}
-	    }
+        try {
 
-	    Constructor<?> constructor = fieldClass
-		    .getConstructor(String.class);
+            Class<?> fieldClass = field.getDataType();
 
-	    return constructor.newInstance(value);
-	} catch (Exception e) {
-	    throw new RuntimeException("The value '" + value
-		    + "' for the field '" + fieldName
-		    + "' is malformed on line '" + line + "'", e);
-	}
+            // TODO use adapter factory as in SQL manager
+            if (fieldClass.equals(Boolean.class)) {
+                return Boolean.valueOf(value.trim().equalsIgnoreCase("1"));
+            }
+
+            // For number types return null if the value is empty
+            if (Number.class.isAssignableFrom(fieldClass)) {
+                if (value.equals("")) {
+                    return null;
+                }
+            }
+
+            Constructor<?> constructor = fieldClass
+                    .getConstructor(String.class);
+
+            return constructor.newInstance(value);
+        } catch (Exception e) {
+            throw new RuntimeException("The value '" + value
+                    + "' for the field '" + fieldName
+                    + "' is malformed on line '" + line + "'", e);
+        }
 
     }
 
     @Override
     public void put(String fieldURI, Object value) {
-	throw new UnsupportedOperationException("Read-only TSVEntity");
+        throw new UnsupportedOperationException("Read-only TSVEntity");
     }
-    
+
     public String getLine() {
-	return line;
+        return line;
     }
 
     public void setLine(String line) {
-	this.line = line;
+        this.line = line;
     }
-    
+
     protected String parseField(String str, int num) {
 
-	int start = -1;
-	for (int i = 0; i < num; i++) {
-	    start = str.indexOf(SEPARATOR, start + 1);
-	    if (start == -1)
-		return null;
-	}
+        int start = -1;
+        for (int i = 0; i < num; i++) {
+            start = str.indexOf(SEPARATOR, start + 1);
+            if (start == -1)
+                return null;
+        }
 
-	int end = str.indexOf(SEPARATOR, start + 1);
-	if (end == -1)
-	    end = str.length();
+        int end = str.indexOf(SEPARATOR, start + 1);
+        if (end == -1)
+            end = str.length();
 
-	String result = str.substring(start + 1, end);
+        String result = str.substring(start + 1, end);
 
-	if (result != null && result.equals(NULL_CHAR)) {
-	    return null;
-	}
+        if (result != null && result.equals(NULL_CHAR)) {
+            return null;
+        }
 
-	return result.replace('"', ' ').trim();
+        return result.replace('"', ' ').trim();
 
     }
 

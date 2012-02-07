@@ -23,25 +23,25 @@ import org.onexus.core.resources.Resource;
 import org.onexus.ui.IViewerCreator;
 
 public class WizardViewerTab implements IViewerCreator {
-    
+
     @Override
     public String getTitle() {
-	return "Wizards";
+        return "Wizards";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-	return new WizardViewerTabPanel(containerId, model);
+        return new WizardViewerTabPanel(containerId, model);
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-	return true;
+        return true;
     }
 
     @Override
     public double getOrder() {
-	return 1;
+        return 1;
     }
 
 }

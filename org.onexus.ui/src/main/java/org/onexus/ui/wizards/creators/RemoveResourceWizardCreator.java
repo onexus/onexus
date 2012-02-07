@@ -27,22 +27,22 @@ public class RemoveResourceWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-	return "Remove";
+        return "Remove";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-	return new RemoveResourceWizard(containerId, model);
+        return new RemoveResourceWizard(containerId, model);
     }
 
     @Override
     public double getOrder() {
-	return 0;
+        return 0;
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-	return !Workspace.class.isAssignableFrom(resourceType);
+        return !Workspace.class.isAssignableFrom(resourceType);
     }
 
 }

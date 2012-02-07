@@ -24,19 +24,19 @@ public abstract class Filter implements Serializable {
     private String collection;
 
     public Filter() {
-	super();
+        super();
     }
-    
+
     public Filter(String collectionURI) {
-	this.collection = collectionURI;
+        this.collection = collectionURI;
     }
 
     public String getCollection() {
-	return collection;
+        return collection;
     }
 
     public void setCollection(String collectionURI) {
-	this.collection = collectionURI;
+        this.collection = collectionURI;
     }
 
 }

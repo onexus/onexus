@@ -23,25 +23,25 @@ import org.onexus.ui.website.formaters.ITextFormater;
 public class VerticalHeader extends StringHeader {
 
     public VerticalHeader(String label, IHeader parentHeader) {
-	super(label, parentHeader, null);
+        super(label, parentHeader, null);
     }
 
     public VerticalHeader(String label, IHeader parentHeader,
-	    ITextFormater formater) {
-	super(label, parentHeader, formater);
+                          ITextFormater formater) {
+        super(label, parentHeader, formater);
     }
 
     public VerticalHeader(String label, ITextFormater formater) {
-	super(label, formater);
+        super(label, formater);
     }
 
     public VerticalHeader(String label) {
-	super(label);
+        super(label);
     }
 
     @Override
     public Component getHeader(String componentId) {
-	return new VerticalTextPanel(componentId, getFormatedLabel());
+        return new VerticalTextPanel(componentId, getFormatedLabel());
     }
 
 }

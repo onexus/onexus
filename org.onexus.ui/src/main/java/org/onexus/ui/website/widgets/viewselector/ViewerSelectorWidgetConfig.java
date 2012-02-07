@@ -17,9 +17,8 @@
  */
 package org.onexus.ui.website.widgets.viewselector;
 
-import org.onexus.ui.website.widgets.WidgetConfig;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
 @XStreamAlias("widget-viewer-selector")
 public class ViewerSelectorWidgetConfig extends WidgetConfig {
@@ -27,16 +26,16 @@ public class ViewerSelectorWidgetConfig extends WidgetConfig {
     private ViewerSelectorWidgetStatus defaultStatus;
 
     public ViewerSelectorWidgetConfig() {
-	super();
+        super();
     }
 
     public ViewerSelectorWidgetConfig(String id, String region) {
-	super(id, region);
+        super(id, region);
     }
 
     @Override
     public ViewerSelectorWidgetStatus createEmptyStatus() {
-	return new ViewerSelectorWidgetStatus(getId());
+        return new ViewerSelectorWidgetStatus(getId());
     }
 
     public ViewerSelectorWidgetStatus getDefaultStatus() {

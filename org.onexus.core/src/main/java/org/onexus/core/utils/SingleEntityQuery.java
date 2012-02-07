@@ -23,9 +23,9 @@ import org.onexus.core.query.Query;
 public class SingleEntityQuery extends Query {
 
     public SingleEntityQuery(String collectionURI, String entityId) {
-	super(collectionURI);
-	setMainNamespace(ResourceTools.getParentURI(collectionURI));
-	getFixedEntities().add(new FixedEntity(collectionURI, entityId));
-    }    
+        super(collectionURI);
+        setMainNamespace(ResourceTools.getParentURI(collectionURI));
+        getFixedEntities().add(new FixedEntity(collectionURI, entityId));
+    }
 
 }

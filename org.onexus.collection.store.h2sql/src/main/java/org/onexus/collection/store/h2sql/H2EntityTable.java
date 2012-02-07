@@ -17,11 +17,6 @@
  */
 package org.onexus.collection.store.h2sql;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
@@ -30,14 +25,19 @@ import org.onexus.core.resources.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class H2EntityTable implements IEntityTable {
 
     private final static Logger LOGGER = LoggerFactory
-	    .getLogger(H2EntityTable.class);
+            .getLogger(H2EntityTable.class);
 
     private Query query;
     private TaskStatus taskStatus;
-    
+
     private H2Query mysqlQuery;
 
     private CollectionStore store;
@@ -48,110 +48,110 @@ public class H2EntityTable implements IEntityTable {
     private Long size = null;
 
     public H2EntityTable(CollectionStore store, Query query,
-	    Connection conn) {
+                         Connection conn) {
 
-	this.store = store;
-	this.query = query;
-	this.mysqlQuery = new H2Query(store, query);
-	this.dataConn = conn;
+        this.store = store;
+        this.query = query;
+        this.mysqlQuery = new H2Query(store, query);
+        this.dataConn = conn;
     }
 
     private void initDataRS() {
-	String sql = null;
-	try {
-	    // Start the select
-	    dataSt = dataConn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
-		    ResultSet.CONCUR_READ_ONLY);
+        String sql = null;
+        try {
+            // Start the select
+            dataSt = dataConn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
+                    ResultSet.CONCUR_READ_ONLY);
 
-	    // dataSt.setFetchDirection(ResultSet.FETCH_FORWARD);
-	    // dataSt.setFetchSize(Integer.MIN_VALUE);
+            // dataSt.setFetchDirection(ResultSet.FETCH_FORWARD);
+            // dataSt.setFetchSize(Integer.MIN_VALUE);
 
-	    sql = mysqlQuery.toSelectSQL();
-	    LOGGER.debug(sql);
-	    dataRS = dataSt.executeQuery(sql);
-	} catch (Exception e) {
-	    throw new RuntimeException(e);
-	}
+            sql = mysqlQuery.toSelectSQL();
+            LOGGER.debug(sql);
+            dataRS = dataSt.executeQuery(sql);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public boolean next() {
 
-	if (dataRS == null) {
-	    initDataRS();
-	}
+        if (dataRS == null) {
+            initDataRS();
+        }
 
-	try {
-	    boolean hasNext = (dataRS == null ? false : dataRS.next());
+        try {
+            boolean hasNext = (dataRS == null ? false : dataRS.next());
 
-	    if (!hasNext) {
-		close();
-	    }
+            if (!hasNext) {
+                close();
+            }
 
-	    return hasNext;
-	} catch (SQLException e) {
-	    return false;
-	}
+            return hasNext;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
     public long size() {
 
-	if (size == null) {
+        if (size == null) {
 
-	    String sql = null;
-	    try {
-		// Count all
-		Statement dataSt = dataConn.createStatement();
-		sql = mysqlQuery.toCountSQL();
-		ResultSet dataRS = dataSt.executeQuery(sql);
-		if (dataRS.next()) {
-		    size = dataRS.getLong("size");
-		} else {
-		    size = Long.valueOf(0);
-		}
-		dataRS.close();
-		dataSt.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
+            String sql = null;
+            try {
+                // Count all
+                Statement dataSt = dataConn.createStatement();
+                sql = mysqlQuery.toCountSQL();
+                ResultSet dataRS = dataSt.executeQuery(sql);
+                if (dataRS.next()) {
+                    size = dataRS.getLong("size");
+                } else {
+                    size = Long.valueOf(0);
+                }
+                dataRS.close();
+                dataSt.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
-	}
+        }
 
-	return size;
+        return size;
     }
 
     @Override
     public void close() {
-	try {
-	    if (dataConn != null && !dataConn.isClosed())
-		dataConn.close();
-	} catch (SQLException e) {
-	    throw new RuntimeException(e);
-	}
+        try {
+            if (dataConn != null && !dataConn.isClosed())
+                dataConn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Query getQuery() {
-	return query;
+        return query;
     }
 
     @Override
     public IEntity getEntity(String collectionURI) {
 
-	collectionURI = mysqlQuery.getAbsoluteCollectionURI(collectionURI);
+        collectionURI = mysqlQuery.getAbsoluteCollectionURI(collectionURI);
 
-	Collection collection = store.getCollection(collectionURI);
-	H2Entity entity = new H2Entity(collection);
-	SqlUtils.loadEntity(store.getDDL(collectionURI), dataRS, entity,
-		mysqlQuery.getCollectionAlias(collectionURI));
+        Collection collection = store.getCollection(collectionURI);
+        H2Entity entity = new H2Entity(collection);
+        SqlUtils.loadEntity(store.getDDL(collectionURI), dataRS, entity,
+                mysqlQuery.getCollectionAlias(collectionURI));
 
-	return entity;
+        return entity;
     }
 
     @Override
     public TaskStatus getTaskStatus() {
-	return taskStatus;
+        return taskStatus;
     }
 
     @Override

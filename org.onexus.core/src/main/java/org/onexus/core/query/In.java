@@ -25,60 +25,60 @@ public class In extends FieldFilter {
     private List<Object> values;
 
     public In() {
-	super();
+        super();
     }
 
     public In(String collectionId, String fieldName, Object... value) {
-	super(collectionId, fieldName);
+        super(collectionId, fieldName);
 
-	values = Arrays.asList(value);
+        values = Arrays.asList(value);
     }
-    
+
     @Override
     public String toString() {
-	return getFieldName() + " in (" + listValuesToString(",") + ")";
+        return getFieldName() + " in (" + listValuesToString(",") + ")";
     }
 
     /**
      * Returns the values separed by specified delimitor. By default returns
      * empty string ("")
-     * 
+     *
      * @param delimiter
      * @return
      */
     public String listValuesToString(String delimiter) {
 
-	if (this.values == null || this.values.isEmpty()) {
-	    return "";
-	}
+        if (this.values == null || this.values.isEmpty()) {
+            return "";
+        }
 
-	StringBuilder sb = new StringBuilder();
-	String str = null;
-	for (Object s : this.values) {
-	    str = encodeValue(s);
-	    if (str != null) {
-		sb.append(str);
-		sb.append(delimiter);
-	    }
-	}
-	return (sb.length() > 0) ? sb.substring(0, sb.length() - 1) : "";
+        StringBuilder sb = new StringBuilder();
+        String str = null;
+        for (Object s : this.values) {
+            str = encodeValue(s);
+            if (str != null) {
+                sb.append(str);
+                sb.append(delimiter);
+            }
+        }
+        return (sb.length() > 0) ? sb.substring(0, sb.length() - 1) : "";
     }
 
     /**
      * Only valid for SQL
-     * 
+     *
      * @param value
      * @return
      */
     private static String encodeValue(Object value) {
-	if (value == null) {
-	    return "NULL";
-	}
+        if (value == null) {
+            return "NULL";
+        }
 
-	if (value instanceof String) {
-	    return "\"" + value + "\"";
-	}
+        if (value instanceof String) {
+            return "\"" + value + "\"";
+        }
 
-	return String.valueOf(value);
+        return String.valueOf(value);
     }
 }

@@ -24,19 +24,19 @@ public class SearchWidgetStatus extends WidgetStatus {
     private String search;
 
     public SearchWidgetStatus() {
-	super();
+        super();
     }
 
     public SearchWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
     public String getSearch() {
-	return search;
+        return search;
     }
 
     public void setSearch(String search) {
-	this.search = search;
+        this.search = search;
     }
 
 }

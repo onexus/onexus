@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.decorators.color;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class PValueColorScale extends CompositeColorScale {
 
@@ -34,62 +34,62 @@ public class PValueColorScale extends CompositeColorScale {
     private ScaleRange scaleRange;
 
     public PValueColorScale(double significanceLevel, Color minColor,
-	    Color maxColor, Color nonSignificantColor) {
+                            Color maxColor, Color nonSignificantColor) {
 
-	super(0.0, 1.0, minColor, maxColor);
+        super(0.0, 1.0, minColor, maxColor);
 
-	this.significanceLevel = significanceLevel;
+        this.significanceLevel = significanceLevel;
 
-	nonSigScale = new UniformColorScale(nonSignificantColor);
+        nonSigScale = new UniformColorScale(nonSignificantColor);
 
-	nonSigScaleRange = new ScaleRange(significanceLevel + epsilon, 1.0,
-		nonSigScale);
+        nonSigScaleRange = new ScaleRange(significanceLevel + epsilon, 1.0,
+                nonSigScale);
 
-	scale = new LogColorScale(0.0, significanceLevel + epsilon, minColor,
-		maxColor);
+        scale = new LogColorScale(0.0, significanceLevel + epsilon, minColor,
+                maxColor);
 
-	scaleRange = new ScaleRange(0.0, significanceLevel + epsilon, scale);
+        scaleRange = new ScaleRange(0.0, significanceLevel + epsilon, scale);
 
-	ScaleRange[] scaleRanges = new ScaleRange[] { nonSigScaleRange,
-		scaleRange };
+        ScaleRange[] scaleRanges = new ScaleRange[]{nonSigScaleRange,
+                scaleRange};
 
-	setScaleRanges(scaleRanges);
+        setScaleRanges(scaleRanges);
     }
 
     public PValueColorScale() {
-	this(0.05, ColorConstants.pvalueMinColor,
-		ColorConstants.pvalueMaxColor,
-		ColorConstants.nonSignificantColor);
+        this(0.05, ColorConstants.pvalueMinColor,
+                ColorConstants.pvalueMaxColor,
+                ColorConstants.nonSignificantColor);
     }
 
     public double getSignificanceLevel() {
-	return significanceLevel;
+        return significanceLevel;
     }
 
     public void setSignificanceLevel(double significanceLevel) {
-	this.significanceLevel = significanceLevel;
-	nonSigScaleRange.setMinPoint(significanceLevel + epsilon);
-	scaleRange.setMaxPoint(significanceLevel + epsilon);
-	scale.setMaxPoint(significanceLevel + epsilon);
+        this.significanceLevel = significanceLevel;
+        nonSigScaleRange.setMinPoint(significanceLevel + epsilon);
+        scaleRange.setMaxPoint(significanceLevel + epsilon);
+        scale.setMaxPoint(significanceLevel + epsilon);
     }
 
     @Override
     public void setMinColor(Color color) {
-	super.setMinColor(color);
-	scale.setMinColor(color);
+        super.setMinColor(color);
+        scale.setMinColor(color);
     }
 
     @Override
     public void setMaxColor(Color color) {
-	super.setMaxColor(color);
-	scale.setMaxColor(color);
+        super.setMaxColor(color);
+        scale.setMaxColor(color);
     }
 
     public Color getNonSignificantColor() {
-	return nonSigScale.getColor();
+        return nonSigScale.getColor();
     }
 
     public void setNonSignificantColor(Color color) {
-	nonSigScale.setColor(color);
+        nonSigScale.setColor(color);
     }
 }

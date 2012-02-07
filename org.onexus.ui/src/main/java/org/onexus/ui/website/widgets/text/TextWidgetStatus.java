@@ -25,7 +25,7 @@ public class TextWidgetStatus extends WidgetStatus {
     }
 
     public TextWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
 }

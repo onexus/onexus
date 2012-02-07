@@ -17,11 +17,6 @@
  */
 package org.onexus.ui.website.widgets.export;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -39,97 +34,102 @@ import org.onexus.ui.website.tabs.Tab;
 import org.onexus.ui.website.viewers.ViewerConfig;
 import org.onexus.ui.website.viewers.tableviewer.TableViewerConfig;
 import org.onexus.ui.website.viewers.tableviewer.TableViewerStatus;
-import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.widgets.Widget;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus> {
 
     public ExportWidget(String componentId, ExportWidgetConfig config, IModel<ExportWidgetStatus> statusModel) {
-	super(componentId, config, statusModel);
-	onEventFireUpdate(EventQueryUpdate.class);
+        super(componentId, config, statusModel);
+        onEventFireUpdate(EventQueryUpdate.class);
     }
 
     @Override
     protected void onBeforeRender() {
 
-	Tab<?,?> tab = findParent(Tab.class);
-	ViewerConfig config = tab.getCurrentViewer();
+        Tab<?, ?> tab = findParent(Tab.class);
+        ViewerConfig config = tab.getCurrentViewer();
 
-	if (config instanceof TableViewerConfig) {
+        if (config instanceof TableViewerConfig) {
 
-	    TableViewerConfig tc = (TableViewerConfig) config;
+            TableViewerConfig tc = (TableViewerConfig) config;
 
-	    //FIXME
-	    BrowserPage browserPage = findParent(BrowserPage.class);
-	    String releaseURI = (browserPage!=null?browserPage.getStatus().getReleaseURI():null);
-	    Query query = new Query(tc.getMainCollection());
-	    query.setMainNamespace(releaseURI);
+            //FIXME
+            BrowserPage browserPage = findParent(BrowserPage.class);
+            String releaseURI = (browserPage != null ? browserPage.getStatus().getReleaseURI() : null);
+            Query query = new Query(tc.getMainCollection());
+            query.setMainNamespace(releaseURI);
 
-	    List<ExportColumn> exportColumns = new ArrayList<ExportColumn>();
-	    for (IColumnConfig column : tc.getColumns()) {
-		column.addExportColumns(exportColumns, releaseURI);
-		for (String collectionId : column.getQueryCollections(releaseURI)) {
-		    query.getCollections().add(ResourceTools.getAbsoluteURI(releaseURI, collectionId));
-		}
-	    }
+            List<ExportColumn> exportColumns = new ArrayList<ExportColumn>();
+            for (IColumnConfig column : tc.getColumns()) {
+                column.addExportColumns(exportColumns, releaseURI);
+                for (String collectionId : column.getQueryCollections(releaseURI)) {
+                    query.getCollections().add(ResourceTools.getAbsoluteURI(releaseURI, collectionId));
+                }
+            }
 
-	    buildQuery(query);
+            buildQuery(query);
 
-	    TableViewerStatus vs = getTableViewerStatus();
+            TableViewerStatus vs = getTableViewerStatus();
 
-	    if (vs != null) {
-		Order order = vs.getOrder();
-		if (order != null) {
-		    query.setOrder(order);
-		}
-	    }
+            if (vs != null) {
+                Order order = vs.getOrder();
+                if (order != null) {
+                    query.setOrder(order);
+                }
+            }
 
-	    String statusEncoded;
-	    try {
-		statusEncoded = ExportResource.encodeQuery(query);
-	    } catch (UnsupportedEncodingException e) {
-		throw new WicketRuntimeException("Unable to encode the URL parameter 'query'", e);
-	    }
+            String statusEncoded;
+            try {
+                statusEncoded = ExportResource.encodeQuery(query);
+            } catch (UnsupportedEncodingException e) {
+                throw new WicketRuntimeException("Unable to encode the URL parameter 'query'", e);
+            }
 
-	    StringBuilder columnsString = new StringBuilder();
-	    Iterator<ExportColumn> it = exportColumns.iterator();
+            StringBuilder columnsString = new StringBuilder();
+            Iterator<ExportColumn> it = exportColumns.iterator();
 
-	    while (it.hasNext()) {
-		columnsString.append(it.next().toString());
-		if (it.hasNext()) {
-		    columnsString.append(":::");
-		}
-	    }
+            while (it.hasNext()) {
+                columnsString.append(it.next().toString());
+                if (it.hasNext()) {
+                    columnsString.append(":::");
+                }
+            }
 
-	    PageParameters params = new PageParameters();
-	    params.add(ExportResource.STATUS, statusEncoded);
-	    params.add(ExportResource.FILENAME, "file-name." + ExportResource.FORMAT_TSV);
-	    params.add(ExportResource.COLUMNS, columnsString);
+            PageParameters params = new PageParameters();
+            params.add(ExportResource.STATUS, statusEncoded);
+            params.add(ExportResource.FILENAME, "file-name." + ExportResource.FORMAT_TSV);
+            params.add(ExportResource.COLUMNS, columnsString);
 
-	    ResourceReference rr = Application.get().getSharedResources()
-		    .get(Application.class, "export", null, null, null, true);
-	    addOrReplace(new ResourceLink<String>("tsvLink", rr, params));
+            ResourceReference rr = Application.get().getSharedResources()
+                    .get(Application.class, "export", null, null, null, true);
+            addOrReplace(new ResourceLink<String>("tsvLink", rr, params));
 
-	} else {
-	    addOrReplace(new AjaxLink<String>("tsvLink") {
+        } else {
+            addOrReplace(new AjaxLink<String>("tsvLink") {
 
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-		    target.add(ExportWidget.this);
-		}
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    target.add(ExportWidget.this);
+                }
 
-	    }.setEnabled(false));
-	}
+            }.setEnabled(false));
+        }
 
-	super.onBeforeRender();
+        super.onBeforeRender();
 
     }
 
     private TableViewerStatus getTableViewerStatus() {
-	IModel<TableViewerStatus> statusModel = findInnerModel(TableViewerStatus.class, getDefaultModel());
-	return (statusModel==null? null : statusModel.getObject());
-	
+        IModel<TableViewerStatus> statusModel = findInnerModel(TableViewerStatus.class, getDefaultModel());
+        return (statusModel == null ? null : statusModel.getObject());
+
     }
 
 }

@@ -27,10 +27,10 @@ import org.onexus.ui.website.Website;
 public class PreviewBrowserViewer extends Panel {
 
     public PreviewBrowserViewer(String id, final IModel<? extends Resource> model) {
-	super(id);
+        super(id);
 
-	Session.get().setMetaData(Website.WEBSITE_CONFIG, model.getObject());
-	add(new InlineFrame("browser", Website.class));
+        Session.get().setMetaData(Website.WEBSITE_CONFIG, model.getObject());
+        add(new InlineFrame("browser", Website.class));
     }
 
 }

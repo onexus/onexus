@@ -17,14 +17,6 @@
  */
 package org.onexus.ui.website.widgets.tags.tagstore;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
@@ -35,75 +27,82 @@ import org.onexus.ui.OnexusWebSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class TagStoreManager implements ITagStoreManager {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TagStoreManager.class);
-    
+
     private String database = "onexus-h2-tags";
     private String username = "sa";
     private String password = "";
-    
+
     private Map<String, TagStore> tagStores;
     private DataSource dataSource;
-    
+
     public TagStoreManager() {
-	super();
+        super();
     }
-    
+
     public void init() {
-	LOGGER.debug("Connecting to '{}' as '{}'.", database, username);
+        LOGGER.debug("Connecting to '{}' as '{}'.", database, username);
 
-	Driver.load();
+        Driver.load();
 
-	// Initialize the DataSource with a connection pool
-	ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-		"jdbc:h2:" + database, username, password);
-	ObjectPool connectionPool = new GenericObjectPool(null,
-		GenericObjectPool.DEFAULT_MAX_ACTIVE,
-		GenericObjectPool.WHEN_EXHAUSTED_GROW,
-		GenericObjectPool.DEFAULT_MAX_WAIT);
-	@SuppressWarnings("unused")
-	PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
-		connectionFactory, connectionPool, null, null, false, true);
-	dataSource = new PoolingDataSource(connectionPool);
+        // Initialize the DataSource with a connection pool
+        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
+                "jdbc:h2:" + database, username, password);
+        ObjectPool connectionPool = new GenericObjectPool(null,
+                GenericObjectPool.DEFAULT_MAX_ACTIVE,
+                GenericObjectPool.WHEN_EXHAUSTED_GROW,
+                GenericObjectPool.DEFAULT_MAX_WAIT);
+        @SuppressWarnings("unused")
+        PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
+                connectionFactory, connectionPool, null, null, false, true);
+        dataSource = new PoolingDataSource(connectionPool);
 
-	
-	this.tagStores = Collections.synchronizedMap( new HashMap<String, TagStore>() );
+
+        this.tagStores = Collections.synchronizedMap(new HashMap<String, TagStore>());
 
     }
 
 
     @Override
     public TagStore getUserStore(String namespace) {
-	
-	String userToken = OnexusWebSession.get().getUserToken();
-	
-	return get(userToken + "_" + namespace);
-	
-    }
-        
-    
-    private TagStore get(String namespace) {
-	
-	if (!tagStores.containsKey(namespace)) {
-	    tagStores.put(namespace, new TagStore(namespace, dataSource));	    
-	}
-	
-	return tagStores.get(namespace);
-    }
-    
-    public void stop() {
-	try {
-	    Connection conn = dataSource.getConnection();
-	    Statement stat = conn.createStatement();
 
-	    stat.execute("SHUTDOWN");
-	    stat.close();
-	    
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
-	
+        String userToken = OnexusWebSession.get().getUserToken();
+
+        return get(userToken + "_" + namespace);
+
+    }
+
+
+    private TagStore get(String namespace) {
+
+        if (!tagStores.containsKey(namespace)) {
+            tagStores.put(namespace, new TagStore(namespace, dataSource));
+        }
+
+        return tagStores.get(namespace);
+    }
+
+    public void stop() {
+        try {
+            Connection conn = dataSource.getConnection();
+            Statement stat = conn.createStatement();
+
+            stat.execute("SHUTDOWN");
+            stat.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getDatabase() {
@@ -129,9 +128,6 @@ public class TagStoreManager implements ITagStoreManager {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
-    
-    
+
 
 }

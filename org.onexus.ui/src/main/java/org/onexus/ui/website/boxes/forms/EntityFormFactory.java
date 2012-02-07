@@ -17,48 +17,48 @@
  */
 package org.onexus.ui.website.boxes.forms;
 
-import java.util.Date;
-
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Field;
 
+import java.util.Date;
+
 public class EntityFormFactory {
 
-   
+
     public static Panel getFieldPanel(String id, Field field,
-	    IModel<?> valueObjectModel) {
-	return getFieldPanel(id, field, field.getDataType(), valueObjectModel);
+                                      IModel<?> valueObjectModel) {
+        return getFieldPanel(id, field, field.getDataType(), valueObjectModel);
     }
 
     @SuppressWarnings("unchecked")
     private static <T> Panel getFieldPanel(String id, Field field,
-	    Class<?> valueClass, IModel<?> valueObjectModel) {
+                                           Class<?> valueClass, IModel<?> valueObjectModel) {
 
-	if (Date.class.isAssignableFrom(valueClass)) {
-	    return new ViewStringFieldPanel(id,
-			(IModel<String>) valueObjectModel);
-	}
+        if (Date.class.isAssignableFrom(valueClass)) {
+            return new ViewStringFieldPanel(id,
+                    (IModel<String>) valueObjectModel);
+        }
 
-	if (Number.class.isAssignableFrom(valueClass)) {
-	    return new ViewNumericFieldPanel(id, valueObjectModel);
-	}
+        if (Number.class.isAssignableFrom(valueClass)) {
+            return new ViewNumericFieldPanel(id, valueObjectModel);
+        }
 
-	if (String.class.isAssignableFrom(valueClass)) {
-	    if (field != null && field.getProperty("LINK") != null) {
-		return new LinkStringFieldPanel(id,
-			(IModel<String>) valueObjectModel,
-			field.getProperty("LINK"));
-	    }
+        if (String.class.isAssignableFrom(valueClass)) {
+            if (field != null && field.getProperty("LINK") != null) {
+                return new LinkStringFieldPanel(id,
+                        (IModel<String>) valueObjectModel,
+                        field.getProperty("LINK"));
+            }
 
-	    return new ViewStringFieldPanel(id,
-		    (IModel<String>) valueObjectModel);
-	}
+            return new ViewStringFieldPanel(id,
+                    (IModel<String>) valueObjectModel);
+        }
 
-	throw new UnsupportedOperationException("Unknown field type "
-		+ valueClass);
+        throw new UnsupportedOperationException("Unknown field type "
+                + valueClass);
 
     }
-    
-    
+
+
 }

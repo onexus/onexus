@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.decorators.color;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class BinaryColorScale extends AbstractColorScale {
 
@@ -25,44 +25,44 @@ public class BinaryColorScale extends AbstractColorScale {
     private CutoffCmp cutoffCmp = CutoffCmp.EQ;
 
     public BinaryColorScale(double minPoint, double maxPoint, double cutoff,
-	    Color minColor, Color maxColor, Color nonSignificantColor) {
-	super(minPoint, maxPoint);
-	this.cutoff = cutoff;
-	this.minColor = minColor;
-	this.maxColor = maxColor;
+                            Color minColor, Color maxColor, Color nonSignificantColor) {
+        super(minPoint, maxPoint);
+        this.cutoff = cutoff;
+        this.minColor = minColor;
+        this.maxColor = maxColor;
     }
 
     public BinaryColorScale() {
-	super(0.0, 1.0);
+        super(0.0, 1.0);
     }
 
     @Override
     public Color valueColor(double value) {
-	if (Double.isNaN(value))
-	    return notANumberColor;
-	else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
-	    return posInfinityColor;
-	else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
-	    return negInfinityColor;
+        if (Double.isNaN(value))
+            return notANumberColor;
+        else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
+            return posInfinityColor;
+        else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
+            return negInfinityColor;
 
-	boolean isSig = cutoffCmp.compare(value, cutoff);
-	return isSig ? maxColor : minColor;
+        boolean isSig = cutoffCmp.compare(value, cutoff);
+        return isSig ? maxColor : minColor;
     }
 
     public double getCutoff() {
-	return cutoff;
+        return cutoff;
     }
 
     public void setCutoff(double cutoff) {
-	this.cutoff = cutoff;
+        this.cutoff = cutoff;
     }
 
     public CutoffCmp getCutoffCmp() {
-	return cutoffCmp;
+        return cutoffCmp;
     }
 
     public void setCutoffCmp(CutoffCmp cutoffCmp) {
-	this.cutoffCmp = cutoffCmp;
+        this.cutoffCmp = cutoffCmp;
     }
 
 }

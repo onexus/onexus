@@ -17,14 +17,13 @@
  */
 package org.onexus.ui.website.widgets.tags;
 
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
-import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.List;
 
 @XStreamAlias("column-tags")
 public class TagColumnConfig implements IColumnConfig {
@@ -32,35 +31,35 @@ public class TagColumnConfig implements IColumnConfig {
     private String collection;
 
     public TagColumnConfig() {
-	super();
+        super();
     }
-    
+
     public TagColumnConfig(String collection) {
-	super();
-	this.collection = collection;
+        super();
+        this.collection = collection;
     }
 
     public String getCollection() {
-	return collection;
+        return collection;
     }
 
     public void setCollection(String collection) {
-	this.collection = collection;
+        this.collection = collection;
     }
 
     @Override
-    public String[] getQueryCollections(String releaseURI ) {
-	return new String[0];
+    public String[] getQueryCollections(String releaseURI) {
+        return new String[0];
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI ) {
-	columns.add(new TagColumn(collection));
+    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI) {
+        columns.add(new TagColumn(collection));
     }
 
     @Override
-    public void addExportColumns(List<ExportColumn> columns, String releaseURI ) {
-	// Nothing to export
+    public void addExportColumns(List<ExportColumn> columns, String releaseURI) {
+        // Nothing to export
     }
 
 }

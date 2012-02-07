@@ -22,26 +22,26 @@ import java.sql.ResultSet;
 public class IntegerAdapter extends SQLAdapter {
 
     public IntegerAdapter() {
-	super(Integer.class);
+        super(Integer.class);
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-	// FIXME Fails with negative values
-	// NumericTools.toHexString(container, ((Integer) object).intValue());
+        // FIXME Fails with negative values
+        // NumericTools.toHexString(container, ((Integer) object).intValue());
 
-	container.append(Integer.toString((Integer) object));
+        container.append(Integer.toString((Integer) object));
     }
 
     @Override
     public Object extract(ResultSet container, Object... parameters)
-	    throws Exception {
-	int value = container.getInt(((String) parameters[0]).trim());
-	if (container.wasNull()) {
-	    return null;
-	} else {
-	    return value;
-	}
+            throws Exception {
+        int value = container.getInt(((String) parameters[0]).trim());
+        if (container.wasNull()) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
 }

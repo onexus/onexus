@@ -17,35 +17,35 @@
  */
 package org.onexus.ui.website.viewers.tableviewer.headers;
 
-import java.awt.Font;
-
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import java.awt.*;
 
 public class VerticalTextPanel extends Panel {
 
     private VerticalTextPanel(String id, String text,
-	    VerticalTextResource resource) {
-	super(id);
-	Image image = new Image("image", resource);
-	add(image);
+                              VerticalTextResource resource) {
+        super(id);
+        Image image = new Image("image", resource);
+        add(image);
     }
 
     public VerticalTextPanel(String id, String text, int width, int height,
-	    Font font) {
-	this(id, text, new VerticalTextResource(text, width, height, font));
+                             Font font) {
+        this(id, text, new VerticalTextResource(text, width, height, font));
     }
 
     public VerticalTextPanel(String id, String text, int width, int height) {
-	this(id, text, new VerticalTextResource(text, width, height));
+        this(id, text, new VerticalTextResource(text, width, height));
     }
 
     public VerticalTextPanel(String id, String text) {
-	this(id, text, new VerticalTextResource(text));
+        this(id, text, new VerticalTextResource(text));
     }
 
     public VerticalTextPanel(String id, String text, Font font) {
-	this(id, text, new VerticalTextResource(text, font));
+        this(id, text, new VerticalTextResource(text, font));
     }
 
 }

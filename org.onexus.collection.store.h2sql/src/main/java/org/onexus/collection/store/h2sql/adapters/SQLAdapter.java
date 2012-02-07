@@ -24,17 +24,17 @@ public abstract class SQLAdapter {
     private String dataType;
 
     public SQLAdapter(Class<?> dataClass) {
-	this.dataType = dataClass.getName();
+        this.dataType = dataClass.getName();
     }
 
     public String getDataType() {
-	return dataType;
+        return dataType;
     }
 
     public abstract void append(StringBuilder container, Object object)
-	    throws Exception;
+            throws Exception;
 
     public abstract Object extract(ResultSet container, Object... parameters)
-	    throws Exception;
+            throws Exception;
 
 }

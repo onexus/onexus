@@ -17,11 +17,11 @@
  */
 package org.onexus.ui.website.decorators.color;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.Serializable;
 
 public abstract class AbstractColorScale implements IColorScale,
-	IColorScaleHtml, Serializable {
+        IColorScaleHtml, Serializable {
 
     protected Color notANumberColor = ColorConstants.notANumberColor;
     protected Color posInfinityColor = ColorConstants.posInfinityColor;
@@ -36,92 +36,92 @@ public abstract class AbstractColorScale implements IColorScale,
 
     public AbstractColorScale(double minPoint, double maxPoint) {
 
-	this(minPoint, maxPoint, ColorConstants.negInfinityColor,
-		ColorConstants.posInfinityColor);
+        this(minPoint, maxPoint, ColorConstants.negInfinityColor,
+                ColorConstants.posInfinityColor);
     }
 
     public AbstractColorScale(double minPoint, double maxPoint, Color minColor,
-	    Color maxColor) {
-	this.minPoint = minPoint;
-	this.maxPoint = maxPoint;
-	this.minColor = minColor;
-	this.maxColor = maxColor;
+                              Color maxColor) {
+        this.minPoint = minPoint;
+        this.maxPoint = maxPoint;
+        this.minColor = minColor;
+        this.maxColor = maxColor;
     }
 
     public Color getNotANumberColor() {
-	return notANumberColor;
+        return notANumberColor;
     }
 
     public void setNotANumberColor(Color notANumberColor) {
-	this.notANumberColor = notANumberColor;
+        this.notANumberColor = notANumberColor;
     }
 
     public Color getPosInfinityColor() {
-	return posInfinityColor;
+        return posInfinityColor;
     }
 
     public void setPosInfinityColor(Color posInfinityColor) {
-	this.posInfinityColor = posInfinityColor;
+        this.posInfinityColor = posInfinityColor;
     }
 
     public Color getNegInfinityColor() {
-	return negInfinityColor;
+        return negInfinityColor;
     }
 
     public void setNegInfinityColor(Color negInfinityColor) {
-	this.negInfinityColor = negInfinityColor;
+        this.negInfinityColor = negInfinityColor;
     }
 
     public Color getEmptyColor() {
-	return emptyColor;
+        return emptyColor;
     }
 
     public void setEmptyColor(Color emptyColor) {
-	this.emptyColor = emptyColor;
+        this.emptyColor = emptyColor;
     }
 
     public Color getMinColor() {
-	return minColor;
+        return minColor;
     }
 
     public void setMinColor(Color minColor) {
-	this.minColor = minColor;
+        this.minColor = minColor;
     }
 
     public Color getMaxColor() {
-	return maxColor;
+        return maxColor;
     }
 
     public void setMaxColor(Color maxColor) {
-	this.maxColor = maxColor;
+        this.maxColor = maxColor;
     }
 
     public double getMinPoint() {
-	return minPoint;
+        return minPoint;
     }
 
     public void setMinPoint(double minPoint) {
-	this.minPoint = minPoint;
+        this.minPoint = minPoint;
     }
 
     public double getMaxPoint() {
-	return maxPoint;
+        return maxPoint;
     }
 
     public void setMaxPoint(double maxPoint) {
-	this.maxPoint = maxPoint;
+        this.maxPoint = maxPoint;
     }
 
     @Override
     public String valueRGBHtmlColor(double value) {
-	Color color = valueColor(value);
-	return ColorUtils.colorToRGBHtml(color);
+        Color color = valueColor(value);
+        return ColorUtils.colorToRGBHtml(color);
     }
 
     @Override
     public String valueHexHtmlColor(double value) {
-	Color color = valueColor(value);
-	return ColorUtils.colorToHexHtml(color);
+        Color color = valueColor(value);
+        return ColorUtils.colorToHexHtml(color);
     }
 
 }

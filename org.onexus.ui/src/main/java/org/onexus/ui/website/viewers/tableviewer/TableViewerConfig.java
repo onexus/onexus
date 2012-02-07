@@ -17,55 +17,54 @@
  */
 package org.onexus.ui.website.viewers.tableviewer;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.ui.website.viewers.ViewerConfig;
 import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.ArrayList;
+import java.util.List;
 
 @XStreamAlias("viewer-table")
 public class TableViewerConfig extends ViewerConfig {
 
     private String mainCollection;
-    
+
     private TableViewerStatus defaultStatus;
-   
+
     private List<IColumnConfig> columns = new ArrayList<IColumnConfig>();
 
     public TableViewerConfig() {
-	super();
+        super();
     }
 
     public TableViewerConfig(String id, String mainCollectionURI) {
-	super(id);
-	this.mainCollection = mainCollectionURI;
+        super(id);
+        this.mainCollection = mainCollectionURI;
     }
 
     public String getMainCollection() {
-	return mainCollection;
+        return mainCollection;
     }
 
     public void setMainCollection(String mainCollectionURI) {
-	this.mainCollection = mainCollectionURI;
+        this.mainCollection = mainCollectionURI;
     }
-    
+
     public List<IColumnConfig> getColumns() {
-	return columns;
+        return columns;
     }
 
     public void setColumns(List<IColumnConfig> columns) {
-	this.columns = columns;
+        this.columns = columns;
     }
 
     public void addColumn(IColumnConfig column) {
-	this.columns.add(column);
+        this.columns.add(column);
     }
-    
+
     @Override
     public TableViewerStatus createEmptyStatus() {
-	return new TableViewerStatus(getId());
+        return new TableViewerStatus(getId());
     }
 
     public TableViewerStatus getDefaultStatus() {

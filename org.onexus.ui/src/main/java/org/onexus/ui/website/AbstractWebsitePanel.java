@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.website;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
@@ -33,142 +29,145 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.events.AbstractEvent;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class AbstractWebsitePanel<C extends IWebsiteConfig, S extends IWebsiteStatus> extends Panel {
 
     private C config;
     private Set<Class<?>> registeredEvents = new HashSet<Class<?>>();
 
     public AbstractWebsitePanel(String componentId, C config, IModel<S> statusModel) {
-	super(componentId, statusModel);
-	setOutputMarkupId(true);
-	this.config = config;
+        super(componentId, statusModel);
+        setOutputMarkupId(true);
+        this.config = config;
     }
 
     public C getConfig() {
-	return config;
+        return config;
     }
 
     @SuppressWarnings("unchecked")
     public S getStatus() {
-	S status = getModelStatus().getObject();
+        S status = getModelStatus().getObject();
 
-	if (status == null) {
-	    status = (S) config.getDefaultStatus();
-	    getModelStatus().setObject(status);
-	}
+        if (status == null) {
+            status = (S) config.getDefaultStatus();
+            getModelStatus().setObject(status);
+        }
 
-	if (status == null) {
-	    status = (S) config.createEmptyStatus();
-	    getModelStatus().setObject(status);
-	}
-	return status;
+        if (status == null) {
+            status = (S) config.createEmptyStatus();
+            getModelStatus().setObject(status);
+        }
+        return status;
 
     }
 
     public void setStatus(S status) {
-	getModelStatus().setObject(status);
+        getModelStatus().setObject(status);
     }
 
     @SuppressWarnings("unchecked")
     public IModel<S> getModelStatus() {
-	return (IModel<S>) getDefaultModel();
+        return (IModel<S>) getDefaultModel();
     }
 
     protected WebsiteStatus getWebsiteStatus() {
-	IModel<WebsiteStatus> statusModel = findInnerModel(WebsiteStatus.class, getDefaultModel());
-	return (statusModel == null ? null : statusModel.getObject());
+        IModel<WebsiteStatus> statusModel = findInnerModel(WebsiteStatus.class, getDefaultModel());
+        return (statusModel == null ? null : statusModel.getObject());
     }
-    
+
     protected WebsiteConfig getWebsiteConfig() {
-	return findInnerConfig(WebsiteConfig.class, getDefaultModel());
+        return findInnerConfig(WebsiteConfig.class, getDefaultModel());
     }
-    
+
     @SuppressWarnings("unchecked")
     public static <C extends IWebsiteConfig> C findInnerConfig(Class<C> configClass, IModel<?> model) {
-	if (model != null && (model instanceof IWebsiteModel)) {
-	    IWebsiteConfig config = ((IWebsiteModel) model).getConfig();
-	    if (config != null && config.getClass().equals(configClass)) {
-		return (C) config;
-	    }
-	}
-	
-	if (model instanceof IWrapModel) {
-	    IModel<?> wrapModel = ((IWrapModel<?>) model).getWrappedModel();
-	    
-	    return findInnerConfig(configClass, wrapModel);
-	}
-	
-	return null;
+        if (model != null && (model instanceof IWebsiteModel)) {
+            IWebsiteConfig config = ((IWebsiteModel) model).getConfig();
+            if (config != null && config.getClass().equals(configClass)) {
+                return (C) config;
+            }
+        }
+
+        if (model instanceof IWrapModel) {
+            IModel<?> wrapModel = ((IWrapModel<?>) model).getWrappedModel();
+
+            return findInnerConfig(configClass, wrapModel);
+        }
+
+        return null;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static <C> IModel<C> findInnerModel(Class<C> objectClass, IModel<?> model) {
-	if (model != null && model.getObject() != null && objectClass.isAssignableFrom(model.getObject().getClass())) {
-	    return (IModel<C>) model;
-	}
+        if (model != null && model.getObject() != null && objectClass.isAssignableFrom(model.getObject().getClass())) {
+            return (IModel<C>) model;
+        }
 
-	if (model instanceof IWrapModel) {
-	    IModel<?> wrapModel = ((IWrapModel<?>) model).getWrappedModel();
+        if (model instanceof IWrapModel) {
+            IModel<?> wrapModel = ((IWrapModel<?>) model).getWrappedModel();
 
-	    if (wrapModel != null) {
-		return findInnerModel(objectClass, wrapModel);
-	    }
-	}
+            if (wrapModel != null) {
+                return findInnerModel(objectClass, wrapModel);
+            }
+        }
 
-	return null;
+        return null;
     }
 
     protected void sendEvent(AbstractEvent event) {
-	send(getPage(), Broadcast.BREADTH, event);
+        send(getPage(), Broadcast.BREADTH, event);
     }
 
     /**
-     * @param eventClass
-     *            Update this panel on 'eventClass' events.
+     * @param eventClass Update this panel on 'eventClass' events.
      */
     protected void onEventFireUpdate(Class<?>... eventClass) {
-	registeredEvents.addAll(Arrays.asList(eventClass));
+        registeredEvents.addAll(Arrays.asList(eventClass));
     }
 
     @Override
     public void onEvent(IEvent<?> event) {
 
-	// Add this panel to AJAX target if it's a registered Event.
-	if (event.getPayload() instanceof AbstractEvent) {
-	    AjaxRequestTarget target = AjaxRequestTarget.get();
+        // Add this panel to AJAX target if it's a registered Event.
+        if (event.getPayload() instanceof AbstractEvent) {
+            AjaxRequestTarget target = AjaxRequestTarget.get();
 
-	    if (target != null) {
-		Class<?> currentEventClass = event.getPayload().getClass();
-		for (Class<?> eventClass : registeredEvents) {
-		    if (eventClass.isAssignableFrom(currentEventClass)) {
-			target.add(this);
-			event.dontBroadcastDeeper();
-			return;
-		    }
-		}
-	    }
-	}
+            if (target != null) {
+                Class<?> currentEventClass = event.getPayload().getClass();
+                for (Class<?> eventClass : registeredEvents) {
+                    if (eventClass.isAssignableFrom(currentEventClass)) {
+                        target.add(this);
+                        event.dontBroadcastDeeper();
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     protected void buildQuery(Query query) {
-	getPage().visitChildren(new QueryBuilder(query));
+        getPage().visitChildren(new QueryBuilder(query));
     }
 
     private static final class QueryBuilder implements IVisitor<Component, Void> {
 
-	private final Query query;
+        private final Query query;
 
-	public QueryBuilder(final Query query) {
-	    super();
-	    this.query = query;
-	}
+        public QueryBuilder(final Query query) {
+            super();
+            this.query = query;
+        }
 
-	@Override
-	public void component(Component component, IVisit<Void> visit) {
-	    if (component instanceof IQueryContributor) {
-		((IQueryContributor) component).onQueryBuild(query);
-	    }
-	}
+        @Override
+        public void component(Component component, IVisit<Void> visit) {
+            if (component instanceof IQueryContributor) {
+                ((IQueryContributor) component).onQueryBuild(query);
+            }
+        }
 
     }
 

@@ -25,31 +25,30 @@ import org.onexus.core.resources.Resource;
 
 public class NewCollectionWizard extends AbstractNewResourceWizard<Collection> {
 
-   
-    public NewCollectionWizard(String id, IModel<? extends Resource> resourceModel) {
-	super(id, resourceModel);
-	
-	WizardModel model = new WizardModel();
-	model.add(new ResourceName());
 
-	init(model);
+    public NewCollectionWizard(String id, IModel<? extends Resource> resourceModel) {
+        super(id, resourceModel);
+
+        WizardModel model = new WizardModel();
+        model.add(new ResourceName());
+
+        init(model);
     }
-    
+
     @Override
     protected Collection getDefaultResource() {
-	return new Collection();
+        return new Collection();
     }
 
     private final class ResourceName extends WizardStep {
 
-	public ResourceName() {
-	    super("New collection", "Creates a new collection inside the current release");
-	    
-	    add(getFieldResourceName());
+        public ResourceName() {
+            super("New collection", "Creates a new collection inside the current release");
 
-	}
+            add(getFieldResourceName());
+
+        }
     }
 
-    
 
 }

@@ -27,25 +27,25 @@ public class EntityRenderer implements IChoiceRenderer<IEntity> {
     private String nullValue;
 
     public EntityRenderer(String displayField, String nullValue) {
-	super();
-	this.displayField = displayField;
-	this.nullValue = nullValue;
+        super();
+        this.displayField = displayField;
+        this.nullValue = nullValue;
     }
 
     public EntityRenderer(Field displayField, String nullValue) {
-	super();
-	this.displayField = displayField.getName();
-	this.nullValue = nullValue;
+        super();
+        this.displayField = displayField.getName();
+        this.nullValue = nullValue;
     }
 
     @Override
     public Object getDisplayValue(IEntity entity) {
-	return (entity == null ? nullValue : entity.get(displayField));
+        return (entity == null ? nullValue : entity.get(displayField));
     }
 
     @Override
     public String getIdValue(IEntity object, int index) {
-	return Integer.toString(index);
+        return Integer.toString(index);
     }
 
 }

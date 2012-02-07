@@ -26,7 +26,7 @@ import org.onexus.core.IEntityTable;
 
 /**
  * Recreates modal window each time that is invoked.
- * 
+ *
  * @author armand
  */
 public class OpenDetailWindowEvent extends AjaxEventBehavior {
@@ -35,25 +35,25 @@ public class OpenDetailWindowEvent extends AjaxEventBehavior {
     private Panel panel;
 
     public OpenDetailWindowEvent(ModalWindow modalWindow,
-	    IModel<IEntityTable> rowModel,
-	    DetailsColumnConfig configDetailsTrackModel) {
+                                 IModel<IEntityTable> rowModel,
+                                 DetailsColumnConfig configDetailsTrackModel) {
 
-	super("onclick");
+        super("onclick");
 
-	this.modal = modalWindow;
-	this.panel = new DetailsTrackPanel(modal.getContentId(), rowModel,
-		configDetailsTrackModel);
+        this.modal = modalWindow;
+        this.panel = new DetailsTrackPanel(modal.getContentId(), rowModel,
+                configDetailsTrackModel);
 
     }
 
     @Override
     protected void onEvent(AjaxRequestTarget target) {
 
-	if (modal != null) {
-	    modal.setInitialWidth(790);
-	    modal.setContent(panel);
-	    modal.show(target);
-	}
+        if (modal != null) {
+            modal.setInitialWidth(790);
+            modal.setContent(panel);
+            modal.show(target);
+        }
     }
 
 }

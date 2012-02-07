@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.decorators;
 
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,49 +28,51 @@ import org.onexus.core.resources.Field;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 
+import java.util.Set;
+
 public class LinkDecorator extends FieldDecorator {
 
     private String collectionId;
 
     public LinkDecorator(String collectionId, Field field) {
-	super(field);
-	this.collectionId = collectionId;
+        super(field);
+        this.collectionId = collectionId;
     }
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer,
-	    String componentId, IModel<IEntity> data) {
-	Object value = getValue(data.getObject());
-	cellContainer.add(new LinkPanel(componentId, getFormatValue(data
-		.getObject()), getLink(collectionId, data)));
-	cellContainer.add(new AttributeModifier("title", new Model<String>(
-		(value == null ? "No data" : value.toString()))));
+                             String componentId, IModel<IEntity> data) {
+        Object value = getValue(data.getObject());
+        cellContainer.add(new LinkPanel(componentId, getFormatValue(data
+                .getObject()), getLink(collectionId, data)));
+        cellContainer.add(new AttributeModifier("title", new Model<String>(
+                (value == null ? "No data" : value.toString()))));
     }
 
     protected WebMarkupContainer getLink(String collectionId,
-	    IModel<IEntity> data) {
+                                         IModel<IEntity> data) {
 
-	String entityId = null;
-	IEntity entity = data.getObject();
+        String entityId = null;
+        IEntity entity = data.getObject();
 
-	if (entity.getCollection().getURI().equals(collectionId)) {
-	    entityId = entity.getId();
-	} else {
-	    entityId = String.valueOf(entity.get(getValueProperty().getName()));
-	}
+        if (entity.getCollection().getURI().equals(collectionId)) {
+            entityId = entity.getId();
+        } else {
+            entityId = String.valueOf(entity.get(getValueProperty().getName()));
+        }
 
-	return new BrowserPageLink<FixedEntity>(LinkPanel.LINK_ID, Model.of(new FixedEntity(collectionId, entityId))) {
+        return new BrowserPageLink<FixedEntity>(LinkPanel.LINK_ID, Model.of(new FixedEntity(collectionId, entityId))) {
 
-	    @Override
-	    public void onClick(AjaxRequestTarget target) {
-		
-		Set<FixedEntity> fixedEntities = getBrowserPageStatus().getFixedEntities();
-		fixedEntities.add(getModelObject());
-		sendEvent(EventFixEntity.EVENT);
-		
-	    }
-	    
-	};
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+
+                Set<FixedEntity> fixedEntities = getBrowserPageStatus().getFixedEntities();
+                fixedEntities.add(getModelObject());
+                sendEvent(EventFixEntity.EVENT);
+
+            }
+
+        };
     }
 
 }

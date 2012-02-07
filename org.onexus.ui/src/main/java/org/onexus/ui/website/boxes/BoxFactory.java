@@ -17,11 +17,11 @@
  */
 package org.onexus.ui.website.boxes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IEntity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BoxFactory {
 
@@ -30,27 +30,27 @@ public class BoxFactory {
     private static Map<String, IBoxCreator> creators = new HashMap<String, IBoxCreator>();
 
     public static AbstractBox createBox(String collectionId,
-	    IModel<IEntity> entity) {
+                                        IModel<IEntity> entity) {
 
-	if (creators.containsKey(collectionId)) {
-	    return creators.get(collectionId).createBox(collectionId, entity);
-	}
+        if (creators.containsKey(collectionId)) {
+            return creators.get(collectionId).createBox(collectionId, entity);
+        }
 
-	if (defaultBoxCreator != null) {
-	    return defaultBoxCreator.createBox(collectionId, entity);
-	}
+        if (defaultBoxCreator != null) {
+            return defaultBoxCreator.createBox(collectionId, entity);
+        }
 
-	return null;
+        return null;
 
     }
 
     public static void registerBoxCreator(String collectionId,
-	    IBoxCreator boxCreator) {
-	creators.put(collectionId, boxCreator);
+                                          IBoxCreator boxCreator) {
+        creators.put(collectionId, boxCreator);
     }
 
     public static void setDefaultBoxCreator(IBoxCreator boxCreator) {
-	defaultBoxCreator = boxCreator;
+        defaultBoxCreator = boxCreator;
     }
 
 }

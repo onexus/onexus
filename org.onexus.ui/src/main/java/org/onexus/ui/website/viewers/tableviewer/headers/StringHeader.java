@@ -30,69 +30,69 @@ public class StringHeader implements IHeader {
     private ITextFormater textFormater;
 
     public StringHeader(String label) {
-	this(label, null, null, null);
+        this(label, null, null, null);
     }
 
     public StringHeader(String label, String title, ITextFormater formater) {
-	this(label, title, null, formater);
+        this(label, title, null, formater);
     }
 
     public StringHeader(String label, ITextFormater formater) {
-	this(label, null, null, formater);
+        this(label, null, null, formater);
     }
 
     public StringHeader(String label, IHeader parentHeader,
-	    ITextFormater formater) {
-	this(label, null, parentHeader, formater);
+                        ITextFormater formater) {
+        this(label, null, parentHeader, formater);
     }
 
     public StringHeader(String label, String title, IHeader parentHeader,
-	    ITextFormater formater) {
-	super();
-	this.label = label;
-	this.title = title;
-	this.parentHeader = parentHeader;
-	this.textFormater = formater;
+                        ITextFormater formater) {
+        super();
+        this.label = label;
+        this.title = title;
+        this.parentHeader = parentHeader;
+        this.textFormater = formater;
     }
 
     @Override
     public Component getHeader(String componentId) {
-	return new Label(componentId, getFormatedLabel());
+        return new Label(componentId, getFormatedLabel());
     }
 
     @Override
     public String getLabel() {
-	return label;
+        return label;
     }
 
     @Override
     public String getTitle() {
-	return (title == null ? getLabel() : title);
+        return (title == null ? getLabel() : title);
     }
 
     public String getFormatedLabel() {
-	return (textFormater == null ? getLabel() : textFormater
-		.format(getLabel()));
+        return (textFormater == null ? getLabel() : textFormater
+                .format(getLabel()));
     }
 
     @Override
     public IHeader getParentHeader() {
-	return (parentHeader == null ? new EmptyHeader() : parentHeader);
+        return (parentHeader == null ? new EmptyHeader() : parentHeader);
     }
 
     @Override
     public String getSortProperty() {
-	return null;
+        return null;
     }
 
     @Override
     public boolean isSortable() {
-	return false;
+        return false;
     }
 
     @Override
     public Component getHelp(String componentId) {
-	return new EmptyPanel(componentId);
+        return new EmptyPanel(componentId);
     }
 
 }

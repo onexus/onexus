@@ -30,21 +30,21 @@ public class Field implements IMetadata {
     private List<Property> properties;
 
     public Field() {
-	super();
+        super();
     }
-    
+
     public Field(String name, String shortName, String title, Class<?> dataType) {
-	super();
-	this.name = name;
-	this.shortName = shortName;
-	this.title = title;
-	this.dataType = dataType;
-	this.primaryKey = false;
+        super();
+        this.name = name;
+        this.shortName = shortName;
+        this.title = title;
+        this.dataType = dataType;
+        this.primaryKey = false;
     }
 
     @Override
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
@@ -60,92 +60,92 @@ public class Field implements IMetadata {
     }
 
     public String getShortName() {
-	return shortName;
+        return shortName;
     }
 
     public void setShortName(String shortName) {
-	this.shortName = shortName;
+        this.shortName = shortName;
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     @Override
     public String getDescription() {
-	return description;
+        return description;
     }
 
     public void setDescription(String description) {
-	this.description = description;
+        this.description = description;
     }
 
     public Class<?> getDataType() {
-	return dataType;
+        return dataType;
     }
 
     public boolean isPrimaryKey() {
-	return primaryKey;
+        return primaryKey;
     }
 
     public void setPrimaryKey(boolean primaryKey) {
-	this.primaryKey = primaryKey;
+        this.primaryKey = primaryKey;
     }
 
     @Override
     public List<Property> getProperties() {
-	return properties;
+        return properties;
     }
 
     @Override
     public String getProperty(String key) {
-	if (this.properties == null) {
-	    return null;
-	}
+        if (this.properties == null) {
+            return null;
+        }
 
-	for (Property p : this.properties) {
-	    if (p.getKey().equals(key)) {
-		return p.getValue();
-	    }
-	}
-	return null;
+        for (Property p : this.properties) {
+            if (p.getKey().equals(key)) {
+                return p.getValue();
+            }
+        }
+        return null;
     }
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Field other = (Field) obj;
-	if (name == null) {
-	    if (other.name != null)
-		return false;
-	} else if (!name.equals(other.name))
-	    return false;
-	return true;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Field other = (Field) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
-	return "Field [name=" + name + ", shortName=" + shortName + ", title="
-		+ title + ", description=" + description + ", dataType="
-		+ dataType + ", primaryKey=" + primaryKey + ", properties="
-		+ properties + "]";
+        return "Field [name=" + name + ", shortName=" + shortName + ", title="
+                + title + ", description=" + description + ", dataType="
+                + dataType + ", primaryKey=" + primaryKey + ", properties="
+                + properties + "]";
     }
 
 }

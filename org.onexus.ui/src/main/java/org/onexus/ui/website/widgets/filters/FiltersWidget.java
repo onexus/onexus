@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
@@ -47,13 +43,17 @@ import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * FilterBoxPanel contain a list of tab filters that could be actived or
  * inactived.
- * 
+ * <p/>
  * There are two kind of filters. A predefined ones, and custom filters (this
  * can be deleted).
- * 
+ *
  * @author armand
  */
 public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStatus> implements IQueryContributor {
@@ -61,188 +61,188 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
     private FilterModel model;
 
     public FiltersWidget(String componentId, FiltersWidgetConfig config, IModel<FiltersWidgetStatus> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
 
-	onEventFireUpdate(EventQueryUpdate.class);
+        onEventFireUpdate(EventQueryUpdate.class);
 
-	String title = getConfig().getTitle();
-	add(new Label("title", (title != null ? title : "Filters")));
+        String title = getConfig().getTitle();
+        add(new Label("title", (title != null ? title : "Filters")));
 
-	Form<String> form = new Form<String>("form");
-	add(form);
+        Form<String> form = new Form<String>("form");
+        add(form);
 
-	if (config.getFilters() != null) {
-	    FiltersWidgetStatus status = getStatus();
-	    if (status == null) {
-		status = new FiltersWidgetStatus(config.getId());
-		for (FilterConfig filter : config.getFilters()) {
-		    status.updateFilter(filter);
-		}
+        if (config.getFilters() != null) {
+            FiltersWidgetStatus status = getStatus();
+            if (status == null) {
+                status = new FiltersWidgetStatus(config.getId());
+                for (FilterConfig filter : config.getFilters()) {
+                    status.updateFilter(filter);
+                }
 
-		setStatus(status);
-	    } else {
-		for (FilterConfig filter : config.getFilters()) {
-		    if (status.getActiveFilters().contains(filter.getId())) {
-			filter.setActive(true);
-		    } else {
-			filter.setActive(false);
-		    }
-		}
-	    }
-	}
+                setStatus(status);
+            } else {
+                for (FilterConfig filter : config.getFilters()) {
+                    if (status.getActiveFilters().contains(filter.getId())) {
+                        filter.setActive(true);
+                    } else {
+                        filter.setActive(false);
+                    }
+                }
+            }
+        }
 
-	this.model = new FilterModel();
+        this.model = new FilterModel();
 
-	form.add(new ListView<FilterConfig>("filters", this.model) {
+        form.add(new ListView<FilterConfig>("filters", this.model) {
 
-	    @Override
-	    protected void populateItem(final ListItem<FilterConfig> item) {
+            @Override
+            protected void populateItem(final ListItem<FilterConfig> item) {
 
-		FilterConfig filter = item.getModelObject();
-		BrowserPageStatus browserStatus = findParent(BrowserPage.class).getStatus();
+                FilterConfig filter = item.getModelObject();
+                BrowserPageStatus browserStatus = findParent(BrowserPage.class).getStatus();
 
-		FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(browserStatus
-			.getReleaseURI(), browserStatus.getFixedEntities());
+                FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(browserStatus
+                        .getReleaseURI(), browserStatus.getFixedEntities());
 
-		if (!filter.getHidden() && fixedPredicate.evaluate(filter)) {
+                if (!filter.getHidden() && fixedPredicate.evaluate(filter)) {
 
-		    item.add(new CheckBoxItem("checkboxItem", item) {
+                    item.add(new CheckBoxItem("checkboxItem", item) {
 
-			@Override
-			public void onItemSelected(AjaxRequestTarget target, FilterConfig filter) {
-			    getStatus().updateFilter(filter);
+                        @Override
+                        public void onItemSelected(AjaxRequestTarget target, FilterConfig filter) {
+                            getStatus().updateFilter(filter);
 
-			    send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
-			}
+                            send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
+                        }
 
-			@Override
-			protected void onItemDeleted(AjaxRequestTarget target, FilterConfig filter) {
+                        @Override
+                        protected void onItemDeleted(AjaxRequestTarget target, FilterConfig filter) {
 
-			    getStatus().getUserFilters().remove(filter);
+                            getStatus().getUserFilters().remove(filter);
 
-			    sendEvent(EventFiltersUpdate.EVENT);
+                            sendEvent(EventFiltersUpdate.EVENT);
 
-			}
+                        }
 
-		    });
+                    });
 
-		    // Help?
-		    if (filter.getHtmlHelp() != null) {
-			item.add(new HelpMark("helpFilterPanel", "", filter.getHtmlHelp()));
-		    } else {
-			item.add(new EmptyPanel("helpFilterPanel"));
-		    }
+                    // Help?
+                    if (filter.getHtmlHelp() != null) {
+                        item.add(new HelpMark("helpFilterPanel", "", filter.getHtmlHelp()));
+                    } else {
+                        item.add(new EmptyPanel("helpFilterPanel"));
+                    }
 
-		} else {
-		    item.setVisible(false);
-		}
+                } else {
+                    item.setVisible(false);
+                }
 
-	    }
-	});
+            }
+        });
 
-	final ModalWindow modal = new ModalWindow("modalWindowAddFilter");
-	modal.setContent(new ListItemsFilterPanel(ModalWindow.CONTENT_ID, getConfig().getFieldSelection()) {
+        final ModalWindow modal = new ModalWindow("modalWindowAddFilter");
+        modal.setContent(new ListItemsFilterPanel(ModalWindow.CONTENT_ID, getConfig().getFieldSelection()) {
 
-	    @Override
-	    public void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection field,
-		    Collection<String> values) {
+            @Override
+            public void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection field,
+                                             Collection<String> values) {
 
-		List<FilterConfig> userFilters = getStatus().getUserFilters();
+                List<FilterConfig> userFilters = getStatus().getUserFilters();
 
-		FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(userFilters.size() + 1),
-			filterName, true, new In(field.getCollection(), field.getFieldName(), values.toArray()));
-		filter.setDeletable(true);
-		userFilters.add(filter);
+                FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(userFilters.size() + 1),
+                        filterName, true, new In(field.getCollection(), field.getFieldName(), values.toArray()));
+                filter.setDeletable(true);
+                userFilters.add(filter);
 
-		modal.close(target);
+                modal.close(target);
 
-		sendEvent(EventFiltersUpdate.EVENT);
+                sendEvent(EventFiltersUpdate.EVENT);
 
-	    }
+            }
 
-	    @Override
-	    public void cancel(AjaxRequestTarget target) {
-		modal.close(target);
-	    }
+            @Override
+            public void cancel(AjaxRequestTarget target) {
+                modal.close(target);
+            }
 
-	});
-	add(modal);
+        });
+        add(modal);
 
-	// Add Filter link - Only visible if there is fields to be viewed
-	WebMarkupContainer addLink = new AjaxLink<String>("addFilter") {
+        // Add Filter link - Only visible if there is fields to be viewed
+        WebMarkupContainer addLink = new AjaxLink<String>("addFilter") {
 
-	    @Override
-	    public void onClick(AjaxRequestTarget target) {
-		modal.show(target);
-	    }
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                modal.show(target);
+            }
 
-	};
-	addLink.setOutputMarkupPlaceholderTag(true);
-	form.add(addLink);
-	addLink.setVisible(Boolean.TRUE.equals(getConfig().getUserFilters()));
+        };
+        addLink.setOutputMarkupPlaceholderTag(true);
+        form.add(addLink);
+        addLink.setVisible(Boolean.TRUE.equals(getConfig().getUserFilters()));
 
     }
 
     @Override
     public void onQueryBuild(Query query) {
-	
-	BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
 
-	FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), query.getFixedEntities());
+        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
 
-	List<Filter> rules = new ArrayList<Filter>();
-	for (FilterConfig filter : this.model.getObject()) {
-	    if (filter.getActive() && fixedPredicate.evaluate(filter)) {
-		for (Filter rule : filter.getRules()) {
-		    rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(),
-			    rule.getCollection()));
-		    rules.add(rule);
-		}
-	    }
-	}
+        FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), query.getFixedEntities());
 
-	if (!rules.isEmpty()) {
+        List<Filter> rules = new ArrayList<Filter>();
+        for (FilterConfig filter : this.model.getObject()) {
+            if (filter.getActive() && fixedPredicate.evaluate(filter)) {
+                for (Filter rule : filter.getRules()) {
+                    rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(),
+                            rule.getCollection()));
+                    rules.add(rule);
+                }
+            }
+        }
 
-	    boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
+        if (!rules.isEmpty()) {
 
-	    if (!union) {
-		for (Filter rule : rules) {
-		    query.putFilter(getConfig().getId(), rule);
-		}
-	    } else {
-		query.putFilter(getConfig().getId(), buildUnion(0, rules));
-	    }
+            boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
 
-	}
+            if (!union) {
+                for (Filter rule : rules) {
+                    query.putFilter(getConfig().getId(), rule);
+                }
+            } else {
+                query.putFilter(getConfig().getId(), buildUnion(0, rules));
+            }
+
+        }
     }
 
     private Filter buildUnion(int pos, List<Filter> rules) {
-	if (pos + 1 == rules.size()) {
-	    return rules.get(pos);
-	} else {
-	    Filter rule = rules.get(pos);
-	    return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
-	}
+        if (pos + 1 == rules.size()) {
+            return rules.get(pos);
+        } else {
+            Filter rule = rules.get(pos);
+            return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
+        }
     }
 
     public class FilterModel extends AbstractReadOnlyModel<List<? extends FilterConfig>> {
 
-	@Override
-	public List<? extends FilterConfig> getObject() {
-	   
-	    List<FilterConfig> filters = new ArrayList<FilterConfig>();
-	    List<FilterConfig> configFilters = FiltersWidget.this.getConfig().getFilters();
-	    List<FilterConfig> userFilters = FiltersWidget.this.getStatus().getUserFilters();
-	    
-	    if (configFilters != null) {
-		filters.addAll(configFilters);
-	    }
-	    
-	    if (userFilters != null) {
-		filters.addAll(userFilters);
-	    }
-	    
-	    return filters;
-	}
+        @Override
+        public List<? extends FilterConfig> getObject() {
+
+            List<FilterConfig> filters = new ArrayList<FilterConfig>();
+            List<FilterConfig> configFilters = FiltersWidget.this.getConfig().getFilters();
+            List<FilterConfig> userFilters = FiltersWidget.this.getStatus().getUserFilters();
+
+            if (configFilters != null) {
+                filters.addAll(configFilters);
+            }
+
+            if (userFilters != null) {
+                filters.addAll(userFilters);
+            }
+
+            return filters;
+        }
     }
 }

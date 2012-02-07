@@ -17,9 +17,6 @@
  */
 package org.onexus.ui.website.pages.browser;
 
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -42,118 +39,121 @@ import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.utils.EntityModel;
 
-public class FixedEntities extends AbstractWebsitePanel<BrowserPageConfig, BrowserPageStatus> implements IQueryContributor {
-    
-    
-    public FixedEntities(String id, BrowserPageConfig config, IModel<BrowserPageStatus> model) {
-	super(id, config, model);
+import java.util.Set;
+import java.util.regex.Pattern;
 
-	// Update this component if this events are fired.
-	onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class);
+public class FixedEntities extends AbstractWebsitePanel<BrowserPageConfig, BrowserPageStatus> implements IQueryContributor {
+
+
+    public FixedEntities(String id, BrowserPageConfig config, IModel<BrowserPageStatus> model) {
+        super(id, config, model);
+
+        // Update this component if this events are fired.
+        onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class);
     }
-    
+
     private String getAbsoluteURI(String collectionURI) {
-	return ResourceTools.getAbsoluteURI(getStatus().getReleaseURI(), collectionURI);
+        return ResourceTools.getAbsoluteURI(getStatus().getReleaseURI(), collectionURI);
     }
 
     @Override
     protected void onBeforeRender() {
 
-	super.onBeforeRender();
+        super.onBeforeRender();
 
-	RepeatingView filterRules = new RepeatingView("fixedEntities");
+        RepeatingView filterRules = new RepeatingView("fixedEntities");
 
-	for (FixedEntity fixedEntity : getStatus().getFixedEntities()) {
-	    WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
+        for (FixedEntity fixedEntity : getStatus().getFixedEntities()) {
+            WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
-	    Collection collection = OnexusWebSession.get().getResourceManager()
-		    .load(Collection.class, getAbsoluteURI(fixedEntity.getCollectionURI()));
+            Collection collection = OnexusWebSession.get().getResourceManager()
+                    .load(Collection.class, getAbsoluteURI(fixedEntity.getCollectionURI()));
 
-	    String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
-	    if (collectionLabel == null) {
-		collectionLabel = collection.getName();
-	    }
+            String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
+            if (collectionLabel == null) {
+                collectionLabel = collection.getName();
+            }
 
-	    String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
-	    String entityLabel = fixedEntity.getEntityId();
-	    if (entityField != null) {
-		IEntity entity = new EntityIterator(OnexusWebSession
-			.get()
-			.getCollectionManager()
-			.load(new SingleEntityQuery(getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity
-				.getEntityId())), getAbsoluteURI(fixedEntity.getCollectionURI())).next();
+            String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
+            String entityLabel = fixedEntity.getEntityId();
+            if (entityField != null) {
+                IEntity entity = new EntityIterator(OnexusWebSession
+                        .get()
+                        .getCollectionManager()
+                        .load(new SingleEntityQuery(getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity
+                                .getEntityId())), getAbsoluteURI(fixedEntity.getCollectionURI())).next();
 
-		entityLabel = String.valueOf(entity.get(entityField));
+                entityLabel = String.valueOf(entity.get(entityField));
 
-		if (entityLabel == null || entityLabel.isEmpty()) {
-		    entityLabel = fixedEntity.getEntityId();
-		}
+                if (entityLabel == null || entityLabel.isEmpty()) {
+                    entityLabel = fixedEntity.getEntityId();
+                }
 
-	    }
+            }
 
-	    String entityPattern = collection.getProperty("FIXED_ENTITY_PATTERN");
-	    if (entityPattern != null) {
-		IEntity entity = new EntityIterator(OnexusWebSession
-			.get()
-			.getCollectionManager()
-			.load(new SingleEntityQuery(getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity
-				.getEntityId())), getAbsoluteURI(fixedEntity.getCollectionURI())).next();
-		
-		if (entity != null) {
-		    entityLabel = parseTemplate(entityPattern, entity);
-		}
-	    }
-	    
+            String entityPattern = collection.getProperty("FIXED_ENTITY_PATTERN");
+            if (entityPattern != null) {
+                IEntity entity = new EntityIterator(OnexusWebSession
+                        .get()
+                        .getCollectionManager()
+                        .load(new SingleEntityQuery(getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity
+                                .getEntityId())), getAbsoluteURI(fixedEntity.getCollectionURI())).next();
 
-	    // Add new fixed entity
-	    container.add(new Label("collectionLabel", collectionLabel));
-	    Label labelComponent = new Label("entityLabel", entityLabel);
-	    labelComponent.setEscapeModelStrings(false);
-	    container.add(labelComponent);
-	    container.add(BoxFactory.createBox(fixedEntity.getCollectionURI(), new EntityModel(
-		    getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity.getEntityId())));
-	    
-	    BrowserPageLink<FixedEntity> removeLink = new BrowserPageLink<FixedEntity>("remove", Model.of(fixedEntity)) {
+                if (entity != null) {
+                    entityLabel = parseTemplate(entityPattern, entity);
+                }
+            }
 
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-		    
-		    Set<FixedEntity> fixedEntities = getBrowserPageStatus().getFixedEntities();
-		    fixedEntities.remove(getModelObject());
-		    
-		    sendEvent(EventUnfixEntity.EVENT);
-		}
-		
-	    };
-	    
-	    removeLink.setVisible(fixedEntity.isDeletable());
-	    container.add(removeLink);
-	    filterRules.add(container);
-	}
 
-	addOrReplace(filterRules);
+            // Add new fixed entity
+            container.add(new Label("collectionLabel", collectionLabel));
+            Label labelComponent = new Label("entityLabel", entityLabel);
+            labelComponent.setEscapeModelStrings(false);
+            container.add(labelComponent);
+            container.add(BoxFactory.createBox(fixedEntity.getCollectionURI(), new EntityModel(
+                    getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity.getEntityId())));
+
+            BrowserPageLink<FixedEntity> removeLink = new BrowserPageLink<FixedEntity>("remove", Model.of(fixedEntity)) {
+
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+
+                    Set<FixedEntity> fixedEntities = getBrowserPageStatus().getFixedEntities();
+                    fixedEntities.remove(getModelObject());
+
+                    sendEvent(EventUnfixEntity.EVENT);
+                }
+
+            };
+
+            removeLink.setVisible(fixedEntity.isDeletable());
+            container.add(removeLink);
+            filterRules.add(container);
+        }
+
+        addOrReplace(filterRules);
 
     }
 
     private String parseTemplate(String entityPattern, IEntity entity) {
-	
-	
-	for (Field field : entity.getCollection().getFields()) {
-	    String fieldName = field.getName();
-	    entityPattern = entityPattern.replaceAll(
-		    Pattern.quote("${"+fieldName+"}"), 
-		    String.valueOf(entity.get(fieldName))
-		    );
-	}
-	
-	return entityPattern;
+
+
+        for (Field field : entity.getCollection().getFields()) {
+            String fieldName = field.getName();
+            entityPattern = entityPattern.replaceAll(
+                    Pattern.quote("${" + fieldName + "}"),
+                    String.valueOf(entity.get(fieldName))
+            );
+        }
+
+        return entityPattern;
     }
 
     @Override
     public void onQueryBuild(Query query) {
-	for (FixedEntity fe : getStatus().getFixedEntities()) {
-	    query.getFixedEntities().add(fe);
-	}
+        for (FixedEntity fe : getStatus().getFixedEntities()) {
+            query.getFixedEntities().add(fe);
+        }
     }
 
 }

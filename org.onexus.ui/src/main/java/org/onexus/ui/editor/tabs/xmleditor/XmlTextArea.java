@@ -17,11 +17,6 @@
  */
 package org.onexus.ui.editor.tabs.xmleditor;
 
-import java.io.ByteArrayInputStream;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.ConversionException;
@@ -30,6 +25,10 @@ import org.apache.wicket.util.io.ByteArrayOutputStream;
 import org.apache.wicket.validation.IValidationError;
 import org.onexus.core.IResourceSerializer;
 import org.onexus.core.resources.Resource;
+
+import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.util.Locale;
 
 public class XmlTextArea extends TextArea<Resource> {
 
@@ -41,64 +40,64 @@ public class XmlTextArea extends TextArea<Resource> {
     private String resourceName;
 
     public XmlTextArea(String id, IModel<Resource> model) {
-	super(id, model);
-	setType(Resource.class);
+        super(id, model);
+        setType(Resource.class);
 
-	this.converter = new ResourceConverter();
+        this.converter = new ResourceConverter();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <C> IConverter<C> getConverter(Class<C> type) {
-	return (IConverter<C>) converter;
+        return (IConverter<C>) converter;
     }
 
     @Override
     public void error(IValidationError error) {
-	// Hide validation errors
+        // Hide validation errors
     }
 
     private class ResourceConverter implements IConverter<Resource> {
 
-	@Override
-	public Resource convertToObject(String value, Locale locale) {
-	    try {
-		Resource resource = resourceSerializer.unserialize(Resource.class,
-			new ByteArrayInputStream(value.getBytes()));
+        @Override
+        public Resource convertToObject(String value, Locale locale) {
+            try {
+                Resource resource = resourceSerializer.unserialize(Resource.class,
+                        new ByteArrayInputStream(value.getBytes()));
 
-		resource.setURI(resourceUri);
-		resource.setName(resourceName);
+                resource.setURI(resourceUri);
+                resource.setName(resourceName);
 
-		return resource;
-	    } catch (Exception e) {
-		XmlTextArea.this.error(String.valueOf(e.getMessage()));
-		throw new ConversionException(e.getMessage());
-	    }
-	}
+                return resource;
+            } catch (Exception e) {
+                XmlTextArea.this.error(String.valueOf(e.getMessage()));
+                throw new ConversionException(e.getMessage());
+            }
+        }
 
-	@Override
-	public String convertToString(Resource value, Locale locale) {
-	    try {
+        @Override
+        public String convertToString(Resource value, Locale locale) {
+            try {
 
-		resourceUri = value.getURI();
-		resourceName = value.getName();
+                resourceUri = value.getURI();
+                resourceName = value.getName();
 
-		value.setURI(null);
-		value.setName(null);
+                value.setURI(null);
+                value.setName(null);
 
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		resourceSerializer.serialize(value, output);
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                resourceSerializer.serialize(value, output);
 
-		value.setURI(resourceUri);
-		value.setName(resourceName);
+                value.setURI(resourceUri);
+                value.setName(resourceName);
 
-		return output.toString();
-	    } catch (Exception e) {
-		XmlTextArea.this.error(String.valueOf(e.getMessage()));
-		throw new ConversionException(e.getMessage());
+                return output.toString();
+            } catch (Exception e) {
+                XmlTextArea.this.error(String.valueOf(e.getMessage()));
+                throw new ConversionException(e.getMessage());
 
-	    }
-	}
+            }
+        }
 
     }
 

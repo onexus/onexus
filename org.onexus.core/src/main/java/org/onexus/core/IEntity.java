@@ -21,11 +21,10 @@ import org.onexus.core.resources.Collection;
 
 /**
  * <p>An entity is one piece of identifiable data in a Collection.</p>
- * 
- * <p>All the entities have the same fields.</p>  
- * 
- * @author Jordi Deu-Pons
+ * <p/>
+ * <p>All the entities have the same fields.</p>
  *
+ * @author Jordi Deu-Pons
  */
 public interface IEntity {
 
@@ -34,7 +33,7 @@ public interface IEntity {
      */
     public String getId();
 
-    
+
     /**
      * @return The owner collection.
      */
@@ -46,10 +45,10 @@ public interface IEntity {
      */
     public Object get(String fieldName);
 
-    
+
     /**
      * @param fieldName The name of the field.
-     * @param value The value to put into this field.
+     * @param value     The value to put into this field.
      */
     public void put(String fieldName, Object value);
 

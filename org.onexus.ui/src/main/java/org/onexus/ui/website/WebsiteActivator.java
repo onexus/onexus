@@ -24,7 +24,7 @@ public class WebsiteActivator implements IResourceActivator {
 
     @Override
     public void bind(IResourceRegister resourceRegister) {
-	resourceRegister.register(WebsiteConfig.class);
+        resourceRegister.register(WebsiteConfig.class);
     }
 
     @Override

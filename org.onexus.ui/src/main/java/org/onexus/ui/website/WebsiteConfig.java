@@ -17,32 +17,31 @@
  */
 package org.onexus.ui.website;
 
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.core.resources.MetadataResource;
 import org.onexus.ui.website.pages.PageConfig;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.List;
 
 @XStreamAlias("website")
 public class WebsiteConfig extends MetadataResource implements IWebsiteConfig {
-    
+
     private WebsiteStatus defaultStatus;
-    
+
     private List<PageConfig> pages;
-    
+
     public WebsiteConfig() {
-	super();
+        super();
     }
 
     @Override
     public WebsiteStatus getDefaultStatus() {
-	return defaultStatus;
+        return defaultStatus;
     }
 
     @Override
     public WebsiteStatus createEmptyStatus() {
-	return new WebsiteStatus();
+        return new WebsiteStatus();
     }
 
     public void setDefaultStatus(WebsiteStatus defaultStatus) {
@@ -50,23 +49,23 @@ public class WebsiteConfig extends MetadataResource implements IWebsiteConfig {
     }
 
     public List<PageConfig> getPages() {
-	return pages;
+        return pages;
     }
-    
+
     public PageConfig getPage(String pageId) {
-	if (pages != null) {
-	    for (PageConfig page : pages) {
-		if (page.getId().equals(pageId)) {
-		    return page;
-		}
-	    }
-	}
-	
-	return null;
+        if (pages != null) {
+            for (PageConfig page : pages) {
+                if (page.getId().equals(pageId)) {
+                    return page;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void setPages(List<PageConfig> pages) {
         this.pages = pages;
-    } 
+    }
 
 }

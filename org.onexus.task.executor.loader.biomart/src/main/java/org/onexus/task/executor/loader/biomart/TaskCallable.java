@@ -22,26 +22,26 @@ import org.onexus.core.ITaskCallable;
 import org.onexus.core.TaskStatus;
 
 public class TaskCallable implements ITaskCallable {
-    
+
     private TaskStatus status;
     private BiomartRequest request;
-    
+
     public TaskCallable(BiomartRequest request) {
-	this.request = request;
-	
-	String collectionURI = request.getCollection().getURI();
-	this.status = new TaskStatus(Long.toHexString(collectionURI.hashCode()), "Preparing BIOMART collection '"+collectionURI+"'");
+        this.request = request;
+
+        String collectionURI = request.getCollection().getURI();
+        this.status = new TaskStatus(Long.toHexString(collectionURI.hashCode()), "Preparing BIOMART collection '" + collectionURI + "'");
     }
 
     @Override
     public IEntitySet call() throws Exception {
-	this.status.addLog("Downloading and parsing the collection");
-	return new BiomartEntitySet(status, request);
+        this.status.addLog("Downloading and parsing the collection");
+        return new BiomartEntitySet(status, request);
     }
 
     @Override
     public TaskStatus getStatus() {
-	return status;
+        return status;
     }
 
 }

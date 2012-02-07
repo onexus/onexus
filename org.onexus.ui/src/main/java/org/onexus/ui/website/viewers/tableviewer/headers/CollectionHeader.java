@@ -28,57 +28,57 @@ public class CollectionHeader extends ElementHeader {
     private Collection collection;
 
     public CollectionHeader(Collection dataType) {
-	super((dataType == null ? null : dataType), (dataType == null ? null
-		: new StringHeader(null)), new StringFormater(30, false));
-	this.collection = dataType;
+        super((dataType == null ? null : dataType), (dataType == null ? null
+                : new StringHeader(null)), new StringFormater(30, false));
+        this.collection = dataType;
     }
 
     @Override
     public Component getHeader(String componentId) {
-	if (collection.getProperty("HELP") != null) {
-	    return new HelpMark(componentId, collection.getName(),
-		    getFormatedLabel(), getHelpContent());
-	} else {
-	    return super.getHeader(componentId);
-	}
+        if (collection.getProperty("HELP") != null) {
+            return new HelpMark(componentId, collection.getName(),
+                    getFormatedLabel(), getHelpContent());
+        } else {
+            return super.getHeader(componentId);
+        }
 
     }
 
     @Override
     public String getLabel() {
-	return (collection == null ? "" : collection.getTitle());
+        return (collection == null ? "" : collection.getTitle());
     }
 
     @Override
     public String getTitle() {
-	return collection.getDescription();
+        return collection.getDescription();
     }
 
     private String getHelpContent() {
-	StringBuilder str = new StringBuilder();
+        StringBuilder str = new StringBuilder();
 
-	str.append("<p>");
-	str.append(collection.getProperty("HELP"));
-	str.append("</p>");
+        str.append("<p>");
+        str.append(collection.getProperty("HELP"));
+        str.append("</p>");
 
-	str.append("<ul>");
-	for (Field field : collection.getFields()) {
-	    if (field.getProperty("HELP") != null) {
-		str.append("<li>");
-		str.append("<strong>").append(field.getShortName())
-			.append(":</strong>&nbsp;");
-		str.append(field.getProperty("HELP"));
-		if (field.getProperty("HELP-LINK") != null) {
-		    str.append("&nbsp;&nbsp;<a href=\"")
-			    .append(field.getProperty("HELP-LINK"))
-			    .append("\" target=\"_tab\">more...</a>");
-		}
-		str.append("</li>");
-	    }
-	}
-	str.append("</ul>");
+        str.append("<ul>");
+        for (Field field : collection.getFields()) {
+            if (field.getProperty("HELP") != null) {
+                str.append("<li>");
+                str.append("<strong>").append(field.getShortName())
+                        .append(":</strong>&nbsp;");
+                str.append(field.getProperty("HELP"));
+                if (field.getProperty("HELP-LINK") != null) {
+                    str.append("&nbsp;&nbsp;<a href=\"")
+                            .append(field.getProperty("HELP-LINK"))
+                            .append("\" target=\"_tab\">more...</a>");
+                }
+                str.append("</li>");
+            }
+        }
+        str.append("</ul>");
 
-	return str.toString();
+        return str.toString();
     }
 
 }

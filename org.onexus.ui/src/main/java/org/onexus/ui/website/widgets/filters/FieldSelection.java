@@ -17,9 +17,9 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
-import java.io.Serializable;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import java.io.Serializable;
 
 @XStreamAlias("field-selection")
 public class FieldSelection implements Serializable {
@@ -29,38 +29,38 @@ public class FieldSelection implements Serializable {
     private String fieldName;
 
     public FieldSelection() {
-	super();
+        super();
     }
 
     public FieldSelection(String title, String collectionURI, String fieldName) {
-	super();
-	this.title = title;
-	this.collection = collectionURI;
-	this.fieldName = fieldName;
+        super();
+        this.title = title;
+        this.collection = collectionURI;
+        this.fieldName = fieldName;
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getCollection() {
-	return collection;
+        return collection;
     }
 
     public void setCollection(String collectionURI) {
-	this.collection = collectionURI;
+        this.collection = collectionURI;
     }
 
     public String getFieldName() {
-	return fieldName;
+        return fieldName;
     }
 
     public void setFieldName(String fieldName) {
-	this.fieldName = fieldName;
+        this.fieldName = fieldName;
     }
 
 }

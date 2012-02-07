@@ -25,9 +25,9 @@ public class LinkPanel extends Panel {
     public static final String LINK_ID = "select";
 
     public LinkPanel(String id, String label, WebMarkupContainer link) {
-	super(id);
-	link.add(new Label("label", label));
-	add(link);
+        super(id);
+        link.add(new Label("label", label));
+        add(link);
     }
 
 }

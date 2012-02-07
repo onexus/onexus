@@ -17,23 +17,10 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
-import java.io.BufferedReader;
-import java.io.CharArrayReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -42,9 +29,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Simple lightweight form panel.
- * 
+ *
  * @author armand
  */
 public abstract class ListItemsFilterPanel extends Panel {
@@ -54,56 +46,56 @@ public abstract class ListItemsFilterPanel extends Panel {
     private List<FieldSelection> fieldSelectionList;
 
     public ListItemsFilterPanel(String id, List<FieldSelection> filterableProps) {
-	super(id);
+        super(id);
 
-	this.filterNameModel = new Model<String>("");
-	this.fieldSelectionList = filterableProps;
+        this.filterNameModel = new Model<String>("");
+        this.fieldSelectionList = filterableProps;
 
-	// Create feedback panels
-	final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
+        // Create feedback panels
+        final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
 
-	// Add uploadFeedback to the page itself
-	add(uploadFeedback);
+        // Add uploadFeedback to the page itself
+        add(uploadFeedback);
 
-	// Add simple upload form, which is hooked up to its feedback panel by
-	// virtue of that panel being nested in the form.
-	final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
-	add(simpleUploadForm);
+        // Add simple upload form, which is hooked up to its feedback panel by
+        // virtue of that panel being nested in the form.
+        final FileUploadForm simpleUploadForm = new FileUploadForm("simpleUpload");
+        add(simpleUploadForm);
 
     }
 
     // Methods to send result of user interaction
     public abstract void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection property,
-	    Collection<String> values);
+                                              Collection<String> values);
 
     public abstract void cancel(AjaxRequestTarget target);
 
     public IModel<String> getFilterNameModel() {
-	return filterNameModel;
+        return filterNameModel;
     }
 
     public String getFilterName() {
-	return filterNameModel.getObject();
+        return filterNameModel.getObject();
     }
 
     public void setFilterName(String filterName) {
-	this.filterNameModel.setObject(filterName);
+        this.filterNameModel.setObject(filterName);
     }
 
     public List<FieldSelection> getFieldSelectionList() {
-	return fieldSelectionList;
+        return fieldSelectionList;
     }
 
     public void setFieldSelectionList(List<FieldSelection> fieldSelectionList) {
-	this.fieldSelectionList = fieldSelectionList;
+        this.fieldSelectionList = fieldSelectionList;
     }
 
     public FieldSelection getFieldSelected() {
-	return fieldSelected;
+        return fieldSelected;
     }
 
     public void setFieldSelected(FieldSelection fieldSelectedModel) {
-	this.fieldSelected = fieldSelectedModel;
+        this.fieldSelected = fieldSelectedModel;
     }
 
     /**
@@ -111,157 +103,157 @@ public abstract class ListItemsFilterPanel extends Panel {
      */
     private class FileUploadForm extends Form<Object> {
 
-	private FileUploadField fileUploadField;
-	private Model<String> textArea = new Model<String>("");
+        private FileUploadField fileUploadField;
+        private Model<String> textArea = new Model<String>("");
 
-	public FileUploadForm(String name) {
-	    super(name);
+        public FileUploadForm(String name) {
+            super(name);
 
-	    setOutputMarkupId(true);
+            setOutputMarkupId(true);
 
-	    // set this form to multipart mode (allways needed for uploads!)
-	    setMultiPart(true);
+            // set this form to multipart mode (allways needed for uploads!)
+            setMultiPart(true);
 
-	    /* add(new Label("type", entityCollection.getName())); */
+            /* add(new Label("type", entityCollection.getName())); */
 
-	    TextField<String> filterName = new TextField<String>("filterName", getFilterNameModel());
-	    add(filterName);
+            TextField<String> filterName = new TextField<String>("filterName", getFilterNameModel());
+            add(filterName);
 
-	    WebMarkupContainer properties = new WebMarkupContainer("properties");
-	    add(properties);
+            WebMarkupContainer properties = new WebMarkupContainer("properties");
+            add(properties);
 
-	    PropertyModel propModel = new PropertyModel();
-	    fieldSelected = (getFieldSelectionList() == null || getFieldSelectionList().isEmpty()) ? null
-		    : getFieldSelectionList().get(0);
-	    propModel.setObject(fieldSelected);
-	    properties.add(new DropDownChoice<FieldSelection>("select", propModel, getFieldSelectionList(),
-		    new ChoiceRenderer<FieldSelection>("title")));
+            PropertyModel propModel = new PropertyModel();
+            fieldSelected = (getFieldSelectionList() == null || getFieldSelectionList().isEmpty()) ? null
+                    : getFieldSelectionList().get(0);
+            propModel.setObject(fieldSelected);
+            properties.add(new DropDownChoice<FieldSelection>("select", propModel, getFieldSelectionList(),
+                    new ChoiceRenderer<FieldSelection>("title")));
 
-	    add(new TextArea<String>("textarea", textArea));
+            add(new TextArea<String>("textarea", textArea));
 
-	    // Add one file input field
-	    add(fileUploadField = new FileUploadField("fileInput"));
+            // Add one file input field
+            add(fileUploadField = new FileUploadField("fileInput"));
 
-	    final FeedbackPanel pfeedback = new FeedbackPanel("p-feedback");
-	    add(pfeedback);
-	    pfeedback.setOutputMarkupId(true);
+            final FeedbackPanel pfeedback = new FeedbackPanel("p-feedback");
+            add(pfeedback);
+            pfeedback.setOutputMarkupId(true);
 
-	    // Necessary to pass all information from form.
-	    add(new AjaxButton("okButton") {
-		@Override
-		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		    if (isDataFormOk()) {
-			try {
-			    Collection<String> values = getValuesFromForm();
-			    recuperateFormValues(target, getFilterName(), getFieldSelected(), values);
+            // Necessary to pass all information from form.
+            add(new AjaxButton("okButton") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    if (isDataFormOk()) {
+                        try {
+                            Collection<String> values = getValuesFromForm();
+                            recuperateFormValues(target, getFilterName(), getFieldSelected(), values);
 
-			} catch (Exception e) {
-			    // TODO
-			    e.printStackTrace();
-			}
-		    }
-		    target.add(pfeedback);
-		}
+                        } catch (Exception e) {
+                            // TODO
+                            e.printStackTrace();
+                        }
+                    }
+                    target.add(pfeedback);
+                }
 
-		@Override
-		protected void onError(AjaxRequestTarget target, Form<?> form) {
-		    target.add(pfeedback);
-		}
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    target.add(pfeedback);
+                }
 
-	    });
+            });
 
-	    add(new AjaxButton("cancelButton") {
+            add(new AjaxButton("cancelButton") {
 
-		@Override
-		protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		    cancel(target);
-		}
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    cancel(target);
+                }
 
-		@Override
-		protected void onError(AjaxRequestTarget target, Form<?> form) {
-		    // FIXME Auto-generated method stub
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    // FIXME Auto-generated method stub
 
-		}
-	    });
+                }
+            });
 
-	    // Set maximum size to 1K
-	    setMaxSize(Bytes.kilobytes(10));
+            // Set maximum size to 1K
+            setMaxSize(Bytes.kilobytes(10));
 
-	}
+        }
 
-	/**
-	 * Validates the form data.
-	 * 
-	 * @return
-	 */
-	public boolean isDataFormOk() {
+        /**
+         * Validates the form data.
+         *
+         * @return
+         */
+        public boolean isDataFormOk() {
 
-	    if (getFilterName() == null || "".equals(getFilterName())) {
-		error("Filter name must be specified");
-		return false;
+            if (getFilterName() == null || "".equals(getFilterName())) {
+                error("Filter name must be specified");
+                return false;
 
-	    } else {
-		return getFieldSelected() != null
-			&& getFilterName() != null
-			&& !"".equals(getFilterName())
-			&& (fileUploadField.getFileUpload() != null || (textArea.getObject() != null && textArea
-				.getObject().length() > 0));
-	    }
-	}
+            } else {
+                return getFieldSelected() != null
+                        && getFilterName() != null
+                        && !"".equals(getFilterName())
+                        && (fileUploadField.getFileUpload() != null || (textArea.getObject() != null && textArea
+                        .getObject().length() > 0));
+            }
+        }
 
-	/**
-	 * Get Values From Form.
-	 * 
-	 * @param upload
-	 * @return
-	 * @throws IOException
-	 */
-	private Collection<String> getValuesFromForm() throws IOException {
+        /**
+         * Get Values From Form.
+         *
+         * @param upload
+         * @return
+         * @throws IOException
+         */
+        private Collection<String> getValuesFromForm() throws IOException {
 
-	    BufferedReader reader = null;
-	    InputStream input = null;
-	    try {
-		final FileUpload upload = fileUploadField.getFileUpload();
+            BufferedReader reader = null;
+            InputStream input = null;
+            try {
+                final FileUpload upload = fileUploadField.getFileUpload();
 
-		if (upload != null) {
-		    input = upload.getInputStream();
-		    reader = new BufferedReader(new InputStreamReader(input));
-		} else {
-		    reader = new BufferedReader(new CharArrayReader(textArea.getObject().toCharArray()));
-		}
+                if (upload != null) {
+                    input = upload.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(input));
+                } else {
+                    reader = new BufferedReader(new CharArrayReader(textArea.getObject().toCharArray()));
+                }
 
-		int c;
-		Collection<String> values = new ArrayList<String>();
-		String value = "";
-		while ((c = reader.read()) != -1) {
-		    if (c == ' ' || c == '\r' || c == '\t') {
-			continue;
-		    }
-		    if (c == ',' || c == '\n') {
-			if (!value.equals("")) {
-			    values.add(value);
-			    value = "";
-			}
-		    } else {
-			value = value + ((char) c);
-		    }
-		}
-		if (!value.equals("")) {
-		    values.add(value);
-		    value = "";
-		}
+                int c;
+                Collection<String> values = new ArrayList<String>();
+                String value = "";
+                while ((c = reader.read()) != -1) {
+                    if (c == ' ' || c == '\r' || c == '\t') {
+                        continue;
+                    }
+                    if (c == ',' || c == '\n') {
+                        if (!value.equals("")) {
+                            values.add(value);
+                            value = "";
+                        }
+                    } else {
+                        value = value + ((char) c);
+                    }
+                }
+                if (!value.equals("")) {
+                    values.add(value);
+                    value = "";
+                }
 
-		return values;
-	    } finally {
-		if (reader != null) {
-		    reader.close();
-		}
+                return values;
+            } finally {
+                if (reader != null) {
+                    reader.close();
+                }
 
-		if (input != null) {
-		    input.close();
-		}
-	    }
-	}
+                if (input != null) {
+                    input.close();
+                }
+            }
+        }
 
     }
 
@@ -270,20 +262,20 @@ public abstract class ListItemsFilterPanel extends Panel {
      */
     private class PropertyModel implements IModel<FieldSelection> {
 
-	@Override
-	public FieldSelection getObject() {
-	    return getFieldSelected();
-	}
+        @Override
+        public FieldSelection getObject() {
+            return getFieldSelected();
+        }
 
-	@Override
-	public void setObject(FieldSelection object) {
-	    setFieldSelected(object);
-	}
+        @Override
+        public void setObject(FieldSelection object) {
+            setFieldSelected(object);
+        }
 
-	@Override
-	public void detach() {
-	    // Nothing
-	}
+        @Override
+        public void detach() {
+            // Nothing
+        }
     }
 
 }

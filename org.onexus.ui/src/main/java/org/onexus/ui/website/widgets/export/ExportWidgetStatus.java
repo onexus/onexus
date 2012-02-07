@@ -22,11 +22,11 @@ import org.onexus.ui.website.widgets.WidgetStatus;
 public class ExportWidgetStatus extends WidgetStatus {
 
     public ExportWidgetStatus() {
-	super();
+        super();
     }
 
     public ExportWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
 }

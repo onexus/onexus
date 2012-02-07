@@ -31,42 +31,40 @@ public class TagColumn extends TableTrack implements IColumn<IEntityTable> {
     private String collectionURI;
 
     public TagColumn(String collectionURI) {
-	super();
-	this.collectionURI = collectionURI;
+        super();
+        this.collectionURI = collectionURI;
     }
 
     @Override
     public void populateItem(Item<ICellPopulator<IEntityTable>> cellItem,
-	    String componentId, IModel<IEntityTable> rowModel) {
-	
-	String rowValue = rowModel.getObject().getEntity(collectionURI).getId();
+                             String componentId, IModel<IEntityTable> rowModel) {
 
-	cellItem.add(new TagColumnItem(componentId, Model.of(rowValue)));
+        String rowValue = rowModel.getObject().getEntity(collectionURI).getId();
+
+        cellItem.add(new TagColumnItem(componentId, Model.of(rowValue)));
 
     }
-    
-    
+
 
     @Override
     public void detach() {
 
     }
-    
+
     @Override
     public Component getHeader(String componentId) {
-	return new TagColumnHeader(componentId);
+        return new TagColumnHeader(componentId);
     }
 
     @Override
     public String getSortProperty() {
-	return null;
+        return null;
     }
 
     @Override
     public boolean isSortable() {
-	return false;
+        return false;
     }
-    
-    
+
 
 }

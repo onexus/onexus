@@ -22,52 +22,49 @@ import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.IResourceStream;
 
-public abstract class TagsDownload extends AbstractAjaxBehavior
-{
-    
-    	private boolean addAntiCache;
-    	
-    	public TagsDownload() {
-    	    this(true);
-    	}
-    	
-	public TagsDownload(boolean addAntiCache) {
-	    super();
-	    this.addAntiCache = addAntiCache;
-	}
+public abstract class TagsDownload extends AbstractAjaxBehavior {
 
-	/**
-	 * Call this method to initiate the download.
-	 */
-	public void initiate(AjaxRequestTarget target)
-	{
-		String url = getCallbackUrl().toString();
-		
-		if (addAntiCache) {
-		    url = url + (url.contains("?") ? "&" : "?");
-		    url = url + "antiCache=" + System.currentTimeMillis();
-		}
+    private boolean addAntiCache;
 
-		target.appendJavaScript("window.location.href='" + url + "'");
-	}
+    public TagsDownload() {
+        this(true);
+    }
 
-	public void onRequest()
-	{
-	    getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(
-	                new ResourceStreamRequestHandler(getResourceStream(), getFileName()));
-	}
+    public TagsDownload(boolean addAntiCache) {
+        super();
+        this.addAntiCache = addAntiCache;
+    }
 
-	/**
-	 * Override this method for a file name which will let the browser prompt with a save/open dialog.
-	 * @see ResourceStreamRequestTarget#getFileName()
-	 */
-	protected String getFileName()
-	{
-		return null;
-	}
+    /**
+     * Call this method to initiate the download.
+     */
+    public void initiate(AjaxRequestTarget target) {
+        String url = getCallbackUrl().toString();
 
-	/**
-	 * Hook method providing the actual resource stream.
-	 */
-	protected abstract IResourceStream getResourceStream();
+        if (addAntiCache) {
+            url = url + (url.contains("?") ? "&" : "?");
+            url = url + "antiCache=" + System.currentTimeMillis();
+        }
+
+        target.appendJavaScript("window.location.href='" + url + "'");
+    }
+
+    public void onRequest() {
+        getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                new ResourceStreamRequestHandler(getResourceStream(), getFileName()));
+    }
+
+    /**
+     * Override this method for a file name which will let the browser prompt with a save/open dialog.
+     *
+     * @see ResourceStreamRequestTarget#getFileName()
+     */
+    protected String getFileName() {
+        return null;
+    }
+
+    /**
+     * Hook method providing the actual resource stream.
+     */
+    protected abstract IResourceStream getResourceStream();
 }

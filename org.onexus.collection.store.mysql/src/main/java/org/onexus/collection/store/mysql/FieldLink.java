@@ -18,20 +18,20 @@
 package org.onexus.collection.store.mysql;
 
 public class FieldLink {
-    
+
     private String fromCollection;
     private String fromFieldName;
     private String toCollection;
     private String toFieldName;
-    
-    
+
+
     public FieldLink(String fromCollection, String fromFieldName,
-	    String toCollection, String toFieldName) {
-	super();
-	this.fromCollection = fromCollection;
-	this.fromFieldName = fromFieldName;
-	this.toCollection = toCollection;
-	this.toFieldName = toFieldName;
+                     String toCollection, String toFieldName) {
+        super();
+        this.fromCollection = fromCollection;
+        this.fromFieldName = fromFieldName;
+        this.toCollection = toCollection;
+        this.toFieldName = toFieldName;
     }
 
 
@@ -73,9 +73,6 @@ public class FieldLink {
     public void setToFieldName(String toFieldName) {
         this.toFieldName = toFieldName;
     }
-    
-    
-    
-    
+
 
 }

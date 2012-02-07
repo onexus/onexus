@@ -24,24 +24,24 @@ public class SelectorFilterWidgetStatus extends WidgetStatus {
     private String activeFilter;
 
     public SelectorFilterWidgetStatus() {
-	super();
+        super();
     }
 
     public SelectorFilterWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
     public SelectorFilterWidgetStatus(String widgetId, String activeFilter) {
-	super(widgetId);
-	this.activeFilter = activeFilter;
+        super(widgetId);
+        this.activeFilter = activeFilter;
     }
 
     public String getActiveFilter() {
-	return activeFilter;
+        return activeFilter;
     }
 
     public void setActiveFilter(String activeFilter) {
-	this.activeFilter = activeFilter;
+        this.activeFilter = activeFilter;
     }
 
 }

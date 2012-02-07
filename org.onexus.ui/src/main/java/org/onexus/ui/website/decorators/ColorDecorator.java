@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.decorators;
 
-import java.awt.Color;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,8 +28,10 @@ import org.onexus.ui.website.decorators.color.ColorUtils;
 import org.onexus.ui.website.decorators.color.IColorScaleHtml;
 import org.onexus.ui.website.formaters.ITextFormater;
 
+import java.awt.*;
+
 public class ColorDecorator extends FieldDecorator {
-    private static final Color emptyColor = new Color(255,255,255);
+    private static final Color emptyColor = new Color(255, 255, 255);
 
     private boolean showValue = false;
     private Field tooltipField;
@@ -39,108 +39,108 @@ public class ColorDecorator extends FieldDecorator {
     private String cssClass;
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
-	    String cssClass) {
-	this(valueField, valueField, colorScale, cssClass, false, null);
+                          String cssClass) {
+        this(valueField, valueField, colorScale, cssClass, false, null);
     }
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
-	    String cssClass, ITextFormater textFormater) {
-	this(valueField, valueField, colorScale, cssClass, false, textFormater);
+                          String cssClass, ITextFormater textFormater) {
+        this(valueField, valueField, colorScale, cssClass, false, textFormater);
     }
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
-	    String cssClass, boolean showValue) {
-	this(valueField, valueField, colorScale, cssClass, showValue, null);
+                          String cssClass, boolean showValue) {
+        this(valueField, valueField, colorScale, cssClass, showValue, null);
     }
 
     public ColorDecorator(Field valueField, Field tooltipField,
-	    IColorScaleHtml colorScale, String cssClass, boolean showValue,
-	    ITextFormater textFormater) {
-	super(valueField, textFormater);
-	this.tooltipField = tooltipField;
-	this.colorScale = colorScale;
-	this.cssClass = cssClass;
-	this.showValue = showValue;
+                          IColorScaleHtml colorScale, String cssClass, boolean showValue,
+                          ITextFormater textFormater) {
+        super(valueField, textFormater);
+        this.tooltipField = tooltipField;
+        this.colorScale = colorScale;
+        this.cssClass = cssClass;
+        this.showValue = showValue;
     }
 
     protected String getTooltip(IEntity entity) {
 
-	if (tooltipField == null || entity == null) {
-	    return "";
-	}
+        if (tooltipField == null || entity == null) {
+            return "";
+        }
 
-	Object value = entity.get(tooltipField.getName());
+        Object value = entity.get(tooltipField.getName());
 
-	if (value == null) {
-	    return "";
-	}
+        if (value == null) {
+            return "";
+        }
 
-	return value.toString();
+        return value.toString();
 
     }
 
     public boolean isShowValue() {
-	return showValue;
+        return showValue;
     }
 
     public void setShowValue(boolean showValue) {
-	this.showValue = showValue;
+        this.showValue = showValue;
     }
-    
+
     public String getColor(IEntity entity) {
-	return ColorUtils.colorToHexHtml(getRealColor(entity));
+        return ColorUtils.colorToHexHtml(getRealColor(entity));
     }
 
     public Color getRealColor(IEntity entity) {
 
-	Object value = getValue(entity);
+        Object value = getValue(entity);
 
-	if (value == null) {
-	    return emptyColor;
-	}
+        if (value == null) {
+            return emptyColor;
+        }
 
-	if (value instanceof Double) {
-	    return colorScale.valueColor((Double) value);
-	}
+        if (value instanceof Double) {
+            return colorScale.valueColor((Double) value);
+        }
 
-	return colorScale.valueColor(new Double(value.toString()));
+        return colorScale.valueColor(new Double(value.toString()));
     }
-    
+
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer,
-	    String componentId, IModel<IEntity> entityModel) {
-	
-	Color bkgColor = getRealColor(entityModel.getObject());
+                             String componentId, IModel<IEntity> entityModel) {
 
-	if (!showValue) {
-	    WebMarkupContainer empty = new WebMarkupContainer(componentId);
-	    empty.setVisible(false);
-	    cellContainer.add(empty);
-	} else {
-	    Label textValue = new Label(componentId, getFormatValue(entityModel.getObject()));
-	    String textColor = (lum(bkgColor) >= 128 ? "color: #000;" : "color: #FFF;");
-	    textValue.add(new AttributeModifier("style", new Model<String>(textColor)));
-	    cellContainer.add(textValue);
-	}
+        Color bkgColor = getRealColor(entityModel.getObject());
 
-	cellContainer
-		.add(new AttributeModifier("style", new Model<String>(
-			"background-color: " + ColorUtils.colorToHexHtml(bkgColor) + ";")));
-	cellContainer.add(new AttributeModifier("title", new Model<String>(
-		getTooltip(entityModel.getObject()))));
-	if (cssClass != null) {
-	    cellContainer.add(new AttributeModifier("class", new Model<String>(
-		    cssClass)));
-	}
+        if (!showValue) {
+            WebMarkupContainer empty = new WebMarkupContainer(componentId);
+            empty.setVisible(false);
+            cellContainer.add(empty);
+        } else {
+            Label textValue = new Label(componentId, getFormatValue(entityModel.getObject()));
+            String textColor = (lum(bkgColor) >= 128 ? "color: #000;" : "color: #FFF;");
+            textValue.add(new AttributeModifier("style", new Model<String>(textColor)));
+            cellContainer.add(textValue);
+        }
+
+        cellContainer
+                .add(new AttributeModifier("style", new Model<String>(
+                        "background-color: " + ColorUtils.colorToHexHtml(bkgColor) + ";")));
+        cellContainer.add(new AttributeModifier("title", new Model<String>(
+                getTooltip(entityModel.getObject()))));
+        if (cssClass != null) {
+            cellContainer.add(new AttributeModifier("class", new Model<String>(
+                    cssClass)));
+        }
 
     }
-    
+
     public static double lum(Color color) {
         int r = color.getRed();
         int g = color.getGreen();
         int b = color.getBlue();
-        return .299*r + .587*g + .114*b;
+        return .299 * r + .587 * g + .114 * b;
     }
 
 

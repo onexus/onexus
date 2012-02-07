@@ -20,15 +20,15 @@ package org.onexus.ui.website.pages;
 import org.onexus.ui.website.IWebsiteStatus;
 
 public abstract class PageStatus implements IWebsiteStatus {
-    
+
     private String id;
 
     public PageStatus() {
     }
-    
+
     public PageStatus(String id) {
-	super();
-	this.id = id;
+        super();
+        this.id = id;
     }
 
     public String getId() {

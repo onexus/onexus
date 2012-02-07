@@ -17,15 +17,11 @@
  */
 package org.onexus.collection.store.mysql;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+
+import java.util.*;
 
 public class MysqlEntity implements IEntity {
 
@@ -33,55 +29,55 @@ public class MysqlEntity implements IEntity {
     private Map<String, Object> values;
 
     public MysqlEntity(Collection collection) {
-	this(collection, new HashMap<String, Object>());
+        this(collection, new HashMap<String, Object>());
     }
 
     private MysqlEntity(Collection collection, Map<String, Object> values) {
-	super();
-	this.collection = collection;
-	this.values = values;
+        super();
+        this.collection = collection;
+        this.values = values;
     }
 
     @Override
     public String getId() {
 
-	List<String> collectionKeys = new ArrayList<String>();
-	for (Field field : collection.getFields()) {
-	    if (field.isPrimaryKey()) {
-		collectionKeys.add(field.getName());
-	    }
-	}
+        List<String> collectionKeys = new ArrayList<String>();
+        for (Field field : collection.getFields()) {
+            if (field.isPrimaryKey()) {
+                collectionKeys.add(field.getName());
+            }
+        }
 
-	StringBuilder id = new StringBuilder();
-	Iterator<String> fieldNames = collectionKeys.iterator();
-	while (fieldNames.hasNext()) {
-	    id.append(String.valueOf(get(fieldNames.next())));
-	    if (fieldNames.hasNext()) {
-		id.append("\t");
-	    }
-	}
+        StringBuilder id = new StringBuilder();
+        Iterator<String> fieldNames = collectionKeys.iterator();
+        while (fieldNames.hasNext()) {
+            id.append(String.valueOf(get(fieldNames.next())));
+            if (fieldNames.hasNext()) {
+                id.append("\t");
+            }
+        }
 
-	return id.toString();
+        return id.toString();
     }
 
     @Override
     public Collection getCollection() {
-	return collection;
+        return collection;
     }
 
     @Override
     public Object get(String fieldURI) {
-	return values.get(fieldURI);
+        return values.get(fieldURI);
     }
 
     @Override
     public void put(String fieldURI, Object value) {
-	values.put(fieldURI, value);
+        values.put(fieldURI, value);
     }
 
     protected MysqlEntity clone() {
-	return new MysqlEntity(collection, new HashMap<String, Object>(
-		this.values));
+        return new MysqlEntity(collection, new HashMap<String, Object>(
+                this.values));
     }
 
 }

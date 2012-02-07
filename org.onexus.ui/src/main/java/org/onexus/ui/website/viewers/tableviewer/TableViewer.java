@@ -17,9 +17,6 @@
  */
 package org.onexus.ui.website.viewers.tableviewer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
@@ -42,10 +39,13 @@ import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.workspace.progressbar.TaskStatusProgress;
 import org.onexus.ui.workspace.progressbar.TaskStatusProgress.ActiveTasks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TableViewer extends Viewer<TableViewerConfig, TableViewerStatus> {
 
     public static final CssResourceReference TABLE_VIEWER_CSS = new CssResourceReference(TableViewer.class,
-	    "TableViewer.css");
+            "TableViewer.css");
 
     private final static MetaDataKey<Integer> DEFAULT_ROWS_PER_PAGE = new MetaDataKey<Integer>() {
     };
@@ -54,71 +54,71 @@ public class TableViewer extends Viewer<TableViewerConfig, TableViewerStatus> {
     private EntitiesRowProvider dataProvider;
 
     public TableViewer(String componentId, TableViewerConfig config, IModel<TableViewerStatus> status) {
-	super(componentId, config, status);
+        super(componentId, config, status);
 
-	onEventFireUpdate(EventQueryUpdate.class, EventFixEntity.class, EventUnfixEntity.class);
+        onEventFireUpdate(EventQueryUpdate.class, EventFixEntity.class, EventUnfixEntity.class);
 
-	if (status.getObject() == null) {
-	    status.setObject(getStatus());
-	}
+        if (status.getObject() == null) {
+            status.setObject(getStatus());
+        }
 
-	this.dataProvider = new EntitiesRowProvider(config, status) {
+        this.dataProvider = new EntitiesRowProvider(config, status) {
 
-	    @Override
-	    protected void buildQuery(Query query) {
-		TableViewer.this.buildQuery(query);
-	    }
+            @Override
+            protected void buildQuery(Query query) {
+                TableViewer.this.buildQuery(query);
+            }
 
-	    @Override
-	    protected void addTaskStatus(TaskStatus taskStatus) {
+            @Override
+            protected void addTaskStatus(TaskStatus taskStatus) {
 
-		ActiveTasks activeTasks = Session.get().getMetaData(TaskStatusProgress.TASKS);
-		if (activeTasks == null) {
-		    activeTasks = new ActiveTasks();
-		    Session.get().setMetaData(TaskStatusProgress.TASKS, activeTasks);
-		}
-		for (TaskStatus task : taskStatus.getSubTasks()) {
-		    activeTasks.addTask(task);
-		}
-	    }
-	    
-	    @Override
-	    protected BrowserPageStatus getBrowserPageStatus() {
-		//FIXME
-		WebsiteStatus websiteStatus = TableViewer.this.getWebsiteStatus();
-		return (websiteStatus == null ? null : (BrowserPageStatus) websiteStatus.getCurrentPageStatus());
-	    }
+                ActiveTasks activeTasks = Session.get().getMetaData(TaskStatusProgress.TASKS);
+                if (activeTasks == null) {
+                    activeTasks = new ActiveTasks();
+                    Session.get().setMetaData(TaskStatusProgress.TASKS, activeTasks);
+                }
+                for (TaskStatus task : taskStatus.getSubTasks()) {
+                    activeTasks.addTask(task);
+                }
+            }
 
-	};
-	Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
+            @Override
+            protected BrowserPageStatus getBrowserPageStatus() {
+                //FIXME
+                WebsiteStatus websiteStatus = TableViewer.this.getWebsiteStatus();
+                return (websiteStatus == null ? null : (BrowserPageStatus) websiteStatus.getCurrentPageStatus());
+            }
 
-	WebsiteStatus websiteStatus = getWebsiteStatus();
-	BrowserPageStatus browserPageStatus = (websiteStatus == null? null : ((BrowserPageStatus) websiteStatus.getCurrentPageStatus()));
-	String releaseURI = (browserPageStatus == null) ? null : browserPageStatus.getReleaseURI();
+        };
+        Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
 
-	// Create the columns from the config
-	List<IColumnConfig> columnsConfig = getConfig().getColumns();
-	List<IColumn<IEntityTable>> columns = new ArrayList<IColumn<IEntityTable>>();
-	for (IColumnConfig columnConfig : columnsConfig) {
-	    columnConfig.addColumns(columns, releaseURI);
-	}
+        WebsiteStatus websiteStatus = getWebsiteStatus();
+        BrowserPageStatus browserPageStatus = (websiteStatus == null ? null : ((BrowserPageStatus) websiteStatus.getCurrentPageStatus()));
+        String releaseURI = (browserPageStatus == null) ? null : browserPageStatus.getReleaseURI();
 
-	DataTable<IEntityTable> resultTable = new DataTable<IEntityTable>("datatable", columns, dataProvider,
-		(rowsPerPage == null ? 20 : rowsPerPage));
-	resultTable.setOutputMarkupId(true);
-	resultTable.setVersioned(false);
-	resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
-	resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
-	resultTable.addBottomToolbar(new AjaxNavigationToolbar(resultTable));
-	// resultTable.addBottomToolbar(new NavigationToolbar(resultTable));
-	add(resultTable);
+        // Create the columns from the config
+        List<IColumnConfig> columnsConfig = getConfig().getColumns();
+        List<IColumn<IEntityTable>> columns = new ArrayList<IColumn<IEntityTable>>();
+        for (IColumnConfig columnConfig : columnsConfig) {
+            columnConfig.addColumns(columns, releaseURI);
+        }
+
+        DataTable<IEntityTable> resultTable = new DataTable<IEntityTable>("datatable", columns, dataProvider,
+                (rowsPerPage == null ? 20 : rowsPerPage));
+        resultTable.setOutputMarkupId(true);
+        resultTable.setVersioned(false);
+        resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
+        resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
+        resultTable.addBottomToolbar(new AjaxNavigationToolbar(resultTable));
+        // resultTable.addBottomToolbar(new NavigationToolbar(resultTable));
+        add(resultTable);
 
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-	super.renderHead(response);
-	response.renderCSSReference(TABLE_VIEWER_CSS);
+        super.renderHead(response);
+        response.renderCSSReference(TABLE_VIEWER_CSS);
     }
 
 }

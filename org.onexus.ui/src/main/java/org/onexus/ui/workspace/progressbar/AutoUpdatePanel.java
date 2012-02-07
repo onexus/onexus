@@ -28,48 +28,48 @@ public abstract class AutoUpdatePanel<T> extends Panel implements IFormModelUpda
     private int hashCode = 0;
 
     public AutoUpdatePanel(String id, IModel<T> model) {
-	super(id, model);
-	setOutputMarkupId(true);	
+        super(id, model);
+        setOutputMarkupId(true);
     }
 
     @Override
     protected void onBeforeRender() {
-	this.hashCode = getModelHashCode();
-	super.onBeforeRender();
+        this.hashCode = getModelHashCode();
+        super.onBeforeRender();
     }
 
     public void onEvent(IEvent<?> event) {
-	if (event.getPayload() instanceof AjaxRequestTarget) {
-	    int newHashCode = getModelHashCode();
-	    if (hashCode != newHashCode) {
-		((AjaxRequestTarget) event.getPayload()).add(this);
-	    }
-	}
+        if (event.getPayload() instanceof AjaxRequestTarget) {
+            int newHashCode = getModelHashCode();
+            if (hashCode != newHashCode) {
+                ((AjaxRequestTarget) event.getPayload()).add(this);
+            }
+        }
     }
 
     private int getModelHashCode() {
-	IModel<?> model = getDefaultModel();
-	if (model != null && model.getObject() != null) {
-	    return model.getObject().hashCode();
-	} else {
-	    return 0;
-	}
+        IModel<?> model = getDefaultModel();
+        if (model != null && model.getObject() != null) {
+            return model.getObject().hashCode();
+        } else {
+            return 0;
+        }
     }
 
     @SuppressWarnings("unchecked")
     public IModel<T> getModel() {
-	return (IModel<T>) getDefaultModel();
+        return (IModel<T>) getDefaultModel();
     }
 
     @SuppressWarnings("unchecked")
     public T getModelObject() {
-	return (T) getDefaultModelObject();
+        return (T) getDefaultModelObject();
     }
 
     @Override
     public void updateModel() {
-	// Override this if the model must to be updated via Ajax.
-	
+        // Override this if the model must to be updated via Ajax.
+
     }
-    
+
 }

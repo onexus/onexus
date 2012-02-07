@@ -34,42 +34,42 @@ public class EntityModel implements IModel<IEntity> {
 
     public EntityModel() {
     }
-    
+
     public EntityModel(FixedEntity fe) {
-	this(fe.getCollectionURI(), fe.getEntityId());
+        this(fe.getCollectionURI(), fe.getEntityId());
     }
 
     public EntityModel(IEntity es) {
-	this.entity = es;
-	this.entityCollection = es.getCollection();
-	this.id = es.getId();
+        this.entity = es;
+        this.entityCollection = es.getCollection();
+        this.id = es.getId();
     }
 
     public EntityModel(String collectionId, String entityId) {
-	this(OnexusWebSession.get().getResourceManager()
-		.load(Collection.class, collectionId), entityId);
+        this(OnexusWebSession.get().getResourceManager()
+                .load(Collection.class, collectionId), entityId);
     }
 
     public EntityModel(Collection entityCollection, String id) {
-	this.entityCollection = entityCollection;
-	this.id = id;
+        this.entityCollection = entityCollection;
+        this.id = id;
     }
 
     @Override
     public IEntity getObject() {
-	if (entity == null && id != null && entityCollection != null) {
-	    entity = new EntityIterator(
-		    OnexusWebSession.get().getCollectionManager()
-		    .load(new SingleEntityQuery(entityCollection.getURI(), id)),
-		    entityCollection.getURI()
-		    ).next();
-	}
-	return entity;
+        if (entity == null && id != null && entityCollection != null) {
+            entity = new EntityIterator(
+                    OnexusWebSession.get().getCollectionManager()
+                            .load(new SingleEntityQuery(entityCollection.getURI(), id)),
+                    entityCollection.getURI()
+            ).next();
+        }
+        return entity;
     }
 
     @Override
     public void setObject(IEntity object) {
-	this.entity = object;
+        this.entity = object;
     }
 
     @Override

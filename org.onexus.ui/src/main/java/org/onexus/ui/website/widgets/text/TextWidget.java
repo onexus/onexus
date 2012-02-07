@@ -24,10 +24,10 @@ import org.onexus.ui.website.widgets.Widget;
 public class TextWidget extends Widget<TextWidgetConfig, TextWidgetStatus> {
 
     public TextWidget(String componentId, TextWidgetConfig config, IModel<TextWidgetStatus> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
 
-	add(new Label("title", config.getTitle()));
-	add(new Label("text", config.getText()).setEscapeModelStrings(false));
+        add(new Label("title", config.getTitle()));
+        add(new Label("text", config.getText()).setEscapeModelStrings(false));
 
     }
 

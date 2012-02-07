@@ -17,13 +17,13 @@
  */
 package org.onexus.task.executor.loader.tsv;
 
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileEntity implements IEntity {
 

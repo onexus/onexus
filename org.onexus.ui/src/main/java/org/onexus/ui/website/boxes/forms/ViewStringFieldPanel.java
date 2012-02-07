@@ -24,9 +24,9 @@ import org.apache.wicket.model.IModel;
 public class ViewStringFieldPanel extends Panel {
 
     public ViewStringFieldPanel(String id, IModel<String> model) {
-	super(id);
+        super(id);
 
-	add(new Label("value", model).setRenderBodyOnly(true));
+        add(new Label("value", model).setRenderBodyOnly(true));
 
     }
 

@@ -27,30 +27,30 @@ import org.onexus.core.TaskStatus;
 /**
  * TaskStatusSimpleView is a recursive panel that visualizes the state of parent
  * task, and its childs.
- * 
+ *
  * @author armand
  */
 public class TaskStatusSimpleView extends Panel {
 
     public TaskStatusSimpleView(String id, final IModel<TaskStatus> taskStatusModel) {
-	super(id);
-	setOutputMarkupId(true);
-	TaskStatusSimpleViewBox box = null;
-	add(box = new TaskStatusSimpleViewBox("taskbox_simpleview",
-		taskStatusModel));
-	box.setOutputMarkupPlaceholderTag(true);
+        super(id);
+        setOutputMarkupId(true);
+        TaskStatusSimpleViewBox box = null;
+        add(box = new TaskStatusSimpleViewBox("taskbox_simpleview",
+                taskStatusModel));
+        box.setOutputMarkupPlaceholderTag(true);
 
-	RepeatingView rep = new RepeatingView("tasklist_simpleview");
-	TaskStatus task = taskStatusModel.getObject();
-	for (TaskStatus taskChild : task.getSubTasks()) {
-	    if (taskChild != null && taskChild.getId() != null) {
-		rep.add(new TaskStatusSimpleView(rep.newChildId(), Model
-			.of(taskChild)));
-	    } else {
-		rep.add(new EmptyPanel(rep.newChildId()));
-	    }
-	}
-	box.getBodyContainer().add(rep);
+        RepeatingView rep = new RepeatingView("tasklist_simpleview");
+        TaskStatus task = taskStatusModel.getObject();
+        for (TaskStatus taskChild : task.getSubTasks()) {
+            if (taskChild != null && taskChild.getId() != null) {
+                rep.add(new TaskStatusSimpleView(rep.newChildId(), Model
+                        .of(taskChild)));
+            } else {
+                rep.add(new EmptyPanel(rep.newChildId()));
+            }
+        }
+        box.getBodyContainer().add(rep);
     }
 
 }

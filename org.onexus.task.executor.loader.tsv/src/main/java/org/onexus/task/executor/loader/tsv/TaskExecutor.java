@@ -17,12 +17,6 @@
  */
 package org.onexus.task.executor.loader.tsv;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.onexus.core.ISourceManager;
 import org.onexus.core.ITaskCallable;
 import org.onexus.core.ITaskExecutor;
@@ -30,6 +24,12 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Task;
 import org.onexus.core.utils.ResourceTools;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class TaskExecutor implements ITaskExecutor {
 

@@ -22,23 +22,23 @@ import java.sql.ResultSet;
 public class DoubleAdapter extends SQLAdapter {
 
     public DoubleAdapter() {
-	super(Double.class);
+        super(Double.class);
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-	container.append(((Double) object));
+        container.append(((Double) object));
     }
 
     @Override
     public Object extract(ResultSet container, Object... parameters)
-	    throws Exception {
-	double value = container.getDouble((String) parameters[0]);
-	if (container.wasNull()) {
-	    return null;
-	} else {
-	    return value;
-	}
+            throws Exception {
+        double value = container.getDouble((String) parameters[0]);
+        if (container.wasNull()) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
 }

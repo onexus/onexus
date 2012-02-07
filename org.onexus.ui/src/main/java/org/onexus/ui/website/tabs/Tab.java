@@ -24,14 +24,14 @@ import org.onexus.ui.website.viewers.ViewerConfig;
 public abstract class Tab<C extends TabConfig, S extends TabStatus> extends AbstractWebsitePanel<C, S> {
 
     public Tab(String componentId, C config, IModel<S> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
     }
 
     public ViewerConfig getCurrentViewer() {
-	S status = getStatus();
-	
-	String viewerId = status.getCurrentViewer();
-	return getConfig().getViewerConfig(viewerId);
+        S status = getStatus();
+
+        String viewerId = status.getCurrentViewer();
+        return getConfig().getViewerConfig(viewerId);
 
     }
 

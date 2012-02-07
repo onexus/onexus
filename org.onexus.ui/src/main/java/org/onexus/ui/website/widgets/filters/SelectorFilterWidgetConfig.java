@@ -17,13 +17,12 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.onexus.ui.website.widgets.WidgetConfig;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("widget-filters-selector")
 public class SelectorFilterWidgetConfig extends WidgetConfig {
@@ -36,66 +35,66 @@ public class SelectorFilterWidgetConfig extends WidgetConfig {
     private List<FilterConfig> filters;
 
     public SelectorFilterWidgetConfig() {
-	super();
+        super();
     }
 
     public SelectorFilterWidgetConfig(String id, String region, String title,
-	    String defaultFilter, FilterConfig... filters) {
-	super(id, region);
-	this.title = title;
-	this.userFilters = false;
-	this.fieldSelection = new ArrayList<FieldSelection>(0);
-	this.defaultFilter = defaultFilter;
-	this.filters = new ArrayList<FilterConfig>(Arrays.asList(filters));
+                                      String defaultFilter, FilterConfig... filters) {
+        super(id, region);
+        this.title = title;
+        this.userFilters = false;
+        this.fieldSelection = new ArrayList<FieldSelection>(0);
+        this.defaultFilter = defaultFilter;
+        this.filters = new ArrayList<FilterConfig>(Arrays.asList(filters));
     }
 
     public List<FilterConfig> getFilters() {
-	return filters;
+        return filters;
     }
 
     public void setFilters(List<FilterConfig> filters) {
-	this.filters = filters;
+        this.filters = filters;
     }
 
     public void addFilter(FilterConfig filter) {
-	this.filters.add(filter);
+        this.filters.add(filter);
     }
 
     public Boolean getUserFilters() {
-	return userFilters;
+        return userFilters;
     }
 
     public void setUserFilters(Boolean userFilters) {
-	this.userFilters = userFilters;
+        this.userFilters = userFilters;
     }
 
     public List<FieldSelection> getFieldSelection() {
-	return fieldSelection;
+        return fieldSelection;
     }
 
     public void setFieldSelection(List<FieldSelection> fieldSelection) {
-	this.fieldSelection = fieldSelection;
+        this.fieldSelection = fieldSelection;
     }
 
     public String getDefaultFilter() {
-	return defaultFilter;
+        return defaultFilter;
     }
 
     public void setDefaultFilter(String defaultFilter) {
-	this.defaultFilter = defaultFilter;
+        this.defaultFilter = defaultFilter;
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     @Override
     public SelectorFilterWidgetStatus createEmptyStatus() {
-	return new SelectorFilterWidgetStatus(getId());
+        return new SelectorFilterWidgetStatus(getId());
     }
 
     public SelectorFilterWidgetStatus getDefaultStatus() {

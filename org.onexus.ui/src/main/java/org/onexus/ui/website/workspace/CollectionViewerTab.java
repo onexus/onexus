@@ -27,22 +27,22 @@ public class CollectionViewerTab implements IViewerCreator {
 
     @Override
     public String getTitle() {
-	return "Browser";
+        return "Browser";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-	return new CollectionViewer(containerId, model);
+        return new CollectionViewer(containerId, model);
     }
 
     @Override
     public double getOrder() {
-	return 2;
+        return 2;
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-	return Collection.class.isAssignableFrom(resourceType);
+        return Collection.class.isAssignableFrom(resourceType);
     }
 
 }

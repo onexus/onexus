@@ -26,25 +26,25 @@ public abstract class Resource implements Serializable {
 
     private String uri;
     private String name;
-    
+
     public Resource() {
-	super();
+        super();
     }
 
     public String getURI() {
-	return uri;
+        return uri;
     }
 
     public void setURI(String uri) {
-	this.uri = uri;
+        this.uri = uri;
     }
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
-    
+
 }

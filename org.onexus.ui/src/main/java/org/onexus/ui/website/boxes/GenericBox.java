@@ -27,42 +27,42 @@ import org.onexus.ui.website.boxes.forms.EntityFormFactory;
 
 /**
  * Base class to instantiate (creates) new concrete panel.
- * 
+ * <p/>
  * There is two possibilities. If there is not any viewerClass specified, a
  * generic way to display all data from an IEntity is used (in concrete
  * ElementObjectDisplayPanel)
- * 
+ *
  * @author armand
  */
-@SuppressWarnings({"rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class GenericBox extends AbstractBox {
 
     public GenericBox(String collectionId, IModel<IEntity> entityModel) {
-	super(collectionId, entityModel);
+        super(collectionId, entityModel);
 
-	RepeatingView fieldsRV = new RepeatingView("fields");
-	for (Field field : entityModel.getObject().getCollection().getFields()) {
+        RepeatingView fieldsRV = new RepeatingView("fields");
+        for (Field field : entityModel.getObject().getCollection().getFields()) {
 
-	    // Skip fields with null value
-	    if (entityModel.getObject().get(field.getName()) == null) {
-		continue;
-	    }
+            // Skip fields with null value
+            if (entityModel.getObject().get(field.getName()) == null) {
+                continue;
+            }
 
-	    String caption = field.getTitle();
-	    if (caption == null) {
-		caption = field.getName();
-	    }
+            String caption = field.getTitle();
+            if (caption == null) {
+                caption = field.getName();
+            }
 
-	    // Create the field container
-	    WebMarkupContainer fieldContainer = new WebMarkupContainer(
-		    fieldsRV.newChildId());
-	    fieldContainer.add(new Label("caption", caption));
-	    fieldContainer.add(EntityFormFactory.getFieldPanel("value", field,
-		    new FieldValueModel(field.getName(), entityModel)));
-	    fieldsRV.add(fieldContainer);
+            // Create the field container
+            WebMarkupContainer fieldContainer = new WebMarkupContainer(
+                    fieldsRV.newChildId());
+            fieldContainer.add(new Label("caption", caption));
+            fieldContainer.add(EntityFormFactory.getFieldPanel("value", field,
+                    new FieldValueModel(field.getName(), entityModel)));
+            fieldsRV.add(fieldContainer);
 
-	}
-	add(fieldsRV);
+        }
+        add(fieldsRV);
 
     }
 

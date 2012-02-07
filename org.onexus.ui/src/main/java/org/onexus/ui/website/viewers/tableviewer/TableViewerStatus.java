@@ -21,28 +21,28 @@ import org.onexus.core.query.Order;
 import org.onexus.ui.website.viewers.ViewerStatus;
 
 public class TableViewerStatus extends ViewerStatus {
-    
+
     private Order order;
 
     public TableViewerStatus() {
-	super();
+        super();
     }
-    
+
     public TableViewerStatus(String viewerId) {
-	super(viewerId);
+        super(viewerId);
     }
 
     public TableViewerStatus(String viewerId, Order order) {
-	super(viewerId);
-	this.order = order;
+        super(viewerId);
+        this.order = order;
     }
 
     public Order getOrder() {
-	return order;
+        return order;
     }
 
     public void setOrder(Order order) {
-	this.order = order;
+        this.order = order;
     }
 
 }

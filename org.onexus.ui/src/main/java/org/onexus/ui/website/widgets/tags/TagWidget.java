@@ -17,28 +17,13 @@
  */
 package org.onexus.ui.website.widgets.tags;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.onexus.core.query.EqualEntity;
@@ -55,283 +40,286 @@ import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.ui.website.widgets.tags.tagstore.TagStore;
 
+import javax.inject.Inject;
+import java.util.*;
+
 public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implements IQueryContributor {
 
     @Inject
     public ITagStoreManager tagStoreManager;
-    
+
     private List<String> selectedTags;
 
     private boolean filter = false;
 
     public TagWidget(String componentId, TagWidgetConfig config, IModel<TagWidgetStatus> statusModel) {
-	super(componentId, config, statusModel);
-	
-	Form<TagWidgetStatus> form = new Form<TagWidgetStatus>("form", new CompoundPropertyModel<TagWidgetStatus>(statusModel));
+        super(componentId, config, statusModel);
 
-	form.add(new HiddenField<String>("selection").setMarkupId("rows-selection-container"));
+        Form<TagWidgetStatus> form = new Form<TagWidgetStatus>("form", new CompoundPropertyModel<TagWidgetStatus>(statusModel));
 
-	form.add(new AjaxSubmitLink("apply") {
+        form.add(new HiddenField<String>("selection").setMarkupId("rows-selection-container"));
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+        form.add(new AjaxSubmitLink("apply") {
 
-		TagWidget.this.filter = false;
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-		TagStore tagStore = getTagStore();
+                TagWidget.this.filter = false;
 
-		for (String tagKey : getSelectedTags()) {
-		    for (String tagValue : getSelectedValues()) {
-			tagStore.putTagValue(tagKey, tagValue);
-		    }
-		}
+                TagStore tagStore = getTagStore();
 
-		// Clear selected values
-		getStatus().setSelection("");
-		target.appendJavaScript("clearSelected();");
+                for (String tagKey : getSelectedTags()) {
+                    for (String tagValue : getSelectedValues()) {
+                        tagStore.putTagValue(tagKey, tagValue);
+                    }
+                }
 
-		// Clear selected tags
-		selectedTags.clear();
+                // Clear selected values
+                getStatus().setSelection("");
+                target.appendJavaScript("clearSelected();");
 
-		sendEvent(EventViewChange.EVENT);
-		
-		target.add(TagWidget.this);
-	    }
+                // Clear selected tags
+                selectedTags.clear();
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(TagWidget.this);
-	    }
+                sendEvent(EventViewChange.EVENT);
 
-	});
+                target.add(TagWidget.this);
+            }
 
-	form.add(new AjaxSubmitLink("filter") {
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(TagWidget.this);
+            }
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		TagWidget.this.filter = !getSelectedTags().isEmpty();
-		sendEvent(EventFiltersUpdate.EVENT);
-		target.add(TagWidget.this);
-	    }
+        });
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(TagWidget.this);
-	    }
+        form.add(new AjaxSubmitLink("filter") {
 
-	});
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                TagWidget.this.filter = !getSelectedTags().isEmpty();
+                sendEvent(EventFiltersUpdate.EVENT);
+                target.add(TagWidget.this);
+            }
 
-	final IModel<String> newLabel = Model.of("");
-	form.add(new TextField<String>("newlabel", newLabel));
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(TagWidget.this);
+            }
 
-	form.add(new AjaxSubmitLink("newbutton") {
+        });
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+        final IModel<String> newLabel = Model.of("");
+        form.add(new TextField<String>("newlabel", newLabel));
 
-		TagStore tagStore = getTagStore();
-		String label = newLabel.getObject();
+        form.add(new AjaxSubmitLink("newbutton") {
 
-		if (label != null && !label.isEmpty()) {
-		    label = label.trim().replaceAll("[^a-zA-Z0-9\\-_]", "_");
-		    tagStore.putTagKey(label);
-		    newLabel.setObject("");
-		}
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-		target.add(TagWidget.this);
-	    }
+                TagStore tagStore = getTagStore();
+                String label = newLabel.getObject();
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(TagWidget.this);
-	    }
+                if (label != null && !label.isEmpty()) {
+                    label = label.trim().replaceAll("[^a-zA-Z0-9\\-_]", "_");
+                    tagStore.putTagKey(label);
+                    newLabel.setObject("");
+                }
 
-	});
+                target.add(TagWidget.this);
+            }
 
-	form.add(new AjaxSubmitLink("remove") {
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(TagWidget.this);
+            }
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+        });
 
-		TagStore tagStore = getTagStore();
-		for (String tagKey : getSelectedTags()) {
-		    tagStore.removeTag(tagKey);
-		}
+        form.add(new AjaxSubmitLink("remove") {
 
-		sendEvent(EventViewChange.EVENT);
-		
-		target.add(TagWidget.this);
-	    }
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(TagWidget.this);
-	    }
+                TagStore tagStore = getTagStore();
+                for (String tagKey : getSelectedTags()) {
+                    tagStore.removeTag(tagKey);
+                }
 
-	});
+                sendEvent(EventViewChange.EVENT);
 
-	form.add(new CheckBoxMultipleChoice<String>("tags", new PropertyModel<List<String>>(this, "selectedTags"),
-		new TagsModel()) {
+                target.add(TagWidget.this);
+            }
 
-	    @Override
-	    protected String getSuffix(int index, String choice) {
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(TagWidget.this);
+            }
 
-		TagStore tagStore = getTagStore();
-		int count = tagStore.getTagValues(choice).size();
+        });
 
-		return " [" + Integer.toString(count) + "] " + super.getSuffix(index, choice);
-	    }
+        form.add(new CheckBoxMultipleChoice<String>("tags", new PropertyModel<List<String>>(this, "selectedTags"),
+                new TagsModel()) {
 
-	});
+            @Override
+            protected String getSuffix(int index, String choice) {
 
-	final TagsDownload download = new TagsDownload() {
+                TagStore tagStore = getTagStore();
+                int count = tagStore.getTagValues(choice).size();
 
-	    @Override
-	    protected IResourceStream getResourceStream() {
-		return new StringResourceStream(createDownload(), "text/csv");
+                return " [" + Integer.toString(count) + "] " + super.getSuffix(index, choice);
+            }
 
-	    }
+        });
 
-	    @Override
-	    protected String getFileName() {
-		return getDownloadFileName();
-	    }
+        final TagsDownload download = new TagsDownload() {
 
-	};
-	form.add(download);
+            @Override
+            protected IResourceStream getResourceStream() {
+                return new StringResourceStream(createDownload(), "text/csv");
 
-	form.add(new AjaxSubmitLink("download") {
+            }
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		target.add(TagWidget.this);
-		download.initiate(target);
-	    }
+            @Override
+            protected String getFileName() {
+                return getDownloadFileName();
+            }
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		target.add(TagWidget.this);
-	    }
+        };
+        form.add(download);
 
-	});
+        form.add(new AjaxSubmitLink("download") {
 
-	add(form);
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(TagWidget.this);
+                download.initiate(target);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(TagWidget.this);
+            }
+
+        });
+
+        add(form);
     }
 
     private List<String> getSelectedTags() {
-	return selectedTags;
+        return selectedTags;
     }
 
     @SuppressWarnings("unchecked")
     private List<String> getSelectedValues() {
-	TagWidgetStatus status = getStatus();
-	String selection = status.getSelection();
+        TagWidgetStatus status = getStatus();
+        String selection = status.getSelection();
 
-	return (selection==null?Collections.EMPTY_LIST : Arrays.asList(selection.split(":::")));
+        return (selection == null ? Collections.EMPTY_LIST : Arrays.asList(selection.split(":::")));
     }
 
     private CharSequence createDownload() {
 
-	StringBuilder output = new StringBuilder();
+        StringBuilder output = new StringBuilder();
 
-	TagStore tagStore = getTagStore();
-	for (String tagKey : getSelectedTags()) {
-	    for (String value : tagStore.getTagValues(tagKey)) {
-		output.append(value).append("\n");
-	    }
-	}
+        TagStore tagStore = getTagStore();
+        for (String tagKey : getSelectedTags()) {
+            for (String value : tagStore.getTagValues(tagKey)) {
+                output.append(value).append("\n");
+            }
+        }
 
-	return output;
+        return output;
     }
 
     private String getDownloadFileName() {
 
-	StringBuilder fileName = new StringBuilder();
+        StringBuilder fileName = new StringBuilder();
 
-	Iterator<String> it = getSelectedTags().iterator();
+        Iterator<String> it = getSelectedTags().iterator();
 
-	while (it.hasNext()) {
-	    fileName.append(it.next());
-	    if (it.hasNext()) {
-		fileName.append("-");
-	    }
-	}
+        while (it.hasNext()) {
+            fileName.append(it.next());
+            if (it.hasNext()) {
+                fileName.append("-");
+            }
+        }
 
-	fileName.append(".tsv");
+        fileName.append(".tsv");
 
-	return fileName.toString();
+        return fileName.toString();
 
     }
 
     private TagStore getTagStore() {
-	
-	BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
-	String tagId = status.getCurrentTabId();
-	String releaseURI = status.getReleaseURI();
-	
-	String namespace = releaseURI + "#" + tagId;
-	
-	TagStore store = tagStoreManager.getUserStore(namespace);
-	
-	// Check that the default tags are present
-	Collection<String> keys = store.getTagKeys();
-	List<String> defaultTags = getConfig().getDefaultTags();
-	if (defaultTags != null) {
-	    for (String defaultTag : defaultTags) {
-		if (!keys.contains(defaultTag)) {
-		    store.putTagKey(defaultTag);
-		}
-	    }
-	}
 
-	return store;
+        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
+        String tagId = status.getCurrentTabId();
+        String releaseURI = status.getReleaseURI();
+
+        String namespace = releaseURI + "#" + tagId;
+
+        TagStore store = tagStoreManager.getUserStore(namespace);
+
+        // Check that the default tags are present
+        Collection<String> keys = store.getTagKeys();
+        List<String> defaultTags = getConfig().getDefaultTags();
+        if (defaultTags != null) {
+            for (String defaultTag : defaultTags) {
+                if (!keys.contains(defaultTag)) {
+                    store.putTagKey(defaultTag);
+                }
+            }
+        }
+
+        return store;
 
     }
 
     private class TagsModel extends AbstractReadOnlyModel<List<String>> {
 
-	@Override
-	public List<String> getObject() {
-	    return new ArrayList<String>(getTagStore().getTagKeys());
-	}
+        @Override
+        public List<String> getObject() {
+            return new ArrayList<String>(getTagStore().getTagKeys());
+        }
 
     }
 
     @Override
     public void onQueryBuild(Query query) {
 
-	if (filter) {
-	    Set<String> selectedValues = new HashSet<String>();
+        if (filter) {
+            Set<String> selectedValues = new HashSet<String>();
 
-	    TagStore tagStore = getTagStore();
+            TagStore tagStore = getTagStore();
 
-	    for (String tagKey : getSelectedTags()) {
-		selectedValues.addAll(tagStore.getTagValues(tagKey));
-	    }
+            for (String tagKey : getSelectedTags()) {
+                selectedValues.addAll(tagStore.getTagValues(tagKey));
+            }
 
-	    if (!selectedValues.isEmpty()) {
-		List<Filter> rules = new ArrayList<Filter>(selectedValues.size());
+            if (!selectedValues.isEmpty()) {
+                List<Filter> rules = new ArrayList<Filter>(selectedValues.size());
 
-		for (String value : selectedValues) {
-		    String collectionURI = ResourceTools.getAbsoluteURI(query.getMainNamespace(),
-			    query.getMainCollection());
-		    rules.add(new EqualEntity(collectionURI, value));
-		}
+                for (String value : selectedValues) {
+                    String collectionURI = ResourceTools.getAbsoluteURI(query.getMainNamespace(),
+                            query.getMainCollection());
+                    rules.add(new EqualEntity(collectionURI, value));
+                }
 
-		query.putFilter(getConfig().getId(), buildUnion(0, rules));
-	    }
+                query.putFilter(getConfig().getId(), buildUnion(0, rules));
+            }
 
-	}
+        }
 
     }
 
     private Filter buildUnion(int pos, List<Filter> rules) {
-	if (pos + 1 == rules.size()) {
-	    return rules.get(pos);
-	} else {
-	    Filter rule = rules.get(pos);
-	    return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
-	}
+        if (pos + 1 == rules.size()) {
+            return rules.get(pos);
+        } else {
+            Filter rule = rules.get(pos);
+            return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
+        }
     }
 
 }

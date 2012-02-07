@@ -21,9 +21,9 @@ package org.onexus.ui.website.events;
 public class EventUnfixEntity extends EventQueryUpdate {
 
     public final static EventUnfixEntity EVENT = new EventUnfixEntity();
-   
+
     protected EventUnfixEntity() {
-	super();
+        super();
     }
 
 }

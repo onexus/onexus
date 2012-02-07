@@ -20,19 +20,19 @@ package org.onexus.ui.website.viewers;
 import org.onexus.ui.website.IWebsiteConfig;
 
 public abstract class ViewerConfig implements IWebsiteConfig {
-    
+
     private String id;
     private String title;
-    
+
     public ViewerConfig() {
-	super();
+        super();
     }
 
     public ViewerConfig(String viewerId) {
-	super();
-	this.id = viewerId;
+        super();
+        this.id = viewerId;
     }
-    
+
     public String getId() {
         return id;
     }
@@ -48,12 +48,12 @@ public abstract class ViewerConfig implements IWebsiteConfig {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     @Override
     public abstract ViewerStatus getDefaultStatus();
 
     @Override
-    public abstract ViewerStatus createEmptyStatus();    
-    
+    public abstract ViewerStatus createEmptyStatus();
+
 
 }

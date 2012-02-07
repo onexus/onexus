@@ -22,11 +22,11 @@ import org.onexus.ui.website.widgets.WidgetStatus;
 public class BookmarkWidgetStatus extends WidgetStatus {
 
     public BookmarkWidgetStatus() {
-	super();
+        super();
     }
 
     public BookmarkWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
 }

@@ -23,6 +23,6 @@ public class EventViewChange extends AbstractEvent {
     public static final EventViewChange EVENT = new EventViewChange();
 
     private EventViewChange() {
-	super();
+        super();
     }
 }

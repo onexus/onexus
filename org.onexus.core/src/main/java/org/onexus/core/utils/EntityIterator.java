@@ -17,11 +17,11 @@
  */
 package org.onexus.core.utils;
 
-import java.util.Iterator;
-
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntitySet;
 import org.onexus.core.IEntityTable;
+
+import java.util.Iterator;
 
 public class EntityIterator implements Iterator<IEntity> {
 
@@ -34,63 +34,63 @@ public class EntityIterator implements Iterator<IEntity> {
     private boolean _lastNext = true;
 
     public EntityIterator(IEntitySet entitySet) {
-	super();
+        super();
 
-	this.entitySet = entitySet;
-	this.collectionURI = null;
-	this.entityTable = null;
+        this.entitySet = entitySet;
+        this.collectionURI = null;
+        this.entityTable = null;
     }
 
     public EntityIterator(IEntityTable entityTable, String collectionURI) {
-	super();
+        super();
 
-	this.entitySet = null;
-	this.collectionURI = collectionURI;
-	this.entityTable = entityTable;
+        this.entitySet = null;
+        this.collectionURI = collectionURI;
+        this.entityTable = entityTable;
     }
 
     @Override
     public boolean hasNext() {
-	if (_lastNext == false) {
-	    return false;
-	}
+        if (_lastNext == false) {
+            return false;
+        }
 
-	if (_movedToNext == true) {
-	    return true;
-	}
+        if (_movedToNext == true) {
+            return true;
+        }
 
-	_movedToNext = true;
-	_lastNext = internalNext();
+        _movedToNext = true;
+        _lastNext = internalNext();
 
-	return _lastNext;
+        return _lastNext;
     }
 
     private boolean internalNext() {
-	if (entitySet != null) {
-	    return entitySet.next();
-	}
-	return entityTable.next();
+        if (entitySet != null) {
+            return entitySet.next();
+        }
+        return entityTable.next();
     }
 
     @Override
     public IEntity next() {
 
-	if (!_movedToNext) {
-	    _lastNext = internalNext();
-	}
+        if (!_movedToNext) {
+            _lastNext = internalNext();
+        }
 
-	_movedToNext = false;
+        _movedToNext = false;
 
-	if (entitySet != null) {
-	    return entitySet.detachedEntity();
-	} else {
-	    return entityTable.getEntity(collectionURI);
-	}
+        if (entitySet != null) {
+            return entitySet.detachedEntity();
+        } else {
+            return entityTable.getEntity(collectionURI);
+        }
     }
 
     @Override
     public void remove() {
-	throw new UnsupportedOperationException("Read-only iterator");
+        throw new UnsupportedOperationException("Read-only iterator");
     }
 
 }

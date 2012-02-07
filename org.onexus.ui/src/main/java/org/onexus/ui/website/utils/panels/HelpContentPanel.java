@@ -24,9 +24,9 @@ public class HelpContentPanel extends Panel {
 
     public HelpContentPanel(String id, String htmlContent) {
 
-	super(id);
+        super(id);
 
-	add(new Label("content", htmlContent).setEscapeModelStrings(false));
+        add(new Label("content", htmlContent).setEscapeModelStrings(false));
     }
 
 }

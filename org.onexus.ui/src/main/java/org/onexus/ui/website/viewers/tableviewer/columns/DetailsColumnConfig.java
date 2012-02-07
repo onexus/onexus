@@ -17,14 +17,13 @@
  */
 package org.onexus.ui.website.viewers.tableviewer.columns;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
 import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.Arrays;
+import java.util.List;
 
 @XStreamAlias("column-details")
 public class DetailsColumnConfig implements IColumnConfig {
@@ -32,31 +31,31 @@ public class DetailsColumnConfig implements IColumnConfig {
     private String[] collections;
 
     public DetailsColumnConfig() {
-	super();
+        super();
     }
 
     public DetailsColumnConfig(String... collections) {
-	super();
-	this.collections = collections;
+        super();
+        this.collections = collections;
     }
 
     public List<String> getCollections() {
-	return Arrays.asList(collections);
-    }
-    
-    @Override
-    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI ) {
-	columns.add(new DetailsTrack(this));
+        return Arrays.asList(collections);
     }
 
     @Override
-    public String[] getQueryCollections(String releaseURI ) {
-	return collections;
+    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI) {
+        columns.add(new DetailsTrack(this));
     }
 
     @Override
-    public void addExportColumns(List<ExportColumn> columns, String releaseURI ) {
-	// Nothing to add
+    public String[] getQueryCollections(String releaseURI) {
+        return collections;
+    }
+
+    @Override
+    public void addExportColumns(List<ExportColumn> columns, String releaseURI) {
+        // Nothing to add
     }
 
 }

@@ -34,65 +34,65 @@ import org.onexus.core.IEntityTable;
 public class DetailsTrack extends TableTrack {
 
     private final ResourceReference DETAILS_ICON = new PackageResourceReference(
-	    DetailsTrack.class, "zoom.png");
+            DetailsTrack.class, "zoom.png");
 
     private ModalWindow modal;
 
     private DetailsColumnConfig configDetails;
 
     public DetailsTrack() {
-	this(new DetailsColumnConfig());
+        this(new DetailsColumnConfig());
     }
 
     public DetailsTrack(DetailsColumnConfig configModel) {
-	super();
-	this.configDetails = configModel;
+        super();
+        this.configDetails = configModel;
     }
 
     public DetailsColumnConfig getConfiguration() {
-	return configDetails;
+        return configDetails;
     }
 
     @Override
     public Component getHeader(String componentId) {
-	return new HeaderWithModal(componentId);
+        return new HeaderWithModal(componentId);
     }
 
     @Override
     public void populateItem(Item<ICellPopulator<IEntityTable>> cellItem,
-	    String componentId, IModel<IEntityTable> rowModel) {
+                             String componentId, IModel<IEntityTable> rowModel) {
 
-	cellItem.add(new DetailsTrackImage(componentId, rowModel, configDetails));
+        cellItem.add(new DetailsTrackImage(componentId, rowModel, configDetails));
 
     }
 
     private class DetailsTrackImage extends Panel {
 
-	public DetailsTrackImage(String componentId,
-		IModel<IEntityTable> rowModel,
-		DetailsColumnConfig configDetailsTrackModel) {
-	    super(componentId);
+        public DetailsTrackImage(String componentId,
+                                 IModel<IEntityTable> rowModel,
+                                 DetailsColumnConfig configDetailsTrackModel) {
+            super(componentId);
 
-	    Image image = new Image("imageDetails", DETAILS_ICON) {
+            Image image = new Image("imageDetails", DETAILS_ICON) {
 
-		@Override
-		protected boolean shouldAddAntiCacheParameter() {
-		    return false;
-		}
+                @Override
+                protected boolean shouldAddAntiCacheParameter() {
+                    return false;
+                }
 
-	    };
-	    image.add(new OpenDetailWindowEvent(modal, rowModel,
-		    configDetailsTrackModel));
-	    add(image);
-	}
+            };
+            image.add(new OpenDetailWindowEvent(modal, rowModel,
+                    configDetailsTrackModel));
+            add(image);
+        }
     }
 
     private class HeaderWithModal extends Panel {
 
-	public HeaderWithModal(String id) {
-	    super(id);
-	    add(modal = new ModalWindow("modalWindow"));
-	}
+        public HeaderWithModal(String id) {
+            super(id);
+            add(modal = new ModalWindow("modalWindow"));
+        }
 
     }
 

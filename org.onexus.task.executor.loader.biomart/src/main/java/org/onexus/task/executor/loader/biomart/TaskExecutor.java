@@ -29,40 +29,40 @@ public class TaskExecutor implements ITaskExecutor {
 
     @Override
     public boolean isCallable(String toolURI) {
-	return "http://www.onexus.org/tools/loader-biomart/1.0.0".equals(toolURI);
+        return "http://www.onexus.org/tools/loader-biomart/1.0.0".equals(toolURI);
     }
-    
+
     /**
      * Initialization method called when configuration is updated
      */
     public void init() {
-	
+
     }
 
     @Override
     public ITaskCallable createCallable(Collection collection) {
-	return new TaskCallable(new BiomartRequest(collection, defaultMartService, defaultVirtualSchema));
+        return new TaskCallable(new BiomartRequest(collection, defaultMartService, defaultVirtualSchema));
     }
 
     @Override
     public boolean preprocessCollection(Collection collection) {
-	return false;
+        return false;
     }
 
     public String getDefaultMartService() {
-	return defaultMartService;
+        return defaultMartService;
     }
 
     public void setDefaultMartService(String defaultMartService) {
-	this.defaultMartService = defaultMartService;
+        this.defaultMartService = defaultMartService;
     }
 
     public String getDefaultVirtualSchema() {
-	return defaultVirtualSchema;
+        return defaultVirtualSchema;
     }
 
     public void setDefaultVirtualSchema(String defaultVirtualSchema) {
-	this.defaultVirtualSchema = defaultVirtualSchema;
+        this.defaultVirtualSchema = defaultVirtualSchema;
     }
 
 }

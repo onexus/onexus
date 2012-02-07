@@ -17,34 +17,34 @@
  */
 package org.onexus.collection.store.h2sql.adapters;
 
-import java.sql.ResultSet;
-
 import org.h2.util.StringUtils;
+
+import java.sql.ResultSet;
 
 public class StringAdapter extends SQLAdapter {
 
     public StringAdapter() {
-	super(String.class);
+        super(String.class);
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-	
-	String quoteValue;
-	if (object == null) {
-	    quoteValue = "NULL";
-	} else {
-	    quoteValue = StringUtils.quoteStringSQL(String.valueOf(object));
-	}
-	
-	((StringBuilder) container).append(quoteValue);
-	
+
+        String quoteValue;
+        if (object == null) {
+            quoteValue = "NULL";
+        } else {
+            quoteValue = StringUtils.quoteStringSQL(String.valueOf(object));
+        }
+
+        ((StringBuilder) container).append(quoteValue);
+
     }
 
     @Override
     public Object extract(ResultSet container, Object... parameters)
-	    throws Exception {
-	return container.getString((String) parameters[0]);
+            throws Exception {
+        return container.getString((String) parameters[0]);
     }
 
 }

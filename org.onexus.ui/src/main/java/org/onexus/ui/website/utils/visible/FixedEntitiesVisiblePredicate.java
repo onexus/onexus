@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.utils.visible;
 
-import java.util.Set;
-
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IEntity;
@@ -26,130 +24,131 @@ import org.onexus.core.query.FixedEntity;
 import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.website.utils.EntityModel;
 
+import java.util.Set;
+
 public class FixedEntitiesVisiblePredicate implements Predicate {
 
     private String releaseURI;
     private Set<FixedEntity> fixedEntities;
 
     public FixedEntitiesVisiblePredicate(String releaseURI,
-	    Set<FixedEntity> fixedEntities) {
-	super();
+                                         Set<FixedEntity> fixedEntities) {
+        super();
 
-	this.releaseURI = releaseURI;
-	this.fixedEntities = fixedEntities;
+        this.releaseURI = releaseURI;
+        this.fixedEntities = fixedEntities;
     }
 
     @Override
     public boolean evaluate(Object object) {
 
-	IVisible visible = (IVisible) object;
-	
-	if (object == null) {
-	    return true;
-	}
-	
-	String visibleQuery = visible.getVisible();
-	
-	if (visibleQuery == null) {
-	    return true;
-	}
+        IVisible visible = (IVisible) object;
 
-	String visibleRules[] = visibleQuery.split(",");
+        if (object == null) {
+            return true;
+        }
 
-	for (String rule : visibleRules) {
-	    if (rule.isEmpty()) {
-		continue;
-	    }
-	    	
-	    if (!isVisible(rule)) {
-		return false;
-	    }
+        String visibleQuery = visible.getVisible();
 
-	}
+        if (visibleQuery == null) {
+            return true;
+        }
 
-	return true;
+        String visibleRules[] = visibleQuery.split(",");
+
+        for (String rule : visibleRules) {
+            if (rule.isEmpty()) {
+                continue;
+            }
+
+            if (!isVisible(rule)) {
+                return false;
+            }
+
+        }
+
+        return true;
 
     }
-    
+
     private boolean isVisible(String rule) {
-	
-	rule = rule.trim();
-	
-	String collectionURI = getRuleCollection(rule);
-	String entityId = getEntityId(rule);
-	boolean negative = isNegative(rule);
-	
-	for (FixedEntity fe : fixedEntities) {
-	    
-	    if (
-		    fe.getCollectionURI().equals(collectionURI) && 
-		    isValidEntity(entityId, fe)
-	    ) {		
-		return !negative;
-	    }
-	    
-	}
-	
-	return negative;
+
+        rule = rule.trim();
+
+        String collectionURI = getRuleCollection(rule);
+        String entityId = getEntityId(rule);
+        boolean negative = isNegative(rule);
+
+        for (FixedEntity fe : fixedEntities) {
+
+            if (
+                    fe.getCollectionURI().equals(collectionURI) &&
+                            isValidEntity(entityId, fe)
+                    ) {
+                return !negative;
+            }
+
+        }
+
+        return negative;
     }
-    
+
     private boolean isValidEntity(String entityId, FixedEntity fe) {
-	
-	if (entityId==null) {
-	    return true;
-	}
-	
-	int equal = entityId.indexOf('=');
-	
-	if (equal == -1) {
-	    return entityId.equals(fe.getEntityId());
-	}
-	
-	String fieldName = entityId.substring(0,equal);
-	String entityValue = entityId.substring(equal+1);
-	
-	IModel<IEntity> entity = new EntityModel(fe);
-	
-	return entityValue.equals(entity.getObject().get(fieldName));
-	
+
+        if (entityId == null) {
+            return true;
+        }
+
+        int equal = entityId.indexOf('=');
+
+        if (equal == -1) {
+            return entityId.equals(fe.getEntityId());
+        }
+
+        String fieldName = entityId.substring(0, equal);
+        String entityValue = entityId.substring(equal + 1);
+
+        IModel<IEntity> entity = new EntityModel(fe);
+
+        return entityValue.equals(entity.getObject().get(fieldName));
+
     }
 
     private boolean isNegative(String rule) {
-	return rule.startsWith("!");
+        return rule.startsWith("!");
     }
 
     private String getRuleCollection(String rule) {
-		
-	String collectionURI = rule.replace("!", "");
-	
-	int ini = collectionURI.indexOf("[");
-	if (ini!=-1) {
-	    collectionURI = collectionURI.substring(0, ini);
-	}	
-	
-	if (releaseURI != null && !releaseURI.isEmpty()) {
-	    collectionURI = ResourceTools.getAbsoluteURI(releaseURI,
-		    collectionURI);
-	}
-	
-	return collectionURI;
+
+        String collectionURI = rule.replace("!", "");
+
+        int ini = collectionURI.indexOf("[");
+        if (ini != -1) {
+            collectionURI = collectionURI.substring(0, ini);
+        }
+
+        if (releaseURI != null && !releaseURI.isEmpty()) {
+            collectionURI = ResourceTools.getAbsoluteURI(releaseURI,
+                    collectionURI);
+        }
+
+        return collectionURI;
     }
-    
+
     private String getEntityId(String rule) {
-	
-	int ini = rule.indexOf("[");
-	
-	if (ini == -1) return null;
-	
-	int end = rule.indexOf("]");
-	
-	if (end == -1 || (end - ini) < 1) {
-	    return null;
-	}
-	
-	return rule.substring(ini+1, end);	
+
+        int ini = rule.indexOf("[");
+
+        if (ini == -1) return null;
+
+        int end = rule.indexOf("]");
+
+        if (end == -1 || (end - ini) < 1) {
+            return null;
+        }
+
+        return rule.substring(ini + 1, end);
     }
-    
-    
+
 
 }

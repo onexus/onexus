@@ -25,37 +25,37 @@ public class EmptyHeader implements IHeader {
 
     @Override
     public String getLabel() {
-	return null;
+        return null;
     }
 
     @Override
     public String getTitle() {
-	return null;
+        return null;
     }
 
     @Override
     public Component getHeader(String componentId) {
-	return new Label(componentId, "");
+        return new Label(componentId, "");
     }
 
     @Override
     public IHeader getParentHeader() {
-	return new EmptyHeader();
+        return new EmptyHeader();
     }
 
     @Override
     public String getSortProperty() {
-	return null;
+        return null;
     }
 
     @Override
     public boolean isSortable() {
-	return false;
+        return false;
     }
 
     @Override
     public Component getHelp(String componentId) {
-	return new EmptyPanel(componentId);
+        return new EmptyPanel(componentId);
     }
 
 }

@@ -17,13 +17,13 @@
  */
 package org.onexus.task.executor.loader.tsv;
 
-import java.util.Map;
-
 import org.onexus.core.IEntitySet;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.ITaskCallable;
 import org.onexus.core.TaskStatus;
 import org.onexus.core.resources.Collection;
+
+import java.util.Map;
 
 public class TsvTaskCallable implements ITaskCallable {
 
@@ -33,27 +33,27 @@ public class TsvTaskCallable implements ITaskCallable {
     private Collection collection;
 
     public TsvTaskCallable(ISourceManager sourceManager, Map<String, String> properties, Collection collection) {
-	super();
+        super();
 
-	this.sourceManager = sourceManager;
-	this.properties = properties;
-	this.status = new TaskStatus(Long.toHexString(System.currentTimeMillis() + collection.hashCode()), "Loading TSV file '"+collection.getTask().getParameter("FILE_URL")+"'");
-	this.collection = collection;
+        this.sourceManager = sourceManager;
+        this.properties = properties;
+        this.status = new TaskStatus(Long.toHexString(System.currentTimeMillis() + collection.hashCode()), "Loading TSV file '" + collection.getTask().getParameter("FILE_URL") + "'");
+        this.collection = collection;
     }
 
     @Override
     public IEntitySet call() throws Exception {
-	status.addLog(status.getTitle());
-	try {
-	    return new FileEntitySet(sourceManager, properties, collection);
-	} finally {
-	    this.status.setDone(true);
-	}
+        status.addLog(status.getTitle());
+        try {
+            return new FileEntitySet(sourceManager, properties, collection);
+        } finally {
+            this.status.setDone(true);
+        }
     }
 
     @Override
     public TaskStatus getStatus() {
-	return status;
+        return status;
     }
 
 }

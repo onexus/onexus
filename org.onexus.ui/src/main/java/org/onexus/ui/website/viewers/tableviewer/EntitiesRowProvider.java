@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.viewers.tableviewer;
 
-import java.util.Iterator;
-
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
@@ -33,8 +31,10 @@ import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.viewers.tableviewer.headers.FieldHeader;
 
+import java.util.Iterator;
+
 public abstract class EntitiesRowProvider implements
-	ISortableDataProvider<IEntityTable> {
+        ISortableDataProvider<IEntityTable> {
 
     private TableViewerConfig config;
     private IModel<TableViewerStatus> statusModel;
@@ -42,166 +42,166 @@ public abstract class EntitiesRowProvider implements
     private SortState sortState = new SortState();
 
     public EntitiesRowProvider(TableViewerConfig config,
-	    IModel<TableViewerStatus> status) {
-	this.statusModel = status;
-	this.config = config;
+                               IModel<TableViewerStatus> status) {
+        this.statusModel = status;
+        this.config = config;
     }
 
     protected TableViewerStatus getTableViewerStatus() {
-	TableViewerStatus status = statusModel.getObject();
-	
-	if (status == null) {
-	    status = config.getDefaultStatus();
-	    statusModel.setObject(status);
-	}
-	
-	if (status == null) {
-	    status = config.createEmptyStatus();
-	    statusModel.setObject(status);
-	}
-	
-	return status;
+        TableViewerStatus status = statusModel.getObject();
+
+        if (status == null) {
+            status = config.getDefaultStatus();
+            statusModel.setObject(status);
+        }
+
+        if (status == null) {
+            status = config.createEmptyStatus();
+            statusModel.setObject(status);
+        }
+
+        return status;
     }
 
     @Override
     public Iterator<IEntityTable> iterator(int first, int total) {
 
-	Query query = loadSort(buildQuery());
-	query.setFirstResult(first);
-	query.setMaxResults(total);
-	return loadIterator(query);
+        Query query = loadSort(buildQuery());
+        query.setFirstResult(first);
+        query.setMaxResults(total);
+        return loadIterator(query);
     }
 
     @Override
     public int size() {
-	Query query = buildQuery();
-	IEntityTable entityTable = OnexusWebSession.get().getCollectionManager().load(query);
-	
-	TaskStatus task = entityTable.getTaskStatus(); 
-	if (task!=null && !task.isDone()) {
-	    addTaskStatus(entityTable.getTaskStatus());
-	}
-	
-	return (int) entityTable.size();
+        Query query = buildQuery();
+        IEntityTable entityTable = OnexusWebSession.get().getCollectionManager().load(query);
+
+        TaskStatus task = entityTable.getTaskStatus();
+        if (task != null && !task.isDone()) {
+            addTaskStatus(entityTable.getTaskStatus());
+        }
+
+        return (int) entityTable.size();
     }
 
     private Query buildQuery() {
 
-	
-	Query query = new Query(config.getMainCollection());
-	
-	BrowserPageStatus status = getBrowserPageStatus();
-	String releaseURI = (status==null?null:status.getReleaseURI());
-	query.setMainNamespace(releaseURI);
-	
-	for (IColumnConfig column : config.getColumns()) {
-	    for (String collectionId : column.getQueryCollections(releaseURI)) {
-		query.getCollections().add(collectionId);
-	    }
-	}
 
-	buildQuery(query);
+        Query query = new Query(config.getMainCollection());
 
-	return query;
+        BrowserPageStatus status = getBrowserPageStatus();
+        String releaseURI = (status == null ? null : status.getReleaseURI());
+        query.setMainNamespace(releaseURI);
+
+        for (IColumnConfig column : config.getColumns()) {
+            for (String collectionId : column.getQueryCollections(releaseURI)) {
+                query.getCollections().add(collectionId);
+            }
+        }
+
+        buildQuery(query);
+
+        return query;
     }
 
     protected abstract void buildQuery(Query query);
-    
+
     protected abstract BrowserPageStatus getBrowserPageStatus();
-    
+
     protected abstract void addTaskStatus(TaskStatus taskStatus);
-    
+
     private Query loadSort(Query query) {
-	Order order = getTableViewerStatus().getOrder();
-	if (order != null) {
-	    query.setOrder(order);
-	}
-	return query;
+        Order order = getTableViewerStatus().getOrder();
+        if (order != null) {
+            query.setOrder(order);
+        }
+        return query;
     }
 
     private Iterator<IEntityTable> loadIterator(Query query) {
-	if (rows == null) {
-	    IEntityTable entityTable = OnexusWebSession.get().getCollectionManager().load(query);
-	    
-	    TaskStatus task = entityTable.getTaskStatus(); 
-	    if (task!=null && !task.isDone()) {
-		addTaskStatus(entityTable.getTaskStatus());
-	    }
-	    
-	    rows = new EntitiesRow(entityTable);
-	}
-	return rows;
+        if (rows == null) {
+            IEntityTable entityTable = OnexusWebSession.get().getCollectionManager().load(query);
+
+            TaskStatus task = entityTable.getTaskStatus();
+            if (task != null && !task.isDone()) {
+                addTaskStatus(entityTable.getTaskStatus());
+            }
+
+            rows = new EntitiesRow(entityTable);
+        }
+        return rows;
     }
 
     @Override
     public IModel<IEntityTable> model(IEntityTable object) {
-	return new EntityMatrixModel(object);
+        return new EntityMatrixModel(object);
     }
 
     @Deprecated
     public class EntityMatrixModel extends
-	    LoadableDetachableModel<IEntityTable> {
+            LoadableDetachableModel<IEntityTable> {
 
-	private Query query;
+        private Query query;
 
-	public EntityMatrixModel(IEntityTable matrix) {
-	    super(matrix);
-	    this.query = matrix.getQuery();
-	}
+        public EntityMatrixModel(IEntityTable matrix) {
+            super(matrix);
+            this.query = matrix.getQuery();
+        }
 
-	@Override
-	protected IEntityTable load() {
-	    return OnexusWebSession.get().getCollectionManager()
-		    .load(query);
-	}
+        @Override
+        protected IEntityTable load() {
+            return OnexusWebSession.get().getCollectionManager()
+                    .load(query);
+        }
 
     }
 
     @Override
     public void detach() {
-	if (rows != null) {
-	    statusModel.detach();
-	    rows = null;
-	}
+        if (rows != null) {
+            statusModel.detach();
+            rows = null;
+        }
     }
 
     @Override
     public ISortState getSortState() {
-	return sortState;
+        return sortState;
     }
 
     public class SortState implements ISortState {
 
-	@Override
-	public void setPropertySortOrder(String property, SortOrder order) {
-	    String[] values = property
-		    .split(FieldHeader.SORT_PROPERTY_SEPARATOR);
-	    String collectionId = values[0];
-	    String fieldName = values[1];
+        @Override
+        public void setPropertySortOrder(String property, SortOrder order) {
+            String[] values = property
+                    .split(FieldHeader.SORT_PROPERTY_SEPARATOR);
+            String collectionId = values[0];
+            String fieldName = values[1];
 
-	    getTableViewerStatus().setOrder(
-		    new Order(collectionId, fieldName,
-			    order == SortOrder.ASCENDING));
+            getTableViewerStatus().setOrder(
+                    new Order(collectionId, fieldName,
+                            order == SortOrder.ASCENDING));
 
-	}
+        }
 
-	@Override
-	public SortOrder getPropertySortOrder(String property) {
-	    String[] values = property
-		    .split(FieldHeader.SORT_PROPERTY_SEPARATOR);
-	    String collectionId = values[0];
-	    String fieldName = values[1];
+        @Override
+        public SortOrder getPropertySortOrder(String property) {
+            String[] values = property
+                    .split(FieldHeader.SORT_PROPERTY_SEPARATOR);
+            String collectionId = values[0];
+            String fieldName = values[1];
 
-	    
-	    Order order = getTableViewerStatus().getOrder();
-	    if (order != null && order.getCollection().equals(collectionId)
-		    && order.getFieldName().equals(fieldName)) {
-		return (order.isAscending() ? SortOrder.ASCENDING
-			: SortOrder.DESCENDING);
-	    }
 
-	    return SortOrder.NONE;
-	}
+            Order order = getTableViewerStatus().getOrder();
+            if (order != null && order.getCollection().equals(collectionId)
+                    && order.getFieldName().equals(fieldName)) {
+                return (order.isAscending() ? SortOrder.ASCENDING
+                        : SortOrder.DESCENDING);
+            }
+
+            return SortOrder.NONE;
+        }
 
     }
 

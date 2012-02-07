@@ -17,13 +17,12 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.onexus.ui.website.widgets.WidgetConfig;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("widget-filters")
 public class FiltersWidgetConfig extends WidgetConfig {
@@ -34,31 +33,31 @@ public class FiltersWidgetConfig extends WidgetConfig {
     private Boolean union;
     private List<FieldSelection> fieldSelection;
     private List<FilterConfig> filters;
-    
+
     public FiltersWidgetConfig() {
-	super();
+        super();
     }
 
     public FiltersWidgetConfig(String id, String region,
-	    FilterConfig... filters) {
-	this(id, region, null, filters);
+                               FilterConfig... filters) {
+        this(id, region, null, filters);
     }
 
     public FiltersWidgetConfig(String id, String region,
-	    FieldSelection[] userFields, FilterConfig... filters) {
-	super(id, region);
+                               FieldSelection[] userFields, FilterConfig... filters) {
+        super(id, region);
 
-	if (userFields == null || userFields.length == 0) {
-	    this.userFilters = false;
-	    this.fieldSelection = new ArrayList<FieldSelection>(0);
-	} else {
-	    this.userFilters = true;
-	    this.fieldSelection = new ArrayList<FieldSelection>(
-		    Arrays.asList(userFields));
-	}
-	this.filters = new ArrayList<FilterConfig>(Arrays.asList(filters));
+        if (userFields == null || userFields.length == 0) {
+            this.userFilters = false;
+            this.fieldSelection = new ArrayList<FieldSelection>(0);
+        } else {
+            this.userFilters = true;
+            this.fieldSelection = new ArrayList<FieldSelection>(
+                    Arrays.asList(userFields));
+        }
+        this.filters = new ArrayList<FilterConfig>(Arrays.asList(filters));
     }
-    
+
     public String getTitle() {
         return title;
     }
@@ -68,31 +67,31 @@ public class FiltersWidgetConfig extends WidgetConfig {
     }
 
     public List<FilterConfig> getFilters() {
-	return filters;
+        return filters;
     }
 
     public void setFilters(List<FilterConfig> filters) {
-	this.filters = filters;
+        this.filters = filters;
     }
 
     public void addFilter(FilterConfig filter) {
-	this.filters.add(filter);
+        this.filters.add(filter);
     }
 
     public Boolean getUserFilters() {
-	return userFilters;
+        return userFilters;
     }
 
     public void setUserFilters(Boolean userFilters) {
-	this.userFilters = userFilters;
+        this.userFilters = userFilters;
     }
 
     public List<FieldSelection> getFieldSelection() {
-	return fieldSelection;
+        return fieldSelection;
     }
 
     public void setFieldSelection(List<FieldSelection> fieldSelection) {
-	this.fieldSelection = fieldSelection;
+        this.fieldSelection = fieldSelection;
     }
 
     public Boolean getUnion() {
@@ -105,7 +104,7 @@ public class FiltersWidgetConfig extends WidgetConfig {
 
     @Override
     public FiltersWidgetStatus createEmptyStatus() {
-	return new FiltersWidgetStatus(getId());
+        return new FiltersWidgetStatus(getId());
     }
 
     public FiltersWidgetStatus getDefaultStatus() {

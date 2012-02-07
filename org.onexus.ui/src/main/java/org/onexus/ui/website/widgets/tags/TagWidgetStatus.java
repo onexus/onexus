@@ -20,15 +20,15 @@ package org.onexus.ui.website.widgets.tags;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 public class TagWidgetStatus extends WidgetStatus {
-    
+
     private String selection;
 
     public TagWidgetStatus() {
-	super();
+        super();
     }
-    
+
     public TagWidgetStatus(String widgetId) {
-	super(widgetId);
+        super(widgetId);
     }
 
     public String getSelection() {

@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.website.widgets.viewselector;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -38,159 +34,163 @@ import org.onexus.ui.website.tabs.TabStatus;
 import org.onexus.ui.website.viewers.ViewerConfig;
 import org.onexus.ui.website.widgets.Widget;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ViewerSelectorWidget extends Widget<ViewerSelectorWidgetConfig, ViewerSelectorWidgetStatus> {
 
     private IModel<ViewerOption> ctModel;
 
     public ViewerSelectorWidget(String componentId, ViewerSelectorWidgetConfig config,
-	    IModel<ViewerSelectorWidgetStatus> status) {
-	super(componentId, config, status);
+                                IModel<ViewerSelectorWidgetStatus> status) {
+        super(componentId, config, status);
 
-	onEventFireUpdate(EventQueryUpdate.class);
+        onEventFireUpdate(EventQueryUpdate.class);
 
-	WebsiteStatus websiteStatus =  getWebsiteStatus();
-	BrowserPageStatus browserStatus = (BrowserPageStatus) websiteStatus.getPageStatus(websiteStatus.getCurrentPageId());
-	ViewerOption defaultOption = null;
-	
-	if (browserStatus!=null) {
-	    TabStatus tabStatus = browserStatus.getCurrentTabStatus();
-	    if (tabStatus != null) {
-		defaultOption = new ViewerOption(tabStatus.getCurrentViewer(), null);
-	    }
-	}
-	
-	ctModel = Model.of(defaultOption);
+        WebsiteStatus websiteStatus = getWebsiteStatus();
+        BrowserPageStatus browserStatus = (BrowserPageStatus) websiteStatus.getPageStatus(websiteStatus.getCurrentPageId());
+        ViewerOption defaultOption = null;
+
+        if (browserStatus != null) {
+            TabStatus tabStatus = browserStatus.getCurrentTabStatus();
+            if (tabStatus != null) {
+                defaultOption = new ViewerOption(tabStatus.getCurrentViewer(), null);
+            }
+        }
+
+        ctModel = Model.of(defaultOption);
 
     }
 
     @Override
     protected void onBeforeRender() {
-	@SuppressWarnings("rawtypes")
-	Form form = new Form("form");
+        @SuppressWarnings("rawtypes")
+        Form form = new Form("form");
 
-	DropDownChoice<ViewerOption> ct = new DropDownChoice<ViewerOption>("views", ctModel, getViewers());
-	ct.add(new OnChangeAjaxBehavior() {
+        DropDownChoice<ViewerOption> ct = new DropDownChoice<ViewerOption>("views", ctModel, getViewers());
+        ct.add(new OnChangeAjaxBehavior() {
 
-	    @Override
-	    protected void onUpdate(AjaxRequestTarget target) {
-		ViewerOption option = ctModel.getObject();
-		
-		BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
-		if (option != null && status != null) {
-		    status.getCurrentTabStatus().setCurrentViewer(option.getId());
-		}
-		
-		sendEvent(EventViewChange.EVENT);
-	    }
-	});
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                ViewerOption option = ctModel.getObject();
 
-	form.add(ct);
+                BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
+                if (option != null && status != null) {
+                    status.getCurrentTabStatus().setCurrentViewer(option.getId());
+                }
 
-	addOrReplace(form);
+                sendEvent(EventViewChange.EVENT);
+            }
+        });
 
-	super.onBeforeRender();
+        form.add(ct);
+
+        addOrReplace(form);
+
+        super.onBeforeRender();
     }
 
     private List<ViewerOption> getViewers() {
 
-	List<ViewerOption> viewers = new ArrayList<ViewerOption>();
+        List<ViewerOption> viewers = new ArrayList<ViewerOption>();
 
-	BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
-	BrowserPageConfig config = getBrowserConfig();
+        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
+        BrowserPageConfig config = getBrowserConfig();
 
-	if (status != null && config != null) {
+        if (status != null && config != null) {
 
-	    String currentTabId = status.getCurrentTabId();
+            String currentTabId = status.getCurrentTabId();
 
-	    TabConfig tabConfig = config.getTab(currentTabId);
+            TabConfig tabConfig = config.getTab(currentTabId);
 
-	    List<ViewerConfig> viewerConfigs = tabConfig.getViewers();
+            List<ViewerConfig> viewerConfigs = tabConfig.getViewers();
 
-	    if (viewerConfigs != null) {
-		ViewerOption currentOption = ctModel.getObject(); 
-		for (ViewerConfig viewerConfig : viewerConfigs) {
-		    
-		    if (currentOption!=null && currentOption.getId().equals(viewerConfig.getId())) {
-			currentOption.setTitle(viewerConfig.getTitle());
-			viewers.add(currentOption);
-		    } else {		    
-			viewers.add(new ViewerOption( viewerConfig.getId(), viewerConfig.getTitle()));
-		    }
-		}
-	    }
-	}
+            if (viewerConfigs != null) {
+                ViewerOption currentOption = ctModel.getObject();
+                for (ViewerConfig viewerConfig : viewerConfigs) {
 
-	return viewers;
+                    if (currentOption != null && currentOption.getId().equals(viewerConfig.getId())) {
+                        currentOption.setTitle(viewerConfig.getTitle());
+                        viewers.add(currentOption);
+                    } else {
+                        viewers.add(new ViewerOption(viewerConfig.getId(), viewerConfig.getTitle()));
+                    }
+                }
+            }
+        }
+
+        return viewers;
     }
 
     private BrowserPageConfig getBrowserConfig() {
 
-	BrowserPage browser = findParent(BrowserPage.class);
+        BrowserPage browser = findParent(BrowserPage.class);
 
-	if (browser != null) {
-	    return browser.getConfig();
-	}
+        if (browser != null) {
+            return browser.getConfig();
+        }
 
-	return null;
+        return null;
 
     }
-    
+
     private class ViewerOption implements Serializable {
-	
-	private String id;
-	private String title;
-	
-	public ViewerOption(String id, String title) {
-	    super();
-	    this.id = id;
-	    this.title = title;
-	}
 
-	public void setTitle(String title) {
-	    this.title = title;	    
-	}
+        private String id;
+        private String title;
 
-	public String getId() {
-	    return id;
-	}
+        public ViewerOption(String id, String title) {
+            super();
+            this.id = id;
+            this.title = title;
+        }
 
-	@Override
-	public String toString() {
-	    return (title!=null ? title : id);
-	}
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-	@Override
-	public int hashCode() {
-	    final int prime = 31;
-	    int result = 1;
-	    result = prime * result + getOuterType().hashCode();
-	    result = prime * result + ((id == null) ? 0 : id.hashCode());
-	    return result;
-	}
+        public String getId() {
+            return id;
+        }
 
-	@Override
-	public boolean equals(Object obj) {
-	    if (this == obj)
-		return true;
-	    if (obj == null)
-		return false;
-	    if (getClass() != obj.getClass())
-		return false;
-	    ViewerOption other = (ViewerOption) obj;
-	    if (!getOuterType().equals(other.getOuterType()))
-		return false;
-	    if (id == null) {
-		if (other.id != null)
-		    return false;
-	    } else if (!id.equals(other.id))
-		return false;
-	    return true;
-	}
+        @Override
+        public String toString() {
+            return (title != null ? title : id);
+        }
 
-	private ViewerSelectorWidget getOuterType() {
-	    return ViewerSelectorWidget.this;
-	}
-	
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + getOuterType().hashCode();
+            result = prime * result + ((id == null) ? 0 : id.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ViewerOption other = (ViewerOption) obj;
+            if (!getOuterType().equals(other.getOuterType()))
+                return false;
+            if (id == null) {
+                if (other.id != null)
+                    return false;
+            } else if (!id.equals(other.id))
+                return false;
+            return true;
+        }
+
+        private ViewerSelectorWidget getOuterType() {
+            return ViewerSelectorWidget.this;
+        }
+
     }
-    
+
 }

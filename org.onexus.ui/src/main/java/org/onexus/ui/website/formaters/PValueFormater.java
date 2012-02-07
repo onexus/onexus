@@ -30,27 +30,27 @@ public class PValueFormater implements ITextFormater {
     @Override
     public String format(Object obj) {
 
-	if (obj == null) {
-	    return "";
-	}
+        if (obj == null) {
+            return "";
+        }
 
-	if (obj instanceof Double) {
-	    double value = (Double) obj;
-	    if (value == 0) {
-		return "< 1E-16";
-	    }
+        if (obj instanceof Double) {
+            double value = (Double) obj;
+            if (value == 0) {
+                return "< 1E-16";
+            }
 
-	    if (value < 0.01) {
-		NumberFormat f = new DecimalFormat("0.###E0");
-		return f.format(value);
-	    } else {
-		NumberFormat f = NumberFormat.getNumberInstance();
-		f.setMaximumFractionDigits(3);
-		return f.format(value);
-	    }
-	}
+            if (value < 0.01) {
+                NumberFormat f = new DecimalFormat("0.###E0");
+                return f.format(value);
+            } else {
+                NumberFormat f = NumberFormat.getNumberInstance();
+                f.setMaximumFractionDigits(3);
+                return f.format(value);
+            }
+        }
 
-	return obj.toString();
+        return obj.toString();
     }
 
 }

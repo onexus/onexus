@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.workspace.pages;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -42,96 +38,99 @@ import org.onexus.ui.workspace.pages.tools.WorkspaceSelectorTool;
 import org.onexus.ui.workspace.tree.WorkspaceTree;
 import org.onexus.ui.workspace.viewers.ViewerTabs;
 
+import javax.inject.Inject;
+import java.util.List;
+
 public class ResourcesPage extends BasePage {
 
     private static final AttributeModifier ATTRIBUTE_MODIFIER_MIN = new AttributeModifier("class",
-	    "resources-tabs resources-tabs-min");
+            "resources-tabs resources-tabs-min");
     private static final AttributeModifier ATTRIBUTE_MODIFIER_MAX = new AttributeModifier("class",
-	    "resources-tabs resources-tabs-max");
+            "resources-tabs resources-tabs-max");
     public final static String RESOURCE = "uri";
     public final static CssResourceReference CSS = new CssResourceReference(ResourcesPage.class, "ResourcesPage.css");
-    
-    
+
+
     @Inject
     private IResourceManager resourceManager;
-    
+
     private WebMarkupContainer resourcesTabs;
     private WebMarkupContainer resourceInfo;
 
     public ResourcesPage(PageParameters parameters) {
 
-	String defaultResourceURI = getDefaultResourceURI();
-	String resourceURI = parameters.get(RESOURCE).toString(defaultResourceURI);
+        String defaultResourceURI = getDefaultResourceURI();
+        String resourceURI = parameters.get(RESOURCE).toString(defaultResourceURI);
 
-	IModel<Resource> currentResource = new ResourceModel(resourceURI);
+        IModel<Resource> currentResource = new ResourceModel(resourceURI);
 
-	add(new WorkspaceTree("tree", currentResource));
+        add(new WorkspaceTree("tree", currentResource));
 
-	resourcesTabs = new WebMarkupContainer("resourcesTabs");
-	resourcesTabs.setOutputMarkupId(true);
+        resourcesTabs = new WebMarkupContainer("resourcesTabs");
+        resourcesTabs.setOutputMarkupId(true);
 
-	resourceInfo = new WebMarkupContainer("resourceInfo");
-	resourceInfo.setOutputMarkupId(true);
-	resourceInfo.add(new Label("resourceType", new PropertyModel<String>(currentResource, "class.simpleName")));
-	resourceInfo.add(new Label("resourceUri", new PropertyModel<String>(currentResource, "URI")));
-	resourcesTabs.add(resourceInfo);
+        resourceInfo = new WebMarkupContainer("resourceInfo");
+        resourceInfo.setOutputMarkupId(true);
+        resourceInfo.add(new Label("resourceType", new PropertyModel<String>(currentResource, "class.simpleName")));
+        resourceInfo.add(new Label("resourceUri", new PropertyModel<String>(currentResource, "URI")));
+        resourcesTabs.add(resourceInfo);
 
-	AjaxLink<Boolean> fullscreenLink = new AjaxLink<Boolean>("fullscreen", Model.of(Boolean.FALSE)) {
+        AjaxLink<Boolean> fullscreenLink = new AjaxLink<Boolean>("fullscreen", Model.of(Boolean.FALSE)) {
 
-	    @Override
-	    public void onClick(AjaxRequestTarget target) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
 
-		Boolean fullscreen = !getModelObject();
+                Boolean fullscreen = !getModelObject();
 
-		if (fullscreen) {
-		    resourcesTabs.add(ATTRIBUTE_MODIFIER_MAX);
-		} else {
-		    resourcesTabs.add(ATTRIBUTE_MODIFIER_MIN);
-		}
+                if (fullscreen) {
+                    resourcesTabs.add(ATTRIBUTE_MODIFIER_MAX);
+                } else {
+                    resourcesTabs.add(ATTRIBUTE_MODIFIER_MIN);
+                }
 
-		setModelObject(fullscreen);
-		target.add(resourcesTabs);
+                setModelObject(fullscreen);
+                target.add(resourcesTabs);
 
-	    }
+            }
 
-	};
-	
-	fullscreenLink.add(new Image("image", "fullscreen.png"));
-	
-	resourcesTabs.add(fullscreenLink);
+        };
 
-	resourcesTabs.add(new ViewerTabs("viewers", currentResource));
+        fullscreenLink.add(new Image("image", "fullscreen.png"));
 
-	add(resourcesTabs);
+        resourcesTabs.add(fullscreenLink);
 
-	addTool(new WorkspaceSelectorTool());
+        resourcesTabs.add(new ViewerTabs("viewers", currentResource));
+
+        add(resourcesTabs);
+
+        addTool(new WorkspaceSelectorTool());
 
     }
 
     private String getDefaultResourceURI() {
-	List<Workspace> workspaces = resourceManager.loadChildren(Workspace.class, null);
+        List<Workspace> workspaces = resourceManager.loadChildren(Workspace.class, null);
 
-	if (workspaces != null && !workspaces.isEmpty()) {
-	    return workspaces.get(0).getURI();
-	}
+        if (workspaces != null && !workspaces.isEmpty()) {
+            return workspaces.get(0).getURI();
+        }
 
-	return null;
+        return null;
     }
 
     @Override
     public void onEvent(IEvent<?> event) {
 
-	if (EventResourceSelect.EVENT == event.getPayload()) {
-	    AjaxRequestTarget.get().add(resourceInfo);
-	}
+        if (EventResourceSelect.EVENT == event.getPayload()) {
+            AjaxRequestTarget.get().add(resourceInfo);
+        }
 
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-	super.renderHead(response);
+        super.renderHead(response);
 
-	response.renderCSSReference(CSS);
+        response.renderCSSReference(CSS);
     }
 
 }

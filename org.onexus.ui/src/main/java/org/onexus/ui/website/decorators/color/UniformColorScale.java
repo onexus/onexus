@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.decorators.color;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.Serializable;
 
 public class UniformColorScale implements IColorScale, Serializable {
@@ -25,20 +25,20 @@ public class UniformColorScale implements IColorScale, Serializable {
     protected Color color;
 
     public UniformColorScale(Color color) {
-	this.color = color;
+        this.color = color;
     }
 
     public Color getColor() {
-	return color;
+        return color;
     }
 
     public void setColor(Color color) {
-	this.color = color;
+        this.color = color;
     }
 
     @Override
     public Color valueColor(double value) {
-	return color;
+        return color;
     }
 
 }

@@ -18,12 +18,7 @@
 package org.onexus.core.query;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Query implements Serializable {
 
@@ -46,76 +41,76 @@ public class Query implements Serializable {
     private long maxResults = Long.MAX_VALUE;
 
     public Query() {
-	super();
+        super();
     }
 
     public Query(String mainCollection) {
-	super();
-	this.mainCollection = mainCollection;
-	this.collections.add(mainCollection);
+        super();
+        this.mainCollection = mainCollection;
+        this.collections.add(mainCollection);
     }
 
     public Set<FixedEntity> getFixedEntities() {
-	return fixedEntities;
+        return fixedEntities;
     }
 
     public Set<String> getFilterKeys() {
-	return filters.keySet();
+        return filters.keySet();
     }
 
     public Set<Filter> getFilters(String filterKey) {
-	return filters.get(filterKey);
+        return filters.get(filterKey);
     }
 
     public List<String> getCollections() {
-	return collections;
+        return collections;
     }
 
     public String getMainCollection() {
-	return mainCollection;
+        return mainCollection;
     }
 
     public void setMainCollection(String mainCollection) {
-	this.mainCollection = mainCollection;
+        this.mainCollection = mainCollection;
     }
 
     public String getMainNamespace() {
-	return mainNamespace;
+        return mainNamespace;
     }
 
     public void setMainNamespace(String mainNamespace) {
-	this.mainNamespace = mainNamespace;
+        this.mainNamespace = mainNamespace;
     }
 
     public long getFirstResult() {
-	return firstResult;
+        return firstResult;
     }
 
     public void setFirstResult(long firstResult) {
-	this.firstResult = firstResult;
+        this.firstResult = firstResult;
     }
 
     public long getMaxResults() {
-	return maxResults;
+        return maxResults;
     }
 
     public void setMaxResults(long maxResults) {
-	this.maxResults = maxResults;
+        this.maxResults = maxResults;
     }
 
     public Order getOrder() {
-	return order;
+        return order;
     }
 
     public void setOrder(Order order) {
-	this.order = order;
+        this.order = order;
     }
 
     public void putFilter(String id, Filter rule) {
-	if (!filters.containsKey(id)) {
-	    filters.put(id, new HashSet<Filter>());
-	}
-	filters.get(id).add(rule);
+        if (!filters.containsKey(id)) {
+            filters.put(id, new HashSet<Filter>());
+        }
+        filters.get(id).add(rule);
     }
 
 }

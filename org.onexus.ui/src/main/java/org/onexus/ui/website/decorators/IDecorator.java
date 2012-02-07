@@ -24,16 +24,14 @@ import org.apache.wicket.model.IModel;
 import org.onexus.core.IEntity;
 
 /**
- * 
  * A IDecorator creates the panel for a given Field and a IEntity instance.
- * 
- * @author Jordi Deu-Pons
  *
+ * @author Jordi Deu-Pons
  */
 public interface IDecorator extends IClusterable, IDetachable {
 
     void populateCell(WebMarkupContainer cellContainer, String componentId,
-	    IModel<IEntity> entity);
+                      IModel<IEntity> entity);
 
     String getFormatValue(IEntity entity);
 

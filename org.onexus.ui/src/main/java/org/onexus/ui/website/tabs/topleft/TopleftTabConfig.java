@@ -17,15 +17,14 @@
  */
 package org.onexus.ui.website.tabs.topleft;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.onexus.ui.website.tabs.TabConfig;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.ArrayList;
+import java.util.List;
 
 @XStreamAlias("tab-topleft")
 public class TopleftTabConfig extends TabConfig {
@@ -33,63 +32,63 @@ public class TopleftTabConfig extends TabConfig {
     public final static String REGION_TOP = "top";
     public final static String REGION_TOP_RIGHT = "top-right";
     public final static String REGION_LEFT = "left";
-    
+
     private TopleftTabStatus defaultStatus;
 
     public TopleftTabConfig() {
-	super();
+        super();
     }
 
     public TopleftTabConfig(String tabId, String title) {
-	super(tabId, title);
+        super(tabId, title);
     }
-    
+
     public List<WidgetConfig> getLeftWidgets() {
-	List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
-	CollectionUtils.select(getWidgets(),
-		new FilterWidgetRegion(REGION_LEFT), widgets);
-	return widgets;
+        List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
+        CollectionUtils.select(getWidgets(),
+                new FilterWidgetRegion(REGION_LEFT), widgets);
+        return widgets;
     }
 
     public List<WidgetConfig> getTopWidgets() {
-	List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
-	CollectionUtils.select(getWidgets(),
-		new FilterWidgetRegion(REGION_TOP), widgets);
-	return widgets;
+        List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
+        CollectionUtils.select(getWidgets(),
+                new FilterWidgetRegion(REGION_TOP), widgets);
+        return widgets;
     }
 
     public List<WidgetConfig> getTopRightWidgets() {
-	List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
-	CollectionUtils.select(getWidgets(), new FilterWidgetRegion(
-		REGION_TOP_RIGHT), widgets);
-	return widgets;
+        List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
+        CollectionUtils.select(getWidgets(), new FilterWidgetRegion(
+                REGION_TOP_RIGHT), widgets);
+        return widgets;
     }
 
     private static class FilterWidgetRegion implements Predicate {
 
-	private String validRegion;
+        private String validRegion;
 
-	public FilterWidgetRegion(String validRegion) {
-	    super();
-	    this.validRegion = validRegion;
-	}
+        public FilterWidgetRegion(String validRegion) {
+            super();
+            this.validRegion = validRegion;
+        }
 
-	@Override
-	public boolean evaluate(Object object) {
-	    WidgetConfig widgetConfig = (WidgetConfig) object;
-	    return validRegion.equalsIgnoreCase(widgetConfig.getRegion());
-	}
+        @Override
+        public boolean evaluate(Object object) {
+            WidgetConfig widgetConfig = (WidgetConfig) object;
+            return validRegion.equalsIgnoreCase(widgetConfig.getRegion());
+        }
 
     }
 
     @Override
     public TopleftTabStatus createEmptyStatus() {
-	return new TopleftTabStatus(getId(), getFirstViewerId(getViewers()));
+        return new TopleftTabStatus(getId(), getFirstViewerId(getViewers()));
     }
 
     @Override
     public TopleftTabStatus getDefaultStatus() {
-	return defaultStatus;
+        return defaultStatus;
     }
 
     public void setDefaultStatus(TopleftTabStatus defaultStatus) {

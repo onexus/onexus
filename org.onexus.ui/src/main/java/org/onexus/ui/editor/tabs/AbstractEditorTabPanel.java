@@ -24,16 +24,16 @@ import org.onexus.core.resources.Resource;
 public abstract class AbstractEditorTabPanel extends Panel {
 
     public AbstractEditorTabPanel(String id, IModel<? extends Resource> model) {
-	super(id, model);
+        super(id, model);
     }
-    
+
     @SuppressWarnings("unchecked")
     public IModel<? extends Resource> getModel() {
-	return (IModel<? extends Resource>) getDefaultModel();
+        return (IModel<? extends Resource>) getDefaultModel();
     }
-    
+
     public Resource getModelObject() {
-	return getModel().getObject();
+        return getModel().getObject();
     }
 
 }

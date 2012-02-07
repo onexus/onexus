@@ -23,7 +23,7 @@ import javax.swing.tree.TreeNode;
 public class BundleDefaultTreeModel extends DefaultTreeModel {
 
     public BundleDefaultTreeModel(TreeNode root) {
-	super(root);
+        super(root);
     }
 
 }

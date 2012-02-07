@@ -31,43 +31,43 @@ public class TaskStatusSimpleViewBox extends Border {
     @SuppressWarnings("unchecked")
     public TaskStatusSimpleViewBox(String id, IModel<TaskStatus> taskModel) {
 
-	super(id, new Model<Boolean>());
-	// I have to do it in ajax, otherwise i leave the page
-	// setOutputMarkupId(true);
-	setCollapsed(taskModel.getObject().isDone());
+        super(id, new Model<Boolean>());
+        // I have to do it in ajax, otherwise i leave the page
+        // setOutputMarkupId(true);
+        setCollapsed(taskModel.getObject().isDone());
 
-	final WebMarkupContainer body = new WebMarkupContainer(
-		"collapsiblebody") {
-	    @Override
-	    protected void onConfigure() {
-		setVisible(!isCollapsed());
-	    }
-	};
-	body.setOutputMarkupPlaceholderTag(true); // important	
-	addToBorder(body);
-	body.add(getBodyContainer());
-	AjaxLink<Boolean> toggle = new AjaxLink<Boolean>("toggle") {
-	    @Override
-	    public void onClick(AjaxRequestTarget target) {
-		
-		setCollapsed(!isCollapsed());
-		target.add(body);
-		target.add(this);		
-		
-	    }
-	};	
-	toggle.setOutputMarkupId(true);
-	addToBorder(toggle);	
-	toggle.add(new ArrowToggleButton("toggleButton", (IModel<Boolean>) getDefaultModel()));
-	addToBorder(new TaskStatusItemHeader("itemHeader", taskModel));
+        final WebMarkupContainer body = new WebMarkupContainer(
+                "collapsiblebody") {
+            @Override
+            protected void onConfigure() {
+                setVisible(!isCollapsed());
+            }
+        };
+        body.setOutputMarkupPlaceholderTag(true); // important
+        addToBorder(body);
+        body.add(getBodyContainer());
+        AjaxLink<Boolean> toggle = new AjaxLink<Boolean>("toggle") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+
+                setCollapsed(!isCollapsed());
+                target.add(body);
+                target.add(this);
+
+            }
+        };
+        toggle.setOutputMarkupId(true);
+        addToBorder(toggle);
+        toggle.add(new ArrowToggleButton("toggleButton", (IModel<Boolean>) getDefaultModel()));
+        addToBorder(new TaskStatusItemHeader("itemHeader", taskModel));
     }
 
     public void setCollapsed(boolean collapsed) {
-	setDefaultModelObject(collapsed);
+        setDefaultModelObject(collapsed);
     }
 
     public boolean isCollapsed() {
-	return Boolean.TRUE.equals(getDefaultModelObject());
+        return Boolean.TRUE.equals(getDefaultModelObject());
     }
-    
+
 }

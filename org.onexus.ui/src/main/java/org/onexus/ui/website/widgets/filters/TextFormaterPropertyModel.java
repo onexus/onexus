@@ -25,15 +25,15 @@ public class TextFormaterPropertyModel extends PropertyModel<String> {
     private ITextFormater formater;
 
     public TextFormaterPropertyModel(Object modelObject, String expression,
-	    ITextFormater formater) {
-	super(modelObject, expression);
-	this.formater = formater;
+                                     ITextFormater formater) {
+        super(modelObject, expression);
+        this.formater = formater;
     }
 
     @Override
     public String getObject() {
-	Object value = super.getObject();
-	return (value == null ? null : formater.format(value));
+        Object value = super.getObject();
+        return (value == null ? null : formater.format(value));
     }
 
 }

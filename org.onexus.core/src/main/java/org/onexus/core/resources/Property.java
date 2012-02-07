@@ -25,17 +25,17 @@ public class Property implements Serializable {
     private String value;
 
     public Property() {
-	super();
+        super();
     }
-    
+
     public Property(String key, String value) {
-	super();
-	this.key = key;
-	this.value = value;
+        super();
+        this.key = key;
+        this.value = value;
     }
-    
+
     public String getKey() {
-	return key;
+        return key;
     }
 
     public void setKey(String key) {
@@ -47,12 +47,12 @@ public class Property implements Serializable {
     }
 
     public String getValue() {
-	return value;
+        return value;
     }
 
     @Override
     public String toString() {
-	return "Property [key=" + key + ", value=" + value + "]";
+        return "Property [key=" + key + ", value=" + value + "]";
     }
 
 }

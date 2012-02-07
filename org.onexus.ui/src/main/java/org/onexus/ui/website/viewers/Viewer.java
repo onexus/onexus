@@ -23,7 +23,7 @@ import org.onexus.ui.website.AbstractWebsitePanel;
 public abstract class Viewer<C extends ViewerConfig, S extends ViewerStatus> extends AbstractWebsitePanel<C, S> {
 
     public Viewer(final String panelId, C config, final IModel<S> statusModel) {
-	super(panelId, config, statusModel);
+        super(panelId, config, statusModel);
     }
 
 }

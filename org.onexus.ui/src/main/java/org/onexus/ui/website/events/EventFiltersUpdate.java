@@ -19,11 +19,11 @@ package org.onexus.ui.website.events;
 
 
 public class EventFiltersUpdate extends EventQueryUpdate {
-    
+
     public final static EventFiltersUpdate EVENT = new EventFiltersUpdate();
 
     protected EventFiltersUpdate() {
-	super();
+        super();
     }
 
 }

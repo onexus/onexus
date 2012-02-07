@@ -22,35 +22,35 @@ import org.onexus.core.resources.Resource;
 public class ResourceTools {
 
     public static String getParentURI(String resourceURI) {
-	return resourceURI.substring(0,
-		resourceURI.lastIndexOf(Resource.SEPARATOR));
+        return resourceURI.substring(0,
+                resourceURI.lastIndexOf(Resource.SEPARATOR));
     }
 
     public static String concatURIs(String parentURI, String resourceName) {
-	return parentURI + Resource.SEPARATOR + resourceName;
+        return parentURI + Resource.SEPARATOR + resourceName;
     }
 
     public static String getAbsoluteURI(String releaseURI, String collectionURI) {
 
-	releaseURI = formatURL(releaseURI);
-	collectionURI = formatURL(collectionURI);
-	
-	// Already absolute URI
-	if (collectionURI.contains("://") || releaseURI == null
-		|| releaseURI.isEmpty()) {
-	    return collectionURI;
-	}
+        releaseURI = formatURL(releaseURI);
+        collectionURI = formatURL(collectionURI);
 
-	// Relative URI
-	return concatURIs(releaseURI, collectionURI);
+        // Already absolute URI
+        if (collectionURI.contains("://") || releaseURI == null
+                || releaseURI.isEmpty()) {
+            return collectionURI;
+        }
+
+        // Relative URI
+        return concatURIs(releaseURI, collectionURI);
     }
-    
+
     private static String formatURL(String url) {
-	return (url==null?null : url.replaceAll("[\n\t ]", ""));
+        return (url == null ? null : url.replaceAll("[\n\t ]", ""));
     }
 
     public static String getResourceName(String resourceURI) {
-	return resourceURI.substring(resourceURI.lastIndexOf(Resource.SEPARATOR) + 1);
+        return resourceURI.substring(resourceURI.lastIndexOf(Resource.SEPARATOR) + 1);
     }
 
 }

@@ -17,30 +17,28 @@
  */
 package org.onexus.ui.website.viewers.tableviewer.columns;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
 import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
+
+import java.io.Serializable;
+import java.util.List;
 
 public interface IColumnConfig extends Serializable {
 
     /**
      * @return Return all the collectionId that this column needs to add into
      *         the data query.
-     * 
      */
-    public String[] getQueryCollections( String releaseURI );
+    public String[] getQueryCollections(String releaseURI);
 
     /**
-     * @param columns
-     *            This method is called by the table viewer when it needs to
-     *            construct all the columns. It's expected that the column
-     *            config add all the columns at the end of the list.
+     * @param columns This method is called by the table viewer when it needs to
+     *                construct all the columns. It's expected that the column
+     *                config add all the columns at the end of the list.
      */
-    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI );
-    
-    public void addExportColumns(List<ExportColumn> columns, String releaseURI );
+    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI);
+
+    public void addExportColumns(List<ExportColumn> columns, String releaseURI);
 
 }

@@ -26,24 +26,24 @@ import org.onexus.ui.workspace.pages.ResourcesPage;
 public class WorkspaceApplication extends OnexusWebApplication {
 
     private void mountPages() {
-	mountPage("admin", ResourcesPage.class);
+        mountPage("admin", ResourcesPage.class);
     }
 
     public Class<? extends Page> getHomePage() {
-	return ResourcesPage.class;
+        return ResourcesPage.class;
     }
-    
+
     @Override
     protected void init() {
-	super.init();
+        super.init();
 
-	getMarkupSettings().setStripWicketTags(true);
-	getDebugSettings().setAjaxDebugModeEnabled(true);
-	
-	getSharedResources().add("export", new ExportResource());
-	mountResource("download", getSharedResources().get(Application.class, "export", null, null, null, true));
+        getMarkupSettings().setStripWicketTags(true);
+        getDebugSettings().setAjaxDebugModeEnabled(true);
 
-	mountPages();
+        getSharedResources().add("export", new ExportResource());
+        mountResource("download", getSharedResources().get(Application.class, "export", null, null, null, true));
+
+        mountPages();
     }
 
 }

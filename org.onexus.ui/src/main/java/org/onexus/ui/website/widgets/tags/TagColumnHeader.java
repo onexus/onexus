@@ -27,46 +27,46 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
 
 public class TagColumnHeader extends Panel {
-    
+
     public final static PackageResourceReference JAVA_SCRIPT = new PackageResourceReference(TagColumn.class, "tagcolumn.js");
 
     private WebMarkupContainer checkbox;
-    
+
     public TagColumnHeader(String id) {
-	this(id, Model.of("ALL"));
-    }  
-    
+        this(id, Model.of("ALL"));
+    }
+
 
     public TagColumnHeader(String id, IModel<String> model) {
-	super(id);
-	checkbox = new WebMarkupContainer("checkbox");
-	checkbox.add(new AttributeModifier("value", model));
-	
-	// We decided to disable this feature (because it's confusing
-	// for the user) until we implement the ALL rows selection feature #807
-	checkbox.setVisible(false);
-	
-	add(checkbox);
+        super(id);
+        checkbox = new WebMarkupContainer("checkbox");
+        checkbox.add(new AttributeModifier("value", model));
+
+        // We decided to disable this feature (because it's confusing
+        // for the user) until we implement the ALL rows selection feature #807
+        checkbox.setVisible(false);
+
+        add(checkbox);
     }
-    
+
     protected WebMarkupContainer getCheckBox() {
-	return checkbox;
+        return checkbox;
     }
-    
+
     protected String getTableId() {
-	return findParent(DataTable.class).getMarkupId();
+        return findParent(DataTable.class).getMarkupId();
     }
-    
+
     @Override
     protected void onBeforeRender() {
-	checkbox.add(new AttributeModifier("onclick", "toggleCheckBoxes(this, '" + getTableId() + "');"));
-	super.onBeforeRender();
+        checkbox.add(new AttributeModifier("onclick", "toggleCheckBoxes(this, '" + getTableId() + "');"));
+        super.onBeforeRender();
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
-	super.renderHead(response);
-	response.renderJavaScriptReference(JAVA_SCRIPT);
+        super.renderHead(response);
+        response.renderJavaScriptReference(JAVA_SCRIPT);
     }
 
 }

@@ -23,27 +23,27 @@ public class Between extends FieldFilter {
     private Object max;
 
     public Between() {
-	this(null, null, null, null);
+        this(null, null, null, null);
     }
 
     public Between(String collectionId, String fieldName, Object min, Object max) {
-	super(collectionId, fieldName);
-	this.min = min;
-	this.max = max;
+        super(collectionId, fieldName);
+        this.min = min;
+        this.max = max;
     }
 
     public Object getMin() {
-	return min;
+        return min;
     }
 
     public Object getMax() {
-	return max;
+        return max;
     }
 
     @Override
     public String toString() {
-	return getCollection() + "." + getFieldName() + " BETWEEN "
-		+ getMin() + " AND " + getMax();
+        return getCollection() + "." + getFieldName() + " BETWEEN "
+                + getMin() + " AND " + getMax();
     }
 
 }

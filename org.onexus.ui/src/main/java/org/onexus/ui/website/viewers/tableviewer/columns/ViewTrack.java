@@ -29,38 +29,38 @@ public class ViewTrack extends MatrixTrack {
     private Collection viewType;
 
     public ViewTrack(Collection viewType, IHeader headerDecorator,
-	    IDecorator cellDecorator) {
-	super(headerDecorator, cellDecorator);
-	this.viewType = viewType;
+                     IDecorator cellDecorator) {
+        super(headerDecorator, cellDecorator);
+        this.viewType = viewType;
     }
 
     @Override
     protected IModel<IEntity> getModelAdapter(IModel<IEntityTable> rowModel) {
-	return new ModelAdapter(rowModel);
+        return new ModelAdapter(rowModel);
     }
 
     public class ModelAdapter implements IModel<IEntity> {
-	private IModel<IEntityTable> rowModel;
+        private IModel<IEntityTable> rowModel;
 
-	public ModelAdapter(IModel<IEntityTable> rowModel) {
-	    this.rowModel = rowModel;
-	}
+        public ModelAdapter(IModel<IEntityTable> rowModel) {
+            this.rowModel = rowModel;
+        }
 
-	@Override
-	public IEntity getObject() {
-	    return rowModel.getObject().getEntity(viewType.getURI());
-	}
+        @Override
+        public IEntity getObject() {
+            return rowModel.getObject().getEntity(viewType.getURI());
+        }
 
-	@Override
-	public void setObject(IEntity object) {
+        @Override
+        public void setObject(IEntity object) {
 
-	    // Read only model
-	    throw new UnsupportedOperationException("Read-only model");
-	}
+            // Read only model
+            throw new UnsupportedOperationException("Read-only model");
+        }
 
-	@Override
-	public void detach() {
-	}
+        @Override
+        public void detach() {
+        }
 
     }
 

@@ -30,51 +30,50 @@ import org.onexus.core.TaskStatus;
 /**
  * TaskStatusItemHeader is a way to represent given a task in concret, its state
  * in a fancy way.
- * 
+ *
  * @author armand
- * 
  */
 public class TaskStatusItemHeader extends Panel {
 
     private final ResourceReference img_refreshing = new PackageResourceReference(
-	    TaskStatusItemHeader.class, "ajax-loader2.gif");
+            TaskStatusItemHeader.class, "ajax-loader2.gif");
     private final ResourceReference img_ok = new PackageResourceReference(
-	    TaskStatusItemHeader.class, "dialog-ok-3.png");
+            TaskStatusItemHeader.class, "dialog-ok-3.png");
 
     public TaskStatusItemHeader(String id, IModel<TaskStatus> taskStatusModel) {
-	super(id, taskStatusModel);
+        super(id, taskStatusModel);
 
-	TaskStatus task = taskStatusModel.getObject();
-	add(new Label("itemName", task.getTitle()));
-	String msg = "In process ...";
-	if (task.isDone()) {
-	    msg = "OK!";
-	} else if (task.isCancelled()) {
-	    msg = "Cancelled";
-	}
-	add(new Label("itemStatus", msg));
-	add(new Image("statusimg", new ImageTaskStatusModel(
-		new PropertyModel<Boolean>(taskStatusModel, "isDone"))));
+        TaskStatus task = taskStatusModel.getObject();
+        add(new Label("itemName", task.getTitle()));
+        String msg = "In process ...";
+        if (task.isDone()) {
+            msg = "OK!";
+        } else if (task.isCancelled()) {
+            msg = "Cancelled";
+        }
+        add(new Label("itemStatus", msg));
+        add(new Image("statusimg", new ImageTaskStatusModel(
+                new PropertyModel<Boolean>(taskStatusModel, "isDone"))));
 
     }
 
     private class ImageTaskStatusModel extends Model<ResourceReference> {
 
-	IModel<Boolean> statusDoned; // True or False
+        IModel<Boolean> statusDoned; // True or False
 
-	public ImageTaskStatusModel(IModel<Boolean> isDonedTaskModel) {
-	    this.statusDoned = isDonedTaskModel;	    
-	}
+        public ImageTaskStatusModel(IModel<Boolean> isDonedTaskModel) {
+            this.statusDoned = isDonedTaskModel;
+        }
 
-	@Override
-	public ResourceReference getObject() {
-	    // Returns kind of icon
-	    if (statusDoned.getObject()) {
-		return img_ok;
-	    } else {
-		return img_refreshing;
-	    }
-	}
+        @Override
+        public ResourceReference getObject() {
+            // Returns kind of icon
+            if (statusDoned.getObject()) {
+                return img_ok;
+            } else {
+                return img_refreshing;
+            }
+        }
     }
 
 }

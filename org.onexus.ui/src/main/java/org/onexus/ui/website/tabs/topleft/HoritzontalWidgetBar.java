@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.website.tabs.topleft;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -29,26 +25,29 @@ import org.onexus.ui.website.tabs.TabStatus;
 import org.onexus.ui.website.widgets.IWidgetManager;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
+import javax.inject.Inject;
+import java.util.List;
+
 public class HoritzontalWidgetBar extends Panel {
-    
+
     @Inject
     public IWidgetManager widgetManager;
 
     public HoritzontalWidgetBar(String componentId, List<WidgetConfig> widgets, IModel<? extends TabStatus> statusModel) {
-	super(componentId);
+        super(componentId);
 
-	RepeatingView widgetsContainer = new RepeatingView("widgetsContainer");
+        RepeatingView widgetsContainer = new RepeatingView("widgetsContainer");
 
-	// Add all the widgets
-	if (widgets != null) {
-	    for (WidgetConfig widget : widgets) {
-		WebMarkupContainer item = new WebMarkupContainer(widgetsContainer.newChildId());
-		widgetsContainer.add(item);
-		
-		item.add(widgetManager.create("widget", widget, new WidgetModel(widget, statusModel)));
-	    }
-	}
+        // Add all the widgets
+        if (widgets != null) {
+            for (WidgetConfig widget : widgets) {
+                WebMarkupContainer item = new WebMarkupContainer(widgetsContainer.newChildId());
+                widgetsContainer.add(item);
 
-	add(widgetsContainer);
+                item.add(widgetManager.create("widget", widget, new WidgetModel(widget, statusModel)));
+            }
+        }
+
+        add(widgetsContainer);
     }
 }

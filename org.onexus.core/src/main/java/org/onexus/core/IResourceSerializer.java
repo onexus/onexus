@@ -30,6 +30,5 @@ public interface IResourceSerializer {
 
     void register(Class<?> type);
 
-    
 
 }

@@ -22,23 +22,23 @@ import java.sql.ResultSet;
 public class BooleanAdapter extends SQLAdapter {
 
     public BooleanAdapter() {
-	super(Boolean.class);
+        super(Boolean.class);
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-	container.append(((Boolean) object) ? "1" : "0");
+        container.append(((Boolean) object) ? "1" : "0");
     }
 
     @Override
     public Object extract(ResultSet container, Object... parameters)
-	    throws Exception {
-	Boolean value = container.getBoolean(((String) parameters[0]).trim());
-	if (container.wasNull()) {
-	    return null;
-	} else {
-	    return value;
-	}
+            throws Exception {
+        Boolean value = container.getBoolean(((String) parameters[0]).trim());
+        if (container.wasNull()) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
 }

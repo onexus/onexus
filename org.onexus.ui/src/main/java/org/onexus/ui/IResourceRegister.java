@@ -20,6 +20,6 @@ package org.onexus.ui;
 public interface IResourceRegister {
 
     public void register(Class<?> resourceType);
-    
+
     public ClassLoader getResourcesClassLoader();
 }

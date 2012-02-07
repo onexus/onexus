@@ -22,21 +22,20 @@ import org.onexus.core.TaskStatus;
 public class ContainerTaskStatus extends TaskStatus {
 
     public ContainerTaskStatus(String id, String title) {
-	super(id, title);
+        super(id, title);
     }
 
     @Override
     public boolean isDone() {
-	
-	for (TaskStatus subTask : getSubTasks()) {
-		if (!subTask.isDone()) {
-		    return false;
-		}
-	}
-	
-	return true;
+
+        for (TaskStatus subTask : getSubTasks()) {
+            if (!subTask.isDone()) {
+                return false;
+            }
+        }
+
+        return true;
     }
-    
-    
+
 
 }

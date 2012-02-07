@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
 
-	<cm:property-placeholder persistent-id="org.onexus.task.manager.basic" update-strategy="reload">
-		<cm:default-properties>
-			<cm:property name="timeout" value="50" />
-			<cm:property name="maxThreads" value="2" />
-		</cm:default-properties>
-	</cm:property-placeholder>
+    <cm:property-placeholder persistent-id="org.onexus.task.manager.basic" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="timeout" value="50"/>
+            <cm:property name="maxThreads" value="2"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
 
-	<reference-list id="executorsRef" interface="org.onexus.core.ITaskExecutor" />
-	
-	<service id="org.onexus.task.manager.basic" interface="org.onexus.core.ITaskManager" >
-		<bean class="org.onexus.task.manager.basic.TaskManager" init-method="init">
-			<property name="timeout" value="${timeout}" />
-			<property name="maxThreads" value="${maxThreads}" />
-			<property name="executors" ref="executorsRef" />
-		</bean>
-	</service>
+    <reference-list id="executorsRef" interface="org.onexus.core.ITaskExecutor"/>
+
+    <service id="org.onexus.task.manager.basic" interface="org.onexus.core.ITaskManager">
+        <bean class="org.onexus.task.manager.basic.TaskManager" init-method="init">
+            <property name="timeout" value="${timeout}"/>
+            <property name="maxThreads" value="${maxThreads}"/>
+            <property name="executors" ref="executorsRef"/>
+        </bean>
+    </service>
 </blueprint>

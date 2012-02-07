@@ -27,22 +27,22 @@ public class NewProjectWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-	return "New project";
+        return "New project";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-	return new NewProjectWizard(containerId, model);
+        return new NewProjectWizard(containerId, model);
     }
 
     @Override
     public double getOrder() {
-	return 0;
+        return 0;
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-	return Workspace.class.isAssignableFrom(resourceType);
+        return Workspace.class.isAssignableFrom(resourceType);
     }
 
 }

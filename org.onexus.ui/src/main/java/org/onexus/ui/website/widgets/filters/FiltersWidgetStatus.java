@@ -17,13 +17,9 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.onexus.ui.website.widgets.WidgetStatus;
+
+import java.util.*;
 
 public class FiltersWidgetStatus extends WidgetStatus {
 
@@ -32,39 +28,39 @@ public class FiltersWidgetStatus extends WidgetStatus {
     private List<FilterConfig> userFilters = new ArrayList<FilterConfig>();
 
     public FiltersWidgetStatus() {
-	super();
+        super();
     }
 
     public FiltersWidgetStatus(String widgetId, String... activeFilters) {
-	super(widgetId);
-	this.activeFilters = new HashSet<String>(Arrays.asList(activeFilters));
+        super(widgetId);
+        this.activeFilters = new HashSet<String>(Arrays.asList(activeFilters));
 
     }
 
     public Set<String> getActiveFilters() {
-	return activeFilters;
+        return activeFilters;
     }
 
     public void setActiveFilters(Set<String> activeFilters) {
-	this.activeFilters = activeFilters;
+        this.activeFilters = activeFilters;
     }
 
     public List<FilterConfig> getUserFilters() {
-	return userFilters;
+        return userFilters;
     }
 
     public void setUserFilters(List<FilterConfig> userFilters) {
-	this.userFilters = userFilters;
+        this.userFilters = userFilters;
     }
 
     public void updateFilter(FilterConfig filter) {
-	if (filter.getActive()) {
-	    activeFilters.add(filter.getId());
-	} else {
-	    if (activeFilters.contains(filter.getId())) {
-		activeFilters.remove(filter.getId());
-	    }
-	}
+        if (filter.getActive()) {
+            activeFilters.add(filter.getId());
+        } else {
+            if (activeFilters.contains(filter.getId())) {
+                activeFilters.remove(filter.getId());
+            }
+        }
     }
 
 }

@@ -26,39 +26,39 @@ public class Order implements Serializable {
     private boolean ascending;
 
     public Order() {
-	super();
+        super();
     }
 
     public Order(String collectionURI, String fieldName, boolean ascending) {
-	super();
-	this.collection = collectionURI;
-	this.fieldName = fieldName;
-	this.ascending = ascending;
+        super();
+        this.collection = collectionURI;
+        this.fieldName = fieldName;
+        this.ascending = ascending;
     }
 
     public String getCollection() {
-	return collection;
+        return collection;
     }
 
     public String getFieldName() {
-	return fieldName;
+        return fieldName;
     }
 
     public boolean isAscending() {
-	return ascending;
+        return ascending;
     }
 
     @Override
     public String toString() {
-	StringBuilder builder = new StringBuilder();
-	builder.append("Order [collectionURI=");
-	builder.append(collection);
-	builder.append(", fieldName=");
-	builder.append(fieldName);
-	builder.append(", ascending=");
-	builder.append(ascending);
-	builder.append("]");
-	return builder.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("Order [collectionURI=");
+        builder.append(collection);
+        builder.append(", fieldName=");
+        builder.append(fieldName);
+        builder.append(", ascending=");
+        builder.append(ascending);
+        builder.append("]");
+        return builder.toString();
     }
 
 }

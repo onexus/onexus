@@ -26,34 +26,34 @@ import org.wicketstuff.osgi.OsgiClassResolver;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 
 public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
-    
+
     // Force to import the package
     public final static WicketFilter wicketFilter = null;
-    
+
     @Override
     protected void init() {
-	super.init();
-	mountPage("/login", getSignInPageClass());
-	getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
-	
-	getComponentInstantiationListeners().add(new OsgiComponentInjector());
-	getSessionListeners().add(new OsgiSessionInjector());
-	getApplicationListeners().add(new OsgiApplicationInjector());
-	getApplicationSettings().setClassResolver(new OsgiClassResolver());
+        super.init();
+        mountPage("/login", getSignInPageClass());
+        getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
+
+        getComponentInstantiationListeners().add(new OsgiComponentInjector());
+        getSessionListeners().add(new OsgiSessionInjector());
+        getApplicationListeners().add(new OsgiApplicationInjector());
+        getApplicationSettings().setClassResolver(new OsgiClassResolver());
     }
-    
+
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
-	return OnexusSignInPage.class;
+        return OnexusSignInPage.class;
     }
 
     @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
-	return OnexusWebSession.class;
+        return OnexusWebSession.class;
     }
-    
+
     public static OnexusWebApplication get() {
-	return (OnexusWebApplication) Application.get();
+        return (OnexusWebApplication) Application.get();
     }
-    
+
 }

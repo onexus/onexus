@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.workspace.viewers;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -37,8 +33,11 @@ import org.onexus.core.resources.Resource;
 import org.onexus.ui.IViewerCreator;
 import org.onexus.ui.workspace.events.EventResourceSelect;
 
+import javax.inject.Inject;
+import java.util.List;
+
 public class ViewerTabs extends Panel {
-    
+
     @Inject
     private IViewersManager viewersManager;
 
@@ -46,98 +45,98 @@ public class ViewerTabs extends Panel {
     private IModel<Resource> resourceModel;
 
     private int currentTab = 0;
-    
+
     public ViewerTabs(String id, IModel<Resource> model) {
-	super(id, model);
-	setOutputMarkupId(true);
+        super(id, model);
+        setOutputMarkupId(true);
 
-	this.tabsModel = new TabsListModel();
-	this.resourceModel = model;
+        this.tabsModel = new TabsListModel();
+        this.resourceModel = model;
 
-	// Tabs row
-	ListView<IViewerCreator> tabsRow = new ListView<IViewerCreator>("tabs", tabsModel) {
+        // Tabs row
+        ListView<IViewerCreator> tabsRow = new ListView<IViewerCreator>("tabs", tabsModel) {
 
-	    @Override
-	    protected void populateItem(final ListItem<IViewerCreator> tab) {
+            @Override
+            protected void populateItem(final ListItem<IViewerCreator> tab) {
 
-		AjaxLink<String> link = new AjaxLink<String>("link") {
+                AjaxLink<String> link = new AjaxLink<String>("link") {
 
-		    @Override
-		    public void onClick(AjaxRequestTarget target) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
 
-			IViewerCreator viewerTab = tab.getModelObject();
+                        IViewerCreator viewerTab = tab.getModelObject();
 
-			updatePanel(tab.getIndex(), viewerTab.getPanel("panel", resourceModel));
+                        updatePanel(tab.getIndex(), viewerTab.getPanel("panel", resourceModel));
 
-			target.add(ViewerTabs.this);
+                        target.add(ViewerTabs.this);
 
-		    }
+                    }
 
-		};
+                };
 
-		link.add(new Label("title", Model.of(tab.getModelObject().getTitle())));
-		tab.add(link);
+                link.add(new Label("title", Model.of(tab.getModelObject().getTitle())));
+                tab.add(link);
 
-		if (tab.getIndex() == currentTab) {
-		    tab.add(new AttributeModifier("class", "selected"));
-		}
+                if (tab.getIndex() == currentTab) {
+                    tab.add(new AttributeModifier("class", "selected"));
+                }
 
-	    }
-	};
+            }
+        };
 
-	add(tabsRow);
+        add(tabsRow);
 
-	updateDefaultPanel();
+        updateDefaultPanel();
 
     }
-    
+
     private void updateDefaultPanel() {
-	// Set first tab as default
-	List<? extends IViewerCreator> tabs = tabsModel.getObject();
-	if (tabs.isEmpty()) {
-	    updatePanel(0, new EmptyPanel("panel"));
-	} else {
-	    IViewerCreator viewerTab = tabs.get(0);
-	    updatePanel(0, viewerTab.getPanel("panel", resourceModel));
-	}
+        // Set first tab as default
+        List<? extends IViewerCreator> tabs = tabsModel.getObject();
+        if (tabs.isEmpty()) {
+            updatePanel(0, new EmptyPanel("panel"));
+        } else {
+            IViewerCreator viewerTab = tabs.get(0);
+            updatePanel(0, viewerTab.getPanel("panel", resourceModel));
+        }
     }
 
     private void updatePanel(int position, Panel panel) {
-	currentTab = position;
-	addOrReplace(panel);
+        currentTab = position;
+        addOrReplace(panel);
     }
 
     @Override
     public void onEvent(IEvent<?> event) {
 
-	Object payLoad = event.getPayload();
-	if (EventResourceSelect.EVENT == payLoad) {
-	    tabsModel.clear();
-	    updateDefaultPanel();
-	    AjaxRequestTarget.get().add(this);
-	}
+        Object payLoad = event.getPayload();
+        if (EventResourceSelect.EVENT == payLoad) {
+            tabsModel.clear();
+            updateDefaultPanel();
+            AjaxRequestTarget.get().add(this);
+        }
 
     }
 
     private class TabsListModel extends AbstractReadOnlyModel<List<? extends IViewerCreator>> {
-	
-	private transient List<? extends IViewerCreator> viewerTabs;
 
-	@Override
-	public List<? extends IViewerCreator> getObject() {
+        private transient List<? extends IViewerCreator> viewerTabs;
 
-	    if (viewerTabs == null) {
-		Resource resource = resourceModel.getObject();
-		viewerTabs = viewersManager.getViewerCreators(resource);
-	    }
+        @Override
+        public List<? extends IViewerCreator> getObject() {
 
-	    return viewerTabs;
+            if (viewerTabs == null) {
+                Resource resource = resourceModel.getObject();
+                viewerTabs = viewersManager.getViewerCreators(resource);
+            }
 
-	}
-	
-	public void clear() {
-	    this.viewerTabs = null;
-	}
+            return viewerTabs;
+
+        }
+
+        public void clear() {
+            this.viewerTabs = null;
+        }
 
     }
 
@@ -149,5 +148,5 @@ public class ViewerTabs extends Panel {
         this.viewersManager = viewersManager;
     }
 
-    
+
 }

@@ -30,7 +30,9 @@ public class TaskStatusProgressBehavior extends AbstractDefaultAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
 
-    /** The update interval */
+    /**
+     * The update interval
+     */
     private Duration updateInterval;
 
     private boolean stopped = false;
@@ -39,80 +41,78 @@ public class TaskStatusProgressBehavior extends AbstractDefaultAjaxBehavior {
 
     /**
      * Construct.
-     * 
-     * @param updateInterval
-     *            Duration between AJAX callbacks
+     *
+     * @param updateInterval Duration between AJAX callbacks
      */
     public TaskStatusProgressBehavior(final Duration updateInterval) {
-	if (updateInterval == null || updateInterval.getMilliseconds() <= 0) {
-	    throw new IllegalArgumentException("Invalid update interval");
-	}
-	this.updateInterval = updateInterval;
+        if (updateInterval == null || updateInterval.getMilliseconds() <= 0) {
+            throw new IllegalArgumentException("Invalid update interval");
+        }
+        this.updateInterval = updateInterval;
     }
 
     /**
      * Stops the timer
      */
     public final void stop() {
-	stopped = true;
+        stopped = true;
     }
 
     /**
      * Starts the timer
      */
     public final void start() {
-	stopped = false;
+        stopped = false;
     }
 
     /**
      * Sets the update interval duration. This method should only be called
      * within the {@link #onTimer(AjaxRequestTarget)} method.
-     * 
+     *
      * @param updateInterval
      */
     protected final void setUpdateInterval(Duration updateInterval) {
-	if (updateInterval == null || updateInterval.getMilliseconds() <= 0) {
-	    throw new IllegalArgumentException("Invalid update interval");
-	}
-	this.updateInterval = updateInterval;
+        if (updateInterval == null || updateInterval.getMilliseconds() <= 0) {
+            throw new IllegalArgumentException("Invalid update interval");
+        }
+        this.updateInterval = updateInterval;
     }
 
     /**
      * Returns the update interval
-     * 
+     *
      * @return The update interval
      */
     public final Duration getUpdateInterval() {
-	return updateInterval;
+        return updateInterval;
     }
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
-	super.renderHead(component, response);
+        super.renderHead(component, response);
 
-	WebRequest request = (WebRequest) RequestCycle.get().getRequest();
+        WebRequest request = (WebRequest) RequestCycle.get().getRequest();
 
-	if (!stopped && (!headRendered || !request.isAjax())) {
-	    headRendered = true;
-	    response.renderOnLoadJavaScript(getJsTimeoutCall(updateInterval));
-	}
+        if (!stopped && (!headRendered || !request.isAjax())) {
+            headRendered = true;
+            response.renderOnLoadJavaScript(getJsTimeoutCall(updateInterval));
+        }
     }
 
     /**
-     * @param updateInterval
-     *            Duration between AJAX callbacks
+     * @param updateInterval Duration between AJAX callbacks
      * @return JS script
      */
     protected final String getJsTimeoutCall(final Duration updateInterval) {
-	// this might look strange, but it is necessary for IE not to leak :(
-	return "setTimeout(\"" + getCallbackScript() + "\", "
-		+ updateInterval.getMilliseconds() + ");";
+        // this might look strange, but it is necessary for IE not to leak :(
+        return "setTimeout(\"" + getCallbackScript() + "\", "
+                + updateInterval.getMilliseconds() + ");";
     }
 
     @Override
     protected CharSequence getCallbackScript() {
-	return generateCallbackScript("wicketAjaxGet('" + getCallbackUrl()
-		+ "'");
+        return generateCallbackScript("wicketAjaxGet('" + getCallbackUrl()
+                + "'");
     }
 
     /**
@@ -120,49 +120,46 @@ public class TaskStatusProgressBehavior extends AbstractDefaultAjaxBehavior {
      */
     @Override
     protected CharSequence getPreconditionScript() {
-	String precondition = null;
-	if (!(getComponent() instanceof Page)) {
-	    String componentId = getComponent().getMarkupId();
-	    precondition = "var c = Wicket.$('" + componentId
-		    + "'); return typeof(c) != 'undefined' && c != null";
-	}
-	return precondition;
+        String precondition = null;
+        if (!(getComponent() instanceof Page)) {
+            String componentId = getComponent().getMarkupId();
+            precondition = "var c = Wicket.$('" + componentId
+                    + "'); return typeof(c) != 'undefined' && c != null";
+        }
+        return precondition;
     }
 
     /**
-     * 
      * @see org.apache.wicket.ajax.AbstractDefaultAjaxBehavior#respond(org.apache.wicket.ajax.AjaxRequestTarget)
      */
     @Override
     protected final void respond(final AjaxRequestTarget target) {
-	onTimer(target);
+        onTimer(target);
 
-	if (!stopped && isEnabled(getComponent())) {
-	    target.getHeaderResponse().renderOnLoadJavaScript(
-		    getJsTimeoutCall(updateInterval));
-	}
+        if (!stopped && isEnabled(getComponent())) {
+            target.getHeaderResponse().renderOnLoadJavaScript(
+                    getJsTimeoutCall(updateInterval));
+        }
     }
 
     /**
      * Listener method for the AJAX timer event.
-     * 
-     * @param target
-     *            The request target
+     *
+     * @param target The request target
      */
-    protected final void onTimer(final AjaxRequestTarget target) {	
-	target.add(getComponent());
-	onPostProcessTarget(target);
-	
+    protected final void onTimer(final AjaxRequestTarget target) {
+        target.add(getComponent());
+        onPostProcessTarget(target);
+
     }
-    
-    
+
+
     /**
      * Give the subclass a chance to add something to the target, like a
      * javascript effect call. Called after the hosting component has been added
      * to the target.
-     * 
-     * @param target
-     *            The AJAX target
+     *
+     * @param target The AJAX target
      */
     protected void onPostProcessTarget(final AjaxRequestTarget target) {
     }
@@ -171,7 +168,7 @@ public class TaskStatusProgressBehavior extends AbstractDefaultAjaxBehavior {
      * @return {@code true} if has been stopped via {@link #stop()}
      */
     public final boolean isStopped() {
-	return stopped;
+        return stopped;
     }
 
 }

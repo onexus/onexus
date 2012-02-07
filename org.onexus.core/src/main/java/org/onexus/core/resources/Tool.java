@@ -24,25 +24,25 @@ public class Tool extends MetadataResource {
     private List<Parameter> parameters;
 
     public Tool() {
-	super();
+        super();
     }
 
     public List<Parameter> getParameters() {
-	return parameters;
+        return parameters;
     }
 
     public void setParameters(List<Parameter> parameters) {
-	this.parameters = parameters;
+        this.parameters = parameters;
     }
 
     @Override
     public String toString() {
-	return "Tool [getURI()=" + getURI() + ", getName()=" + getName()
-		+ ", getTitle()=" + getTitle() + ", getDescription()="
-		+ getDescription() + ", hashCode()=" + hashCode()
-		+ ", getClass()=" + getClass() + ", toString()="
-		+ super.toString() + ", parameters=" + parameters
-		+ ", getParameters()=" + getParameters() + "]";
+        return "Tool [getURI()=" + getURI() + ", getName()=" + getName()
+                + ", getTitle()=" + getTitle() + ", getDescription()="
+                + getDescription() + ", hashCode()=" + hashCode()
+                + ", getClass()=" + getClass() + ", toString()="
+                + super.toString() + ", parameters=" + parameters
+                + ", getParameters()=" + getParameters() + "]";
     }
 
 }

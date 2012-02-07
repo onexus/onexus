@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.tabs.topleft;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -26,39 +24,41 @@ import org.onexus.ui.website.tabs.Tab;
 import org.onexus.ui.website.viewers.ICollectionViewerManager;
 import org.onexus.ui.website.viewers.ViewerConfig;
 
+import javax.inject.Inject;
+
 /**
  * @author Jordi Deu-Pons
  */
 public class TopleftTab extends Tab<TopleftTabConfig, TopleftTabStatus> {
-    
+
     @Inject
     public ICollectionViewerManager viewerManager;
-    
-    public static final CssResourceReference CSS = new CssResourceReference(TopleftTab.class,"TopleftTab.css");
+
+    public static final CssResourceReference CSS = new CssResourceReference(TopleftTab.class, "TopleftTab.css");
 
     public TopleftTab(String panelId, TopleftTabConfig config, IModel<TopleftTabStatus> statusModel) {
-	super(panelId, config, statusModel);
+        super(panelId, config, statusModel);
 
-	// Add top widgets
-	add(new HoritzontalWidgetBar("topwidgets", getConfig().getTopWidgets(), getModelStatus()));
+        // Add top widgets
+        add(new HoritzontalWidgetBar("topwidgets", getConfig().getTopWidgets(), getModelStatus()));
 
-	// Add top-rigth widgets
-	add(new HoritzontalWidgetBar("toprightwidgets", getConfig().getTopRightWidgets(), getModelStatus()));
+        // Add top-rigth widgets
+        add(new HoritzontalWidgetBar("toprightwidgets", getConfig().getTopRightWidgets(), getModelStatus()));
 
-	// Add left widgets
-	add(new VerticalWidgetBar("leftwidgets", getConfig().getLeftWidgets(), getModelStatus()));
+        // Add left widgets
+        add(new VerticalWidgetBar("leftwidgets", getConfig().getLeftWidgets(), getModelStatus()));
 
-	// Add viewer
-	ViewerConfig viewerConfig = getCurrentViewer();
-	
-	add(viewerManager.create("viewer", viewerConfig, new ViewerModel(viewerConfig, statusModel)));
+        // Add viewer
+        ViewerConfig viewerConfig = getCurrentViewer();
+
+        add(viewerManager.create("viewer", viewerConfig, new ViewerModel(viewerConfig, statusModel)));
 
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
-	super.renderHead(response);
-	response.renderCSSReference(CSS);
+        super.renderHead(response);
+        response.renderCSSReference(CSS);
     }
 
 }

@@ -19,11 +19,11 @@ package org.onexus.ui.website.events;
 
 
 public class EventFixEntity extends EventQueryUpdate {
-    
+
     public final static EventFixEntity EVENT = new EventFixEntity();
-    
+
     protected EventFixEntity() {
-	super();
+        super();
     }
 
 }

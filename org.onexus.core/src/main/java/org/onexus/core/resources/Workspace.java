@@ -20,12 +20,12 @@ package org.onexus.core.resources;
 public class Workspace extends MetadataResource {
 
     public Workspace() {
-	super();
+        super();
     }
 
     @Override
     public String toString() {
-	return "Workspace [getURI()=" + getURI() + "]";
+        return "Workspace [getURI()=" + getURI() + "]";
     }
 
 }

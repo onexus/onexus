@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.widgets.search;
 
-import java.util.Iterator;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
@@ -33,69 +31,71 @@ import org.onexus.ui.website.IQueryContributor;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.widgets.Widget;
 
+import java.util.Iterator;
+
 public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus> implements IQueryContributor {
 
     public SearchWidget(String componentId, SearchWidgetConfig config, IModel<SearchWidgetStatus> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
 
-	Form<SearchWidgetStatus> form = new Form<SearchWidgetStatus>("toolsForms", new CompoundPropertyModel<SearchWidgetStatus>(statusModel));
+        Form<SearchWidgetStatus> form = new Form<SearchWidgetStatus>("toolsForms", new CompoundPropertyModel<SearchWidgetStatus>(statusModel));
 
-	// Search field & button
-	form.add(new TextField<String>("search"));
-	form.add(new AjaxButton("searchButton") {
+        // Search field & button
+        form.add(new TextField<String>("search"));
+        form.add(new AjaxButton("searchButton") {
 
-	    @Override
-	    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-		sendEvent(EventFiltersUpdate.EVENT);
-	    }
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                sendEvent(EventFiltersUpdate.EVENT);
+            }
 
-	    @Override
-	    protected void onError(AjaxRequestTarget target, Form<?> form) {
-		// FIXME
-	    }
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                // FIXME
+            }
 
-	});
+        });
 
-	add(form);
+        add(form);
 
     }
 
     @Override
     public void onQueryBuild(Query query) {
 
-	String search = getStatus().getSearch();
+        String search = getStatus().getSearch();
 
-	if (search != null) {
-	    
-	    SearchWidgetConfig config = getConfig();
-	    Iterator<SearchField> fields = config.getFields().iterator();
+        if (search != null) {
 
-	    if (fields.hasNext()) {
-		SearchField field = fields.next();
+            SearchWidgetConfig config = getConfig();
+            Iterator<SearchField> fields = config.getFields().iterator();
 
-		Filter filter = buildSearchFieldFilter(field, search);
-		while (fields.hasNext()) {
-		    field = fields.next();
-		    filter = new Or(field.getCollection(), filter, buildSearchFieldFilter(field, search));
-		}
-		query.putFilter(getConfig().getId() + "_search", filter);
-	    }
-	}
+            if (fields.hasNext()) {
+                SearchField field = fields.next();
+
+                Filter filter = buildSearchFieldFilter(field, search);
+                while (fields.hasNext()) {
+                    field = fields.next();
+                    filter = new Or(field.getCollection(), filter, buildSearchFieldFilter(field, search));
+                }
+                query.putFilter(getConfig().getId() + "_search", filter);
+            }
+        }
 
     }
 
     private Filter buildSearchFieldFilter(SearchField field, String search) {
 
-	String collectionURI = field.getCollection();
-	String fieldNames[] = field.getFieldNames().split(",");
+        String collectionURI = field.getCollection();
+        String fieldNames[] = field.getFieldNames().split(",");
 
-	Filter filter = new Like(collectionURI, fieldNames[0].trim(), search);
+        Filter filter = new Like(collectionURI, fieldNames[0].trim(), search);
 
-	for (int i = 1; i < fieldNames.length; i++) {
-	    filter = new Or(field.getCollection(), filter, new Like(collectionURI, fieldNames[i].trim(), search));
-	}
+        for (int i = 1; i < fieldNames.length; i++) {
+            filter = new Or(field.getCollection(), filter, new Like(collectionURI, fieldNames[i].trim(), search));
+        }
 
-	return filter;
+        return filter;
     }
 
 }

@@ -26,48 +26,48 @@ import org.onexus.ui.website.utils.panels.icons.Icons;
 
 /**
  * ArrowToggleButton
- * 
+ * <p/>
  * Simple toggle button is suposed to change the state via ajax.
- * 
+ * <p/>
  * This Class uses img from : http://sourceforge.net/projects/openiconlibrary/
- * 
+ *
  * @author armand
  */
 public class ArrowToggleButton extends Panel {
 
     IModel<Boolean> state;
-    
+
     /**
      * @param id
      * @param model
      */
     public ArrowToggleButton(String id, IModel<Boolean> model) {
-	super(id);
-	setOutputMarkupPlaceholderTag(true);
-	this.state = model;
-	add(new Image("toggleimg", new ButtonImageModel()));
+        super(id);
+        setOutputMarkupPlaceholderTag(true);
+        this.state = model;
+        add(new Image("toggleimg", new ButtonImageModel()));
 
     }
 
     private Boolean getState() {
-	return this.state.getObject();
+        return this.state.getObject();
     }
-    
+
     private class ButtonImageModel extends Model<ResourceReference> {
 
-	public ButtonImageModel() {	    
-	}
+        public ButtonImageModel() {
+        }
 
-	@Override
-	public ResourceReference getObject() {
-	    // Returns kind of icon
-	    if (getState()) {
-		return Icons.ARROW_RIGHT;
-	    } else {
-		return Icons.ARROW_DOWN;
-	    }
+        @Override
+        public ResourceReference getObject() {
+            // Returns kind of icon
+            if (getState()) {
+                return Icons.ARROW_RIGHT;
+            } else {
+                return Icons.ARROW_DOWN;
+            }
 
-	}
+        }
     }
 
 }

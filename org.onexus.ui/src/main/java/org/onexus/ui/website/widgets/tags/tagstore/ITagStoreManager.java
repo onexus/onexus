@@ -19,9 +19,8 @@ package org.onexus.ui.website.widgets.tags.tagstore;
 
 
 public interface ITagStoreManager {
-    
+
     public TagStore getUserStore(String namespace);
-    
-    
+
 
 }

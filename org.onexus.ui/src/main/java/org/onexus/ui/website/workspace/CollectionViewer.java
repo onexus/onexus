@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.workspace;
 
-import java.util.Iterator;
-
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -35,52 +33,54 @@ import org.onexus.ui.website.widgets.export.ExportWidgetConfig;
 import org.onexus.ui.website.widgets.search.SearchField;
 import org.onexus.ui.website.widgets.search.SearchWidgetConfig;
 
+import java.util.Iterator;
+
 public class CollectionViewer extends Panel {
 
     private static final String REGEXP_ALL_FIELDS = "*{(.*)}";
 
     public CollectionViewer(String id, IModel<? extends Resource> model) {
-	super(id, model);
+        super(id, model);
 
-	Resource resource = model.getObject();
+        Resource resource = model.getObject();
 
-	if (resource != null && resource instanceof Collection) {
+        if (resource != null && resource instanceof Collection) {
 
-	    Collection collection = (Collection) resource;
+            Collection collection = (Collection) resource;
 
-	    // Tableviewer
-	    TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", collection.getURI());
-	    viewerConfig.addColumn(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
+            // Tableviewer
+            TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", collection.getURI());
+            viewerConfig.addColumn(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
 
-	    // Export widget
-	    ExportWidgetConfig exportConfig = new ExportWidgetConfig("export", "left", collection.getURI());
+            // Export widget
+            ExportWidgetConfig exportConfig = new ExportWidgetConfig("export", "left", collection.getURI());
 
-	    // Search widget
-	    SearchWidgetConfig searchConfig = new SearchWidgetConfig("search", "top");
-	    Iterator<Field> fieldIt = collection.getFields().iterator();
-	    StringBuilder fieldNames = new StringBuilder();
-	    while (fieldIt.hasNext()) {
-		Field field = fieldIt.next();
-		if (String.class.isAssignableFrom(field.getDataType())) {
-		    fieldNames.append(field.getName());
-		    fieldNames.append(",");
-		}
-	    }
-	    fieldNames.setCharAt(fieldNames.length() - 1, ' ');
-	    searchConfig.addField(new SearchField(collection.getURI(), fieldNames.toString()));
+            // Search widget
+            SearchWidgetConfig searchConfig = new SearchWidgetConfig("search", "top");
+            Iterator<Field> fieldIt = collection.getFields().iterator();
+            StringBuilder fieldNames = new StringBuilder();
+            while (fieldIt.hasNext()) {
+                Field field = fieldIt.next();
+                if (String.class.isAssignableFrom(field.getDataType())) {
+                    fieldNames.append(field.getName());
+                    fieldNames.append(",");
+                }
+            }
+            fieldNames.setCharAt(fieldNames.length() - 1, ' ');
+            searchConfig.addField(new SearchField(collection.getURI(), fieldNames.toString()));
 
-	    // Layout
-	    TopleftTabConfig tabConfig = new TopleftTabConfig("browser", "browser");
-	    tabConfig.getViewers().add(viewerConfig);
-	    tabConfig.getWidgets().add(exportConfig);
-	    tabConfig.getWidgets().add(searchConfig);
+            // Layout
+            TopleftTabConfig tabConfig = new TopleftTabConfig("browser", "browser");
+            tabConfig.getViewers().add(viewerConfig);
+            tabConfig.getWidgets().add(exportConfig);
+            tabConfig.getWidgets().add(searchConfig);
 
-	    IModel<TopleftTabStatus> statusModel = Model.of(tabConfig.getDefaultStatus());
-	    add(new TopleftTab("table", tabConfig, statusModel));
+            IModel<TopleftTabStatus> statusModel = Model.of(tabConfig.getDefaultStatus());
+            add(new TopleftTab("table", tabConfig, statusModel));
 
-	} else {
-	    add(new EmptyPanel("table"));
-	}
+        } else {
+            add(new EmptyPanel("table"));
+        }
 
     }
 

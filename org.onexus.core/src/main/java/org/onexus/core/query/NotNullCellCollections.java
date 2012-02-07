@@ -20,11 +20,11 @@ package org.onexus.core.query;
 public class NotNullCellCollections extends Filter {
 
     public NotNullCellCollections() {
-	this(null);
+        this(null);
     }
 
     public NotNullCellCollections(String axisCollection) {
-	super(axisCollection);
+        super(axisCollection);
     }
 
 }

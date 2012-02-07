@@ -23,23 +23,23 @@ public class EmptyViewerConfig extends ViewerConfig {
     private static EmptyViewerConfig INSTANCE = new EmptyViewerConfig("empty");
 
     private EmptyViewerConfig(String viewerId) {
-	super(viewerId);
+        super(viewerId);
     }
 
     public static EmptyViewerConfig get() {
-	return INSTANCE;
+        return INSTANCE;
     }
 
     @Override
     public ViewerStatus createEmptyStatus() {
-	return new ViewerStatus() {};
+        return new ViewerStatus() {
+        };
     }
 
     @Override
     public ViewerStatus getDefaultStatus() {
-	return null;
+        return null;
     }
 
-    
-    
+
 }

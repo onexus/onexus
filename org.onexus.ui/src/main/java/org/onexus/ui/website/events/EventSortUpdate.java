@@ -21,9 +21,9 @@ package org.onexus.ui.website.events;
 public class EventSortUpdate extends EventQueryUpdate {
 
     public final static EventSortUpdate EVENT = new EventSortUpdate();
-    
+
     protected EventSortUpdate() {
-	super();
+        super();
     }
 
 }

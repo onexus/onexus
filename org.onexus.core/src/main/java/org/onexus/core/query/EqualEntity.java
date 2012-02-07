@@ -22,21 +22,21 @@ public class EqualEntity extends Filter {
     private String entityId;
 
     public EqualEntity() {
-	this(null, null);
+        this(null, null);
     }
 
     public EqualEntity(String collectionId, String entityId) {
-	super(collectionId);
-	this.entityId = entityId;
+        super(collectionId);
+        this.entityId = entityId;
     }
 
     public String getEntityId() {
-	return entityId;
+        return entityId;
     }
 
     @Override
     public String toString() {
-	return getCollection() + " = " + getEntityId();
+        return getCollection() + " = " + getEntityId();
     }
 
 }

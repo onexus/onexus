@@ -22,16 +22,16 @@ public abstract class FieldFilter extends Filter {
     private String fieldName;
 
     public FieldFilter() {
-	super();
+        super();
     }
-    
+
     public FieldFilter(String collectionId, String fieldName) {
-	super(collectionId);
-	this.fieldName = fieldName;
+        super(collectionId);
+        this.fieldName = fieldName;
     }
 
     public String getFieldName() {
-	return fieldName;
+        return fieldName;
     }
 
 }

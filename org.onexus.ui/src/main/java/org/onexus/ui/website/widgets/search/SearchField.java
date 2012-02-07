@@ -17,9 +17,9 @@
  */
 package org.onexus.ui.website.widgets.search;
 
-import java.io.Serializable;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import java.io.Serializable;
 
 @XStreamAlias("search-field")
 public class SearchField implements Serializable {
@@ -29,29 +29,29 @@ public class SearchField implements Serializable {
     private String fieldNames;
 
     public SearchField() {
-	super();
+        super();
     }
 
     public SearchField(String collectionURI, String fieldNames) {
-	super();
-	this.collection = collectionURI;
-	this.fieldNames = fieldNames;
+        super();
+        this.collection = collectionURI;
+        this.fieldNames = fieldNames;
     }
 
     public String getCollection() {
-	return collection;
+        return collection;
     }
 
     public void setCollection(String collectionURI) {
-	this.collection = collectionURI;
+        this.collection = collectionURI;
     }
 
     public String getFieldNames() {
-	return fieldNames;
+        return fieldNames;
     }
 
     public void setFieldNames(String fieldNames) {
-	this.fieldNames = fieldNames;
+        this.fieldNames = fieldNames;
     }
 
 }

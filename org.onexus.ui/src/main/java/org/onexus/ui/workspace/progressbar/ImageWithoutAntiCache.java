@@ -26,36 +26,35 @@ import org.apache.wicket.request.resource.ResourceReference;
 public class ImageWithoutAntiCache extends Image {
 
     protected ImageWithoutAntiCache(String id) {
-	super(id);
+        super(id);
     }
 
     public ImageWithoutAntiCache(String id, IModel<?> model) {
-	super(id, model);
+        super(id, model);
     }
 
     public ImageWithoutAntiCache(String id, IResource imageResource) {
-	super(id, imageResource);
+        super(id, imageResource);
     }
 
     public ImageWithoutAntiCache(String id,
-	    ResourceReference resourceReference,
-	    PageParameters resourceParameters) {
-	super(id, resourceReference, resourceParameters);
+                                 ResourceReference resourceReference,
+                                 PageParameters resourceParameters) {
+        super(id, resourceReference, resourceParameters);
     }
 
     public ImageWithoutAntiCache(String id, ResourceReference resourceReference) {
-	super(id, resourceReference);
+        super(id, resourceReference);
     }
 
     public ImageWithoutAntiCache(String id, String string) {
-	super(id, string);
+        super(id, string);
     }
 
     @Override
     protected boolean shouldAddAntiCacheParameter() {
-	return false;
+        return false;
     }
-    
-    
+
 
 }

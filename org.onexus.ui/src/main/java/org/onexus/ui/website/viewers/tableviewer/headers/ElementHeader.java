@@ -31,67 +31,67 @@ public class ElementHeader implements IHeader {
     private String sortProperty = null;
 
     public ElementHeader(IMetadata element, ITextFormater formater) {
-	this(element, null, formater);
+        this(element, null, formater);
     }
 
     public ElementHeader(IMetadata element, IHeader parentHeader,
-	    ITextFormater formater) {
-	super();
-	this.element = element;
-	this.parentHeader = parentHeader;
-	this.textFormater = formater;
+                         ITextFormater formater) {
+        super();
+        this.element = element;
+        this.parentHeader = parentHeader;
+        this.textFormater = formater;
     }
 
     @Override
     public Component getHeader(String componentId) {
-	return new Label(componentId, getFormatedLabel());
+        return new Label(componentId, getFormatedLabel());
     }
 
     @Override
     public String getLabel() {
-	String label = null;
+        String label = null;
 
-	if (element != null) {
+        if (element != null) {
 
-	    // FIXME Use a renderer
+            // FIXME Use a renderer
 
-	    label = element.getName();
-	}
+            label = element.getName();
+        }
 
-	return label;
+        return label;
     }
 
     @Override
     public String getTitle() {
-	return getLabel();
+        return getLabel();
     }
 
     public String getFormatedLabel() {
-	return textFormater.format(getLabel());
+        return textFormater.format(getLabel());
     }
 
     @Override
     public IHeader getParentHeader() {
-	return parentHeader;
+        return parentHeader;
     }
 
     @Override
     public String getSortProperty() {
-	return sortProperty;
+        return sortProperty;
     }
-    
+
     public void setSortProperty(String sortProperty) {
-	this.sortProperty = sortProperty;
+        this.sortProperty = sortProperty;
     }
 
     @Override
     public boolean isSortable() {
-	return (sortProperty != null);
+        return (sortProperty != null);
     }
 
     @Override
     public Component getHelp(String componentId) {
-	return new EmptyPanel(componentId);
+        return new EmptyPanel(componentId);
     }
 
 }

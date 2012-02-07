@@ -26,26 +26,26 @@ public class DoubleFormater implements ITextFormater {
     private int digits;
 
     public DoubleFormater(int digits) {
-	this.digits = digits;
+        this.digits = digits;
     }
 
     @Override
     public String format(Object value) {
-	return format(value, digits);
+        return format(value, digits);
     }
 
     public static String format(Object value, int digits) {
 
-	if (value == null) {
-	    return "";
-	}
+        if (value == null) {
+            return "";
+        }
 
-	if (value instanceof Double) {
-	    NumberFormat f = NumberFormat.getNumberInstance();
-	    f.setMaximumFractionDigits(digits);
-	    return f.format(value);
-	}
+        if (value instanceof Double) {
+            NumberFormat f = NumberFormat.getNumberInstance();
+            f.setMaximumFractionDigits(digits);
+            return f.format(value);
+        }
 
-	return value.toString();
+        return value.toString();
     }
 }

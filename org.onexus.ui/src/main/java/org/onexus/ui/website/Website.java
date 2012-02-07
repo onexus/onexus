@@ -17,16 +17,7 @@
  */
 package org.onexus.ui.website;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Session;
-import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.*;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -43,6 +34,10 @@ import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 
+import javax.inject.Inject;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+
 public class Website extends WebPage {
 
     public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {
@@ -53,8 +48,8 @@ public class Website extends WebPage {
     public final static String PARAMETER_WEBSITE = "onexus-website";
     public final static String PARAMETER_STATUS = "onexus-status";
     public final static String PARAMETER_PAGE = "onexus-page";
-    
-    public final static CssResourceReference CSS = new CssResourceReference(Website.class, "Website.css"); 
+
+    public final static CssResourceReference CSS = new CssResourceReference(Website.class, "Website.css");
 
     @Inject
     public IPageManager pageManager;
@@ -63,104 +58,104 @@ public class Website extends WebPage {
     private WebsiteStatus websiteStatus;
 
     public Website(PageParameters pageParameters) {
-	
-	initConfig(pageParameters);
-	initStatus(pageParameters);
-	
-	add(new Label("title", websiteConfig.getTitle()));
-	
-	add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "websiteConfig.pages")) {
 
-	    @Override
-	    protected void populateItem(ListItem<PageConfig> item) {
-		
-		PageConfig pageConfig = item.getModelObject();
-		
-		PageParameters parameters = new PageParameters();
-		parameters.add(PARAMETER_PAGE, pageConfig.getId());
-		parameters.add(PARAMETER_WEBSITE, websiteConfig.getURI());
-		Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
-		link.add(new Label("name", pageConfig.getName()));
-		
-		String currentPage = websiteStatus.getCurrentPageId();
-		if (currentPage.equals(pageConfig.getId())) {
-		    link.add(new AttributeModifier("class", "current"));
-		}	
-		
-		item.add(link);
-		
-	    }
-	});
-	
-	String currentPage = websiteStatus.getCurrentPageId();
-	PageConfig pageConfig = websiteConfig.getPage(currentPage);
-	
-	add( pageManager.create("page", pageConfig, new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
+        initConfig(pageParameters);
+        initStatus(pageParameters);
+
+        add(new Label("title", websiteConfig.getTitle()));
+
+        add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "websiteConfig.pages")) {
+
+            @Override
+            protected void populateItem(ListItem<PageConfig> item) {
+
+                PageConfig pageConfig = item.getModelObject();
+
+                PageParameters parameters = new PageParameters();
+                parameters.add(PARAMETER_PAGE, pageConfig.getId());
+                parameters.add(PARAMETER_WEBSITE, websiteConfig.getURI());
+                Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
+                link.add(new Label("name", pageConfig.getName()));
+
+                String currentPage = websiteStatus.getCurrentPageId();
+                if (currentPage.equals(pageConfig.getId())) {
+                    link.add(new AttributeModifier("class", "current"));
+                }
+
+                item.add(link);
+
+            }
+        });
+
+        String currentPage = websiteStatus.getCurrentPageId();
+        PageConfig pageConfig = websiteConfig.getPage(currentPage);
+
+        add(pageManager.create("page", pageConfig, new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
 
     }
 
     private void initConfig(PageParameters pageParameters) {
 
-	// Application level
-	websiteConfig = Application.get().getMetaData(WEBSITE_CONFIG);
+        // Application level
+        websiteConfig = Application.get().getMetaData(WEBSITE_CONFIG);
 
-	// Session level
-	if (websiteConfig == null) {
-	    websiteConfig = Session.get().getMetaData(WEBSITE_CONFIG);
-	}
+        // Session level
+        if (websiteConfig == null) {
+            websiteConfig = Session.get().getMetaData(WEBSITE_CONFIG);
+        }
 
-	// URL level
-	if (websiteConfig == null) {
-	    StringValue websiteURI = pageParameters.get(PARAMETER_WEBSITE);
-	    if (!websiteURI.isNull()) {
-		websiteConfig = OnexusWebSession.get().getResourceManager()
-			.load(WebsiteConfig.class, websiteURI.toString());
-	    }
-	}
+        // URL level
+        if (websiteConfig == null) {
+            StringValue websiteURI = pageParameters.get(PARAMETER_WEBSITE);
+            if (!websiteURI.isNull()) {
+                websiteConfig = OnexusWebSession.get().getResourceManager()
+                        .load(WebsiteConfig.class, websiteURI.toString());
+            }
+        }
 
     }
 
     private void initStatus(PageParameters pageParameters) {
 
-	// Session level
-	websiteStatus = Session.get().getMetaData(WEBSITE_STATUS);
+        // Session level
+        websiteStatus = Session.get().getMetaData(WEBSITE_STATUS);
 
-	// URL level
-	if (websiteStatus == null) {
-	    StringValue statusENCODED = pageParameters.get(PARAMETER_STATUS);
+        // URL level
+        if (websiteStatus == null) {
+            StringValue statusENCODED = pageParameters.get(PARAMETER_STATUS);
 
-	    if (!statusENCODED.isNull()) {
-		try {
-		    StatusEncoder statusEncoder = new StatusEncoder(getClass().getClassLoader());
-		    websiteStatus = statusEncoder.decodeStatus(statusENCODED.toString());
-		} catch (UnsupportedEncodingException e) {
-		    // TODO
-		}
-	    }
-	}
-	
-	// Default config status
-	if (websiteStatus == null) {
-	    websiteStatus = websiteConfig.getDefaultStatus();
-	}
-	
-	// Empty status
-	if (websiteStatus == null) {
-	    websiteStatus = websiteConfig.createEmptyStatus();
-	}
-	
-	// Set current page
-	StringValue pageId = pageParameters.get(PARAMETER_PAGE);
-	if (!pageId.isEmpty()) {
-	    websiteStatus.setCurrentPageId(pageId.toString());
-	} else {
-	    if (websiteConfig.getPages() != null && !websiteConfig.getPages().isEmpty()) {
-		websiteStatus.setCurrentPageId(websiteConfig.getPages().get(0).getId());
-	    } else {
-		throw new WicketRuntimeException("No page definition in this website. Add at least one page.");
-	    }
-	}
-	
+            if (!statusENCODED.isNull()) {
+                try {
+                    StatusEncoder statusEncoder = new StatusEncoder(getClass().getClassLoader());
+                    websiteStatus = statusEncoder.decodeStatus(statusENCODED.toString());
+                } catch (UnsupportedEncodingException e) {
+                    // TODO
+                }
+            }
+        }
+
+        // Default config status
+        if (websiteStatus == null) {
+            websiteStatus = websiteConfig.getDefaultStatus();
+        }
+
+        // Empty status
+        if (websiteStatus == null) {
+            websiteStatus = websiteConfig.createEmptyStatus();
+        }
+
+        // Set current page
+        StringValue pageId = pageParameters.get(PARAMETER_PAGE);
+        if (!pageId.isEmpty()) {
+            websiteStatus.setCurrentPageId(pageId.toString());
+        } else {
+            if (websiteConfig.getPages() != null && !websiteConfig.getPages().isEmpty()) {
+                websiteStatus.setCurrentPageId(websiteConfig.getPages().get(0).getId());
+            } else {
+                throw new WicketRuntimeException("No page definition in this website. Add at least one page.");
+            }
+        }
+
     }
 
     public WebsiteConfig getWebsiteConfig() {
@@ -170,12 +165,12 @@ public class Website extends WebPage {
     public WebsiteStatus getWebsiteStatus() {
         return websiteStatus;
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
-	super.renderHead(response);
+        super.renderHead(response);
 
-	response.renderCSSReference(CSS);
+        response.renderCSSReference(CSS);
     }
 
 }

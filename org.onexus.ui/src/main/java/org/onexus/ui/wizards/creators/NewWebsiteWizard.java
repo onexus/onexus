@@ -25,31 +25,30 @@ import org.onexus.ui.website.WebsiteConfig;
 
 public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
-   
-    public NewWebsiteWizard(String id, IModel<? extends Resource> resourceModel) {
-	super(id, resourceModel);
-	
-	WizardModel model = new WizardModel();
-	model.add(new ResourceName());
 
-	init(model);
+    public NewWebsiteWizard(String id, IModel<? extends Resource> resourceModel) {
+        super(id, resourceModel);
+
+        WizardModel model = new WizardModel();
+        model.add(new ResourceName());
+
+        init(model);
     }
-    
+
     @Override
     protected WebsiteConfig getDefaultResource() {
-	return new WebsiteConfig();
+        return new WebsiteConfig();
     }
 
     private final class ResourceName extends WizardStep {
 
-	public ResourceName() {
-	    super("New website", "Creates a new wesite inside the current project");
-	    
-	    add(getFieldResourceName());
+        public ResourceName() {
+            super("New website", "Creates a new wesite inside the current project");
 
-	}
+            add(getFieldResourceName());
+
+        }
     }
 
-    
 
 }

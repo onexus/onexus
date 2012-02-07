@@ -17,46 +17,45 @@
  */
 package org.onexus.ui.website.widgets.search;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.onexus.ui.website.widgets.WidgetConfig;
-
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 @XStreamAlias("widget-search")
 public class SearchWidgetConfig extends WidgetConfig {
-    
+
     private SearchWidgetStatus defaultStatus;
 
     private List<SearchField> fields;
 
     public SearchWidgetConfig() {
-	super();
+        super();
     }
 
     public SearchWidgetConfig(String id, String region) {
-	super(id, region);
+        super(id, region);
     }
 
     public List<SearchField> getFields() {
-	if (fields == null) {
-	    fields = new ArrayList<SearchField>();
-	}
-	return fields;
+        if (fields == null) {
+            fields = new ArrayList<SearchField>();
+        }
+        return fields;
     }
 
     public void setFields(List<SearchField> fields) {
-	this.fields = fields;
+        this.fields = fields;
     }
 
     public void addField(SearchField field) {
-	this.getFields().add(field);
+        this.getFields().add(field);
     }
 
     @Override
     public SearchWidgetStatus createEmptyStatus() {
-	return new SearchWidgetStatus(getId());
+        return new SearchWidgetStatus(getId());
     }
 
     public SearchWidgetStatus getDefaultStatus() {

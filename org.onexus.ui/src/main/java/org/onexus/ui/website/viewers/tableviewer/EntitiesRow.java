@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.viewers.tableviewer;
 
+import org.onexus.core.IEntityTable;
+
 import java.io.Serializable;
 import java.util.Iterator;
-
-import org.onexus.core.IEntityTable;
 
 public class EntitiesRow implements Iterator<IEntityTable>, Serializable {
 
@@ -29,31 +29,31 @@ public class EntitiesRow implements Iterator<IEntityTable>, Serializable {
     private transient boolean hasNext;
 
     public EntitiesRow(IEntityTable dataMatrix) {
-	this.dataMatrix = dataMatrix;
+        this.dataMatrix = dataMatrix;
     }
 
     @Override
     public boolean hasNext() {
-	if (!hasNextCalled) {
-	    hasNext = dataMatrix.next();
-	    hasNextCalled = true;
-	}
+        if (!hasNextCalled) {
+            hasNext = dataMatrix.next();
+            hasNextCalled = true;
+        }
 
-	return hasNext;
+        return hasNext;
     }
 
     @Override
     public IEntityTable next() {
-	if (!hasNextCalled) {
-	    hasNext = dataMatrix.next();
-	}
-	hasNextCalled = false;
-	return dataMatrix;
+        if (!hasNextCalled) {
+            hasNext = dataMatrix.next();
+        }
+        hasNextCalled = false;
+        return dataMatrix;
     }
 
     @Override
     public void remove() {
-	throw new RuntimeException("Read only iterator");
+        throw new RuntimeException("Read only iterator");
     }
 
 }

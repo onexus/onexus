@@ -17,12 +17,6 @@
  */
 package org.onexus.ui.website.pages.browser;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.AttributeModifier;
@@ -49,164 +43,169 @@ import org.onexus.ui.website.tabs.TabStatus;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 
+import javax.inject.Inject;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
-    
+
     public final static CssResourceReference CSS = new CssResourceReference(BrowserPage.class, "BrowserPage.css");
 
     @Inject
     public ITabManager tabManager;
-    
+
 
     public BrowserPage(String componentId, BrowserPageConfig config, IModel<BrowserPageStatus> statusModel) {
-	super(componentId, config, statusModel);
-	onEventFireUpdate(EventTabSelected.class);
-	
-	checkRelease();
-	
-	add(new FixedEntities("position", config, statusModel));
+        super(componentId, config, statusModel);
+        onEventFireUpdate(EventTabSelected.class);
 
-	onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
+        checkRelease();
+
+        add(new FixedEntities("position", config, statusModel));
+
+        onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
-    
-    
+
+
     protected boolean isCurrentTab(String tabId) {
-	String currentTabId = getStatus().getCurrentTabId();
-	return tabId.equals(currentTabId);
+        String currentTabId = getStatus().getCurrentTabId();
+        return tabId.equals(currentTabId);
     }
 
     protected TabConfig getCurrentTab() {
-	String currentTabId = getStatus().getCurrentTabId();
-	return getConfig().getTab(currentTabId);
+        String currentTabId = getStatus().getCurrentTabId();
+        return getConfig().getTab(currentTabId);
     }
 
     private void checkRelease() {
 
-	BrowserPageStatus status = getStatus();
-	String releaseUri = status.getReleaseURI();
+        BrowserPageStatus status = getStatus();
+        String releaseUri = status.getReleaseURI();
 
-	if (releaseUri == null) {
+        if (releaseUri == null) {
 
-	    String parentURI = ResourceTools.getParentURI(getWebsiteConfig().getURI());
-	    List<Release> releases = OnexusWebSession.get().getResourceManager().loadChildren(Release.class, parentURI);
+            String parentURI = ResourceTools.getParentURI(getWebsiteConfig().getURI());
+            List<Release> releases = OnexusWebSession.get().getResourceManager().loadChildren(Release.class, parentURI);
 
-	    if (releases != null && !releases.isEmpty()) {
-		status.setReleaseURI(releases.get(0).getURI());
-	    }
+            if (releases != null && !releases.isEmpty()) {
+                status.setReleaseURI(releases.get(0).getURI());
+            }
 
-	}
+        }
 
     }
 
     @Override
     protected void onBeforeRender() {
-	
-	checkRelease();
 
-	VisibleTabs visibleTabs = new VisibleTabs();
+        checkRelease();
 
-	// Tabs can change when we fix/unfix entities
-	addOrReplace(new ListView<TabConfig>("tabs", visibleTabs) {
+        VisibleTabs visibleTabs = new VisibleTabs();
 
-	    @Override
-	    protected void populateItem(ListItem<TabConfig> item) {
+        // Tabs can change when we fix/unfix entities
+        addOrReplace(new ListView<TabConfig>("tabs", visibleTabs) {
 
-		TabConfig tab = item.getModelObject();
+            @Override
+            protected void populateItem(ListItem<TabConfig> item) {
 
-		BrowserPageLink<TabStatus> link = new BrowserPageLink<TabStatus>("link", Model.of(tab
-			.getDefaultStatus())) {
+                TabConfig tab = item.getModelObject();
 
-		    @Override
-		    public void onClick(AjaxRequestTarget target) {
+                BrowserPageLink<TabStatus> link = new BrowserPageLink<TabStatus>("link", Model.of(tab
+                        .getDefaultStatus())) {
 
-			TabStatus defaultStatus = null;
-			try {
-			    defaultStatus = getModelObject();
-			    StatusEncoder encoder = new StatusEncoder(getClass().getClassLoader());
-			    defaultStatus = encoder.decodeStatus(encoder.encodeStatus(defaultStatus));
-			} catch (UnsupportedEncodingException e) {
-			    throw new RuntimeException(e);
-			}
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
 
-			getStatus().setCurrentTabId(defaultStatus.getId());
-			getStatus().setTabStatus(defaultStatus);
+                        TabStatus defaultStatus = null;
+                        try {
+                            defaultStatus = getModelObject();
+                            StatusEncoder encoder = new StatusEncoder(getClass().getClassLoader());
+                            defaultStatus = encoder.decodeStatus(encoder.encodeStatus(defaultStatus));
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
 
-			sendEvent(EventTabSelected.EVENT);
+                        getStatus().setCurrentTabId(defaultStatus.getId());
+                        getStatus().setTabStatus(defaultStatus);
 
-		    }
+                        sendEvent(EventTabSelected.EVENT);
 
-		};
+                    }
 
-		String tabTitle = (tab.getTitle() == null ? tab.getId() : tab.getTitle());
+                };
 
-		link.add(new Label("label", tabTitle));
-		item.add(link);
+                String tabTitle = (tab.getTitle() == null ? tab.getId() : tab.getTitle());
 
-		if (isCurrentTab(tab.getId())) {
-		    item.add(new AttributeModifier("class", new Model<String>("selected")));
-		}
+                link.add(new Label("label", tabTitle));
+                item.add(link);
 
-	    }
+                if (isCurrentTab(tab.getId())) {
+                    item.add(new AttributeModifier("class", new Model<String>("selected")));
+                }
 
-	});
-	
-	// Check if the current selected tab is visible.
-	String currentTabId = getStatus().getCurrentTabId();
-	
-	// Set a current tab if there is no one.
-	if (currentTabId == null) {
-	    
-	    List<TabConfig> tabs = getConfig().getTabs(); 
-	    if (tabs != null && !tabs.isEmpty()) {
-		currentTabId = tabs.get(0).getId();
-		getStatus().setCurrentTabId(currentTabId);
-	    }	    	    
-	}
+            }
 
-	List<TabConfig> tabs = visibleTabs.getObject();
-	boolean hiddenTab = true;
-	for (TabConfig tab : tabs) {
-	    if (tab.getId().equals(currentTabId)) {
-		hiddenTab = false;
-	    }
-	}
+        });
 
-	if (hiddenTab && !tabs.isEmpty()) {
-	    TabConfig firstTab = tabs.get(0);
-	    getStatus().setCurrentTabId(firstTab.getId());
-	}
+        // Check if the current selected tab is visible.
+        String currentTabId = getStatus().getCurrentTabId();
 
-	// Add the tab panel
-	TabConfig tabConfig = getCurrentTab();
-	addOrReplace(tabManager.create("content", tabConfig, new TabModel(tabConfig, getModelStatus())));
+        // Set a current tab if there is no one.
+        if (currentTabId == null) {
 
-	super.onBeforeRender();
+            List<TabConfig> tabs = getConfig().getTabs();
+            if (tabs != null && !tabs.isEmpty()) {
+                currentTabId = tabs.get(0).getId();
+                getStatus().setCurrentTabId(currentTabId);
+            }
+        }
+
+        List<TabConfig> tabs = visibleTabs.getObject();
+        boolean hiddenTab = true;
+        for (TabConfig tab : tabs) {
+            if (tab.getId().equals(currentTabId)) {
+                hiddenTab = false;
+            }
+        }
+
+        if (hiddenTab && !tabs.isEmpty()) {
+            TabConfig firstTab = tabs.get(0);
+            getStatus().setCurrentTabId(firstTab.getId());
+        }
+
+        // Add the tab panel
+        TabConfig tabConfig = getCurrentTab();
+        addOrReplace(tabManager.create("content", tabConfig, new TabModel(tabConfig, getModelStatus())));
+
+        super.onBeforeRender();
     }
 
     private class VisibleTabs extends AbstractReadOnlyModel<List<TabConfig>> {
 
-	@Override
-	public List<TabConfig> getObject() {
+        @Override
+        public List<TabConfig> getObject() {
 
-	    // All the defined tabs in the configuration
-	    List<TabConfig> allTabs = getConfig().getTabs();
+            // All the defined tabs in the configuration
+            List<TabConfig> allTabs = getConfig().getTabs();
 
-	    // A predicate that filters the visible tabs
-	    Predicate filter = new FixedEntitiesVisiblePredicate(getStatus().getReleaseURI(), getStatus()
-		    .getFixedEntities());
+            // A predicate that filters the visible tabs
+            Predicate filter = new FixedEntitiesVisiblePredicate(getStatus().getReleaseURI(), getStatus()
+                    .getFixedEntities());
 
-	    // Return a new collection with only the visible tabs
-	    List<TabConfig> tabs = new ArrayList<TabConfig>();
-	    CollectionUtils.select(allTabs, filter, tabs);
-	    return tabs;
-	}
+            // Return a new collection with only the visible tabs
+            List<TabConfig> tabs = new ArrayList<TabConfig>();
+            CollectionUtils.select(allTabs, filter, tabs);
+            return tabs;
+        }
 
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
-	super.renderHead(response);
+        super.renderHead(response);
 
-	response.renderCSSReference(CSS);
+        response.renderCSSReference(CSS);
     }
 
 }

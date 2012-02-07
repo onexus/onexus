@@ -23,21 +23,22 @@ public class EmptyTabConfig extends TabConfig {
     private static EmptyTabConfig INSTANCE = new EmptyTabConfig();
 
     private EmptyTabConfig() {
-	super("empty", "#");
-    }   
+        super("empty", "#");
+    }
 
     public static EmptyTabConfig get() {
-	return INSTANCE;
+        return INSTANCE;
     }
 
     @Override
     public TabStatus createEmptyStatus() {
-	return new TabStatus() {};
+        return new TabStatus() {
+        };
     }
 
     @Override
     public TabStatus getDefaultStatus() {
-	return null;
+        return null;
     }
 
 }

@@ -21,6 +21,6 @@ import org.apache.wicket.model.IModel;
 
 public interface ICollectionViewerManager {
 
-    Viewer<?,?> create(String componentId, ViewerConfig config, IModel<ViewerStatus> statusModel);
+    Viewer<?, ?> create(String componentId, ViewerConfig config, IModel<ViewerStatus> statusModel);
 
 }

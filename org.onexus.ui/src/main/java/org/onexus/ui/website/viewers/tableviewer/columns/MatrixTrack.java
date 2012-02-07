@@ -28,7 +28,6 @@ import org.onexus.ui.website.viewers.tableviewer.headers.IHeader;
 
 /**
  * @author Jordi Deu-Pons
- * 
  */
 public abstract class MatrixTrack extends TableTrack {
 
@@ -36,42 +35,42 @@ public abstract class MatrixTrack extends TableTrack {
     private IDecorator cellDecorator;
 
     public MatrixTrack(IHeader headerDecorator, IDecorator cellDecorator) {
-	super();
-	this.headerDecorator = headerDecorator;
-	this.cellDecorator = cellDecorator;
+        super();
+        this.headerDecorator = headerDecorator;
+        this.cellDecorator = cellDecorator;
     }
 
     protected abstract IModel<IEntity> getModelAdapter(
-	    IModel<IEntityTable> rowModel);
+            IModel<IEntityTable> rowModel);
 
     @Override
     public void populateItem(Item<ICellPopulator<IEntityTable>> cellItem,
-	    String componentId, IModel<IEntityTable> rowModel) {
-	cellDecorator.populateCell(cellItem, componentId,
-		getModelAdapter(rowModel));
+                             String componentId, IModel<IEntityTable> rowModel) {
+        cellDecorator.populateCell(cellItem, componentId,
+                getModelAdapter(rowModel));
     }
 
     public IDecorator getCellDecorator() {
-	return cellDecorator;
+        return cellDecorator;
     }
 
     @Override
     public Component getHeader(String componentId) {
-	return headerDecorator.getHeader(componentId);
+        return headerDecorator.getHeader(componentId);
     }
 
     public IHeader getHeaderDecorator() {
-	return headerDecorator;
+        return headerDecorator;
     }
 
     @Override
     public String getSortProperty() {
-	return headerDecorator.getSortProperty();
+        return headerDecorator.getSortProperty();
     }
 
     @Override
     public boolean isSortable() {
-	return headerDecorator.isSortable();
+        return headerDecorator.isSortable();
     }
 
 }

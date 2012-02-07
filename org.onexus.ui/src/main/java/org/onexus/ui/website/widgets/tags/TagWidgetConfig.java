@@ -17,22 +17,21 @@
  */
 package org.onexus.ui.website.widgets.tags;
 
-import java.util.List;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.util.List;
 
 @XStreamAlias("widget-tags")
 public class TagWidgetConfig extends WidgetConfig {
-    
+
     private TagWidgetStatus defaultStatus;
     private List<String> defaultTags;
-    
+
     public TagWidgetConfig() {
-	super();
+        super();
     }
-    
+
     public TagWidgetStatus getDefaultStatus() {
         return defaultStatus;
     }
@@ -51,7 +50,7 @@ public class TagWidgetConfig extends WidgetConfig {
 
     @Override
     public TagWidgetStatus createEmptyStatus() {
-	return new TagWidgetStatus(getId());
+        return new TagWidgetStatus(getId());
     }
 
 }

@@ -17,18 +17,6 @@
  */
 package org.onexus.task.executor.loader.tsv;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntitySet;
 import org.onexus.core.ISourceManager;
@@ -36,6 +24,14 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.task.executor.loader.tsv.tools.BufferedFileChannel;
 import org.onexus.task.executor.loader.tsv.tools.Token;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class FileEntitySet extends FileEntity implements IEntitySet {
 

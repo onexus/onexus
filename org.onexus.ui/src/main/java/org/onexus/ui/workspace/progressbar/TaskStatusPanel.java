@@ -28,29 +28,28 @@ import org.onexus.ui.website.utils.panels.icons.Icons;
 public class TaskStatusPanel extends Panel {
 
     public TaskStatusPanel(String id, IModel<TaskStatus> model) {
-	super(id, model);
-	
-	add(new Label("title", new PropertyModel<String>(model, "title")));
-	
+        super(id, model);
+
+        add(new Label("title", new PropertyModel<String>(model, "title")));
+
     }
-    
-    
-    
+
+
     @Override
     protected void onBeforeRender() {
-	
-	if (getTaskStatus().isDone()) {
-	    addOrReplace(new Image("progress", Icons.DONE));
-	} else {
-	    addOrReplace(new Image("progress", Icons.LOADING));
-	}
-	
-	super.onBeforeRender();
+
+        if (getTaskStatus().isDone()) {
+            addOrReplace(new Image("progress", Icons.DONE));
+        } else {
+            addOrReplace(new Image("progress", Icons.LOADING));
+        }
+
+        super.onBeforeRender();
     }
 
     private TaskStatus getTaskStatus() {
-	return (TaskStatus) getDefaultModelObject();
+        return (TaskStatus) getDefaultModelObject();
     }
-        
+
 
 }

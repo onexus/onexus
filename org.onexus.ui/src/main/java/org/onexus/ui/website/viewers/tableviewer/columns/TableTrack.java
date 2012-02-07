@@ -21,14 +21,14 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
 
 public abstract class TableTrack extends AbstractTrack implements
-	IColumn<IEntityTable> {
+        IColumn<IEntityTable> {
 
     public TableTrack() {
-	super();
+        super();
     }
 
     public TableTrack(String collectionId) {
-	super(collectionId);
+        super(collectionId);
     }
 
     @Override
@@ -37,12 +37,12 @@ public abstract class TableTrack extends AbstractTrack implements
 
     @Override
     public String getSortProperty() {
-	return null;
+        return null;
     }
 
     @Override
     public boolean isSortable() {
-	return false;
+        return false;
     }
 
 }

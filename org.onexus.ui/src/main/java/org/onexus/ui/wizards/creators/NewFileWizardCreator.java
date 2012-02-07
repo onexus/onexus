@@ -27,22 +27,22 @@ public class NewFileWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-	return "New file";
+        return "New file";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-	return new NewFileWizard(containerId, model);
+        return new NewFileWizard(containerId, model);
     }
 
     @Override
     public double getOrder() {
-	return 0;
+        return 0;
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-	return Release.class.isAssignableFrom(resourceType);
+        return Release.class.isAssignableFrom(resourceType);
     }
 
 }

@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.editor;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
@@ -36,8 +34,9 @@ import org.onexus.ui.editor.tabs.EditorTabList;
 import org.onexus.ui.workspace.events.EventResourceRevert;
 import org.onexus.ui.workspace.events.EventResourceSync;
 
+import javax.inject.Inject;
+
 /**
- * 
  * EditorViewer is the main viewer to edit resource.
  *
  * @author armand
@@ -46,134 +45,132 @@ public class EditorViewer extends Panel {
 
     @Inject
     private IResourceManager resourceManager;
-    
+
     private FeedbackPanel feedback;
     private WebMarkupContainer actionbar;
     private Form<Resource> form;
-        
+
     @SuppressWarnings("unchecked")
     public EditorViewer(String id, final IModel<? extends Resource> model) {
-	super(id, model);
+        super(id, model);
 
-	// Create feedback
-	feedback = new FeedbackPanel("feedback");
-	feedback.setOutputMarkupId(true);
-	add(feedback);
-	
-	form = new Form<Resource>("form", (IModel<Resource>) model);
-	form.setMultiPart(true);
-	form.setOutputMarkupId(true);
+        // Create feedback
+        feedback = new FeedbackPanel("feedback");
+        feedback.setOutputMarkupId(true);
+        add(feedback);
 
-	// Action bar
-	actionbar = new WebMarkupContainer("actionbar");
-	actionbar.setOutputMarkupId(true);
-	
-	// Save Button
-	actionbar.add(new ActionButton("save", form) {
-	    @Override
-	    protected void run(IResourceManager resourceManager, Resource resource) throws Exception {
-		resourceManager.save(resource);
-		resourceManager.commit(resource.getURI());
-		send(getPage(), Broadcast.BREADTH, EventResourceSync.EVENT);
-	    }
-	});
+        form = new Form<Resource>("form", (IModel<Resource>) model);
+        form.setMultiPart(true);
+        form.setOutputMarkupId(true);
 
-	// Revert Button
-	actionbar.add(new ActionButton("revert", form) {
-	    @Override
-	    protected void run(IResourceManager resourceManager, Resource resource) throws Exception {
-		
-		String resourceURI = resource.getURI();
-		resourceManager.revert(resourceURI);
-		Resource revertedResource = resourceManager.load(Resource.class, resourceURI);
-		EditorViewer.this.getModel().setObject(revertedResource);
-		
-		send(getPage(), Broadcast.BREADTH, EventResourceSync.EVENT);
-		send(getPage(), Broadcast.BREADTH, EventResourceRevert.EVENT);
-	    }
+        // Action bar
+        actionbar = new WebMarkupContainer("actionbar");
+        actionbar.setOutputMarkupId(true);
 
-	    @Override
-	    public boolean isEnabled() {
-		ResourceStatus status = getResourceStatus();
-		return status != ResourceStatus.SYNC && status != ResourceStatus.ADD;
-	    }
-	    
-	    
-	});
-	form.add(actionbar);
-	
-	form.add(new AjaxTabbedPanel("tabs", new EditorTabList(model)));
+        // Save Button
+        actionbar.add(new ActionButton("save", form) {
+            @Override
+            protected void run(IResourceManager resourceManager, Resource resource) throws Exception {
+                resourceManager.save(resource);
+                resourceManager.commit(resource.getURI());
+                send(getPage(), Broadcast.BREADTH, EventResourceSync.EVENT);
+            }
+        });
 
-	add(form);
+        // Revert Button
+        actionbar.add(new ActionButton("revert", form) {
+            @Override
+            protected void run(IResourceManager resourceManager, Resource resource) throws Exception {
+
+                String resourceURI = resource.getURI();
+                resourceManager.revert(resourceURI);
+                Resource revertedResource = resourceManager.load(Resource.class, resourceURI);
+                EditorViewer.this.getModel().setObject(revertedResource);
+
+                send(getPage(), Broadcast.BREADTH, EventResourceSync.EVENT);
+                send(getPage(), Broadcast.BREADTH, EventResourceRevert.EVENT);
+            }
+
+            @Override
+            public boolean isEnabled() {
+                ResourceStatus status = getResourceStatus();
+                return status != ResourceStatus.SYNC && status != ResourceStatus.ADD;
+            }
+
+
+        });
+        form.add(actionbar);
+
+        form.add(new AjaxTabbedPanel("tabs", new EditorTabList(model)));
+
+        add(form);
 
     }
 
     private ResourceStatus getResourceStatus() {
 
-	Resource resource = (Resource) getDefaultModelObject();
+        Resource resource = (Resource) getDefaultModelObject();
 
-	if (resource != null && resource.getURI() != null) {
-	    return resourceManager.status(resource.getURI());
-	}
+        if (resource != null && resource.getURI() != null) {
+            return resourceManager.status(resource.getURI());
+        }
 
-	return ResourceStatus.SYNC;
+        return ResourceStatus.SYNC;
     }
-    
-    
-    
+
+
     @Override
     public void onEvent(IEvent<?> event) {
-	
-	if (event.getPayload() == EventResourceSync.EVENT) {
-	    AjaxRequestTarget.get().add(actionbar);
-	}
-	
-		
-	if (EventResourceRevert.EVENT == event.getPayload()) {
-	    AjaxRequestTarget.get().add(form);
-	}
-	
+
+        if (event.getPayload() == EventResourceSync.EVENT) {
+            AjaxRequestTarget.get().add(actionbar);
+        }
+
+
+        if (EventResourceRevert.EVENT == event.getPayload()) {
+            AjaxRequestTarget.get().add(form);
+        }
+
     }
 
     @SuppressWarnings("unchecked")
     public IModel<Resource> getModel() {
-	return (IModel<Resource>) getDefaultModel();
+        return (IModel<Resource>) getDefaultModel();
     }
 
     private abstract class ActionButton extends AjaxButton {
 
-	public ActionButton(String id, Form<?> form) {
-	    super(id, form);
+        public ActionButton(String id, Form<?> form) {
+            super(id, form);
 
-	}
+        }
 
-	@Override
-	protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-	    try {
-		Resource resource = (Resource) EditorViewer.this.getDefaultModelObject();
-		run(resourceManager, resource);
-	    } catch (Exception e) {
-		form.error(e.getMessage());
-		onError(target, form);
-		return;
-	    }
-	    target.add(feedback);
-	}
+        @Override
+        protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            try {
+                Resource resource = (Resource) EditorViewer.this.getDefaultModelObject();
+                run(resourceManager, resource);
+            } catch (Exception e) {
+                form.error(e.getMessage());
+                onError(target, form);
+                return;
+            }
+            target.add(feedback);
+        }
 
-	protected abstract void run(IResourceManager resourceManager, Resource resource) throws Exception;
+        protected abstract void run(IResourceManager resourceManager, Resource resource) throws Exception;
 
-	@Override
-	protected void onError(AjaxRequestTarget target, Form<?> form) {
-	    target.add(feedback);
-	}
+        @Override
+        protected void onError(AjaxRequestTarget target, Form<?> form) {
+            target.add(feedback);
+        }
 
-	@Override
-	public boolean isEnabled() {
-	    return getResourceStatus() != ResourceStatus.SYNC;
-	}
+        @Override
+        public boolean isEnabled() {
+            return getResourceStatus() != ResourceStatus.SYNC;
+        }
 
     }
-    
-   
+
 
 }

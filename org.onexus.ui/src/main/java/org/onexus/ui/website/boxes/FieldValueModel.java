@@ -27,31 +27,31 @@ public class FieldValueModel<T> extends AbstractWrapModel<T> {
     private IModel<? extends IEntity> complexModel;
 
     public FieldValueModel(String fieldName,
-	    IModel<? extends IEntity> complexElementModel) {
-	super();
-	this.fieldName = fieldName;
-	this.complexModel = complexElementModel;
+                           IModel<? extends IEntity> complexElementModel) {
+        super();
+        this.fieldName = fieldName;
+        this.complexModel = complexElementModel;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T getObject() {
-	return (T) getWrappedModel().getObject().get(fieldName);
+        return (T) getWrappedModel().getObject().get(fieldName);
     }
 
     @Override
     public void setObject(T object) {
-	getWrappedModel().getObject().put(fieldName, object);
+        getWrappedModel().getObject().put(fieldName, object);
     }
 
     @Override
     public IModel<? extends IEntity> getWrappedModel() {
-	return complexModel;
+        return complexModel;
     }
 
     @Override
     public void detach() {
-	super.detach();
+        super.detach();
     }
 
 }

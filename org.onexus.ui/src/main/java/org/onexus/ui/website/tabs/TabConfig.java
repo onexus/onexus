@@ -17,35 +17,35 @@
  */
 package org.onexus.ui.website.tabs;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.onexus.ui.website.IWebsiteConfig;
 import org.onexus.ui.website.utils.visible.IVisible;
 import org.onexus.ui.website.viewers.EmptyViewerConfig;
 import org.onexus.ui.website.viewers.ViewerConfig;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class TabConfig implements IWebsiteConfig, IVisible {
 
     private String id;
     private String title;
     private String visible;
-  
+
     private List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
     private List<ViewerConfig> viewers = new ArrayList<ViewerConfig>();
 
     public TabConfig() {
-	super();
+        super();
     }
 
     public TabConfig(String tabId, String title) {
-	super();
-	this.id = tabId;
-	this.title = title;
-	this.visible = "";
+        super();
+        this.id = tabId;
+        this.title = title;
+        this.visible = "";
     }
-    
+
     public String getId() {
         return id;
     }
@@ -55,33 +55,33 @@ public abstract class TabConfig implements IWebsiteConfig, IVisible {
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getVisible() {
-	return visible;
+        return visible;
     }
 
     public void setVisible(String visible) {
-	this.visible = visible;
+        this.visible = visible;
     }
 
     public List<WidgetConfig> getWidgets() {
-	return widgets;
+        return widgets;
     }
 
     public void setWidgets(List<WidgetConfig> widgets) {
-	this.widgets = widgets;
+        this.widgets = widgets;
     }
 
     public List<ViewerConfig> getViewers() {
-	return viewers;
+        return viewers;
     }
-    
+
     @Override
     public abstract TabStatus getDefaultStatus();
 
@@ -90,26 +90,26 @@ public abstract class TabConfig implements IWebsiteConfig, IVisible {
 
     public ViewerConfig getViewerConfig(String viewerId) {
 
-	if (viewers != null) {
-	    for (ViewerConfig view : viewers) {
-		if (view.getId().equals(viewerId)) {
-		    return view;
-		}
-	    }
-	}
-	return EmptyViewerConfig.get();
+        if (viewers != null) {
+            for (ViewerConfig view : viewers) {
+                if (view.getId().equals(viewerId)) {
+                    return view;
+                }
+            }
+        }
+        return EmptyViewerConfig.get();
     }
 
     public void setViewers(List<ViewerConfig> views) {
-	this.viewers = views;
+        this.viewers = views;
     }
 
     protected static String getFirstViewerId(List<ViewerConfig> viewers) {
-	if (viewers != null && !viewers.isEmpty()) {
-	    return viewers.get(0).getId();
-	}
+        if (viewers != null && !viewers.isEmpty()) {
+            return viewers.get(0).getId();
+        }
 
-	return null;
+        return null;
     }
 
 }

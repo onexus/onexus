@@ -24,25 +24,25 @@ import org.onexus.ui.IViewerCreator;
 import org.onexus.ui.website.WebsiteConfig;
 
 public class PreviewBrowserViewerTab implements IViewerCreator {
-    
+
     @Override
     public String getTitle() {
-	return "Preview";
+        return "Preview";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-	return new PreviewBrowserViewer(containerId, model);
+        return new PreviewBrowserViewer(containerId, model);
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-	return WebsiteConfig.class.isAssignableFrom(resourceType);
+        return WebsiteConfig.class.isAssignableFrom(resourceType);
     }
 
     @Override
     public double getOrder() {
-	return 2;
+        return 2;
     }
 
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public interface IMetadata extends Serializable {
 
     public String getName();
-    
+
     public String getTitle();
 
     public String getDescription();

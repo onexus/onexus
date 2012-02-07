@@ -23,27 +23,27 @@ public class StringFormater implements ITextFormater {
     private boolean addDots;
 
     public StringFormater(final int maxLength, final boolean addDots) {
-	super();
-	this.maxLength = maxLength;
-	this.addDots = addDots;
+        super();
+        this.maxLength = maxLength;
+        this.addDots = addDots;
     }
 
     @Override
     public String format(final Object value) {
-	return format(value, maxLength, addDots);
+        return format(value, maxLength, addDots);
     }
-    
+
     public static String format(final Object value, int maxLength, boolean addDots) {
-	
-	String formatedValue = (value == null ? "" : value.toString());
 
-	if (formatedValue.length() > maxLength) {
-	    formatedValue = formatedValue.substring(0, maxLength)
-		    + (addDots ? "..." : "");
-	}
+        String formatedValue = (value == null ? "" : value.toString());
 
-	return formatedValue;
-	
+        if (formatedValue.length() > maxLength) {
+            formatedValue = formatedValue.substring(0, maxLength)
+                    + (addDots ? "..." : "");
+        }
+
+        return formatedValue;
+
     }
 
 }

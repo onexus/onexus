@@ -23,9 +23,8 @@ import org.onexus.ui.website.AbstractWebsitePanel;
 public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends AbstractWebsitePanel<C, S> {
 
     public Widget(String componentId, C config, IModel<S> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
     }
-    
-    
+
 
 }

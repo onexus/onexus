@@ -17,17 +17,17 @@
  */
 package org.onexus.collection.store.h2sql;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.onexus.core.query.FixedEntity;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Link;
 import org.onexus.core.utils.ResourceTools;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractSqlQuery {
 
@@ -38,20 +38,20 @@ public abstract class AbstractSqlQuery {
     private transient Map<String, String> fixedEntities = new HashMap<String, String>();
 
     public AbstractSqlQuery(Query query) {
-	super();
-	this.query = query;
+        super();
+        this.query = query;
     }
 
     public Query getQuery() {
-	return query;
+        return query;
     }
 
     private void addQuery() {
-	addFields();
-	addFrom();
-	addWhere();
-	addOrder();
-	addLimit();
+        addFields();
+        addFrom();
+        addWhere();
+        addOrder();
+        addLimit();
     }
 
     protected abstract void addFields();
@@ -65,89 +65,89 @@ public abstract class AbstractSqlQuery {
     protected abstract void addLimit();
 
     protected void init() {
-	for (String collectionURI : query.getCollections()) {
-	    addFixedEntities(collectionURI);
-	}
+        for (String collectionURI : query.getCollections()) {
+            addFixedEntities(collectionURI);
+        }
 
-	// Main collection
-	addFixedEntities(getQuery().getMainCollection());
+        // Main collection
+        addFixedEntities(getQuery().getMainCollection());
 
-	for (FixedEntity fe : query.getFixedEntities()) {
-	    Collection eCol = getCollection(fe.getCollectionURI());
-	    for (Map.Entry<String, String> entry : getLinkValues(eCol, fe.getEntityId()).entrySet()) {
-		this.fixedEntities.put(getAbsoluteCollectionURI(fe.getCollectionURI()) + ":" + entry.getKey(), "\""
-			+ entry.getValue() + "\"");
-	    }
-	}
+        for (FixedEntity fe : query.getFixedEntities()) {
+            Collection eCol = getCollection(fe.getCollectionURI());
+            for (Map.Entry<String, String> entry : getLinkValues(eCol, fe.getEntityId()).entrySet()) {
+                this.fixedEntities.put(getAbsoluteCollectionURI(fe.getCollectionURI()) + ":" + entry.getKey(), "\""
+                        + entry.getValue() + "\"");
+            }
+        }
 
-	addQuery();
+        addQuery();
     }
 
     private void addFixedEntities(String collectionURI) {
-	Collection collection = getCollection(collectionURI);
+        Collection collection = getCollection(collectionURI);
 
-	for (Field keyField : collection.getFields()) {
-	    if (!keyField.isPrimaryKey())
-		continue;
+        for (Field keyField : collection.getFields()) {
+            if (!keyField.isPrimaryKey())
+                continue;
 
-	    String linkCollection = collection.getURI();
-	    Link link = SqlUtils.getLinkByField(collection, keyField.getName());
-	    if (link != null) {
-		linkCollection = link.getCollectionURI();
-	    }
-	    this.fixedEntities.put(linkCollection + ":" + keyField.getName(), "`" + getCollectionAlias(collectionURI)
-		    + "`.`" + keyField.getName() + "`");
-	}
+            String linkCollection = collection.getURI();
+            Link link = SqlUtils.getLinkByField(collection, keyField.getName());
+            if (link != null) {
+                linkCollection = link.getCollectionURI();
+            }
+            this.fixedEntities.put(linkCollection + ":" + keyField.getName(), "`" + getCollectionAlias(collectionURI)
+                    + "`.`" + keyField.getName() + "`");
+        }
 
-	if (collection.getLinks() != null) {
-	    for (Link link : collection.getLinks()) {
-		for (String fieldLink : link.getFieldNames()) {
-		    String fromField = Link.getFromFieldName(fieldLink);
-		    this.fixedEntities.put(getAbsoluteCollectionURI(link.getCollectionURI()) + ":" + fromField, "`"
-			    + getCollectionAlias(collectionURI) + "`.`" + fromField + "`");
-		}
-	    }
-	}
+        if (collection.getLinks() != null) {
+            for (Link link : collection.getLinks()) {
+                for (String fieldLink : link.getFieldNames()) {
+                    String fromField = Link.getFromFieldName(fieldLink);
+                    this.fixedEntities.put(getAbsoluteCollectionURI(link.getCollectionURI()) + ":" + fromField, "`"
+                            + getCollectionAlias(collectionURI) + "`.`" + fromField + "`");
+                }
+            }
+        }
     }
 
     public String getAbsoluteCollectionURI(String collectionURI) {
-	return ResourceTools.getAbsoluteURI(getQuery().getMainNamespace(), collectionURI);
+        return ResourceTools.getAbsoluteURI(getQuery().getMainNamespace(), collectionURI);
     }
 
     protected abstract Collection getCollection(String collectionURI);
 
     protected String getCollectionAlias(String collectionURI) {
-	collectionURI = getAbsoluteCollectionURI(collectionURI);
-	if (!collectionsAlias.containsKey(collectionURI)) {
-	    String alias = "c" + Integer.toString(nextAliasPrefix);
-	    collectionsAlias.put(collectionURI, alias);
-	    nextAliasPrefix++;
-	}
-	return collectionsAlias.get(collectionURI);
+        collectionURI = getAbsoluteCollectionURI(collectionURI);
+        if (!collectionsAlias.containsKey(collectionURI)) {
+            String alias = "c" + Integer.toString(nextAliasPrefix);
+            collectionsAlias.put(collectionURI, alias);
+            nextAliasPrefix++;
+        }
+        return collectionsAlias.get(collectionURI);
     }
 
     protected String getFixedValue(String collectionURI, String fieldName) {
-	return this.fixedEntities.get(getAbsoluteCollectionURI(collectionURI) + ":" + fieldName);
+        return this.fixedEntities.get(getAbsoluteCollectionURI(collectionURI) + ":" + fieldName);
     }
 
     private static Map<String, String> getLinkValues(Collection collection, String entityId) {
-	String[] ids = entityId.split("\t");
+        String[] ids = entityId.split("\t");
 
-	List<String> collectionKeys = new ArrayList<String>();
-	for (Field field : collection.getFields()) {
-	    if (field.isPrimaryKey()) {
-		collectionKeys.add(field.getName());
-	    }
-	}
+        List<String> collectionKeys = new ArrayList<String>();
+        for (Field field : collection.getFields()) {
+            if (field.isPrimaryKey()) {
+                collectionKeys.add(field.getName());
+            }
+        }
 
-	assert ids.length == collectionKeys.size() : "The total number of primary key values not match.";
+        assert ids.length == collectionKeys.size() : "The total number of primary key values not match.";
 
-	Map<String, String> keys = new HashMap<String, String>();
-	for (int i = 0; i < collectionKeys.size(); i++) {
-	    keys.put(collectionKeys.get(i), ids[i]);
-	}
+        Map<String, String> keys = new HashMap<String, String>();
+        for (int i = 0; i < collectionKeys.size(); i++) {
+            keys.put(collectionKeys.get(i), ids[i]);
+        }
 
-	return keys;
+        return keys;
     }
 
 }

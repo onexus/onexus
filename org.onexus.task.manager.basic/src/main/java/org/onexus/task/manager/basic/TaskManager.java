@@ -17,25 +17,17 @@
  */
 package org.onexus.task.manager.basic;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import org.onexus.core.IEntitySet;
-import org.onexus.core.ITaskCallable;
-import org.onexus.core.ITaskExecutor;
-import org.onexus.core.ITaskManager;
-import org.onexus.core.TaskStatus;
+import org.onexus.core.*;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.*;
 
 public class TaskManager implements ITaskManager {
 
@@ -52,112 +44,112 @@ public class TaskManager implements ITaskManager {
     private ExecutorService executorService;
 
     public TaskManager() {
-	super();
-	this.taskCallables = Collections.synchronizedMap(new HashMap<String, ITaskCallable>());
-	this.taskFutures = Collections.synchronizedMap(new HashMap<String, FutureTask<IEntitySet>>());
-	this.executorService = Executors.newFixedThreadPool(maxThreads);
+        super();
+        this.taskCallables = Collections.synchronizedMap(new HashMap<String, ITaskCallable>());
+        this.taskFutures = Collections.synchronizedMap(new HashMap<String, FutureTask<IEntitySet>>());
+        this.executorService = Executors.newFixedThreadPool(maxThreads);
     }
 
     public void init() {
-	if (executorService instanceof ThreadPoolExecutor) {
-	    ((ThreadPoolExecutor) executorService).setMaximumPoolSize(maxThreads);
-	}
+        if (executorService instanceof ThreadPoolExecutor) {
+            ((ThreadPoolExecutor) executorService).setMaximumPoolSize(maxThreads);
+        }
     }
 
     @Override
     public TaskStatus submitCollection(Collection collection) {
-	LOGGER.debug("Submiting collection {}", collection.getURI());
+        LOGGER.debug("Submiting collection {}", collection.getURI());
 
-	Task task = collection.getTask();
+        Task task = collection.getTask();
 
-	ITaskExecutor executor = getToolExecutor(task.getToolURI());
-	ITaskCallable taskCall = executor.createCallable(collection);
-	FutureTask<IEntitySet> taskFuture = new FutureTask<IEntitySet>(taskCall);
-	executorService.submit(taskFuture);
+        ITaskExecutor executor = getToolExecutor(task.getToolURI());
+        ITaskCallable taskCall = executor.createCallable(collection);
+        FutureTask<IEntitySet> taskFuture = new FutureTask<IEntitySet>(taskCall);
+        executorService.submit(taskFuture);
 
-	String taskId = taskCall.getStatus().getId();
-	taskCallables.put(taskId, taskCall);
-	taskFutures.put(taskId, taskFuture);
+        String taskId = taskCall.getStatus().getId();
+        taskCallables.put(taskId, taskCall);
+        taskFutures.put(taskId, taskFuture);
 
-	return taskCall.getStatus();
+        return taskCall.getStatus();
     }
 
     @Override
     public boolean preprocessCollection(Collection collection) {
 
-	Task task = collection.getTask();
-	ITaskExecutor executor = getToolExecutor(task.getToolURI());
+        Task task = collection.getTask();
+        ITaskExecutor executor = getToolExecutor(task.getToolURI());
 
-	return executor.preprocessCollection(collection);
+        return executor.preprocessCollection(collection);
     }
 
     @Override
     public TaskStatus getTaskStatus(String taskId) {
 
-	if (!taskCallables.containsKey(taskId)) {
-	    throw new RuntimeException("Unmanaged task '" + taskId + "'");
-	}
+        if (!taskCallables.containsKey(taskId)) {
+            throw new RuntimeException("Unmanaged task '" + taskId + "'");
+        }
 
-	return taskCallables.get(taskId).getStatus();
+        return taskCallables.get(taskId).getStatus();
     }
 
     @Override
     public IEntitySet getTaskOutput(String taskId) {
-	LOGGER.debug("Getting task {} output", taskId);
+        LOGGER.debug("Getting task {} output", taskId);
 
-	TaskStatus taskStatus = getTaskStatus(taskId);
+        TaskStatus taskStatus = getTaskStatus(taskId);
 
-	if (!taskStatus.isDone()) {
-	    throw new RuntimeException("The task is still running.");
-	}
+        if (!taskStatus.isDone()) {
+            throw new RuntimeException("The task is still running.");
+        }
 
-	try {
-	    return taskFutures.get(taskId).get(timeout, TimeUnit.SECONDS);
-	} catch (Exception e) {
-	    String msg = "Exception getting the task '" + taskId + "' output.";
-	    LOGGER.error(msg, e);
-	    throw new RuntimeException(msg, e);
-	} finally {
-	    taskFutures.remove(taskId);
-	    taskCallables.remove(taskId);
-	}
+        try {
+            return taskFutures.get(taskId).get(timeout, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            String msg = "Exception getting the task '" + taskId + "' output.";
+            LOGGER.error(msg, e);
+            throw new RuntimeException(msg, e);
+        } finally {
+            taskFutures.remove(taskId);
+            taskCallables.remove(taskId);
+        }
     }
 
     private ITaskExecutor getToolExecutor(String toolURI) {
-	for (ITaskExecutor executor : executors) {
-	    if (executor.isCallable(toolURI)) {
-		return executor;
-	    }
-	}
+        for (ITaskExecutor executor : executors) {
+            if (executor.isCallable(toolURI)) {
+                return executor;
+            }
+        }
 
-	// TODO Auto-install tool
+        // TODO Auto-install tool
 
-	String msg = "Tool executor for tool '" + toolURI + "' not found.";
-	throw new RuntimeException(msg);
+        String msg = "Tool executor for tool '" + toolURI + "' not found.";
+        throw new RuntimeException(msg);
     }
 
     public List<ITaskExecutor> getExecutors() {
-	return executors;
+        return executors;
     }
 
     public void setExecutors(List<ITaskExecutor> executors) {
-	this.executors = executors;
+        this.executors = executors;
     }
 
     public int getTimeout() {
-	return timeout;
+        return timeout;
     }
 
     public void setTimeout(int timeout) {
-	this.timeout = timeout;
+        this.timeout = timeout;
     }
 
     public int getMaxThreads() {
-	return maxThreads;
+        return maxThreads;
     }
 
     public void setMaxThreads(int maxThreads) {
-	this.maxThreads = maxThreads;
+        this.maxThreads = maxThreads;
     }
 
 }

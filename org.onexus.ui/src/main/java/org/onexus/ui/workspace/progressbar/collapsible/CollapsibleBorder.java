@@ -30,71 +30,71 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 
 public class CollapsibleBorder extends Border {
 
-	public CollapsibleBorder(String id,IModel<String> collapse,
-			IModel<String> expand) {
-		super(id, new Model<Boolean>());
-		setOutputMarkupId(true);
-		setCollapsed(false);
+    public CollapsibleBorder(String id, IModel<String> collapse,
+                             IModel<String> expand) {
+        super(id, new Model<Boolean>());
+        setOutputMarkupId(true);
+        setCollapsed(false);
 
-		final WebMarkupContainer body = new WebMarkupContainer("collapsiblebody") {
-			@Override
-			protected void onConfigure() {
-				setVisible(!isCollapsed());
-			}
-		};
-		body.setOutputMarkupId(true);
-		//body.setOutputMarkupPlaceholderTag(true);				
-		addToBorder(body);
-		body.add(getBodyContainer());
+        final WebMarkupContainer body = new WebMarkupContainer("collapsiblebody") {
+            @Override
+            protected void onConfigure() {
+                setVisible(!isCollapsed());
+            }
+        };
+        body.setOutputMarkupId(true);
+        //body.setOutputMarkupPlaceholderTag(true);
+        addToBorder(body);
+        body.add(getBodyContainer());
 
-		AjaxLink<Boolean> toggle = new AjaxLink<Boolean>("toggle") {
+        AjaxLink<Boolean> toggle = new AjaxLink<Boolean>("toggle") {
 
-			@Override
-			public void onClick(AjaxRequestTarget target) {			    
-				setCollapsed(!isCollapsed());
-				target.add(body);
-				target.add(this);				
-			}
-		};
-		toggle.setOutputMarkupId(true);
-		addToBorder(toggle);
-		toggle.add(new Label("toggleButton", new ExpandCollapseModel(collapse,expand)));
-		addToBorder(new Image("refreshing", new PackageResourceReference(CollapsibleBorder.class, "ajax-loader2.gif")));
-	
-	}
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setCollapsed(!isCollapsed());
+                target.add(body);
+                target.add(this);
+            }
+        };
+        toggle.setOutputMarkupId(true);
+        addToBorder(toggle);
+        toggle.add(new Label("toggleButton", new ExpandCollapseModel(collapse, expand)));
+        addToBorder(new Image("refreshing", new PackageResourceReference(CollapsibleBorder.class, "ajax-loader2.gif")));
 
-	public void setCollapsed(boolean collapsed) {
-		setDefaultModelObject(collapsed);
-	}
+    }
 
-	public boolean isCollapsed() {
-		return Boolean.TRUE.equals(getDefaultModelObject());
-	}
+    public void setCollapsed(boolean collapsed) {
+        setDefaultModelObject(collapsed);
+    }
 
-	private class ExpandCollapseModel extends AbstractReadOnlyModel<String> {
-		private final IModel<String> collapse;
-		private final IModel<String> expand;
+    public boolean isCollapsed() {
+        return Boolean.TRUE.equals(getDefaultModelObject());
+    }
 
-		public ExpandCollapseModel(IModel<String> collapse,
-				IModel<String> expand) {
-			this.collapse = collapse;
-			this.expand = expand;
-		}
+    private class ExpandCollapseModel extends AbstractReadOnlyModel<String> {
+        private final IModel<String> collapse;
+        private final IModel<String> expand;
 
-		@Override
-		public String getObject() {
-			if (isCollapsed()) {
-				return expand.getObject();
-			} else {
-				return collapse.getObject();
-			}
-		}
+        public ExpandCollapseModel(IModel<String> collapse,
+                                   IModel<String> expand) {
+            this.collapse = collapse;
+            this.expand = expand;
+        }
 
-		@Override
-		public void detach() {
-			collapse.detach();
-			expand.detach();
-		}
+        @Override
+        public String getObject() {
+            if (isCollapsed()) {
+                return expand.getObject();
+            } else {
+                return collapse.getObject();
+            }
+        }
 
-	}
+        @Override
+        public void detach() {
+            collapse.detach();
+            expand.detach();
+        }
+
+    }
 }

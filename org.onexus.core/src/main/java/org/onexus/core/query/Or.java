@@ -23,32 +23,32 @@ public class Or extends Filter {
     private Filter right;
 
     public Or() {
-	this(null, null, null);
+        this(null, null, null);
     }
 
     public Or(String collectionId, Filter left, Filter right) {
-	super(collectionId);
-	this.left = left;
-	this.right = right;
+        super(collectionId);
+        this.left = left;
+        this.right = right;
     }
 
     public Filter getLeft() {
-	return left;
+        return left;
     }
 
     public Filter getRight() {
-	return right;
+        return right;
     }
 
     @Override
     public String toString() {
-	StringBuilder builder = new StringBuilder();
-	builder.append("(");
-	builder.append(left);
-	builder.append(") OR (");
-	builder.append(right);
-	builder.append(")");
-	return builder.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("(");
+        builder.append(left);
+        builder.append(") OR (");
+        builder.append(right);
+        builder.append(")");
+        return builder.toString();
     }
 
 }

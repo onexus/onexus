@@ -23,31 +23,31 @@ import org.apache.wicket.injection.Injector;
 import org.wicketstuff.osgi.inject.impl.OsgiFieldValueFactory;
 
 public class OsgiApplicationInjector extends Injector implements IApplicationListener {
-    
+
     private OsgiFieldValueFactory fieldFactory;
 
     public OsgiApplicationInjector() {
-	this(true);
+        this(true);
     }
 
     public OsgiApplicationInjector(boolean wrapInProxies) {
-	fieldFactory = new OsgiFieldValueFactory(wrapInProxies);
+        fieldFactory = new OsgiFieldValueFactory(wrapInProxies);
     }
 
 
     @Override
     public void onAfterInitialized(Application application) {
-	inject(application);
+        inject(application);
     }
 
     @Override
     public void onBeforeDestroyed(Application application) {
-	
+
     }
 
     @Override
     public void inject(Object application) {
-	inject(application, fieldFactory);
+        inject(application, fieldFactory);
     }
 
 }

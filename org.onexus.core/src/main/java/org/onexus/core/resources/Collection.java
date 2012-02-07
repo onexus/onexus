@@ -27,46 +27,46 @@ public class Collection extends MetadataResource {
     private List<Link> links = new ArrayList<Link>();
 
     public Collection() {
-	super();
+        super();
     }
-    
+
     public Task getTask() {
-	return task;
+        return task;
     }
 
     public void setTask(Task task) {
-	this.task = task;
+        this.task = task;
     }
 
     public List<Field> getFields() {
-	return fields;
+        return fields;
     }
 
     public List<Link> getLinks() {
-	return links;
+        return links;
     }
 
-   
+
     @Override
     public String toString() {
-	return "Collection [getURI()=" + getURI() + ", task=" + task
-		+ ", fields=" + fields + ", links=" + links + "]";
+        return "Collection [getURI()=" + getURI() + ", task=" + task
+                + ", fields=" + fields + ", links=" + links + "]";
     }
 
     public Field getField(String fieldName) {
-	if (fieldName != null) {
-	    for (Field field : fields) {
-		if (field.getName().equals(fieldName)) {
-		    return field;
-		}
-	    }
-	}
+        if (fieldName != null) {
+            for (Field field : fields) {
+                if (field.getName().equals(fieldName)) {
+                    return field;
+                }
+            }
+        }
 
-	return null;
+        return null;
     }
-    
+
     public void setFields(List<Field> fields) {
-	this.fields = fields;
+        this.fields = fields;
     }
 
 }

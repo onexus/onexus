@@ -22,11 +22,11 @@ import org.onexus.core.query.Query;
 public interface IEntityTable {
 
     public TaskStatus getTaskStatus();
-    
+
     public void setTaskStatus(TaskStatus taskStatus);
-    
+
     public Query getQuery();
-    
+
     public IEntity getEntity(String collectionURI);
 
     public boolean next();

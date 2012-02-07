@@ -25,14 +25,14 @@ import org.apache.wicket.model.IModel;
 public class LinkStringFieldPanel extends Panel {
 
     public LinkStringFieldPanel(String id, IModel<String> model, String href) {
-	super(id);
+        super(id);
 
-	String linkValue = href
-		+ (model.getObject() != null ? model.getObject() : "");
-	ExternalLink link = new ExternalLink("link", linkValue);
-	link.add(new Label("value", model).setRenderBodyOnly(true));
+        String linkValue = href
+                + (model.getObject() != null ? model.getObject() : "");
+        ExternalLink link = new ExternalLink("link", linkValue);
+        link.add(new Label("value", model).setRenderBodyOnly(true));
 
-	add(link);
+        add(link);
 
     }
 

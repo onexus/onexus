@@ -24,9 +24,9 @@ import org.apache.wicket.model.IModel;
 public class ViewNumericFieldPanel extends Panel {
 
     public ViewNumericFieldPanel(String id, IModel<?> model) {
-	super(id);
+        super(id);
 
-	add(new Label("value", model).setRenderBodyOnly(true));
+        add(new Label("value", model).setRenderBodyOnly(true));
 
     }
 

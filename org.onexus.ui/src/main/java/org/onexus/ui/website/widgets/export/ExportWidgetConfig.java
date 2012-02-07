@@ -17,29 +17,28 @@
  */
 package org.onexus.ui.website.widgets.export;
 
-import org.onexus.ui.website.widgets.WidgetConfig;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
 @XStreamAlias("widget-export")
 public class ExportWidgetConfig extends WidgetConfig {
-    
+
     private ExportWidgetStatus defaultStatus;
-    
+
     public ExportWidgetConfig() {
-	super();
+        super();
     }
 
     public ExportWidgetConfig(String id, String region, String mainCollection,
-	    String... collections) {
-	super(id, region);
+                              String... collections) {
+        super(id, region);
 
-	
+
     }
 
     @Override
     public ExportWidgetStatus createEmptyStatus() {
-	return new ExportWidgetStatus(getId());
+        return new ExportWidgetStatus(getId());
     }
 
     public ExportWidgetStatus getDefaultStatus() {

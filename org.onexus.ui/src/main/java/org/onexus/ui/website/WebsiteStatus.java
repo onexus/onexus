@@ -17,26 +17,26 @@
  */
 package org.onexus.ui.website;
 
+import org.onexus.ui.website.pages.PageStatus;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import org.onexus.ui.website.pages.PageStatus;
-
 public class WebsiteStatus implements IWebsiteStatus {
-    
+
     private String currentPageId;
     private Set<PageStatus> pageStatus;
-    
+
     public PageStatus getPageStatus(String id) {
-	for (PageStatus status : getPageStatus()) {
-	    if (status.getId().equals(id)) {
-		return status;
-	    }
-	}
-	return null;
+        for (PageStatus status : getPageStatus()) {
+            if (status.getId().equals(id)) {
+                return status;
+            }
+        }
+        return null;
     }
-    
-    
+
+
     public String getCurrentPageId() {
         return currentPageId;
     }
@@ -47,23 +47,23 @@ public class WebsiteStatus implements IWebsiteStatus {
     }
 
     public Set<PageStatus> getPageStatus() {
-	if (pageStatus==null) {
-	    pageStatus = new HashSet<PageStatus>();
-	}
-	return pageStatus;
+        if (pageStatus == null) {
+            pageStatus = new HashSet<PageStatus>();
+        }
+        return pageStatus;
     }
 
     public void setPageStatus(PageStatus pageStatus) {
-	
-	if (pageStatus != null) {
-	    getPageStatus().add(pageStatus);
-	}
+
+        if (pageStatus != null) {
+            getPageStatus().add(pageStatus);
+        }
     }
 
 
     public PageStatus getCurrentPageStatus() {
-	return getPageStatus(getCurrentPageId());
+        return getPageStatus(getCurrentPageId());
     }
 
-    
+
 }

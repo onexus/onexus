@@ -27,21 +27,21 @@ public class OsgiSessionInjector extends Injector implements ISessionListener {
     private OsgiFieldValueFactory fieldFactory;
 
     public OsgiSessionInjector() {
-	this(true);
+        this(true);
     }
 
     public OsgiSessionInjector(boolean wrapInProxies) {
-	fieldFactory = new OsgiFieldValueFactory(wrapInProxies);
+        fieldFactory = new OsgiFieldValueFactory(wrapInProxies);
     }
 
     @Override
     public void onCreated(Session session) {
-	inject(session);
+        inject(session);
     }
 
     @Override
     public void inject(Object object) {
-	inject(object, fieldFactory);
+        inject(object, fieldFactory);
     }
 
 }

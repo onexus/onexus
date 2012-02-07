@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.website.widgets.tags;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,82 +35,85 @@ import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.ui.website.widgets.tags.tagstore.TagStore;
 
+import javax.inject.Inject;
+import java.util.List;
+
 public class TagColumnItem extends Panel {
-    
+
     @Inject
     public ITagStoreManager tagStoreManager;
-    
+
     private WebMarkupContainer checkbox;
 
     public TagColumnItem(String id, final IModel<String> rowModel) {
-	super(id);
+        super(id);
 
-	checkbox = new WebMarkupContainer("checkbox");
+        checkbox = new WebMarkupContainer("checkbox");
 
-	checkbox.add(new AttributeModifier("value", rowModel));
-	
-	add( new ListView<String>("tags", new TagValuesModel(rowModel)) {
+        checkbox.add(new AttributeModifier("value", rowModel));
 
-	    @Override
-	    protected void populateItem(ListItem<String> item) {
-		item.add(new Label("label", item.getModel()));
-		item.add(new AjaxLink<String>("link", item.getModel()) {
+        add(new ListView<String>("tags", new TagValuesModel(rowModel)) {
 
-		    @Override
-		    public void onClick(AjaxRequestTarget target) {
-			getTagStore().removeTagValue(getModelObject(), rowModel.getObject());
-			
-			send(getPage(), Broadcast.BREADTH, EventViewChange.EVENT);
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new Label("label", item.getModel()));
+                item.add(new AjaxLink<String>("link", item.getModel()) {
 
-		    }
-		    
-		});
-	    }
-	    
-	});
-	
-	add(checkbox);
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        getTagStore().removeTagValue(getModelObject(), rowModel.getObject());
+
+                        send(getPage(), Broadcast.BREADTH, EventViewChange.EVENT);
+
+                    }
+
+                });
+            }
+
+        });
+
+        add(checkbox);
 
     }
-    
+
     private TagStore getTagStore() {
-	BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
-	String tagId = status.getCurrentTabId();
-	String releaseURI = status.getReleaseURI();
-	String namespace = releaseURI + "#" + tagId;
-	
-	return tagStoreManager.getUserStore(namespace);
+        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
+        String tagId = status.getCurrentTabId();
+        String releaseURI = status.getReleaseURI();
+        String namespace = releaseURI + "#" + tagId;
+
+        return tagStoreManager.getUserStore(namespace);
     }
-    
+
     protected WebMarkupContainer getCheckBox() {
-	return checkbox;
+        return checkbox;
     }
-    
+
     protected String getTableId() {
-	return findParent(DataTable.class).getMarkupId();
+        return findParent(DataTable.class).getMarkupId();
     }
-    
+
     @Override
     protected void onBeforeRender() {
-	
-	checkbox.add(new AttributeModifier("onclick", "updateSelected('" + getTableId() + "');"));
 
-	super.onBeforeRender();
+        checkbox.add(new AttributeModifier("onclick", "updateSelected('" + getTableId() + "');"));
+
+        super.onBeforeRender();
     }
 
     private class TagValuesModel extends AbstractReadOnlyModel<List<String>> {
 
-	private IModel<String> rowValue;
-	
-	public TagValuesModel(IModel<String> rowValue) {
-	    super();
-	    this.rowValue = rowValue;
-	}
+        private IModel<String> rowValue;
 
-	@Override
-	public List<String> getObject() {
-	    return getTagStore().getTagKeysByValue(rowValue.getObject());
-	}
-	
+        public TagValuesModel(IModel<String> rowValue) {
+            super();
+            this.rowValue = rowValue;
+        }
+
+        @Override
+        public List<String> getObject() {
+            return getTagStore().getTagKeysByValue(rowValue.getObject());
+        }
+
     }
 }

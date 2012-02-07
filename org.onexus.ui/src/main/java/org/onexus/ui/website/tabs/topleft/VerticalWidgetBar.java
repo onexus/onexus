@@ -17,10 +17,6 @@
  */
 package org.onexus.ui.website.tabs.topleft;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
@@ -34,9 +30,12 @@ import org.onexus.ui.website.utils.panels.icons.Icons;
 import org.onexus.ui.website.widgets.IWidgetManager;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
+import javax.inject.Inject;
+import java.util.List;
+
 public class VerticalWidgetBar extends Panel {
     private static final long serialVersionUID = 1L;
-    
+
     @Inject
     public IWidgetManager widgetManager;
 
@@ -45,55 +44,55 @@ public class VerticalWidgetBar extends Panel {
     private WebMarkupContainer boxesContainer;
 
     public VerticalWidgetBar(final String componentId, final List<WidgetConfig> widgets, IModel<? extends TabStatus> statusModel) {
-	super(componentId);
-	setOutputMarkupId(true);
+        super(componentId);
+        setOutputMarkupId(true);
 
-	// Create the containers
-	add(boxesshowContainer = new WebMarkupContainer("boxesshowContainer"));
-	boxesshowContainer.add(boxesContainer = new WebMarkupContainer("boxesContainer"));
+        // Create the containers
+        add(boxesshowContainer = new WebMarkupContainer("boxesshowContainer"));
+        boxesshowContainer.add(boxesContainer = new WebMarkupContainer("boxesContainer"));
 
-	boxesView = new RepeatingView("boxes");
-	boxesContainer.setMarkupId("leftboxes");
-	boxesContainer.add(boxesView);
+        boxesView = new RepeatingView("boxes");
+        boxesContainer.setMarkupId("leftboxes");
+        boxesContainer.add(boxesView);
 
-	// Create boxes
-	if (widgets != null) {
-	    for (WidgetConfig widget : widgets) {
-		WebMarkupContainer item = new WebMarkupContainer(boxesView.newChildId());
-		boxesView.add(item);
+        // Create boxes
+        if (widgets != null) {
+            for (WidgetConfig widget : widgets) {
+                WebMarkupContainer item = new WebMarkupContainer(boxesView.newChildId());
+                boxesView.add(item);
 
-		Link<String> boxLink;
-		item.add(boxLink = new Link<String>("cross") {
+                Link<String> boxLink;
+                item.add(boxLink = new Link<String>("cross") {
 
-		    @Override
-		    public void onClick() {
+                    @Override
+                    public void onClick() {
 
-		    }
+                    }
 
-		});
-		boxLink.setVisible(false);
-		boxLink.add(new Image("image", Icons.CROSS) {
+                });
+                boxLink.setVisible(false);
+                boxLink.add(new Image("image", Icons.CROSS) {
 
-		    @Override
-		    protected boolean shouldAddAntiCacheParameter() {
-			return false;
-		    }
+                    @Override
+                    protected boolean shouldAddAntiCacheParameter() {
+                        return false;
+                    }
 
-		});
+                });
 
-		item.add(widgetManager.create("widget", widget, new WidgetModel(widget, statusModel)));
-	    }
-	}
+                item.add(widgetManager.create("widget", widget, new WidgetModel(widget, statusModel)));
+            }
+        }
 
-	showHideBoxes();
+        showHideBoxes();
     }
 
     private void showHideBoxes() {
 
-	boxesshowContainer.add(new AttributeModifier("style", new Model<String>("width: 200px;")));
-	boxesContainer.add(new AttributeModifier("style", new Model<String>("width: 181px;")));
+        boxesshowContainer.add(new AttributeModifier("style", new Model<String>("width: 200px;")));
+        boxesContainer.add(new AttributeModifier("style", new Model<String>("width: 181px;")));
 
-	boxesView.setVisible(true);
+        boxesView.setVisible(true);
 
     }
 }

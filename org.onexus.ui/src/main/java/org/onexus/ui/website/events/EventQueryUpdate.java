@@ -18,9 +18,9 @@
 package org.onexus.ui.website.events;
 
 public abstract class EventQueryUpdate extends AbstractEvent {
-    
+
     protected EventQueryUpdate() {
-	super();
+        super();
     }
 
 }

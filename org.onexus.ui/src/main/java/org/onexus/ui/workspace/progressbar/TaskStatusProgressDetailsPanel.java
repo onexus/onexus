@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.workspace.progressbar;
 
-import java.util.List;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -27,55 +25,57 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.onexus.core.TaskStatus;
 
+import java.util.List;
+
 /**
  * TaskStatusWidget contains a simple box to visualize the state of simultaneous
  * processes.
- * 
+ *
  * @author armand *
  */
 public abstract class TaskStatusProgressDetailsPanel extends Panel {
 
     public TaskStatusProgressDetailsPanel(String id) {
-	super(id);
-	
-	add(new AjaxLink<String>("close") {
+        super(id);
 
-	    @Override
-	    public void onClick(AjaxRequestTarget target) {
-		onBackground(target);
-	    }
-	    
-	    @Override
-	    public boolean isVisible() {
-		// By now is not properly tested
-	        return false;
-	    }
-	    
-	});
+        add(new AjaxLink<String>("close") {
 
-	ListView<TaskStatus> listTaskStatus = new ListView<TaskStatus>(
-		"tasklist", new ListActiveTasksModel()) {
-	    @Override
-	    protected void populateItem(ListItem<TaskStatus> item) {
-		if (item.getModelObject() != null) {
-		    item.add(new TaskStatusPanel("taskitem", item.getModel()));
-		}
-	    }
-	};
-	add(listTaskStatus);
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onBackground(target);
+            }
+
+            @Override
+            public boolean isVisible() {
+                // By now is not properly tested
+                return false;
+            }
+
+        });
+
+        ListView<TaskStatus> listTaskStatus = new ListView<TaskStatus>(
+                "tasklist", new ListActiveTasksModel()) {
+            @Override
+            protected void populateItem(ListItem<TaskStatus> item) {
+                if (item.getModelObject() != null) {
+                    item.add(new TaskStatusPanel("taskitem", item.getModel()));
+                }
+            }
+        };
+        add(listTaskStatus);
 
     }
-    
+
     private static class ListActiveTasksModel extends
-	    AbstractReadOnlyModel<List<TaskStatus>> {
+            AbstractReadOnlyModel<List<TaskStatus>> {
 
-	@Override
-	public List<TaskStatus> getObject() {
-	    return TaskStatusProgress.getActiveTasks().getActiveTasks();
-	}
+        @Override
+        public List<TaskStatus> getObject() {
+            return TaskStatusProgress.getActiveTasks().getActiveTasks();
+        }
 
     }
-    
+
     protected abstract void onBackground(AjaxRequestTarget target);
 
 }

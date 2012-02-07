@@ -18,12 +18,12 @@
 package org.onexus.ui.website.events;
 
 public class EventTabSelected extends AbstractEvent {
-        
+
     public static final EventTabSelected EVENT = new EventTabSelected();
-    
+
     private EventTabSelected() {
-	super();
+        super();
     }
 
-    
+
 }

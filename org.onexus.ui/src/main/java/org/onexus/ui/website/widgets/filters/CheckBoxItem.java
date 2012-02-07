@@ -31,57 +31,57 @@ import org.onexus.ui.website.utils.panels.icons.Icons;
 
 /**
  * It incorporate the checkbox, label and remove action if it is necessary.
- * 
+ * <p/>
  * If it is "deletable" it gives the possibility to delete item.
- * 
+ *
  * @author armand
  */
 public abstract class CheckBoxItem extends Panel {
 
     public CheckBoxItem(String id, final ListItem<FilterConfig> item) {
-	super(id);
+        super(id);
 
-	// Add check box
-	add(new AjaxCheckBox("active", new PropertyModel<Boolean>(
-		item.getModel(), "active")) {
+        // Add check box
+        add(new AjaxCheckBox("active", new PropertyModel<Boolean>(
+                item.getModel(), "active")) {
 
-	    @Override
-	    protected void onUpdate(AjaxRequestTarget target) {
-		onItemSelected(target, item.getModelObject());
-	    }
-	});
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onItemSelected(target, item.getModelObject());
+            }
+        });
 
-	// Add
-	add(new Label("name", new TextFormaterPropertyModel(item.getModel(),
-		"name", new StringFormater(18, true))));
-	add(new AttributeModifier("title", new PropertyModel<String>(
-		item.getModel(), "name")));
+        // Add
+        add(new Label("name", new TextFormaterPropertyModel(item.getModel(),
+                "name", new StringFormater(18, true))));
+        add(new AttributeModifier("title", new PropertyModel<String>(
+                item.getModel(), "name")));
 
-	Image removeImg = new Image("removeImg", Icons.THIN_DELETE) {
+        Image removeImg = new Image("removeImg", Icons.THIN_DELETE) {
 
-	    @Override
-	    protected boolean shouldAddAntiCacheParameter() {
-		return false;
-	    }
+            @Override
+            protected boolean shouldAddAntiCacheParameter() {
+                return false;
+            }
 
-	};
-	add(removeImg);
-	if (item.getModelObject().getDeletable()) {
-	    removeImg.add(new AjaxEventBehavior("onclick") {
-		@Override
-		protected void onEvent(AjaxRequestTarget target) {
-		    onItemDeleted(target, item.getModelObject());
-		}
-	    });
+        };
+        add(removeImg);
+        if (item.getModelObject().getDeletable()) {
+            removeImg.add(new AjaxEventBehavior("onclick") {
+                @Override
+                protected void onEvent(AjaxRequestTarget target) {
+                    onItemDeleted(target, item.getModelObject());
+                }
+            });
 
-	} else {
-	    removeImg.setVisible(false);
-	}
+        } else {
+            removeImg.setVisible(false);
+        }
 
     }
 
     protected abstract void onItemSelected(AjaxRequestTarget target,
-	    FilterConfig filter);
+                                           FilterConfig filter);
 
     protected void onItemDeleted(AjaxRequestTarget target, FilterConfig fitler) {
 

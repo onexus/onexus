@@ -27,45 +27,45 @@ public class Link implements Serializable {
     private List<String> fieldNames = new ArrayList<String>();
 
     public Link() {
-	super();
+        super();
     }
-    
+
     public Link(String collectionURI, List<String> fieldNames) {
-	super();
-	this.collectionURI = collectionURI;
-	this.fieldNames = fieldNames;
+        super();
+        this.collectionURI = collectionURI;
+        this.fieldNames = fieldNames;
     }
 
     public String getCollectionURI() {
-	return collectionURI;
+        return collectionURI;
     }
 
     public void setCollectionURI(String collectionURI) {
-	this.collectionURI = collectionURI;
+        this.collectionURI = collectionURI;
     }
 
     public List<String> getFieldNames() {
-	return fieldNames;
+        return fieldNames;
     }
 
     public void setFieldNames(List<String> fieldNames) {
-	this.fieldNames = fieldNames;
+        this.fieldNames = fieldNames;
     }
 
     @Override
     public String toString() {
-	return "Link [collectionURI=" + collectionURI + ", fieldNames="
-		+ fieldNames + "]";
+        return "Link [collectionURI=" + collectionURI + ", fieldNames="
+                + fieldNames + "]";
     }
 
     public static String getToFieldName(String fieldLink) {
-	String values[] = fieldLink.split("\\/\\/");
-	return (values.length==2?values[1]:values[0]);
+        String values[] = fieldLink.split("\\/\\/");
+        return (values.length == 2 ? values[1] : values[0]);
     }
-    
+
     public static String getFromFieldName(String fieldLink) {
-	String values[] = fieldLink.split("\\/\\/");
-	return values[0];
+        String values[] = fieldLink.split("\\/\\/");
+        return values[0];
     }
 
 }

@@ -27,15 +27,15 @@ public class CollectionTrack extends ViewTrack {
     private String collectionId;
 
     public CollectionTrack(String collectionId, IHeader headerDecorator,
-	    IDecorator cellDecorator) {
-	super(OnexusWebSession.get().getResourceManager()
-		.load(Collection.class, collectionId), headerDecorator,
-		cellDecorator);
-	this.collectionId = collectionId;
+                           IDecorator cellDecorator) {
+        super(OnexusWebSession.get().getResourceManager()
+                .load(Collection.class, collectionId), headerDecorator,
+                cellDecorator);
+        this.collectionId = collectionId;
     }
 
     public String getCollectionId() {
-	return collectionId;
+        return collectionId;
     }
 
 }

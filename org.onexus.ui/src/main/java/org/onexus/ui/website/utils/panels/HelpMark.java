@@ -27,74 +27,69 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.ui.website.utils.panels.icons.Icons;
 
 /**
- * 
  * Question mark panel with a modal window that shows the HELP_DESCRIPTION
  * property of the given entity collection.
- * 
+ *
  * @author Armand
- * 
  */
 public class HelpMark extends Panel {
 
     /**
-     * @param panelId
-     *            Wicket component id.
-     * @param title
-     *            Modal window title.
-     * @param helpText
-     *            Text to show into the modal window.
+     * @param panelId  Wicket component id.
+     * @param title    Modal window title.
+     * @param helpText Text to show into the modal window.
      */
     public HelpMark(final String panelId, final String title,
-	    final String helpText) {
-	this(panelId, title, "", helpText);
+                    final String helpText) {
+        this(panelId, title, "", helpText);
     }
 
     public HelpMark(final String panelId, final String title,
-	    final String displayLabel, final String helpText) {
-	super(panelId);
+                    final String displayLabel, final String helpText) {
+        super(panelId);
 
-	// Add modal window
-	final ModalWindow modal = new ModalWindow("modalWindowEmbeeded");
-	modal.setTitle(title);
-	modal.setInitialWidth(700);
-	modal.setInitialHeight(500);
-	add(modal);
+        // Add modal window
+        final ModalWindow modal = new ModalWindow("modalWindowEmbeeded");
+        modal.setTitle(title);
+        modal.setInitialWidth(700);
+        modal.setInitialHeight(500);
+        add(modal);
 
-	// Add mark label
-	final WebMarkupContainer container = new WebMarkupContainer(
-		"displayLabel");
-	container.add(new Label("label", displayLabel));
-	add(container);
+        // Add mark label
+        final WebMarkupContainer container = new WebMarkupContainer(
+                "displayLabel");
+        container.add(new Label("label", displayLabel));
+        add(container);
 
-	// Add question mark icon
-	Image img = null;
-	container.add(img = new Image("imageHelp", Icons.HELP) {
+        // Add question mark icon
+        Image img = null;
+        container.add(img = new Image("imageHelp", Icons.HELP) {
 
-	    @Override
-	    protected boolean shouldAddAntiCacheParameter() {
-		return false;
-	    }
+            @Override
+            protected boolean shouldAddAntiCacheParameter() {
+                return false;
+            }
 
-	});
-	img.add(new AjaxEventBehavior("onclick") {
+        });
+        img.add(new AjaxEventBehavior("onclick") {
 
-	    @Override
-	    protected void onEvent(final AjaxRequestTarget target) {
+            @Override
+            protected void onEvent(final AjaxRequestTarget target) {
 
-		if (modal != null) {
-		    modal.setInitialWidth(700);
-		    modal.setInitialHeight(500);
-		    modal.setContent(new HelpContentPanel(modal.getContentId(),
-			    helpText));
-		    modal.show(target);
-		}
+                if (modal != null) {
+                    modal.setInitialWidth(700);
+                    modal.setInitialHeight(500);
+                    modal.setContent(new HelpContentPanel(modal.getContentId(),
+                            helpText));
+                    modal.show(target);
+                }
 
-	    }
+            }
 
-	});
+        });
 
-	// Visible only if there is some
-	setVisible(helpText != null);
+        // Visible only if there is some
+        setVisible(helpText != null);
 
     }
 }

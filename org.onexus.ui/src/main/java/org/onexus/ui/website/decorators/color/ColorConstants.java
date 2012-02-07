@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.decorators.color;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ColorConstants {
 

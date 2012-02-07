@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.decorators.color;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class LogColorScale extends AbstractColorScale {
 
@@ -29,50 +29,50 @@ public class LogColorScale extends AbstractColorScale {
 
     public LogColorScale(double minPoint, double maxPoint, double logFactor) {
 
-	super(minPoint, maxPoint);
-	this.logFactor = logFactor;
+        super(minPoint, maxPoint);
+        this.logFactor = logFactor;
     }
 
     public LogColorScale(double minPoint, double maxPoint) {
 
-	this(minPoint, maxPoint, defaultLogFactor);
+        this(minPoint, maxPoint, defaultLogFactor);
     }
 
     public LogColorScale() {
-	this(0.0, 1.0, defaultLogFactor);
+        this(0.0, 1.0, defaultLogFactor);
     }
 
     public LogColorScale(double minPoint, double maxPoint, Color minColor,
-	    Color maxColor) {
+                         Color maxColor) {
 
-	this(minPoint, maxPoint);
-	setMinColor(minColor);
-	setMaxColor(maxColor);
+        this(minPoint, maxPoint);
+        setMinColor(minColor);
+        setMaxColor(maxColor);
     }
 
     public double getLogFactor() {
-	return logFactor;
+        return logFactor;
     }
 
     public void setLogFactor(double logFactor) {
-	this.logFactor = logFactor;
+        this.logFactor = logFactor;
     }
 
     public Color valueColor(double value) {
-	if (Double.isNaN(value))
-	    return notANumberColor;
-	else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
-	    return posInfinityColor;
-	else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
-	    return negInfinityColor;
+        if (Double.isNaN(value))
+            return notANumberColor;
+        else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
+            return posInfinityColor;
+        else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
+            return negInfinityColor;
 
-	double range = maxPoint - minPoint;
+        double range = maxPoint - minPoint;
 
-	double f = value / range;
+        double f = value / range;
 
-	f = f > 0.0 ? 1.0 + logFactor * Math.log10(f) : f < 0.0 ? 1.0
-		+ logFactor * Math.log10(-f) : 0.0;
+        f = f > 0.0 ? 1.0 + logFactor * Math.log10(f) : f < 0.0 ? 1.0
+                + logFactor * Math.log10(-f) : 0.0;
 
-	return ColorUtils.mix(maxColor, minColor, f);
+        return ColorUtils.mix(maxColor, minColor, f);
     }
 }

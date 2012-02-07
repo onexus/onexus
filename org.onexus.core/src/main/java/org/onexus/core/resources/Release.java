@@ -20,12 +20,12 @@ package org.onexus.core.resources;
 public class Release extends MetadataResource {
 
     public Release() {
-	super();
+        super();
     }
 
     @Override
     public String toString() {
-	return "Release [getURI()=" + getURI() + "]";
+        return "Release [getURI()=" + getURI() + "]";
     }
 
 }

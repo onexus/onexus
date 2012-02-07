@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.website.widgets.bookmark;
 
-import java.io.UnsupportedEncodingException;
-
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -28,43 +26,45 @@ import org.onexus.ui.website.Website;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.widgets.Widget;
 
+import java.io.UnsupportedEncodingException;
+
 public class BookmarkWidget extends Widget<BookmarkWidgetConfig, BookmarkWidgetStatus> {
 
     private transient StatusEncoder statusEncoder;
 
     public BookmarkWidget(String componentId, BookmarkWidgetConfig config, IModel<BookmarkWidgetStatus> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
 
-	onEventFireUpdate(EventQueryUpdate.class);
+        onEventFireUpdate(EventQueryUpdate.class);
     }
 
     private StatusEncoder getStatusEncoder() {
-	if (statusEncoder == null) {
-	    statusEncoder = new StatusEncoder(getClass().getClassLoader());
-	}
-	return statusEncoder;
+        if (statusEncoder == null) {
+            statusEncoder = new StatusEncoder(getClass().getClassLoader());
+        }
+        return statusEncoder;
     }
 
     @Override
     protected void onBeforeRender() {
 
-	String strStatus;
-	try {
-	    strStatus = getStatusEncoder().encodeStatus(getWebsiteStatus());
-	} catch (UnsupportedEncodingException e) {
-	    throw new WicketRuntimeException("Unable to encode the URL parameter 'status'", e);
-	}
+        String strStatus;
+        try {
+            strStatus = getStatusEncoder().encodeStatus(getWebsiteStatus());
+        } catch (UnsupportedEncodingException e) {
+            throw new WicketRuntimeException("Unable to encode the URL parameter 'status'", e);
+        }
 
-	PageParameters params = new PageParameters();
-	params.add(Website.PARAMETER_STATUS, strStatus);
-	params.add(Website.PARAMETER_WEBSITE, getWebsiteConfig().getURI());
-	
-	BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("directLink", getPage().getClass(), params);
-	link.add( new Image("image", "link.png"));
-	
-	addOrReplace(link);
+        PageParameters params = new PageParameters();
+        params.add(Website.PARAMETER_STATUS, strStatus);
+        params.add(Website.PARAMETER_WEBSITE, getWebsiteConfig().getURI());
 
-	super.onBeforeRender();
+        BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("directLink", getPage().getClass(), params);
+        link.add(new Image("image", "link.png"));
+
+        addOrReplace(link);
+
+        super.onBeforeRender();
 
     }
 

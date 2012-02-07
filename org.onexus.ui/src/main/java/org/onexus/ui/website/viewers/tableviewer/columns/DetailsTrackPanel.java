@@ -32,38 +32,38 @@ import org.onexus.ui.website.utils.EntityModel;
 public class DetailsTrackPanel extends Panel {
 
     public DetailsTrackPanel(String id, IModel<IEntityTable> rowModel,
-	    DetailsColumnConfig config) {
-	super(id);
+                             DetailsColumnConfig config) {
+        super(id);
 
-	RepeatingView items = new RepeatingView("items");
+        RepeatingView items = new RepeatingView("items");
 
-	IEntityTable rowEntities = rowModel.getObject();
+        IEntityTable rowEntities = rowModel.getObject();
 
-	String releaseURI = rowEntities.getQuery().getMainNamespace();
+        String releaseURI = rowEntities.getQuery().getMainNamespace();
 
-	for (String collectionId : config.getCollections()) {
+        for (String collectionId : config.getCollections()) {
 
-	    String collectionURI = ResourceTools.getAbsoluteURI(releaseURI,
-		    collectionId);
-	    IEntity entity = rowEntities.getEntity(collectionURI);
-	    if (!isAllNull(entity)) {
-		AbstractBox box = BoxFactory.createBox(collectionURI,
-			new EntityModel(entity));
-		items.add(new BoxContainerPanel(items.newChildId(), box));
-	    }
-	}
+            String collectionURI = ResourceTools.getAbsoluteURI(releaseURI,
+                    collectionId);
+            IEntity entity = rowEntities.getEntity(collectionURI);
+            if (!isAllNull(entity)) {
+                AbstractBox box = BoxFactory.createBox(collectionURI,
+                        new EntityModel(entity));
+                items.add(new BoxContainerPanel(items.newChildId(), box));
+            }
+        }
 
-	add(items);
+        add(items);
 
     }
 
     private boolean isAllNull(IEntity e) {
-	for (Field f : e.getCollection().getFields()) {
-	    if (e.get(f.getName()) != null) {
-		return false;
-	    }
-	}
-	return true;
+        for (Field f : e.getCollection().getFields()) {
+            if (e.get(f.getName()) != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

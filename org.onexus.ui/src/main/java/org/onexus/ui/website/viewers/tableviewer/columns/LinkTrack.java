@@ -33,44 +33,44 @@ public abstract class LinkTrack extends TableTrack {
     private boolean visibility;
 
     public LinkTrack(String linkLabel, boolean visibility) {
-	super();
-	this.linkLabel = linkLabel;
-	this.visibility = visibility;
+        super();
+        this.linkLabel = linkLabel;
+        this.visibility = visibility;
     }
 
     public abstract void onClick();
 
     @Override
     public Component getHeader(String componentId) {
-	return new LinkPanel(componentId);
+        return new LinkPanel(componentId);
     }
 
     @Override
     public void populateItem(Item<ICellPopulator<IEntityTable>> cellItem,
-	    String componentId, IModel<IEntityTable> rowModel) {
-	Panel empty = new EmptyPanel(componentId);
-	empty.setVisible(false);
-	cellItem.add(empty);
+                             String componentId, IModel<IEntityTable> rowModel) {
+        Panel empty = new EmptyPanel(componentId);
+        empty.setVisible(false);
+        cellItem.add(empty);
     }
 
     public class LinkPanel extends Panel {
-	public LinkPanel(String id) {
-	    super(id);
+        public LinkPanel(String id) {
+            super(id);
 
-	    Link<String> link = new Link<String>("link") {
+            Link<String> link = new Link<String>("link") {
 
-		@Override
-		public void onClick() {
-		    LinkTrack.this.onClick();
-		}
+                @Override
+                public void onClick() {
+                    LinkTrack.this.onClick();
+                }
 
-	    };
+            };
 
-	    link.add(new Label("label", linkLabel));
-	    link.setVisible(LinkTrack.this.visibility);
+            link.add(new Label("label", linkLabel));
+            link.setVisible(LinkTrack.this.visibility);
 
-	    add(link);
-	}
+            add(link);
+        }
     }
 
 }

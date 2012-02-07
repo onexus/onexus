@@ -20,14 +20,14 @@ package org.onexus.ui.website.pages;
 import org.onexus.ui.website.IWebsiteConfig;
 
 public abstract class PageConfig implements IWebsiteConfig {
-    
+
     private String id;
     private String name;
-    
+
     public PageConfig() {
-	super();
+        super();
     }
-    
+
     public String getId() {
         return id;
     }
@@ -35,7 +35,7 @@ public abstract class PageConfig implements IWebsiteConfig {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -43,13 +43,10 @@ public abstract class PageConfig implements IWebsiteConfig {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public abstract PageStatus createEmptyStatus();
 
     public abstract PageStatus getDefaultStatus();
 
-    
 
-    
-    
 }

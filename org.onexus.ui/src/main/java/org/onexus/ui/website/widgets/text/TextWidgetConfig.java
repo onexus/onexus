@@ -17,9 +17,8 @@
  */
 package org.onexus.ui.website.widgets.text;
 
-import org.onexus.ui.website.widgets.WidgetConfig;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
 @XStreamAlias("widget-text")
 public class TextWidgetConfig extends WidgetConfig {
@@ -29,36 +28,36 @@ public class TextWidgetConfig extends WidgetConfig {
     private String text;
 
     public TextWidgetConfig() {
-	super();
+        super();
     }
 
     public TextWidgetConfig(String id, String region, String title, String text) {
-	super(id, region);
+        super(id, region);
 
-	this.title = title;
-	this.text = text;
+        this.title = title;
+        this.text = text;
 
     }
 
     public String getTitle() {
-	return title;
+        return title;
     }
 
     public void setTitle(String title) {
-	this.title = title;
+        this.title = title;
     }
 
     public String getText() {
-	return text;
+        return text;
     }
 
     public void setText(String text) {
-	this.text = text;
+        this.text = text;
     }
 
     @Override
     public TextWidgetStatus createEmptyStatus() {
-	return new TextWidgetStatus(getId());
+        return new TextWidgetStatus(getId());
     }
 
     public TextWidgetStatus getDefaultStatus() {

@@ -24,30 +24,29 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 public class OnexusSignInPage extends WebPage {
-    public static final CssResourceReference CSS = new CssResourceReference(OnexusSignInPage.class,"OnexusSignInPage.css");
+    public static final CssResourceReference CSS = new CssResourceReference(OnexusSignInPage.class, "OnexusSignInPage.css");
     private static final long serialVersionUID = 1L;
 
     /**
      * Construct
      */
     public OnexusSignInPage() {
-	this(null);
+        this(null);
     }
 
     /**
      * Constructor
-     * 
-     * @param parameters
-     *            The page parameters
+     *
+     * @param parameters The page parameters
      */
     public OnexusSignInPage(final PageParameters parameters) {
-	SignInPanel signPanel = null;
-	add(signPanel = new SignInPanel("signInPanel"));
-	signPanel.setRememberMe(false);
+        SignInPanel signPanel = null;
+        add(signPanel = new SignInPanel("signInPanel"));
+        signPanel.setRememberMe(false);
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response) {
-	response.renderCSSReference(CSS);
-    } 
+        response.renderCSSReference(CSS);
+    }
 }

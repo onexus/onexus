@@ -17,17 +17,15 @@
  */
 package org.onexus.ui.website.decorators;
 
-import java.io.Serializable;
-
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 
+import java.io.Serializable;
+
 /**
- * 
  * Creates a IDecorator for a specific Collection and Field.
- * 
- * @author Jordi Deu-Pons
  *
+ * @author Jordi Deu-Pons
  */
 public interface IDecoratorCreator extends Serializable {
 

@@ -22,23 +22,23 @@ import java.sql.ResultSet;
 public class StringAdapter extends SQLAdapter {
 
     public StringAdapter() {
-	super(String.class);
+        super(String.class);
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-	if (object == null) {
-	    ((StringBuilder) container).append("\\N");
-	} else {
-	    ((StringBuilder) container).append('"').append((String) object)
-		    .append('"');
-	}
+        if (object == null) {
+            ((StringBuilder) container).append("\\N");
+        } else {
+            ((StringBuilder) container).append('"').append((String) object)
+                    .append('"');
+        }
     }
 
     @Override
     public Object extract(ResultSet container, Object... parameters)
-	    throws Exception {
-	return container.getString((String) parameters[0]);
+            throws Exception {
+        return container.getString((String) parameters[0]);
     }
 
 }

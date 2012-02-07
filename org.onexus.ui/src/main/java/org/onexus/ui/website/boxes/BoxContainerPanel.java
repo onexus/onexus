@@ -17,39 +17,37 @@
  */
 package org.onexus.ui.website.boxes;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.ui.website.utils.panels.HelpMark;
 
+import javax.inject.Inject;
+
 /**
- * 
  * Collapsible Box panel container.
- * 
  */
 public class BoxContainerPanel extends Panel {
-    
+
     @Inject
     private IResourceManager resourceManager;
 
     public BoxContainerPanel(final String panelId, final AbstractBox box) {
-	super(panelId);
+        super(panelId);
 
-	// Title of the box
-	add(new Label("title", box.getTitle()));
+        // Title of the box
+        add(new Label("title", box.getTitle()));
 
-	// Help text
-	Collection collection = resourceManager.load(Collection.class, box.getCollectionId());
-	String helpText = collection.getProperty("HELP_DESCRIPTION");
+        // Help text
+        Collection collection = resourceManager.load(Collection.class, box.getCollectionId());
+        String helpText = collection.getProperty("HELP_DESCRIPTION");
 
-	// Help question mark
-	add(new HelpMark("help", box.getTitle(), helpText));
+        // Help question mark
+        add(new HelpMark("help", box.getTitle(), helpText));
 
-	// Box content
-	add(box);
+        // Box content
+        add(box);
 
     }
 

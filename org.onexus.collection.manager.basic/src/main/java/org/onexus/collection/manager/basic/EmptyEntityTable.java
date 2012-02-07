@@ -26,15 +26,14 @@ import org.onexus.core.query.Query;
  * <p>
  * This is an empty IEntityTable.
  * </p>
- * 
+ * <p/>
  * <p>
  * Usually it's used when there is no result to return because it's still on the
  * ITaskManager. From here the user will be able to get the TaskStatus and keep
  * asking until the TaskStatus is done.
  * </p>
- * 
+ *
  * @author Jordi Deu-Pons
- * 
  */
 public class EmptyEntityTable implements IEntityTable {
 
@@ -42,34 +41,34 @@ public class EmptyEntityTable implements IEntityTable {
     private TaskStatus taskStatus;
 
     public EmptyEntityTable(Query query, TaskStatus taskStatus) {
-	super();
-	this.query = query;
-	this.taskStatus = taskStatus;
+        super();
+        this.query = query;
+        this.taskStatus = taskStatus;
     }
 
     @Override
     public TaskStatus getTaskStatus() {
-	return taskStatus;
+        return taskStatus;
     }
 
     @Override
     public void setTaskStatus(TaskStatus taskStatus) {
-	this.taskStatus = taskStatus;
+        this.taskStatus = taskStatus;
     }
 
     @Override
     public Query getQuery() {
-	return query;
+        return query;
     }
 
     @Override
     public IEntity getEntity(String collectionURI) {
-	return null;
+        return null;
     }
 
     @Override
     public boolean next() {
-	return false;
+        return false;
     }
 
     @Override
@@ -78,7 +77,7 @@ public class EmptyEntityTable implements IEntityTable {
 
     @Override
     public long size() {
-	return 0;
+        return 0;
     }
 
 }

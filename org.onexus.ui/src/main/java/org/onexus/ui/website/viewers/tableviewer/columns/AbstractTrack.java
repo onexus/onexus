@@ -22,22 +22,22 @@ public class AbstractTrack implements Track {
     private String collectionId;
 
     public AbstractTrack() {
-	super();
-	this.collectionId = null;
+        super();
+        this.collectionId = null;
     }
 
     public AbstractTrack(String collectionId) {
-	super();
-	this.collectionId = collectionId;
+        super();
+        this.collectionId = collectionId;
     }
 
     @Override
     public String getCollectionId() {
-	return collectionId;
+        return collectionId;
     }
 
     public void setCollectionId(String collectionId) {
-	this.collectionId = collectionId;
+        this.collectionId = collectionId;
     }
 
 }

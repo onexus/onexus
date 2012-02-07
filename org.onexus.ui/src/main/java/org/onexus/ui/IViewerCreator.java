@@ -31,15 +31,14 @@ public interface IViewerCreator extends IClusterable {
     String getTitle();
 
     /**
-     * @param containerId
-     *            returned panel MUST have this id
+     * @param containerId returned panel MUST have this id
      * @return a container object (e.g. Panel or Fragment) that will be placed
      *         as the content of the tab
      */
     Panel getPanel(final String containerId, final IModel<? extends Resource> model);
-    
-    double getOrder();    
-    
+
+    double getOrder();
+
     boolean isVisible(Class<? extends Resource> resourceType);
 
 }

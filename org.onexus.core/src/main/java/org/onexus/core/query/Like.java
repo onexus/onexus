@@ -22,21 +22,21 @@ public class Like extends FieldFilter {
     private String value;
 
     public Like() {
-	this(null, null, null);
+        this(null, null, null);
     }
 
     public Like(String collectionId, String fieldName, String value) {
-	super(collectionId, fieldName);
-	this.value = value;
+        super(collectionId, fieldName);
+        this.value = value;
     }
 
     public String getValue() {
-	return value;
+        return value;
     }
 
     @Override
     public String toString() {
-	return getFieldName() + " LIKE " + getValue();
+        return getFieldName() + " LIKE " + getValue();
     }
 
 }

@@ -20,12 +20,12 @@ package org.onexus.core.resources;
 public class Project extends MetadataResource {
 
     public Project() {
-	super();
+        super();
     }
-    
+
     @Override
     public String toString() {
-	return "Project [getURI()=" + getURI() + "]";
+        return "Project [getURI()=" + getURI() + "]";
     }
 
 }

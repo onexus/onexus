@@ -25,31 +25,30 @@ import org.onexus.core.resources.Resource;
 
 public class NewProjectWizard extends AbstractNewResourceWizard<Project> {
 
-   
-    public NewProjectWizard(String id, IModel<? extends Resource> resourceModel) {
-	super(id, resourceModel);
-	
-	WizardModel model = new WizardModel();
-	model.add(new ResourceName());
 
-	init(model);
+    public NewProjectWizard(String id, IModel<? extends Resource> resourceModel) {
+        super(id, resourceModel);
+
+        WizardModel model = new WizardModel();
+        model.add(new ResourceName());
+
+        init(model);
     }
-    
+
     @Override
     protected Project getDefaultResource() {
-	return new Project();
+        return new Project();
     }
 
     private final class ResourceName extends WizardStep {
 
-	public ResourceName() {
-	    super("New project", "Creates a new project inside the current workspace");
-	    
-	    add(getFieldResourceName());
+        public ResourceName() {
+            super("New project", "Creates a new project inside the current workspace");
 
-	}
+            add(getFieldResourceName());
+
+        }
     }
 
-    
 
 }

@@ -17,57 +17,56 @@
  */
 package org.onexus.task.executor.anduril;
 
-import java.io.File;
-import java.io.IOException;
-
+import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
+import fi.helsinki.ltdk.csbl.anduril.core.network.launcher.JavaLauncher;
 import org.onexus.core.ITaskCallable;
 import org.onexus.core.ITaskExecutor;
 import org.onexus.core.resources.Collection;
 
-import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
-import fi.helsinki.ltdk.csbl.anduril.core.network.launcher.JavaLauncher;
+import java.io.File;
+import java.io.IOException;
 
 public class TaskExecutor implements ITaskExecutor {
 
     private String andurilHome;
-    
+
     private String executionDir;
-    
+
     private String heapSize;
 
     private Repository repository;
 
     public TaskExecutor() {
-	super();
+        super();
     }
-    
-    public void init() {
-	JavaLauncher.setHeapSize(Integer.valueOf(heapSize));
 
-	try {
-	    repository = new Repository(new File(andurilHome));
-	    repository.load(true, null, null, null);
-	    if (repository.hasErrors()) {
-		throw new IOException("Error loading Anduril repository");
-	    }
-	} catch (IOException e) {
-	    throw new RuntimeException(e);
-	}
+    public void init() {
+        JavaLauncher.setHeapSize(Integer.valueOf(heapSize));
+
+        try {
+            repository = new Repository(new File(andurilHome));
+            repository.load(true, null, null, null);
+            if (repository.hasErrors()) {
+                throw new IOException("Error loading Anduril repository");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public boolean isCallable(String toolURI) {
-	return "http://www.onexus.org/tools/anduril/1.2.5".equals(toolURI);
+        return "http://www.onexus.org/tools/anduril/1.2.5".equals(toolURI);
     }
 
     @Override
     public ITaskCallable createCallable(Collection collection) {
-	return new TaskCallable(repository, executionDir, collection);
+        return new TaskCallable(repository, executionDir, collection);
     }
 
     @Override
     public boolean preprocessCollection(Collection collection) {
-	return false;
+        return false;
     }
 
     public String getAndurilHome() {
@@ -93,7 +92,6 @@ public class TaskExecutor implements ITaskExecutor {
     public void setHeapSize(String heapSize) {
         this.heapSize = heapSize;
     }
-    
-    
+
 
 }

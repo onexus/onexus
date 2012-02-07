@@ -20,34 +20,34 @@ package org.onexus.collection.store.mysql.adapters;
 public class NumericTools {
 
     private static int mask = 15;
-    private final static char[] digits = { '0', '1', '2', '3', '4', '5', '6',
-	    '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-	    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
-	    'x', 'y', 'z' };
+    private final static char[] digits = {'0', '1', '2', '3', '4', '5', '6',
+            '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
+            'x', 'y', 'z'};
 
     public static void toHexString(StringBuilder str, int i) {
-	char[] buf = new char[10];
-	int charPos = 10;
-	do {
-	    buf[--charPos] = digits[i & mask];
-	    i >>>= 4;
-	} while (i != 0);
-	buf[--charPos] = 'x';
-	buf[--charPos] = '0';
+        char[] buf = new char[10];
+        int charPos = 10;
+        do {
+            buf[--charPos] = digits[i & mask];
+            i >>>= 4;
+        } while (i != 0);
+        buf[--charPos] = 'x';
+        buf[--charPos] = '0';
 
-	str.append(buf, charPos, (10 - charPos));
+        str.append(buf, charPos, (10 - charPos));
     }
 
     public static void toHexString(StringBuilder str, long i) {
-	char[] buf = new char[18];
-	int charPos = 18;
-	do {
-	    buf[--charPos] = digits[(int) (i & mask)];
-	    i >>>= 4;
-	} while (i != 0);
-	buf[--charPos] = 'x';
-	buf[--charPos] = '0';
+        char[] buf = new char[18];
+        int charPos = 18;
+        do {
+            buf[--charPos] = digits[(int) (i & mask)];
+            i >>>= 4;
+        } while (i != 0);
+        buf[--charPos] = 'x';
+        buf[--charPos] = '0';
 
-	str.append(buf, charPos, (18 - charPos));
+        str.append(buf, charPos, (18 - charPos));
     }
 }

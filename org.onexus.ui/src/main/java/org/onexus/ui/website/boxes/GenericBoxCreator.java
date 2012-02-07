@@ -24,7 +24,7 @@ public class GenericBoxCreator implements IBoxCreator {
 
     @Override
     public AbstractBox createBox(String collectionId, IModel<IEntity> entity) {
-	return new GenericBox(collectionId, entity);
+        return new GenericBox(collectionId, entity);
     }
 
 }

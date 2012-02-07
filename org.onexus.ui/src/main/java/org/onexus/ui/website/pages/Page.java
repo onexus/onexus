@@ -17,11 +17,11 @@
  */
 package org.onexus.ui.website.pages;
 
-import javax.inject.Inject;
-
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.AbstractWebsitePanel;
 import org.onexus.ui.website.tabs.ITabManager;
+
+import javax.inject.Inject;
 
 public abstract class Page<C extends PageConfig, S extends PageStatus> extends AbstractWebsitePanel<C, S> {
 
@@ -29,7 +29,7 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends A
     public ITabManager tabManager;
 
     public Page(String componentId, C config, IModel<S> statusModel) {
-	super(componentId, config, statusModel);
+        super(componentId, config, statusModel);
     }
 
 }

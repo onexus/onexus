@@ -17,26 +17,25 @@
  */
 package org.onexus.ui.website.widgets.bookmark;
 
-import org.onexus.ui.website.widgets.WidgetConfig;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
 @XStreamAlias("widget-bookmark")
 public class BookmarkWidgetConfig extends WidgetConfig {
-    
+
     private BookmarkWidgetStatus defaultStatus;
 
     public BookmarkWidgetConfig() {
-	super();
+        super();
     }
 
     public BookmarkWidgetConfig(String id, String region) {
-	super(id, region);
+        super(id, region);
     }
 
     @Override
     public BookmarkWidgetStatus createEmptyStatus() {
-	return new BookmarkWidgetStatus(getId());
+        return new BookmarkWidgetStatus(getId());
     }
 
     public BookmarkWidgetStatus getDefaultStatus() {

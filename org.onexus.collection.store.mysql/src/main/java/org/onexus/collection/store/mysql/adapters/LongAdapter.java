@@ -22,23 +22,23 @@ import java.sql.ResultSet;
 public class LongAdapter extends SQLAdapter {
 
     public LongAdapter() {
-	super(Long.class);
+        super(Long.class);
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-	NumericTools.toHexString(container, ((Long) object).longValue());
+        NumericTools.toHexString(container, ((Long) object).longValue());
     }
 
     @Override
     public Object extract(ResultSet container, Object... parameters)
-	    throws Exception {
-	long value = container.getLong((String) parameters[0]);
-	if (container.wasNull()) {
-	    return null;
-	} else {
-	    return value;
-	}
+            throws Exception {
+        long value = container.getLong((String) parameters[0]);
+        if (container.wasNull()) {
+            return null;
+        } else {
+            return value;
+        }
     }
 
 }

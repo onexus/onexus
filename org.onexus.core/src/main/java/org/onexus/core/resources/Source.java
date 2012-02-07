@@ -19,18 +19,18 @@ package org.onexus.core.resources;
 
 
 public class Source extends Resource {
-    
+
     private String contentType;
-    
+
     public Source() {
-	super();
+        super();
     }
-    
+
     public Source(String contentType) {
-	super();
-	this.contentType = contentType;
+        super();
+        this.contentType = contentType;
     }
-    
+
     public String getContentType() {
         return contentType;
     }

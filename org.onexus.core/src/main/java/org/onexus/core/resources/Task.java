@@ -26,27 +26,26 @@ public class Task implements Serializable {
     private List<ParameterValue> parameters;
 
     public Task() {
-	super();
-    }
-    
-    public Task(String toolURI, List<ParameterValue> parameters) {
-	super();
-	this.toolURI = toolURI;
-	this.parameters = parameters;
+        super();
     }
 
+    public Task(String toolURI, List<ParameterValue> parameters) {
+        super();
+        this.toolURI = toolURI;
+        this.parameters = parameters;
+    }
 
 
     public String getToolURI() {
-	return toolURI;
+        return toolURI;
     }
 
     public void setToolURI(String toolURI) {
-	this.toolURI = toolURI;
+        this.toolURI = toolURI;
     }
 
     public List<ParameterValue> getParameters() {
-	return parameters;
+        return parameters;
     }
 
     public void setParameters(List<ParameterValue> parameters) {
@@ -54,22 +53,22 @@ public class Task implements Serializable {
     }
 
     public String getParameter(String key) {
-	return getParameter(String.class, key);
+        return getParameter(String.class, key);
     }
 
     @SuppressWarnings("unchecked")
     private <T> T getParameter(Class<T> valueClass, String key) {
-	for (ParameterValue value : parameters) {
-	    if (value.getKey().equals(key)) {
-		return (T) value.getValue();
-	    }
-	}
-	return null;
+        for (ParameterValue value : parameters) {
+            if (value.getKey().equals(key)) {
+                return (T) value.getValue();
+            }
+        }
+        return null;
     }
 
     @Override
     public String toString() {
-	return "Task [toolURI=" + toolURI + ", parameters=" + parameters + "]";
+        return "Task [toolURI=" + toolURI + ", parameters=" + parameters + "]";
     }
 
 }

@@ -17,9 +17,9 @@
  */
 package org.onexus.ui.website.viewers.tableviewer.headers;
 
-import java.io.Serializable;
-
 import org.apache.wicket.Component;
+
+import java.io.Serializable;
 
 public interface IHeader extends Serializable {
 
