@@ -3,7 +3,7 @@
         >
 
     <service interface="org.onexus.core.ISourceManager">
-        <bean class="org.onexus.resource.manager.fs.SourceManager"/>
+        <bean class="org.onexus.source.manager.fs.SourceManager"/>
     </service>
 
 </blueprint>

@@ -19,8 +19,4 @@
         </bean>
     </service>
 
-    <service interface="org.onexus.core.ISourceManager">
-        <bean class="org.onexus.resource.manager.fs.SourceManager"/>
-    </service>
-
 </blueprint>
