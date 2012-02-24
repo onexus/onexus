@@ -111,26 +111,12 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
                 TabConfig tab = item.getModelObject();
 
-                BrowserPageLink<TabStatus> link = new BrowserPageLink<TabStatus>("link", Model.of(tab
-                        .getDefaultStatus())) {
+                BrowserPageLink<String> link = new BrowserPageLink<String>("link", Model.of(tab.getId())) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-
-                        TabStatus defaultStatus = null;
-                        try {
-                            defaultStatus = getModelObject();
-                            StatusEncoder encoder = new StatusEncoder(getClass().getClassLoader());
-                            defaultStatus = encoder.decodeStatus(encoder.encodeStatus(defaultStatus));
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        getStatus().setCurrentTabId(defaultStatus.getId());
-                        getStatus().setTabStatus(defaultStatus);
-
+                        getStatus().setCurrentTabId(getModelObject());
                         sendEvent(EventTabSelected.EVENT);
-
                     }
 
                 };

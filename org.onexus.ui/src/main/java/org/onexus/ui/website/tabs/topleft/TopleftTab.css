@@ -2,7 +2,7 @@ div.toplefttab {
     position: relative;
     width: 100%;
     height: 100%;
-    border-top: 1px solid #BBB;
+    overflow: auto;
 }
 
 div.leftwidgets {
@@ -34,6 +34,11 @@ div.gridbar {
 
 div.gridbar-left {
     float: left;
+}
+
+ul.filters {
+	list-style-type:none;
+	padding: 0px;
 }
 
 div.gridbar-right {

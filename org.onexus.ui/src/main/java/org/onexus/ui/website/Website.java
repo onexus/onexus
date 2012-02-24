@@ -62,6 +62,7 @@ public class Website extends WebPage {
         initConfig(pageParameters);
         initStatus(pageParameters);
 
+        add(new Label("windowTitle", websiteConfig.getTitle()));
         add(new Label("title", websiteConfig.getTitle()));
 
         add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "websiteConfig.pages")) {
@@ -78,11 +79,12 @@ public class Website extends WebPage {
                 link.add(new Label("name", pageConfig.getName()));
 
                 String currentPage = websiteStatus.getCurrentPageId();
-                if (currentPage.equals(pageConfig.getId())) {
-                    link.add(new AttributeModifier("class", "current"));
-                }
 
                 item.add(link);
+
+                if (currentPage.equals(pageConfig.getId())) {
+                    link.getParent().add(new AttributeModifier("class", "current"));
+                }
 
             }
         });
@@ -157,6 +159,8 @@ public class Website extends WebPage {
         }
 
     }
+
+
 
     public WebsiteConfig getWebsiteConfig() {
         return websiteConfig;

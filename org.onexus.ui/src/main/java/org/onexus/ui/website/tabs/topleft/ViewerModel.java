@@ -47,6 +47,10 @@ public class ViewerModel extends AbstractWrapModel<ViewerStatus> {
 
         if (viewerStatus == null) {
             viewerStatus = viewerConfig.getDefaultStatus();
+
+            if (viewerStatus == null) {
+                viewerStatus = viewerConfig.createEmptyStatus();
+            }
             tabStatus.setViewerStatus(viewerStatus);
         }
 

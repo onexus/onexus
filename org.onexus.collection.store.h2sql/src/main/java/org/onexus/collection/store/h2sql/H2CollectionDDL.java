@@ -34,7 +34,7 @@ public class H2CollectionDDL implements Serializable {
     private final static Map<Class<?>, String> columnTypes = new HashMap<Class<?>, String>();
 
     static {
-        columnTypes.put(String.class, "VARCHAR(128)");
+        columnTypes.put(String.class, "VARCHAR_IGNORECASE(128)");
         columnTypes.put(Boolean.class, "TINYINT(1)");
         columnTypes.put(Date.class, "TIMESTAMP");
         columnTypes.put(Integer.class, "INT(11)");

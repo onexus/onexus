@@ -29,7 +29,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.Model;
+import org.onexus.core.query.Order;
 import org.onexus.ui.website.events.EventSortUpdate;
 import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.viewers.tableviewer.columns.MatrixTrack;
@@ -255,16 +257,6 @@ public class HeadersToolbar extends AbstractToolbar {
         }
     }
 
-    /*
-     * NON-AJAX Version protected WebMarkupContainer newSortableHeader(String
-     * headerId, String property, ISortStateLocator locator) { return new
-     * OrderByBorder(headerId, property, locator) { private static final long
-     * serialVersionUID = 1L;
-     * 
-     * @Override protected void onSortChanged() { getTable().setCurrentPage(0);
-     * } }; }
-     */
-
     /**
      * @see org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar#newSortableHeader(java.lang.String,
      *      java.lang.String,
@@ -281,10 +273,7 @@ public class HeadersToolbar extends AbstractToolbar {
             protected void onAjaxClick(AjaxRequestTarget target) {
                 target.add(getTable());
 
-                send(getPage(), Broadcast.BREADTH, EventSortUpdate.EVENT);
-
-                // TODO? ((EntitiesRowProvider)
-                // getTable().getDataProvider()).loadOrder();
+                //send(getPage(), Broadcast.BREADTH, EventSortUpdate.EVENT);
 
             }
 

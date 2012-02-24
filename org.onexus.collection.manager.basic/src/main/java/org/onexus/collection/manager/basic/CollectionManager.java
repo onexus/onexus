@@ -125,30 +125,35 @@ public class CollectionManager implements ICollectionManager {
         @Override
         public void run() {
 
-            Collection collection = resourceManager.load(Collection.class, collectionURI);
+            try {
+                Collection collection = resourceManager.load(Collection.class, collectionURI);
 
-            TaskStatus task = taskManager.submitCollection(collection);
+                TaskStatus task = taskManager.submitCollection(collection);
 
-            // Wait until task finish.
-            while (!task.isDone()) {
-                parentTask.setLogs(task.getLogs());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    LOGGER.error("While waiting for task.", e);
-                    parentTask.addLog("ERROR while waiting for task. " + e.getMessage());
+                // Wait until task finish.
+                while (!task.isDone()) {
+                    parentTask.setLogs(task.getLogs());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        LOGGER.error("While waiting for task.", e);
+                        parentTask.addLog("ERROR while waiting for task. " + e.getMessage());
+                    }
+                    task = taskManager.getTaskStatus(task.getId());
                 }
-                task = taskManager.getTaskStatus(task.getId());
+
+                IEntitySet entitySet = taskManager.getTaskOutput(task.getId());
+
+                LOGGER.info("Task '" + parentTask.getId() + "': Inserting collection {}", collectionURI);
+                parentTask.addLog("Inserting collection '" + collectionURI + "'");
+                collectionStore.insert(entitySet);
+                parentTask.addLog("Collection '" + collectionURI + "' inserted.");
+                parentTask.setDone(true);
+                LOGGER.info("Task '" + parentTask.getId() + "': Done.");
+
+            } catch (Exception e) {
+                LOGGER.error("Task '" + parentTask.getId() + "': Error. " + e.getMessage());
             }
-
-            IEntitySet entitySet = taskManager.getTaskOutput(task.getId());
-
-            LOGGER.info("Task '" + parentTask.getId() + "': Inserting collection {}", collectionURI);
-            parentTask.addLog("Inserting collection '" + collectionURI + "'");
-            collectionStore.insert(entitySet);
-            parentTask.addLog("Collection '" + collectionURI + "' inserted.");
-            parentTask.setDone(true);
-            LOGGER.info("Task '" + parentTask.getId() + "': Done.");
         }
 
     }

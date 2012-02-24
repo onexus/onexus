@@ -20,6 +20,7 @@ package org.onexus.ui.workspace;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.onexus.ui.OnexusWebApplication;
+import org.onexus.ui.website.Website;
 import org.onexus.ui.website.widgets.export.ExportResource;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
@@ -27,6 +28,7 @@ public class WorkspaceApplication extends OnexusWebApplication {
 
     private void mountPages() {
         mountPage("admin", ResourcesPage.class);
+        mountPage("website", Website.class);
     }
 
     public Class<? extends Page> getHomePage() {

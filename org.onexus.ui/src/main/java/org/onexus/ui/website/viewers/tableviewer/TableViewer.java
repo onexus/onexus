@@ -104,7 +104,7 @@ public class TableViewer extends Viewer<TableViewerConfig, TableViewerStatus> {
         }
 
         DataTable<IEntityTable> resultTable = new DataTable<IEntityTable>("datatable", columns, dataProvider,
-                (rowsPerPage == null ? 20 : rowsPerPage));
+                (rowsPerPage == null ? 60 : rowsPerPage));
         resultTable.setOutputMarkupId(true);
         resultTable.setVersioned(false);
         resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
@@ -115,10 +115,14 @@ public class TableViewer extends Viewer<TableViewerConfig, TableViewerStatus> {
 
     }
 
+
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference(TABLE_VIEWER_CSS);
     }
+
+
 
 }

@@ -76,7 +76,7 @@ public class In extends FieldFilter {
         }
 
         if (value instanceof String) {
-            return "\"" + value + "\"";
+            return "'" + value + "'";
         }
 
         return String.valueOf(value);

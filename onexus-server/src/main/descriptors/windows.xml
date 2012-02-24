@@ -4,14 +4,14 @@
 	<id>bin</id>
 	
 	<formats>
-		<format>tar.gz</format>
+		<format>zip</format>
 	</formats>
 	
 	<fileSets>
 		
 		<!-- Expanded Karaf Standard Distribution -->
 		<fileSet>
-			<directory>target/dependencies/apache-karaf-${karaf.version}</directory>
+			<directory>target/dependencies/windows/apache-karaf-${karaf.version}</directory>
 			<outputDirectory>/</outputDirectory>
 			<excludes>
 				<exclude>**/demos/**</exclude>
@@ -32,20 +32,20 @@
 		
 		<!-- Copy over bin/* separately to get the correct file mode -->
 		<fileSet>
-			<directory>target/dependencies/apache-karaf-${karaf.version}</directory>
+			<directory>target/dependencies/windows/apache-karaf-${karaf.version}</directory>
 			<outputDirectory>/</outputDirectory>
 			<includes>
-				<include>bin/admin</include>
-				<include>bin/karaf</include>
-				<include>bin/start</include>
-				<include>bin/stop</include>
+				<include>bin/admin.bat</include>
+				<include>bin/karaf.bat</include>
+				<include>bin/start.bat</include>
+				<include>bin/stop.bat</include>
 			</includes>
 			<fileMode>0755</fileMode>
 		</fileSet>
-		
+
 		<!-- Copy over jar files -->
 		<fileSet>
-			<directory>target/dependencies</directory>
+			<directory>target/dependencies/windows</directory>
 			<includes>
 				<include>my-custom.jar</include>
 			</includes>
@@ -74,13 +74,14 @@
 	
 	<files>
 		<file>
-			<source>${basedir}/target/dependencies/apache-karaf-${karaf.version}/bin/karaf</source>
+			<source>${basedir}/target/dependencies/windows/apache-karaf-${karaf.version}/bin/karaf.bat</source>
 			<outputDirectory>/bin/</outputDirectory>
-			<destName>onexus</destName>
+			<destName>onexus.bat</destName>
 			<fileMode>0755</fileMode>
 			<lineEnding>unix</lineEnding>
 		</file>
-		<file>
+
+        <file>
 			<source>${basedir}/target/classes/features.xml</source>
 			<outputDirectory>/system/org.onexus/server-features/${project.version}</outputDirectory>
 			<destName>onexus-${project.version}-features.xml</destName>

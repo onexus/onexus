@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class ResourceManager implements IResourceManager {
 
@@ -361,7 +362,7 @@ public class ResourceManager implements IResourceManager {
             path = filePath.substring(filePath.lastIndexOf(workspacePath) + workspacePath.length());
         }
 
-        path = path.replaceAll(File.separator, String.valueOf(Resource.SEPARATOR));
+        path = path.replaceAll(Pattern.quote(File.separator), String.valueOf(Resource.SEPARATOR));
 
         String resourceURI = workspaceURI + path;
 

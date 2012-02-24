@@ -48,6 +48,11 @@ public class WidgetModel extends AbstractWrapModel<WidgetStatus> {
 
         if (status == null) {
             status = widgetConfig.getDefaultStatus();
+
+            if (status == null) {
+                status = widgetConfig.createEmptyStatus();
+            }
+
             tabStatus.setWidgetStatus(status);
         }
 

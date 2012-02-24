@@ -75,6 +75,9 @@
     <service interface="org.onexus.ui.IWizardCreator">
         <bean class="org.onexus.ui.wizards.creators.NewWebsiteWizardCreator"/>
     </service>
+    <service interface="org.onexus.ui.IWizardCreator">
+        <bean class="org.onexus.ui.wizards.creators.ManageCollectionWizardCreator"/>
+    </service>
 
     <!-- Default wizard manager -->
     <reference-list id="wizardCreatorsRef" interface="org.onexus.ui.IWizardCreator" availability="optional"/>

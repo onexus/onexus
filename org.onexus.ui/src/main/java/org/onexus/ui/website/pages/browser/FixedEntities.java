@@ -20,6 +20,7 @@ package org.onexus.ui.website.pages.browser;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -125,6 +126,7 @@ public class FixedEntities extends AbstractWebsitePanel<BrowserPageConfig, Brows
                 }
 
             };
+            removeLink.add(new Image("close", "close.png"));
 
             removeLink.setVisible(fixedEntity.isDeletable());
             container.add(removeLink);

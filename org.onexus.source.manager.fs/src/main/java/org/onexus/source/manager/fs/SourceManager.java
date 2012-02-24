@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SourceManager implements ISourceManager {
 
@@ -71,9 +72,11 @@ public class SourceManager implements ISourceManager {
     }
 
     private String convertURItoContainerPath(String sourceURI) {
+
         String relativePath = ResourceTools.getParentURI(sourceURI);
-        relativePath = relativePath.replace("http://", "");
-        relativePath = relativePath.replaceAll(String.valueOf(Resource.SEPARATOR), File.separator);
+        relativePath = relativePath.replace("http://", "").replace(":", "_");
+        relativePath.replace(Resource.SEPARATOR, File.separatorChar);
+
         return relativePath;
     }
 

@@ -112,6 +112,7 @@ public abstract class EntitiesRowProvider implements
     protected abstract void addTaskStatus(TaskStatus taskStatus);
 
     private Query loadSort(Query query) {
+
         Order order = getTableViewerStatus().getOrder();
         if (order != null) {
             query.setOrder(order);

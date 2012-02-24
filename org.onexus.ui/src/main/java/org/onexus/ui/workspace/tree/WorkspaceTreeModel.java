@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.workspace.tree;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IResourceManager;
@@ -28,11 +29,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
     private IModel<Resource> currentResource;
+
+    private static final ResourceComparator RESOURCE_COMPARATOR = new ResourceComparator();
 
     private transient TreeModel tree = null;
 
@@ -98,6 +103,8 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
         List<Resource> resources = getResourceManager().loadChildren(Resource.class, parentResource.getURI());
 
+        Collections.sort(resources, RESOURCE_COMPARATOR);
+
         if (!resources.isEmpty()) {
             for (Resource resource : resources) {
                 parentNode.add(createTreeNode(resource));
@@ -109,6 +116,14 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
     protected IResourceManager getResourceManager() {
         return OnexusWebSession.get().getResourceManager();
+    }
+
+    private final static class ResourceComparator implements Comparator<Resource> {
+
+        @Override
+        public int compare(Resource o1, Resource o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
     }
 
 }
