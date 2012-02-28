@@ -18,6 +18,7 @@
 package org.onexus.collection.manager.basic;
 
 import org.onexus.core.*;
+import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.ContainerTaskStatus;
@@ -158,14 +159,31 @@ public class CollectionManager implements ICollectionManager {
 
     }
 
-    private List<String> getQueryCollections(Query query) {
+    private Set<String> getQueryCollections(Query query) {
 
         String mainNamespace = query.getMainNamespace();
-        List<String> queryCollections = new ArrayList<String>();
+        Set<String> queryCollections = new HashSet<String>();
 
+        // Main collections
         queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, query.getMainCollection()));
+        
+        // Join collections
         for (String collectionURI : query.getCollections()) {
             queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, collectionURI));
+        }
+        
+        // Filter collections
+        for (String key : query.getFilterKeys()) {
+            for (Filter filter : query.getFilters(key)) {
+                for (String collectionURI : filter.getDependentCollections()) {
+                    queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, collectionURI));
+                }
+            }
+        }
+        
+        // Order collections
+        if (query.getOrder()!= null) {
+            queryCollections.add(query.getOrder().getCollection());
         }
 
         return queryCollections;

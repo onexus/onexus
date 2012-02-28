@@ -18,6 +18,8 @@
 package org.onexus.core.query;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Set;
 
 public abstract class Filter implements Serializable {
 
@@ -38,5 +40,9 @@ public abstract class Filter implements Serializable {
     public void setCollection(String collectionURI) {
         this.collection = collectionURI;
     }
+    
+    public Set<String> getDependentCollections() {
+        return Collections.EMPTY_SET;
+    };
 
 }

@@ -17,6 +17,10 @@
  */
 package org.onexus.core.query;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class NotNull extends Filter {
 
     private String[] cellCollections;
@@ -34,4 +38,10 @@ public class NotNull extends Filter {
         return cellCollections;
     }
 
+    @Override
+    public Set<String> getDependentCollections() {
+        Set<String> dependencies = new HashSet<String>();
+        dependencies.addAll(Arrays.asList(cellCollections));
+        return dependencies;
+    }
 }
