@@ -17,10 +17,12 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.apache.wicket.model.IModel;
+import java.util.List;
 
 public interface IPageManager {
 
-    Page<?, ?> create(String componentId, PageConfig config, IModel<PageStatus> statusModel);
+    List<IPageCreator> getCreators();
+
+    Page<?, ?> create(String componentId, IPageModel statusModel);
 
 }

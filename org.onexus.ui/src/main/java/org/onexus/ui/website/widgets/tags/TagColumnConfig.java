@@ -20,8 +20,8 @@ package org.onexus.ui.website.widgets.tags;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
-import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
-import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.List;
 

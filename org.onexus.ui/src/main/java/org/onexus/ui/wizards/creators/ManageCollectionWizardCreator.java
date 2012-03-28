@@ -20,7 +20,6 @@ package org.onexus.ui.wizards.creators;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Release;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
 

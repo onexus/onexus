@@ -187,3 +187,17 @@ div.info:hover div {
      top: 15px;
      width: 354px;
 }
+
+
+div.data div.tab-row div.viewselector {
+    border: 0px solid red;
+    float: right;
+    margin-right: 20px;
+    margin-top: 17px;
+}
+
+div.data div.tab-row div.viewselector select {
+    background-color: #eee;
+    border: 1px solid #bbb;
+    color: #666;
+}

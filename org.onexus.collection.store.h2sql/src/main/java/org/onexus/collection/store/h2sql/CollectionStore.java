@@ -317,11 +317,13 @@ public class CollectionStore implements ICollectionStore {
 
     public void stop(ICollectionStore store, @SuppressWarnings("rawtypes") Map properties) {
         try {
-            Connection conn = dataSource.getConnection();
-            Statement stat = conn.createStatement();
+            if (dataSource != null) {
+                Connection conn = dataSource.getConnection();
+                Statement stat = conn.createStatement();
 
-            stat.execute("SHUTDOWN");
-            stat.close();
+                stat.execute("SHUTDOWN");
+                stat.close();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

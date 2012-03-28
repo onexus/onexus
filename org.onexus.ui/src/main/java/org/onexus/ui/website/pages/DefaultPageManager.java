@@ -17,8 +17,56 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.onexus.ui.website.AbstractWebsiteManager;
 
-public class DefaultPageManager extends AbstractWebsiteManager<Page<?, ?>, PageConfig, PageStatus> implements IPageManager {
+import org.onexus.ui.IResourceRegister;
+import org.osgi.framework.ServiceReference;
+
+import java.util.List;
+
+public class DefaultPageManager implements IPageManager {
+
+    private IResourceRegister resourceRegister;
+
+    private List<IPageCreator> creators;
+
+    public Page<?, ?> create(String componentId, IPageModel statusModel) {
+
+        for (IPageCreator creator : creators) {
+            if (creator.canCreate(statusModel.getConfig())) {
+                return creator.create(componentId, statusModel);
+            }
+        }
+
+        return null;
+    }
+
+    public List<IPageCreator> getCreators() {
+        return creators;
+    }
+
+    public void setCreators(List<IPageCreator> creators) {
+        this.creators = creators;
+    }
+
+    public IResourceRegister getResourceRegister() {
+        return resourceRegister;
+    }
+
+    public void setResourceRegister(IResourceRegister resourceRegister) {
+        this.resourceRegister = resourceRegister;
+    }
+
+    public void bindCreators(ServiceReference serviceRef) {
+
+        if (resourceRegister != null && creators != null) {
+            for (IPageCreator bc : creators) {
+                bc.register(resourceRegister);
+            }
+        }
+    }
+
+    public void unbindCreators(ServiceReference serviceRef) {
+        // Nothing to do
+    }
 
 }

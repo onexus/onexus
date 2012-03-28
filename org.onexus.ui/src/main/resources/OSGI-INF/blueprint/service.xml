@@ -55,7 +55,6 @@
         </bean>
     </service>
 
-
     <!-- Default wizards -->
     <service interface="org.onexus.ui.IWizardCreator">
         <bean class="org.onexus.ui.wizards.creators.NewProjectWizardCreator"/>
@@ -87,7 +86,15 @@
         </bean>
     </service>
 
+    <!-- Website module -->
+
     <!-- Default widget creators -->
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.TableViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.heatmap.HeatmapViewerCreator"/>
+    </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.bookmark.BookmarkWidgetCreator"/>
     </service>
@@ -110,7 +117,7 @@
         <bean class="org.onexus.ui.website.widgets.text.TextWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
-        <bean class="org.onexus.ui.website.widgets.viewselector.ViewerSelectorWidgetCreator"/>
+        <bean class="org.onexus.ui.website.widgets.columnsets.ColumnsetsWidgetCreator"/>
     </service>
 
     <!-- Default widget manager -->
@@ -126,45 +133,13 @@
         <property name="creators" ref="widgetCreatorsRef"/>
     </bean>
 
-    <!-- Collection viewers -->
-    <service interface="org.onexus.ui.website.viewers.ICollectionViewerCreator">
-        <bean class="org.onexus.ui.website.viewers.tableviewer.TableViewerCreator"/>
-    </service>
-
-    <!-- CollectionViewerManager -->
-    <reference-list id="collectionViewerCreatorsRef" interface="org.onexus.ui.website.viewers.ICollectionViewerCreator"
-                    availability="optional">
-        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators"
-                            ref="org.onexus.ui.website.viewers.collectionviewermanager"/>
-    </reference-list>
-    <service interface="org.onexus.ui.website.viewers.ICollectionViewerManager"
-             ref="org.onexus.ui.website.viewers.collectionviewermanager"/>
-    <bean id="org.onexus.ui.website.viewers.collectionviewermanager"
-          class="org.onexus.ui.website.viewers.DefaultCollectionViewerManager">
-        <property name="resourceRegister" ref="org.onexus.ui.resourceregister"/>
-        <property name="creators" ref="collectionViewerCreatorsRef"/>
-    </bean>
-
-    <!-- Tabs -->
-    <service interface="org.onexus.ui.website.tabs.ITabCreator">
-        <bean class="org.onexus.ui.website.tabs.topleft.TopleftTabCreator"/>
-    </service>
-
-    <!-- TabManager -->
-    <reference-list id="tabCreatorsRef" interface="org.onexus.ui.website.tabs.ITabCreator" availability="optional">
-        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators"
-                            ref="org.onexus.ui.website.tabs.tabmanager"/>
-    </reference-list>
-    <service interface="org.onexus.ui.website.tabs.ITabManager" ref="org.onexus.ui.website.tabs.tabmanager"/>
-    <bean id="org.onexus.ui.website.tabs.tabmanager" class="org.onexus.ui.website.tabs.DefaultTabManager">
-        <property name="resourceRegister" ref="org.onexus.ui.resourceregister"/>
-        <property name="creators" ref="tabCreatorsRef"/>
-    </bean>
-
-
     <!-- Pages -->
     <service interface="org.onexus.ui.website.pages.IPageCreator">
         <bean class="org.onexus.ui.website.pages.browser.BrowserPageCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.pages.IPageCreator">
+        <bean class="org.onexus.ui.website.pages.html.HtmlPageCreator"/>
     </service>
 
     <!-- PageManager -->

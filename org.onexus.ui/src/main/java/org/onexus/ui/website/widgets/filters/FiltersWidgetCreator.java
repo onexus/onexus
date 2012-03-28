@@ -20,6 +20,7 @@ package org.onexus.ui.website.widgets.filters;
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class FiltersWidgetCreator extends AbstractWidgetCreator<FiltersWidgetConfig, FiltersWidgetStatus> {
@@ -29,8 +30,8 @@ public class FiltersWidgetCreator extends AbstractWidgetCreator<FiltersWidgetCon
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, FiltersWidgetConfig config, IModel<FiltersWidgetStatus> statusModel) {
-        return new FiltersWidget(componentId, config, statusModel);
+    protected Widget<?, ?> build(String componentId, IWidgetModel<FiltersWidgetStatus> statusModel) {
+        return new FiltersWidget(componentId, statusModel);
     }
 
     @Override

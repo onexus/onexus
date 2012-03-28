@@ -27,18 +27,19 @@ import org.onexus.core.query.Filter;
 import org.onexus.core.query.Like;
 import org.onexus.core.query.Or;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.IQueryContributor;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.events.EventFiltersUpdate;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.util.Iterator;
 
 public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus> implements IQueryContributor {
 
-    public SearchWidget(String componentId, SearchWidgetConfig config, IModel<SearchWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public SearchWidget(String componentId, IWidgetModel statusModel) {
+        super(componentId, statusModel);
 
-        Form<SearchWidgetStatus> form = new Form<SearchWidgetStatus>("toolsForms", new CompoundPropertyModel<SearchWidgetStatus>(statusModel));
+        Form<SearchWidgetStatus> form = new Form<SearchWidgetStatus>("toolsForms", new CompoundPropertyModel<SearchWidgetStatus>((IModel<SearchWidgetStatus>) statusModel));
 
         // Search field & button
         form.add(new TextField<String>("search"));

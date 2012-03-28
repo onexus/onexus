@@ -18,10 +18,18 @@
 package org.onexus.ui.website.widgets;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.IWebsiteCreator;
+import org.onexus.ui.IResourceRegister;
 
-public interface IWidgetCreator extends IWebsiteCreator<WidgetConfig, WidgetStatus> {
+public interface IWidgetCreator {
 
-    public Widget<?, ?> create(String componentId, WidgetConfig config, IModel<WidgetStatus> statusModel);
+    public void register(IResourceRegister resourceRegister);
+
+    public boolean canCreate(WidgetConfig config);
+
+    public String getTitle();
+
+    public String getDescription();
+
+    public Widget<?, ?> create(String componentId, IWidgetModel<?> widgetModel);
 
 }

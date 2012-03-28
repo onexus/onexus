@@ -20,20 +20,24 @@ package org.onexus.ui.website.workspace;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Resource;
-import org.onexus.ui.website.tabs.topleft.TopleftTab;
-import org.onexus.ui.website.tabs.topleft.TopleftTabConfig;
-import org.onexus.ui.website.tabs.topleft.TopleftTabStatus;
-import org.onexus.ui.website.viewers.tableviewer.TableViewerConfig;
-import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig;
+import org.onexus.ui.website.pages.PageModel;
+import org.onexus.ui.website.pages.browser.BrowserPageConfig;
+import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
+import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.export.ExportWidgetConfig;
 import org.onexus.ui.website.widgets.search.SearchField;
 import org.onexus.ui.website.widgets.search.SearchWidgetConfig;
+import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
+import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class CollectionViewer extends Panel {
 
@@ -47,13 +51,19 @@ public class CollectionViewer extends Panel {
         if (resource != null && resource instanceof Collection) {
 
             Collection collection = (Collection) resource;
+            
+            List<WidgetConfig> widgets = new ArrayList<WidgetConfig>(3);
 
             // Tableviewer
-            TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", collection.getURI());
-            viewerConfig.addColumn(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
+            TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", "main", collection.getURI());
+            ColumnSet columnSet = new ColumnSet();
+            columnSet.getColumns().add(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
+            viewerConfig.getColumnSets().add(columnSet);
+            widgets.add(viewerConfig);
 
             // Export widget
-            ExportWidgetConfig exportConfig = new ExportWidgetConfig("export", "left", collection.getURI());
+            widgets.add( new ExportWidgetConfig("export", "left", collection.getURI()) );
+            
 
             // Search widget
             SearchWidgetConfig searchConfig = new SearchWidgetConfig("search", "top");
@@ -68,20 +78,15 @@ public class CollectionViewer extends Panel {
             }
             fieldNames.setCharAt(fieldNames.length() - 1, ' ');
             searchConfig.addField(new SearchField(collection.getURI(), fieldNames.toString()));
-
-            // Layout
-            TopleftTabConfig tabConfig = new TopleftTabConfig("browser", "browser");
-            tabConfig.getViewers().add(viewerConfig);
-            tabConfig.getWidgets().add(exportConfig);
-            tabConfig.getWidgets().add(searchConfig);
-
-            IModel<TopleftTabStatus> statusModel = Model.of(tabConfig.getDefaultStatus());
-            add(new TopleftTab("table", tabConfig, statusModel));
+            widgets.add( searchConfig );
+           
+            add(new TopleftLayout("table", widgets, new PageModel<BrowserPageStatus>(new BrowserPageConfig())));
 
         } else {
             add(new EmptyPanel("table"));
         }
 
     }
+
 
 }

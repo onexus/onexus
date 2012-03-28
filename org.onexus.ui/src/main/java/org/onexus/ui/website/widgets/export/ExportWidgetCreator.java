@@ -19,6 +19,7 @@ package org.onexus.ui.website.widgets.export;
 
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class ExportWidgetCreator extends AbstractWidgetCreator<ExportWidgetConfig, ExportWidgetStatus> {
@@ -28,8 +29,8 @@ public class ExportWidgetCreator extends AbstractWidgetCreator<ExportWidgetConfi
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, ExportWidgetConfig config, IModel<ExportWidgetStatus> statusModel) {
-        return new ExportWidget(componentId, config, statusModel);
+    protected Widget<?, ?> build(String componentId, IWidgetModel<ExportWidgetStatus> statusModel) {
+        return new ExportWidget(componentId, statusModel);
     }
 
 }

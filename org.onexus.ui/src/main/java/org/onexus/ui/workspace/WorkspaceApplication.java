@@ -46,6 +46,7 @@ public class WorkspaceApplication extends OnexusWebApplication {
         mountResource("download", getSharedResources().get(Application.class, "export", null, null, null, true));
 
         mountPages();
+
     }
 
 }

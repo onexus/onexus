@@ -18,20 +18,48 @@
 package org.onexus.ui.website.widgets;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.AbstractWebsiteCreator;
+import org.onexus.ui.IResourceRegister;
 
-public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends WidgetStatus> extends AbstractWebsiteCreator<WidgetConfig, WidgetStatus> implements IWidgetCreator {
+public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends WidgetStatus> implements IWidgetCreator {
 
+    private Class<C> configType;
+    private String title;
+    private String description;
+    
     public AbstractWidgetCreator(Class<C> configType, String title, String description) {
-        super(configType, title, description);
+        super();
+
+        this.configType = configType;
+        this.title = title;
+        this.description = description;
+    }
+
+    @Override
+    public void register(IResourceRegister resourceRegister) {
+        resourceRegister.register(configType);
+    }
+
+    @Override
+    public boolean canCreate(WidgetConfig config) {
+        return configType.equals(config.getClass());
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Widget<?, ?> create(String componentId, WidgetConfig config, IModel<WidgetStatus> statusModel) {
-        return build(componentId, (C) config, (IModel<S>) statusModel);
+    public Widget<?, ?> create(String componentId, IWidgetModel<?> statusModel) {
+        return build(componentId, (IWidgetModel<S>) statusModel);
     }
 
-    protected abstract Widget<?, ?> build(String componentId, C config, IModel<S> statusModel);
+    protected abstract Widget<?, ?> build(String componentId, IWidgetModel<S> statusModel);
 
 }

@@ -18,16 +18,26 @@
 package org.onexus.ui.website.widgets.text;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
+import org.onexus.ui.website.utils.panels.HelpContentPanel;
+import org.onexus.ui.website.utils.panels.HelpMark;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class TextWidget extends Widget<TextWidgetConfig, TextWidgetStatus> {
 
-    public TextWidget(String componentId, TextWidgetConfig config, IModel<TextWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public TextWidget(String componentId, IWidgetModel<TextWidgetStatus> statusModel) {
+        super(componentId, statusModel);
 
-        add(new Label("title", config.getTitle()));
-        add(new Label("text", config.getText()).setEscapeModelStrings(false));
+        add(new Label("title", getConfig().getTitle()));
+        add(new Label("text", getConfig().getText()).setEscapeModelStrings(false));
+        
+        if (getConfig().getDetails() != null) {
+            add(new HelpMark("details", getConfig().getText(), getConfig().getDetails()));
+        } else {
+            add(new EmptyPanel("details"));
+        }
 
     }
 

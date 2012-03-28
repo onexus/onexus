@@ -26,6 +26,7 @@ public class TextWidgetConfig extends WidgetConfig {
     private TextWidgetStatus defaultStatus;
     private String title;
     private String text;
+    private String details;
 
     public TextWidgetConfig() {
         super();
@@ -53,6 +54,14 @@ public class TextWidgetConfig extends WidgetConfig {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     @Override

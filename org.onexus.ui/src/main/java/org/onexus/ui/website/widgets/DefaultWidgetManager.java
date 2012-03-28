@@ -17,8 +17,57 @@
  */
 package org.onexus.ui.website.widgets;
 
-import org.onexus.ui.website.AbstractWebsiteManager;
+import org.apache.wicket.model.IModel;
+import org.onexus.ui.IResourceRegister;
+import org.osgi.framework.ServiceReference;
 
-public class DefaultWidgetManager extends AbstractWebsiteManager<Widget<?, ?>, WidgetConfig, WidgetStatus> implements IWidgetManager {
+import java.util.List;
+
+public class DefaultWidgetManager implements IWidgetManager {
+
+    private IResourceRegister resourceRegister;
+
+    private List<IWidgetCreator> creators;
+
+    @Override
+    public Widget<?, ?> create(String componentId, IWidgetModel statusModel) {
+
+        for (IWidgetCreator creator : creators) {
+            if (creator.canCreate(statusModel.getConfig())) {
+                return creator.create(componentId, statusModel);
+            }
+        }
+
+        return null;
+    }
+
+    public List<IWidgetCreator> getCreators() {
+        return creators;
+    }
+
+    public void setCreators(List<IWidgetCreator> creators) {
+        this.creators = creators;
+    }
+
+    public IResourceRegister getResourceRegister() {
+        return resourceRegister;
+    }
+
+    public void setResourceRegister(IResourceRegister resourceRegister) {
+        this.resourceRegister = resourceRegister;
+    }
+
+    public void bindCreators(ServiceReference serviceRef) {
+
+        if (resourceRegister != null && creators != null) {
+            for (IWidgetCreator bc : creators) {
+                bc.register(resourceRegister);
+            }
+        }
+    }
+
+    public void unbindCreators(ServiceReference serviceRef) {
+        // Nothing to do
+    }
 
 }

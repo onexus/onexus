@@ -19,6 +19,7 @@ package org.onexus.ui.website.widgets.text;
 
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class TextWidgetCreator extends AbstractWidgetCreator<TextWidgetConfig, TextWidgetStatus> {
@@ -28,8 +29,8 @@ public class TextWidgetCreator extends AbstractWidgetCreator<TextWidgetConfig, T
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, TextWidgetConfig config, IModel<TextWidgetStatus> statusModel) {
-        return new TextWidget(componentId, config, statusModel);
+    protected Widget<?, ?> build(String componentId, IWidgetModel<TextWidgetStatus> statusModel) {
+        return new TextWidget(componentId, statusModel);
     }
 
 }

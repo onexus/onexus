@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.ui.website.formaters.StringFormater;
 import org.onexus.ui.website.utils.panels.icons.Icons;
 
 /**
@@ -53,7 +52,7 @@ public abstract class CheckBoxItem extends Panel {
 
         // Add
         add(new Label("name", new TextFormaterPropertyModel(item.getModel(),
-                "name", new StringFormater(18, true))));
+                "name", 18, true)));
         add(new AttributeModifier("title", new PropertyModel<String>(
                 item.getModel(), "name")));
 

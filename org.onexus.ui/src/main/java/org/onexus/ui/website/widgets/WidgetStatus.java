@@ -17,9 +17,9 @@
  */
 package org.onexus.ui.website.widgets;
 
-import org.onexus.ui.website.IWebsiteStatus;
+import java.io.Serializable;
 
-public abstract class WidgetStatus implements IWebsiteStatus {
+public abstract class WidgetStatus implements Serializable {
 
     private String id;
 

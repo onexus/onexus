@@ -17,9 +17,12 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.onexus.ui.website.IWebsiteConfig;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
-public abstract class PageConfig implements IWebsiteConfig {
+import java.io.Serializable;
+import java.util.List;
+
+public abstract class PageConfig implements Serializable {
 
     private String id;
     private String name;
@@ -43,6 +46,20 @@ public abstract class PageConfig implements IWebsiteConfig {
     public void setName(String name) {
         this.name = name;
     }
+
+    public WidgetConfig getWidgetConfig(String id) {
+
+        if (id != null) {
+            for (WidgetConfig config : getWidgetConfigs()) {
+                if (id.equals(config.getId())) {
+                    return config;
+                }
+            }
+        }
+        return null;
+    }
+
+    public abstract List<WidgetConfig> getWidgetConfigs();
 
     public abstract PageStatus createEmptyStatus();
 

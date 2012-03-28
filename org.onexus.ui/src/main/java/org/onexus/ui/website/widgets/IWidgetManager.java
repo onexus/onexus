@@ -19,8 +19,12 @@ package org.onexus.ui.website.widgets;
 
 import org.apache.wicket.model.IModel;
 
+import java.util.List;
+
 public interface IWidgetManager {
 
-    Widget<?, ?> create(String componentId, WidgetConfig config, IModel<WidgetStatus> statusModel);
+    List<IWidgetCreator> getCreators();
+
+    Widget<?, ?> create(String componentId, IWidgetModel statusModel);
 
 }

@@ -1,99 +1,111 @@
 <website>
-<title>Sample website</title>
-<pages>
-<page-browser>
-	<id>sample</id>
-    <name>Sample</name>
-    <tabs>
-		<tab-topleft>
-			<id>widgets</id>
-			<title>Widgets</title>
-			<widgets>
+    <title>Sample website</title>
+    <pages>
+        <browser>
+            <id>browser</id>
+            <name>Browser page</name>
+            <tabs>
+                <tab>
+                    <id>table</id>
+                    <title>Table</title>
+                    <view>
+                        <title>Table viewer</title>
+                        <layout>topleft</layout>
+                        <widgets>
+                            <viewer-table>
+                                <id>gene-expression</id>
+                                <region>main</region>
+                                <mainCollection>gene-project-oncodrive</mainCollection>
+                                <columnset>
+                                    <title>pValue columns</title>
+                                    <columns>
+                                        <column>
+                                            <collection>gene-project-oncodrive</collection>
+                                            <fieldNames>GENEID,*{^(PV|QV)(.*)}</fieldNames>
+                                        </column>
+                                    </columns>
+                                </columnset>
+                                <columnset>
+                                    <title>zScore columns</title>
+                                    <columns>
+                                        <column>
+                                            <collection>gene-project-oncodrive</collection>
+                                            <fieldNames>GENEID,*{^ZSCORE(.*)}</fieldNames>
+                                        </column>
+                                    </columns>
+                                </columnset>
+                                <columnset>
+                                    <title>All columns</title>
+                                    <columns>
+                                        <column>
+                                            <collection>gene-project-oncodrive</collection>
+                                            <fieldNames>*{.*}</fieldNames>
+                                        </column>
+                                    </columns>
+                                </columnset>
+                            </viewer-table>
 
-				<widget-bookmark>
-					<id>bookmark</id>
-					<region>left</region>
-				</widget-bookmark>
+                            <widget-columnsets>
+                                <id>columnesets</id>
+                                <region>left</region>
+                            </widget-columnsets>
 
-				<widget-export>
-					<id>export</id>
-					<region>left</region>
-				</widget-export>
+                            <widget-bookmark>
+                                <id>bookmark</id>
+                                <region>left</region>
+                            </widget-bookmark>
 
-				<widget-filters>
-					<id>filters</id>
-					<region>left</region>
-					<title>Filters checkbox</title>
-				</widget-filters>
+                            <widget-export>
+                                <id>export</id>
+                                <region>left</region>
+                            </widget-export>
 
-				<widget-filters-selector>
-					<id>filters-selector</id>
-					<region>left</region>
-					<title>Filters selector</title>
-				</widget-filters-selector>
+                            <widget-filters>
+                                <id>filters</id>
+                                <region>left</region>
+                                <title>Filters checkbox</title>
+                            </widget-filters>
 
-				<widget-search>	
-					<id>search</id>
-					<region>top</region>
-					<fields>
-						<search-field>
-							<collection>tcga-coad</collection>
-							<fieldNames>GeneID</fieldNames>
-						</search-field>
-					</fields>
-				</widget-search>
+                            <widget-filters-selector>
+                                <id>filters-selector</id>
+                                <region>left</region>
+                                <title>Filters selector</title>
+                            </widget-filters-selector>
 
-				<widget-tags>
-					<id>tags</id>
-					<region>left</region>
-				</widget-tags>
+                            <widget-search>
+                                <id>search</id>
+                                <region>top</region>
+                                <fields>
+                                    <search-field>
+                                        <collection>gene-project-oncodrive</collection>
+                                        <fieldNames>GeneID</fieldNames>
+                                    </search-field>
+                                </fields>
+                            </widget-search>
 
-				<widget-text>
-					<id>text</id>
-					<region>left</region>
-					<title>Text Widget</title>
-					<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec at neque eu orci pharetra consectetur. Ut tincidunt nisi vitae mi malesuada condimentum. Etiam ultrices tellus id tortor hendrerit a cursus lorem interdum.</text>
-				</widget-text>
-
-				<widget-viewer-selector>
-					<id>viewer-selector</id>
-					<region>top-right</region>
-				</widget-viewer-selector>
-				
-			</widgets>
-
-			<viewers>
-                                <viewer-table>
-                                        <id>gene-expression</id>
-                                        <title>Gene expression</title>
-                                        <mainCollection>tcga-coad</mainCollection>
-                                        <columns>
-                                                <column-tags>
-                                                        <collection>tcga-coad</collection>
-                                                </column-tags>
-                                                <column>
-                                                        <collection>tcga-coad</collection>
-                                                        <fieldNames>GeneID,*{^GeneExpression(.*)}</fieldNames>
-                                                </column>
-                                        </columns>
-                                </viewer-table>
-				<viewer-table>
-					<id>allcolumns</id>
-					<title>All columns</title>
-					<mainCollection>tcga-coad</mainCollection>
-					<columns>
-						<column-tags>
-							<collection>tcga-coad</collection>
-						</column-tags>
-						<column>
-							<collection>tcga-coad</collection>
-							<fieldNames>*{.*}</fieldNames>
-						</column>
-					</columns>
-				</viewer-table>
-			</viewers>
-		</tab-topleft>
-	</tabs>
-</page-browser>
-</pages>
+                            <widget-text>
+                                <id>text</id>
+                                <region>left</region>
+                                <title>Text Widget</title>
+                                <text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>
+                                <details><![CDATA[
+                                    <h1>Lorem ipsum dolor sit amet</h1>
+                                    <p>Pharetra consectetur. Ut tincidunt nisi vitae mi malesuada condimentum. Etiam ultrices</p>
+                                    <p>tellus id tortor hendrerit a cursus lorem interdum.</p>
+                                ]]></details>
+                            </widget-text>
+                        </widgets>
+                    </view>
+                </tab>
+            </tabs>
+        </browser>
+        <html>
+            <id>html</id>
+            <name>Html page</name>
+            <content><![CDATA[
+	<h1>This a simple html page</h1>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla diam quis lectus vulputate in lobortis odio feugiat. Sed at turpis at massa rhoncus volutpat. In suscipit rhoncus urna, eget fringilla sapien venenatis vel. Nam elit velit, rhoncus at mattis a, laoreet nec ante. Nam velit velit, sagittis et volutpat ornare, ultricies ut justo. Praesent feugiat, enim sit amet rhoncus ultricies, metus velit pulvinar est, sit amet cursus nulla lacus nec tellus. Sed augue metus, dapibus eu venenatis ac, porta non orci. Integer varius sapien quis justo facilisis tempus. In posuere condimentum dictum. Praesent quis arcu eu neque tempor aliquet nec lobortis ipsum. Vivamus semper molestie tellus, at aliquam diam dignissim eget. Integer in eros a diam eleifend tristique in sed tellus. Mauris interdum turpis non metus sodales ac commodo sem sodales.</p>
+	]]></content>
+        </html>
+    </pages>
 </website>

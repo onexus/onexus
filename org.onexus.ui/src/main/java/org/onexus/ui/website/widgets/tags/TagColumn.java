@@ -24,7 +24,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.IEntityTable;
-import org.onexus.ui.website.viewers.tableviewer.columns.TableTrack;
+import org.onexus.ui.website.widgets.tableviewer.columns.TableTrack;
 
 public class TagColumn extends TableTrack implements IColumn<IEntityTable> {
 

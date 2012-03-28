@@ -18,22 +18,39 @@
 package org.onexus.ui.website.widgets.filters;
 
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.ui.website.formaters.ITextFormater;
 
 public class TextFormaterPropertyModel extends PropertyModel<String> {
 
-    private ITextFormater formater;
+    private int maxLength;
+    private boolean addDots;
+
 
     public TextFormaterPropertyModel(Object modelObject, String expression,
-                                     ITextFormater formater) {
+                                     final int maxLength, final boolean addDots) {
         super(modelObject, expression);
-        this.formater = formater;
+
+        this.maxLength = maxLength;
+        this.addDots = addDots;
+
     }
 
     @Override
     public String getObject() {
         Object value = super.getObject();
-        return (value == null ? null : formater.format(value));
+        return (value == null ? null : format(value, maxLength, addDots));
+    }
+
+    public static String format(final Object value, int maxLength, boolean addDots) {
+
+        String formatedValue = (value == null ? "" : value.toString());
+
+        if (formatedValue.length() > maxLength) {
+            formatedValue = formatedValue.substring(0, maxLength)
+                    + (addDots ? "..." : "");
+        }
+
+        return formatedValue;
+
     }
 
 }

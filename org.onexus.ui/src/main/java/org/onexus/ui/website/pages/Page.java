@@ -17,19 +17,43 @@
  */
 package org.onexus.ui.website.pages;
 
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.AbstractWebsitePanel;
-import org.onexus.ui.website.tabs.ITabManager;
+import org.onexus.ui.website.events.EventPanel;
+import org.onexus.ui.website.widgets.IWidgetManager;
 
 import javax.inject.Inject;
 
-public abstract class Page<C extends PageConfig, S extends PageStatus> extends AbstractWebsitePanel<C, S> {
+public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel {
 
     @Inject
-    public ITabManager tabManager;
+    private IWidgetManager widgetManager;
 
-    public Page(String componentId, C config, IModel<S> statusModel) {
-        super(componentId, config, statusModel);
+    private IPageModel<S> pageModel;
+
+    public Page(String componentId, IPageModel<S> pageModel) {
+        super(componentId);
+        this.pageModel = pageModel;
+    }
+
+    public IWidgetManager getWidgetManager() {
+        return widgetManager;
+    }
+
+    public void setWidgetManager(IWidgetManager widgetManager) {
+        this.widgetManager = widgetManager;
+    }
+
+    public C getConfig() {
+        return (C) pageModel.getConfig();
+    }
+
+    public S getStatus() {
+        return (S) pageModel.getObject();
+    }
+
+    public IPageModel<S> getPageModel() {
+        return pageModel;
     }
 
 }

@@ -21,30 +21,35 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.onexus.core.resources.Release;
 import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.OnexusWebSession;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventTabSelected;
 import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.events.EventViewChange;
+import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.Page;
-import org.onexus.ui.website.tabs.ITabManager;
-import org.onexus.ui.website.tabs.TabConfig;
-import org.onexus.ui.website.tabs.TabStatus;
+import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
+import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
+import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
-import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 
-import javax.inject.Inject;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,25 +57,21 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
     public final static CssResourceReference CSS = new CssResourceReference(BrowserPage.class, "BrowserPage.css");
 
-    @Inject
-    public ITabManager tabManager;
-
-
-    public BrowserPage(String componentId, BrowserPageConfig config, IModel<BrowserPageStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public BrowserPage(String componentId, IPageModel<BrowserPageStatus> statusModel) {
+        super(componentId, statusModel);
         onEventFireUpdate(EventTabSelected.class);
 
         checkRelease();
 
-        add(new FixedEntities("position", config, statusModel));
+        add(new FixedEntities("position", statusModel));
 
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
 
 
     protected boolean isCurrentTab(String tabId) {
-        String currentTabId = getStatus().getCurrentTabId();
-        return tabId.equals(currentTabId);
+        return tabId.equals(getStatus().getCurrentTabId());
+
     }
 
     protected TabConfig getCurrentTab() {
@@ -85,7 +86,9 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         if (releaseUri == null) {
 
-            String parentURI = ResourceTools.getParentURI(getWebsiteConfig().getURI());
+            WebsiteConfig websiteConfig = getPageModel().getWebsiteModel().getConfig();
+
+            String parentURI = ResourceTools.getParentURI(websiteConfig.getURI());
             List<Release> releases = OnexusWebSession.get().getResourceManager().loadChildren(Release.class, parentURI);
 
             if (releases != null && !releases.isEmpty()) {
@@ -121,9 +124,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
                 };
 
-                String tabTitle = (tab.getTitle() == null ? tab.getId() : tab.getTitle());
-
-                link.add(new Label("label", tabTitle));
+                link.add(new Label("label", tab.getTitle()));
                 item.add(link);
 
                 if (isCurrentTab(tab.getId())) {
@@ -160,9 +161,54 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             getStatus().setCurrentTabId(firstTab.getId());
         }
 
-        // Add the tab panel
-        TabConfig tabConfig = getCurrentTab();
-        addOrReplace(tabManager.create("content", tabConfig, new TabModel(tabConfig, getModelStatus())));
+
+        List<String> views = new ArrayList<String>();
+        for (ViewConfig view :  getCurrentTab().getViews()) {
+            views.add(view.getTitle());
+        }
+
+        WebMarkupContainer viewSelector = new WebMarkupContainer("viewselector");
+
+        if (getStatus().getCurrentView() == null && views.size() > 0) {
+            getStatus().setCurrentView(views.get(0));
+        }
+
+        DropDownChoice<String> selector = new DropDownChoice<String>("select", new PropertyModel<String>(getPageModel(), "currentView"), views);
+        selector.setNullValid(false);
+        viewSelector.add(selector);
+
+        selector.add(new OnChangeAjaxBehavior() {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                sendEvent(EventViewChange.EVENT);
+            }
+        });
+
+
+        addOrReplace(viewSelector);
+        viewSelector.setVisible(views.size() > 1);
+
+        ViewConfig viewConfig = null;
+        for (ViewConfig view : getCurrentTab().getViews()) {
+            if (view.getTitle().equals(getStatus().getCurrentView())) {
+                viewConfig = view;
+                break;
+            }
+        }
+
+        String layout = (viewConfig == null ? null : viewConfig.getLayout());
+        if (layout == null) {
+            addOrReplace(new EmptyPanel("content"));
+
+        } else if (layout.equals(TopleftLayout.LAYOUT)) {
+            addOrReplace(new TopleftLayout("content", viewConfig.getWidgets(), getPageModel()));
+
+        } else if (layout.equals(LeftMainLayout.LAYOUT)) {
+            addOrReplace(new LeftMainLayout("content", viewConfig.getWidgets(), getPageModel()));
+        } else if (layout.equals(SingleLayout.LAYOUT)) {
+            addOrReplace(new SingleLayout("content", viewConfig.getWidgets(), getPageModel()));
+        }
 
         super.onBeforeRender();
     }
@@ -172,12 +218,10 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         @Override
         public List<TabConfig> getObject() {
 
-            // All the defined tabs in the configuration
             List<TabConfig> allTabs = getConfig().getTabs();
 
-            // A predicate that filters the visible tabs
-            Predicate filter = new FixedEntitiesVisiblePredicate(getStatus().getReleaseURI(), getStatus()
-                    .getFixedEntities());
+            // A predicate that filters the visible views
+            Predicate filter = new FixedEntitiesVisiblePredicate(getStatus().getReleaseURI(), getStatus().getFixedEntities());
 
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();
@@ -192,6 +236,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super.renderHead(response);
 
         response.renderCSSReference(CSS);
+       // response.renderJavaScriptReference(JS);
     }
 
 }

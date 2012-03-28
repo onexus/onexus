@@ -20,6 +20,7 @@ package org.onexus.ui.website.widgets.tags;
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class TagWidgetCreator extends AbstractWidgetCreator<TagWidgetConfig, TagWidgetStatus> {
@@ -29,8 +30,8 @@ public class TagWidgetCreator extends AbstractWidgetCreator<TagWidgetConfig, Tag
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, TagWidgetConfig config, IModel<TagWidgetStatus> statusModel) {
-        return new TagWidget(componentId, config, statusModel);
+    protected Widget<?, ?> build(String componentId, IWidgetModel<TagWidgetStatus> statusModel) {
+        return new TagWidget(componentId, statusModel);
     }
 
     @Override

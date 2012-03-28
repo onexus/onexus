@@ -220,7 +220,7 @@ public class SqlUtils {
                 String sqlColumnName = (columnPrefix == null ? columnName : columnPrefix + "_" + columnName);
                 dstObj.put(column.getField().getName(), adapter.extract(rs, sqlColumnName));
             } catch (Exception e) {
-                LOGGER.error("Error loading column '" + column + "'");
+                LOGGER.error("Error loading column '" + column + "' " + e.getMessage());
                 try {
                     ResultSetMetaData m = rs.getMetaData();
 

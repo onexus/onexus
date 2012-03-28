@@ -17,12 +17,18 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.IWebsiteCreator;
+import org.onexus.ui.IResourceRegister;
 
+public interface IPageCreator {
 
-public interface IPageCreator extends IWebsiteCreator<PageConfig, PageStatus> {
+    public void register(IResourceRegister resourceRegister);
 
-    public Page<?, ?> create(String componentId, PageConfig config, IModel<PageStatus> statusModel);
+    public boolean canCreate(PageConfig config);
+
+    public String getTitle();
+
+    public String getDescription();
+
+    public Page<?, ?> create(String componentId, IPageModel statusModel);
 
 }

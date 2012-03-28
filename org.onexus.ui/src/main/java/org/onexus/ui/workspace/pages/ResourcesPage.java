@@ -39,6 +39,7 @@ import org.onexus.ui.workspace.tree.WorkspaceTree;
 import org.onexus.ui.workspace.viewers.ViewerTabs;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class ResourcesPage extends BasePage {

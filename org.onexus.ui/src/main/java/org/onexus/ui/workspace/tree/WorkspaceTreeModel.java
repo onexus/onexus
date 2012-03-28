@@ -17,7 +17,6 @@
  */
 package org.onexus.ui.workspace.tree;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IResourceManager;

@@ -18,20 +18,49 @@
 package org.onexus.ui.website.pages;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.AbstractWebsiteCreator;
+import org.onexus.ui.IResourceRegister;
 
-public abstract class AbstractPageCreator<C extends PageConfig, S extends PageStatus> extends AbstractWebsiteCreator<PageConfig, PageStatus> implements IPageCreator {
+public abstract class AbstractPageCreator<C extends PageConfig, S extends PageStatus> implements IPageCreator {
+    
+    private Class<C> configType;
+    private String title;
+    private String description;
 
     public AbstractPageCreator(Class<C> configType, String title, String description) {
-        super(configType, title, description);
+        super();
+
+        this.configType = configType;
+        this.title = title;
+        this.description = description;
+
     }
 
-    @SuppressWarnings("unchecked")
+
     @Override
-    public Page<?, ?> create(String componentId, PageConfig config, IModel<PageStatus> statusModel) {
-        return build(componentId, (C) config, (IModel<S>) statusModel);
+    public Page<?, ?> create(String componentId, IPageModel statusModel) {
+        return build(componentId, (IPageModel<S>) statusModel);
     }
 
-    protected abstract Page<?, ?> build(String componentId, C config, IModel<S> statusModel);
+    @Override
+    public void register(IResourceRegister resourceRegister) {
+        resourceRegister.register(configType);
+    }
+
+    @Override
+    public boolean canCreate(PageConfig config) {
+        return configType.equals(config.getClass());
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    protected abstract Page<?, ?> build(String componentId, IPageModel<S> statusModel);
 
 }

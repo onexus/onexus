@@ -11,7 +11,7 @@
   <description>Onexus</description>
 
   <properties>
-    <wicket.version>1.5.4</wicket.version>
+    <wicket.version>1.5.5</wicket.version>
     <karaf.version>2.2.5</karaf.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

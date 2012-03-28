@@ -24,7 +24,7 @@ import org.onexus.ui.website.pages.PageConfig;
 import java.util.List;
 
 @XStreamAlias("website")
-public class WebsiteConfig extends MetadataResource implements IWebsiteConfig {
+public class WebsiteConfig extends MetadataResource {
 
     private WebsiteStatus defaultStatus;
 
@@ -34,12 +34,10 @@ public class WebsiteConfig extends MetadataResource implements IWebsiteConfig {
         super();
     }
 
-    @Override
     public WebsiteStatus getDefaultStatus() {
         return defaultStatus;
     }
 
-    @Override
     public WebsiteStatus createEmptyStatus() {
         return new WebsiteStatus();
     }
@@ -55,7 +53,7 @@ public class WebsiteConfig extends MetadataResource implements IWebsiteConfig {
     public PageConfig getPage(String pageId) {
         if (pages != null) {
             for (PageConfig page : pages) {
-                if (page.getId().equals(pageId)) {
+                if (pageId.equals(page.getId())) {
                     return page;
                 }
             }

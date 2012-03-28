@@ -19,12 +19,13 @@ package org.onexus.ui.website.pages.browser;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.ui.website.pages.PageConfig;
-import org.onexus.ui.website.tabs.TabConfig;
+import org.onexus.ui.website.utils.reflection.ListComposer;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("page-browser")
+@XStreamAlias("browser")
 public class BrowserPageConfig extends PageConfig {
 
     private BrowserPageStatus defaultStatus;
@@ -36,22 +37,18 @@ public class BrowserPageConfig extends PageConfig {
     public BrowserPageConfig() {
         super();
     }
+    
+    public TabConfig getTab(String tabId) {
+        for (TabConfig tab : getTabs()) {
+            if (tabId.equals(tab.getId())) {
+                return tab;
+            }
+        }
+        return null;
+    }
 
     public List<TabConfig> getTabs() {
         return tabs;
-    }
-
-    public TabConfig getTab(String tabId) {
-
-        if (tabs != null) {
-            for (TabConfig tab : tabs) {
-                if (tab.getId().equals(tabId)) {
-                    return tab;
-                }
-            }
-        }
-
-        return null;
     }
 
     public void setTabs(List<TabConfig> tabs) {
@@ -77,5 +74,18 @@ public class BrowserPageConfig extends PageConfig {
     public void setDefaultStatus(BrowserPageStatus defaultStatus) {
         this.defaultStatus = defaultStatus;
     }
+
+    private transient List<WidgetConfig> widgetConfigList;
+
+    @Override
+    public List<WidgetConfig> getWidgetConfigs() {
+
+        if (widgetConfigList == null) {
+            this.widgetConfigList = new ListComposer<WidgetConfig>(this, "tabs.views.widgets");
+        }
+
+        return this.widgetConfigList;
+    }
+
 
 }

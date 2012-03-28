@@ -31,11 +31,13 @@ import org.onexus.core.query.Filter;
 import org.onexus.core.query.Or;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.ui.website.IQueryContributor;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventViewChange;
-import org.onexus.ui.website.pages.browser.BrowserPage;
+import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.widgets.IQueryContributor;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.ui.website.widgets.tags.tagstore.TagStore;
@@ -52,8 +54,8 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
 
     private boolean filter = false;
 
-    public TagWidget(String componentId, TagWidgetConfig config, IModel<TagWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public TagWidget(String componentId, IWidgetModel<TagWidgetStatus> statusModel) {
+        super(componentId, statusModel);
 
         Form<TagWidgetStatus> form = new Form<TagWidgetStatus>("form", new CompoundPropertyModel<TagWidgetStatus>(statusModel));
 
@@ -253,26 +255,32 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
 
     private TagStore getTagStore() {
 
-        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
-        String tagId = status.getCurrentTabId();
-        String releaseURI = status.getReleaseURI();
+        IPageModel pageModel = getPageModel();
+        if (pageModel != null && pageModel.getConfig() instanceof BrowserPageConfig) {
+            BrowserPageStatus status = (BrowserPageStatus) pageModel.getObject();
 
-        String namespace = releaseURI + "#" + tagId;
+            String tagId = status.getCurrentTabId();
+            String releaseURI = status.getReleaseURI();
 
-        TagStore store = tagStoreManager.getUserStore(namespace);
+            String namespace = releaseURI + "#" + tagId;
 
-        // Check that the default tags are present
-        Collection<String> keys = store.getTagKeys();
-        List<String> defaultTags = getConfig().getDefaultTags();
-        if (defaultTags != null) {
-            for (String defaultTag : defaultTags) {
-                if (!keys.contains(defaultTag)) {
-                    store.putTagKey(defaultTag);
+            TagStore store = tagStoreManager.getUserStore(namespace);
+
+            // Check that the default tags are present
+            Collection<String> keys = store.getTagKeys();
+            List<String> defaultTags = getConfig().getDefaultTags();
+            if (defaultTags != null) {
+                for (String defaultTag : defaultTags) {
+                    if (!keys.contains(defaultTag)) {
+                        store.putTagKey(defaultTag);
+                    }
                 }
             }
-        }
 
-        return store;
+            return store;
+        } else {
+            return null;
+        }
 
     }
 

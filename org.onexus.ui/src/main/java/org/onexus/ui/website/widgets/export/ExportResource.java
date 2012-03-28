@@ -32,7 +32,7 @@ import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.OnexusWebSession;
-import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -75,48 +75,51 @@ public class ExportResource extends AbstractResource {
         response.setLastModified(Time.now());
 
         if (response.dataNeedsToBeWritten(attributes)) {
-
-            String filename = attributes.getParameters().get(FILENAME)
-                    .toString();
-
-            response.setFileName(filename);
+            if (attributes != null && attributes.getParameters() != null) {
+                String filename = attributes.getParameters().get(FILENAME).toString();
+                response.setFileName(filename);
+            }
             response.setContentDisposition(ContentDisposition.ATTACHMENT);
-
-            response.setWriteCallback(new WriteCallback() {
-                @Override
-                public void writeData(final Attributes attributes) {
-
-                    Query query = null;
-                    String strQuery = attributes.getParameters().get(STATUS)
-                            .toString();
-
-                    if (strQuery != null) {
-                        try {
-                            query = decodeQuery(strQuery);
-                        } catch (UnsupportedEncodingException e) {
-                            throw new WicketRuntimeException(
-                                    "Unable to decode the URL parameter 'query'",
-                                    e);
-                        }
-                    }
-
-                    String strColumns[] = attributes.getParameters()
-                            .get(COLUMNS).toString().split(":::");
-                    List<ExportColumn> columns = new ArrayList<ExportColumn>();
-                    for (String column : strColumns) {
-                        columns.add(new ExportColumn(column));
-                    }
-
-                    writeTSV(attributes.getResponse(), query, columns);
-                }
-            });
-
+            response.setWriteCallback(newWriteCallback());
         }
 
         return response;
     }
 
-    private void writeTSV(Response pw, Query query, List<ExportColumn> columns) {
+    protected WriteCallback newWriteCallback() {
+
+        return new WriteCallback() {
+            @Override
+            public void writeData(final Attributes attributes) {
+
+                Query query = null;
+                String strQuery = attributes.getParameters().get(STATUS)
+                        .toString();
+
+                if (strQuery != null) {
+                    try {
+                        query = decodeQuery(strQuery);
+                    } catch (UnsupportedEncodingException e) {
+                        throw new WicketRuntimeException(
+                                "Unable to decode the URL parameter 'query'",
+                                e);
+                    }
+                }
+
+                String strColumns[] = attributes.getParameters()
+                        .get(COLUMNS).toString().split(":::");
+                List<ExportColumn> columns = new ArrayList<ExportColumn>();
+                for (String column : strColumns) {
+                    columns.add(new ExportColumn(column));
+                }
+
+                writeTSV(attributes.getResponse(), query, columns);
+            }
+        };
+
+    }
+
+    protected void writeTSV(Response pw, Query query, List<ExportColumn> columns) {
 
         ICollectionManager em = OnexusWebSession.get()
                 .getCollectionManager();
@@ -132,7 +135,7 @@ public class ExportResource extends AbstractResource {
                     .iterator();
             while (itf.hasNext()) {
                 String field = itf.next().trim();
-                pw.write(c.getName() + "." + field);
+                pw.write(field);
                 if (itf.hasNext()) {
                     pw.write(getFieldSeparator());
                 }

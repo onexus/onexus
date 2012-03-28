@@ -28,19 +28,21 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.In;
 import org.onexus.core.query.Or;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.ui.website.IQueryContributor;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
+import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPage;
+import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
+import org.onexus.ui.website.widgets.IQueryContributor;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.util.ArrayList;
@@ -60,10 +62,11 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     private FilterModel model;
 
-    public FiltersWidget(String componentId, FiltersWidgetConfig config, IModel<FiltersWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public FiltersWidget(String componentId, IWidgetModel<FiltersWidgetStatus> statusModel) {
+        super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
+        
 
         String title = getConfig().getTitle();
         add(new Label("title", (title != null ? title : "Filters")));
@@ -71,6 +74,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         Form<String> form = new Form<String>("form");
         add(form);
 
+        FiltersWidgetConfig config = getConfig();
         if (config.getFilters() != null) {
             FiltersWidgetStatus status = getStatus();
             if (status == null) {
@@ -78,8 +82,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 for (FilterConfig filter : config.getFilters()) {
                     status.updateFilter(filter);
                 }
-
-                setStatus(status);
+                statusModel.setObject(status);
             } else {
                 for (FilterConfig filter : config.getFilters()) {
                     if (status.getActiveFilters().contains(filter.getId())) {
@@ -99,7 +102,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             protected void populateItem(final ListItem<FilterConfig> item) {
 
                 FilterConfig filter = item.getModelObject();
-                BrowserPageStatus browserStatus = findParent(BrowserPage.class).getStatus();
+                BrowserPageStatus browserStatus = getBrowserPageStatus();
 
                 FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(browserStatus
                         .getReleaseURI(), browserStatus.getFixedEntities());
@@ -186,35 +189,38 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
     @Override
     public void onQueryBuild(Query query) {
 
-        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
 
-        FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), query.getFixedEntities());
+            BrowserPageStatus status = getBrowserPageStatus();
 
-        List<Filter> rules = new ArrayList<Filter>();
-        for (FilterConfig filter : this.model.getObject()) {
-            if (filter.getActive() && fixedPredicate.evaluate(filter)) {
-                for (Filter rule : filter.getRules()) {
-                    rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(),
-                            rule.getCollection()));
-                    rules.add(rule);
+            FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), query.getFixedEntities());
+
+            List<Filter> rules = new ArrayList<Filter>();
+            for (FilterConfig filter : this.model.getObject()) {
+                if (filter.getActive() && fixedPredicate.evaluate(filter)) {
+                    for (Filter rule : filter.getRules()) {
+                        rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(),
+                                rule.getCollection()));
+                        rules.add(rule);
+                    }
                 }
             }
-        }
 
-        if (!rules.isEmpty()) {
+            if (!rules.isEmpty()) {
 
-            boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
+                boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
 
-            if (!union) {
-                for (Filter rule : rules) {
-                    query.putFilter(getConfig().getId(), rule);
+                if (!union) {
+                    for (Filter rule : rules) {
+                        query.putFilter(getConfig().getId(), rule);
+                    }
+                } else {
+                    query.putFilter(getConfig().getId(), buildUnion(0, rules));
                 }
-            } else {
-                query.putFilter(getConfig().getId(), buildUnion(0, rules));
+
             }
 
-        }
     }
+
 
     private Filter buildUnion(int pos, List<Filter> rules) {
         if (pos + 1 == rules.size()) {
@@ -223,6 +229,16 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             Filter rule = rules.get(pos);
             return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
         }
+    }
+
+    private BrowserPageStatus getBrowserPageStatus() {
+        IPageModel pageModel = getPageModel();
+
+        if (pageModel != null && pageModel.getConfig() instanceof BrowserPageConfig) {
+            return (BrowserPageStatus) pageModel.getObject();
+        }
+
+        return null;
     }
 
     public class FilterModel extends AbstractReadOnlyModel<List<? extends FilterConfig>> {

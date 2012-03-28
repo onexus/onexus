@@ -29,13 +29,17 @@ import org.onexus.core.query.Order;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.pages.browser.BrowserPage;
-import org.onexus.ui.website.tabs.Tab;
-import org.onexus.ui.website.viewers.ViewerConfig;
-import org.onexus.ui.website.viewers.tableviewer.TableViewerConfig;
-import org.onexus.ui.website.viewers.tableviewer.TableViewerStatus;
-import org.onexus.ui.website.viewers.tableviewer.columns.ColumnConfig.ExportColumn;
-import org.onexus.ui.website.viewers.tableviewer.columns.IColumnConfig;
+import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.browser.BrowserPageConfig;
+import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.pages.browser.ViewConfig;
+import org.onexus.ui.website.widgets.IWidgetModel;
+import org.onexus.ui.website.widgets.WidgetConfig;
+import org.onexus.ui.website.widgets.WidgetStatus;
+import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
+import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.io.UnsupportedEncodingException;
@@ -45,29 +49,27 @@ import java.util.List;
 
 public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus> {
 
-    public ExportWidget(String componentId, ExportWidgetConfig config, IModel<ExportWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public ExportWidget(String componentId, IWidgetModel<ExportWidgetStatus> statusModel) {
+        super(componentId, statusModel);
         onEventFireUpdate(EventQueryUpdate.class);
     }
 
     @Override
     protected void onBeforeRender() {
 
-        Tab<?, ?> tab = findParent(Tab.class);
-        ViewerConfig config = tab.getCurrentViewer();
 
-        if (config instanceof TableViewerConfig) {
+        TableViewerConfig config = getTableViewerConfig();
+        if (config != null) {
 
-            TableViewerConfig tc = (TableViewerConfig) config;
-
-            //FIXME
-            BrowserPage browserPage = findParent(BrowserPage.class);
-            String releaseURI = (browserPage != null ? browserPage.getStatus().getReleaseURI() : null);
-            Query query = new Query(tc.getMainCollection());
+            BrowserPageStatus browserStatus = getPageStatus();
+            String releaseURI = (browserStatus != null ? browserStatus.getReleaseURI() : null);
+            Query query = new Query(config.getMainCollection());
             query.setMainNamespace(releaseURI);
 
             List<ExportColumn> exportColumns = new ArrayList<ExportColumn>();
-            for (IColumnConfig column : tc.getColumns()) {
+
+            TableViewerStatus vs = getTableViewerStatus();
+            for (IColumnConfig column : config.getColumnSets().get(vs.getCurrentColumnSet()).getColumns()) {
                 column.addExportColumns(exportColumns, releaseURI);
                 for (String collectionId : column.getQueryCollections(releaseURI)) {
                     query.getCollections().add(ResourceTools.getAbsoluteURI(releaseURI, collectionId));
@@ -76,7 +78,7 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
 
             buildQuery(query);
 
-            TableViewerStatus vs = getTableViewerStatus();
+
 
             if (vs != null) {
                 Order order = vs.getOrder();
@@ -126,10 +128,40 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
 
     }
 
+    private BrowserPageStatus getPageStatus() {
+        IPageModel pageModel = getPageModel();
+
+        return (BrowserPageStatus) (pageModel == null ? null : pageModel.getObject());
+    };
+
+    private BrowserPageConfig getPageConfig() {
+        IPageModel pageModel = getPageModel();
+
+        return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
+    };
+
     private TableViewerStatus getTableViewerStatus() {
-        IModel<TableViewerStatus> statusModel = findInnerModel(TableViewerStatus.class, getDefaultModel());
-        return (statusModel == null ? null : statusModel.getObject());
+
+        String widgetId = getTableViewerConfig().getId();
+        return (TableViewerStatus) (widgetId==null? null : getPageStatus().getWidgetStatus(widgetId));
 
     }
+    
+    private TableViewerConfig getTableViewerConfig() {
+
+        String currentTab = getPageStatus().getCurrentTabId();
+        String currentView = getPageStatus().getCurrentView();
+        ViewConfig view = getPageConfig().getTab(currentTab).getView(currentView);
+
+        String widgetId = null;
+        for (WidgetConfig widget : view.getWidgets()) {
+            if (widget instanceof TableViewerConfig) {
+                return (TableViewerConfig) widget;
+            }
+        }
+
+        return null;
+    }
+
 
 }

@@ -17,9 +17,10 @@
  */
 package org.onexus.ui.website.widgets;
 
-import org.onexus.ui.website.IWebsiteConfig;
 
-public abstract class WidgetConfig implements IWebsiteConfig {
+import java.io.Serializable;
+
+public abstract class WidgetConfig implements Serializable {
 
     private String id;
     private String region;
@@ -50,11 +51,8 @@ public abstract class WidgetConfig implements IWebsiteConfig {
         this.region = region;
     }
 
-    @Override
     public abstract WidgetStatus getDefaultStatus();
 
-    @Override
     public abstract WidgetStatus createEmptyStatus();
-
 
 }

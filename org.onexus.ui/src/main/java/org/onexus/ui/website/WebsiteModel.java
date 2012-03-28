@@ -19,7 +19,7 @@ package org.onexus.ui.website;
 
 import org.apache.wicket.model.IModel;
 
-public class WebsiteModel implements IModel<WebsiteStatus>, IWebsiteModel {
+public class WebsiteModel implements IWebsiteModel {
 
     private WebsiteConfig websiteConfig;
     private WebsiteStatus websiteStatus;
@@ -30,17 +30,15 @@ public class WebsiteModel implements IModel<WebsiteStatus>, IWebsiteModel {
         this.websiteStatus = websiteStatus;
     }
 
-    @Override
     public WebsiteStatus getObject() {
         return websiteStatus;
     }
 
-    @Override
-    public IWebsiteConfig getConfig() {
+
+    public WebsiteConfig getConfig() {
         return websiteConfig;
     }
 
-    @Override
     public void setObject(WebsiteStatus object) {
         this.websiteStatus = object;
     }

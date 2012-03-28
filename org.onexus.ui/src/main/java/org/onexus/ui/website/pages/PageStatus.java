@@ -17,13 +17,19 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.onexus.ui.website.IWebsiteStatus;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
-public abstract class PageStatus implements IWebsiteStatus {
+import java.io.Serializable;
+import java.util.*;
+
+public abstract class PageStatus implements Serializable {
 
     private String id;
+    
+    private List<WidgetStatus> widgetStatuses = new ArrayList<WidgetStatus>();
 
     public PageStatus() {
+        super();
     }
 
     public PageStatus(String id) {
@@ -38,5 +44,33 @@ public abstract class PageStatus implements IWebsiteStatus {
     public void setId(String id) {
         this.id = id;
     }
+    
+    public WidgetStatus getWidgetStatus(String id) {
 
+        if (id == null) {
+            return null;
+        }
+
+        for (WidgetStatus status : getWidgetStatuses()) {
+            if (id.equals(status.getId())) {
+                return status;
+            }
+        }
+
+        return null;
+    }
+    
+    public void setWidgetStatus(WidgetStatus status) {
+        WidgetStatus oldStatus = getWidgetStatus(status.getId());
+        widgetStatuses.add(status);
+        widgetStatuses.remove(oldStatus);
+    }
+
+    public List<WidgetStatus> getWidgetStatuses() {
+        return widgetStatuses;
+    }
+
+    public void setWidgetStatuses(List<WidgetStatus> widgetStatuses) {
+        this.widgetStatuses = widgetStatuses;
+    }
 }

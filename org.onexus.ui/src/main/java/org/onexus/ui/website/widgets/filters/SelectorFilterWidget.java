@@ -27,9 +27,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.IQueryContributor;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.util.Collections;
@@ -47,11 +48,12 @@ import java.util.List;
 public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, SelectorFilterWidgetStatus> implements
         IQueryContributor {
 
-    public SelectorFilterWidget(String componentId, SelectorFilterWidgetConfig config,
-                                IModel<SelectorFilterWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public SelectorFilterWidget(String componentId, IWidgetModel statusModel) {
+        super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
+
+        SelectorFilterWidgetConfig config = getConfig();
 
         String title = config.getTitle();
         add(new Label("title", (title != null ? title : "Filters")));
@@ -62,7 +64,7 @@ public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, Sel
         SelectorFilterWidgetStatus status = getStatus();
         if (status == null) {
             status = new SelectorFilterWidgetStatus(config.getId(), config.getDefaultFilter());
-            setStatus(status);
+            statusModel.setObject(status);
         }
 
         IModel<FilterConfig> selectItemModel = new Model<FilterConfig>();

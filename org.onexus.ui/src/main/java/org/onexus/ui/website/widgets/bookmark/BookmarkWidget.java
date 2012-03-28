@@ -20,10 +20,11 @@ package org.onexus.ui.website.widgets.bookmark;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.onexus.ui.website.IWebsiteModel;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.events.EventQueryUpdate;
+import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.io.UnsupportedEncodingException;
@@ -32,8 +33,8 @@ public class BookmarkWidget extends Widget<BookmarkWidgetConfig, BookmarkWidgetS
 
     private transient StatusEncoder statusEncoder;
 
-    public BookmarkWidget(String componentId, BookmarkWidgetConfig config, IModel<BookmarkWidgetStatus> statusModel) {
-        super(componentId, config, statusModel);
+    public BookmarkWidget(String componentId, IWidgetModel<BookmarkWidgetStatus> statusModel) {
+        super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
     }
@@ -48,21 +49,28 @@ public class BookmarkWidget extends Widget<BookmarkWidgetConfig, BookmarkWidgetS
     @Override
     protected void onBeforeRender() {
 
-        String strStatus;
-        try {
-            strStatus = getStatusEncoder().encodeStatus(getWebsiteStatus());
-        } catch (UnsupportedEncodingException e) {
-            throw new WicketRuntimeException("Unable to encode the URL parameter 'status'", e);
-        }
-
+        IWebsiteModel websiteModel = getWebsiteModel();
         PageParameters params = new PageParameters();
-        params.add(Website.PARAMETER_STATUS, strStatus);
-        params.add(Website.PARAMETER_WEBSITE, getWebsiteConfig().getURI());
+
+        if (websiteModel != null) {
+            String strStatus;
+            try {
+                strStatus = getStatusEncoder().encodeStatus(websiteModel.getObject());
+            } catch (UnsupportedEncodingException e) {
+                throw new WicketRuntimeException("Unable to encode the URL parameter 'status'", e);
+            }
+
+            params.add(Website.PARAMETER_STATUS, strStatus);
+            params.add(Website.PARAMETER_WEBSITE, websiteModel.getConfig().getURI());
+        }
 
         BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("directLink", getPage().getClass(), params);
         link.add(new Image("image", "link.png"));
-
         addOrReplace(link);
+
+        if (websiteModel == null) {
+            link.setEnabled(false);
+        }
 
         super.onBeforeRender();
 

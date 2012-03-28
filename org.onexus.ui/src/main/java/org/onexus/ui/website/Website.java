@@ -28,10 +28,12 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
+import org.onexus.ui.website.pages.PageModel;
 import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 
 import javax.inject.Inject;
@@ -50,6 +52,7 @@ public class Website extends WebPage {
     public final static String PARAMETER_PAGE = "onexus-page";
 
     public final static CssResourceReference CSS = new CssResourceReference(Website.class, "Website.css");
+    public final static JavaScriptResourceReference JS = new JavaScriptResourceReference(Website.class, "utils/ajax-loader.js");
 
     @Inject
     public IPageManager pageManager;
@@ -92,7 +95,7 @@ public class Website extends WebPage {
         String currentPage = websiteStatus.getCurrentPageId();
         PageConfig pageConfig = websiteConfig.getPage(currentPage);
 
-        add(pageManager.create("page", pageConfig, new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
+        add(pageManager.create("page", new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
 
     }
 
@@ -175,6 +178,7 @@ public class Website extends WebPage {
         super.renderHead(response);
 
         response.renderCSSReference(CSS);
+        response.renderJavaScriptReference(JS);
     }
 
 }

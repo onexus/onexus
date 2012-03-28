@@ -19,10 +19,11 @@ package org.onexus.ui.website;
 
 import org.onexus.ui.website.pages.PageStatus;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class WebsiteStatus implements IWebsiteStatus {
+public class WebsiteStatus implements Serializable {
 
     private String currentPageId;
     private Set<PageStatus> pageStatus;

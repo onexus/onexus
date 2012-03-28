@@ -105,15 +105,17 @@ public class FiltersWidgetConfig extends WidgetConfig {
     @Override
     public FiltersWidgetStatus createEmptyStatus() {
         FiltersWidgetStatus status = new FiltersWidgetStatus(getId());
-        
-        for (FilterConfig filter : filters) {
-            if (filter.getActive()) {
-                status.getActiveFilters().add(filter.getId());
+
+        if (filters != null) {
+            for (FilterConfig filter : filters) {
+                if (filter.getActive()) {
+                    status.getActiveFilters().add(filter.getId());
+                }
             }
         }
-        
+
         return status;
-        
+
     }
 
     public FiltersWidgetStatus getDefaultStatus() {
