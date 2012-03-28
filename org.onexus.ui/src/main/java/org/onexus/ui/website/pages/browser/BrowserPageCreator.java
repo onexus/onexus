@@ -17,7 +17,8 @@
  */
 package org.onexus.ui.website.pages.browser;
 
-import org.apache.wicket.model.IModel;
+import org.onexus.ui.IResourceRegister;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.AbstractPageCreator;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.Page;
@@ -33,5 +34,16 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
         return new BrowserPage(componentId, statusModel);
     }
 
+    @Override
+    public void register(IResourceRegister resourceRegister) {
+        super.register(resourceRegister);
 
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "pages",
+                "<browser>" +
+                        "<id>[page-id]</id>" +
+                        "<name>[page-name]</name>" +
+                        "<defaultRelease>0.1</defaultRelease>" +
+                        "<tabs></tabs>" +
+                        "</browser>");
+    }
 }

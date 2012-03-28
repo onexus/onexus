@@ -25,6 +25,8 @@ public class WebsiteActivator implements IResourceActivator {
     @Override
     public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(WebsiteConfig.class);
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "", "<website>");
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "website", "<pages>");
     }
 
     @Override

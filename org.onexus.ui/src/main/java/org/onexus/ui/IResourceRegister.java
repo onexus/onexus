@@ -17,9 +17,16 @@
  */
 package org.onexus.ui;
 
+import java.util.List;
+import java.util.Map;
+
 public interface IResourceRegister {
 
     public void register(Class<?> resourceType);
 
     public ClassLoader getResourcesClassLoader();
+    
+    public void addAutocompleteHint(Class<?> resourceType, String parentTag, String hint);
+    
+    public Map<String, List<String>> getAutocompleteMap(Class<?> resourceType);
 }

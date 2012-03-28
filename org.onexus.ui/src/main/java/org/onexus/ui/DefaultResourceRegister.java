@@ -21,9 +21,7 @@ import org.onexus.core.IResourceSerializer;
 import org.osgi.framework.ServiceReference;
 
 import javax.swing.event.TreeModelListener;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DefaultResourceRegister implements IResourceRegister {
 
@@ -32,6 +30,8 @@ public class DefaultResourceRegister implements IResourceRegister {
 
     private IResourceSerializer serializer;
     private List<IResourceActivator> resourceActivators;
+    
+    private Map<Class<?>, Map<String, List<String>>> autocompleteMaps = new HashMap<Class<?>, Map<String, List<String>>>();
 
     @Override
     public void register(Class<?> resourceType) {
@@ -42,6 +42,32 @@ public class DefaultResourceRegister implements IResourceRegister {
     @Override
     public ClassLoader getResourcesClassLoader() {
         return classLoader;
+    }
+
+    @Override
+    public void addAutocompleteHint(Class<?> resourceType, String parentTag, String hint) {
+        
+        if (!autocompleteMaps.containsKey(resourceType)) {
+            autocompleteMaps.put(resourceType, new HashMap<String, List<String>>());
+        }
+        
+        Map<String, List<String>> autocompleteMap = autocompleteMaps.get(resourceType);
+
+        if (!autocompleteMap.containsKey(parentTag)) {
+            autocompleteMap.put(parentTag, new ArrayList<String>());
+        }
+
+        List<String> hints = autocompleteMap.get(parentTag);
+
+        if (!hints.contains(hint)) {
+            hints.add(hint);
+        }
+
+    }
+
+    @Override
+    public Map<String, List<String>> getAutocompleteMap(Class<?> resourceType) {
+        return autocompleteMaps.get(resourceType);
     }
 
     public IResourceSerializer getSerializer() {

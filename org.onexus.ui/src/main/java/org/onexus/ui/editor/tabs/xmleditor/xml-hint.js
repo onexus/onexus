@@ -69,14 +69,27 @@
     var strParent = parent.string.replace('<', '');
                 
     return {
-    	list: getCompletions(strToken, strParent),
+    	list: getCompletions(strToken, strParent, iniFrom.ch),
       from: iniFrom,
       to: iniTo
     };
   };
     
-  function getCompletions(token, parent) {
-  	 return tagMap[parent];
+  function getCompletions(token, parent, indent) {
+
+     var spaces = "\n";
+     for (var i=0; i < indent; i++) {
+        spaces += " ";
+     };
+
+     var tags = tagMap[parent];
+     var completions = [];
+
+     for (var i=0; i < tags.length; i++) {
+        completions[i] = tags[i].replace(/\n/g, spaces );
+     }
+
+  	 return completions;
   }
 
 })();

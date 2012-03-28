@@ -17,6 +17,8 @@
  */
 package org.onexus.ui.website.pages.html;
 
+import org.onexus.ui.IResourceRegister;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.AbstractPageCreator;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.Page;
@@ -30,6 +32,19 @@ public class HtmlPageCreator extends AbstractPageCreator<HtmlPageConfig, HtmlPag
     @Override
     protected Page<?, ?> build(String componentId, IPageModel<HtmlPageStatus> statusModel) {
         return new HtmlPage(componentId, statusModel);
+    }
+
+    @Override
+    public void register(IResourceRegister resourceRegister) {
+        super.register(resourceRegister);
+
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "pages",
+                "<html>" +
+                        "<id>[page-id]</id>" +
+                        "<name>[page-name]</name>" +
+                        "<content></content>" +
+                        "<css></css>" +
+                        "</html>");
     }
 
 

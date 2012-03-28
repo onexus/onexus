@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.editor.tabs.xmleditor;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.event.Broadcast;
@@ -28,24 +29,31 @@ import org.apache.wicket.util.time.Duration;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceManager.ResourceStatus;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.editor.tabs.AbstractEditorTabPanel;
 import org.onexus.ui.workspace.events.EventResourceSync;
 
 import javax.inject.Inject;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 public class XmlEditorTab extends AbstractEditorTabPanel {
 
     @Inject
-    private IResourceManager resourceManager;
+    public IResourceManager resourceManager;
+
+    @Inject
+    public IResourceRegister resourceRegister;
 
     private static final PackageResourceReference CODEMIRROR_JS = new PackageResourceReference(XmlEditorTab.class, "codemirror.js");
     private static final PackageResourceReference CODEMIRROR_FOLDCODE_JS = new PackageResourceReference(XmlEditorTab.class, "foldcode.js");
     private static final PackageResourceReference CODEMIRROR_HINT_JS = new PackageResourceReference(XmlEditorTab.class, "my-simple-hint.js");
     private static final PackageResourceReference CODEMIRROR_XML_HINT_JS = new PackageResourceReference(XmlEditorTab.class, "xml-hint.js");
-    private static final PackageResourceReference CODEMIRROR_TAG_MAP_JS = new PackageResourceReference(XmlEditorTab.class, "tag-map.js");
     private static final PackageResourceReference CODEMIRROR_XML_JS = new PackageResourceReference(XmlEditorTab.class, "xml.js");
     private static final PackageResourceReference CODEMIRROR_CSS = new PackageResourceReference(XmlEditorTab.class, "codemirror.css");
+
 
     public XmlEditorTab(String id, IModel<Resource> model) {
         super(id, model);
@@ -94,8 +102,43 @@ public class XmlEditorTab extends AbstractEditorTabPanel {
         response.renderJavaScriptReference(CODEMIRROR_FOLDCODE_JS);
         response.renderJavaScriptReference(CODEMIRROR_XML_JS);
         response.renderJavaScriptReference(CODEMIRROR_HINT_JS);
-        response.renderJavaScriptReference(CODEMIRROR_TAG_MAP_JS);
+
+        String autocomplete = createAutocompleteJS(resourceRegister.getAutocompleteMap(getModelObject().getClass()));
+        response.renderJavaScript(autocomplete, Integer.toString(autocomplete.hashCode()));
         response.renderJavaScriptReference(CODEMIRROR_XML_HINT_JS);
+    }
+
+    private static String createAutocompleteJS(Map<String, List<String>> autocompleteMap) {
+        StringBuilder js = new StringBuilder();
+
+        if (autocompleteMap != null && !autocompleteMap.isEmpty()) {
+            js.append("var tagMap = {};\n");
+
+            for (String keyTag : autocompleteMap.keySet()) {
+
+                Iterator<String> subTags = autocompleteMap.get(keyTag).iterator();
+
+                if (subTags.hasNext()) {
+                    js.append("tagMap['").append(keyTag).append("'] = [");
+
+                    while (subTags.hasNext()) {
+                        String subTag = subTags.next();
+
+                        js.append("'").append(StringEscapeUtils.escapeEcmaScript(XmlUtils.formatXml(subTag))).append("'");
+
+                        if (subTags.hasNext()) {
+                            js.append(",");
+                        }
+                    }
+
+                    js.append("];\n");
+                }
+
+
+            }
+        }
+
+        return js.toString();
     }
 
 }
