@@ -28,11 +28,14 @@ import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.widgets.WidgetConfig;
+import org.onexus.ui.website.widgets.WidgetModel;
 import org.onexus.ui.website.widgets.export.ExportWidgetConfig;
 import org.onexus.ui.website.widgets.search.SearchField;
 import org.onexus.ui.website.widgets.search.SearchWidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
+import org.onexus.ui.website.widgets.tableviewer.TableViewer;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
+import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
 import java.util.ArrayList;
@@ -51,36 +54,14 @@ public class CollectionViewer extends Panel {
         if (resource != null && resource instanceof Collection) {
 
             Collection collection = (Collection) resource;
-            
-            List<WidgetConfig> widgets = new ArrayList<WidgetConfig>(3);
 
-            // Tableviewer
             TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", "main", collection.getURI());
+
             ColumnSet columnSet = new ColumnSet();
             columnSet.getColumns().add(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
             viewerConfig.getColumnSets().add(columnSet);
-            widgets.add(viewerConfig);
 
-            // Export widget
-            widgets.add( new ExportWidgetConfig("export", "left", collection.getURI()) );
-            
-
-            // Search widget
-            SearchWidgetConfig searchConfig = new SearchWidgetConfig("search", "top");
-            Iterator<Field> fieldIt = collection.getFields().iterator();
-            StringBuilder fieldNames = new StringBuilder();
-            while (fieldIt.hasNext()) {
-                Field field = fieldIt.next();
-                if (String.class.isAssignableFrom(field.getDataType())) {
-                    fieldNames.append(field.getName());
-                    fieldNames.append(",");
-                }
-            }
-            fieldNames.setCharAt(fieldNames.length() - 1, ' ');
-            searchConfig.addField(new SearchField(collection.getURI(), fieldNames.toString()));
-            widgets.add( searchConfig );
-           
-            add(new TopleftLayout("table", widgets, new PageModel<BrowserPageStatus>(new BrowserPageConfig())));
+            add( new TableViewer("table", new WidgetModel<TableViewerStatus>(viewerConfig)));
 
         } else {
             add(new EmptyPanel("table"));

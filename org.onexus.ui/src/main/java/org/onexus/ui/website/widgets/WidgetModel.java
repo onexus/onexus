@@ -9,6 +9,10 @@ public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
     private IPageModel<? extends PageStatus> pageModel;
     private S status;
 
+    public WidgetModel(WidgetConfig config) {
+        this(config, null);
+    }
+
     public WidgetModel(WidgetConfig config, IPageModel<? extends PageStatus> pageModel) {
         super();
         this.config = config;
@@ -32,7 +36,9 @@ public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
             return status;
         }
 
-        status = (S) pageModel.getObject().getWidgetStatus(config.getId());
+        if (pageModel!=null) {
+            status = (S) pageModel.getObject().getWidgetStatus(config.getId());
+        }
         
         if (status == null) {
             status = (S) config.getDefaultStatus();
@@ -52,7 +58,10 @@ public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
     @Override
     public void setObject(S object) {
         status = object;
-        pageModel.getObject().setWidgetStatus(object);
+
+        if (pageModel != null) {
+            pageModel.getObject().setWidgetStatus(object);
+        }
     }
 
     @Override
