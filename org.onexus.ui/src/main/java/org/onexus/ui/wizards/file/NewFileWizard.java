@@ -32,7 +32,7 @@ import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.resources.Source;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.ui.wizards.creators.AbstractNewResourceWizard;
+import org.onexus.ui.wizards.AbstractNewResourceWizard;
 
 import javax.inject.Inject;
 import java.io.File;

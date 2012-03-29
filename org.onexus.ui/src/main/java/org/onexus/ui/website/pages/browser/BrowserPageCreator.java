@@ -45,5 +45,20 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
                         "<defaultRelease>0.1</defaultRelease>" +
                         "<tabs></tabs>" +
                         "</browser>");
+
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "tabs",
+                "<tab>" +
+                        "<id>[tab-id]</id>" +
+                        "<title>Tab title</title>" +
+                        "<view>" +
+                            "<title>View</title>" +
+                            "<layout>single</layout>" +
+                            "<widgets></widgets>" +
+                        "</view></tab>");
+
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "layout", "single");
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "layout", "leftmain");
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "layout", "topleft");
+
     }
 }

@@ -47,12 +47,12 @@ public class XmlEditorTab extends AbstractEditorTabPanel {
     @Inject
     public IResourceRegister resourceRegister;
 
-    private static final PackageResourceReference CODEMIRROR_JS = new PackageResourceReference(XmlEditorTab.class, "codemirror.js");
-    private static final PackageResourceReference CODEMIRROR_FOLDCODE_JS = new PackageResourceReference(XmlEditorTab.class, "foldcode.js");
-    private static final PackageResourceReference CODEMIRROR_HINT_JS = new PackageResourceReference(XmlEditorTab.class, "my-simple-hint.js");
-    private static final PackageResourceReference CODEMIRROR_XML_HINT_JS = new PackageResourceReference(XmlEditorTab.class, "xml-hint.js");
-    private static final PackageResourceReference CODEMIRROR_XML_JS = new PackageResourceReference(XmlEditorTab.class, "xml.js");
-    private static final PackageResourceReference CODEMIRROR_CSS = new PackageResourceReference(XmlEditorTab.class, "codemirror.css");
+    public static final PackageResourceReference CODEMIRROR_JS = new PackageResourceReference(XmlEditorTab.class, "codemirror.js");
+    public static final PackageResourceReference CODEMIRROR_FOLDCODE_JS = new PackageResourceReference(XmlEditorTab.class, "foldcode.js");
+    public static final PackageResourceReference CODEMIRROR_HINT_JS = new PackageResourceReference(XmlEditorTab.class, "simple-hint.js");
+    public static final PackageResourceReference CODEMIRROR_XML_HINT_JS = new PackageResourceReference(XmlEditorTab.class, "xml-hint.js");
+    public static final PackageResourceReference CODEMIRROR_XML_JS = new PackageResourceReference(XmlEditorTab.class, "xml.js");
+    public static final PackageResourceReference CODEMIRROR_CSS = new PackageResourceReference(XmlEditorTab.class, "codemirror.css");
 
 
     public XmlEditorTab(String id, IModel<Resource> model) {

@@ -25,8 +25,8 @@ public class WebsiteActivator implements IResourceActivator {
     @Override
     public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(WebsiteConfig.class);
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "", "<website>");
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "website", "<pages>");
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "", "<website><title>Onexus powered website</title><pages></pages></website>");
+        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "website", "<defaultStatus><currentPageId>[page-id]</currentPageId></defaultStatus>");
     }
 
     @Override

@@ -41,6 +41,9 @@
         <bean class="org.onexus.ui.editor.EditorViewerTab"/>
     </service>
     <service interface="org.onexus.ui.IViewerCreator">
+        <bean class="org.onexus.ui.viewers.FilePreviewViewerTab"/>
+    </service>
+    <service interface="org.onexus.ui.IViewerCreator">
         <bean class="org.onexus.ui.website.workspace.PreviewBrowserViewerTab"/>
     </service>
     <service interface="org.onexus.ui.IViewerCreator">
@@ -57,25 +60,25 @@
 
     <!-- Default wizards -->
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.NewProjectWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.project.NewProjectWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.NewReleaseWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.release.NewReleaseWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.NewFileWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.file.NewFileWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.RemoveResourceWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.resource.RemoveResourceWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.NewCollectionWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.collection.NewCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.NewWebsiteWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.website.NewWebsiteWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.creators.ManageCollectionWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.collection.ManageCollectionWizardCreator"/>
     </service>
 
     <!-- Default wizard manager -->
@@ -88,7 +91,7 @@
 
     <!-- Website module -->
 
-    <!-- Default widget creators -->
+    <!-- Default widget resource -->
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.tableviewer.TableViewerCreator"/>
     </service>

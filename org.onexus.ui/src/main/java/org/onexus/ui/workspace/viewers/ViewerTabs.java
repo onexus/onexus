@@ -39,7 +39,7 @@ import java.util.List;
 public class ViewerTabs extends Panel {
 
     @Inject
-    private IViewersManager viewersManager;
+    public IViewersManager viewersManager;
 
     private TabsListModel tabsModel;
     private IModel<Resource> resourceModel;
@@ -138,14 +138,6 @@ public class ViewerTabs extends Panel {
             this.viewerTabs = null;
         }
 
-    }
-
-    public IViewersManager getViewersManager() {
-        return viewersManager;
-    }
-
-    public void setViewersManager(IViewersManager viewersManager) {
-        this.viewersManager = viewersManager;
     }
 
 

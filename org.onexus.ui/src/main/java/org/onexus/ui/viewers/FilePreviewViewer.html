@@ -1,6 +1,15 @@
 <html xmlns:wicket>
 <wicket:panel>
-    <iframe wicket:id="browser" style="border:0px; width:100%; height:100%; overlay:auto;"></iframe>
+    <form wicket:id="form">
+        <textarea id="code" wicket:id="file"></textarea>
+        <script>
+            var txtArea = document.getElementById("code");
+            var editor = CodeMirror.fromTextArea(txtArea, {
+                lineNumbers: true,
+                readOnly: true
+            });
+        </script>
+    </form>
 </wicket:panel>
 </html>
 

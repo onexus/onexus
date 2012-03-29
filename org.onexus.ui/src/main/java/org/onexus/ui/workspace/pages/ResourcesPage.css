@@ -242,12 +242,14 @@ div.wizard ul {
 
 div.wizard label {
      display: block;
-     float: left;
-     margin-right: 50px;
      text-align: left;
-     width: 300px;
      font-size: 10px;
      font-weight: bold;
+}
+
+div.wizard input {
+    float: left;
+    margin-top: 0px;
 }
 
 div.wizard p {
