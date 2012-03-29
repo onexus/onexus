@@ -1,0 +1,134 @@
+<collection>
+  <title>Gene Oncodrive analysis</title>
+  <description>Gene Oncodrive analysis</description>
+  <properties/>
+  <task>
+    <toolURI>http://www.onexus.org/tools/loader-tsv/1.0.0</toolURI>
+    <parameters>
+      <parameter-value>
+        <key>SOURCE_URI</key>
+        <value class="string">${release.uri}/gene-project-oncodrive.tsv</value>
+      </parameter-value>
+    </parameters>
+  </task>
+  <fields>
+    <field>
+      <name>GENEID</name>
+      <shortName>gene</shortName>
+      <title>ENSEMBL gene ID </title>
+      <dataType>java.lang.String</dataType>
+      <primaryKey>true</primaryKey>
+    </field>
+    <field>
+      <name>PROJECTID</name>
+      <shortName>Project ID</shortName>
+      <title>Project identifier</title>
+      <dataType>java.lang.String</dataType>
+      <primaryKey>true</primaryKey>
+    </field>
+
+    <field>
+      <name>MUTSAMPLES</name>
+      <shortName>Mutated Samples</shortName>
+      <title>Number of samples with mutations</title>
+      <dataType>java.lang.Integer</dataType>
+      <primaryKey>false</primaryKey>
+    </field>
+
+    <field>
+      <name>ZSCOREEXT</name>
+      <shortName>Zscore(ext)</shortName>
+      <title>Zscore computed with external null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+    </field>
+    <field>
+      <name>QVEXT</name>
+      <shortName>qv(ext)</shortName>
+      <title>qvalue computed with external null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+      <properties>
+        <property>
+          <key>BROWSER_DECORATOR</key>
+          <value>PVALUE2</value>
+        </property>
+      </properties>
+    </field>
+    <field>
+      <name>ZSCOREPOOLED</name>
+      <shortName>Zscore(pooled)</shortName>
+      <title>Zscore computed with pooled somatic mutations null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+    </field>
+   <field>
+      <name>PVPOOLED</name>
+      <shortName>pv(pooled)</shortName>
+      <title>pvalue computed with pooled somatic mutations null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+      <properties>
+        <property>
+          <key>BROWSER_DECORATOR</key>
+          <value>PVALUE2</value>
+        </property>
+      </properties>
+    </field>
+ <field>
+      <name>ZSCORECOSMIC</name>
+      <shortName>Zscore(Cosmic)</shortName>
+      <title>Zscore computed with Cosmic mutations null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+    </field>
+ <field>
+      <name>PVCOSMIC</name>
+      <shortName>pv(Cosmic)</shortName>
+      <title>pvalue computed with Cosmic mutations null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+      <properties>
+        <property>
+          <key>BROWSER_DECORATOR</key>
+          <value>PVALUE2</value>
+        </property>
+      </properties>
+    </field>
+ <field>
+      <name>ZSCOREINT</name>
+      <shortName>Zscore(int)</shortName>
+      <title>Zscore computed with internal null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+    </field>
+<field>
+      <name>PVINT</name>
+      <shortName>pv(int)</shortName>
+      <title>pvalue computed with internal null distribution</title>
+      <dataType>java.lang.Double</dataType>
+      <primaryKey>false</primaryKey>
+      <properties>
+        <property>
+          <key>BROWSER_DECORATOR</key>
+          <value>PVALUE2</value>
+        </property>
+      </properties>
+    </field>
+
+  </fields>
+  <links>
+    <link>
+      <collectionURI>genes</collectionURI>
+      <fieldNames>
+        <string>GENEID</string>
+      </fieldNames>
+    </link>
+    <link>
+      <collectionURI>projects</collectionURI>
+      <fieldNames>
+        <string>PROJECTID</string>
+      </fieldNames>
+    </link>
+  </links>
+</collection>
