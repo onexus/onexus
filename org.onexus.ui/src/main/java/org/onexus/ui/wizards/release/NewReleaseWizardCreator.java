@@ -15,24 +15,24 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.release;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.resources.Release;
+import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
 
-public class NewFileWizardCreator implements IWizardCreator {
+public class NewReleaseWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-        return "New file";
+        return "New release";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-        return new NewFileWizard(containerId, model);
+        return new NewReleaseWizard(containerId, model);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class NewFileWizardCreator implements IWizardCreator {
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-        return Release.class.isAssignableFrom(resourceType);
+        return Project.class.isAssignableFrom(resourceType);
     }
 
 }

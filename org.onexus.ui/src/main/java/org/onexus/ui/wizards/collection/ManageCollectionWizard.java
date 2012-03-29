@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.collection;
 
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;

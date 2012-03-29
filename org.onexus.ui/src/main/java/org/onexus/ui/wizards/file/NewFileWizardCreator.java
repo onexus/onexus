@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.file;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -23,16 +23,16 @@ import org.onexus.core.resources.Release;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
 
-public class NewCollectionWizardCreator implements IWizardCreator {
+public class NewFileWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-        return "New collection";
+        return "New file";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-        return new NewCollectionWizard(containerId, model);
+        return new NewFileWizard(containerId, model);
     }
 
     @Override

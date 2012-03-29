@@ -15,34 +15,34 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.resource;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
+import org.onexus.core.resources.Workspace;
 import org.onexus.ui.IWizardCreator;
 
-public class NewWebsiteWizardCreator implements IWizardCreator {
+public class RemoveResourceWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-        return "New website";
+        return "Remove";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-        return new NewWebsiteWizard(containerId, model);
+        return new RemoveResourceWizard(containerId, model);
     }
 
     @Override
     public double getOrder() {
-        return 1;
+        return 0;
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-        return Project.class.isAssignableFrom(resourceType);
+        return !Workspace.class.isAssignableFrom(resourceType);
     }
 
 }

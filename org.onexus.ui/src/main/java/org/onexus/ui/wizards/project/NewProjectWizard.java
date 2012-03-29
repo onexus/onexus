@@ -15,13 +15,14 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.project;
 
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.wizards.AbstractNewResourceWizard;
 
 public class NewProjectWizard extends AbstractNewResourceWizard<Project> {
 

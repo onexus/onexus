@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.file;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -32,6 +32,7 @@ import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.resources.Source;
 import org.onexus.core.utils.ResourceTools;
+import org.onexus.ui.wizards.creators.AbstractNewResourceWizard;
 
 import javax.inject.Inject;
 import java.io.File;

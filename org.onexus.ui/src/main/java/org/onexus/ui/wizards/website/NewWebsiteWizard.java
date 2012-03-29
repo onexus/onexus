@@ -15,13 +15,14 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.website;
 
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.website.WebsiteConfig;
+import org.onexus.ui.wizards.AbstractNewResourceWizard;
 
 public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 

@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards;
 
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -29,7 +29,6 @@ import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.ui.wizards.AbstractWizard;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
 import javax.inject.Inject;

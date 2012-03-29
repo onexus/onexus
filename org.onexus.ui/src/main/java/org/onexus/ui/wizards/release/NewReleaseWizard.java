@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.release;
 
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.core.resources.Release;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.wizards.AbstractNewResourceWizard;
 
 public class NewReleaseWizard extends AbstractNewResourceWizard<Release> {
 

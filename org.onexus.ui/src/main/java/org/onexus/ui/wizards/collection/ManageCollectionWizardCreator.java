@@ -15,40 +15,34 @@
  *
  *
  */
-package org.onexus.ui.wizards.creators;
+package org.onexus.ui.wizards.collection;
 
-import org.apache.wicket.extensions.wizard.WizardModel;
-import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.IWizardCreator;
 
-public class NewCollectionWizard extends AbstractNewResourceWizard<Collection> {
+public class ManageCollectionWizardCreator implements IWizardCreator {
 
-
-    public NewCollectionWizard(String id, IModel<? extends Resource> resourceModel) {
-        super(id, resourceModel);
-
-        WizardModel model = new WizardModel();
-        model.add(new ResourceName());
-
-        init(model);
+    @Override
+    public String getTitle() {
+        return "Manage collection";
     }
 
     @Override
-    protected Collection getDefaultResource() {
-        return new Collection();
+    public Panel getPanel(String containerId, IModel<? extends Resource> model) {
+        return new ManageCollectionWizard(containerId, model);
     }
 
-    private final class ResourceName extends WizardStep {
-
-        public ResourceName() {
-            super("New collection", "Creates a new collection inside the current release");
-
-            add(getFieldResourceName());
-
-        }
+    @Override
+    public double getOrder() {
+        return 1;
     }
 
+    @Override
+    public boolean isVisible(Class<? extends Resource> resourceType) {
+        return Collection.class.isAssignableFrom(resourceType);
+    }
 
 }
