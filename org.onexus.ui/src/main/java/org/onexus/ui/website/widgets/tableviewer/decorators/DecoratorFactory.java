@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -72,19 +72,19 @@ public class DecoratorFactory {
         if (decoratorId == null && field != null || decoratorId != null
                 && decoratorId.equals("") && field != null) {
 
-            if (field.getDataType().equals(Double.class)) {
+            if (field.getType().equals(Double.class)) {
                 return new FieldDecorator(field, new DoubleFormater(3),
                         cssClass);
             }
 
-            if (field.getDataType().equals(Integer.class)) {
+            if (field.getType().equals(Integer.class)) {
                 return new FieldDecorator(field, cssClass);
             }
-            if (field.getDataType().equals(Long.class)) {
+            if (field.getType().equals(Long.class)) {
                 return new FieldDecorator(field, cssClass);
             }
 
-            if (field.getDataType().equals(String.class)) {
+            if (field.getType().equals(String.class)) {
                 return new FieldDecorator(field, cssClass);
             }
 

@@ -4,96 +4,88 @@
         <browser>
             <id>browser</id>
             <name>Browser page</name>
+            <widgets>
+                <viewer-table>
+                    <id>gene-expression</id>
+                    <collection>gene-project-oncodrive</collection>
+                    <columnset>
+                        <title>pValue columns</title>
+                        <columns>
+                            <column>
+                                <collection>gene-project-oncodrive</collection>
+                                <fields>GENEID,*{^(PV|QV)(.*)}</fields>
+                            </column>
+                        </columns>
+                    </columnset>
+                    <columnset>
+                        <title>zScore columns</title>
+                        <columns>
+                            <column>
+                                <collection>gene-project-oncodrive</collection>
+                                <fields>GENEID,*{^ZSCORE(.*)}</fields>
+                            </column>
+                        </columns>
+                    </columnset>
+                    <columnset>
+                        <title>All columns</title>
+                        <columns>
+                            <column>
+                                <collection>gene-project-oncodrive</collection>
+                                <fields>*{.*}</fields>
+                            </column>
+                        </columns>
+                    </columnset>
+                </viewer-table>
+
+                <widget-columnsets>
+                    <id>columnsets</id>
+                </widget-columnsets>
+
+                <widget-bookmark>
+                    <id>bookmark</id>
+                </widget-bookmark>
+
+                <widget-export>
+                    <id>export</id>
+                </widget-export>
+
+                <widget-filters>
+                    <id>filters</id>
+                    <title>Filters checkbox</title>
+                </widget-filters>
+
+                <widget-filters-selector>
+                    <id>filters-selector</id>
+                    <title>Filters selector</title>
+                </widget-filters-selector>
+
+                <widget-search>
+                    <id>search</id>
+                    <column>
+                        <collection>gene-project-oncodrive</collection>
+                        <fields>GeneID</fields>
+                    </column>
+                </widget-search>
+
+                <widget-text>
+                    <id>text</id>
+                    <title>Text Widget</title>
+                    <text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>
+                    <details><![CDATA[
+                                    <h1>Lorem ipsum dolor sit amet</h1>
+                                    <p>Maecenas fringilla diam quis lectus vulputate in lobortis odio feugiat. Sed at turpis at massa rhoncus volutpat. In suscipit rhoncus urna, eget fringilla sapien venenatis vel. Nam elit velit, rhoncus at mattis a, laoreet nec ante. Nam velit velit, sagittis et volutpat ornare, ultricies ut justo. Praesent feugiat, enim sit amet rhoncus ultricies, metus velit pulvinar est, sit amet cursus nulla lacus nec tellus. Sed augue metus, dapibus eu venenatis ac, porta non orci. Integer varius sapien quis justo facilisis tempus. In posuere condimentum dictum.</p>
+                                ]]></details>
+                </widget-text>
+            </widgets>
             <tabs>
                 <tab>
                     <id>table</id>
                     <title>Table</title>
                     <view>
                         <title>Table viewer</title>
-                        <layout>topleft</layout>
-                        <widgets>
-                            <viewer-table>
-                                <id>gene-expression</id>
-                                <region>main</region>
-                                <mainCollection>gene-project-oncodrive</mainCollection>
-                                <columnset>
-                                    <title>pValue columns</title>
-                                    <columns>
-                                        <column>
-                                            <collection>gene-project-oncodrive</collection>
-                                            <fieldNames>GENEID,*{^(PV|QV)(.*)}</fieldNames>
-                                        </column>
-                                    </columns>
-                                </columnset>
-                                <columnset>
-                                    <title>zScore columns</title>
-                                    <columns>
-                                        <column>
-                                            <collection>gene-project-oncodrive</collection>
-                                            <fieldNames>GENEID,*{^ZSCORE(.*)}</fieldNames>
-                                        </column>
-                                    </columns>
-                                </columnset>
-                                <columnset>
-                                    <title>All columns</title>
-                                    <columns>
-                                        <column>
-                                            <collection>gene-project-oncodrive</collection>
-                                            <fieldNames>*{.*}</fieldNames>
-                                        </column>
-                                    </columns>
-                                </columnset>
-                            </viewer-table>
-
-                            <widget-columnsets>
-                                <id>columnesets</id>
-                                <region>left</region>
-                            </widget-columnsets>
-
-                            <widget-bookmark>
-                                <id>bookmark</id>
-                                <region>left</region>
-                            </widget-bookmark>
-
-                            <widget-export>
-                                <id>export</id>
-                                <region>left</region>
-                            </widget-export>
-
-                            <widget-filters>
-                                <id>filters</id>
-                                <region>left</region>
-                                <title>Filters checkbox</title>
-                            </widget-filters>
-
-                            <widget-filters-selector>
-                                <id>filters-selector</id>
-                                <region>left</region>
-                                <title>Filters selector</title>
-                            </widget-filters-selector>
-
-                            <widget-search>
-                                <id>search</id>
-                                <region>top</region>
-                                <fields>
-                                    <search-field>
-                                        <collection>gene-project-oncodrive</collection>
-                                        <fieldNames>GeneID</fieldNames>
-                                    </search-field>
-                                </fields>
-                            </widget-search>
-
-                            <widget-text>
-                                <id>text</id>
-                                <region>left</region>
-                                <title>Text Widget</title>
-                                <text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>
-                                <details><![CDATA[
-                                    <h1>Lorem ipsum dolor sit amet</h1>
-                                    <p>Maecenas fringilla diam quis lectus vulputate in lobortis odio feugiat. Sed at turpis at massa rhoncus volutpat. In suscipit rhoncus urna, eget fringilla sapien venenatis vel. Nam elit velit, rhoncus at mattis a, laoreet nec ante. Nam velit velit, sagittis et volutpat ornare, ultricies ut justo. Praesent feugiat, enim sit amet rhoncus ultricies, metus velit pulvinar est, sit amet cursus nulla lacus nec tellus. Sed augue metus, dapibus eu venenatis ac, porta non orci. Integer varius sapien quis justo facilisis tempus. In posuere condimentum dictum.</p>
-                                ]]></details>
-                            </widget-text>
-                        </widgets>
+                        <top>search</top>
+                        <left>columnsets, bookmark, export, filters, filters-selector</left>
+                        <main>gene-expression</main>
                     </view>
                 </tab>
             </tabs>

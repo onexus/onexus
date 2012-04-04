@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class MysqlCollectionDDL implements Serializable {
 
     private static String convertURItoTableName(Collection collection) {
         String hashCode = Integer.toHexString(ResourceTools.getParentURI(collection.getURI()).hashCode());
-        String tableName = MysqlUtils.removeNonValidChars(collection.getName());
+        String tableName = MysqlUtils.removeNonValidChars(collection.getId());
 
         // Check that the table name is no longer than 64 characters (the
         // maximum allowed)
@@ -112,7 +112,7 @@ public class MysqlCollectionDDL implements Serializable {
 
     public ColumnInfo getColumnInfoByFieldName(String fieldName) {
         for (ColumnInfo ci : columnInfos.values()) {
-            if (ci.getField().getName().equals(fieldName)) {
+            if (ci.getField().getId().equals(fieldName)) {
                 return ci;
             }
         }
@@ -151,8 +151,8 @@ public class MysqlCollectionDDL implements Serializable {
         // TODO Use common collections filters
         List<String> keys = new ArrayList<String>();
         for (Field field : collection.getFields()) {
-            if (field.isPrimaryKey()) {
-                keys.add(field.getName());
+            if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+                keys.add(field.getId());
             }
         }
 
@@ -163,7 +163,7 @@ public class MysqlCollectionDDL implements Serializable {
                 String fieldURI = keyFields.next();
                 String columnName = null;
                 for (ColumnInfo column : columnInfos.values()) {
-                    if (column.getField().getName().equals(fieldURI)) {
+                    if (column.getField().getId().equals(fieldURI)) {
                         columnName = column.getColumnName();
                         break;
                     }
@@ -195,12 +195,12 @@ public class MysqlCollectionDDL implements Serializable {
         private String columnType = null;
 
         private ColumnInfo(String prefix, Field field) {
-            this.columnName = MysqlUtils.removeNonValidChars(field.getName());
+            this.columnName = MysqlUtils.removeNonValidChars(field.getId());
             this.field = field;
 
             this.columnType = field.getProperty("SQL_COLUMN_TYPE");
             if (this.columnType == null) {
-                this.columnType = columnTypes.get(field.getDataType());
+                this.columnType = columnTypes.get(field.getType());
             }
             if (this.columnType == null) {
                 String msg = "Column type not found for the field: '" + field
@@ -236,7 +236,7 @@ public class MysqlCollectionDDL implements Serializable {
         }
 
         public SQLAdapter getAdapter() {
-            return sqlAdapters.get(field.getDataType());
+            return sqlAdapters.get(field.getType());
         }
 
     }

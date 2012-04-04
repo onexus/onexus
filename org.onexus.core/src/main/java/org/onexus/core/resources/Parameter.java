@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,72 +22,37 @@ import java.io.Serializable;
 public class Parameter implements Serializable {
 
     private String key;
-    private String title;
-    private String description;
-    private boolean mandatory;
-    private Class<?> valueType;
-    private Object defaultValue;
+    private String value;
 
     public Parameter() {
         super();
     }
 
-    public Parameter(String key, String title, String description,
-                     boolean mandatory, Object defaultValue, Class<?> valueType) {
+    public Parameter(String key, String value) {
         super();
         this.key = key;
-        this.title = title;
-        this.description = description;
-        this.mandatory = mandatory;
-        this.defaultValue = defaultValue;
-        this.valueType = valueType;
-    }
-
-    public Class<?> getValueType() {
-        return valueType;
-    }
-
-    public boolean isMandatory() {
-        return mandatory;
-    }
-
-    public void setMandatory(boolean mandatory) {
-        this.mandatory = mandatory;
+        this.value = value;
     }
 
     public String getKey() {
         return key;
     }
 
-    public String getTitle() {
-        return title;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(Object defaultValue) {
-        this.defaultValue = defaultValue;
+    public String getValue() {
+        return value;
     }
 
     @Override
     public String toString() {
-        return "Parameter [key=" + key + ", title=" + title + ", description="
-                + description + ", mandatory=" + mandatory + ", valueType="
-                + valueType + ", defaultValue=" + defaultValue + "]";
+        return "ParameterValue [key=" + key + ", value=" + value + "]";
     }
 
     @Override

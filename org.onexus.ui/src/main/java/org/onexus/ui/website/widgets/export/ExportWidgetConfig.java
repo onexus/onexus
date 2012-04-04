@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,13 +27,6 @@ public class ExportWidgetConfig extends WidgetConfig {
 
     public ExportWidgetConfig() {
         super();
-    }
-
-    public ExportWidgetConfig(String id, String region, String mainCollection,
-                              String... collections) {
-        super(id, region);
-
-
     }
 
     @Override

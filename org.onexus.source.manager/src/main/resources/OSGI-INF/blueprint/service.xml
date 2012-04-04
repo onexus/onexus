@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        >
+
+    <service interface="org.onexus.core.ISourceManager">
+        <bean class="org.onexus.source.manager.SourceManager"/>
+    </service>
+
+</blueprint>

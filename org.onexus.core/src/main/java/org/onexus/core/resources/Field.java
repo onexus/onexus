@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,52 +21,54 @@ import java.util.List;
 
 public class Field implements IMetadata {
 
-    private String name;
-    private String shortName;
+    private String id;
+    private String label;
     private String title;
     private String description;
-    private Class<?> dataType;
-    private boolean primaryKey;
+    private Class<?> type;
+    private Boolean primaryKey;
     private List<Property> properties;
 
     public Field() {
         super();
     }
 
-    public Field(String name, String shortName, String title, Class<?> dataType) {
+    public Field(String id, String label, String title, Class<?> type) {
         super();
-        this.name = name;
-        this.shortName = shortName;
+        this.id = id;
+        this.label = label;
         this.title = title;
-        this.dataType = dataType;
-        this.primaryKey = false;
+        this.type = type;
+        this.primaryKey = null;
     }
 
-    @Override
-    public String getName() {
-        return name;
+
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setDataType(Class<?> dataType) {
-        this.dataType = dataType;
+    public void setType(Class<?> type) {
+        this.type = type;
     }
 
     public void setProperties(List<Property> properties) {
         this.properties = properties;
     }
 
-    public String getShortName() {
-        return shortName;
+    @Override
+    public String getLabel() {
+        return label;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
@@ -84,15 +86,15 @@ public class Field implements IMetadata {
         this.description = description;
     }
 
-    public Class<?> getDataType() {
-        return dataType;
+    public Class<?> getType() {
+        return type;
     }
 
-    public boolean isPrimaryKey() {
+    public Boolean isPrimaryKey() {
         return primaryKey;
     }
 
-    public void setPrimaryKey(boolean primaryKey) {
+    public void setPrimaryKey(Boolean primaryKey) {
         this.primaryKey = primaryKey;
     }
 
@@ -119,7 +121,7 @@ public class Field implements IMetadata {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
 
@@ -132,19 +134,19 @@ public class Field implements IMetadata {
         if (getClass() != obj.getClass())
             return false;
         Field other = (Field) obj;
-        if (name == null) {
-            if (other.name != null)
+        if (id == null) {
+            if (other.id != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!id.equals(other.id))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Field [name=" + name + ", shortName=" + shortName + ", title="
-                + title + ", description=" + description + ", dataType="
-                + dataType + ", primaryKey=" + primaryKey + ", properties="
+        return "Field [id=" + id + ", label=" + label + ", title="
+                + title + ", description=" + description + ", type="
+                + type + ", primaryKey=" + primaryKey + ", properties="
                 + properties + "]";
     }
 

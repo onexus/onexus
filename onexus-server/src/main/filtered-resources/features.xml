@@ -5,12 +5,12 @@
 
 	<feature name='onexus-server' version='${project.version}'>
 		<feature version='${project.version}'>org.onexus.core</feature>
-		<feature version='${project.version}'>org.onexus.collection.manager.basic</feature>
-		<feature version='${project.version}'>org.onexus.task.manager.basic</feature>
-		<feature version='${project.version}'>org.onexus.task.executor.loader.tsv</feature>
-		<feature version='${project.version}'>org.onexus.task.executor.loader.biomart</feature>
-		<feature version='${project.version}'>org.onexus.resource.manager.fs</feature>
-		<feature version='${project.version}'>org.onexus.source.manager.fs</feature>
+		<feature version='${project.version}'>org.onexus.collection.manager</feature>
+		<feature version='${project.version}'>org.onexus.task.manager</feature>
+		<feature version='${project.version}'>org.onexus.loader.tsv</feature>
+		<feature version='${project.version}'>org.onexus.loader.biomart</feature>
+		<feature version='${project.version}'>org.onexus.resource.manager</feature>
+		<feature version='${project.version}'>org.onexus.source.manager</feature>
 		<feature version='${project.version}'>org.onexus.resource.serializer.xstream</feature>
 		<feature version='${project.version}'>org.onexus.collection.store.mysql</feature>
 		<feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>

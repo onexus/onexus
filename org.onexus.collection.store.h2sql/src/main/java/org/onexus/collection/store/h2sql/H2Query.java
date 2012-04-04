@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -98,8 +98,8 @@ public class H2Query extends AbstractSqlQuery {
         for (FixedEntity se : getQuery().getFixedEntities()) {
             for (Link colLink : mainCollection.getLinks()) {
                 if (getAbsoluteCollectionURI(se.getCollectionURI()).equals(
-                        getAbsoluteCollectionURI(colLink.getCollectionURI()))) {
-                    List<String> fields = colLink.getFieldNames();
+                        getAbsoluteCollectionURI(colLink.getCollection()))) {
+                    List<String> fields = colLink.getFields();
                     String[] ids = se.getEntityId().split("\t");
                     if (fields.size() != ids.length) {
                         throw new RuntimeException("Bad entity id: " + se);
@@ -147,8 +147,8 @@ public class H2Query extends AbstractSqlQuery {
                     // TODO Support composed primary keys
                     String fieldName = null;
                     for (Field field : getCollection(collectionId).getFields()) {
-                        if (field.isPrimaryKey()) {
-                            fieldName = field.getName();
+                        if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+                            fieldName = field.getId();
                             break;
                         }
                     }
@@ -169,7 +169,7 @@ public class H2Query extends AbstractSqlQuery {
         if (filter instanceof NotNull) {
             NotNull f = (NotNull) filter;
             // if
-            // (getAbsoluteCollectionURI(f.getCollectionURI()).equals(getAbsoluteCollectionURI(getQuery().getMainCollection())))
+            // (getAbsoluteCollectionURI(f.getCollection()).equals(getAbsoluteCollectionURI(getQuery().getMainCollection())))
             // {
             for (String collectionId : f.getCellCollections()) {
                 addJoin(collectionId, filterJoins);
@@ -185,8 +185,8 @@ public class H2Query extends AbstractSqlQuery {
                 // TODO Support composed primary keys
                 String fieldName = null;
                 for (Field field : getCollection(collectionId).getFields()) {
-                    if (field.isPrimaryKey()) {
-                        fieldName = field.getName();
+                    if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+                        fieldName = field.getId();
                         break;
                     }
                 }
@@ -232,8 +232,8 @@ public class H2Query extends AbstractSqlQuery {
 
             List<String> fields = new ArrayList<String>();
             for (Field field : collection.getFields()) {
-                if (field.isPrimaryKey()) {
-                    fields.add(field.getName());
+                if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+                    fields.add(field.getId());
                 }
             }
 
@@ -361,7 +361,7 @@ public class H2Query extends AbstractSqlQuery {
 
         for (ColumnInfo ci : getCollectionDDL(order.getCollection())
                 .getColumnInfos()) {
-            if (ci.getField().getName().equals(order.getFieldName())) {
+            if (ci.getField().getId().equals(order.getFieldName())) {
 
 
                 orders.add("`" + getCollectionAlias(order.getCollection())
@@ -381,7 +381,7 @@ public class H2Query extends AbstractSqlQuery {
         }
 
         for (Field field : collection.getFields()) {
-            if (field.getName().equals(fieldName)) {
+            if (field.getId().equals(fieldName)) {
                 return true;
             }
         }
@@ -413,9 +413,9 @@ public class H2Query extends AbstractSqlQuery {
             for (FixedEntity se : getQuery().getFixedEntities()) {
                 for (Link colLink : joinCollection.getLinks()) {
                     if (getAbsoluteCollectionURI(se.getCollectionURI())
-                            .equals(getAbsoluteCollectionURI(colLink.getCollectionURI()))) {
+                            .equals(getAbsoluteCollectionURI(colLink.getCollection()))) {
                         collectionsFixed.add(getAbsoluteCollectionURI(se.getCollectionURI()));
-                        List<String> fields = colLink.getFieldNames();
+                        List<String> fields = colLink.getFields();
                         String[] ids = se.getEntityId().split("\t");
                         if (fields.size() != ids.length) {
                             throw new RuntimeException("Bad entity id: " + se);

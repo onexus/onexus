@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,14 +38,12 @@ public class FiltersWidgetConfig extends WidgetConfig {
         super();
     }
 
-    public FiltersWidgetConfig(String id, String region,
-                               FilterConfig... filters) {
-        this(id, region, null, filters);
+    public FiltersWidgetConfig(String id, FilterConfig... filters) {
+        this(id, null, filters);
     }
 
-    public FiltersWidgetConfig(String id, String region,
-                               FieldSelection[] userFields, FilterConfig... filters) {
-        super(id, region);
+    public FiltersWidgetConfig(String id, FieldSelection[] userFields, FilterConfig... filters) {
+        super(id);
 
         if (userFields == null || userFields.length == 0) {
             this.userFilters = false;

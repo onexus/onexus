@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package org.onexus.ui.website.pages.browser;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.ui.website.pages.PageConfig;
-import org.onexus.ui.website.utils.reflection.ListComposer;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
@@ -30,9 +29,12 @@ public class BrowserPageConfig extends PageConfig {
 
     private BrowserPageStatus defaultStatus;
 
-    private String defaultRelease;
+    private String release;
 
     private List<TabConfig> tabs = new ArrayList<TabConfig>();
+
+    private List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
+
 
     public BrowserPageConfig() {
         super();
@@ -55,12 +57,20 @@ public class BrowserPageConfig extends PageConfig {
         this.tabs = tabs;
     }
 
-    public String getDefaultRelease() {
-        return defaultRelease;
+    public String getRelease() {
+        return release;
     }
 
-    public void setDefaultRelease(String defaultRelease) {
-        this.defaultRelease = defaultRelease;
+    public void setRelease(String release) {
+        this.release = release;
+    }
+
+    public List<WidgetConfig> getWidgets() {
+        return widgets;
+    }
+
+    public void setWidgets(List<WidgetConfig> widgets) {
+        this.widgets = widgets;
     }
 
     public BrowserPageStatus createEmptyStatus() {
@@ -73,18 +83,6 @@ public class BrowserPageConfig extends PageConfig {
 
     public void setDefaultStatus(BrowserPageStatus defaultStatus) {
         this.defaultStatus = defaultStatus;
-    }
-
-    private transient List<WidgetConfig> widgetConfigList;
-
-    @Override
-    public List<WidgetConfig> getWidgetConfigs() {
-
-        if (widgetConfigList == null) {
-            this.widgetConfigList = new ListComposer<WidgetConfig>(this, "tabs.views.widgets");
-        }
-
-        return this.widgetConfigList;
     }
 
 

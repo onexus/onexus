@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -87,23 +87,23 @@ public abstract class AbstractSqlQuery {
         Collection collection = getCollection(collectionURI);
 
         for (Field keyField : collection.getFields()) {
-            if (!keyField.isPrimaryKey())
+            if (keyField.isPrimaryKey()==null || !keyField.isPrimaryKey())
                 continue;
 
             String linkCollection = collection.getURI();
-            Link link = MysqlUtils.getLinkByField(collection, keyField.getName());
+            Link link = MysqlUtils.getLinkByField(collection, keyField.getId());
             if (link != null) {
-                linkCollection = link.getCollectionURI();
+                linkCollection = link.getCollection();
             }
-            this.fixedEntities.put(linkCollection + ":" + keyField.getName(), "`" + getCollectionAlias(collectionURI)
-                    + "`.`" + keyField.getName() + "`");
+            this.fixedEntities.put(linkCollection + ":" + keyField.getId(), "`" + getCollectionAlias(collectionURI)
+                    + "`.`" + keyField.getId() + "`");
         }
 
         if (collection.getLinks() != null) {
             for (Link link : collection.getLinks()) {
-                for (String fieldLink : link.getFieldNames()) {
+                for (String fieldLink : link.getFields()) {
                     String fromField = Link.getFromFieldName(fieldLink);
-                    this.fixedEntities.put(getAbsoluteCollectionURI(link.getCollectionURI()) + ":" + fromField, "`"
+                    this.fixedEntities.put(getAbsoluteCollectionURI(link.getCollection()) + ":" + fromField, "`"
                             + getCollectionAlias(collectionURI) + "`.`" + fromField + "`");
                 }
             }
@@ -135,8 +135,8 @@ public abstract class AbstractSqlQuery {
 
         List<String> collectionKeys = new ArrayList<String>();
         for (Field field : collection.getFields()) {
-            if (field.isPrimaryKey()) {
-                collectionKeys.add(field.getName());
+            if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+                collectionKeys.add(field.getId());
             }
         }
 

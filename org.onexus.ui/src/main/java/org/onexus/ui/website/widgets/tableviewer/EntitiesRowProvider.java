@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public abstract class EntitiesRowProvider implements
     private Query buildQuery() {
 
 
-        Query query = new Query(config.getMainCollection());
+        Query query = new Query(config.getCollection());
 
         BrowserPageStatus status = getBrowserPageStatus();
         String releaseURI = (status == null ? null : status.getReleaseURI());

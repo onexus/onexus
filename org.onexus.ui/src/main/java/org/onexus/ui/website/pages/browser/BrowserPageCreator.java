@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,27 +38,32 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
     public void register(IResourceRegister resourceRegister) {
         super.register(resourceRegister);
 
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "pages",
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "pages",
                 "<browser>" +
                         "<id>[page-id]</id>" +
                         "<name>[page-name]</name>" +
-                        "<defaultRelease>0.1</defaultRelease>" +
+                        "<release>[release-name]</release>" +
                         "<tabs></tabs>" +
+                        "<widgets></widgets>" +
                         "</browser>");
 
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "tabs",
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "tabs",
                 "<tab>" +
                         "<id>[tab-id]</id>" +
-                        "<title>Tab title</title>" +
+                        "<title>[tab-title]</title>" +
                         "<view>" +
-                            "<title>View</title>" +
-                            "<layout>single</layout>" +
-                            "<widgets></widgets>" +
+                        "<title>[view-title]</title>" +
                         "</view></tab>");
 
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "layout", "single");
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "layout", "leftmain");
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "layout", "topleft");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "tab",  "<id>[tab-id]</id>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "tab",  "<title>[tab-title]</title>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "tab",  "<view><title>[view-title]</title></view>");
+
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<main>[widget-ids]</main>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<left>[widget-ids]</left>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<top>[widget-ids]</top>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<top-right>[widget-ids]</top-right>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<title>[view-title]</title>");
 
     }
 }

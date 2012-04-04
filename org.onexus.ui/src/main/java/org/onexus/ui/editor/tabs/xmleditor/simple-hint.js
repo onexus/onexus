@@ -6,10 +6,15 @@
     if (!result || !result.list.length) return;
     var completions = result.list;
     function insert(str) {
-      editor.replaceRange(str, result.from, result.to);
+      if (str.indexOf('<') == 0) {
+        editor.replaceRange(str, result.from, result.to);
+      } else {
+        result.from.ch++;
+        editor.replaceRange(str, result.from, result.to);
+      }
     }
     // When there is only one completion, use it directly.
-    if (completions.length == 1) {insert(completions[0]); return true;}
+    //if (completions.length == 1) {insert(completions[0]); return true;}
 
     // Build the select widget
     var complete = document.createElement("div");

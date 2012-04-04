@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ package org.onexus.ui.website.widgets.tableviewer;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.ui.website.widgets.WidgetConfig;
-import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.List;
 @XStreamAlias("viewer-table")
 public class TableViewerConfig extends WidgetConfig {
     
-    private String mainCollection;
+    private String collection;
 
     private TableViewerStatus defaultStatus;
 
@@ -39,17 +38,17 @@ public class TableViewerConfig extends WidgetConfig {
         super();
     }
 
-    public TableViewerConfig(String id, String region, String mainCollectionURI) {
-        super(id, region);
-        this.mainCollection = mainCollectionURI;
+    public TableViewerConfig(String id, String collection) {
+        super(id);
+        this.collection = collection;
     }
 
-    public String getMainCollection() {
-        return mainCollection;
+    public String getCollection() {
+        return collection;
     }
 
-    public void setMainCollection(String mainCollectionURI) {
-        this.mainCollection = mainCollectionURI;
+    public void setCollection(String collection) {
+        this.collection = collection;
     }
 
     public List<ColumnSet> getColumnSets() {

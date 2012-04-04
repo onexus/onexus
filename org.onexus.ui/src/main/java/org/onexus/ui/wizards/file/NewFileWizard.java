@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
         String parentUri = getParentUri();
 
         if (resource != null && parentUri != null && fileUpload != null) {
-            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getName());
+            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getId());
             sourceManager.store(resourceUri, new File(fileUpload.tempPath), true);
 
             super.onFinish();
@@ -96,7 +96,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
     private final class ResourceName extends WizardStep {
 
         public ResourceName() {
-            super("New project", "Creates a new project inside the current workspace");
+            super("New file", "Creates a new file source inside the current release");
 
             add(getFieldResourceName());
 
@@ -104,7 +104,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
 
         @Override
         public boolean isComplete() {
-            return getResource().getName() != null;
+            return getResource().getId() != null;
         }
 
 

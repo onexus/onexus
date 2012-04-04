@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.core.utils.SingleEntityQuery;
+import org.onexus.ui.website.utils.SingleEntityQuery;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventPanel;
@@ -78,7 +78,7 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
 
                 String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
                 if (collectionLabel == null) {
-                    collectionLabel = collection.getName();
+                    collectionLabel = collection.getId();
                 }
 
                 String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
@@ -147,7 +147,7 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
 
 
         for (Field field : entity.getCollection().getFields()) {
-            String fieldName = field.getName();
+            String fieldName = field.getId();
             entityPattern = entityPattern.replaceAll(
                     Pattern.quote("${" + fieldName + "}"),
                     String.valueOf(entity.get(fieldName))

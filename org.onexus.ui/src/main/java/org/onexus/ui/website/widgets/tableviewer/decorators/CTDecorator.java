@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ public class CTDecorator extends FieldDecorator {
     }
 
     protected String getTooltip(IEntity data) {
-        Object value = data.get(getValueProperty().getName());
+        Object value = data.get(getValueProperty().getId());
         return (value == null ? "" : value.toString());
     }
 
@@ -118,7 +118,7 @@ public class CTDecorator extends FieldDecorator {
         IEntity entity = data.getObject();
 
         Object value = (entity != null ? entity.get(getValueProperty()
-                .getName()) : null);
+                .getId()) : null);
         String shortName = (value != null ? shortNames.get(value.toString()
                 .toUpperCase()) : "");
         shortName = (shortName == null ? value.toString().toLowerCase()

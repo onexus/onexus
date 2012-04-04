@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website;
 
+import org.onexus.core.resources.Project;
 import org.onexus.ui.IResourceActivator;
 import org.onexus.ui.IResourceRegister;
 
@@ -25,8 +26,11 @@ public class WebsiteActivator implements IResourceActivator {
     @Override
     public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(WebsiteConfig.class);
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "", "<website><title>Onexus powered website</title><pages></pages></website>");
-        resourceRegister.addAutocompleteHint(WebsiteConfig.class, "website", "<defaultStatus><currentPageId>[page-id]</currentPageId></defaultStatus>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<default><currentPage>[page-id]</currentPage></default>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<title>[title]</title>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<pages></pages>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<description>[description]</description>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<property><key>[key]</key><value>[value]</value></property>");
     }
 
     @Override

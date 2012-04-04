@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 package org.onexus.ui.website.widgets.tableviewer;
 
 import org.onexus.ui.IResourceRegister;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
@@ -39,7 +40,19 @@ public class TableViewerCreator extends AbstractWidgetCreator<TableViewerConfig,
         resourceRegister.register(TableViewerConfig.class);
         resourceRegister.register(ColumnConfig.class);
         resourceRegister.register(ColumnSet.class);
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets", "<viewer-table>\n" +
+                "          <id>table</id>\n" +
+                "          <collection>[main collection]</collection>\n" +
+                "          <columnset>\n" +
+                "            <columns>\n" +
+                "              <column>\n" +
+                "                <collection>[collection]</collection>\n" +
+                "                <fields>[field names]</fields>\n" +
+                "                <decorator>[decorator name]</decorator>\n" +
+                "              </column>\n" +
+                "            </columns>\n" +
+                "          </columnset>\n" +
+                "        </viewer-table>");
     }
-
 
 }

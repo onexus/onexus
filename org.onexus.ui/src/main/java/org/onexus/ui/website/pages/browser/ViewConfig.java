@@ -1,3 +1,20 @@
+/**
+ *  Copyright 2012 Universitat Pompeu Fabra.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
 package org.onexus.ui.website.pages.browser;
 
 
@@ -9,9 +26,11 @@ import java.util.List;
 public class ViewConfig implements Serializable {
 
     private String title;
-    private String layout;
-    
-    private List<WidgetConfig> widgets;
+
+    private String main;
+    private String left;
+    private String top;
+    private String topRight;
 
     public ViewConfig() {
     }
@@ -24,20 +43,36 @@ public class ViewConfig implements Serializable {
         this.title = title;
     }
 
-    public String getLayout() {
-        return layout;
+    public String getMain() {
+        return main;
     }
 
-    public void setLayout(String layout) {
-        this.layout = layout;
+    public void setMain(String main) {
+        this.main = main;
     }
 
-    public List<WidgetConfig> getWidgets() {
-        return widgets;
+    public String getTop() {
+        return top;
     }
 
-    public void setWidgets(List<WidgetConfig> widgets) {
-        this.widgets = widgets;
+    public void setTop(String top) {
+        this.top = top;
+    }
+
+    public String getLeft() {
+        return left;
+    }
+
+    public void setLeft(String left) {
+        this.left = left;
+    }
+
+    public String getTopRight() {
+        return topRight;
+    }
+
+    public void setTopRight(String topRight) {
+        this.topRight = topRight;
     }
 
     @Override

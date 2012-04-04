@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
+import org.onexus.ui.website.utils.panels.HelpMark;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -61,8 +62,22 @@ public class WizardViewerTabPanel extends Panel {
                     }
                 };
 
-                link.add(new Label("title", item.getModelObject().getTitle()));
+                IWizardCreator wizard = item.getModelObject();
+                String label = wizard.getLabel();
+                String title = wizard.getTitle();
+                String description = wizard.getDescription();
+
+                link.add(new Label("label", label));
                 item.add(link);
+
+                item.add(new Label("title", title));
+
+                if ( description != null ) {
+                    item.add(new HelpMark("description", title, description));
+                } else {
+                    item.add(new EmptyPanel("description"));
+                }
+
             }
         });
 

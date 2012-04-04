@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus>
     private Filter buildSearchFieldFilter(SearchField field, String search) {
 
         String collectionURI = field.getCollection();
-        String fieldNames[] = field.getFieldNames().split(",");
+        String fieldNames[] = field.getFields().split(",");
 
         Filter filter = new Like(collectionURI, fieldNames[0].trim(), search);
 

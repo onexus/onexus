@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -47,10 +47,10 @@ public abstract class PageConfig implements Serializable {
         this.name = name;
     }
 
-    public WidgetConfig getWidgetConfig(String id) {
+    public WidgetConfig getWidget(String id) {
 
         if (id != null) {
-            for (WidgetConfig config : getWidgetConfigs()) {
+            for (WidgetConfig config : getWidgets()) {
                 if (id.equals(config.getId())) {
                     return config;
                 }
@@ -59,7 +59,7 @@ public abstract class PageConfig implements Serializable {
         return null;
     }
 
-    public abstract List<WidgetConfig> getWidgetConfigs();
+    public abstract List<WidgetConfig> getWidgets();
 
     public abstract PageStatus createEmptyStatus();
 

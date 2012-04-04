@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,42 +24,33 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.pages.browser.ViewConfig;
+import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.Collection;
 import java.util.List;
 
-public class TopleftLayout extends Panel {
-
-    public static final String LAYOUT = "topleft";
-
-    public static final String REGION_TOP = "top";
-    public static final String REGION_TOP_RIGHT = "top-right";
-    public static final String REGION_LEFT = "left";
-    public static final String REGION_MAIN = "main";
+public class TopleftLayout extends AbstractLayout {
 
     public static final CssResourceReference CSS = new CssResourceReference(TopleftLayout.class, "TopleftLayout.css");
 
-    public static final RegionPredicate PREDICATE_TOP = new RegionPredicate(REGION_TOP);
-    public static final RegionPredicate PREDICATE_TOP_RIGHT = new RegionPredicate(REGION_TOP_RIGHT);
-    public static final RegionPredicate PREDICATE_LEFT = new RegionPredicate(REGION_LEFT);
-    public static final RegionPredicate PREDICATE_MAIN = new RegionPredicate(REGION_MAIN);
 
-    public TopleftLayout(String panelId, List<WidgetConfig> widgets, IPageModel<BrowserPageStatus> statusModel) {
-        super(panelId);
+    public TopleftLayout(String panelId, ViewConfig viewConfig, IPageModel<BrowserPageStatus> statusModel) {
+        super(panelId, statusModel);
 
         // Add left widgets
-        add(new VerticalWidgetBar("leftwidgets", filterWidgets(widgets, PREDICATE_LEFT), statusModel));
+        add(new VerticalWidgetBar("leftwidgets", filterWidgets(viewConfig.getLeft()), statusModel));
 
         // Add main widgets
-        add(new HorizontalWidgetBar("topwidgets", filterWidgets(widgets, PREDICATE_TOP), statusModel));
+        add(new HorizontalWidgetBar("topwidgets", filterWidgets(viewConfig.getTop()), statusModel));
 
         // Add main widgets
-        add(new HorizontalWidgetBar("toprightwidgets", filterWidgets(widgets, PREDICATE_TOP_RIGHT), statusModel));
+        add(new HorizontalWidgetBar("toprightwidgets", filterWidgets(viewConfig.getTopRight()), statusModel));
 
 
         // Add main widgets
-        add(new HorizontalWidgetBar("main", filterWidgets(widgets, PREDICATE_MAIN), statusModel));
+        add(new HorizontalWidgetBar("main", filterWidgets(viewConfig.getMain()), statusModel));
 
     }
 
@@ -68,29 +59,4 @@ public class TopleftLayout extends Panel {
         super.renderHead(response);
         response.renderCSSReference(CSS);
     }
-
-    private static Collection<WidgetConfig> filterWidgets(Collection<WidgetConfig> allWidgets, Predicate predicate) {
-        return CollectionUtils.select(allWidgets, predicate);
-    }
-
-    private static class RegionPredicate implements Predicate {
-
-        private String region;
-
-        private RegionPredicate(String region) {
-            assert region != null;
-            this.region = region;
-        }
-
-        @Override
-        public boolean evaluate(Object object) {
-
-            if (object instanceof WidgetConfig) {
-                return (region.equals(((WidgetConfig) object).getRegion()));
-            }
-
-            return false;
-        }
-    }
-
 }

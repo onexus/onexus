@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ public abstract class ListItemsFilterPanel extends Panel {
             // set this form to multipart mode (allways needed for uploads!)
             setMultiPart(true);
 
-            /* add(new Label("type", entityCollection.getName())); */
+            /* add(new Label("type", entityCollection.getId())); */
 
             TextField<String> filterName = new TextField<String>("filterName", getFilterNameModel());
             add(filterName);

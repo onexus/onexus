@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -85,8 +85,10 @@ public class ResourcesPage extends BasePage {
 
                 if (fullscreen) {
                     resourcesTabs.add(ATTRIBUTE_MODIFIER_MAX);
+                    addOrReplace(new Label("label", ">>"));
                 } else {
                     resourcesTabs.add(ATTRIBUTE_MODIFIER_MIN);
+                    addOrReplace(new Label("label", "<<").setEscapeModelStrings(true));
                 }
 
                 setModelObject(fullscreen);
@@ -96,9 +98,9 @@ public class ResourcesPage extends BasePage {
 
         };
 
-        fullscreenLink.add(new Image("image", "fullscreen.png"));
+        fullscreenLink.add(new Label("label", "<<"));
 
-        resourcesTabs.add(fullscreenLink);
+        resourceInfo.add(fullscreenLink);
 
         resourcesTabs.add(new ViewerTabs("viewers", currentResource));
 

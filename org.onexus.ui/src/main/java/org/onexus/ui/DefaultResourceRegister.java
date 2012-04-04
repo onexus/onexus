@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 package org.onexus.ui;
 
 import org.onexus.core.IResourceSerializer;
+import org.onexus.core.resources.*;
+import org.onexus.core.resources.Collection;
 import org.osgi.framework.ServiceReference;
 
 import javax.swing.event.TreeModelListener;
@@ -32,6 +34,55 @@ public class DefaultResourceRegister implements IResourceRegister {
     private List<IResourceActivator> resourceActivators;
     
     private Map<Class<?>, Map<String, List<String>>> autocompleteMaps = new HashMap<Class<?>, Map<String, List<String>>>();
+    
+    public DefaultResourceRegister() {
+
+        // Workspace
+        addAutoComplete(Workspace.class, "workspace", "<title>[title]</title>");
+        addAutoComplete(Workspace.class, "workspace", "<description>[description]</description>");
+        addAutoComplete(Workspace.class, "workspace", "<property><key>[key]</key><value>[value]</value></property>");
+
+        // Project
+        addAutoComplete(Project.class, "project", "<title>[title]</title>");
+        addAutoComplete(Project.class, "project", "<description>[description]</description>");
+        addAutoComplete(Project.class, "project", "<property><key>[key]</key><value>[value]</value></property>");
+
+        // Release
+        addAutoComplete(Release.class, "release", "<title>[title]</title>");
+        addAutoComplete(Release.class, "release", "<description>[description]</description>");
+        addAutoComplete(Release.class, "release", "<property><key>[key]</key><value>[value]</value></property>");
+
+        // Source
+        addAutoComplete(Source.class, "source", "<title>[title]</title>");
+        addAutoComplete(Source.class, "source", "<description>[description]</description>");
+        addAutoComplete(Source.class, "source", "<content-type>[title]</content-type>");
+        addAutoComplete(Source.class, "source", "<property><key>[key]</key><value>[value]</value></property>");
+
+        // Collection
+        addAutoComplete(Collection.class, "collection", "<title>[title]</title>");
+        addAutoComplete(Collection.class, "collection", "<description>[description]</description>");
+        addAutoComplete(Collection.class, "collection", "<task><tool>[tool URL]</tool></task>");
+        addAutoComplete(Collection.class, "collection", "<fields></fields>");
+        addAutoComplete(Collection.class, "collection", "<links></links>");
+        addAutoComplete(Collection.class, "task", "<tool>[tool URL]</tool>");
+        addAutoComplete(Collection.class, "task", "<parameter><key>[parameter key]</key><value>[parameter value]</value></parameter>");
+        addAutoComplete(Collection.class, "fields", "<field><name>[name]</name><label>[short label]</label><type>[data type]</type></field>");
+        addAutoComplete(Collection.class, "field", "<name>[name]</name>");
+        addAutoComplete(Collection.class, "field", "<label>[label]</label>");
+        addAutoComplete(Collection.class, "field", "<title>[title]</title>");
+        addAutoComplete(Collection.class, "field", "<description>[description]</description>");
+        addAutoComplete(Collection.class, "field", "<type>[type]</type>");
+        addAutoComplete(Collection.class, "field", "<primary-key>true</primary-key>");
+        addAutoComplete(Collection.class, "field", "<property><key>[key]</key><value>[value]</value></property>");
+        addAutoComplete(Collection.class, "type", "string");
+        addAutoComplete(Collection.class, "type", "double");
+        addAutoComplete(Collection.class, "type", "integer");
+        addAutoComplete(Collection.class, "links", "<link><collection>[collection uri]</collection><field>[field-src-name//field-dst-name]</field></link>");
+        addAutoComplete(Collection.class, "link", "<collection>[collection uri]</collection>");
+        addAutoComplete(Collection.class, "link", "<field>[field-src-name//field-dst-name]</field>");
+
+
+    };
 
     @Override
     public void register(Class<?> resourceType) {
@@ -45,7 +96,7 @@ public class DefaultResourceRegister implements IResourceRegister {
     }
 
     @Override
-    public void addAutocompleteHint(Class<?> resourceType, String parentTag, String hint) {
+    public void addAutoComplete(Class<?> resourceType, String parentTag, String hint) {
         
         if (!autocompleteMaps.containsKey(resourceType)) {
             autocompleteMaps.put(resourceType, new HashMap<String, List<String>>());

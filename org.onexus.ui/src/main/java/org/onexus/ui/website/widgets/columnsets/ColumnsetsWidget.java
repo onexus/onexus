@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -82,18 +82,15 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
 
         String currentTab = getPageStatus().getCurrentTabId();
         String currentView = getPageStatus().getCurrentView();
-        ViewConfig view = getPageConfig().getTab(currentTab).getView(currentView);
+        String mainWidgetId = getPageConfig().getTab(currentTab).getView(currentView).getMain().trim();
+        WidgetConfig widgetConfig = getPageConfig().getWidget(mainWidgetId);
 
-        String widgetId = null;
-        for (WidgetConfig widget : view.getWidgets()) {
-            if (widget instanceof TableViewerConfig) {
-                return (TableViewerConfig) widget;
-            }
+        if (widgetConfig instanceof TableViewerConfig) {
+            return (TableViewerConfig) widgetConfig;
         }
 
         return null;
     }
-
 
     private class AjaxColumnSetSelector extends DropDownChoice<ColumnSet> {
 

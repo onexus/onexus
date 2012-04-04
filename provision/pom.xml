@@ -102,11 +102,6 @@
 			<artifactId>com.springsource.org.joda.time</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.codehaus.jettison</groupId>
-			<artifactId>com.springsource.org.codehaus.jettison</artifactId>
-		</dependency>
-
 		<!-- WICKET -->
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
@@ -127,87 +122,11 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
 		</dependency>
-		
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm-all</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ops4j.pax.logging</groupId>
-			<artifactId>pax-logging-service</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ops4j.pax.logging</groupId>
-			<artifactId>pax-logging-api</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.log</artifactId>
-		</dependency>
-
-		<!-- APACHE FELIX -->
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>javax.servlet</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.http.jetty</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.eventadmin</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.scr</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.webconsole</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.configadmin</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.ipojo.annotations</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.ipojo</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.ipojo.metadata</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.ipojo.webconsole</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.fileinstall</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.bundlerepository</artifactId>
 		</dependency>
 
 		<!-- Onexus -->
@@ -229,19 +148,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.collection.manager.basic</artifactId>
+			<artifactId>org.onexus.collection.manager</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.task.manager.basic</artifactId>
+			<artifactId>org.onexus.task.manager</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.resource.manager.fs</artifactId>
+			<artifactId>org.onexus.resource.manager</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.source.manager.fs</artifactId>
+			<artifactId>org.onexus.source.manager</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
@@ -249,11 +168,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.task.executor.loader.biomart</artifactId>
+			<artifactId>org.onexus.loader.biomart</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.task.executor.loader.tsv</artifactId>
+			<artifactId>org.onexus.loader.tsv</artifactId>
 		</dependency>
 	</dependencies>
 

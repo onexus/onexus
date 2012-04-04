@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,8 +26,18 @@ import org.onexus.ui.IWizardCreator;
 public class NewCollectionWizardCreator implements IWizardCreator {
 
     @Override
+    public String getLabel() {
+        return "New collection";
+    }
+
+    @Override
     public String getTitle() {
         return "New collection";
+    }
+
+    @Override
+    public String getDescription() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -41,8 +51,8 @@ public class NewCollectionWizardCreator implements IWizardCreator {
     }
 
     @Override
-    public boolean isVisible(Class<? extends Resource> resourceType) {
-        return Release.class.isAssignableFrom(resourceType);
+    public boolean isVisible(Resource resource) {
+        return Release.class.isAssignableFrom(resource.getClass());
     }
 
 }

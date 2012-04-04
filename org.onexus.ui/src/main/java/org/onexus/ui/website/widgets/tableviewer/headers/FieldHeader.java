@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -45,21 +45,21 @@ public class FieldHeader extends ElementHeader {
         StringBuilder sortProperty = new StringBuilder();
 
         sortProperty.append(dataType.getURI()).append(SORT_PROPERTY_SEPARATOR);
-        sortProperty.append(attribute.getName());
+        sortProperty.append(attribute.getId());
 
         return sortProperty.toString();
     }
 
     @Override
     public String getLabel() {
-        String label = attribute.getShortName();
-        return (label == null ? attribute.getName() : label);
+        String label = attribute.getLabel();
+        return (label == null ? attribute.getId() : label);
     }
 
     @Override
     public String getTitle() {
         String title = attribute.getTitle();
-        return (title == null ? attribute.getName() : title);
+        return (title == null ? attribute.getId() : title);
     }
 
     @Override

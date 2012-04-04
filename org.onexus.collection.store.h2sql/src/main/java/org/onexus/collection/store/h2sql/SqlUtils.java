@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -169,13 +169,13 @@ public class SqlUtils {
         Iterator<ColumnInfo> itColumns = ddl.getColumnInfos().iterator();
         while (itColumns.hasNext()) {
             ColumnInfo column = itColumns.next();
-            Object value = entity.get(column.getField().getName());
+            Object value = entity.get(column.getField().getId());
             if (value == null) {
 
                 // Check if it's a key field (MySQL don't accept NULL values on
                 // PRIMARY KEY fields)
-                if (column.getField().isPrimaryKey()) {
-                    if (column.getField().getDataType().equals(String.class)) {
+                if (column.getField().isPrimaryKey()!=null && column.getField().isPrimaryKey()) {
+                    if (column.getField().getType().equals(String.class)) {
                         sql.append("'NONE'");
                     } else {
                         sql.append("0");
@@ -218,7 +218,7 @@ public class SqlUtils {
             SQLAdapter adapter = column.getAdapter();
             try {
                 String sqlColumnName = (columnPrefix == null ? columnName : columnPrefix + "_" + columnName);
-                dstObj.put(column.getField().getName(), adapter.extract(rs, sqlColumnName));
+                dstObj.put(column.getField().getId(), adapter.extract(rs, sqlColumnName));
             } catch (Exception e) {
                 LOGGER.error("Error loading column '" + column + "' " + e.getMessage());
                 try {
@@ -261,8 +261,8 @@ public class SqlUtils {
         // Case 1: A has a direct link to B
 
         for (Link link : linksA) {
-            if (link.getCollectionURI().equals(b.getURI())) {
-                for (String field : link.getFieldNames()) {
+            if (link.getCollection().equals(b.getURI())) {
+                for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(a.getURI(), Link.getFromFieldName(field), b.getURI(), Link
                             .getToFieldName(field)));
                 }
@@ -273,14 +273,14 @@ public class SqlUtils {
         // Case 2: All the primary fields of A has a link to collections linked
         // by B
         for (Field field : a.getFields()) {
-            if (field.isPrimaryKey()) {
+            if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
 
                 // The links that link to this field
                 List<Link> keyLinks = new ArrayList<Link>();
                 for (Link link : linksA) {
-                    for (String fieldName : link.getFieldNames()) {
+                    for (String fieldName : link.getFields()) {
                         String fromField = Link.getFromFieldName(fieldName);
-                        if (fromField.equals(field.getName())) {
+                        if (fromField.equals(field.getId())) {
                             keyLinks.add(link);
                         }
                     }
@@ -289,16 +289,16 @@ public class SqlUtils {
                 // Look if there is any match with B links
                 for (Link linkB : linksB) {
                     for (Link linkA : keyLinks) {
-                        String linkBCollection = ResourceTools.getAbsoluteURI(releaseURI, linkB.getCollectionURI());
-                        String linkACollection = ResourceTools.getAbsoluteURI(releaseURI, linkA.getCollectionURI());
+                        String linkBCollection = ResourceTools.getAbsoluteURI(releaseURI, linkB.getCollection());
+                        String linkACollection = ResourceTools.getAbsoluteURI(releaseURI, linkA.getCollection());
 
                         if (linkBCollection.equals(linkACollection)) {
 
                             // Try to match the field links
-                            for (String fieldLinkA : linkA.getFieldNames()) {
+                            for (String fieldLinkA : linkA.getFields()) {
                                 String toFieldA = Link.getToFieldName(fieldLinkA);
 
-                                for (String fieldLinkB : linkB.getFieldNames()) {
+                                for (String fieldLinkB : linkB.getFields()) {
                                     String toFieldB = Link.getToFieldName(fieldLinkB);
                                     if (toFieldA.equals(toFieldB)) {
                                         String fromFieldA = Link.getFromFieldName(fieldLinkA);
@@ -322,7 +322,7 @@ public class SqlUtils {
     public static Link getLinkByField(Collection collection, String fieldName) {
         if (collection.getLinks() != null) {
             for (Link link : collection.getLinks()) {
-                for (String fieldLink : link.getFieldNames()) {
+                for (String fieldLink : link.getFields()) {
                     String fromField = Link.getFromFieldName(fieldLink);
                     if (fieldName.equals(fromField)) {
                         return link;

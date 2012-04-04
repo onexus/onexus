@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -43,8 +43,8 @@ public class H2Entity implements IEntity {
 
         List<String> collectionKeys = new ArrayList<String>();
         for (Field field : collection.getFields()) {
-            if (field.isPrimaryKey()) {
-                collectionKeys.add(field.getName());
+            if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+                collectionKeys.add(field.getId());
             }
         }
 

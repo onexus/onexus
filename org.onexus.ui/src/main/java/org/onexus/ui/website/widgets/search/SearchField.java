@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,16 +26,16 @@ public class SearchField implements Serializable {
 
     private String collection;
 
-    private String fieldNames;
+    private String fields;
 
     public SearchField() {
         super();
     }
 
-    public SearchField(String collectionURI, String fieldNames) {
+    public SearchField(String collectionURI, String fields) {
         super();
         this.collection = collectionURI;
-        this.fieldNames = fieldNames;
+        this.fields = fields;
     }
 
     public String getCollection() {
@@ -46,12 +46,12 @@ public class SearchField implements Serializable {
         this.collection = collectionURI;
     }
 
-    public String getFieldNames() {
-        return fieldNames;
+    public String getFields() {
+        return fields;
     }
 
-    public void setFieldNames(String fieldNames) {
-        this.fieldNames = fieldNames;
+    public void setFields(String fields) {
+        this.fields = fields;
     }
 
 }

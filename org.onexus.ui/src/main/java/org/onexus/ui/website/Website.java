@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class Website extends WebPage {
                 Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
                 link.add(new Label("name", pageConfig.getName()));
 
-                String currentPage = websiteStatus.getCurrentPageId();
+                String currentPage = websiteStatus.getCurrentPage();
 
                 item.add(link);
 
@@ -92,7 +92,7 @@ public class Website extends WebPage {
             }
         });
 
-        String currentPage = websiteStatus.getCurrentPageId();
+        String currentPage = websiteStatus.getCurrentPage();
         PageConfig pageConfig = websiteConfig.getPage(currentPage);
 
         add(pageManager.create("page", new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
@@ -141,7 +141,7 @@ public class Website extends WebPage {
 
         // Default config status
         if (websiteStatus == null) {
-            websiteStatus = websiteConfig.getDefaultStatus();
+            websiteStatus = websiteConfig.getDefault();
         }
 
         // Empty status
@@ -152,10 +152,10 @@ public class Website extends WebPage {
         // Set current page
         StringValue pageId = pageParameters.get(PARAMETER_PAGE);
         if (!pageId.isEmpty()) {
-            websiteStatus.setCurrentPageId(pageId.toString());
+            websiteStatus.setCurrentPage(pageId.toString());
         } else {
             if (websiteConfig.getPages() != null && !websiteConfig.getPages().isEmpty()) {
-                websiteStatus.setCurrentPageId(websiteConfig.getPages().get(0).getId());
+                websiteStatus.setCurrentPage(websiteConfig.getPages().get(0).getId());
             } else {
                 throw new WicketRuntimeException("No page definition in this website. Add at least one page.");
             }

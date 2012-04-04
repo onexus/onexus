@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public interface IResourceRegister {
 
     public ClassLoader getResourcesClassLoader();
     
-    public void addAutocompleteHint(Class<?> resourceType, String parentTag, String hint);
+    public void addAutoComplete(Class<?> resourceType, String parentTag, String hint);
     
     public Map<String, List<String>> getAutocompleteMap(Class<?> resourceType);
 }

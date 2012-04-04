@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,9 +25,20 @@ import org.onexus.ui.IWizardCreator;
 
 public class NewReleaseWizardCreator implements IWizardCreator {
 
+
+    @Override
+    public String getLabel() {
+        return "New release";
+    }
+
     @Override
     public String getTitle() {
-        return "New release";
+        return "Create a new release";
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
     }
 
     @Override
@@ -41,8 +52,8 @@ public class NewReleaseWizardCreator implements IWizardCreator {
     }
 
     @Override
-    public boolean isVisible(Class<? extends Resource> resourceType) {
-        return Project.class.isAssignableFrom(resourceType);
+    public boolean isVisible(Resource resource) {
+        return Project.class.isAssignableFrom(resource.getClass());
     }
 
 }

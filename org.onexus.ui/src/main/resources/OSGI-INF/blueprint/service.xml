@@ -69,6 +69,9 @@
         <bean class="org.onexus.ui.wizards.file.NewFileWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
+        <bean class="org.onexus.ui.wizards.file.CreateCollectionWizardCreator"/>
+    </service>
+    <service interface="org.onexus.ui.IWizardCreator">
         <bean class="org.onexus.ui.wizards.resource.RemoveResourceWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">

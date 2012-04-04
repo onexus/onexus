@@ -114,12 +114,12 @@
 							</descriptors>
 							<features>
 								<feature>org.onexus.core</feature>
-								<feature>org.onexus.collection.manager.basic</feature>
-								<feature>org.onexus.task.manager.basic</feature>
-								<feature>org.onexus.task.executor.loader.tsv</feature>
-								<feature>org.onexus.task.executor.loader.biomart</feature>
-								<feature>org.onexus.resource.manager.fs</feature>
-                                <feature>org.onexus.source.manager.fs</feature>
+								<feature>org.onexus.collection.manager</feature>
+								<feature>org.onexus.task.manager</feature>
+								<feature>org.onexus.loader.tsv</feature>
+								<feature>org.onexus.loader.biomart</feature>
+								<feature>org.onexus.resource.manager</feature>
+                                <feature>org.onexus.source.manager</feature>
 								<feature>org.onexus.resource.serializer.xstream</feature>
 								<feature>org.onexus.collection.store.mysql</feature>
 								<feature>org.onexus.collection.store.h2sql</feature>

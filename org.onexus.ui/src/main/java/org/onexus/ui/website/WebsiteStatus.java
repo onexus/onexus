@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,12 +38,12 @@ public class WebsiteStatus implements Serializable {
     }
 
 
-    public String getCurrentPageId() {
+    public String getCurrentPage() {
         return currentPageId;
     }
 
 
-    public void setCurrentPageId(String currentPageId) {
+    public void setCurrentPage(String currentPageId) {
         this.currentPageId = currentPageId;
     }
 
@@ -63,7 +63,7 @@ public class WebsiteStatus implements Serializable {
 
 
     public PageStatus getCurrentPageStatus() {
-        return getPageStatus(getCurrentPageId());
+        return getPageStatus(getCurrentPage());
     }
 
 

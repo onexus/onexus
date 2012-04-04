@@ -22,23 +22,58 @@
 
 .resources-tabs-min {
 	top: 122px;
-	left: 304px;
+	left: 322px;
 }
 
 .resources-tabs-max {
-	top: 0px;
-	left: 0px;
+	top: 122px;
+	left: 21px;
 }
 
+div.lefttoolbar {
+	position: absolute;
+	overflow: hidden;
+	top: 122px;
+	bottom: 0px;
+	width: 20px;
+	background-color: #EEE;
+	border-right: 1px solid #999;
+}
 .resources-tree {
 	position: absolute;
 	overflow: auto;
 	top: 122px;
 	bottom: 0px;
 	width: 300px;
+	left: 21px;
 	margin: 0;
 	padding: 0;
-	border-right: 4px solid #BBB;
+	border-right: 1px solid #999;
+}
+
+.resources-tree > div > table {
+    width: 100%;
+}
+
+.resources-tree table {
+    font-size: 11px;
+    font-stretch: ultra-condensed;
+}
+
+div.resourceuri {
+	background-color: #C6CFDE;
+	padding-left: 10px;
+	font-stretch: ultra-condensed;
+	font-size: 11px;
+	color: #333;
+	border-bottom: 1px solid #999;
+}
+
+div.resourceuri a {
+	font-size: 12px;
+	font-weight: bold;
+	color: #444;
+	padding: 4px;
 }
 
 .resources-tree td {
@@ -148,15 +183,17 @@ form>div>div.tab-row a:hover {
 
 ul.feedbackPanel {
 	float: right;
-	height: 44px;
+	height: 23px;
 	margin: 0px 5px;
-	width: 500px;
+	padding: 2px 10px;
+	width: 550px;
 	overflow: auto;
 	background-color: #FEE;
 	color: #F00;
 	border: 1px solid red;
 	list-style: none;
-	font-size: 10px;
+	font-size: 12px;
+	font-weight: bold;
 }
 
 div.wizard ul.feedbackPanel {
@@ -236,8 +273,24 @@ ul.wizard-list a {
    font-weight: bold;
 }
 
+ul.wizard-list li span.title {
+   font-style:italic;
+}
+
+
+ul.wizard-list div {
+    float: left;
+    margin: 6px 4px;
+}
+
+
 div.wizard ul {
     list-style: none;
+}
+
+div.wizard ul li {
+    padding: 10px;
+    clear: both;
 }
 
 div.wizard label {

@@ -1,134 +1,119 @@
 <collection>
-  <title>Gene Oncodrive analysis</title>
-  <description>Gene Oncodrive analysis</description>
-  <properties/>
-  <task>
-    <toolURI>http://www.onexus.org/tools/loader-tsv/1.0.0</toolURI>
-    <parameters>
-      <parameter-value>
-        <key>SOURCE_URI</key>
-        <value class="string">${release.uri}/gene-project-oncodrive.tsv</value>
-      </parameter-value>
-    </parameters>
-  </task>
-  <fields>
-    <field>
-      <name>GENEID</name>
-      <shortName>gene</shortName>
-      <title>ENSEMBL gene ID </title>
-      <dataType>java.lang.String</dataType>
-      <primaryKey>true</primaryKey>
-    </field>
-    <field>
-      <name>PROJECTID</name>
-      <shortName>Project ID</shortName>
-      <title>Project identifier</title>
-      <dataType>java.lang.String</dataType>
-      <primaryKey>true</primaryKey>
-    </field>
+    <title>Gene Oncodrive analysis</title>
+    <description>Gene Oncodrive analysis</description>
+    <loader>
+        <plugin>mvn:org.onexus/org.onexus.loader.tsv/0.2</plugin>
+        <parameter>
+            <key>SOURCE_URI</key>
+            <value>${release.uri}/gene-project-oncodrive.tsv</value>
+        </parameter>
+    </loader>
+    <fields>
+        <field>
+            <id>GENEID</id>
+            <label>gene</label>
+            <title>ENSEMBL gene ID</title>
+            <type>string</type>
+            <primary-key>true</primary-key>
+        </field>
 
-    <field>
-      <name>MUTSAMPLES</name>
-      <shortName>Mutated Samples</shortName>
-      <title>Number of samples with mutations</title>
-      <dataType>java.lang.Integer</dataType>
-      <primaryKey>false</primaryKey>
-    </field>
+        <field>
+            <id>PROJECTID</id>
+            <label>Project ID</label>
+            <title>Project identifier</title>
+            <type>string</type>
+            <primary-key>true</primary-key>
+        </field>
 
-    <field>
-      <name>ZSCOREEXT</name>
-      <shortName>Zscore(ext)</shortName>
-      <title>Zscore computed with external null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-    </field>
-    <field>
-      <name>QVEXT</name>
-      <shortName>qv(ext)</shortName>
-      <title>qvalue computed with external null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-      <properties>
-        <property>
-          <key>BROWSER_DECORATOR</key>
-          <value>PVALUE2</value>
-        </property>
-      </properties>
-    </field>
-    <field>
-      <name>ZSCOREPOOLED</name>
-      <shortName>Zscore(pooled)</shortName>
-      <title>Zscore computed with pooled somatic mutations null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-    </field>
-   <field>
-      <name>PVPOOLED</name>
-      <shortName>pv(pooled)</shortName>
-      <title>pvalue computed with pooled somatic mutations null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-      <properties>
-        <property>
-          <key>BROWSER_DECORATOR</key>
-          <value>PVALUE2</value>
-        </property>
-      </properties>
-    </field>
- <field>
-      <name>ZSCORECOSMIC</name>
-      <shortName>Zscore(Cosmic)</shortName>
-      <title>Zscore computed with Cosmic mutations null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-    </field>
- <field>
-      <name>PVCOSMIC</name>
-      <shortName>pv(Cosmic)</shortName>
-      <title>pvalue computed with Cosmic mutations null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-      <properties>
-        <property>
-          <key>BROWSER_DECORATOR</key>
-          <value>PVALUE2</value>
-        </property>
-      </properties>
-    </field>
- <field>
-      <name>ZSCOREINT</name>
-      <shortName>Zscore(int)</shortName>
-      <title>Zscore computed with internal null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-    </field>
-<field>
-      <name>PVINT</name>
-      <shortName>pv(int)</shortName>
-      <title>pvalue computed with internal null distribution</title>
-      <dataType>java.lang.Double</dataType>
-      <primaryKey>false</primaryKey>
-      <properties>
-        <property>
-          <key>BROWSER_DECORATOR</key>
-          <value>PVALUE2</value>
-        </property>
-      </properties>
-    </field>
+        <field>
+            <id>MUTSAMPLES</id>
+            <label>Mutated Samples</label>
+            <title>Number of samples with mutations</title>
+            <type>integer</type>
+        </field>
 
-  </fields>
-  <links>
-    <link>
-      <collectionURI>genes</collectionURI>
-      <fieldNames>
-        <string>GENEID</string>
-      </fieldNames>
-    </link>
-    <link>
-      <collectionURI>projects</collectionURI>
-      <fieldNames>
-        <string>PROJECTID</string>
-      </fieldNames>
-    </link>
-  </links>
+        <field>
+            <id>ZSCOREEXT</id>
+            <label>Zscore(ext)</label>
+            <title>Zscore computed with external null distribution</title>
+            <type>double</type>
+        </field>
+
+        <field>
+            <id>QVEXT</id>
+            <label>qv(ext)</label>
+            <title>qvalue computed with external null distribution</title>
+            <type>double</type>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+        </field>
+
+        <field>
+            <id>ZSCOREPOOLED</id>
+            <label>Zscore(pooled)</label>
+            <title>Zscore computed with pooled somatic mutations null distribution</title>
+            <type>double</type>
+        </field>
+
+        <field>
+            <id>PVPOOLED</id>
+            <label>pv(pooled)</label>
+            <title>pvalue computed with pooled somatic mutations null distribution</title>
+            <type>double</type>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+        </field>
+
+        <field>
+            <id>ZSCORECOSMIC</id>
+            <label>Zscore(Cosmic)</label>
+            <title>Zscore computed with Cosmic mutations null distribution</title>
+            <type>double</type>
+        </field>
+
+        <field>
+            <id>PVCOSMIC</id>
+            <label>pv(Cosmic)</label>
+            <title>pvalue computed with Cosmic mutations null distribution</title>
+            <type>double</type>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+        </field>
+
+        <field>
+            <id>ZSCOREINT</id>
+            <label>Zscore(int)</label>
+            <title>Zscore computed with internal null distribution</title>
+            <type>double</type>
+        </field>
+
+        <field>
+            <id>PVINT</id>
+            <label>pv(int)</label>
+            <title>pvalue computed with internal null distribution</title>
+            <type>double</type>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+        </field>
+    </fields>
+
+    <links>
+        <link>
+            <collection>genes</collection>
+            <field>GENEID</field>
+        </link>
+        <link>
+            <collection>projects</collection>
+            <field>PROJECTID</field>
+        </link>
+    </links>
+
 </collection>

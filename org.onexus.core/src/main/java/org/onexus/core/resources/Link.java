@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,49 +23,51 @@ import java.util.List;
 
 public class Link implements Serializable {
 
-    private String collectionURI;
-    private List<String> fieldNames = new ArrayList<String>();
+    public final static String FIELDS_SEPARATOR = "==";
+
+    private String collection;
+    private List<String> fields = new ArrayList<String>();
 
     public Link() {
         super();
     }
 
-    public Link(String collectionURI, List<String> fieldNames) {
+    public Link(String collection, List<String> fields) {
         super();
-        this.collectionURI = collectionURI;
-        this.fieldNames = fieldNames;
+        this.collection = collection;
+        this.fields = fields;
     }
 
-    public String getCollectionURI() {
-        return collectionURI;
+    public String getCollection() {
+        return collection;
     }
 
-    public void setCollectionURI(String collectionURI) {
-        this.collectionURI = collectionURI;
+    public void setCollection(String collection) {
+        this.collection = collection;
     }
 
-    public List<String> getFieldNames() {
-        return fieldNames;
+    public List<String> getFields() {
+        return fields;
     }
 
-    public void setFieldNames(List<String> fieldNames) {
-        this.fieldNames = fieldNames;
+    public void setFields(List<String> fieldNames) {
+        this.fields = fieldNames;
     }
 
     @Override
     public String toString() {
-        return "Link [collectionURI=" + collectionURI + ", fieldNames="
-                + fieldNames + "]";
+        return "Link [collection=" + collection + ", fields="
+                + fields + "]";
     }
 
     public static String getToFieldName(String fieldLink) {
-        String values[] = fieldLink.split("\\/\\/");
-        return (values.length == 2 ? values[1] : values[0]);
+        String values[] = fieldLink.split(FIELDS_SEPARATOR);
+        return (values.length == 2 ? values[1].trim() : values[0].trim());
     }
 
     public static String getFromFieldName(String fieldLink) {
-        String values[] = fieldLink.split("\\/\\/");
-        return values[0];
+        String values[] = fieldLink.split(FIELDS_SEPARATOR);
+        return values[0].trim();
     }
 
 }

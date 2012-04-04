@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 package org.onexus.ui.website.widgets.filters;
 
 import org.apache.wicket.model.IModel;
+import org.onexus.ui.IResourceRegister;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
@@ -33,4 +35,9 @@ public class SelectorFilterWidgetCreator extends AbstractWidgetCreator<SelectorF
         return new SelectorFilterWidget(componentId, statusModel);
     }
 
+    @Override
+    public void register(IResourceRegister resourceRegister) {
+        super.register(resourceRegister);
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<id>[tab-id]</id>");
+    }
 }

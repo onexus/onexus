@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -29,12 +28,10 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.onexus.core.resources.Release;
 import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.OnexusWebSession;
@@ -45,10 +42,11 @@ import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.events.EventViewChange;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.Page;
-import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
+import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
+import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,7 +161,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
 
         List<String> views = new ArrayList<String>();
-        for (ViewConfig view :  getCurrentTab().getViews()) {
+        for (ViewConfig view : getCurrentTab().getViews()) {
             views.add(view.getTitle());
         }
 
@@ -197,17 +195,12 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             }
         }
 
-        String layout = (viewConfig == null ? null : viewConfig.getLayout());
-        if (layout == null) {
-            addOrReplace(new EmptyPanel("content"));
-
-        } else if (layout.equals(TopleftLayout.LAYOUT)) {
-            addOrReplace(new TopleftLayout("content", viewConfig.getWidgets(), getPageModel()));
-
-        } else if (layout.equals(LeftMainLayout.LAYOUT)) {
-            addOrReplace(new LeftMainLayout("content", viewConfig.getWidgets(), getPageModel()));
-        } else if (layout.equals(SingleLayout.LAYOUT)) {
-            addOrReplace(new SingleLayout("content", viewConfig.getWidgets(), getPageModel()));
+        if (viewConfig.getLeft() != null && viewConfig.getTop() != null) {
+            addOrReplace(new TopleftLayout("content", viewConfig, getPageModel()));
+        } else if (viewConfig.getLeft() != null) {
+            addOrReplace(new LeftMainLayout("content", viewConfig, getPageModel()));
+        } else {
+            addOrReplace(new SingleLayout("content", viewConfig, getPageModel()));
         }
 
         super.onBeforeRender();
@@ -236,7 +229,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super.renderHead(response);
 
         response.renderCSSReference(CSS);
-       // response.renderJavaScriptReference(JS);
+        // response.renderJavaScriptReference(JS);
     }
 
 }

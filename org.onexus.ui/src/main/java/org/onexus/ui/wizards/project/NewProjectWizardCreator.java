@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,8 +26,18 @@ import org.onexus.ui.IWizardCreator;
 public class NewProjectWizardCreator implements IWizardCreator {
 
     @Override
-    public String getTitle() {
+    public String getLabel() {
         return "New project";
+    }
+
+    @Override
+    public String getTitle() {
+        return "Creates a new project inside the current workspace";
+    }
+
+    @Override
+    public String getDescription() {
+        return "long description";
     }
 
     @Override
@@ -41,8 +51,8 @@ public class NewProjectWizardCreator implements IWizardCreator {
     }
 
     @Override
-    public boolean isVisible(Class<? extends Resource> resourceType) {
-        return Workspace.class.isAssignableFrom(resourceType);
+    public boolean isVisible(Resource resource) {
+        return Workspace.class.isAssignableFrom(resource.getClass());
     }
 
 }

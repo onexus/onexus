@@ -46,17 +46,17 @@
         <module>onexus-server</module>
         <module>org.onexus.core</module>
         <module>org.onexus.collection.store.mysql</module>
-        <module>org.onexus.collection.manager.basic</module>
-        <module>org.onexus.task.manager.basic</module>
-        <module>org.onexus.task.executor.loader.tsv</module>
-        <module>org.onexus.resource.manager.fs</module>
+        <module>org.onexus.collection.manager</module>
+        <module>org.onexus.task.manager</module>
+        <module>org.onexus.loader.tsv</module>
+        <module>org.onexus.resource.manager</module>
         <module>org.onexus.resource.serializer.xstream</module>
         <module>org.onexus.ui</module>
-        <module>org.onexus.task.executor.loader.biomart</module>
-        <module>org.onexus.task.executor.anduril</module>
+        <module>org.onexus.loader.biomart</module>
+        <module>org.onexus.loader.anduril</module>
         <module>org.onexus.collection.store.h2sql</module>
         <module>onexus-resources</module>
-        <module>org.onexus.source.manager.fs</module>
+        <module>org.onexus.source.manager</module>
     </modules>
 
     <build>
@@ -183,103 +183,14 @@
                 <artifactId>com.springsource.org.joda.time</artifactId>
                 <version>1.6.0</version>
             </dependency>
-            <dependency>
-                <groupId>org.codehaus.jettison</groupId>
-                <artifactId>com.springsource.org.codehaus.jettison</artifactId>
-                <version>1.0.1</version>
-            </dependency>
+
             <!-- Logging -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>1.6.1</version>
             </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
-                <version>1.6.4</version>
-            </dependency>
-            <dependency>
-                <groupId>asm</groupId>
-                <artifactId>asm-all</artifactId>
-                <version>3.3.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ops4j.pax.logging</groupId>
-                <artifactId>pax-logging-service</artifactId>
-                <version>1.6.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ops4j.pax.logging</groupId>
-                <artifactId>pax-logging-api</artifactId>
-                <version>1.6.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.log</artifactId>
-                <version>1.0.1</version>
-            </dependency>
-            <!-- APACHE FELIX -->
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>javax.servlet</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.http.jetty</artifactId>
-                <version>2.2.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.eventadmin</artifactId>
-                <version>1.2.12</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.scr</artifactId>
-                <version>1.6.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.webconsole</artifactId>
-                <version>3.1.8</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.configadmin</artifactId>
-                <version>1.2.8</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.ipojo</artifactId>
-                <version>1.8.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.ipojo.metadata</artifactId>
-                <version>1.4.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.ipojo.webconsole</artifactId>
-                <version>1.6.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.ipojo.annotations</artifactId>
-                <version>1.8.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.fileinstall</artifactId>
-                <version>3.1.10</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>org.apache.felix.bundlerepository</artifactId>
-                <version>1.6.6</version>
-            </dependency>
+
             <!-- ONEXUS -->
             <dependency>
                 <groupId>org.onexus</groupId>
@@ -308,56 +219,44 @@
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.collection.manager.basic</artifactId>
+                <artifactId>org.onexus.collection.manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.task.manager.basic</artifactId>
+                <artifactId>org.onexus.task.manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.resource.manager.fs</artifactId>
+                <artifactId>org.onexus.resource.manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.source.manager.fs</artifactId>
+                <artifactId>org.onexus.source.manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.webservice.restful</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!-- ONEXUS Websites -->
-            <dependency>
-                <groupId>org.onexus</groupId>
-                <artifactId>org.genomed</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onexus</groupId>
-                <artifactId>org.intogen</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
+
             <!-- ONEXUS TaskExecutors -->
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.task.executor.loader.tsv</artifactId>
+                <artifactId>org.onexus.loader.tsv</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.loader.biomart</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.task.executor.loader.biomart</artifactId>
+                <artifactId>org.onexus.loader.anduril</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.task.executor.anduril</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <!-- ONEXUS dependencies -->
             <dependency>
                 <groupId>fi.helsinki.ltdk.csbl</groupId>

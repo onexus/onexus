@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.ResourceLink;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.core.query.Order;
@@ -32,10 +31,8 @@ import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.WidgetConfig;
-import org.onexus.ui.website.widgets.WidgetStatus;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
@@ -63,7 +60,7 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
 
             BrowserPageStatus browserStatus = getPageStatus();
             String releaseURI = (browserStatus != null ? browserStatus.getReleaseURI() : null);
-            Query query = new Query(config.getMainCollection());
+            Query query = new Query(config.getCollection());
             query.setMainNamespace(releaseURI);
 
             List<ExportColumn> exportColumns = new ArrayList<ExportColumn>();
@@ -151,13 +148,11 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
 
         String currentTab = getPageStatus().getCurrentTabId();
         String currentView = getPageStatus().getCurrentView();
-        ViewConfig view = getPageConfig().getTab(currentTab).getView(currentView);
+        String mainWidgetId = getPageConfig().getTab(currentTab).getView(currentView).getMain().trim();
+        WidgetConfig widgetConfig = getPageConfig().getWidget(mainWidgetId);
 
-        String widgetId = null;
-        for (WidgetConfig widget : view.getWidgets()) {
-            if (widget instanceof TableViewerConfig) {
-                return (TableViewerConfig) widget;
-            }
+        if (widgetConfig instanceof TableViewerConfig) {
+            return (TableViewerConfig) widgetConfig;
         }
 
         return null;

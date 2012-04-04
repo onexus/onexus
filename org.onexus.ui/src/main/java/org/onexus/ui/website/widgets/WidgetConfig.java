@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,16 +23,15 @@ import java.io.Serializable;
 public abstract class WidgetConfig implements Serializable {
 
     private String id;
-    private String region;
 
     public WidgetConfig() {
         super();
     }
 
-    public WidgetConfig(String id, String region) {
+    public WidgetConfig(String id) {
         super();
         this.id = id;
-        this.region = region;
+
     }
 
     public String getId() {
@@ -41,14 +40,6 @@ public abstract class WidgetConfig implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
     }
 
     public abstract WidgetStatus getDefaultStatus();

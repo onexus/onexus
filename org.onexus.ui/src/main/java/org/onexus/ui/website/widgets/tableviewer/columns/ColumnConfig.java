@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ public class ColumnConfig implements IColumnConfig {
 
     private String collection;
 
-    private String fieldNames;
+    private String fields;
 
     private String decorator;
 
@@ -54,14 +54,14 @@ public class ColumnConfig implements IColumnConfig {
         this(collectionId, null, null);
     }
 
-    public ColumnConfig(String collectionId, String fieldNames) {
-        this(collectionId, fieldNames, null);
+    public ColumnConfig(String collectionId, String fields) {
+        this(collectionId, fields, null);
     }
 
-    public ColumnConfig(String collectionURI, String fieldNames, String decorator) {
+    public ColumnConfig(String collectionURI, String fields, String decorator) {
         super();
         this.collection = collectionURI;
-        this.fieldNames = fieldNames;
+        this.fields = fields;
         this.decorator = decorator;
     }
 
@@ -73,12 +73,12 @@ public class ColumnConfig implements IColumnConfig {
         this.collection = collectionURI;
     }
 
-    public String getFieldNames() {
-        return fieldNames;
+    public String getFields() {
+        return fields;
     }
 
-    public void setFieldNames(String fieldNames) {
-        this.fieldNames = fieldNames;
+    public void setFields(String fields) {
+        this.fields = fields;
     }
 
     public String getDecorator() {
@@ -116,7 +116,7 @@ public class ColumnConfig implements IColumnConfig {
             Iterator<Field> it = fields.iterator();
 
             while (it.hasNext()) {
-                fieldNames.append(it.next().getName());
+                fieldNames.append(it.next().getId());
                 if (it.hasNext()) {
                     fieldNames.append(",");
                 }
@@ -130,18 +130,18 @@ public class ColumnConfig implements IColumnConfig {
     private List<Field> getFields(Collection collection) {
         List<Field> fields;
 
-        if (fieldNames == null) {
+        if (this.fields == null) {
             fields = new ArrayList<Field>(collection.getFields());
         } else {
             fields = new ArrayList<Field>();
 
-            for (String fieldName : fieldNames.split(",")) {
+            for (String fieldName : this.fields.split(",")) {
                 if (fieldName.trim().startsWith("*{")) {
                     String regExp = fieldName.trim().substring(2);
                     regExp = regExp.substring(0, regExp.lastIndexOf("}"));
                     Pattern pattern = Pattern.compile(regExp);
                     for (Field field : collection.getFields()) {
-                        if (pattern.matcher(field.getName()).matches()) {
+                        if (pattern.matcher(field.getId()).matches()) {
                             fields.add(field);
                         }
                     }

@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,25 +17,24 @@
  */
 package org.onexus.core.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Collection extends MetadataResource {
+public class Collection extends Resource {
 
-    private Task task;
-    private List<Field> fields = new ArrayList<Field>();
-    private List<Link> links = new ArrayList<Link>();
+    private Loader loader;
+    private List<Field> fields;
+    private List<Link> links;
 
     public Collection() {
         super();
     }
 
-    public Task getTask() {
-        return task;
+    public Loader getLoader() {
+        return loader;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setLoader(Loader loader) {
+        this.loader = loader;
     }
 
     public List<Field> getFields() {
@@ -49,14 +48,14 @@ public class Collection extends MetadataResource {
 
     @Override
     public String toString() {
-        return "Collection [getURI()=" + getURI() + ", task=" + task
+        return "Collection [getURI()=" + getURI() + ", loader=" + loader
                 + ", fields=" + fields + ", links=" + links + "]";
     }
 
     public Field getField(String fieldName) {
         if (fieldName != null) {
             for (Field field : fields) {
-                if (field.getName().equals(fieldName)) {
+                if (field.getId().equals(fieldName)) {
                     return field;
                 }
             }

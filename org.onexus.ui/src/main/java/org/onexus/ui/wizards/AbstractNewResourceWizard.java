@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
     public void onFinish() {
 
         if (parentUri != null) {
-            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getName());
+            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getId());
             resource.setURI(resourceUri);
         }
 
@@ -100,7 +100,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
         @Override
         protected void onValidate(IValidatable<String> validatable) {
 
-            if (parentUri != null && resource != null && resource.getName() != null) {
+            if (parentUri != null && resource != null && resource.getId() != null) {
 
                 String resourceURI = ResourceTools.concatURIs(parentUri, validatable.getValue());
 

@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public class FieldDecorator implements IDecorator {
     }
 
     protected Object getValue(IEntity data) {
-        return (data == null ? null : data.get(field.getName()));
+        return (data == null ? null : data.get(field.getId()));
     }
 
     public String getFormatValue(final IEntity entity) {
@@ -116,7 +116,7 @@ public class FieldDecorator implements IDecorator {
 
     @Deprecated
     private static ITextFormater getTextFormater(Field field) {
-        if (field.getDataType().equals(String.class)) {
+        if (field.getType().equals(String.class)) {
             int maxLength;
             String value = field.getProperty("MAX_LENGTH");
 
@@ -129,9 +129,9 @@ public class FieldDecorator implements IDecorator {
             return new StringFormater(maxLength, true);
         }
 
-        if (field.getDataType().equals(Double.class)
-                || field.getDataType().equals(Long.class)
-                || field.getDataType().equals(Integer.class)) {
+        if (field.getType().equals(Double.class)
+                || field.getType().equals(Long.class)
+                || field.getType().equals(Integer.class)) {
             return DoubleFormater.INSTANCE;
         }
 

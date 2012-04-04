@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 package org.onexus.ui.website.widgets.search;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamImplicitCollection;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
@@ -28,14 +30,15 @@ public class SearchWidgetConfig extends WidgetConfig {
 
     private SearchWidgetStatus defaultStatus;
 
+    @XStreamImplicit(itemFieldName="column")
     private List<SearchField> fields;
 
     public SearchWidgetConfig() {
         super();
     }
 
-    public SearchWidgetConfig(String id, String region) {
-        super(id, region);
+    public SearchWidgetConfig(String id) {
+        super(id);
     }
 
     public List<SearchField> getFields() {

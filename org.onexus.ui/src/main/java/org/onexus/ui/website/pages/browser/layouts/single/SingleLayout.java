@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.def.ApplicationSettings;
 import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.widgets.IWidgetManager;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.WidgetModel;
@@ -43,14 +45,17 @@ public class SingleLayout extends Panel {
     @Inject
     public IWidgetManager widgetManager;
 
-    public SingleLayout(String panelId, List<WidgetConfig> widgets, IPageModel<BrowserPageStatus> statusModel) {
+    public SingleLayout(String panelId, ViewConfig viewConfig, IPageModel<BrowserPageStatus> statusModel) {
         super(panelId);
 
-        if (widgets.size() < 1) {
+        if (viewConfig.getMain() == null) {
             add(new EmptyPanel("widget"));
         } else {
+
+            PageConfig pageConfig = statusModel.getConfig();
+
             // Get first widget
-            WidgetConfig widget = widgets.get(0);
+            WidgetConfig widget = pageConfig.getWidget(viewConfig.getMain());
 
             // Add widget
             add(widgetManager.create("widget", new WidgetModel(widget, statusModel)));

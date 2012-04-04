@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class CollectionHeader extends ElementHeader {
     @Override
     public Component getHeader(String componentId) {
         if (collection.getProperty("HELP") != null) {
-            return new HelpMark(componentId, collection.getName(),
+            return new HelpMark(componentId, collection.getId(),
                     getFormatedLabel(), getHelpContent());
         } else {
             return super.getHeader(componentId);
@@ -65,7 +65,7 @@ public class CollectionHeader extends ElementHeader {
         for (Field field : collection.getFields()) {
             if (field.getProperty("HELP") != null) {
                 str.append("<li>");
-                str.append("<strong>").append(field.getShortName())
+                str.append("<strong>").append(field.getLabel())
                         .append(":</strong>&nbsp;");
                 str.append(field.getProperty("HELP"));
                 if (field.getProperty("HELP-LINK") != null) {

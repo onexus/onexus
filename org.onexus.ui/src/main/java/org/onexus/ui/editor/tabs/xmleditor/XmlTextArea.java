@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.editor.tabs.xmleditor;
 
+import com.thoughtworks.xstream.converters.ErrorWriter;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.ConversionException;
@@ -70,7 +71,13 @@ public class XmlTextArea extends TextArea<Resource> {
 
                 return resource;
             } catch (Exception e) {
-                XmlTextArea.this.error(String.valueOf(e.getMessage()));
+                
+                if (e instanceof ErrorWriter) {
+                    ErrorWriter ew = (ErrorWriter)e;
+                    XmlTextArea.this.error("Error at line " + ew.get("line number") + " on " + ew.get("path"));
+                } else {
+                     XmlTextArea.this.error(String.valueOf(e.getMessage()));
+                }
                 throw new ConversionException(e.getMessage());
             }
         }
@@ -80,7 +87,7 @@ public class XmlTextArea extends TextArea<Resource> {
             try {
 
                 resourceUri = value.getURI();
-                resourceName = value.getName();
+                resourceName = value.getId();
 
                 value.setURI(null);
                 value.setName(null);

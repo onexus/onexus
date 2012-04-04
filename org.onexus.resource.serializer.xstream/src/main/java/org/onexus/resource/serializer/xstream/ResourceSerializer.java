@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -37,18 +37,36 @@ public class ResourceSerializer implements IResourceSerializer {
         this.xstream = new XStream();
         this.xstream.setClassLoader(new RegisteredClassLoader());
 
-        alias("resource", Resource.class);
+        // Workspace
         alias("workspace", Workspace.class);
+        xstream.addImplicitCollection(Workspace.class, "properties", "property", Property.class);
+
+        // Project
         alias("project", Project.class);
+        xstream.addImplicitCollection(Project.class, "properties", "property", Property.class);
+
+        // Release
         alias("release", Release.class);
-        alias("collection", Collection.class);
+        xstream.addImplicitCollection(Release.class, "properties", "property", Property.class);
+
+        // Source
         alias("source", Source.class);
-        alias("tool", Tool.class);
-        alias("task", Task.class);
-        alias("field", Field.class);
-        alias("link", Link.class);
+        xstream.addImplicitCollection(Source.class, "properties", "property", Property.class);
+        xstream.aliasField("content-type", Source.class, "contentType");
+
+        // Collection
+        alias("collection", Collection.class);
+        xstream.addImplicitCollection(Collection.class, "properties", "property", Property.class);
+        alias("task", Loader.class);
         alias("parameter", Parameter.class);
-        alias("parameter-value", ParameterValue.class);
+        alias("parameter-value", Parameter.class);
+        xstream.addImplicitCollection(Loader.class, "parameters", "parameter", Parameter.class );
+        alias("field", Field.class);
+        xstream.addImplicitCollection(Field.class, "properties", "property", Property.class);
+        xstream.aliasField("primary-key", Field.class, "primaryKey");
+        xstream.registerConverter(new ClassConverter());
+        alias("link", Link.class);
+        xstream.addImplicitCollection(Link.class, "fields", "field", String.class);
         alias("property", Property.class);
 
     }

@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
 package org.onexus.ui.website;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import org.onexus.core.resources.MetadataResource;
+import org.onexus.core.resources.Resource;
 import org.onexus.ui.website.pages.PageConfig;
 
 import java.util.List;
 
 @XStreamAlias("website")
-public class WebsiteConfig extends MetadataResource {
+public class WebsiteConfig extends Resource {
 
     private WebsiteStatus defaultStatus;
 
@@ -34,7 +34,7 @@ public class WebsiteConfig extends MetadataResource {
         super();
     }
 
-    public WebsiteStatus getDefaultStatus() {
+    public WebsiteStatus getDefault() {
         return defaultStatus;
     }
 
@@ -42,7 +42,7 @@ public class WebsiteConfig extends MetadataResource {
         return new WebsiteStatus();
     }
 
-    public void setDefaultStatus(WebsiteStatus defaultStatus) {
+    public void setDefault(WebsiteStatus defaultStatus) {
         this.defaultStatus = defaultStatus;
     }
 

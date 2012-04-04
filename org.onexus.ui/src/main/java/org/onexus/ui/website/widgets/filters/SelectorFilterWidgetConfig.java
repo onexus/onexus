@@ -1,5 +1,5 @@
 /**
- *  Copyright 2011 Universitat Pompeu Fabra.
+ *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,9 +38,9 @@ public class SelectorFilterWidgetConfig extends WidgetConfig {
         super();
     }
 
-    public SelectorFilterWidgetConfig(String id, String region, String title,
+    public SelectorFilterWidgetConfig(String id, String title,
                                       String defaultFilter, FilterConfig... filters) {
-        super(id, region);
+        super(id);
         this.title = title;
         this.userFilters = false;
         this.fieldSelection = new ArrayList<FieldSelection>(0);
