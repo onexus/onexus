@@ -59,7 +59,14 @@ public class SourceManager implements ISourceManager {
             }
 
             if (moveSourceFile) {
-                FileUtils.moveFile(sourceFile, new File(destDir, sourceName));
+                File destFile = new File(destDir, sourceName);
+
+                // By default overwrite the file
+                if (destFile.exists()) {
+                    destFile.delete();
+                }
+
+                FileUtils.moveFile(sourceFile, destFile);
             } else {
                 FileUtils.copyFile(sourceFile, new File(destDir, sourceName), true);
             }

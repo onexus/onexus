@@ -145,6 +145,7 @@ public class CreateCollectionWizard extends AbstractWizard {
                     links.add(link);
                 }
             }
+            collection.setLinks(links);
 
             Loader loader = new Loader();
             loader.setPlugin("mvn:org.onexus/org.onexus.loader.tsv/0.2");

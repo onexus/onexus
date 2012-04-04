@@ -45,6 +45,9 @@ public class Collection extends Resource {
         return links;
     }
 
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
 
     @Override
     public String toString() {
