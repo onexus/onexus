@@ -57,7 +57,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
         init(model);
 
         getForm().setMultiPart(true);
-        getForm().setMaxSize(Bytes.megabytes(10));
+        getForm().setMaxSize(Bytes.megabytes(100));
 
     }
 

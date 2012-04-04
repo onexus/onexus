@@ -77,7 +77,7 @@ public class DefaultResourceRegister implements IResourceRegister {
         addAutoComplete(Collection.class, "type", "string");
         addAutoComplete(Collection.class, "type", "double");
         addAutoComplete(Collection.class, "type", "integer");
-        addAutoComplete(Collection.class, "links", "<link><collection>[collection uri]</collection><field>[field-src-name//field-dst-name]</field></link>");
+        addAutoComplete(Collection.class, "links", "<link><collection>[collection uri]</collection><field>[field-src-name] == [field-dst-name]</field></link>");
         addAutoComplete(Collection.class, "link", "<collection>[collection uri]</collection>");
         addAutoComplete(Collection.class, "link", "<field>[field-src-name//field-dst-name]</field>");
 

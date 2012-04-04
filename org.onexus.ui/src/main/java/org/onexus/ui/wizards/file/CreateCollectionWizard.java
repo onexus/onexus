@@ -133,8 +133,21 @@ public class CreateCollectionWizard extends AbstractWizard {
             }
             collection.setFields(fields);
 
+            // Deduce links from other collections in the same release
+            Map<String, Link> otherLinks = collectLinks();
+            List<Link> links = new ArrayList<Link>();
+            for (String header : headers) {
+                if (otherLinks.containsKey(header)) {
+                    Link otherLink = otherLinks.get(header);
+                    Link link = new Link();
+                    link.setCollection(otherLink.getCollection());
+                    link.getFields().add(otherLink.getFields().get(0));
+                    links.add(link);
+                }
+            }
+
             Loader loader = new Loader();
-            loader.setPlugin("http://www.onexus.org/tools/loader-tsv/1.0.0");
+            loader.setPlugin("mvn:org.onexus/org.onexus.loader.tsv/0.2");
             List<Parameter> parameters = new ArrayList<Parameter>();
             parameters.add(new Parameter("SOURCE_URI", "${release.uri}/" + ResourceTools.getResourceName(sourceURI)));
             loader.setParameters(parameters);
@@ -150,6 +163,28 @@ public class CreateCollectionWizard extends AbstractWizard {
             e.printStackTrace();
         }
 
+    }
+
+
+
+    private Map<String, Link> collectLinks() {
+        Map<String, Link> links = new HashMap<String, Link>();
+
+        String releaseURI = ResourceTools.getParentURI(sourceURI);
+        List<Collection> collections = resourceManager.loadChildren(Collection.class, releaseURI);
+
+        for (Collection collection : collections) {
+            for (Link link : collection.getLinks()) {
+
+                // Only simple links (not composed)
+                if (link.getFields().size() == 1) {
+                    String field = Link.getFromFieldName(link.getFields().get(0));
+                    links.put(field, link);
+                }
+            }
+        }
+
+        return links;
     }
 
     private Map<String, Field> collectFields() {
