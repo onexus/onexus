@@ -41,7 +41,7 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
         resourceRegister.addAutoComplete(WebsiteConfig.class, "pages",
                 "<browser>" +
                         "<id>[page-id]</id>" +
-                        "<name>[page-name]</name>" +
+                        "<label>[page-name]</label>" +
                         "<release>[release-name]</release>" +
                         "<tabs></tabs>" +
                         "<widgets></widgets>" +

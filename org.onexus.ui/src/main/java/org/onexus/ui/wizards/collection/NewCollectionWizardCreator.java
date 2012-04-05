@@ -19,7 +19,7 @@ package org.onexus.ui.wizards.collection;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.resources.Release;
+import org.onexus.core.resources.Folder;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
 
@@ -52,7 +52,7 @@ public class NewCollectionWizardCreator implements IWizardCreator {
 
     @Override
     public boolean isVisible(Resource resource) {
-        return Release.class.isAssignableFrom(resource.getClass());
+        return Folder.class.isAssignableFrom(resource.getClass());
     }
 
 }

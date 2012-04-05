@@ -17,7 +17,7 @@
  */
 package org.onexus.core.resources;
 
-public class Release extends Resource {
+public class Release extends Folder {
 
     public Release() {
         super();

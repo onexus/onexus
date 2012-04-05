@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.file;
+package org.onexus.ui.wizards.folder;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -23,31 +23,31 @@ import org.onexus.core.resources.Folder;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
 
-public class NewFileWizardCreator implements IWizardCreator {
+public class NewFolderWizardCreator implements IWizardCreator {
 
     @Override
     public String getLabel() {
-        return "New file";
+        return "New folder";
     }
 
     @Override
     public String getTitle() {
-        return "New file";
+        return "Creates a new folder inside the release";
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return "A folder it's only a resource container";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-        return new NewFileWizard(containerId, model);
+        return new NewFolderWizard(containerId, model);
     }
 
     @Override
     public double getOrder() {
-        return 0;
+        return 3;
     }
 
     @Override
