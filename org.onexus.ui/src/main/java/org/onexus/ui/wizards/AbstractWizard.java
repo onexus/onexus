@@ -20,6 +20,7 @@ package org.onexus.ui.wizards;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.wizard.*;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.CompoundPropertyModel;
 
 public abstract class AbstractWizard extends Wizard {
 
@@ -50,9 +51,9 @@ public abstract class AbstractWizard extends Wizard {
     }
 
     @Override
-    protected <E> Form<E> newForm(String id) {
+    protected Form<AbstractWizard> newForm(String id) {
 
-        Form<E> form = super.newForm(id);
+        Form<AbstractWizard> form = new Form<AbstractWizard>(id, new CompoundPropertyModel<AbstractWizard>(this));
         form.setOutputMarkupId(true);
 
         return form;

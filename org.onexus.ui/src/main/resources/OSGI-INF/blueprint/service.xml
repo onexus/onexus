@@ -78,6 +78,9 @@
         <bean class="org.onexus.ui.wizards.resource.RemoveResourceWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
+        <bean class="org.onexus.ui.wizards.resource.MoveResourceWizardCreator"/>
+    </service>
+    <service interface="org.onexus.ui.IWizardCreator">
         <bean class="org.onexus.ui.wizards.collection.NewCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">

@@ -21,21 +21,19 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.Project;
-import org.onexus.core.resources.Release;
-import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Workspace;
+import org.onexus.core.resources.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class ResourceManager implements IResourceManager {
 
     @SuppressWarnings("rawtypes")
-    public final static Class[] DEFAULT_CONTAINER_RESOURCES = {Workspace.class, Project.class, Release.class};
+    public final static Class[] DEFAULT_CONTAINER_RESOURCES = {Workspace.class, Project.class, Folder.class};
     private final static Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
     private final static String ONEXUS_CONTAINER_PREFIX = "onexus-";
     private final static String ONEXUS_FILE_EXTENSION = "onx";
@@ -190,7 +188,16 @@ public class ResourceManager implements IResourceManager {
                 String filePath = uriToAbsolutePath.get(resourceURI);
 
                 if (filePath != null) {
+                    File resourceFile = new File(filePath);
+                    File container = resourceFile.getParentFile();
                     FileUtils.deleteQuietly(new File(filePath));
+
+                    if (container.isDirectory()) {
+                        if (container.list().length == 0) {
+                            container.delete();
+                        }
+                    }
+
                     uriToAbsolutePath.remove(resourceURI);
                 }
                 uncommitRemoves.remove(resourceURI);
@@ -217,7 +224,7 @@ public class ResourceManager implements IResourceManager {
 
         // Check that it's a resourceURI of our workspace
         if (resourceURI == null || !isValidURI(resourceURI)) {
-            throw new RuntimeException("This ResourceManager don't manage the resource '" + resourceURI + "'");
+            return null;
         }
 
         // Remove ending separator if exists
@@ -290,7 +297,7 @@ public class ResourceManager implements IResourceManager {
     @SuppressWarnings("rawtypes")
     private static File buildFile(Resource resource, Map.Entry<String, String> workspaceEntry) {
         for (Class clazz : DEFAULT_CONTAINER_RESOURCES) {
-            if (clazz.equals(resource.getClass())) {
+            if (clazz.isAssignableFrom(resource.getClass())) {
                 return buildFile(resource, true, workspaceEntry);
             }
         }
