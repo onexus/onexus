@@ -79,7 +79,7 @@ public class Website extends WebPage {
                 parameters.add(PARAMETER_PAGE, pageConfig.getId());
                 parameters.add(PARAMETER_WEBSITE, websiteConfig.getURI());
                 Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
-                link.add(new Label("name", pageConfig.getName()));
+                link.add(new Label("name", pageConfig.getLabel()));
 
                 String currentPage = websiteStatus.getCurrentPage();
 

@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.pages;
 
+import org.onexus.core.resources.IMetadata;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.io.Serializable;
@@ -25,7 +26,9 @@ import java.util.List;
 public abstract class PageConfig implements Serializable {
 
     private String id;
-    private String name;
+    private String label;
+    private String title;
+    private String description;
 
     public PageConfig() {
         super();
@@ -39,12 +42,28 @@ public abstract class PageConfig implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public WidgetConfig getWidget(String id) {

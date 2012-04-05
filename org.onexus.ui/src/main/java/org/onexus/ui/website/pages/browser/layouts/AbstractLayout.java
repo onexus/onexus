@@ -22,7 +22,6 @@ import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.WidgetConfig;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 import java.util.List;

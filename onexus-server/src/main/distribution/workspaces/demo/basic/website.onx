@@ -3,7 +3,7 @@
     <pages>
         <browser>
             <id>browser</id>
-            <name>Browser page</name>
+            <label>Browser page</label>
             <widgets>
                 <viewer-table>
                     <id>gene-expression</id>
@@ -92,7 +92,7 @@
         </browser>
         <html>
             <id>html</id>
-            <name>Html page</name>
+            <label>Html page</label>
             <content><![CDATA[
 	<h1>This a simple html page</h1>
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla diam quis lectus vulputate in lobortis odio feugiat. Sed at turpis at massa rhoncus volutpat. In suscipit rhoncus urna, eget fringilla sapien venenatis vel. Nam elit velit, rhoncus at mattis a, laoreet nec ante. Nam velit velit, sagittis et volutpat ornare, ultricies ut justo. Praesent feugiat, enim sit amet rhoncus ultricies, metus velit pulvinar est, sit amet cursus nulla lacus nec tellus. Sed augue metus, dapibus eu venenatis ac, porta non orci. Integer varius sapien quis justo facilisis tempus. In posuere condimentum dictum. Praesent quis arcu eu neque tempor aliquet nec lobortis ipsum. Vivamus semper molestie tellus, at aliquam diam dignissim eget. Integer in eros a diam eleifend tristique in sed tellus. Mauris interdum turpis non metus sodales ac commodo sem sodales.</p>
