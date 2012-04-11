@@ -35,6 +35,7 @@ import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
 import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
+import org.onexus.ui.workspace.progressbar.ProgressBar;
 
 import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;
@@ -65,6 +66,7 @@ public class Website extends WebPage {
         initConfig(pageParameters);
         initStatus(pageParameters);
 
+        add(new ProgressBar("progressbar"));
         add(new Label("windowTitle", websiteConfig.getTitle()));
         add(new Label("title", websiteConfig.getTitle()));
 

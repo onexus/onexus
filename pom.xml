@@ -274,6 +274,7 @@
                 <artifactId>wicketstuff-osgi</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-ioc-bundle</artifactId>

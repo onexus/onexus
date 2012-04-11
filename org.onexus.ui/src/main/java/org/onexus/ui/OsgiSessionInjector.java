@@ -37,11 +37,19 @@ public class OsgiSessionInjector extends Injector implements ISessionListener {
     @Override
     public void onCreated(Session session) {
         inject(session);
+
+        if (session instanceof InjectableSession) {
+            ((InjectableSession) session).onAfterInject();
+        }
     }
 
     @Override
     public void inject(Object object) {
         inject(object, fieldFactory);
+    }
+
+    public interface InjectableSession {
+        public void onAfterInject();
     }
 
 }

@@ -26,3 +26,14 @@
      z-index:1002;
      overflow: auto;
 }
+
+.modal div.icon {
+    float: left;
+    margin: 4px 8px;
+
+}
+
+.modal div.task {
+    clear: both;
+    margin-top: 7px;
+}

@@ -46,6 +46,7 @@ public class OnexusWebSession extends AuthenticatedWebSession {
     @Inject
     private ICollectionManager collectionManager;
 
+
     private String userName = null;
     private String userToken = null;
 
@@ -83,6 +84,8 @@ public class OnexusWebSession extends AuthenticatedWebSession {
 
         this.userToken = userToken;
     }
+
+
 
     public String getUserToken() {
         return (isSignedIn() ? userName : userToken);

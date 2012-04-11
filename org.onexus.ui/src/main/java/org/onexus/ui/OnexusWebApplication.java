@@ -40,7 +40,10 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
         getSessionListeners().add(new OsgiSessionInjector());
         getApplicationListeners().add(new OsgiApplicationInjector());
         getApplicationSettings().setClassResolver(new OsgiClassResolver());
+
     }
+
+
 
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {

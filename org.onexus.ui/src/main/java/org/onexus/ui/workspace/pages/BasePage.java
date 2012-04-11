@@ -25,11 +25,11 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.workspace.pages.tools.AbstractTool;
+import org.onexus.ui.workspace.progressbar.ProgressBar;
 
 @AuthorizeInstantiation("onexus-admin")
 public class BasePage extends WebPage {
@@ -48,8 +48,7 @@ public class BasePage extends WebPage {
 
         add(menu);
 
-        // add(new TaskStatusProgress("progressbar"));
-        add(new EmptyPanel("progressbar"));
+        add(new ProgressBar("progressbar"));
 
         add(new Link<String>("signout") {
 

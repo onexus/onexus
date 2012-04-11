@@ -24,7 +24,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
@@ -39,8 +38,8 @@ import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
-import org.onexus.ui.workspace.progressbar.TaskStatusProgress;
-import org.onexus.ui.workspace.progressbar.TaskStatusProgress.ActiveTasks;
+import org.onexus.ui.workspace.progressbar.ProgressBar;
+import org.onexus.ui.workspace.progressbar.ProgressBar.ActiveTasks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,10 +76,10 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
             @Override
             protected void addTaskStatus(TaskStatus taskStatus) {
 
-                ActiveTasks activeTasks = Session.get().getMetaData(TaskStatusProgress.TASKS);
+                ActiveTasks activeTasks = Session.get().getMetaData(ProgressBar.TASKS);
                 if (activeTasks == null) {
                     activeTasks = new ActiveTasks();
-                    Session.get().setMetaData(TaskStatusProgress.TASKS, activeTasks);
+                    Session.get().setMetaData(ProgressBar.TASKS, activeTasks);
                 }
                 for (TaskStatus task : taskStatus.getSubTasks()) {
                     activeTasks.addTask(task);

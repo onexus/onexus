@@ -30,6 +30,7 @@ import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
+import org.onexus.ui.workspace.progressbar.ProgressBar;
 
 import java.util.Iterator;
 
@@ -123,7 +124,7 @@ public abstract class EntitiesRowProvider implements
 
     private Iterator<IEntityTable> loadIterator(Query query) {
         if (rows == null) {
-            IEntityTable entityTable = OnexusWebSession.get().getCollectionManager().load(query);
+            IEntityTable entityTable = ProgressBar.show(OnexusWebSession.get().getCollectionManager().load(query));
 
             TaskStatus task = entityTable.getTaskStatus();
             if (task != null && !task.isDone()) {

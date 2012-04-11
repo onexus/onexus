@@ -19,102 +19,48 @@ package org.onexus.ui.workspace.progressbar;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
+import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
 import org.onexus.ui.website.events.EventViewChange;
-import org.onexus.ui.website.utils.panels.icons.Icons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskStatusProgress extends Panel {
-
-    public final static PackageResourceReference CSS = new PackageResourceReference(TaskStatusProgress.class, "TaskStatusProgress.css");
-
+public class ProgressBar extends Panel {
+    public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
     public final static MetaDataKey<ActiveTasks> TASKS = new MetaDataKey<ActiveTasks>() {
     };
 
-    private final TaskStatusProgressBehavior REFRESH_PROGRESS_BAR = new TaskStatusProgressBehavior(Duration.seconds(5.0));
-
     private boolean open = false;
-    private boolean runInBackground = false;
 
-    public TaskStatusProgress(String id) {
-        this(id, true);
-    }
-
-    public TaskStatusProgress(String id, boolean autoRefresh) {
-
+    public ProgressBar(String id) {
         super(id);
 
-        // Update the progress bar every 5 seconds
         setOutputMarkupId(true);
+        add(new Refresh());
 
-        if (autoRefresh) {
-            add(REFRESH_PROGRESS_BAR);
-            REFRESH_PROGRESS_BAR.start();
-        }
-
-        // Container DIV
-        WebMarkupContainer container = new WebMarkupContainer("container") {
-
+        final WebMarkupContainer modal = new WebMarkupContainer("modal") {
             @Override
             public boolean isVisible() {
                 return (open = getActiveTasks().isActive());
             }
-
         };
-
-        // Modal CSS window
-        final WebMarkupContainer modal = new WebMarkupContainer("modal") {
-            @Override
-            public boolean isVisible() {
-                return (open = getActiveTasks().isActive()) && !runInBackground;
-            }
-        };
-
-        modal.add(new TaskStatusProgressDetailsPanel("progressDetails") {
-
-            @Override
-            protected void onBackground(AjaxRequestTarget target) {
-                runInBackground = true;
-                //target.add(TaskStatusProgress.this);
-            }
-
-        });
+        modal.setMarkupId("progressbar-modal");
+        modal.add(new ProgressBarPanel("progressDetails"));
         add(modal);
 
-        // Prepare panel
-        WebMarkupContainer activeTasks = new WebMarkupContainer("InfoActiveTasks");
-        activeTasks.add(new Label("quickInfoTasks", "Several tasks running ..."));
-        AjaxLink<String> viewTasksLink = new AjaxLink<String>("viewInfoTasks") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                runInBackground = false;
-            }
-        };
-
-        viewTasksLink.add(new ImageWithoutAntiCache("refreshbar", new PackageResourceReference(
-                TaskStatusProgress.class, "ajax-loader.gif")));
-
-        viewTasksLink.add(new ImageWithoutAntiCache("infobutton", Icons.INFORMATION));
-
-        activeTasks.add(viewTasksLink);
-        container.add(activeTasks);
-
-        add(container);
-
     }
+
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -128,12 +74,37 @@ public class TaskStatusProgress extends Panel {
         if (event.getPayload() instanceof AjaxRequestTarget) {
             AjaxRequestTarget target = ((AjaxRequestTarget) event.getPayload());
 
-            target.add(this);
+            if (open || getActiveTasks().isActive()) {
+                open = true;
+                target.add(this);
+            }
 
             if (open && !getActiveTasks().isActive()) {
+                open = false;
                 send(getPage(), Broadcast.BREADTH, EventViewChange.EVENT);
             }
         }
+    }
+
+    private class Refresh extends AbstractAjaxTimerBehavior {
+
+        public Refresh() {
+            super(Duration.seconds(3));
+        }
+
+        @Override
+        protected void onTimer(AjaxRequestTarget target) {
+            // Nothing adding throw onEvent
+        }
+
+
+        @Override
+        protected CharSequence getPreconditionScript()
+        {
+            String componentId = "progressbar-modal";
+            return "var c = Wicket.$('" + componentId + "'); return typeof(c) != 'undefined' && c != null";
+        }
+
     }
 
     public static ActiveTasks getActiveTasks() {
@@ -143,6 +114,16 @@ public class TaskStatusProgress extends Panel {
             Session.get().setMetaData(TASKS, tasks);
         }
         return tasks;
+    }
+
+    public static IEntityTable show(IEntityTable entityTable) {
+
+        TaskStatus status = entityTable.getTaskStatus();
+        if (status != null) {
+            getActiveTasks().getTasks().addAll(status.getSubTasks());
+        }
+
+        return entityTable;
     }
 
     public static class ActiveTasks implements Serializable {

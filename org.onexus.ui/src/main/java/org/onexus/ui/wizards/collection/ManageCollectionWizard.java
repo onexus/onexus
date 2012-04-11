@@ -26,6 +26,7 @@ import org.onexus.core.ICollectionManager;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.wizards.AbstractWizard;
+import org.onexus.ui.workspace.progressbar.ProgressBar;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -67,7 +68,7 @@ public class ManageCollectionWizard extends AbstractWizard {
 
         if (selected.equals(LOAD)) {
             collectionManager.unload(resourceURI);
-            collectionManager.load(new Query(resourceURI));
+            ProgressBar.show(collectionManager.load(new Query(resourceURI)));
             return;
         }
 
