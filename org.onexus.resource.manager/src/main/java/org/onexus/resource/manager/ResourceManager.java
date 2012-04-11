@@ -175,7 +175,7 @@ public class ResourceManager implements IResourceManager {
                 file.createNewFile();
 
                 String keepURI = resource.getURI();
-                String keepName = resource.getId();
+                String keepName = resource.getName();
                 resource.setURI(null);
                 resource.setName(null);
                 serializer.serialize(resource, new FileOutputStream(file));

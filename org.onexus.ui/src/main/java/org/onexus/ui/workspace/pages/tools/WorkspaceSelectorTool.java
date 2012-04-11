@@ -76,7 +76,7 @@ public class WorkspaceSelectorTool extends AbstractTool<Workspace> {
 
         @Override
         public Object getDisplayValue(Workspace workspace) {
-            return workspace.getId();
+            return workspace.getName();
         }
 
         @Override

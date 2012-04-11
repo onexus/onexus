@@ -72,7 +72,7 @@ public class MysqlCollectionDDL implements Serializable {
 
     private static String convertURItoTableName(Collection collection) {
         String hashCode = Integer.toHexString(ResourceTools.getParentURI(collection.getURI()).hashCode());
-        String tableName = MysqlUtils.removeNonValidChars(collection.getId());
+        String tableName = MysqlUtils.removeNonValidChars(collection.getName());
 
         // Check that the table name is no longer than 64 characters (the
         // maximum allowed)

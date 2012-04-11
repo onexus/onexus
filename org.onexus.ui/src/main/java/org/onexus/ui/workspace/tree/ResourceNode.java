@@ -40,7 +40,7 @@ public class ResourceNode implements Serializable {
         super();
 
         this.uri = resource.getURI();
-        this.name = resource.getId();
+        this.name = resource.getName();
     }
 
     public static DefaultMutableTreeNode get(Resource resource) {

@@ -56,6 +56,8 @@ public class DefaultResourceRegister implements IResourceRegister {
         addAutoComplete(Source.class, "source", "<title>[title]</title>");
         addAutoComplete(Source.class, "source", "<description>[description]</description>");
         addAutoComplete(Source.class, "source", "<content-type>[title]</content-type>");
+        addAutoComplete(Source.class, "source", "<repository>[repository]</repository>");
+        addAutoComplete(Source.class, "source", "<path>[path]</path>");
         addAutoComplete(Source.class, "source", "<property><key>[key]</key><value>[value]</value></property>");
 
         // Collection
@@ -66,7 +68,7 @@ public class DefaultResourceRegister implements IResourceRegister {
         addAutoComplete(Collection.class, "collection", "<links></links>");
         addAutoComplete(Collection.class, "task", "<tool>[tool URL]</tool>");
         addAutoComplete(Collection.class, "task", "<parameter><key>[parameter key]</key><value>[parameter value]</value></parameter>");
-        addAutoComplete(Collection.class, "fields", "<field><name>[name]</name><label>[short label]</label><type>[data type]</type></field>");
+        addAutoComplete(Collection.class, "fields", "<field><id>[identifier]</id><label>[short label]</label><type>[data type]</type></field>");
         addAutoComplete(Collection.class, "field", "<name>[name]</name>");
         addAutoComplete(Collection.class, "field", "<label>[label]</label>");
         addAutoComplete(Collection.class, "field", "<title>[title]</title>");

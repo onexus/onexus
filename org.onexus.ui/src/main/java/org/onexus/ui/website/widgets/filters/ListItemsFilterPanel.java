@@ -114,7 +114,7 @@ public abstract class ListItemsFilterPanel extends Panel {
             // set this form to multipart mode (allways needed for uploads!)
             setMultiPart(true);
 
-            /* add(new Label("type", entityCollection.getId())); */
+            /* add(new Label("type", entityCollection.getName())); */
 
             TextField<String> filterName = new TextField<String>("filterName", getFilterNameModel());
             add(filterName);

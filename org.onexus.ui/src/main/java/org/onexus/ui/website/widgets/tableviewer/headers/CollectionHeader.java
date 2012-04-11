@@ -36,7 +36,7 @@ public class CollectionHeader extends ElementHeader {
     @Override
     public Component getHeader(String componentId) {
         if (collection.getProperty("HELP") != null) {
-            return new HelpMark(componentId, collection.getId(),
+            return new HelpMark(componentId, collection.getName(),
                     getFormatedLabel(), getHelpContent());
         } else {
             return super.getHeader(componentId);

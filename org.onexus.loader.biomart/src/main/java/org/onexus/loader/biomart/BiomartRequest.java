@@ -48,7 +48,7 @@ public class BiomartRequest {
         } else {
 
             String virtualSchema = (parameterVirtualSchema == null ? defaultVirtualSchema : parameterVirtualSchema);
-            String dataset = (parameterDataset == null ? collection.getId() : parameterDataset);
+            String dataset = (parameterDataset == null ? collection.getName() : parameterDataset);
 
             this.query.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             this.query.append("<!DOCTYPE Query>");

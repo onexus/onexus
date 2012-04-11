@@ -44,7 +44,7 @@ public abstract class AbstractBox extends Panel {
 
         String title = collection.getTitle();
 
-        return (title == null ? collection.getId() : title);
+        return (title == null ? collection.getName() : title);
     }
 
     public String getCollectionId() {

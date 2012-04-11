@@ -22,6 +22,7 @@ import org.onexus.core.IEntitySet;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
+import org.onexus.core.utils.ResourceTools;
 import org.onexus.loader.tsv.tools.BufferedFileChannel;
 import org.onexus.loader.tsv.tools.Token;
 
@@ -36,7 +37,6 @@ import java.util.regex.Pattern;
 public class FileEntitySet extends FileEntity implements IEntitySet {
 
     private ISourceManager sourceManager;
-    private Map<String, String> properties;
     private long currentPosition;
     private String currentLine;
 
@@ -66,14 +66,13 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
     }
 
 
-    public FileEntitySet(ISourceManager sourceManager, Map<String, String> properties, Collection collection) {
+    public FileEntitySet(ISourceManager sourceManager, Collection collection) {
         super(collection, "", -1);
 
         this.sourceManager = sourceManager;
-        this.properties = properties;
         this.urls = new ArrayDeque<URL>();
 
-        initializeURLs(collection.getLoader().getParameter("SOURCE_URI"));
+        initializeURLs(collection.getLoader().getParameter("SOURCE_URI"), ResourceTools.getProperties(collection.getURI()));
 
         NULL_CHAR = collection.getLoader().getParameter("NULL_VALUE");
         SEPARATOR = collection.getLoader().getParameter("SEPARATOR");
@@ -92,9 +91,9 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
     }
 
-    private void initializeURLs(String strUrl) {
+    private void initializeURLs(String strUrl, Map<String, String> properties) {
 
-        strUrl = replaceProperties(strUrl);
+        strUrl = replaceProperties(strUrl, properties);
 
         int parametersSeparator = strUrl.indexOf("?");
 
@@ -105,7 +104,7 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
     }
 
-    private String replaceProperties(String strUrl) {
+    private String replaceProperties(String strUrl, Map<String, String> properties) {
 
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());

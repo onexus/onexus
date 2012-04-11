@@ -25,13 +25,13 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.core</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.core</artifactId>
         </dependency>
 
         <dependency>

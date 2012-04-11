@@ -18,8 +18,11 @@
 package org.onexus.resource.serializer.xstream;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.mapper.MapperWrapper;
 import org.onexus.core.IResourceSerializer;
 import org.onexus.core.resources.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,13 +31,30 @@ import java.util.Set;
 
 public class ResourceSerializer implements IResourceSerializer {
 
+    private static final Logger log = LoggerFactory.getLogger(ResourceSerializer.class);
     private Set<ClassLoader> registeredLoaders = new HashSet<ClassLoader>();
 
     private XStream xstream;
 
     public ResourceSerializer() {
         super();
-        this.xstream = new XStream();
+        this.xstream = new XStream() {
+            @Override
+            protected MapperWrapper wrapMapper(MapperWrapper next) {
+                return new MapperWrapper(next) {
+                    @Override
+                    public boolean shouldSerializeMember(Class definedIn,
+                                                         String fieldName) {
+                        if (definedIn == Object.class) {
+                            log.warn("Tag '"+fieldName+"' not defined.");
+                            return false;
+                        }
+                        return super.shouldSerializeMember(definedIn, fieldName);
+                    }
+                };
+            }
+        };
+
         this.xstream.setClassLoader(new RegisteredClassLoader());
 
         // Workspace
@@ -49,10 +69,13 @@ public class ResourceSerializer implements IResourceSerializer {
         alias("release", Release.class);
         xstream.addImplicitCollection(Release.class, "properties", "property", Property.class);
 
+        // Folder
+        alias("folder", Folder.class);
+
         // Source
         alias("source", Source.class);
+        xstream.addImplicitCollection(Source.class, "paths", "path", String.class);
         xstream.addImplicitCollection(Source.class, "properties", "property", Property.class);
-        xstream.aliasField("content-type", Source.class, "contentType");
 
         // Collection
         alias("collection", Collection.class);

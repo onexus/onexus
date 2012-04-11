@@ -18,9 +18,13 @@
 package org.onexus.core.resources;
 
 
+import java.util.List;
+
 public class Source extends Resource {
 
-    private String contentType;
+    private String repository;
+
+    private List<String> paths;
 
     public Source() {
         super();
@@ -28,15 +32,21 @@ public class Source extends Resource {
 
     public Source(String contentType) {
         super();
-        this.contentType = contentType;
     }
 
-    public String getContentType() {
-        return contentType;
+    public String getRepository() {
+        return repository;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public void setRepository(String repository) {
+        this.repository = repository;
     }
 
+    public List<String> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(List<String> paths) {
+        this.paths = paths;
+    }
 }

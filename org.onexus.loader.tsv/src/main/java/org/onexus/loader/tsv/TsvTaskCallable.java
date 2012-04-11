@@ -28,15 +28,13 @@ import java.util.Map;
 public class TsvTaskCallable implements ITask {
 
     private ISourceManager sourceManager;
-    private Map<String, String> properties;
     private TaskStatus status;
     private Collection collection;
 
-    public TsvTaskCallable(ISourceManager sourceManager, Map<String, String> properties, Collection collection) {
+    public TsvTaskCallable(ISourceManager sourceManager, Collection collection) {
         super();
 
         this.sourceManager = sourceManager;
-        this.properties = properties;
         this.status = new TaskStatus(Long.toHexString(System.currentTimeMillis() + collection.hashCode()), "Loading TSV file '" + collection.getLoader().getParameter("FILE_URL") + "'");
         this.collection = collection;
     }
@@ -45,7 +43,7 @@ public class TsvTaskCallable implements ITask {
     public IEntitySet call() throws Exception {
         status.addLog(status.getTitle());
         try {
-            return new FileEntitySet(sourceManager, properties, collection);
+            return new FileEntitySet(sourceManager, collection);
         } finally {
             this.status.setDone(true);
         }

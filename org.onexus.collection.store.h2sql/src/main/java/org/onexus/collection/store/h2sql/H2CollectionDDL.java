@@ -72,7 +72,7 @@ public class H2CollectionDDL implements Serializable {
 
     private static String convertURItoTableName(Collection collection) {
         String hashCode = Integer.toHexString(ResourceTools.getParentURI(collection.getURI()).hashCode());
-        String tableName = SqlUtils.removeNonValidChars(collection.getId());
+        String tableName = SqlUtils.removeNonValidChars(collection.getName());
 
         // Check that the table name is no longer than 64 characters (the
         // maximum allowed)

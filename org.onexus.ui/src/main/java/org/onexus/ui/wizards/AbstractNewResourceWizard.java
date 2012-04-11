@@ -59,7 +59,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
     public void onFinish() {
 
         if (parentUri != null) {
-            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getId());
+            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getName());
             resource.setURI(resourceUri);
         }
 
@@ -100,7 +100,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
         @Override
         protected void onValidate(IValidatable<String> validatable) {
 
-            if (parentUri != null && resource != null && resource.getId() != null) {
+            if (parentUri != null && resource != null && resource.getName() != null) {
 
                 String resourceURI = ResourceTools.concatURIs(parentUri, validatable.getValue());
 

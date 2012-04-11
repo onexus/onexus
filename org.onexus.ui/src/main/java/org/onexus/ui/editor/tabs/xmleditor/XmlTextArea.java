@@ -87,7 +87,7 @@ public class XmlTextArea extends TextArea<Resource> {
             try {
 
                 resourceUri = value.getURI();
-                resourceName = value.getId();
+                resourceName = value.getName();
 
                 value.setURI(null);
                 value.setName(null);

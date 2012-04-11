@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.wizards.file;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.wizard.WizardModel;
@@ -38,6 +39,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewFileWizard extends AbstractNewResourceWizard<Source> {
@@ -47,6 +49,9 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
 
     private transient List<FileUpload> tmpFile;
     private FileReference fileUpload = null;
+
+    private String repoPath;
+    public final static String ONEXUS_REPOSITORY_ENV = "ONEXUS_REPOSITORY";
 
     public NewFileWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id, resourceModel);
@@ -59,6 +64,12 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
         getForm().setMultiPart(true);
         getForm().setMaxSize(Bytes.megabytes(100));
 
+        repoPath = System.getenv(ONEXUS_REPOSITORY_ENV);
+
+        if (repoPath == null) {
+            repoPath = "repository";
+        }
+
     }
 
     @Override
@@ -68,12 +79,56 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
         String parentUri = getParentUri();
 
         if (resource != null && parentUri != null && fileUpload != null) {
-            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getId());
-            sourceManager.store(resourceUri, new File(fileUpload.tempPath), true);
-
+            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getName());
+            resource.setRepository("local");
+            String path = store(resourceUri, new File(fileUpload.tempPath), true);
+            if (resource.getPaths() == null) {
+                resource.setPaths(new ArrayList<String>());
+            }
+            resource.getPaths().add(path);
             super.onFinish();
         }
 
+    }
+
+    private String convertURItoContainerPath(String sourceURI) {
+        String serverUri = ResourceTools.getServerURI(sourceURI);
+        String relativePath = sourceURI.replace(serverUri + Resource.SEPARATOR, "");
+        relativePath.replace(Resource.SEPARATOR, File.separatorChar);
+        return relativePath;
+    }
+
+    private String store(String sourceURI, File sourceFile, boolean moveSourceFile) {
+
+        String path = convertURItoContainerPath(ResourceTools.getParentURI(sourceURI));
+        String sourceContainer = repoPath + File.separator + path;
+        String sourceName = ResourceTools.getResourceName(sourceURI);
+        File destDir = new File(sourceContainer);
+
+        try {
+
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+
+            if (moveSourceFile) {
+                File destFile = new File(destDir, sourceName);
+
+                // By default overwrite the file
+                if (destFile.exists()) {
+                    destFile.delete();
+                }
+
+                FileUtils.moveFile(sourceFile, destFile);
+            } else {
+                FileUtils.copyFile(sourceFile, new File(destDir, sourceName), true);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return path + File.separator + sourceName;
     }
 
     @Override
@@ -104,7 +159,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
 
         @Override
         public boolean isComplete() {
-            return getResource().getId() != null;
+            return getResource().getName() != null;
         }
 
 
@@ -159,8 +214,6 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
             if (fileUpload != null) {
                 Source source = getResource();
                 source.setName(fileUpload.fileName.replaceAll("[^\\w-.\\+]", "_"));
-                source.setContentType(fileUpload.contentType);
-
             }
         }
 

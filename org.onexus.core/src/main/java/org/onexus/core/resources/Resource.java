@@ -45,7 +45,7 @@ public abstract class Resource implements IMetadata, Serializable {
         this.uri = uri;
     }
 
-    public String getId() {
+    public String getName() {
         return name;
     }
 

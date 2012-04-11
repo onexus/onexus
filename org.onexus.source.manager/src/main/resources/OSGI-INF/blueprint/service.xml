@@ -2,8 +2,12 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         >
 
+    <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
+
     <service interface="org.onexus.core.ISourceManager">
-        <bean class="org.onexus.source.manager.SourceManager"/>
+        <bean class="org.onexus.source.manager.SourceManager">
+            <property name="resourceManager" ref="resourceManagerRef"/>
+        </bean>
     </service>
 
 </blueprint>

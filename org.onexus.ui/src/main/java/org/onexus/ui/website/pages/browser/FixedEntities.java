@@ -78,7 +78,7 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
 
                 String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
                 if (collectionLabel == null) {
-                    collectionLabel = collection.getId();
+                    collectionLabel = collection.getName();
                 }
 
                 String entityField = collection.getProperty("FIXED_ENTITY_FIELD");

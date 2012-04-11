@@ -49,25 +49,7 @@ public class TaskExecutor implements ILoader {
 
     @Override
     public ITask createCallable(Collection collection) {
-        return new TsvTaskCallable(sourceManager, getProperties(collection), collection);
-    }
-
-    private Map<String, String> getProperties(Collection collection) {
-
-        Map<String, String> properties = new HashMap<String, String>();
-
-        String releaseURI = ResourceTools.getParentURI(collection.getURI());
-        String releaseName = ResourceTools.getResourceName(releaseURI);
-
-        String projectURI = ResourceTools.getParentURI(releaseURI);
-        String projectName = ResourceTools.getResourceName(projectURI);
-
-        properties.put("release.uri", releaseURI);
-        properties.put("release.name", releaseName);
-        properties.put("project.uri", projectURI);
-        properties.put("project.name", projectName);
-
-        return properties;
+        return new TsvTaskCallable(sourceManager, collection);
     }
 
     @Override
@@ -91,7 +73,7 @@ public class TaskExecutor implements ILoader {
             }
         }
 
-        FileEntitySet fileEntitySet = new FileEntitySet(sourceManager, getProperties(collection), collection);
+        FileEntitySet fileEntitySet = new FileEntitySet(sourceManager, collection);
 
         Pattern regExp = Pattern.compile(autoupdateRegExp);
         boolean addedField = false;

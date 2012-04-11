@@ -87,7 +87,7 @@ public class CollectionManager implements ICollectionManager {
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
                 taskId = Integer.toHexString(collectionURI.hashCode());
-                TaskStatus storeCollection = new TaskStatus(taskId, "Running '" + collection.getId() + "'");
+                TaskStatus storeCollection = new TaskStatus(taskId, "Running '" + collection.getName() + "'");
 
                 boolean collectionUpdated = taskManager.preprocessCollection(collection);
                 if (collectionUpdated) {
