@@ -17,6 +17,9 @@
  */
 package org.onexus.core.query;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Or extends Filter {
 
     private Filter left;
@@ -38,6 +41,14 @@ public class Or extends Filter {
 
     public Filter getRight() {
         return right;
+    }
+
+    @Override
+    public Set<String> getDependentCollections() {
+        Set<String> collections = new HashSet<String>();
+        collections.addAll(left.getDependentCollections());
+        collections.addAll(right.getDependentCollections());
+        return collections;
     }
 
     @Override

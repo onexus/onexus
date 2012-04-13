@@ -346,7 +346,7 @@ public class H2Query extends AbstractSqlQuery {
             return;
         }
 
-        if (!isValidFieldName(order.getCollection(), order.getFieldName())) {
+        if (!isValidFieldName(order.getCollection(), order.getField())) {
             return;
         }
 
@@ -361,7 +361,7 @@ public class H2Query extends AbstractSqlQuery {
 
         for (ColumnInfo ci : getCollectionDDL(order.getCollection())
                 .getColumnInfos()) {
-            if (ci.getField().getId().equals(order.getFieldName())) {
+            if (ci.getField().getId().equals(order.getField())) {
 
 
                 orders.add("`" + getCollectionAlias(order.getCollection())
@@ -434,6 +434,10 @@ public class H2Query extends AbstractSqlQuery {
             // Add links
             String releaseURI = getQuery().getMainNamespace();
             List<FieldLink> linkFields = SqlUtils.getLinkFields(releaseURI, joinCollection, mainCollection);
+
+            if (linkFields.isEmpty()) {
+                throw new UnsupportedOperationException("Impossible to link collection '"+collectionId+"'.");
+            }
 
             for (FieldLink fieldLink : linkFields) {
 

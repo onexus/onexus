@@ -198,7 +198,7 @@ public abstract class EntitiesRowProvider implements
 
             Order order = getTableViewerStatus().getOrder();
             if (order != null && order.getCollection().equals(collectionId)
-                    && order.getFieldName().equals(fieldName)) {
+                    && order.getField().equals(fieldName)) {
                 return (order.isAscending() ? SortOrder.ASCENDING
                         : SortOrder.DESCENDING);
             }

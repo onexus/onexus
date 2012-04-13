@@ -18,7 +18,9 @@
 package org.onexus.core.query;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class Filter implements Serializable {
@@ -42,7 +44,11 @@ public abstract class Filter implements Serializable {
     }
     
     public Set<String> getDependentCollections() {
-        return Collections.EMPTY_SET;
+
+        Set<String> collections = new HashSet<String>();
+        collections.add(collection);
+
+        return collections;
     };
 
 }

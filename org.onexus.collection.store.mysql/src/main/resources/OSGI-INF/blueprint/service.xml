@@ -4,9 +4,11 @@
 
     <cm:property-placeholder persistent-id="org.onexus.collection.store.mysql" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="uri" value="[http://localhost/demo/onx=workspaces/demo]"/>
+            <cm:property name="server" value="localhost"/>
+            <cm:property name="port" value="3306"/>
+            <cm:property name="database" value="onexus"/>
             <cm:property name="username" value="onexus"/>
-            <cm:property name="password" value=""/>
+            <cm:property name="password" value="onexus"/>
             <cm:property name="status" value="disabled"/>
         </cm:default-properties>
     </cm:property-placeholder>
@@ -19,7 +21,9 @@
         </service-properties>
 
         <bean class="org.onexus.collection.store.mysql.CollectionStore" init-method="init">
-            <property name="uri" value="${uri}"/>
+            <property name="server" value="${server}"/>
+            <property name="port" value="${port}"/>
+            <property name="database" value="${database}"/>
             <property name="username" value="${username}"/>
             <property name="password" value="${password}"/>
             <property name="status" value="${status}"/>

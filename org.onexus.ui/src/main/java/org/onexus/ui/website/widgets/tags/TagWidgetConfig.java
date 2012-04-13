@@ -18,6 +18,7 @@
 package org.onexus.ui.website.widgets.tags;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.List;
@@ -26,7 +27,9 @@ import java.util.List;
 public class TagWidgetConfig extends WidgetConfig {
 
     private TagWidgetStatus defaultStatus;
-    private List<String> defaultTags;
+
+    @XStreamImplicit(itemFieldName = "tag")
+    private List<String> tags;
 
     public TagWidgetConfig() {
         super();
@@ -40,12 +43,12 @@ public class TagWidgetConfig extends WidgetConfig {
         this.defaultStatus = defaultStatus;
     }
 
-    public List<String> getDefaultTags() {
-        return defaultTags;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setDefaultTags(List<String> defaultTags) {
-        this.defaultTags = defaultTags;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     @Override

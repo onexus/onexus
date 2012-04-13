@@ -40,7 +40,7 @@ public class NotNull extends Filter {
 
     @Override
     public Set<String> getDependentCollections() {
-        Set<String> dependencies = new HashSet<String>();
+        Set<String> dependencies = super.getDependentCollections();
         dependencies.addAll(Arrays.asList(cellCollections));
         return dependencies;
     }

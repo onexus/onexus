@@ -86,6 +86,10 @@ public class CollectionManager implements ICollectionManager {
 
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
+                if (collection == null) {
+                    throw new UnsupportedOperationException("Unknown collection '" + collectionURI +"'");
+                }
+
                 taskId = Integer.toHexString(collectionURI.hashCode());
                 TaskStatus storeCollection = new TaskStatus(taskId, "Running '" + collection.getName() + "'");
 
@@ -182,7 +186,7 @@ public class CollectionManager implements ICollectionManager {
         
         // Order collections
         if (query.getOrder()!= null) {
-            queryCollections.add(query.getOrder().getCollection());
+            queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, query.getOrder().getCollection()));
         }
 
         return queryCollections;

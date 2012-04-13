@@ -121,7 +121,19 @@ public class ResourceTools {
             return collectionURI;
         }
 
-        // Relative URI
+        // Relative to Workspace URI
+        if (collectionURI.charAt(0) == Resource.SEPARATOR) {
+            return getWorkspaceURI(releaseURI) + collectionURI;
+        }
+
+        // Relative URI (../../resorce-name)
+        String relative = ".." + Resource.SEPARATOR;
+        while (collectionURI.startsWith(relative)) {
+            releaseURI = getParentURI(releaseURI);
+            collectionURI = collectionURI.substring(3);
+        }
+
+        // Same release URI
         return concatURIs(releaseURI, collectionURI);
     }
 

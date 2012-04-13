@@ -7,7 +7,7 @@
     <relativePath>..</relativePath>
   </parent>
   <artifactId>onexus-resources</artifactId>
-  
+  <name>onexus - Common META-INF resources</name>
   <build>
     <plugins>
       <plugin>      

@@ -44,7 +44,11 @@ public class CollectionStore implements ICollectionStore {
     private static final int INSERT_BATCH_SIZE = 400;
     private static final int INSERT_BUFFER_SIZE = INSERT_BATCH_SIZE * 400;
 
-    private String uri;
+    private String server;
+
+    private String port;
+
+    private String database;
 
     private String username;
 
@@ -68,6 +72,7 @@ public class CollectionStore implements ICollectionStore {
             return;
         }
 
+        String uri = "jdbc:mysql://" + server + ":" + port + "/" + database;
         LOGGER.debug("Connecting to {} as {}.", uri, username);
 
         try {
@@ -329,12 +334,28 @@ public class CollectionStore implements ICollectionStore {
         return ddls.get(collectionURI);
     }
 
-    public String getUri() {
-        return uri;
+    public String getServer() {
+        return server;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setServer(String server) {
+        this.server = server;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
     }
 
     public String getUsername() {

@@ -32,12 +32,12 @@ import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.IWidgetModel;
+import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
-import org.onexus.ui.website.widgets.Widget;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -56,7 +56,8 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
 
 
         TableViewerConfig config = getTableViewerConfig();
-        if (config != null) {
+        TableViewerStatus vs = getTableViewerStatus();
+        if (config != null && vs != null) {
 
             BrowserPageStatus browserStatus = getPageStatus();
             String releaseURI = (browserStatus != null ? browserStatus.getReleaseURI() : null);
@@ -65,7 +66,6 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
 
             List<ExportColumn> exportColumns = new ArrayList<ExportColumn>();
 
-            TableViewerStatus vs = getTableViewerStatus();
             for (IColumnConfig column : config.getColumnSets().get(vs.getCurrentColumnSet()).getColumns()) {
                 column.addExportColumns(exportColumns, releaseURI);
                 for (String collectionId : column.getQueryCollections(releaseURI)) {
@@ -74,7 +74,6 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
             }
 
             buildQuery(query);
-
 
 
             if (vs != null) {
@@ -129,30 +128,47 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
         IPageModel pageModel = getPageModel();
 
         return (BrowserPageStatus) (pageModel == null ? null : pageModel.getObject());
-    };
+    }
+
+    ;
 
     private BrowserPageConfig getPageConfig() {
         IPageModel pageModel = getPageModel();
 
         return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
-    };
+    }
+
+    ;
 
     private TableViewerStatus getTableViewerStatus() {
 
+        TableViewerConfig tableConfig = getTableViewerConfig();
+        if (tableConfig == null) {
+            return null;
+        }
+
         String widgetId = getTableViewerConfig().getId();
-        return (TableViewerStatus) (widgetId==null? null : getPageStatus().getWidgetStatus(widgetId));
+        if (widgetId == null) {
+            return null;
+        }
+
+        return (TableViewerStatus) getPageStatus().getWidgetStatus(widgetId);
 
     }
-    
+
     private TableViewerConfig getTableViewerConfig() {
 
-        String currentTab = getPageStatus().getCurrentTabId();
-        String currentView = getPageStatus().getCurrentView();
-        String mainWidgetId = getPageConfig().getTab(currentTab).getView(currentView).getMain().trim();
-        WidgetConfig widgetConfig = getPageConfig().getWidget(mainWidgetId);
+        try {
+            String currentTab = getPageStatus().getCurrentTabId();
+            String currentView = getPageStatus().getCurrentView();
+            String mainWidgetId = getPageConfig().getTab(currentTab).getView(currentView).getMain().trim();
+            WidgetConfig widgetConfig = getPageConfig().getWidget(mainWidgetId);
 
-        if (widgetConfig instanceof TableViewerConfig) {
-            return (TableViewerConfig) widgetConfig;
+            if (widgetConfig instanceof TableViewerConfig) {
+                return (TableViewerConfig) widgetConfig;
+            }
+        } catch (NullPointerException e) {
+            // Return null on any null pointer exception
         }
 
         return null;

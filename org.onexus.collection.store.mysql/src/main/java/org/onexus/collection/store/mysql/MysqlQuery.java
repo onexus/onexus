@@ -346,7 +346,7 @@ public class MysqlQuery extends AbstractSqlQuery {
             return;
         }
 
-        if (!isValidFieldName(order.getCollection(), order.getFieldName())) {
+        if (!isValidFieldName(order.getCollection(), order.getField())) {
             return;
         }
 
@@ -361,7 +361,7 @@ public class MysqlQuery extends AbstractSqlQuery {
 
         for (ColumnInfo ci : getCollectionDDL(order.getCollection())
                 .getColumnInfos()) {
-            if (ci.getField().getId().equals(order.getFieldName())) {
+            if (ci.getField().getId().equals(order.getField())) {
 
                 // Keep nulls at the end always
                 if (order.isAscending()) {
@@ -441,6 +441,10 @@ public class MysqlQuery extends AbstractSqlQuery {
             String releaseURI = getQuery().getMainNamespace();
             List<FieldLink> linkFields = MysqlUtils.getLinkFields(releaseURI,
                     joinCollection, mainCollection);
+
+            if (linkFields.isEmpty()) {
+                throw new UnsupportedOperationException("Impossible to link collection '"+collectionId+"'.");
+            }
 
             for (FieldLink fieldLink : linkFields) {
 

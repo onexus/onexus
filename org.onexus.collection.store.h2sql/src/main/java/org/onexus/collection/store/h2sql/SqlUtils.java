@@ -261,7 +261,7 @@ public class SqlUtils {
         // Case 1: A has a direct link to B
 
         for (Link link : linksA) {
-            if (link.getCollection().equals(b.getURI())) {
+            if (ResourceTools.getAbsoluteURI(releaseURI, link.getCollection()).equals(b.getURI())) {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(a.getURI(), Link.getFromFieldName(field), b.getURI(), Link
                             .getToFieldName(field)));

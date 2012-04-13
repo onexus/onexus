@@ -19,11 +19,13 @@ package org.onexus.ui.website.widgets.tags;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.*;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.onexus.core.query.EqualEntity;
@@ -46,6 +48,8 @@ import javax.inject.Inject;
 import java.util.*;
 
 public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implements IQueryContributor {
+
+    public static final CssResourceReference CSS = new CssResourceReference(TagWidget.class, "TagWidget.css");
 
     @Inject
     public ITagStoreManager tagStoreManager;
@@ -268,7 +272,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
 
             // Check that the default tags are present
             Collection<String> keys = store.getTagKeys();
-            List<String> defaultTags = getConfig().getDefaultTags();
+            List<String> defaultTags = getConfig().getTags();
             if (defaultTags != null) {
                 for (String defaultTag : defaultTags) {
                     if (!keys.contains(defaultTag)) {
@@ -328,6 +332,12 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
             Filter rule = rules.get(pos);
             return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
         }
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference(CSS);
     }
 
 }

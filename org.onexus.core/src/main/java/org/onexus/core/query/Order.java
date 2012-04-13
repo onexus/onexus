@@ -22,17 +22,17 @@ import java.io.Serializable;
 public class Order implements Serializable {
 
     private String collection;
-    private String fieldName;
+    private String field;
     private boolean ascending;
 
     public Order() {
         super();
     }
 
-    public Order(String collectionURI, String fieldName, boolean ascending) {
+    public Order(String collectionURI, String field, boolean ascending) {
         super();
         this.collection = collectionURI;
-        this.fieldName = fieldName;
+        this.field = field;
         this.ascending = ascending;
     }
 
@@ -40,8 +40,8 @@ public class Order implements Serializable {
         return collection;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public String getField() {
+        return field;
     }
 
     public boolean isAscending() {
@@ -53,8 +53,8 @@ public class Order implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append("Order [collectionURI=");
         builder.append(collection);
-        builder.append(", fieldName=");
-        builder.append(fieldName);
+        builder.append(", field=");
+        builder.append(field);
         builder.append(", ascending=");
         builder.append(ascending);
         builder.append("]");
