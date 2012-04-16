@@ -21,13 +21,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.*;
+import org.onexus.core.resources.Folder;
+import org.onexus.core.resources.Project;
+import org.onexus.core.resources.Resource;
+import org.onexus.core.resources.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class ResourceManager implements IResourceManager {
@@ -111,31 +113,30 @@ public class ResourceManager implements IResourceManager {
     @Override
     public void checkout() {
 
-        try {
+        for (Map.Entry<String, String> ws : this.workspacesPaths.entrySet()) {
+            File folder = new File(ws.getValue());
 
-            for (Map.Entry<String, String> ws : this.workspacesPaths.entrySet()) {
-                File folder = new File(ws.getValue());
-
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                }
-
-                @SuppressWarnings("unchecked")
-                Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, new String[]{ONEXUS_FILE_EXTENSION}, true);
-
-                for (File file : files) {
-                    Resource resource = checkoutFile(file, ws.getKey(), ws.getValue());
-
-                    resources.put(resource.getURI(), resource);
-                    uriToAbsolutePath.put(resource.getURI(), file.getAbsolutePath());
-                }
+            if (!folder.exists()) {
+                folder.mkdirs();
             }
 
-        } catch (FileNotFoundException e) {
-            LOGGER.error("File not found", e);
-            throw new RuntimeException(e);
-        }
+            @SuppressWarnings("unchecked")
+            Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, new String[]{ONEXUS_FILE_EXTENSION}, true);
 
+            for (File file : files) {
+
+                Resource resource = null;
+                try {
+                    resource = checkoutFile(file, ws.getKey(), ws.getValue());
+                } catch (Exception e) {
+                    LOGGER.error("Unserializing file '" + file.getPath() + "'", e);
+                    throw new RuntimeException("Error on file '" + file.getPath() + "'", e);
+                }
+
+                resources.put(resource.getURI(), resource);
+                uriToAbsolutePath.put(resource.getURI(), file.getAbsolutePath());
+            }
+        }
     }
 
     private Resource checkoutFile(File file, String workspaceURI, String workspacePath) throws FileNotFoundException {

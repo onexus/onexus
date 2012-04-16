@@ -28,10 +28,20 @@ public class WebsiteConfig extends Resource {
 
     private WebsiteStatus defaultStatus;
 
+    private String authorization;
+
     private List<PageConfig> pages;
 
     public WebsiteConfig() {
         super();
+    }
+
+    public String getAuthorization() {
+        return authorization;
+    }
+
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
     public WebsiteStatus getDefault() {

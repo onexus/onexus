@@ -18,6 +18,8 @@
 package org.onexus.ui.website;
 
 import org.apache.wicket.*;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -98,6 +100,10 @@ public class Website extends WebPage {
         PageConfig pageConfig = websiteConfig.getPage(currentPage);
 
         add(pageManager.create("page", new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
+
+        if (websiteConfig.getAuthorization() != null) {
+            MetaDataRoleAuthorizationStrategy.authorize(this, Component.RENDER, websiteConfig.getAuthorization());
+        }
 
     }
 
