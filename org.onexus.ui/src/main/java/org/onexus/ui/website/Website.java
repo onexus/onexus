@@ -18,8 +18,7 @@
 package org.onexus.ui.website;
 
 import org.apache.wicket.*;
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authroles.authorization.strategies.role.metadata.MetaDataRoleAuthorizationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,6 +31,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
@@ -102,7 +102,13 @@ public class Website extends WebPage {
         add(pageManager.create("page", new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
 
         if (websiteConfig.getAuthorization() != null) {
-            MetaDataRoleAuthorizationStrategy.authorize(this, Component.RENDER, websiteConfig.getAuthorization());
+
+            String role = websiteConfig.getAuthorization();
+
+            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
+                OnexusWebApplication.get().restartResponseAtSignInPage();
+            }
+
         }
 
     }
