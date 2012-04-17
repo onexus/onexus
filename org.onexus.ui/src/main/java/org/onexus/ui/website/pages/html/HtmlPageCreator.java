@@ -41,7 +41,7 @@ public class HtmlPageCreator extends AbstractPageCreator<HtmlPageConfig, HtmlPag
         resourceRegister.addAutoComplete(WebsiteConfig.class, "pages",
                 "<html>" +
                         "<id>[page-id]</id>" +
-                        "<name>[page-name]</name>" +
+                        "<label>[page-name]</label>" +
                         "<content></content>" +
                         "<css></css>" +
                         "</html>");

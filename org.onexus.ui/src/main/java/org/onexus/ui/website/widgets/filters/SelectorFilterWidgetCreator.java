@@ -38,6 +38,7 @@ public class SelectorFilterWidgetCreator extends AbstractWidgetCreator<SelectorF
     @Override
     public void register(IResourceRegister resourceRegister) {
         super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<id>[tab-id]</id>");
+
+        //resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<id>[tab-id]</id>");
     }
 }

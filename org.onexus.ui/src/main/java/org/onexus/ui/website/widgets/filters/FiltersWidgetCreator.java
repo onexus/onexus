@@ -41,7 +41,7 @@ public class FiltersWidgetCreator extends AbstractWidgetCreator<FiltersWidgetCon
         resourceRegister.register(FieldSelection.class);
         resourceRegister.register(FilterConfig.class);
 
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<id>[tab-id]</id>");
+        //resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<id>[tab-id]</id>");
     }
 
 }
