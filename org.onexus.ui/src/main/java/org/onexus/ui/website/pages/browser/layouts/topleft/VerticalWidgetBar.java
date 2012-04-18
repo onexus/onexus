@@ -89,11 +89,6 @@ public class VerticalWidgetBar extends Panel {
     }
 
     private void showHideBoxes() {
-
-        boxesshowContainer.add(new AttributeModifier("style", new Model<String>("width: 200px;")));
-        boxesContainer.add(new AttributeModifier("style", new Model<String>("width: 181px;")));
-
         boxesView.setVisible(true);
-
     }
 }

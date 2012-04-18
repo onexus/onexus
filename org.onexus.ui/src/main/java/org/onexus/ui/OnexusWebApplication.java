@@ -22,7 +22,7 @@ import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSessio
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
-import org.wicketstuff.osgi.OsgiClassResolver;
+import org.apache.wicket.util.resource.locator.OsgiResourceStreamLocator;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 
 public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
@@ -39,10 +39,11 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
         getComponentInstantiationListeners().add(new OsgiComponentInjector());
         getSessionListeners().add(new OsgiSessionInjector());
         getApplicationListeners().add(new OsgiApplicationInjector());
-        getApplicationSettings().setClassResolver(new OsgiClassResolver());
+
+        getResourceSettings().setResourceStreamLocator(new OsgiResourceStreamLocator());
+        getApplicationSettings().setClassResolver(new OsgiClassResolver(getClass().getClassLoader(), OsgiClassResolver.class.getClassLoader()));
 
     }
-
 
 
     @Override

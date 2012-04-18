@@ -42,25 +42,27 @@ public class GenericBox extends AbstractBox {
         RepeatingView fieldsRV = new RepeatingView("fields");
         IEntity entity = entityModel.getObject();
 
-        for (Field field : entity.getCollection().getFields()) {
+        if (entity != null) {
+            for (Field field : entity.getCollection().getFields()) {
 
-            // Skip fields with null value
-            Object value = entity.get(field.getId());
-            if (value == null) {
-                continue;
+                // Skip fields with null value
+                Object value = entity.get(field.getId());
+                if (value == null) {
+                    continue;
+                }
+
+                String caption = field.getTitle();
+                if (caption == null) {
+                    caption = field.getId();
+                }
+
+                // Create the field container
+                WebMarkupContainer fieldContainer = new WebMarkupContainer(fieldsRV.newChildId());
+                fieldContainer.add(new Label("caption", caption));
+                fieldContainer.add(new Label("value", String.valueOf(value)));
+                fieldsRV.add(fieldContainer);
+
             }
-
-            String caption = field.getTitle();
-            if (caption == null) {
-                caption = field.getId();
-            }
-
-            // Create the field container
-            WebMarkupContainer fieldContainer = new WebMarkupContainer(fieldsRV.newChildId());
-            fieldContainer.add(new Label("caption", caption));
-            fieldContainer.add(new Label("value", String.valueOf(value)));
-            fieldsRV.add(fieldContainer);
-
         }
         add(fieldsRV);
 

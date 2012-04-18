@@ -4,7 +4,6 @@
 
     <cm:property-placeholder persistent-id="org.onexus.ui.workspace" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="urlPrefix" value="/onexus"/>
             <cm:property name="database" value="onexus-h2-tags"/>
             <cm:property name="username" value="sa"/>
             <cm:property name="password" value=""/>

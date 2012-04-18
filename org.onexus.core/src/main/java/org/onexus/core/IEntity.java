@@ -40,10 +40,10 @@ public interface IEntity {
     public Collection getCollection();
 
     /**
-     * @param fieldName The name of the field.
+     * @param fieldId The ID of the field.
      * @return The value associated to this field.
      */
-    public Object get(String fieldName);
+    public Object get(String fieldId);
 
 
     /**

@@ -74,13 +74,13 @@ public class FileEntity implements IEntity {
     }
 
     @Override
-    public Object get(String fieldURI) {
+    public Object get(String fieldId) {
 
-        if (!fields.containsKey(fieldURI)) {
+        if (!fields.containsKey(fieldId)) {
             return null;
         }
 
-        Field field = fields.get(fieldURI);
+        Field field = fields.get(fieldId);
         String value = null;
         if (headers.containsKey(field.getId())) {
             Integer position = headers.get(field.getId());
@@ -121,7 +121,7 @@ public class FileEntity implements IEntity {
             return constructor.newInstance(value);
         } catch (Exception e) {
             throw new RuntimeException("The value '" + value
-                    + "' for the field '" + fieldURI
+                    + "' for the field '" + fieldId
                     + "' is malformed on line '" + line + "'", e);
         }
 

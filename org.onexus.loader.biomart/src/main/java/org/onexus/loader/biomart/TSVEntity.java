@@ -49,7 +49,7 @@ public class TSVEntity implements IEntity {
     }
 
     @Override
-    public Object get(String fieldName) {
+    public Object get(String fieldId) {
 
         List<Field> fields = collection.getFields();
 
@@ -57,7 +57,7 @@ public class TSVEntity implements IEntity {
         Field field = null;
         for (; position < fields.size(); position++) {
             field = fields.get(position);
-            if (field.getId().equals(fieldName)) {
+            if (field.getId().equals(fieldId)) {
                 break;
             }
         }
@@ -98,7 +98,7 @@ public class TSVEntity implements IEntity {
             return constructor.newInstance(value);
         } catch (Exception e) {
             throw new RuntimeException("The value '" + value
-                    + "' for the field '" + fieldName
+                    + "' for the field '" + fieldId
                     + "' is malformed on line '" + line + "'", e);
         }
 

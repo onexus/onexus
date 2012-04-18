@@ -65,8 +65,23 @@ public class Website extends WebPage {
 
     public Website(PageParameters pageParameters) {
 
-        initConfig(pageParameters);
-        initStatus(pageParameters);
+        init(pageParameters);
+
+        addComponents(pageParameters);
+
+        if (websiteConfig != null && websiteConfig.getAuthorization() != null) {
+
+            String role = websiteConfig.getAuthorization();
+
+            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
+                OnexusWebApplication.get().restartResponseAtSignInPage();
+            }
+
+        }
+
+    }
+
+    protected void addComponents(PageParameters pageParameters) {
 
         add(new ProgressBar("progressbar"));
         add(new Label("windowTitle", websiteConfig.getTitle()));
@@ -101,19 +116,17 @@ public class Website extends WebPage {
 
         add(pageManager.create("page", new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
 
-        if (websiteConfig.getAuthorization() != null) {
-
-            String role = websiteConfig.getAuthorization();
-
-            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
-                OnexusWebApplication.get().restartResponseAtSignInPage();
-            }
-
-        }
-
     }
 
-    private void initConfig(PageParameters pageParameters) {
+    protected String getWebsiteUriParameterValue(PageParameters pageParameters) {
+         return pageParameters.get(PARAMETER_WEBSITE).toString();
+    }
+
+    protected String getWebsiteStatusParameterValue(PageParameters pageParameters) {
+        return pageParameters.get(PARAMETER_STATUS).toString();
+    }
+
+    private void init(PageParameters pageParameters) {
 
         // Application level
         websiteConfig = Application.get().getMetaData(WEBSITE_CONFIG);
@@ -125,28 +138,29 @@ public class Website extends WebPage {
 
         // URL level
         if (websiteConfig == null) {
-            StringValue websiteURI = pageParameters.get(PARAMETER_WEBSITE);
-            if (!websiteURI.isNull()) {
+            String websiteURI = getWebsiteUriParameterValue(pageParameters);
+            if (websiteURI != null) {
                 websiteConfig = OnexusWebSession.get().getResourceManager()
-                        .load(WebsiteConfig.class, websiteURI.toString());
+                        .load(WebsiteConfig.class, websiteURI);
             }
         }
 
-    }
-
-    private void initStatus(PageParameters pageParameters) {
+        if (websiteConfig == null) {
+            return;
+        }
 
         // Session level
         websiteStatus = Session.get().getMetaData(WEBSITE_STATUS);
 
         // URL level
         if (websiteStatus == null) {
-            StringValue statusENCODED = pageParameters.get(PARAMETER_STATUS);
 
-            if (!statusENCODED.isNull()) {
+            String statusENCODED = getWebsiteStatusParameterValue(pageParameters);
+
+            if (statusENCODED != null) {
                 try {
                     StatusEncoder statusEncoder = new StatusEncoder(getClass().getClassLoader());
-                    websiteStatus = statusEncoder.decodeStatus(statusENCODED.toString());
+                    websiteStatus = statusEncoder.decodeStatus(statusENCODED);
                 } catch (UnsupportedEncodingException e) {
                     // TODO
                 }
@@ -176,8 +190,6 @@ public class Website extends WebPage {
         }
 
     }
-
-
 
     public WebsiteConfig getWebsiteConfig() {
         return websiteConfig;

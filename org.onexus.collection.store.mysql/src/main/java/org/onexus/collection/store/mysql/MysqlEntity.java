@@ -66,8 +66,8 @@ public class MysqlEntity implements IEntity {
     }
 
     @Override
-    public Object get(String fieldURI) {
-        return values.get(fieldURI);
+    public Object get(String fieldId) {
+        return values.get(fieldId);
     }
 
     @Override

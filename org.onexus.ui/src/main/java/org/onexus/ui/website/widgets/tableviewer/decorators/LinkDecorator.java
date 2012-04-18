@@ -25,8 +25,10 @@ import org.apache.wicket.model.Model;
 import org.onexus.core.IEntity;
 import org.onexus.core.query.FixedEntity;
 import org.onexus.core.resources.Field;
+import org.onexus.ui.website.events.AbstractEvent;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
+import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 
 import java.util.Set;
 
@@ -65,14 +67,25 @@ public class LinkDecorator extends FieldDecorator {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
+                BrowserPageStatus status = getBrowserPageStatus();
+                FixedEntity rowEntity = getModelObject();
 
-                Set<FixedEntity> fixedEntities = getBrowserPageStatus().getFixedEntities();
-                fixedEntities.add(getModelObject());
-                sendEvent(EventFixEntity.EVENT);
-
+                AbstractEvent[] events = LinkDecorator.this.onClick(rowEntity, status);
+                for (AbstractEvent event : events) {
+                    sendEvent(event);
+                }
             }
 
         };
     }
+
+    protected AbstractEvent[] onClick(FixedEntity rowEntity, BrowserPageStatus status)  {
+
+        // Fix current row entity
+        status.getFixedEntities().add(rowEntity);
+
+        return new AbstractEvent[] { EventFixEntity.EVENT };
+    }
+
 
 }
