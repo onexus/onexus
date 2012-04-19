@@ -56,11 +56,20 @@ public class ProgressBarPanel extends Panel {
 
     private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<TaskStatus>> {
 
+        private transient List<TaskStatus> activeTasks;
+
         @Override
         public List<TaskStatus> getObject() {
-            return ProgressBar.getActiveTasks().getActiveTasks();
+            if (activeTasks == null) {
+                activeTasks = ProgressBar.getActiveTasks().getActiveTasks();
+            }
+            return activeTasks;
         }
 
+        @Override
+        public void detach() {
+            activeTasks = null;
+        }
     }
 
 }
