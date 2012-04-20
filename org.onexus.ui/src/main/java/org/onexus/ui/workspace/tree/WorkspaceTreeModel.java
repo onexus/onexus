@@ -22,8 +22,10 @@ import org.apache.wicket.model.IModel;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.resources.Workspace;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
 
+import javax.inject.Inject;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
@@ -40,9 +42,16 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
     private transient TreeModel tree = null;
 
+    @Inject
+    public IResourceManager resourceManager;
+
     public WorkspaceTreeModel(IModel<Resource> currentResource) {
         super();
+
+        OnexusWebApplication.get().getInjector().inject(this);
+
         this.currentResource = currentResource;
+
     }
 
     @Override
@@ -75,7 +84,7 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
             String resourceURI = resource.getURI();
 
-            List<Workspace> workspaces = getResourceManager().loadChildren(Workspace.class, null);
+            List<Workspace> workspaces = resourceManager.loadChildren(Workspace.class, null);
 
             for (Workspace workspace : workspaces) {
                 if (resourceURI.startsWith(workspace.getURI())) {
@@ -100,7 +109,7 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
         DefaultMutableTreeNode parentNode = ResourceNode.create(parentResource);
 
-        List<Resource> resources = getResourceManager().loadChildren(Resource.class, parentResource.getURI());
+        List<Resource> resources = resourceManager.loadChildren(Resource.class, parentResource.getURI());
 
         Collections.sort(resources, RESOURCE_COMPARATOR);
 
@@ -111,10 +120,6 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
         }
 
         return parentNode;
-    }
-
-    protected IResourceManager getResourceManager() {
-        return OnexusWebSession.get().getResourceManager();
     }
 
     private final static class ResourceComparator implements Comparator<Resource> {

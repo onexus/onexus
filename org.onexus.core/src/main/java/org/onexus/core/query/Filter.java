@@ -39,10 +39,6 @@ public abstract class Filter implements Serializable {
         return collection;
     }
 
-    public void setCollection(String collectionURI) {
-        this.collection = collectionURI;
-    }
-    
     public Set<String> getDependentCollections() {
 
         Set<String> collections = new HashSet<String>();

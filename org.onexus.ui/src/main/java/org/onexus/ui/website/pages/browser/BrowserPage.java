@@ -32,6 +32,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.onexus.core.ICollectionManager;
+import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Release;
 import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.OnexusWebSession;
@@ -48,12 +50,16 @@ import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
     public final static CssResourceReference CSS = new CssResourceReference(BrowserPage.class, "BrowserPage.css");
+
+    @Inject
+    public IResourceManager resourceManager;
 
     public BrowserPage(String componentId, IPageModel<BrowserPageStatus> statusModel) {
         super(componentId, statusModel);
@@ -87,7 +93,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             WebsiteConfig websiteConfig = getPageModel().getWebsiteModel().getConfig();
 
             String parentURI = ResourceTools.getParentURI(websiteConfig.getURI());
-            List<Release> releases = OnexusWebSession.get().getResourceManager().loadChildren(Release.class, parentURI);
+            List<Release> releases = resourceManager.loadChildren(Release.class, parentURI);
 
             if (releases != null && !releases.isEmpty()) {
                 status.setReleaseURI(releases.get(0).getURI());
@@ -134,7 +140,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         });
 
         // Check if the current selected tab is visible.
-        String currentTabId = getStatus().getCurrentTabId();
+            String currentTabId = getStatus().getCurrentTabId();
 
         // Set a current tab if there is no one.
         if (currentTabId == null) {

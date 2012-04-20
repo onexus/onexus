@@ -20,18 +20,26 @@ package org.onexus.ui.workspace.pages;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
+
+import javax.inject.Inject;
 
 public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     private String resourceURI;
 
+    @Inject
+    private IResourceManager resourceManager;
+
     public ResourceModel() {
         super();
+        OnexusWebApplication.get().getInjector().inject(this);
     }
 
     public ResourceModel(String resourceURI) {
         super();
+        OnexusWebApplication.get().getInjector().inject(this);
         this.resourceURI = resourceURI;
     }
 
@@ -43,7 +51,7 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
     protected Resource load() {
 
         if (resourceURI != null) {
-            return getResourceManager().load(Resource.class, resourceURI);
+            return resourceManager.load(Resource.class, resourceURI);
         }
 
         return null;
@@ -56,10 +64,6 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
         } else {
             this.resourceURI = null;
         }
-    }
-
-    private IResourceManager getResourceManager() {
-        return OnexusWebSession.get().getResourceManager();
     }
 
 }

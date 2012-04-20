@@ -23,27 +23,35 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
+import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
+import org.onexus.core.IResourceManager;
 import org.onexus.core.query.FixedEntity;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.ui.website.utils.SingleEntityQuery;
-import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
+import org.onexus.ui.website.utils.SingleEntityQuery;
 import org.onexus.ui.website.widgets.IQueryContributor;
 
+import javax.inject.Inject;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 public class FixedEntities extends EventPanel implements IQueryContributor {
+
+    @Inject
+    public IResourceManager resourceManager;
+
+    @Inject
+    public ICollectionManager collectionManager;
 
     private IPageModel<BrowserPageStatus> pageModel;
 
@@ -56,10 +64,6 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class);
     }
 
-    private String getAbsoluteURI(String collectionURI) {
-        return ResourceTools.getAbsoluteURI(pageModel.getObject().getReleaseURI(), collectionURI);
-    }
-
     @Override
     protected void onBeforeRender() {
 
@@ -70,11 +74,17 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
         Set<FixedEntity> fixedEntities = pageModel.getObject().getFixedEntities();
 
         if (fixedEntities != null) {
+
+            String releaseURI = pageModel.getObject().getReleaseURI();
+
             for (FixedEntity fixedEntity : fixedEntities) {
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
-                Collection collection = OnexusWebSession.get().getResourceManager()
-                        .load(Collection.class, getAbsoluteURI(fixedEntity.getCollectionURI()));
+                // Make collection URI absolute
+                String absoluteCollectionURI = ResourceTools.getAbsoluteURI(releaseURI, fixedEntity.getCollectionURI());
+                fixedEntity.setCollectionURI(absoluteCollectionURI);
+
+                Collection collection = resourceManager.load(Collection.class, fixedEntity.getCollectionURI());
 
                 String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
                 if (collectionLabel == null) {
@@ -84,11 +94,8 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
                 String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
                 String entityLabel = fixedEntity.getEntityId();
                 if (entityField != null) {
-                    IEntity entity = new EntityIterator(OnexusWebSession
-                            .get()
-                            .getCollectionManager()
-                            .load(new SingleEntityQuery(getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity
-                                    .getEntityId())), getAbsoluteURI(fixedEntity.getCollectionURI())).next();
+                    IEntity entity = new EntityIterator(collectionManager.load(new SingleEntityQuery(fixedEntity.getCollectionURI(), fixedEntity
+                            .getEntityId())), fixedEntity.getCollectionURI()).next();
 
                     entityLabel = String.valueOf(entity.get(entityField));
 
@@ -100,11 +107,8 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
 
                 String entityPattern = collection.getProperty("FIXED_ENTITY_PATTERN");
                 if (entityPattern != null) {
-                    IEntity entity = new EntityIterator(OnexusWebSession
-                            .get()
-                            .getCollectionManager()
-                            .load(new SingleEntityQuery(getAbsoluteURI(fixedEntity.getCollectionURI()), fixedEntity
-                                    .getEntityId())), getAbsoluteURI(fixedEntity.getCollectionURI())).next();
+                    IEntity entity = new EntityIterator(collectionManager.load(new SingleEntityQuery(fixedEntity.getCollectionURI(), fixedEntity
+                            .getEntityId())), fixedEntity.getCollectionURI()).next();
 
                     if (entity != null) {
                         entityLabel = parseTemplate(entityPattern, entity);

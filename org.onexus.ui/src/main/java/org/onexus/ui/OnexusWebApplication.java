@@ -30,21 +30,27 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
     // Force to import the package
     public final static WicketFilter wicketFilter = null;
 
+    private OsgiComponentInjector injector;
+
     @Override
     protected void init() {
         super.init();
         mountPage("/login", getSignInPageClass());
         getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
 
-        getComponentInstantiationListeners().add(new OsgiComponentInjector());
-        getSessionListeners().add(new OsgiSessionInjector());
-        getApplicationListeners().add(new OsgiApplicationInjector());
-
+        getComponentInstantiationListeners().add(getInjector());
         getResourceSettings().setResourceStreamLocator(new OsgiResourceStreamLocator());
         getApplicationSettings().setClassResolver(new OsgiClassResolver(getClass().getClassLoader(), OsgiClassResolver.class.getClassLoader()));
-
     }
 
+    public OsgiComponentInjector getInjector() {
+
+        if (injector == null) {
+            injector = new OsgiComponentInjector();
+        }
+
+        return injector;
+    }
 
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {

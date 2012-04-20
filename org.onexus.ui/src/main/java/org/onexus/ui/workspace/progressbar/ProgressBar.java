@@ -43,8 +43,12 @@ public class ProgressBar extends Panel {
 
     private boolean open = false;
 
-    public ProgressBar(String id) {
+    private boolean usePrecondition = false;
+
+    public ProgressBar(String id, boolean usePrecondition) {
         super(id);
+
+        this.usePrecondition = usePrecondition;
 
         setOutputMarkupId(true);
         add(new Refresh());
@@ -99,10 +103,13 @@ public class ProgressBar extends Panel {
 
 
         @Override
-        protected CharSequence getPreconditionScript()
-        {
-            String componentId = "progressbar-modal";
-            return "var c = Wicket.$('" + componentId + "'); return typeof(c) != 'undefined' && c != null";
+        protected CharSequence getPreconditionScript() {
+            if (usePrecondition) {
+                String componentId = "progressbar-modal";
+                return "var c = Wicket.$('" + componentId + "'); return typeof(c) != 'undefined' && c != null";
+            } else {
+                return super.getPreconditionScript();
+            }
         }
 
     }

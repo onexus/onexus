@@ -22,20 +22,27 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntityTable;
+import org.onexus.core.IResourceManager;
 import org.onexus.core.TaskStatus;
 import org.onexus.core.query.Order;
 import org.onexus.core.query.Query;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 
+import javax.inject.Inject;
 import java.util.Iterator;
 
 public abstract class EntitiesRowProvider implements
         ISortableDataProvider<IEntityTable> {
+
+    @Inject
+    public ICollectionManager collectionManager;
 
     private TableViewerConfig config;
     private IModel<TableViewerStatus> statusModel;
@@ -44,24 +51,13 @@ public abstract class EntitiesRowProvider implements
 
     public EntitiesRowProvider(TableViewerConfig config,
                                IModel<TableViewerStatus> status) {
+        OnexusWebApplication.get().getInjector().inject(this);
         this.statusModel = status;
         this.config = config;
     }
 
     protected TableViewerStatus getTableViewerStatus() {
-        TableViewerStatus status = statusModel.getObject();
-
-        if (status == null) {
-            status = config.getDefaultStatus();
-            statusModel.setObject(status);
-        }
-
-        if (status == null) {
-            status = config.createEmptyStatus();
-            statusModel.setObject(status);
-        }
-
-        return status;
+        return statusModel.getObject();
     }
 
     @Override
@@ -76,7 +72,7 @@ public abstract class EntitiesRowProvider implements
     @Override
     public int size() {
         Query query = buildQuery();
-        IEntityTable entityTable = OnexusWebSession.get().getCollectionManager().load(query);
+        IEntityTable entityTable = collectionManager.load(query);
 
         TaskStatus task = entityTable.getTaskStatus();
         if (task != null && !task.isDone()) {
@@ -95,8 +91,9 @@ public abstract class EntitiesRowProvider implements
         String releaseURI = (status == null ? null : status.getReleaseURI());
         query.setMainNamespace(releaseURI);
 
-        //TODO
-        for (IColumnConfig column : config.getColumnSets().get(0).getColumns()) {
+        int currentColumnSet = getTableViewerStatus().getCurrentColumnSet();
+
+        for (IColumnConfig column : config.getColumnSets().get(currentColumnSet).getColumns()) {
             for (String collectionId : column.getQueryCollections(releaseURI)) {
                 query.getCollections().add(collectionId);
             }
@@ -124,7 +121,7 @@ public abstract class EntitiesRowProvider implements
 
     private Iterator<IEntityTable> loadIterator(Query query) {
         if (rows == null) {
-            IEntityTable entityTable = ProgressBar.show(OnexusWebSession.get().getCollectionManager().load(query));
+            IEntityTable entityTable = ProgressBar.show(collectionManager.load(query));
 
             TaskStatus task = entityTable.getTaskStatus();
             if (task != null && !task.isDone()) {
@@ -154,8 +151,7 @@ public abstract class EntitiesRowProvider implements
 
         @Override
         protected IEntityTable load() {
-            return OnexusWebSession.get().getCollectionManager()
-                    .load(query);
+            return collectionManager.load(query);
         }
 
     }

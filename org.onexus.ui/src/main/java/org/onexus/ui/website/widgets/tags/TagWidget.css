@@ -1,6 +1,6 @@
 
 form.tagsform input[type=text] {
-     width: 90px;
+     width: 130px;
 }
 
 form.tagsform input {
@@ -12,7 +12,7 @@ form.tagsform div.tags {
      border: 1px solid gray;
      margin: 5px 0px;
      padding: 5px;
-     width: 128px;
+     width: 162px;
      height: 100px;
      overflow: auto;
 }

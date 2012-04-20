@@ -18,49 +18,49 @@
 package org.onexus.ui.website.utils;
 
 import org.apache.wicket.model.IModel;
+import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.query.FixedEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
+
+import javax.inject.Inject;
 
 public class EntityModel implements IModel<IEntity> {
 
-    private Collection entityCollection;
-    private String id;
+    private String collectionURI;
+    private String entityId;
 
     private transient IEntity entity;
 
+    @Inject
+    public ICollectionManager collectionManager;
+
     public EntityModel() {
+        this(null, null);
     }
 
     public EntityModel(FixedEntity fe) {
         this(fe.getCollectionURI(), fe.getEntityId());
     }
 
-    public EntityModel(IEntity es) {
-        this.entity = es;
-        this.entityCollection = es.getCollection();
-        this.id = es.getId();
-    }
-
     public EntityModel(String collectionId, String entityId) {
-        this(OnexusWebSession.get().getResourceManager()
-                .load(Collection.class, collectionId), entityId);
+        super();
+        OnexusWebApplication.get().getInjector().inject(this);
+
+        this.collectionURI = collectionId;
+        this.entityId = entityId;
     }
 
-    public EntityModel(Collection entityCollection, String id) {
-        this.entityCollection = entityCollection;
-        this.id = id;
-    }
 
     @Override
     public IEntity getObject() {
-        if (entity == null && id != null && entityCollection != null) {
+        if (entity == null && entityId != null && collectionURI != null) {
             entity = new EntityIterator(
-                    OnexusWebSession.get().getCollectionManager()
-                            .load(new SingleEntityQuery(entityCollection.getURI(), id)),
-                    entityCollection.getURI()
+                    collectionManager.load(new SingleEntityQuery(collectionURI, entityId)),
+                    collectionURI
             ).next();
         }
         return entity;

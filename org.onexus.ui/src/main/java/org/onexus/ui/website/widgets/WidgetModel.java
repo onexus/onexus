@@ -17,8 +17,14 @@
  */
 package org.onexus.ui.website.widgets;
 
+import org.onexus.core.IResourceSerializer;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.PageStatus;
+
+import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
 
@@ -26,12 +32,16 @@ public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
     private IPageModel<? extends PageStatus> pageModel;
     private S status;
 
+    @Inject
+    public IResourceSerializer serializer;
+
     public WidgetModel(WidgetConfig config) {
         this(config, null);
     }
 
     public WidgetModel(WidgetConfig config, IPageModel<? extends PageStatus> pageModel) {
         super();
+        OnexusWebApplication.get().getInjector().inject(this);
         this.config = config;
         this.pageModel = pageModel;
     }
@@ -58,13 +68,26 @@ public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
         }
         
         if (status == null) {
+
             status = (S) config.getDefaultStatus();
+
+            if (status != null) {
+
+                // We need to clone this object to avoid update defaultStatus on status changes.
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                serializer.serialize(status, buffer);
+                status = (S) serializer.unserialize(status.getClass(), new ByteArrayInputStream(buffer.toByteArray()));
+            }
 
             if (status == null) {
                 status = (S) config.createEmptyStatus();
             }
             
             if (status != null) {
+
+                // The status id must be the config id always.
+                status.setId(config.getId());
+
                 setObject(status);
             }
         }

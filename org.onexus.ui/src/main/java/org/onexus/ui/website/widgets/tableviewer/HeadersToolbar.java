@@ -20,6 +20,7 @@ package org.onexus.ui.website.widgets.tableviewer;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
@@ -29,6 +30,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
+import org.onexus.ui.website.events.EventSortUpdate;
 import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.widgets.tableviewer.columns.MatrixTrack;
 import org.onexus.ui.website.widgets.tableviewer.columns.Track;
@@ -269,7 +271,7 @@ public class HeadersToolbar extends AbstractToolbar {
             protected void onAjaxClick(AjaxRequestTarget target) {
                 target.add(getTable());
 
-                //send(getPage(), Broadcast.BREADTH, EventSortUpdate.EVENT);
+                send(getPage(), Broadcast.BREADTH, EventSortUpdate.EVENT);
 
             }
 

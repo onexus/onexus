@@ -17,10 +17,12 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.columns;
 
+import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Collection;
-import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
+
+import javax.inject.Inject;
 
 public class CollectionTrack extends ViewTrack {
 
@@ -28,9 +30,7 @@ public class CollectionTrack extends ViewTrack {
 
     public CollectionTrack(String collectionId, IHeader headerDecorator,
                            IDecorator cellDecorator) {
-        super(OnexusWebSession.get().getResourceManager()
-                .load(Collection.class, collectionId), headerDecorator,
-                cellDecorator);
+        super(collectionId, headerDecorator, cellDecorator);
         this.collectionId = collectionId;
     }
 

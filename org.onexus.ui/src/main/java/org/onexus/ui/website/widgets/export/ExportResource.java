@@ -31,9 +31,11 @@ import org.onexus.core.IResourceManager;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.ResourceTools;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
 
+import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -53,6 +55,17 @@ public class ExportResource extends AbstractResource {
     public final static String FORMAT_TSV = "tsv";
 
     private final static XStream xstream = new XStream();
+
+    @Inject
+    public IResourceManager resourceManager;
+
+    @Inject
+    public ICollectionManager collectionManager;
+
+    public ExportResource() {
+        super();
+        OnexusWebApplication.get().getInjector().inject(this);
+    }
 
     protected String getFieldSeparator() {
         return "\t";
@@ -121,9 +134,7 @@ public class ExportResource extends AbstractResource {
 
     protected void writeTSV(Response pw, Query query, List<ExportColumn> columns) {
 
-        ICollectionManager em = OnexusWebSession.get()
-                .getCollectionManager();
-        IEntityTable data = em.load(query);
+        IEntityTable data = collectionManager.load(query);
 
         // Print header
         Iterator<ExportColumn> itc = columns.iterator();
@@ -180,8 +191,7 @@ public class ExportResource extends AbstractResource {
     }
 
     private Collection getCollection(String releaseURI, String collectionURI) {
-        IResourceManager rm = OnexusWebSession.get().getResourceManager();
-        return rm.load(Collection.class,
+        return resourceManager.load(Collection.class,
                 ResourceTools.getAbsoluteURI(releaseURI, collectionURI));
     }
 

@@ -51,7 +51,7 @@ public class BrowserPageStatus extends PageStatus {
     }
 
     public void setCurrentTabId(String currentTabId) {
-        if (currentTabId != null && currentTabId.equals(this.currentView = null)) {
+        if (currentTabId != null && !currentTabId.equals(this.currentTabId)) {
             this.currentView = null;
         }
         this.currentTabId = currentTabId;

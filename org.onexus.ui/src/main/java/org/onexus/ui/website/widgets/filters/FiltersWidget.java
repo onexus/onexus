@@ -198,8 +198,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             for (FilterConfig filter : this.model.getObject()) {
                 if (filter.getActive() && fixedPredicate.evaluate(filter)) {
                     for (Filter rule : filter.getRules()) {
-                        rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(),
-                                rule.getCollection()));
+                        //FIXME rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(), rule.getCollection()));
                         rules.add(rule);
                     }
                 }

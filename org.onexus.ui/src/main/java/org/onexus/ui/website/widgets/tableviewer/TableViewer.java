@@ -66,6 +66,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
 
         TableViewerConfig config = getConfig();
 
+        this.getVariation();
+
         this.dataProvider = new EntitiesRowProvider(config, status) {
 
             @Override

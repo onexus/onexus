@@ -20,9 +20,11 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
+import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.ResourceTools;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.widgets.tableviewer.decorators.DecoratorFactory;
 import org.onexus.ui.website.widgets.tableviewer.headers.CollectionHeader;
@@ -30,6 +32,7 @@ import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,9 +49,8 @@ public class ColumnConfig implements IColumnConfig {
 
     private String decorator;
 
-    public ColumnConfig() {
-        super();
-    }
+    @Inject
+    public transient IResourceManager resourceManager;
 
     public ColumnConfig(String collectionId) {
         this(collectionId, null, null);
@@ -60,6 +62,7 @@ public class ColumnConfig implements IColumnConfig {
 
     public ColumnConfig(String collectionURI, String fields, String decorator) {
         super();
+
         this.collection = collectionURI;
         this.fields = fields;
         this.decorator = decorator;
@@ -93,7 +96,7 @@ public class ColumnConfig implements IColumnConfig {
     public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI) {
 
         String collectionURI = ResourceTools.getAbsoluteURI(releaseURI, collection);
-        Collection collection = OnexusWebSession.get().getResourceManager().load(Collection.class, collectionURI);
+        Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
             List<Field> fields = getFields(collection);
@@ -108,7 +111,7 @@ public class ColumnConfig implements IColumnConfig {
     public void addExportColumns(List<ExportColumn> columns, String releaseURI) {
 
         String collectionURI = ResourceTools.getAbsoluteURI(releaseURI, collection);
-        Collection collection = OnexusWebSession.get().getResourceManager().load(Collection.class, collectionURI);
+        Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
             List<Field> fields = getFields(collection);
@@ -168,6 +171,14 @@ public class ColumnConfig implements IColumnConfig {
     @Override
     public String[] getQueryCollections(String releaseURI) {
         return new String[]{collection};
+    }
+
+    private IResourceManager getResourceManager() {
+        if (resourceManager == null) {
+            OnexusWebApplication.get().getInjector().inject(this);
+        }
+
+        return resourceManager;
     }
 
     public static class ExportColumn implements Serializable {

@@ -31,6 +31,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.onexus.core.IResourceManager;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.pages.IPageManager;
@@ -60,6 +61,9 @@ public class Website extends WebPage {
     @Inject
     public IPageManager pageManager;
 
+    @Inject
+    public IResourceManager resourceManager;
+
     private WebsiteConfig websiteConfig;
     private WebsiteStatus websiteStatus;
 
@@ -83,7 +87,7 @@ public class Website extends WebPage {
 
     protected void addComponents(PageParameters pageParameters) {
 
-        add(new ProgressBar("progressbar"));
+        add(new ProgressBar("progressbar", false));
         add(new Label("windowTitle", websiteConfig.getTitle()));
         add(new Label("title", websiteConfig.getTitle()));
 
@@ -140,8 +144,7 @@ public class Website extends WebPage {
         if (websiteConfig == null) {
             String websiteURI = getWebsiteUriParameterValue(pageParameters);
             if (websiteURI != null) {
-                websiteConfig = OnexusWebSession.get().getResourceManager()
-                        .load(WebsiteConfig.class, websiteURI);
+                websiteConfig = resourceManager.load(WebsiteConfig.class, websiteURI);
             }
         }
 

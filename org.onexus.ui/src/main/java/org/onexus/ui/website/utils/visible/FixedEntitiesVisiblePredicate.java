@@ -82,7 +82,7 @@ public class FixedEntitiesVisiblePredicate implements Predicate {
         for (FixedEntity fe : fixedEntities) {
 
             if (
-                    fe.getCollectionURI().equals(collectionURI) &&
+                    ResourceTools.getAbsoluteURI(releaseURI, fe.getCollectionURI()).equals(collectionURI) &&
                             isValidEntity(entityId, fe)
                     ) {
                 return !negative;

@@ -20,18 +20,17 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntityTable;
-import org.onexus.core.resources.Collection;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
 
 public class ViewTrack extends MatrixTrack {
 
-    private Collection viewType;
+    private String collectionURI;
 
-    public ViewTrack(Collection viewType, IHeader headerDecorator,
-                     IDecorator cellDecorator) {
+    public ViewTrack(String collectionURI, IHeader headerDecorator, IDecorator cellDecorator) {
         super(headerDecorator, cellDecorator);
-        this.viewType = viewType;
+
+        this.collectionURI = collectionURI;
     }
 
     @Override
@@ -48,7 +47,7 @@ public class ViewTrack extends MatrixTrack {
 
         @Override
         public IEntity getObject() {
-            return rowModel.getObject().getEntity(viewType.getURI());
+            return rowModel.getObject().getEntity(collectionURI);
         }
 
         @Override

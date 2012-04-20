@@ -48,7 +48,7 @@ public class BasePage extends WebPage {
 
         add(menu);
 
-        add(new ProgressBar("progressbar"));
+        add(new ProgressBar("progressbar", true));
 
         add(new Link<String>("signout") {
 

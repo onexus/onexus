@@ -40,13 +40,6 @@ import java.util.Random;
 
 public class OnexusWebSession extends AuthenticatedWebSession {
 
-    @Inject
-    private IResourceManager resourceManager;
-
-    @Inject
-    private ICollectionManager collectionManager;
-
-
     private String userName = null;
     private String userToken = null;
 
@@ -93,14 +86,6 @@ public class OnexusWebSession extends AuthenticatedWebSession {
 
     public String getUserName() {
         return userName;
-    }
-
-    public IResourceManager getResourceManager() {
-        return resourceManager;
-    }
-
-    public ICollectionManager getCollectionManager() {
-        return collectionManager;
     }
 
     public static OnexusWebSession get() {
