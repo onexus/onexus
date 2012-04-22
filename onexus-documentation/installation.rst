@@ -4,7 +4,7 @@ Onexus installation
 Requirements
 ************
 
-It is possible to install the browser on any operating system that has installed Java SDK 6 (previous versions
+It's possible to install Onexus on any operating system that has installed Java SDK 6 (previous versions
 of Java do not work). It is important that you install both the SDK and the JRE version to be able to 
 run Java in server mode.
 
