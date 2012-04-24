@@ -12,7 +12,8 @@ Creating a new widget using the basic widget Maven archetype::
        -DarchetypeVersion=0.2-SNAPSHOT \
        -DgroupId=my.groupid \
        -DartifactId=helloworld \
-       -Dversion=1.0-SNAPSHOT
+       -Dversion=1.0-SNAPSHOT \
+       -DarchetypeRepository=http://repo.onexus.org/nexus/content/groups/public
 
 You need to change goupdId "my.groupid" and artifactId "helloworld" to deseried ones.
 
