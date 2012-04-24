@@ -14,7 +14,7 @@ Requirements
 #. Install Java::
 
    Download Java JDK 6 from http://www.oracle.com/technetwork/java/javase/downloads/jdk-6u31-download-1501634.html
-   and install it:
+   and install it::
 
    # chmod +x jdk-6u31-linux-x64.bin
    # ./jdk-6u31-linux-x64.bin
