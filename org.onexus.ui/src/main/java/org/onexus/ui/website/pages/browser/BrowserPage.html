@@ -1,0 +1,18 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <div class="position shadowbox" wicket:id="position"></div>
+    <div class="data">
+        <div class="tab-row">
+            <div wicket:id="viewselector" class="viewselector">
+                <select wicket:id="select"><option>Matrix view</option></select>
+            </div>
+            <ul>
+                <li wicket:id="tabs">
+                    <a wicket:id="link" class="styled smallselect"><span wicket:id="label"></span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="gridviewers tab-panel shadowbox" wicket:id="content"></div>
+    </div>
+</wicket:panel>
+</html>

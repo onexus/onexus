@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xml:lang="en" lang="en">
+<head>
+</head>
+<body>
+<wicket:panel>
+    <form wicket:id="formXmlEditorTab">
+        <textarea id="code" wicket:id="xml"></textarea>
+        <script>
+            var txtArea = document.getElementById("code");
+
+            var alertOnChange = function(cm, change) {
+
+            if (change.text == '<') {
+            CodeMirror.simpleHint(cm, CodeMirror.xmlHint);
+            }
+
+            txtArea.onchange();
+            };
+
+            var foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
+
+            var editor = CodeMirror.fromTextArea(txtArea, {
+            mode : "application/xml",
+            lineNumbers : true,
+            lineWrapping: true,
+            onGutterClick: foldFunc,
+            onChange : alertOnChange,
+            onCursorActivity : function() {
+            editor.setLineClass(hlLine, null);
+            hlLine = editor.setLineClass(editor.getCursor().line,
+            "activeline");
+            },
+            extraKeys: {"Ctrl-Space": function(cm) {CodeMirror.simpleHint(cm, CodeMirror.xmlHint);}}
+            });
+
+            var hlLine = editor.setLineClass(0, "activeline");
+        </script>
+    </form>
+</wicket:panel>
+</body>
+</html>
+

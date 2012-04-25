@@ -1,0 +1,15 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <form wicket:id="form">
+        <textarea id="code" wicket:id="file"></textarea>
+        <script>
+            var txtArea = document.getElementById("code");
+            var editor = CodeMirror.fromTextArea(txtArea, {
+                lineNumbers: true,
+                readOnly: true
+            });
+        </script>
+    </form>
+</wicket:panel>
+</html>
+

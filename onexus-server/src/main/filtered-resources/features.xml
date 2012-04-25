@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+	<repository>mvn:org.onexus.build/provision/${project.version}/xml/features
+	</repository>
+
+	<feature name='onexus-server' version='${project.version}'>
+		<feature version='${project.version}'>org.onexus.core</feature>
+		<feature version='${project.version}'>org.onexus.collection.manager</feature>
+		<feature version='${project.version}'>org.onexus.task.manager</feature>
+		<feature version='${project.version}'>org.onexus.loader.tsv</feature>
+		<feature version='${project.version}'>org.onexus.loader.biomart</feature>
+		<feature version='${project.version}'>org.onexus.resource.manager</feature>
+		<feature version='${project.version}'>org.onexus.source.manager</feature>
+		<feature version='${project.version}'>org.onexus.resource.serializer.xstream</feature>
+		<feature version='${project.version}'>org.onexus.collection.store.mysql</feature>
+		<feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>
+		<feature version='${project.version}'>onexus-server-ui</feature>
+	</feature>	
+
+	<feature name='onexus-server-ui' version='${project.version}'>
+		<feature version='${project.version}'>org.onexus.ui</feature>
+		<feature version='${karaf.version}'>war</feature>
+		<feature version='${wicket.version}'>wicketstuff-bundle</feature>
+	</feature>
+</features>

@@ -1,0 +1,8 @@
+ ONEXUS
+ Copyright 2012 Universitat Pompeu Fabra.
+
+ This product includes software developed at
+ Biomedical Genomics Group (http://bg.upf.edu/).
+
+ The original software is available from
+ http://www.onexus.org
