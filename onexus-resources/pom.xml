@@ -3,7 +3,7 @@
   <parent>
     <artifactId>onexus</artifactId>
     <groupId>org.onexus</groupId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2.0</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>onexus-resources</artifactId>

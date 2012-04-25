@@ -47,14 +47,14 @@ Compile and package Onexus
    # cd ..
    # mkdir server
    # cd server
-   # tar xvzf ~/.m2/repository/org/onexus/onexus-server/0.2-SNAPSHOT/onexus-server-0.2-SNAPSHOT.tar.gz
+   # tar xvzf ~/.m2/repository/org/onexus/onexus-server/[current version]-SNAPSHOT/onexus-server-[current version]-SNAPSHOT.tar.gz
 
 Run on debug mode
 *****************
 
 #. Run it in debug mode and attach remote debuging to port 5005::
 
-   # ./onexus-server-0.2-SNAPSHOT/bin/onexus debug
+   # ./onexus-server-[current version]-SNAPSHOT/bin/onexus debug
    Browse: http://localhost:8181/onexus
 
 
