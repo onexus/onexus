@@ -1,0 +1,78 @@
+#
+# HOW TO RELEASE A NEW ONEXUS VERSION STEP BY STEP
+#
+
+# Be sure to be on 'develop' branch
+git checkout develop
+
+# Pull and push all commits
+git pull
+git push
+
+# Start a new release
+git-flow release start onexus-0.2.0
+
+# Publish the release branch
+git-flow release publish onexus-0.2.0
+
+# Update pom.xml version
+# Check that you are going to update only the correct versions:
+find . -name pom.xml | awk '{ system("sed 0,/0.2-SNAPSHOT/s//0.2.0/ "$0)}' | grep -A2 -B3 0.2.0
+
+# Update all like this:
+find . -name pom.xml | awk '{ system("sed -i 0,/0.2-SNAPSHOT/s//0.2.0/ "$0)}'
+
+# Check other possible manual updates
+grep -r 0.2-SNAPSHOT . | grep -v target | grep -v classes | grep -v .idea
+
+# Compile and package 
+mvn clean install
+
+# Test the version in a temporal folder
+cd onexus-server/target/
+tar xvzf onexus-server-0.2.0.tar.gz
+unset ONEXUS_REPOSITORY ONEXUS_WORKSPACES
+./onexus-server-0.2.0/bin/onexus
+
+# Deploy to the repository
+mvn deploy
+
+# Test again from repo and into a Virtual Machine (or a "clean" computer)
+
+# Commit the changes
+git commit -a -m "Set version to 0.2.0"
+
+# Push the release commit 
+git push
+
+# Finish the release 
+git flow release finish -p onexus-0.2.0
+
+# Check that you are on develop branch
+git branch
+
+# Update pom.xml versions to new SNAPSHOT version
+
+# Check that you are going to update only the correct versions:
+find . -name pom.xml | awk '{ system("sed 0,/0.2.0/s//0.3.0-SNAPSHOT/ "$0)}' | grep -A2 -B3 0.3.0-SNAPSHOT
+
+# Update all like this:
+find . -name pom.xml | awk '{ system("sed -i 0,/0.2.0/s//0.3.0-SNAPSHOT/ "$0)}'
+
+# Check other possible updates
+grep -r 0.2.0 . | grep -v target | grep -v classes | grep -v .idea | grep -v repository | grep -v .git
+
+# Test it
+mvn clean install
+
+# Commit
+git commit -a -m "Next iteration version 0.3.0-SNAPSHOT"
+
+# Push develop
+git push
+
+
+
+
+
+
