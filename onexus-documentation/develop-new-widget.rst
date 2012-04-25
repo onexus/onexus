@@ -9,7 +9,7 @@ Creating a new widget using the basic widget Maven archetype::
     # mvn archetype:generate \
        -DarchetypeGroupId=org.onexus \
        -DarchetypeArtifactId=onexus-archetype-widget \
-       -DarchetypeVersion=0.2-SNAPSHOT \
+       -DarchetypeVersion=0.2 \
        -DgroupId=my.groupid \
        -DartifactId=helloworld \
        -Dversion=1.0-SNAPSHOT \

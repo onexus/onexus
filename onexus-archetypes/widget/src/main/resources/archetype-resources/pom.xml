@@ -14,7 +14,7 @@
 
     <properties>
         <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
-        <onexus.version>0.2-SNAPSHOT</onexus.version>
+        <onexus.version>0.2.0</onexus.version>
     </properties>
 
     <name>${bundle.symbolicName}</name>

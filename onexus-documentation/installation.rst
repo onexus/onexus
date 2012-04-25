@@ -21,7 +21,7 @@ Quick start
 
 #. Download last Onexus release from the repository::
 
-   http://repo.onexus.org/nexus/content/repositories/snapshots/org/onexus/onexus-server/
+   http://repo.onexus.org/nexus/content/repositories/releases/org/onexus/onexus-server
 
 #. Extract **onexus-server-[version].tar.gz** to the installation folder::
 
