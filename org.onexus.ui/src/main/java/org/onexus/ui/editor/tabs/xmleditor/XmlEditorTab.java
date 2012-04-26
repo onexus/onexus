@@ -28,6 +28,7 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -126,15 +127,6 @@ public class XmlEditorTab extends AbstractEditorTabPanel {
     }
 
     @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-        AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
-        if (target != null) {
-             target.appendJavaScript( "initCodeMirror('"+textArea.getMarkupId()+"');");
-        }
-    }
-
-    @Override
     public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(CODEMIRROR_CSS));
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_JS));
@@ -146,14 +138,8 @@ public class XmlEditorTab extends AbstractEditorTabPanel {
         response.render(JavaScriptHeaderItem.forScript(autocomplete, Integer.toString(autocomplete.hashCode())));
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_XML_HINT_JS));
         response.render(JavaScriptHeaderItem.forReference(LOAD_JS));
-        response.render(JavaScriptHeaderItem.forScript(
-                "Wicket.Event.add(window, \"load\", function(event) { initCodeMirror('"+textArea.getMarkupId()+"'); });",
-                "load-codemirror-js")
-        );
+        response.render(OnDomReadyHeaderItem.forScript("initCodeMirror('"+textArea.getMarkupId()+"');"));
     }
-
-
-
 
     private static String createAutocompleteJS(Map<String, List<String>> autocompleteMap) {
         StringBuilder js = new StringBuilder();
