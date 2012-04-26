@@ -19,7 +19,8 @@ package org.onexus.ui.website.widgets.tags;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -66,7 +67,7 @@ public class TagColumnHeader extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference(JAVA_SCRIPT);
+        response.render(JavaScriptHeaderItem.forReference(JAVA_SCRIPT));
     }
 
 }

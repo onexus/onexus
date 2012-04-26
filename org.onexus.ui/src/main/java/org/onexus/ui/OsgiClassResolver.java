@@ -57,10 +57,6 @@ public final class OsgiClassResolver implements IClassResolver {
     public final Class<?> resolveClass(final String classname)
             throws ClassNotFoundException {
 
-        if ("org.onexus.icgc.cll.BrowserPage".equals(classname)) {
-            System.out.println(classname);
-        }
-
         Class<?> clazz = null;
         WeakReference<Class<?>> ref = classes.get(classname);
 

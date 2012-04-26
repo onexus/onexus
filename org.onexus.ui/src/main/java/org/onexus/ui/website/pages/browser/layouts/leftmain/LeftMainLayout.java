@@ -17,10 +17,8 @@
  */
 package org.onexus.ui.website.pages.browser.layouts.leftmain;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
@@ -28,10 +26,6 @@ import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.HorizontalWidgetBar;
 import org.onexus.ui.website.pages.browser.layouts.topleft.VerticalWidgetBar;
-import org.onexus.ui.website.widgets.WidgetConfig;
-
-import java.util.Collection;
-import java.util.List;
 
 public class LeftMainLayout extends AbstractLayout {
 
@@ -52,7 +46,7 @@ public class LeftMainLayout extends AbstractLayout {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference(CSS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
 

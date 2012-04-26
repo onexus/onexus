@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.decorators;
 
-import org.apache.wicket.IClusterable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.io.IClusterable;
 import org.onexus.core.IEntity;
 
 /**

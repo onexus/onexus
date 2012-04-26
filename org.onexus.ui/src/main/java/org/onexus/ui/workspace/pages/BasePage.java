@@ -19,12 +19,14 @@ package org.onexus.ui.workspace.pages;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.OnexusWebSession;
@@ -48,7 +50,8 @@ public class BasePage extends WebPage {
 
         add(menu);
 
-        add(new ProgressBar("progressbar", true));
+        //add(new ProgressBar("progressbar", true));
+        add(new EmptyPanel("progressbar"));
 
         add(new Link<String>("signout") {
 
@@ -89,8 +92,8 @@ public class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference(DEFAULT_CSS);
-        response.renderCSSReference(STYLE_CSS);
+        response.render(CssHeaderItem.forReference(DEFAULT_CSS));
+        response.render(CssHeaderItem.forReference(STYLE_CSS));
     }
 
 }

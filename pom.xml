@@ -12,7 +12,7 @@
     <description>Onexus</description>
 
     <properties>
-        <wicket.version>1.5.5</wicket.version>
+        <wicket.version>6.0.0-beta1</wicket.version>
         <karaf.version>2.2.5</karaf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -276,33 +276,26 @@
                 <artifactId>anduril</artifactId>
                 <version>1.2.5</version>
             </dependency>
-            <!-- WICKET -->
-            <dependency>
-                <groupId>org.wicketstuff</groupId>
-                <artifactId>wicketstuff-bundle</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wicketstuff</groupId>
-                <artifactId>wicketstuff-osgi</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
 
-            <dependency>
-                <groupId>org.wicketstuff</groupId>
-                <artifactId>wicketstuff-ioc-bundle</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-extensions</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
+            <!-- WICKET -->
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-core</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-ioc</artifactId>
+                <version>${wicket.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-extensions</artifactId>
+                <version>${wicket.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-datetime</artifactId>
@@ -313,6 +306,13 @@
                 <artifactId>wicket-auth-roles</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.wicketstuff</groupId>
+                <artifactId>wicketstuff-osgi</artifactId>
+                <version>6.0.0-beta1</version>
+            </dependency>
+
             <!-- LIBRARIES -->
             <dependency>
                 <groupId>javax.servlet</groupId>

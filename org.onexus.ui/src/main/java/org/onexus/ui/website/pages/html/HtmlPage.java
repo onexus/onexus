@@ -17,7 +17,8 @@
  */
 package org.onexus.ui.website.pages.html;
 
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.website.pages.IPageModel;
@@ -36,10 +37,10 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference(CSS);
+        response.render(CssHeaderItem.forReference(CSS));
         
         if (getConfig().getCss() != null) {
-            response.renderCSS(getConfig().getCss(), "page-css");
+            response.render(CssHeaderItem.forCSS(getConfig().getCss(), "page-css"));
         }
     }
 

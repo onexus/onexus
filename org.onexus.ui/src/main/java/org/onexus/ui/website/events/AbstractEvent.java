@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.events;
 
-import org.apache.wicket.IClusterable;
+import org.apache.wicket.util.io.IClusterable;
 
 public abstract class AbstractEvent implements IClusterable {
 

@@ -19,7 +19,8 @@ package org.onexus.ui.website.widgets.tags;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -337,7 +338,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference(CSS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
 }

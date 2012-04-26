@@ -20,6 +20,6 @@
 	<feature name='onexus-server-ui' version='${project.version}'>
 		<feature version='${project.version}'>org.onexus.ui</feature>
 		<feature version='${karaf.version}'>war</feature>
-		<feature version='${wicket.version}'>wicketstuff-bundle</feature>
+        <feature version='2.2.0'>com.springsource.net.sf.cglib</feature>
 	</feature>
 </features>

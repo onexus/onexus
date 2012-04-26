@@ -25,6 +25,8 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.core.resources.Release;
 import org.onexus.core.resources.Resource;
@@ -59,8 +61,8 @@ public class NewReleaseWizard extends AbstractNewResourceWizard<Release> {
     private static PatternValidator semanticVersion = new PatternValidator("^[0-9]+\\.[0-9]+\\.[0-9]+(\\-[\\w\\.]+)?{0,1}(\\+[\\w\\.]+)?{0,1}") {
 
         @Override
-        protected String resourceKey() {
-            return "semantic-versioning-message";
+        protected ValidationError decorate(ValidationError error, IValidatable<String> validatable) {
+            return error.addKey("semantic-versioning-message");
         }
 
     };

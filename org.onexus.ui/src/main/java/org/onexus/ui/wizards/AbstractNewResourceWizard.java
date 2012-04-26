@@ -17,14 +17,18 @@
  */
 package org.onexus.ui.wizards;
 
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.validator.AbstractValidator;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
@@ -85,20 +89,30 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
     }
 
     protected RequiredTextField<String> getFieldResourceName() {
-        RequiredTextField<String> resourceName = new RequiredTextField<String>("resource.name");
+        final RequiredTextField<String> resourceName = new RequiredTextField<String>("resource.name");
         resourceName.setOutputMarkupId(true);
         resourceName.add(new PatternValidator("[\\w-.\\+]*"));
         resourceName.add(new DuplicatedResourceValidator());
 
-        resourceName.add(new AjaxFormValidatingBehavior(getForm(), "onchange").setThrottleDelay(Duration.seconds(1)));
+        resourceName.add(new AjaxFormValidatingBehavior(getForm(), "onchange") {
+            @Override
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes)
+            {
+                super.updateAjaxAttributes(attributes);
+
+                String id = "throttle-" + resourceName.getMarkupId();
+                ThrottlingSettings throttlingSettings = new ThrottlingSettings(id, Duration.seconds(1));
+                 attributes.setThrottlingSettings(throttlingSettings);
+            }
+        });
 
         return resourceName;
     }
 
-    public class DuplicatedResourceValidator extends AbstractValidator<String> {
+    public class DuplicatedResourceValidator extends Behavior implements IValidator<String> {
 
         @Override
-        protected void onValidate(IValidatable<String> validatable) {
+        public void validate(IValidatable<String> validatable) {
 
             if (parentUri != null && resource != null && resource.getName() != null) {
 
@@ -107,7 +121,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
                 Resource test = resourceManager.load(Resource.class, resourceURI);
 
                 if (test != null) {
-                    error(validatable, "duplicated-resource");
+                    validatable.error(new ValidationError("duplicated-resource"));
                 }
 
 
@@ -115,7 +129,6 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
 
 
         }
-
     }
 
 }

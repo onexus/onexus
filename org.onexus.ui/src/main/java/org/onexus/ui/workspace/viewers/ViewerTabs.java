@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IViewerCreator;
 import org.onexus.ui.workspace.events.EventResourceSelect;
@@ -113,7 +114,7 @@ public class ViewerTabs extends Panel {
         if (EventResourceSelect.EVENT == payLoad) {
             tabsModel.clear();
             updateDefaultPanel();
-            AjaxRequestTarget.get().add(this);
+            RequestCycle.get().find(AjaxRequestTarget.class).add(this);
         }
 
     }

@@ -21,11 +21,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.ITreeState;
-import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
+import org.apache.wicket.extensions.markup.html.tree.ITreeState;
+import org.apache.wicket.extensions.markup.html.tree.LinkTree;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceManager.ResourceStatus;
 import org.onexus.core.resources.Resource;
@@ -112,7 +113,7 @@ public class WorkspaceTree extends LinkTree {
     }
 
     private static void updateAJAX(Component component) {
-        AjaxRequestTarget target = AjaxRequestTarget.get();
+        AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
         if (target != null) {
             target.add(component);
         }

@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceManager.ResourceStatus;
 import org.onexus.core.resources.Resource;
@@ -123,12 +124,12 @@ public class EditorViewer extends Panel {
     public void onEvent(IEvent<?> event) {
 
         if (event.getPayload() == EventResourceSync.EVENT) {
-            AjaxRequestTarget.get().add(actionbar);
+            RequestCycle.get().find(AjaxRequestTarget.class).add(actionbar);
         }
 
 
         if (EventResourceRevert.EVENT == event.getPayload()) {
-            AjaxRequestTarget.get().add(form);
+            RequestCycle.get().find(AjaxRequestTarget.class).add(form);
         }
 
     }

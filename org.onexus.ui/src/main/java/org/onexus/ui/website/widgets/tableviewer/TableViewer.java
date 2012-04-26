@@ -23,7 +23,8 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNav
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
@@ -145,7 +146,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference(TABLE_VIEWER_CSS);
+        response.render(CssHeaderItem.forReference(TABLE_VIEWER_CSS));
     }
 
 

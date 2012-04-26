@@ -17,13 +17,11 @@
  */
 package org.onexus.ui.website.pages.browser.layouts.single;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.def.ApplicationSettings;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
@@ -33,7 +31,6 @@ import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.WidgetModel;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class SingleLayout extends Panel {
 
@@ -73,7 +70,7 @@ public class SingleLayout extends Panel {
         
         CssResourceReference css = getCssResourceReference();
         if (css != null) {
-            response.renderCSSReference(CSS);
+            response.render(CssHeaderItem.forReference(CSS));
         }
     }
 

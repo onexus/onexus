@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets.tableviewer;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
@@ -263,7 +263,7 @@ public class HeadersToolbar extends AbstractToolbar {
     protected WebMarkupContainer newSortableHeader(String borderId,
                                                    String property, ISortStateLocator locator) {
         return new AjaxFallbackOrderByBorder(borderId, property, locator,
-                getAjaxCallDecorator()) {
+                getAjaxCallListener()) {
 
             private static final long serialVersionUID = 1L;
 
@@ -283,21 +283,10 @@ public class HeadersToolbar extends AbstractToolbar {
         };
     }
 
-    /**
-     * Returns a decorator that will be used to decorate ajax links used in
-     * sortable headers
-     *
-     * @return decorator or null for none
-     */
-    protected IAjaxCallDecorator getAjaxCallDecorator() {
+    protected IAjaxCallListener getAjaxCallListener() {
         return null;
     }
 
-    /**
-     * Add Help if it is necessary
-     *
-     * @param grandParentItem
-     */
     private void decorateSecondParentHeader(
             final WebMarkupContainer headerComponent, IHeader secondHeader,
             MatrixTrack entityTrack) {

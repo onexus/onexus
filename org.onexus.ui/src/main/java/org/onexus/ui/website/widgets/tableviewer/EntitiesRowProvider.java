@@ -61,7 +61,7 @@ public abstract class EntitiesRowProvider implements
     }
 
     @Override
-    public Iterator<IEntityTable> iterator(int first, int total) {
+    public Iterator<IEntityTable> iterator(long first, long total) {
 
         Query query = loadSort(buildQuery());
         query.setFirstResult(first);
@@ -70,7 +70,7 @@ public abstract class EntitiesRowProvider implements
     }
 
     @Override
-    public int size() {
+    public long size() {
         Query query = buildQuery();
         IEntityTable entityTable = collectionManager.load(query);
 
@@ -169,7 +169,7 @@ public abstract class EntitiesRowProvider implements
         return sortState;
     }
 
-    public class SortState implements ISortState {
+    public class SortState implements ISortState<String> {
 
         @Override
         public void setPropertySortOrder(String property, SortOrder order) {

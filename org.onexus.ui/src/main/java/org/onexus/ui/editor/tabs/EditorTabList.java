@@ -47,7 +47,6 @@ public class EditorTabList extends AbstractList<ITab> implements Serializable {
      * For sure there is a way to go deeper directly, but by now, we pass from parameter.
      *
      * @param resource
-     * @param ajaxFormEvent
      */
     public EditorTabList(IModel<? extends Resource> resource) {
 

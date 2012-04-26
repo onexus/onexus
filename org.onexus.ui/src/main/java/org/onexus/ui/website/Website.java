@@ -19,7 +19,9 @@ package org.onexus.ui.website;
 
 import org.apache.wicket.*;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -33,7 +35,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.core.IResourceManager;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
@@ -56,7 +57,6 @@ public class Website extends WebPage {
     public final static String PARAMETER_PAGE = "onexus-page";
 
     public final static CssResourceReference CSS = new CssResourceReference(Website.class, "Website.css");
-    public final static JavaScriptResourceReference JS = new JavaScriptResourceReference(Website.class, "utils/ajax-loader.js");
 
     @Inject
     public IPageManager pageManager;
@@ -206,8 +206,7 @@ public class Website extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.renderCSSReference(CSS);
-        response.renderJavaScriptReference(JS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
 }

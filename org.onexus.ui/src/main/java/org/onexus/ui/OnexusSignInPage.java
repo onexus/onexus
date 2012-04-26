@@ -18,7 +18,8 @@
 package org.onexus.ui;
 
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -47,6 +48,6 @@ public class OnexusSignInPage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference(CSS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 }

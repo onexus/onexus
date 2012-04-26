@@ -21,13 +21,14 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IResourceManager;
@@ -39,7 +40,6 @@ import org.onexus.ui.workspace.tree.WorkspaceTree;
 import org.onexus.ui.workspace.viewers.ViewerTabs;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class ResourcesPage extends BasePage {
@@ -124,7 +124,7 @@ public class ResourcesPage extends BasePage {
     public void onEvent(IEvent<?> event) {
 
         if (EventResourceSelect.EVENT == event.getPayload()) {
-            AjaxRequestTarget.get().add(resourceInfo);
+            RequestCycle.get().find(AjaxRequestTarget.class).add(resourceInfo);
         }
 
     }
@@ -133,7 +133,7 @@ public class ResourcesPage extends BasePage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.renderCSSReference(CSS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
 }

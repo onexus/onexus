@@ -17,17 +17,17 @@
  */
 package org.onexus.ui.viewers;
 
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.editor.tabs.xmleditor.XmlEditorTab;
-import org.onexus.ui.editor.tabs.xmleditor.XmlTextArea;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
@@ -59,9 +59,8 @@ public class FilePreviewViewer extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderJavaScript("wicketThrottler.postponeTimerOnUpdate = true;", "throttler-postpone-true");
-        response.renderCSSReference(XmlEditorTab.CODEMIRROR_CSS);
-        response.renderJavaScriptReference(XmlEditorTab.CODEMIRROR_JS);
+        response.render(CssHeaderItem.forReference(XmlEditorTab.CODEMIRROR_CSS));
+        response.render(JavaScriptHeaderItem.forReference(XmlEditorTab.CODEMIRROR_JS));
     }
 
 

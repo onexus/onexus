@@ -22,6 +22,7 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -53,7 +54,7 @@ public class EventPanel extends Panel {
     public void onEvent(IEvent<?> event) {
 
         if (event.getPayload() instanceof AbstractEvent) {
-            AjaxRequestTarget target = AjaxRequestTarget.get();
+            AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
 
             if (target != null) {
                 Class<?> currentEventClass = event.getPayload().getClass();

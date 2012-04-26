@@ -41,7 +41,7 @@ mvn deploy
 
 # Commit the changes
 git commit -a -m "Set version to 0.2.0"
-
+3e
 # Push the release commit 
 git push
 

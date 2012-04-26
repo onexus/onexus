@@ -17,9 +17,9 @@
  */
 package org.onexus.ui;
 
-import org.apache.wicket.IClusterable;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.io.IClusterable;
 import org.onexus.core.resources.Resource;
 
 public interface IWizardCreator extends IClusterable {

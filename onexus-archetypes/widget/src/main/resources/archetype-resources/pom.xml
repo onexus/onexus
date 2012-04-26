@@ -75,7 +75,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
                         <Bundle-Version>${pom.version}</Bundle-Version>
-                        <Require-Bundle>org.wicketstuff.ioc-bundle</Require-Bundle>
+                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>

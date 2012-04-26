@@ -39,9 +39,6 @@ public class WorkspaceApplication extends OnexusWebApplication {
     protected void init() {
         super.init();
 
-        getMarkupSettings().setStripWicketTags(true);
-        getDebugSettings().setAjaxDebugModeEnabled(true);
-
         getSharedResources().add("export", new ExportResource());
         mountResource("download", getSharedResources().get(Application.class, "export", null, null, null, true));
 

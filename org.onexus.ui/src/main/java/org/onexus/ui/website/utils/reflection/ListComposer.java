@@ -17,15 +17,14 @@
  */
 package org.onexus.ui.website.utils.reflection;
 
-import com.google.common.base.Objects;
 import org.apache.commons.collections.iterators.IteratorChain;
 import org.apache.commons.collections.iterators.ListIteratorWrapper;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.wicket.util.lang.PropertyResolver;
+import org.apache.wicket.core.util.lang.PropertyResolver;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class ListComposer<T> extends AbstractList<T> {

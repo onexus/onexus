@@ -22,7 +22,8 @@ import org.apache.commons.collections.Predicate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -32,11 +33,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.onexus.core.ICollectionManager;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Release;
 import org.onexus.core.utils.ResourceTools;
-import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventTabSelected;
@@ -48,7 +47,6 @@ import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
 import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
-import org.onexus.ui.website.widgets.WidgetConfig;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -234,8 +232,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.renderCSSReference(CSS);
-        // response.renderJavaScriptReference(JS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
 }

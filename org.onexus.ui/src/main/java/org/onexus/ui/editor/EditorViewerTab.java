@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.editor;
 
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Resource;

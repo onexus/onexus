@@ -19,7 +19,6 @@ package org.onexus.ui.website.widgets.search;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamImplicitCollection;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;

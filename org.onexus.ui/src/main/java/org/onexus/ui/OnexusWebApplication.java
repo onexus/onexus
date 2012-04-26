@@ -20,9 +20,10 @@ package org.onexus.ui;
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
-import org.apache.wicket.util.resource.locator.OsgiResourceStreamLocator;
+import org.wicketstuff.osgi.*;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 
 public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
@@ -36,11 +37,11 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
     protected void init() {
         super.init();
         mountPage("/login", getSignInPageClass());
-        getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
 
+        getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
         getComponentInstantiationListeners().add(getInjector());
         getResourceSettings().setResourceStreamLocator(new OsgiResourceStreamLocator());
-        getApplicationSettings().setClassResolver(new OsgiClassResolver(getClass().getClassLoader(), OsgiClassResolver.class.getClassLoader()));
+        getMarkupSettings().setStripWicketTags(true);
     }
 
     public OsgiComponentInjector getInjector() {

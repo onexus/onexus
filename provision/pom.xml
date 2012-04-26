@@ -104,8 +104,8 @@
 
 		<!-- WICKET -->
 		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-bundle</artifactId>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
 		</dependency>
 
         <dependency>

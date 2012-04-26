@@ -18,13 +18,11 @@
 package org.onexus.ui.website.widgets.heatmap;
 
 import org.apache.wicket.IResourceListener;
-import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.widgets.export.ExportResource;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
@@ -68,7 +66,7 @@ public class HeatmapPage extends WebPage implements IResourceListener {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.renderJavaScript( getDynamicJavascript() , "jheatmap-init");
+        response.render(JavaScriptHeaderItem.forScript(getDynamicJavascript(), "jheatmap-init"));
 
     }
 
