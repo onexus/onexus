@@ -130,7 +130,7 @@ public class ResourceManager implements IResourceManager {
                     resource = checkoutFile(file, ws.getKey(), ws.getValue());
                 } catch (Exception e) {
                     LOGGER.error("Unserializing file '" + file.getPath() + "'", e);
-                    throw new RuntimeException("Error on file '" + file.getPath() + "'", e);
+                    continue;
                 }
 
                 resources.put(resource.getURI(), resource);

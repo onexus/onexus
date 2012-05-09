@@ -24,11 +24,13 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.util.resource.locator.OsgiResourceStreamLocator;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
+import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
 
 public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
 
     // Force to import the package
     public final static WicketFilter wicketFilter = null;
+    public final static OsgiServiceProxyTargetLocator targetLocator = null;
 
     private OsgiComponentInjector injector;
 
