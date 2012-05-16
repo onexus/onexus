@@ -50,7 +50,7 @@ public class HeadersToolbar extends AbstractToolbar {
      * @param stateLocator locator for the ISortState implementation used by sortable
      *                     headers
      */
-    public <T> HeadersToolbar(final DataTable<T> table,
+    public <T, S> HeadersToolbar(final DataTable<T, S> table,
                               final ISortStateLocator stateLocator) {
         super(table);
 
@@ -64,7 +64,7 @@ public class HeadersToolbar extends AbstractToolbar {
         add(headersParents);
         add(headers);
 
-        final List<IColumn<T>> columns = table.getColumns();
+        final List<IColumn<T, S>> columns = table.getColumns();
 
         WebMarkupContainer secondHeaderContainer = null;
         String lastSecondHeaderTitle = null;
@@ -74,7 +74,7 @@ public class HeadersToolbar extends AbstractToolbar {
         String lastThirdHeaderTitle = null;
         int lastThirdHeaderColspan = 0;
 
-        for (final IColumn<T> c : columns) {
+        for (final IColumn<T, S> c : columns) {
 
             // Process only Track columns
             MatrixTrack column = null;
@@ -255,11 +255,6 @@ public class HeadersToolbar extends AbstractToolbar {
         }
     }
 
-    /**
-     * @see org.apache.wicket.extensions.markup.html.repeater.data.table.HeadersToolbar#newSortableHeader(java.lang.String,
-     *      java.lang.String,
-     *      org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator)
-     */
     protected WebMarkupContainer newSortableHeader(String borderId,
                                                    String property, ISortStateLocator locator) {
         return new AjaxFallbackOrderByBorder(borderId, property, locator,

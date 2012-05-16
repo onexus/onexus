@@ -21,7 +21,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
 
 public abstract class TableTrack extends AbstractTrack implements
-        IColumn<IEntityTable> {
+        IColumn<IEntityTable, String> {
 
     public TableTrack() {
         super();

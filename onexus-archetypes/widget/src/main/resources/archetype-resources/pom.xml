@@ -10,11 +10,10 @@
     <version>${version}</version>
     <packaging>bundle</packaging>
 
-    #literal()
-
     <properties>
+        <onexus.version>${version}</onexus.version>
+        #literal()
         <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
-        <onexus.version>0.2.0</onexus.version>
     </properties>
 
     <name>${bundle.symbolicName}</name>

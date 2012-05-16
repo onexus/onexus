@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <relativePath>../poms/compiled/</relativePath>
+        <relativePath>../poms/compiled/pom.xml</relativePath>
         <groupId>org.onexus.build</groupId>
         <artifactId>compiled-bundle-settings</artifactId>
         <version>0.3.0-SNAPSHOT</version>

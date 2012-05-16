@@ -4,7 +4,6 @@
     <artifactId>onexus</artifactId>
     <groupId>org.onexus</groupId>
     <version>0.3.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
   </parent>
   <artifactId>onexus-resources</artifactId>
   <name>onexus - Common META-INF resources</name>

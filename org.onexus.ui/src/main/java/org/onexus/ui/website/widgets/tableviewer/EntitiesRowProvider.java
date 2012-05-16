@@ -39,7 +39,7 @@ import javax.inject.Inject;
 import java.util.Iterator;
 
 public abstract class EntitiesRowProvider implements
-        ISortableDataProvider<IEntityTable>, IQueryContributor {
+        ISortableDataProvider<IEntityTable, String>, IQueryContributor {
 
     @Inject
     public ICollectionManager collectionManager;

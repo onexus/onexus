@@ -107,12 +107,12 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         // Create the columns from the config
         int ccs = getStatus().getCurrentColumnSet();
         List<IColumnConfig> columnsConfig = getConfig().getColumnSets().get(ccs).getColumns();
-        List<IColumn<IEntityTable>> columns = new ArrayList<IColumn<IEntityTable>>();
+        List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
         for (IColumnConfig columnConfig : columnsConfig) {
             columnConfig.addColumns(columns, releaseURI);
         }
 
-        DataTable<IEntityTable> resultTable = new DataTable<IEntityTable>("datatable", columns, dataProvider,
+        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider,
                 (rowsPerPage == null ? 45 : rowsPerPage));
         resultTable.setOutputMarkupId(true);
         resultTable.setVersioned(false);

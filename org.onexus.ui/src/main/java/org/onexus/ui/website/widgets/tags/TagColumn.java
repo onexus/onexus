@@ -26,7 +26,7 @@ import org.apache.wicket.model.Model;
 import org.onexus.core.IEntityTable;
 import org.onexus.ui.website.widgets.tableviewer.columns.TableTrack;
 
-public class TagColumn extends TableTrack implements IColumn<IEntityTable> {
+public class TagColumn extends TableTrack implements IColumn<IEntityTable, String> {
 
     private String collectionURI;
 

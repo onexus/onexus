@@ -53,7 +53,7 @@ public class TagColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI) {
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, String releaseURI) {
         columns.add(new TagColumn(collection));
     }
 
