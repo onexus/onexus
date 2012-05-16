@@ -18,8 +18,10 @@
 package org.onexus.resource.serializer.xstream;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import org.onexus.core.IResourceSerializer;
+import org.onexus.core.exceptions.UnserializeException;
 import org.onexus.core.resources.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,9 +103,16 @@ public class ResourceSerializer implements IResourceSerializer {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T unserialize(Class<T> resourceType,
-                             InputStream input) {
-        return (T) xstream.fromXML(input);
+    public <T> T unserialize(Class<T> resourceType, InputStream input) throws UnserializeException {
+        try {
+            return (T) xstream.fromXML(input);
+        } catch (ConversionException e) {
+
+            String path = e.get("path");
+            String line = e.get("line number");
+
+            throw new UnserializeException(path, line, e);
+        }
     }
 
     @Override

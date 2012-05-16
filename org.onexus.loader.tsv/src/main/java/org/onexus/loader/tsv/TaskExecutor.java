@@ -23,12 +23,9 @@ import org.onexus.core.ITask;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Loader;
-import org.onexus.core.utils.ResourceTools;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class TaskExecutor implements ILoader {

@@ -29,11 +29,8 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
-import org.onexus.core.query.EqualEntity;
-import org.onexus.core.query.Filter;
-import org.onexus.core.query.Or;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.query.*;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventViewChange;
 import org.onexus.ui.website.pages.IPageModel;
@@ -311,29 +308,19 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
             }
 
             if (!selectedValues.isEmpty()) {
-                List<Filter> rules = new ArrayList<Filter>(selectedValues.size());
 
+                List<Filter> rules = new ArrayList<Filter>(selectedValues.size());
                 for (String value : selectedValues) {
-                    String collectionURI = ResourceTools.getAbsoluteURI(query.getMainNamespace(),
-                            query.getMainCollection());
-                    rules.add(new EqualEntity(collectionURI, value));
+                    rules.add(new EqualId(query.getFrom(), value));
                 }
 
-                query.putFilter(getConfig().getId(), buildUnion(0, rules));
+                QueryUtils.and(query, QueryUtils.joinOr(rules));
             }
 
         }
 
     }
 
-    private Filter buildUnion(int pos, List<Filter> rules) {
-        if (pos + 1 == rules.size()) {
-            return rules.get(pos);
-        } else {
-            Filter rule = rules.get(pos);
-            return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
-        }
-    }
 
     @Override
     public void renderHead(IHeaderResponse response) {

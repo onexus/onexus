@@ -35,7 +35,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Release;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventTabSelected;
@@ -67,6 +67,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         add(new FixedEntities("position", statusModel));
 
+
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
 
@@ -90,7 +91,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
             WebsiteConfig websiteConfig = getPageModel().getWebsiteModel().getConfig();
 
-            String parentURI = ResourceTools.getParentURI(websiteConfig.getURI());
+            String parentURI = ResourceUtils.getParentURI(websiteConfig.getURI());
             List<Release> releases = resourceManager.loadChildren(Release.class, parentURI);
 
             if (releases != null && !releases.isEmpty()) {
@@ -100,6 +101,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         }
 
     }
+
 
     @Override
     protected void onBeforeRender() {

@@ -18,10 +18,12 @@
 package org.onexus.collection.manager;
 
 import org.onexus.core.*;
-import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.FieldLink;
+import org.onexus.core.utils.LinkUtils;
+import org.onexus.core.utils.QueryUtils;
+import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +59,27 @@ public class CollectionManager implements ICollectionManager {
         }
 
         sync();
+    }
+
+    @Override
+    public boolean isLinkable(Query query, String collectionUri) {
+
+        Collection joinCollection = resourceManager.load(Collection.class, collectionUri);
+
+        for (Map.Entry<String, String> tpDefine : query.getDefine().entrySet()) {
+
+            String tpCollectionUri = QueryUtils.getAbsoluteCollectionUri(query, tpDefine.getValue());
+
+            Collection tpJoinCollection = resourceManager.load(Collection.class, tpCollectionUri);
+
+            List<FieldLink> links = LinkUtils.getLinkFields(query.getOn(), joinCollection, tpJoinCollection);
+
+            if (links != null && !links.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -157,6 +180,7 @@ public class CollectionManager implements ICollectionManager {
 
             } catch (Exception e) {
                 LOGGER.error("Task '" + parentTask.getId() + "': Error. " + e.getMessage());
+                collectionStore.unregisterCollection(collectionURI);
             }
         }
 
@@ -164,29 +188,11 @@ public class CollectionManager implements ICollectionManager {
 
     private Set<String> getQueryCollections(Query query) {
 
-        String mainNamespace = query.getMainNamespace();
         Set<String> queryCollections = new HashSet<String>();
+        String onUri = query.getOn();
 
-        // Main collections
-        queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, query.getMainCollection()));
-        
-        // Join collections
-        for (String collectionURI : query.getCollections()) {
-            queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, collectionURI));
-        }
-        
-        // Filter collections
-        for (String key : query.getFilterKeys()) {
-            for (Filter filter : query.getFilters(key)) {
-                for (String collectionURI : filter.getDependentCollections()) {
-                    queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, collectionURI));
-                }
-            }
-        }
-        
-        // Order collections
-        if (query.getOrder()!= null) {
-            queryCollections.add(ResourceTools.getAbsoluteURI(mainNamespace, query.getOrder().getCollection()));
+        for (String collectionUri : query.getDefine().values()) {
+            queryCollections.add(ResourceUtils.getAbsoluteURI(onUri, collectionUri));
         }
 
         return queryCollections;

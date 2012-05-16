@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.pages.browser;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,18 +27,20 @@ import org.apache.wicket.model.Model;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.query.FixedEntity;
+import org.onexus.core.query.EqualId;
 import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.EntityIterator;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
+import org.onexus.ui.website.utils.FixedEntity;
 import org.onexus.ui.website.utils.SingleEntityQuery;
 import org.onexus.ui.website.widgets.IQueryContributor;
 
@@ -78,10 +81,17 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
             String releaseURI = pageModel.getObject().getReleaseURI();
 
             for (FixedEntity fixedEntity : fixedEntities) {
+
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
+                if (fixedEntity.isEnable()) {
+                    container.add(new AttributeModifier("class", "large awesome blue"));
+                } else {
+                    container.add(new AttributeModifier("class", "large awesome gray"));
+                }
+
                 // Make collection URI absolute
-                String absoluteCollectionURI = ResourceTools.getAbsoluteURI(releaseURI, fixedEntity.getCollectionURI());
+                String absoluteCollectionURI = ResourceUtils.getAbsoluteURI(releaseURI, fixedEntity.getCollectionURI());
                 fixedEntity.setCollectionURI(absoluteCollectionURI);
 
                 Collection collection = resourceManager.load(Collection.class, fixedEntity.getCollectionURI());
@@ -167,7 +177,8 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
 
         if (fixedEntities != null) {
             for (FixedEntity fe : fixedEntities) {
-                query.getFixedEntities().add(fe);
+                    String collectionAlias = QueryUtils.newCollectionAlias(query, fe.getCollectionURI());
+                    QueryUtils.and(query, new EqualId(collectionAlias, fe.getEntityId()));
             }
         }
     }

@@ -17,43 +17,24 @@
  */
 package org.onexus.ui.website.widgets.heatmap;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.link.InlineFrame;
-import org.apache.wicket.markup.html.link.ResourceLink;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.handler.resource.ResourceReferenceRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.AbstractResource;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.query.Order;
 import org.onexus.core.query.Query;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Field;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
-import org.onexus.ui.website.widgets.export.ExportResource;
-import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
-import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import javax.inject.Inject;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> {
+public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> implements IQueryContributor {
     
     @Inject
     public IResourceManager resourceManager;    
@@ -67,32 +48,11 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
     @Override
     protected void onBeforeRender() {
 
-        String releaseURI = getReleaseURI();
-        String collectionURI = getConfig().getCollection();
-        
-        Query query = new Query(collectionURI);
-        query.setMainNamespace( releaseURI );
-
-        for (ColumnConfig column : getConfig().getColumns()) {
-            query.getCollections().add(column.getCollection());
-        }
-
-        for (ColumnConfig column : getConfig().getRows()) {
-            query.getCollections().add(column.getCollection());
-        }
-
-        for (ColumnConfig column : getConfig().getCells()) {
-            query.getCollections().add(column.getCollection());
-        }
-
-        buildQuery(query);
-
-        addOrReplace(new InlineFrame("heatmap", new HeatmapPage(getConfig(), query)));
+        addOrReplace(new InlineFrame("heatmap", new HeatmapPage(getConfig(), getQuery())));
 
         super.onBeforeRender();
         
     }
-    
 
     
     private String getReleaseURI() {
@@ -113,4 +73,26 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
     };
 
+    @Override
+    public void onQueryBuild(Query query) {
+
+        String releaseURI = getReleaseURI();
+        String collectionURI = getConfig().getCollection();
+
+        query.setOn( releaseURI );
+        String collectionAlias = QueryUtils.newCollectionAlias(query, collectionURI);
+        query.setFrom(collectionAlias);
+
+        for (ColumnConfig column : getConfig().getColumns()) {
+            column.buildQuery(query);
+        }
+
+        for (ColumnConfig column : getConfig().getRows()) {
+            column.buildQuery(query);
+        }
+
+        for (ColumnConfig column : getConfig().getCells()) {
+            column.buildQuery(query);
+        }
+    }
 }

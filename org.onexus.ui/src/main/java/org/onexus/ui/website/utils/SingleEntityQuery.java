@@ -17,16 +17,21 @@
  */
 package org.onexus.ui.website.utils;
 
-import org.onexus.core.query.FixedEntity;
+import org.onexus.core.query.EqualId;
 import org.onexus.core.query.Query;
-import org.onexus.core.utils.ResourceTools;
 
 public class SingleEntityQuery extends Query {
 
+    public final static String COLLECTION_ALIAS = "c";
+
     public SingleEntityQuery(String collectionURI, String entityId) {
-        super(collectionURI);
-        setMainNamespace(ResourceTools.getParentURI(collectionURI));
-        getFixedEntities().add(new FixedEntity(collectionURI, entityId));
+        super();
+
+        addDefine(COLLECTION_ALIAS, collectionURI);
+        addSelect(COLLECTION_ALIAS, null);
+        setFrom(COLLECTION_ALIAS);
+        setWhere(new EqualId(COLLECTION_ALIAS, entityId));
+
     }
 
 }

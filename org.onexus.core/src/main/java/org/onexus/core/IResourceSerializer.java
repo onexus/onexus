@@ -17,6 +17,8 @@
  */
 package org.onexus.core;
 
+import org.onexus.core.exceptions.UnserializeException;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -26,7 +28,7 @@ public interface IResourceSerializer {
 
     void serialize(Object resource, OutputStream output);
 
-    <T> T unserialize(Class<T> resourceType, InputStream input);
+    <T> T unserialize(Class<T> resourceType, InputStream input) throws UnserializeException;
 
     void register(Class<?> type);
 

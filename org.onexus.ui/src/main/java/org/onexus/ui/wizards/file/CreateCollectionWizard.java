@@ -28,7 +28,7 @@ import org.onexus.core.IResourceManager;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.*;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractWizard;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
@@ -150,7 +150,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             Loader loader = new Loader();
             loader.setPlugin("mvn:org.onexus/org.onexus.loader.tsv/0.2");
             List<Parameter> parameters = new ArrayList<Parameter>();
-            parameters.add(new Parameter("SOURCE_URI", "${release.uri}/" + ResourceTools.getResourceName(sourceURI)));
+            parameters.add(new Parameter("SOURCE_URI", "${release.uri}/" + ResourceUtils.getResourceName(sourceURI)));
             loader.setParameters(parameters);
             collection.setLoader(loader);
 
@@ -171,7 +171,7 @@ public class CreateCollectionWizard extends AbstractWizard {
     private Map<String, Link> collectLinks() {
         Map<String, Link> links = new HashMap<String, Link>();
 
-        String releaseURI = ResourceTools.getParentURI(sourceURI);
+        String releaseURI = ResourceUtils.getParentURI(sourceURI);
         List<Collection> collections = resourceManager.loadChildren(Collection.class, releaseURI);
 
         for (Collection collection : collections) {
@@ -191,7 +191,7 @@ public class CreateCollectionWizard extends AbstractWizard {
     private Map<String, Field> collectFields() {
         Map<String, Field> fields = new HashMap<String, Field>();
 
-        String releaseURI = ResourceTools.getParentURI(sourceURI);
+        String releaseURI = ResourceUtils.getParentURI(sourceURI);
         List<Collection> collections = resourceManager.loadChildren(Collection.class, releaseURI);
 
         for (Collection collection : collections) {
@@ -205,7 +205,7 @@ public class CreateCollectionWizard extends AbstractWizard {
 
     private Collection newCollection() {
 
-        String sourceName = ResourceTools.getResourceName(sourceURI);
+        String sourceName = ResourceUtils.getResourceName(sourceURI);
         String collectionName;
 
         int punt;
@@ -215,8 +215,8 @@ public class CreateCollectionWizard extends AbstractWizard {
             collectionName = sourceName + ".col";
         }
 
-        String collectionURI = ResourceTools.concatURIs(
-                ResourceTools.getParentURI(sourceURI),
+        String collectionURI = ResourceUtils.concatURIs(
+                ResourceUtils.getParentURI(sourceURI),
                 collectionName
         );
 

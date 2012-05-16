@@ -23,16 +23,17 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.onexus.core.query.Contains;
 import org.onexus.core.query.Filter;
-import org.onexus.core.query.Like;
-import org.onexus.core.query.Or;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.widgets.IQueryContributor;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus> implements IQueryContributor {
 
@@ -69,34 +70,23 @@ public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus>
         if (search != null) {
 
             SearchWidgetConfig config = getConfig();
-            Iterator<SearchField> fields = config.getFields().iterator();
 
-            if (fields.hasNext()) {
-                SearchField field = fields.next();
+            List<Filter> filters = new ArrayList<Filter>();
 
-                Filter filter = buildSearchFieldFilter(field, search);
-                while (fields.hasNext()) {
-                    field = fields.next();
-                    filter = new Or(field.getCollection(), filter, buildSearchFieldFilter(field, search));
+            for (SearchField searchField : config.getFields()) {
+
+                String collectionAlias = QueryUtils.newCollectionAlias(query, searchField.getCollection());
+                String fields[] = searchField.getFields().split(",");
+
+                for (String field : fields) {
+                    filters.add(new Contains(collectionAlias, field.trim(), search));
                 }
-                query.putFilter(getConfig().getId() + "_search", filter);
             }
+
+            QueryUtils.and(query, QueryUtils.joinOr(filters));
+
         }
 
-    }
-
-    private Filter buildSearchFieldFilter(SearchField field, String search) {
-
-        String collectionURI = field.getCollection();
-        String fieldNames[] = field.getFields().split(",");
-
-        Filter filter = new Like(collectionURI, fieldNames[0].trim(), search);
-
-        for (int i = 1; i < fieldNames.length; i++) {
-            filter = new Or(field.getCollection(), filter, new Like(collectionURI, fieldNames[i].trim(), search));
-        }
-
-        return filter;
     }
 
 }

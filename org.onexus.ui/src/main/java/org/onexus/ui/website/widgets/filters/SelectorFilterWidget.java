@@ -25,16 +25,22 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.onexus.core.IQueryParser;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.widgets.IQueryContributor;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * SelectorFilterWidget provides the possibility to select one filter from a
@@ -47,6 +53,11 @@ import java.util.List;
  */
 public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, SelectorFilterWidgetStatus> implements
         IQueryContributor {
+
+    private static final Logger log = LoggerFactory.getLogger(SelectorFilterWidget.class);
+
+    @Inject
+    private IQueryParser queryParser;
 
     public SelectorFilterWidget(String componentId, IWidgetModel statusModel) {
         super(componentId, statusModel);
@@ -88,18 +99,34 @@ public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, Sel
     @Override
     public void onQueryBuild(Query query) {
 
+
         String activeFilter = getStatus().getActiveFilter();
 
         if (activeFilter != null) {
+
             for (FilterConfig filter : getConfig().getFilters()) {
                 if (activeFilter.equals(filter.getId())) {
-                    for (Filter rule : filter.getRules()) {
-                        query.putFilter(filter.getId(), rule);
-                    }
-                }
 
+                    Map<String, String> define = queryParser.parseDefine(filter.getDefine());
+                    Filter where = queryParser.parseWhere(filter.getWhere());
+
+                    if (define == null || where == null) {
+                        log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
+
+                    } else {
+                        for (Map.Entry<String, String> entry : define.entrySet()) {
+                            query.addDefine(entry.getKey(), entry.getValue());
+                        }
+
+                        QueryUtils.and(query, where);
+                    }
+
+
+                }
             }
+
         }
+
     }
 
     /* Component that makes possible to select a filter */

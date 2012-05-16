@@ -17,12 +17,12 @@
  */
 package org.onexus.ui.website.widgets.tableviewer;
 
-import org.onexus.core.query.Order;
+import org.onexus.core.query.OrderBy;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 public class TableViewerStatus extends WidgetStatus {
 
-    private Order order;
+    private OrderBy order;
     
     private int currentColumnSet;
 
@@ -34,16 +34,16 @@ public class TableViewerStatus extends WidgetStatus {
         super(viewerId);
     }
 
-    public TableViewerStatus(String viewerId, Order order) {
+    public TableViewerStatus(String viewerId, OrderBy order) {
         super(viewerId);
         this.order = order;
     }
 
-    public Order getOrder() {
+    public OrderBy getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderBy order) {
         this.order = order;
     }
 

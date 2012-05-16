@@ -41,7 +41,9 @@ public class FilterConfig implements Serializable, IVisible {
 
     private String visible;
 
-    private List<Filter> rules;
+    private String define;
+
+    private String where;
 
     private String htmlHelp;
 
@@ -49,32 +51,14 @@ public class FilterConfig implements Serializable, IVisible {
         super();
     }
 
-    public FilterConfig(String id, String name, Boolean active, Filter... rules) {
-        this(id, name, active, "", rules);
-    }
-
-    public FilterConfig(String id, String name, Boolean active, String visible,
-                        Filter... rules) {
-        this(id, name, null, active, false, visible, rules);
-    }
-
-    public FilterConfig(String id, String name, String htmlHelp,
-                        boolean active, Filter... rules) {
-        this(id, name, htmlHelp, active, false, "", rules);
-    }
-
-    public FilterConfig(String id, String name, String htmlHelp,
-                        Boolean active, Boolean hidden, String visible, Filter... rules) {
+    public FilterConfig(String id, String name, Boolean active) {
         super();
         this.id = id;
         this.name = name;
         this.active = active;
-        this.visible = visible;
+        this.visible = "";
         this.deletable = false;
-        this.hidden = hidden;
-        this.rules = new ArrayList<Filter>();
-        this.rules.addAll(Arrays.asList(rules));
-        this.htmlHelp = htmlHelp;
+        this.hidden = false;
     }
 
     public String getId() {
@@ -125,12 +109,20 @@ public class FilterConfig implements Serializable, IVisible {
         this.visible = visible;
     }
 
-    public List<Filter> getRules() {
-        return rules;
+    public String getDefine() {
+        return define;
     }
 
-    public void setRules(List<Filter> rules) {
-        this.rules = rules;
+    public void setDefine(String define) {
+        this.define = define;
+    }
+
+    public String getWhere() {
+        return where;
+    }
+
+    public void setWhere(String where) {
+        this.where = where;
     }
 
     public String getHtmlHelp() {

@@ -23,14 +23,12 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.IEntity;
-import org.onexus.core.query.FixedEntity;
 import org.onexus.core.resources.Field;
 import org.onexus.ui.website.events.AbstractEvent;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-
-import java.util.Set;
+import org.onexus.ui.website.utils.FixedEntity;
 
 public class LinkDecorator extends FieldDecorator {
 

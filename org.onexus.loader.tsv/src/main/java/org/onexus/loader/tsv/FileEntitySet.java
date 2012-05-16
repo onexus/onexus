@@ -22,7 +22,7 @@ import org.onexus.core.IEntitySet;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.loader.tsv.tools.BufferedFileChannel;
 import org.onexus.loader.tsv.tools.Token;
 
@@ -72,7 +72,7 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
         this.sourceManager = sourceManager;
         this.urls = new ArrayDeque<URL>();
 
-        initializeURLs(collection.getLoader().getParameter("SOURCE_URI"), ResourceTools.getProperties(collection.getURI()));
+        initializeURLs(collection.getLoader().getParameter("SOURCE_URI"), ResourceUtils.getProperties(collection.getURI()));
 
         NULL_CHAR = collection.getLoader().getParameter("NULL_VALUE");
         SEPARATOR = collection.getLoader().getParameter("SEPARATOR");

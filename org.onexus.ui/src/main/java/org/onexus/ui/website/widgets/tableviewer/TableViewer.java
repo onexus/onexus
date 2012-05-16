@@ -36,6 +36,7 @@ import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
@@ -45,7 +46,7 @@ import org.onexus.ui.workspace.progressbar.ProgressBar.ActiveTasks;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
+public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> implements IQueryContributor{
 
     public static final CssResourceReference TABLE_VIEWER_CSS = new CssResourceReference(TableViewer.class,
             "TableViewer.css");
@@ -72,8 +73,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         this.dataProvider = new EntitiesRowProvider(config, status) {
 
             @Override
-            protected void buildQuery(Query query) {
-                TableViewer.this.buildQuery(query);
+            protected Query getQuery() {
+                return TableViewer.this.getQuery();
             }
 
             @Override
@@ -118,7 +119,6 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
         resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
         resultTable.addBottomToolbar(new AjaxNavigationToolbar(resultTable));
-        // resultTable.addBottomToolbar(new NavigationToolbar(resultTable));
         add(resultTable);
 
     }
@@ -150,5 +150,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     }
 
 
-
+    @Override
+    public void onQueryBuild(Query query) {
+        this.dataProvider.onQueryBuild(query);
+    }
 }

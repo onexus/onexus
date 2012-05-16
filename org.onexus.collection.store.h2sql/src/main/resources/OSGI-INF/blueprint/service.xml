@@ -20,7 +20,7 @@
         <registration-listener unregistration-method="stop" ref="org.onexus.collection.store.h2sql"/>
     </service>
 
-    <bean id="org.onexus.collection.store.h2sql" class="org.onexus.collection.store.h2sql.CollectionStore"
+    <bean id="org.onexus.collection.store.h2sql" class="org.onexus.collection.store.h2sql.H2CollectionStore"
           init-method="init">
         <property name="database" value="${database}"/>
         <property name="username" value="${username}"/>

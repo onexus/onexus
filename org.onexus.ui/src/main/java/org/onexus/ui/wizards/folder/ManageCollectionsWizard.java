@@ -78,7 +78,12 @@ public class ManageCollectionsWizard extends AbstractWizard {
             List<Collection> collections = resourceManager.loadChildren(Collection.class, resourceURI);
             for (Collection collection : collections) {
                 collectionManager.unload(collection.getURI());
-                ProgressBar.show(collectionManager.load(new Query(collection.getURI())));
+                Query emptyQuery = new Query();
+                emptyQuery.addDefine("c", collection.getURI());
+                emptyQuery.setFrom("c");
+                emptyQuery.setOffset(0);
+                emptyQuery.setCount(0);
+                ProgressBar.show(collectionManager.load(emptyQuery));
             }
             return;
         }

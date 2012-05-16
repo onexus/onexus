@@ -40,26 +40,7 @@ public class HeatmapPage extends WebPage implements IResourceListener {
     public HeatmapPage(HeatmapViewerConfig config, Query query) {
         super();
         this.config = config;
-
-        List<ColumnConfig.ExportColumn> exportColumns = new ArrayList<ColumnConfig.ExportColumn>();
-
-        for (ColumnConfig column : config.getColumns() ) {
-            column.addExportColumns(exportColumns, query.getMainNamespace());
-        }
-        
-        this.lastColumnFields = countColumns(exportColumns);
-
-        for (ColumnConfig column : config.getRows() ) {
-            column.addExportColumns(exportColumns, query.getMainNamespace());
-        }
-        
-        this.lastRowFields = countColumns(exportColumns);
-
-        for (ColumnConfig column : config.getCells() ) {
-            column.addExportColumns(exportColumns, query.getMainNamespace());
-        }
-
-        this.resource = new StatefulExportResource(query, exportColumns);
+        this.resource = new StatefulExportResource(query);
     }
 
     @Override
@@ -116,26 +97,13 @@ public class HeatmapPage extends WebPage implements IResourceListener {
                 .getResponse(), null);
         this.resource.respond(a);
     }
-    
-    private int countColumns(List<ColumnConfig.ExportColumn> columns ) {
-        
-        int count = 0;
-        for (ColumnConfig.ExportColumn column : columns) {
-               count += column.getFieldNames().length;
-        }
-        
-        return count;
-        
-    }
 
     private static class StatefulExportResource extends ExportResource {
 
         private Query query;
-        private List<ColumnConfig.ExportColumn> columns;
 
-        private StatefulExportResource(Query query, List<ColumnConfig.ExportColumn> columns) {
+        private StatefulExportResource(Query query) {
             this.query = query;
-            this.columns = columns;
         }
 
         protected WriteCallback newWriteCallback() {
@@ -143,7 +111,7 @@ public class HeatmapPage extends WebPage implements IResourceListener {
             return new WriteCallback() {
                 @Override
                 public void writeData(final Attributes attributes) {
-                    writeTSV(attributes.getResponse(), query, columns);
+                    writeTSV(attributes.getResponse(), query);
                 }
             };
 

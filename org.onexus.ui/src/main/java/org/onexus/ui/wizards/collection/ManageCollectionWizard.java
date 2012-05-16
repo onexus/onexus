@@ -68,7 +68,12 @@ public class ManageCollectionWizard extends AbstractWizard {
 
         if (selected.equals(LOAD)) {
             collectionManager.unload(resourceURI);
-            ProgressBar.show(collectionManager.load(new Query(resourceURI)));
+            Query emptyQuery = new Query();
+            emptyQuery.addDefine("c", resourceURI);
+            emptyQuery.setFrom("c");
+            emptyQuery.setOffset(0);
+            emptyQuery.setCount(0);
+            ProgressBar.show(collectionManager.load(emptyQuery));
             return;
         }
 

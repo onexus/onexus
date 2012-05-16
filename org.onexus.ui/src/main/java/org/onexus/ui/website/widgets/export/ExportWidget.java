@@ -24,9 +24,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.onexus.core.query.Order;
 import org.onexus.core.query.Query;
-import org.onexus.core.utils.ResourceTools;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
@@ -36,13 +34,8 @@ import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
-import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus> {
 
@@ -59,29 +52,7 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
         TableViewerStatus vs = getTableViewerStatus();
         if (config != null && vs != null) {
 
-            BrowserPageStatus browserStatus = getPageStatus();
-            String releaseURI = (browserStatus != null ? browserStatus.getReleaseURI() : null);
-            Query query = new Query(config.getCollection());
-            query.setMainNamespace(releaseURI);
-
-            List<ExportColumn> exportColumns = new ArrayList<ExportColumn>();
-
-            for (IColumnConfig column : config.getColumnSets().get(vs.getCurrentColumnSet()).getColumns()) {
-                column.addExportColumns(exportColumns, releaseURI);
-                for (String collectionId : column.getQueryCollections(releaseURI)) {
-                    query.getCollections().add(ResourceTools.getAbsoluteURI(releaseURI, collectionId));
-                }
-            }
-
-            buildQuery(query);
-
-
-            if (vs != null) {
-                Order order = vs.getOrder();
-                if (order != null) {
-                    query.setOrder(order);
-                }
-            }
+            Query query = getQuery();
 
             String statusEncoded;
             try {
@@ -90,20 +61,9 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
                 throw new WicketRuntimeException("Unable to encode the URL parameter 'query'", e);
             }
 
-            StringBuilder columnsString = new StringBuilder();
-            Iterator<ExportColumn> it = exportColumns.iterator();
-
-            while (it.hasNext()) {
-                columnsString.append(it.next().toString());
-                if (it.hasNext()) {
-                    columnsString.append(":::");
-                }
-            }
-
             PageParameters params = new PageParameters();
             params.add(ExportResource.STATUS, statusEncoded);
             params.add(ExportResource.FILENAME, "file-name." + ExportResource.FORMAT_TSV);
-            params.add(ExportResource.COLUMNS, columnsString);
 
             ResourceReference rr = Application.get().getSharedResources()
                     .get(Application.class, "export", null, null, null, true);
@@ -130,15 +90,12 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
         return (BrowserPageStatus) (pageModel == null ? null : pageModel.getObject());
     }
 
-    ;
 
     private BrowserPageConfig getPageConfig() {
         IPageModel pageModel = getPageModel();
 
         return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
     }
-
-    ;
 
     private TableViewerStatus getTableViewerStatus() {
 

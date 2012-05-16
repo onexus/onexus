@@ -151,6 +151,8 @@ ul.entities li img {
 .large.awesome, .large.awesome:visited 			{ font-size: 14px; padding: 8px 14px 9px; }
 .blue.awesome, .blue.awesome:visited		{ background-color: #2daebf; }
 .blue.awesome:hover							{ background-color: #007d9a; }
+.gray.awesome, .gray.awesome:visited { background-color: #bfbfbf; }
+.gray.awesome:hover { background-color: #8f8f8f;}
 
 div.info {
      color: white;

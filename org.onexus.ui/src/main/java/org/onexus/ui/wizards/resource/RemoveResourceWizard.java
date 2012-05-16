@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractWizard;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
@@ -56,7 +56,7 @@ public class RemoveResourceWizard extends AbstractWizard {
         removeRecursive(resourceURI, resourceManager, true);
 
         // Change to parent
-        String parentURI = ResourceTools.getParentURI(resourceURI);
+        String parentURI = ResourceUtils.getParentURI(resourceURI);
 
         PageParameters params = new PageParameters().add("uri", parentURI);
         setResponsePage(ResourcesPage.class, params);

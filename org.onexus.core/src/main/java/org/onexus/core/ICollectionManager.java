@@ -67,4 +67,5 @@ public interface ICollectionManager {
      */
     public void unload(String collectionURI);
 
+    boolean isLinkable(Query query, String collectionUri);
 }

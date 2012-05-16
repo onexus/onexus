@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
+import org.onexus.core.exceptions.UnserializeException;
 import org.onexus.core.resources.Folder;
 import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
@@ -128,8 +129,11 @@ public class ResourceManager implements IResourceManager {
                 Resource resource = null;
                 try {
                     resource = checkoutFile(file, ws.getKey(), ws.getValue());
-                } catch (Exception e) {
-                    LOGGER.error("Unserializing file '" + file.getPath() + "'", e);
+                } catch (FileNotFoundException e) {
+                    LOGGER.error("File '" + file.getPath() + "' not found.");
+                    continue;
+                } catch (UnserializeException e) {
+                    LOGGER.error("Parsing file " + file.getPath() + " at line " + e.getLine() + " on " + e.getPath());
                     continue;
                 }
 

@@ -19,26 +19,15 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.core.query.Query;
 
 import java.io.Serializable;
 import java.util.List;
 
 public interface IColumnConfig extends Serializable {
 
-    /**
-     * @return Return all the collectionId that this column needs to add into
-     *         the data query.
-     */
-    public String[] getQueryCollections(String releaseURI);
+    public void buildQuery(Query query);
 
-    /**
-     * @param columns This method is called by the table viewer when it needs to
-     *                construct all the columns. It's expected that the column
-     *                config add all the columns at the end of the list.
-     */
     public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI);
-
-    public void addExportColumns(List<ExportColumn> columns, String releaseURI);
 
 }

@@ -12,7 +12,7 @@
     <description>Onexus</description>
 
     <properties>
-        <wicket.version>6.0.0-beta1</wicket.version>
+        <wicket.version>6.0-SNAPSHOT</wicket.version>
         <karaf.version>2.2.5</karaf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -45,6 +45,8 @@
         <module>provision</module>
         <module>onexus-server</module>
         <module>org.onexus.core</module>
+	<module>org.onexus.query.parser</module>
+        <module>org.onexus.collection.store.sql</module>
         <module>org.onexus.collection.store.mysql</module>
         <module>org.onexus.collection.manager</module>
         <module>org.onexus.task.manager</module>
@@ -220,16 +222,31 @@
                 <artifactId>org.onexus.core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.query.parser</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.resource.serializer.xstream</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.collection.store.sql</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.collection.store.mysql</artifactId>
@@ -374,6 +391,13 @@
                 <artifactId>com.springsource.org.junit</artifactId>
                 <version>4.9.0</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+                <version>3.4_2</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

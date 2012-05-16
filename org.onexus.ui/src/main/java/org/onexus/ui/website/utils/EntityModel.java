@@ -20,11 +20,8 @@ package org.onexus.ui.website.utils;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
-import org.onexus.core.query.FixedEntity;
-import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.OnexusWebSession;
 
 import javax.inject.Inject;
 

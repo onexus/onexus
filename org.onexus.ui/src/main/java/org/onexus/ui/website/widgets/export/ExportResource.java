@@ -30,19 +30,17 @@ import org.onexus.core.IEntityTable;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.QueryUtils;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.OnexusWebSession;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
 
 import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -51,7 +49,6 @@ public class ExportResource extends AbstractResource {
 
     public final static String STATUS = "query";
     public final static String FILENAME = "filename";
-    public static final String COLUMNS = "columns";
     public final static String FORMAT_TSV = "tsv";
 
     private final static XStream xstream = new XStream();
@@ -119,31 +116,21 @@ public class ExportResource extends AbstractResource {
                     }
                 }
 
-                String strColumns[] = attributes.getParameters()
-                        .get(COLUMNS).toString().split(":::");
-                List<ExportColumn> columns = new ArrayList<ExportColumn>();
-                for (String column : strColumns) {
-                    columns.add(new ExportColumn(column));
-                }
-
-                writeTSV(attributes.getResponse(), query, columns);
+                writeTSV(attributes.getResponse(), query);
             }
         };
 
     }
 
-    protected void writeTSV(Response pw, Query query, List<ExportColumn> columns) {
+    protected void writeTSV(Response pw, Query query) {
 
         IEntityTable data = collectionManager.load(query);
 
         // Print header
-        Iterator<ExportColumn> itc = columns.iterator();
+        Iterator<Map.Entry<String, List<String>>> itc = query.getSelect().entrySet().iterator();
         while (itc.hasNext()) {
-            ExportColumn col = itc.next();
-            Collection c = getCollection(query.getMainNamespace(),
-                    col.getCollectionURI());
-            Iterator<String> itf = Arrays.asList(col.getFieldNames())
-                    .iterator();
+            Map.Entry<String, List<String>> col = itc.next();
+            Iterator<String> itf = col.getValue().iterator();
             while (itf.hasNext()) {
                 String field = itf.next().trim();
                 pw.write(field);
@@ -161,16 +148,11 @@ public class ExportResource extends AbstractResource {
         // Print values
         while (data.next()) {
 
-            itc = columns.iterator();
+            itc = query.getSelect().entrySet().iterator();
             while (itc.hasNext()) {
-                ExportColumn col = itc.next();
-                Iterator<String> itf = Arrays.asList(col.getFieldNames())
-                        .iterator();
-
-                Collection c = getCollection(query.getMainNamespace(),
-                        col.getCollectionURI());
-                IEntity e = data.getEntity(c.getURI());
-
+                Map.Entry<String, List<String>> col = itc.next();
+                Iterator<String> itf = col.getValue().iterator();
+                IEntity e = data.getEntity(QueryUtils.getCollectionUri(query, col.getKey()));
                 while (itf.hasNext()) {
                     String field = itf.next().trim();
                     Object value = e.get(field);
@@ -192,7 +174,7 @@ public class ExportResource extends AbstractResource {
 
     private Collection getCollection(String releaseURI, String collectionURI) {
         return resourceManager.load(Collection.class,
-                ResourceTools.getAbsoluteURI(releaseURI, collectionURI));
+                ResourceUtils.getAbsoluteURI(releaseURI, collectionURI));
     }
 
     public static String encodeQuery(Query query)

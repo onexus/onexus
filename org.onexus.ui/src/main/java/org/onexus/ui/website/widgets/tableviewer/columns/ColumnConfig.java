@@ -21,11 +21,12 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.website.widgets.tableviewer.decorators.DecoratorFactory;
 import org.onexus.ui.website.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
@@ -95,48 +96,29 @@ public class ColumnConfig implements IColumnConfig {
     @Override
     public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI) {
 
-        String collectionURI = ResourceTools.getAbsoluteURI(releaseURI, collection);
+        String collectionURI = ResourceUtils.getAbsoluteURI(releaseURI, collection);
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
-            List<Field> fields = getFields(collection);
-            for (Field field : fields) {
+            List<String> fields = getFields(collection);
+            for (String fieldId : fields) {
+                Field field = collection.getField(fieldId);
                 columns.add(new CollectionTrack(collectionURI, new FieldHeader(collection, field, new CollectionHeader(
                         collection)), DecoratorFactory.getDecorator(decorator, collection, field)));
             }
         }
     }
 
-    @Override
-    public void addExportColumns(List<ExportColumn> columns, String releaseURI) {
-
-        String collectionURI = ResourceTools.getAbsoluteURI(releaseURI, collection);
-        Collection collection = getResourceManager().load(Collection.class, collectionURI);
-
-        if (collection != null) {
-            List<Field> fields = getFields(collection);
-            StringBuilder fieldNames = new StringBuilder();
-            Iterator<Field> it = fields.iterator();
-
-            while (it.hasNext()) {
-                fieldNames.append(it.next().getId());
-                if (it.hasNext()) {
-                    fieldNames.append(",");
-                }
-            }
-
-            columns.add(new ExportColumn(this.collection, fieldNames.toString()));
-        }
-
-    }
-
-    private List<Field> getFields(Collection collection) {
-        List<Field> fields;
+    private List<String> getFields(Collection collection) {
+        List<String> fields;
 
         if (this.fields == null) {
-            fields = new ArrayList<Field>(collection.getFields());
+            fields = new ArrayList<String>();
+            for (Field field : collection.getFields()) {
+                fields.add(field.getId());
+            }
         } else {
-            fields = new ArrayList<Field>();
+            fields = new ArrayList<String>();
 
             for (String fieldName : this.fields.split(",")) {
                 if (fieldName.trim().startsWith("*{")) {
@@ -145,7 +127,7 @@ public class ColumnConfig implements IColumnConfig {
                     Pattern pattern = Pattern.compile(regExp);
                     for (Field field : collection.getFields()) {
                         if (pattern.matcher(field.getId()).matches()) {
-                            fields.add(field);
+                            fields.add(field.getId());
                         }
                     }
                 } else {
@@ -159,7 +141,7 @@ public class ColumnConfig implements IColumnConfig {
                     if (field == null) {
                         LOGGER.warn("Field '" + fieldName + "' not found on collection '" + collection.getURI() + "'.");
                     } else {
-                        fields.add(field);
+                        fields.add(field.getId());
                     }
                 }
 
@@ -169,8 +151,17 @@ public class ColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public String[] getQueryCollections(String releaseURI) {
-        return new String[]{collection};
+    public void buildQuery(Query query) {
+
+        String collectionURI = ResourceUtils.getAbsoluteURI(query.getOn(), collection);
+        String columnAlias = QueryUtils.newCollectionAlias(query, collectionURI);
+        Collection collection = getResourceManager().load(Collection.class, collectionURI);
+
+        if (collection != null) {
+            query.addSelect(columnAlias, getFields(collection));
+        }
+
+
     }
 
     private IResourceManager getResourceManager() {
@@ -179,41 +170,6 @@ public class ColumnConfig implements IColumnConfig {
         }
 
         return resourceManager;
-    }
-
-    public static class ExportColumn implements Serializable {
-
-        private String collectionURI;
-        private String fieldNames;
-
-        public ExportColumn(String collectionURI, String fieldNames) {
-            super();
-            this.collectionURI = collectionURI;
-            this.fieldNames = fieldNames;
-        }
-
-        public ExportColumn(String column) {
-
-            int separator = column.indexOf('|');
-
-            this.collectionURI = column.substring(0, separator);
-            this.fieldNames = column.substring(separator + 1);
-
-        }
-
-        public String getCollectionURI() {
-            return collectionURI;
-        }
-
-        public String[] getFieldNames() {
-            return fieldNames.split(",");
-        }
-
-        @Override
-        public String toString() {
-            return collectionURI + "|" + fieldNames;
-        }
-
     }
 
 }

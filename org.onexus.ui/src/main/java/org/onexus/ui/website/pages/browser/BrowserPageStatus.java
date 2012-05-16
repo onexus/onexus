@@ -17,12 +17,10 @@
  */
 package org.onexus.ui.website.pages.browser;
 
-import org.onexus.core.query.FixedEntity;
 import org.onexus.ui.website.pages.PageStatus;
-import org.onexus.ui.website.widgets.WidgetStatus;
+import org.onexus.ui.website.utils.FixedEntity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class BrowserPageStatus extends PageStatus {

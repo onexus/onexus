@@ -32,7 +32,7 @@
 				<version>2.5</version>
 				<executions>
 					<execution>
-						<id>filter</id>
+						<id>negatedFilter</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>resources</goal>

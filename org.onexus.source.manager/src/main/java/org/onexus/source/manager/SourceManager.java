@@ -25,7 +25,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Source;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -79,7 +79,7 @@ public class SourceManager implements ISourceManager {
         List<URL> urls = new ArrayList<URL>();
 
         for (String templatePath : source.getPaths()) {
-            String path = replaceProperties(templatePath, ResourceTools.getProperties(sourceURI));
+            String path = replaceProperties(templatePath, ResourceUtils.getProperties(sourceURI));
             String fileName = FilenameUtils.getName(path);
 
             // Check if it is a wildcard filter

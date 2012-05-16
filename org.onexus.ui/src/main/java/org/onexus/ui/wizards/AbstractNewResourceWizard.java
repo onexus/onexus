@@ -32,7 +32,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
 import javax.inject.Inject;
@@ -63,7 +63,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
     public void onFinish() {
 
         if (parentUri != null) {
-            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getName());
+            String resourceUri = ResourceUtils.concatURIs(parentUri, resource.getName());
             resource.setURI(resourceUri);
         }
 
@@ -116,7 +116,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
 
             if (parentUri != null && resource != null && resource.getName() != null) {
 
-                String resourceURI = ResourceTools.concatURIs(parentUri, validatable.getValue());
+                String resourceURI = ResourceUtils.concatURIs(parentUri, validatable.getValue());
 
                 Resource test = resourceManager.load(Resource.class, resourceURI);
 

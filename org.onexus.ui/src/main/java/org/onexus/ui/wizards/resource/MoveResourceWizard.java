@@ -10,7 +10,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractWizard;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
@@ -58,7 +58,7 @@ public class MoveResourceWizard extends AbstractWizard {
         resourceManager.remove(resourceUri);
         String newUri = resourceUri.replace(fromUri, toUri);
         oldResource.setURI(newUri);
-        oldResource.setName(ResourceTools.getResourceName(newUri));
+        oldResource.setName(ResourceUtils.getResourceName(newUri));
         resourceManager.save(oldResource);
 
         for (Resource child : children) {
@@ -75,7 +75,7 @@ public class MoveResourceWizard extends AbstractWizard {
     private static boolean isValidDestionation(String destinationUri, IResourceManager rm) {
 
         // Check that the parent of the new location exists
-        String parentUri = ResourceTools.getParentURI(destinationUri);
+        String parentUri = ResourceUtils.getParentURI(destinationUri);
         Resource parent = rm.load(Resource.class, parentUri);
         if (parent == null) {
             return false;
@@ -132,7 +132,7 @@ public class MoveResourceWizard extends AbstractWizard {
         public void validate(IValidatable<String> validatable) {
 
             String resourceUri = validatable.getValue();
-            String parentUri = ResourceTools.getParentURI(resourceUri);
+            String parentUri = ResourceUtils.getParentURI(resourceUri);
 
             Resource parent = resourceManager.load(Resource.class, parentUri);
 

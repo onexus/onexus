@@ -28,15 +28,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.onexus.core.IQueryParser;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.In;
-import org.onexus.core.query.Or;
 import org.onexus.core.query.Query;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.pages.IPageModel;
-import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.panels.HelpMark;
@@ -44,10 +43,14 @@ import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * FilterBoxPanel contain a list of tab filters that could be actived or
@@ -60,13 +63,18 @@ import java.util.List;
  */
 public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStatus> implements IQueryContributor {
 
+    private static final Logger log = LoggerFactory.getLogger(FiltersWidget.class);
     private FilterModel model;
+
+    @Inject
+    private IQueryParser queryParser;
+
 
     public FiltersWidget(String componentId, IWidgetModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
-        
+
 
         String title = getConfig().getTitle();
         add(new Label("title", (title != null ? title : "Filters")));
@@ -152,8 +160,17 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 List<FilterConfig> userFilters = getStatus().getUserFilters();
 
-                FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(userFilters.size() + 1),
-                        filterName, true, new In(field.getCollection(), field.getFieldName(), values.toArray()));
+                FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(userFilters.size() + 1), filterName, true);
+
+                String collectionAlias = filterName;
+
+                filter.setDefine(collectionAlias + '=' + field.getCollection());
+
+                In where = new In(collectionAlias, field.getFieldName());
+                for (Object value : values) {
+                    where.addValue(value);
+                }
+                filter.setWhere(where.toString());
                 filter.setDeletable(true);
                 userFilters.add(filter);
 
@@ -189,45 +206,50 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
     @Override
     public void onQueryBuild(Query query) {
 
+        BrowserPageStatus status = getBrowserPageStatus();
 
-            BrowserPageStatus status = getBrowserPageStatus();
+        FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), status.getFixedEntities());
 
-            FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), query.getFixedEntities());
+        List<Filter> rules = new ArrayList<Filter>();
+        for (FilterConfig filter : this.model.getObject()) {
+            if (filter.getActive() && fixedPredicate.evaluate(filter)) {
 
-            List<Filter> rules = new ArrayList<Filter>();
-            for (FilterConfig filter : this.model.getObject()) {
-                if (filter.getActive() && fixedPredicate.evaluate(filter)) {
-                    for (Filter rule : filter.getRules()) {
-                        //FIXME rule.setCollection(ResourceTools.getAbsoluteURI(status.getReleaseURI(), rule.getCollection()));
-                        rules.add(rule);
-                    }
-                }
-            }
+                String oqlDefine = filter.getDefine();
+                String oqlWhere = filter.getWhere();
 
-            if (!rules.isEmpty()) {
+                if (oqlDefine != null && oqlWhere != null) {
+                    Map<String, String> define = queryParser.parseDefine(oqlDefine);
+                    Filter where = queryParser.parseWhere(oqlWhere);
 
-                boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
+                if (define == null || where == null) {
+                    log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
 
-                if (!union) {
-                    for (Filter rule : rules) {
-                        query.putFilter(getConfig().getId(), rule);
-                    }
                 } else {
-                    query.putFilter(getConfig().getId(), buildUnion(0, rules));
+                    for (Map.Entry<String, String> entry : define.entrySet()) {
+                        query.addDefine(entry.getKey(), entry.getValue());
+                    }
+
+                    rules.add(where);
+                }
                 }
 
+
+            }
+        }
+
+        if (!rules.isEmpty()) {
+
+            boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
+
+            if (!union) {
+                QueryUtils.and(query, QueryUtils.joinAnd(rules));
+            } else {
+                QueryUtils.and(query, QueryUtils.joinOr(rules));
             }
 
-    }
-
-
-    private Filter buildUnion(int pos, List<Filter> rules) {
-        if (pos + 1 == rules.size()) {
-            return rules.get(pos);
-        } else {
-            Filter rule = rules.get(pos);
-            return new Or(rule.getCollection(), rule, buildUnion(pos + 1, rules));
         }
+
+
     }
 
     private BrowserPageStatus getBrowserPageStatus() {

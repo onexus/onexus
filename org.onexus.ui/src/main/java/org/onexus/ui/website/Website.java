@@ -18,7 +18,9 @@
 package org.onexus.ui.website;
 
 import org.apache.wicket.*;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -33,11 +35,15 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.query.Query;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
+import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 
@@ -205,7 +211,6 @@ public class Website extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
         response.render(CssHeaderItem.forReference(CSS));
     }
 

@@ -20,7 +20,7 @@ package org.onexus.ui.website.widgets.tags;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.core.IEntityTable;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig.ExportColumn;
+import org.onexus.core.query.Query;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.List;
@@ -48,18 +48,13 @@ public class TagColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public String[] getQueryCollections(String releaseURI) {
-        return new String[0];
+    public void buildQuery(Query query) {
+        // Nothing to add
     }
 
     @Override
     public void addColumns(List<IColumn<IEntityTable>> columns, String releaseURI) {
         columns.add(new TagColumn(collection));
-    }
-
-    @Override
-    public void addExportColumns(List<ExportColumn> columns, String releaseURI) {
-        // Nothing to export
     }
 
 }

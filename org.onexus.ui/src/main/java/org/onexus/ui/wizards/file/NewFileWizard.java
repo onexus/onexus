@@ -32,7 +32,7 @@ import org.apache.wicket.util.lang.Bytes;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.resources.Source;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractNewResourceWizard;
 
 import javax.inject.Inject;
@@ -79,7 +79,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
         String parentUri = getParentUri();
 
         if (resource != null && parentUri != null && fileUpload != null) {
-            String resourceUri = ResourceTools.concatURIs(parentUri, resource.getName());
+            String resourceUri = ResourceUtils.concatURIs(parentUri, resource.getName());
             resource.setRepository("local");
             String path = store(resourceUri, new File(fileUpload.tempPath), true);
             if (resource.getPaths() == null) {
@@ -92,7 +92,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
     }
 
     private String convertURItoContainerPath(String sourceURI) {
-        String serverUri = ResourceTools.getServerURI(sourceURI);
+        String serverUri = ResourceUtils.getServerURI(sourceURI);
         String relativePath = sourceURI.replace(serverUri + Resource.SEPARATOR, "");
         relativePath.replace(Resource.SEPARATOR, File.separatorChar);
         return relativePath;
@@ -100,9 +100,9 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
 
     private String store(String sourceURI, File sourceFile, boolean moveSourceFile) {
 
-        String path = convertURItoContainerPath(ResourceTools.getParentURI(sourceURI));
+        String path = convertURItoContainerPath(ResourceUtils.getParentURI(sourceURI));
         String sourceContainer = repoPath + File.separator + path;
-        String sourceName = ResourceTools.getResourceName(sourceURI);
+        String sourceName = ResourceUtils.getResourceName(sourceURI);
         File destDir = new File(sourceContainer);
 
         try {

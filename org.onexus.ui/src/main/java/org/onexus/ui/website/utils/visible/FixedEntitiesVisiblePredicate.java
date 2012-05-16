@@ -20,9 +20,9 @@ package org.onexus.ui.website.utils.visible;
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IEntity;
-import org.onexus.core.query.FixedEntity;
-import org.onexus.core.utils.ResourceTools;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.utils.EntityModel;
+import org.onexus.ui.website.utils.FixedEntity;
 
 import java.util.Set;
 
@@ -82,7 +82,7 @@ public class FixedEntitiesVisiblePredicate implements Predicate {
         for (FixedEntity fe : fixedEntities) {
 
             if (
-                    ResourceTools.getAbsoluteURI(releaseURI, fe.getCollectionURI()).equals(collectionURI) &&
+                    ResourceUtils.getAbsoluteURI(releaseURI, fe.getCollectionURI()).equals(collectionURI) &&
                             isValidEntity(entityId, fe)
                     ) {
                 return !negative;
@@ -128,7 +128,7 @@ public class FixedEntitiesVisiblePredicate implements Predicate {
         }
 
         if (releaseURI != null && !releaseURI.isEmpty()) {
-            collectionURI = ResourceTools.getAbsoluteURI(releaseURI,
+            collectionURI = ResourceUtils.getAbsoluteURI(releaseURI,
                     collectionURI);
         }
 
