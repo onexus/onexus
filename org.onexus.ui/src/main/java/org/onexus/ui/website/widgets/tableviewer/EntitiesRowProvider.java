@@ -30,7 +30,6 @@ import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
@@ -39,7 +38,7 @@ import javax.inject.Inject;
 import java.util.Iterator;
 
 public abstract class EntitiesRowProvider implements
-        ISortableDataProvider<IEntityTable, String>, IQueryContributor {
+        ISortableDataProvider<IEntityTable, String> {
 
     @Inject
     public ICollectionManager collectionManager;
@@ -82,37 +81,7 @@ public abstract class EntitiesRowProvider implements
         return (int) entityTable.size();
     }
 
-    @Override
-    public void onQueryBuild(Query query) {
-
-            BrowserPageStatus status = getBrowserPageStatus();
-            String releaseURI = (status == null ? null : status.getReleaseURI());
-
-            query.setOn(releaseURI);
-            String collectionAlias = QueryUtils.newCollectionAlias(query, config.getCollection());
-            query.setFrom(collectionAlias);
-
-            int currentColumnSet = getTableViewerStatus().getCurrentColumnSet();
-
-            for (IColumnConfig column : config.getColumnSets().get(currentColumnSet).getColumns()) {
-                column.buildQuery(query);
-            }
-
-        OrderBy orderWithCollection = getTableViewerStatus().getOrder();
-
-        if (orderWithCollection != null) {
-            String collectionUri = QueryUtils.getAbsoluteCollectionUri(query, orderWithCollection.getCollectionRef());
-            collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
-            OrderBy orderWithAlias = new OrderBy(collectionAlias, orderWithCollection.getFieldId(), orderWithCollection.isAscendent());
-            query.addOrderBy(orderWithAlias);
-        }
-
-
-    }
-
     protected abstract Query getQuery();
-
-    protected abstract BrowserPageStatus getBrowserPageStatus();
 
     protected abstract void addTaskStatus(TaskStatus taskStatus);
 

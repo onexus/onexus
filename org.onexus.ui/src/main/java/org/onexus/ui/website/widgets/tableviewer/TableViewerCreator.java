@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.widgets.tableviewer;
 
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
@@ -31,7 +31,7 @@ public class TableViewerCreator extends AbstractWidgetCreator<TableViewerConfig,
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, IWidgetModel<TableViewerStatus> statusModel) {
+    protected Widget<?, ?> build(String componentId, IModel<TableViewerStatus> statusModel) {
         return new TableViewer(componentId, statusModel);
     }
 

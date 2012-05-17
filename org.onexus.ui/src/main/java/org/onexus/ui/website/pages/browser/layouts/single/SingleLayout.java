@@ -21,8 +21,8 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
@@ -42,20 +42,18 @@ public class SingleLayout extends Panel {
     @Inject
     public IWidgetManager widgetManager;
 
-    public SingleLayout(String panelId, ViewConfig viewConfig, IPageModel<BrowserPageStatus> statusModel) {
+    public SingleLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
         super(panelId);
 
         if (viewConfig.getMain() == null) {
             add(new EmptyPanel("widget"));
         } else {
 
-            PageConfig pageConfig = statusModel.getConfig();
-
             // Get first widget
-            WidgetConfig widget = pageConfig.getWidget(viewConfig.getMain());
+            String widgetId = viewConfig.getMain().split(",")[0];
 
             // Add widget
-            add(widgetManager.create("widget", new WidgetModel(widget, statusModel)));
+            add(widgetManager.create("widget", new WidgetModel(widgetId, statusModel)));
         }
 
     }

@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets.bookmark;
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class BookmarkWidgetStatus extends WidgetStatus {
+public class BookmarkWidgetStatus extends WidgetStatus<BookmarkWidgetConfig> {
 
     public BookmarkWidgetStatus() {
         super();

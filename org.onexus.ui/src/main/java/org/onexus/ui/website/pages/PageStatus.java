@@ -17,16 +17,21 @@
  */
 package org.onexus.ui.website.pages;
 
+import org.onexus.core.query.Query;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class PageStatus implements Serializable {
+public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
     private String id;
-    
+
+    private transient C config;
+
     private List<WidgetStatus> widgetStatuses = new ArrayList<WidgetStatus>();
+
 
     public PageStatus() {
         super();
@@ -44,7 +49,15 @@ public abstract class PageStatus implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
-    
+
+    public C getConfig() {
+        return config;
+    }
+
+    public void setConfig(C config) {
+        this.config = config;
+    }
+
     public WidgetStatus getWidgetStatus(String id) {
 
         if (id == null) {
@@ -59,7 +72,7 @@ public abstract class PageStatus implements Serializable {
 
         return null;
     }
-    
+
     public void setWidgetStatus(WidgetStatus status) {
         WidgetStatus oldStatus = getWidgetStatus(status.getId());
         widgetStatuses.add(status);
@@ -70,7 +83,36 @@ public abstract class PageStatus implements Serializable {
         return widgetStatuses;
     }
 
+    public List<WidgetStatus> getActiveWidgetStatuses() {
+        return getWidgetStatuses();
+    }
+
     public void setWidgetStatuses(List<WidgetStatus> widgetStatuses) {
         this.widgetStatuses = widgetStatuses;
+    }
+
+    public Query buildQuery(String resourceUri) {
+
+        Query query = new Query();
+
+        // Website contributions
+        query.setOn(resourceUri);
+
+        // Page contributions
+        onQueryBuild(query);
+
+        // Widget contributions
+        List<WidgetStatus> activeWidgets = getActiveWidgetStatuses();
+        if (activeWidgets != null && !activeWidgets.isEmpty()) {
+            for (WidgetStatus status : activeWidgets) {
+                status.onQueryBuild(query);
+            }
+        }
+
+        return query;
+    }
+
+    public void onQueryBuild(Query query) {
+        // Override this method if the page contributes to the query build
     }
 }

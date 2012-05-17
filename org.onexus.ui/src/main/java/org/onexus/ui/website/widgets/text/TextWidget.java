@@ -20,14 +20,12 @@ package org.onexus.ui.website.widgets.text;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.utils.panels.HelpContentPanel;
 import org.onexus.ui.website.utils.panels.HelpMark;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class TextWidget extends Widget<TextWidgetConfig, TextWidgetStatus> {
 
-    public TextWidget(String componentId, IWidgetModel<TextWidgetStatus> statusModel) {
+    public TextWidget(String componentId, IModel<TextWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         add(new Label("title", getConfig().getTitle()));

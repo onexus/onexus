@@ -20,6 +20,7 @@ package org.onexus.ui.website.workspace;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Resource;
@@ -61,7 +62,11 @@ public class CollectionViewer extends Panel {
             columnSet.getColumns().add(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
             viewerConfig.getColumnSets().add(columnSet);
 
-            add( new TableViewer("table", new WidgetModel<TableViewerStatus>(viewerConfig)));
+            TableViewerStatus viewerStatus = new TableViewerStatus();
+            viewerStatus.setCurrentColumnSet(0);
+            viewerStatus.setConfig(viewerConfig);
+
+            add(new TableViewer("table", Model.of(viewerStatus)));
 
         } else {
             add(new EmptyPanel("table"));

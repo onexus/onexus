@@ -17,35 +17,116 @@
  */
 package org.onexus.ui.website;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
+import org.onexus.core.IResourceManager;
+import org.onexus.ui.OnexusWebApplication;
+import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 
-public class WebsiteModel implements IWebsiteModel {
+import javax.inject.Inject;
+import java.io.UnsupportedEncodingException;
 
-    private WebsiteConfig websiteConfig;
-    private WebsiteStatus websiteStatus;
+public class WebsiteModel implements IModel<WebsiteStatus> {
 
-    public WebsiteModel(WebsiteConfig websiteConfig, WebsiteStatus websiteStatus) {
+    private String websiteUri;
+    private WebsiteStatus status;
+
+    private transient WebsiteConfig websiteConfig;
+
+    @Inject
+    public IResourceManager resourceManager;
+
+    public WebsiteModel(PageParameters pageParameters) {
         super();
-        this.websiteConfig = websiteConfig;
-        this.websiteStatus = websiteStatus;
+
+        OnexusWebApplication.get().getInjector().inject(this);
+
+        init(pageParameters);
+
     }
 
+    @Override
     public WebsiteStatus getObject() {
-        return websiteStatus;
+
+        if (status == null) {
+            status = getConfig().newStatus();
+            setObject(status);
+        }
+
+        // Check config is set
+        if (status.getConfig() == null) {
+            status.setConfig(getConfig());
+        }
+
+        return status;
     }
 
+    private WebsiteConfig getConfig() {
 
-    public WebsiteConfig getConfig() {
+        if (websiteConfig == null) {
+            websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+        }
+
         return websiteConfig;
     }
 
     public void setObject(WebsiteStatus object) {
-        this.websiteStatus = object;
+        this.status = object;
     }
 
     @Override
     public void detach() {
+        status.setConfig(null);
     }
 
+    private void init(PageParameters pageParameters) {
+
+        // Load Website config
+
+        StringValue websiteParameter = pageParameters.get(Website.PARAMETER_WEBSITE);
+        if (websiteParameter.isEmpty()) {
+
+            // Try to load from Session level
+            this.websiteConfig = Session.get().getMetaData(Website.WEBSITE_CONFIG);
+            if (this.websiteConfig != null) {
+                this.websiteUri = websiteConfig.getURI();
+            } else {
+
+                // Try to load from Application level
+                this.websiteConfig = Application.get().getMetaData(Website.WEBSITE_CONFIG);
+
+                if (this.websiteConfig != null) {
+                    this.websiteUri = websiteConfig.getURI();
+                } else {
+                    throw new RuntimeException("Unable to find website definition URI");
+                }
+            }
+        } else {
+            this.websiteUri = websiteParameter.toString();
+        }
+
+        // Load Website status
+
+        StringValue encodedStatus = pageParameters.get(Website.PARAMETER_STATUS);
+        if (!encodedStatus.isEmpty()) {
+                try {
+                    StatusEncoder statusEncoder = new StatusEncoder(getClass().getClassLoader());
+                    status = statusEncoder.decodeStatus(encodedStatus.toString());
+                } catch (UnsupportedEncodingException e) {
+                    //TODO
+                }
+        }
+
+        // Set current page
+
+        StringValue pageId = pageParameters.get(Website.PARAMETER_PAGE);
+        if (!pageId.isEmpty()) {
+            getObject().setCurrentPage(pageId.toString());
+        }
+
+    }
 
 }

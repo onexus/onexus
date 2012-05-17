@@ -18,9 +18,14 @@
 package org.onexus.ui.website.widgets.tableviewer;
 
 import org.onexus.core.query.OrderBy;
+import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
+import org.onexus.ui.website.pages.PageConfig;
+import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.WidgetStatus;
+import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
-public class TableViewerStatus extends WidgetStatus {
+public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
     private OrderBy order;
     
@@ -53,5 +58,29 @@ public class TableViewerStatus extends WidgetStatus {
 
     public void setCurrentColumnSet(int currentColumnSet) {
         this.currentColumnSet = currentColumnSet;
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
+
+        String collectionAlias = QueryUtils.newCollectionAlias(query, getConfig().getCollection());
+        query.setFrom(collectionAlias);
+
+        int currentColumnSet = getCurrentColumnSet();
+
+        for (IColumnConfig column : getConfig().getColumnSets().get(currentColumnSet).getColumns()) {
+            column.buildQuery(query);
+        }
+
+        OrderBy orderWithCollection = getOrder();
+
+        if (orderWithCollection != null) {
+            String collectionUri = QueryUtils.getAbsoluteCollectionUri(query, orderWithCollection.getCollectionRef());
+            collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
+            OrderBy orderWithAlias = new OrderBy(collectionAlias, orderWithCollection.getFieldId(), orderWithCollection.isAscendent());
+            query.addOrderBy(orderWithAlias);
+        }
+
+
     }
 }

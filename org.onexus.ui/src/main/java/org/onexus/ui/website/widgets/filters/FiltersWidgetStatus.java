@@ -17,11 +17,24 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
+import org.onexus.core.IQueryParser;
+import org.onexus.core.query.Filter;
+import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
+import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.WidgetStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.*;
 
-public class FiltersWidgetStatus extends WidgetStatus {
+public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
+
+    private static final Logger log = LoggerFactory.getLogger(FiltersWidgetStatus.class);
+
+    @Inject
+    private IQueryParser queryParser;
 
     private Set<String> activeFilters;
 
@@ -61,6 +74,55 @@ public class FiltersWidgetStatus extends WidgetStatus {
                 activeFilters.remove(filter.getId());
             }
         }
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
+
+
+        //TODO FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(query.getOn(), status.getFixedEntities());
+
+        List<Filter> rules = new ArrayList<Filter>();
+        for (FilterConfig filter : userFilters) {
+            // if (filter.getActive() && fixedPredicate.evaluate(filter)) {
+            if (filter.getActive()) {
+
+                String oqlDefine = filter.getDefine();
+                String oqlWhere = filter.getWhere();
+
+                if (oqlDefine != null && oqlWhere != null) {
+                    Map<String, String> define = queryParser.parseDefine(oqlDefine);
+                    Filter where = queryParser.parseWhere(oqlWhere);
+
+                    if (define == null || where == null) {
+                        log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
+
+                    } else {
+                        for (Map.Entry<String, String> entry : define.entrySet()) {
+                            query.addDefine(entry.getKey(), entry.getValue());
+                        }
+
+                        rules.add(where);
+                    }
+                }
+
+
+            }
+        }
+
+        if (!rules.isEmpty()) {
+
+            boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
+
+            if (!union) {
+                QueryUtils.and(query, QueryUtils.joinAnd(rules));
+            } else {
+                QueryUtils.and(query, QueryUtils.joinOr(rules));
+            }
+
+        }
+
+
     }
 
 }

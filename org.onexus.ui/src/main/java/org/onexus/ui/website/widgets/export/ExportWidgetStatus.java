@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets.export;
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class ExportWidgetStatus extends WidgetStatus {
+public class ExportWidgetStatus extends WidgetStatus<ExportWidgetConfig> {
 
     public ExportWidgetStatus() {
         super();

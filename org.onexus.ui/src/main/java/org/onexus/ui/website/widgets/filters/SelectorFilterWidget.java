@@ -31,8 +31,6 @@ import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.widgets.IQueryContributor;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +49,11 @@ import java.util.Map;
  *
  * @author armand
  */
-public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, SelectorFilterWidgetStatus> implements
-        IQueryContributor {
+public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, SelectorFilterWidgetStatus> {
 
     private static final Logger log = LoggerFactory.getLogger(SelectorFilterWidget.class);
 
-    @Inject
-    private IQueryParser queryParser;
-
-    public SelectorFilterWidget(String componentId, IWidgetModel statusModel) {
+    public SelectorFilterWidget(String componentId, IModel statusModel) {
         super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
@@ -93,39 +87,6 @@ public class SelectorFilterWidget extends Widget<SelectorFilterWidgetConfig, Sel
         }
 
         form.add(new AjaxFilterSelector("filters", selectItemModel, filters));
-
-    }
-
-    @Override
-    public void onQueryBuild(Query query) {
-
-
-        String activeFilter = getStatus().getActiveFilter();
-
-        if (activeFilter != null) {
-
-            for (FilterConfig filter : getConfig().getFilters()) {
-                if (activeFilter.equals(filter.getId())) {
-
-                    Map<String, String> define = queryParser.parseDefine(filter.getDefine());
-                    Filter where = queryParser.parseWhere(filter.getWhere());
-
-                    if (define == null || where == null) {
-                        log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
-
-                    } else {
-                        for (Map.Entry<String, String> entry : define.entrySet()) {
-                            query.addDefine(entry.getKey(), entry.getValue());
-                        }
-
-                        QueryUtils.and(query, where);
-                    }
-
-
-                }
-            }
-
-        }
 
     }
 

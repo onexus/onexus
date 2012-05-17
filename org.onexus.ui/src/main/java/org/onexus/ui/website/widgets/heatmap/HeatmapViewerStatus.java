@@ -17,9 +17,12 @@
  */
 package org.onexus.ui.website.widgets.heatmap;
 
+import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.widgets.WidgetStatus;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
-public class HeatmapViewerStatus extends WidgetStatus {
+public class HeatmapViewerStatus extends WidgetStatus<HeatmapViewerConfig> {
 
     public HeatmapViewerStatus() {
         super();
@@ -27,6 +30,27 @@ public class HeatmapViewerStatus extends WidgetStatus {
 
     public HeatmapViewerStatus(String viewerId) {
         super(viewerId);
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
+
+        String collectionURI = getConfig().getCollection();
+
+        String collectionAlias = QueryUtils.newCollectionAlias(query, collectionURI);
+        query.setFrom(collectionAlias);
+
+        for (ColumnConfig column : getConfig().getColumns()) {
+            column.buildQuery(query);
+        }
+
+        for (ColumnConfig column : getConfig().getRows()) {
+            column.buildQuery(query);
+        }
+
+        for (ColumnConfig column : getConfig().getCells()) {
+            column.buildQuery(query);
+        }
     }
 
 }

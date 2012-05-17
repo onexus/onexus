@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets.columnsets;
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class ColumnsetsWidgetStatus extends WidgetStatus {
+public class ColumnsetsWidgetStatus extends WidgetStatus<ColumnsetsWidgetConfig> {
 
 
     public ColumnsetsWidgetStatus() {

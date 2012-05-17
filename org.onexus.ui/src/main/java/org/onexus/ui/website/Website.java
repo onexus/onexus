@@ -18,32 +18,25 @@
 package org.onexus.ui.website;
 
 import org.apache.wicket.*;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.query.Query;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
-import org.onexus.ui.website.widgets.IQueryContributor;
 import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 
@@ -53,11 +46,9 @@ import java.util.List;
 
 public class Website extends WebPage {
 
-    public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {
-    };
-    public final static MetaDataKey<WebsiteStatus> WEBSITE_STATUS = new MetaDataKey<WebsiteStatus>() {
-    };
+    public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {};
 
+    // Parameters
     public final static String PARAMETER_WEBSITE = "onexus-website";
     public final static String PARAMETER_STATUS = "onexus-status";
     public final static String PARAMETER_PAGE = "onexus-page";
@@ -67,37 +58,22 @@ public class Website extends WebPage {
     @Inject
     public IPageManager pageManager;
 
-    @Inject
-    public IResourceManager resourceManager;
-
-    private WebsiteConfig websiteConfig;
-    private WebsiteStatus websiteStatus;
-
     public Website(PageParameters pageParameters) {
+        super(new WebsiteModel(pageParameters));
 
-        init(pageParameters);
+        final WebsiteStatus status = getStatus();
+        final WebsiteConfig config = getConfig();
 
-        addComponents(pageParameters);
-
-        if (websiteConfig != null && websiteConfig.getAuthorization() != null) {
-
-            String role = websiteConfig.getAuthorization();
-
-            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
-                OnexusWebApplication.get().restartResponseAtSignInPage();
-            }
-
+        // Init currentPage
+        if (status.getCurrentPage() == null) {
+            status.setCurrentPage(config.getPages().get(0).getId());
         }
 
-    }
-
-    protected void addComponents(PageParameters pageParameters) {
-
         add(new ProgressBar("progressbar", false));
-        add(new Label("windowTitle", websiteConfig.getTitle()));
-        add(new Label("title", websiteConfig.getTitle()));
+        add(new Label("windowTitle", config.getTitle()));
+        add(new Label("title", config.getTitle()));
 
-        add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "websiteConfig.pages")) {
+        add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "config.pages")) {
 
             @Override
             protected void populateItem(ListItem<PageConfig> item) {
@@ -106,11 +82,11 @@ public class Website extends WebPage {
 
                 PageParameters parameters = new PageParameters();
                 parameters.add(PARAMETER_PAGE, pageConfig.getId());
-                parameters.add(PARAMETER_WEBSITE, websiteConfig.getURI());
+                parameters.add(PARAMETER_WEBSITE, config.getURI());
                 Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
                 link.add(new Label("name", pageConfig.getLabel()));
 
-                String currentPage = websiteStatus.getCurrentPage();
+                String currentPage = status.getCurrentPage();
 
                 item.add(link);
 
@@ -121,97 +97,34 @@ public class Website extends WebPage {
             }
         });
 
-        String currentPage = websiteStatus.getCurrentPage();
-        PageConfig pageConfig = websiteConfig.getPage(currentPage);
+        String currentPage = status.getCurrentPage();
 
-        add(pageManager.create("page", new PageModel(pageConfig, new WebsiteModel(websiteConfig, websiteStatus))));
+        add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel() )));
 
-    }
+        if (config != null && config.getAuthorization() != null) {
 
-    protected String getWebsiteUriParameterValue(PageParameters pageParameters) {
-         return pageParameters.get(PARAMETER_WEBSITE).toString();
-    }
+            String role = config.getAuthorization();
 
-    protected String getWebsiteStatusParameterValue(PageParameters pageParameters) {
-        return pageParameters.get(PARAMETER_STATUS).toString();
-    }
-
-    private void init(PageParameters pageParameters) {
-
-        // Application level
-        websiteConfig = Application.get().getMetaData(WEBSITE_CONFIG);
-
-        // Session level
-        if (websiteConfig == null) {
-            websiteConfig = Session.get().getMetaData(WEBSITE_CONFIG);
-        }
-
-        // URL level
-        if (websiteConfig == null) {
-            String websiteURI = getWebsiteUriParameterValue(pageParameters);
-            if (websiteURI != null) {
-                websiteConfig = resourceManager.load(WebsiteConfig.class, websiteURI);
+            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
+                OnexusWebApplication.get().restartResponseAtSignInPage();
             }
+
         }
 
-        if (websiteConfig == null) {
-            return;
-        }
-
-        // Session level
-        websiteStatus = Session.get().getMetaData(WEBSITE_STATUS);
-
-        // URL level
-        if (websiteStatus == null) {
-
-            String statusENCODED = getWebsiteStatusParameterValue(pageParameters);
-
-            if (statusENCODED != null) {
-                try {
-                    StatusEncoder statusEncoder = new StatusEncoder(getClass().getClassLoader());
-                    websiteStatus = statusEncoder.decodeStatus(statusENCODED);
-                } catch (UnsupportedEncodingException e) {
-                    // TODO
-                }
-            }
-        }
-
-        // Default config status
-        if (websiteStatus == null) {
-            websiteStatus = websiteConfig.getDefault();
-        }
-
-        // Empty status
-        if (websiteStatus == null) {
-            websiteStatus = websiteConfig.createEmptyStatus();
-        }
-
-        // Set current page
-        StringValue pageId = pageParameters.get(PARAMETER_PAGE);
-        if (!pageId.isEmpty()) {
-            websiteStatus.setCurrentPage(pageId.toString());
-        } else {
-            if (websiteConfig.getPages() != null && !websiteConfig.getPages().isEmpty()) {
-                websiteStatus.setCurrentPage(websiteConfig.getPages().get(0).getId());
-            } else {
-                throw new WicketRuntimeException("No page definition in this website. Add at least one page.");
-            }
-        }
-
-    }
-
-    public WebsiteConfig getWebsiteConfig() {
-        return websiteConfig;
-    }
-
-    public WebsiteStatus getWebsiteStatus() {
-        return websiteStatus;
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(CSS));
+    }
+
+    public WebsiteStatus getStatus() {
+        return (WebsiteStatus) getDefaultModelObject();
+    }
+
+    public WebsiteConfig getConfig() {
+        return getStatus().getConfig();
     }
 
 }

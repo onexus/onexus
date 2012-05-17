@@ -28,16 +28,14 @@ import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
-import org.onexus.ui.website.widgets.IQueryContributor;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus> implements IQueryContributor {
+public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus> {
 
-    public SearchWidget(String componentId, IWidgetModel statusModel) {
+    public SearchWidget(String componentId, IModel<SearchWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         Form<SearchWidgetStatus> form = new Form<SearchWidgetStatus>("toolsForms", new CompoundPropertyModel<SearchWidgetStatus>((IModel<SearchWidgetStatus>) statusModel));
@@ -59,33 +57,6 @@ public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus>
         });
 
         add(form);
-
-    }
-
-    @Override
-    public void onQueryBuild(Query query) {
-
-        String search = getStatus().getSearch();
-
-        if (search != null) {
-
-            SearchWidgetConfig config = getConfig();
-
-            List<Filter> filters = new ArrayList<Filter>();
-
-            for (SearchField searchField : config.getFields()) {
-
-                String collectionAlias = QueryUtils.newCollectionAlias(query, searchField.getCollection());
-                String fields[] = searchField.getFields().split(",");
-
-                for (String field : fields) {
-                    filters.add(new Contains(collectionAlias, field.trim(), search));
-                }
-            }
-
-            QueryUtils.and(query, QueryUtils.joinOr(filters));
-
-        }
 
     }
 

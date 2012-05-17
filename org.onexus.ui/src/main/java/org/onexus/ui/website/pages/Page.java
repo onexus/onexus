@@ -17,23 +17,27 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.onexus.core.query.Query;
+import org.onexus.ui.website.Website;
+import org.onexus.ui.website.WebsiteConfig;
+import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.widgets.IWidgetManager;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel {
 
     @Inject
     private IWidgetManager widgetManager;
 
-    private IPageModel<S> pageModel;
-
-    public Page(String componentId, IPageModel<S> pageModel) {
-        super(componentId);
-        this.pageModel = pageModel;
+    public Page(String componentId, IModel<S> pageModel) {
+        super(componentId, pageModel);
     }
 
     public IWidgetManager getWidgetManager() {
@@ -44,16 +48,17 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
         this.widgetManager = widgetManager;
     }
 
-    public C getConfig() {
-        return (C) pageModel.getConfig();
+    public IModel<S> getModel() {
+        return (IModel<S>) getDefaultModel();
     }
 
     public S getStatus() {
-        return (S) pageModel.getObject();
+        return (S) getDefaultModelObject();
     }
 
-    public IPageModel<S> getPageModel() {
-        return pageModel;
+    public C getConfig() {
+        S status = getStatus();
+        return (status == null ? null : (C) status.getConfig());
     }
 
 }

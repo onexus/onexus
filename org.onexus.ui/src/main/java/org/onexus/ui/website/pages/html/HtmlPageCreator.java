@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.pages.html;
 
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.AbstractPageCreator;
-import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.Page;
 
 public class HtmlPageCreator extends AbstractPageCreator<HtmlPageConfig, HtmlPageStatus> {
@@ -30,7 +30,7 @@ public class HtmlPageCreator extends AbstractPageCreator<HtmlPageConfig, HtmlPag
     }
 
     @Override
-    protected Page<?, ?> build(String componentId, IPageModel<HtmlPageStatus> statusModel) {
+    protected Page<?, ?> build(String componentId, IModel<HtmlPageStatus> statusModel) {
         return new HtmlPage(componentId, statusModel);
     }
 

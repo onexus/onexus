@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.widgets.heatmap;
 
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 
 public class HeatmapViewerCreator extends AbstractWidgetCreator<HeatmapViewerConfig, HeatmapViewerStatus> {
@@ -30,7 +30,7 @@ public class HeatmapViewerCreator extends AbstractWidgetCreator<HeatmapViewerCon
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, IWidgetModel<HeatmapViewerStatus> statusModel) {
+    protected Widget<?, ?> build(String componentId, IModel<HeatmapViewerStatus> statusModel) {
         return new HeatmapViewer(componentId, statusModel);
     }
 

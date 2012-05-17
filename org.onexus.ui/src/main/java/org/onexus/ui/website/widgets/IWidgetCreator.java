@@ -30,6 +30,6 @@ public interface IWidgetCreator {
 
     public String getDescription();
 
-    public Widget<?, ?> create(String componentId, IWidgetModel<?> widgetModel);
+    public Widget<?, ?> create(String componentId, IModel<?> widgetModel);
 
 }

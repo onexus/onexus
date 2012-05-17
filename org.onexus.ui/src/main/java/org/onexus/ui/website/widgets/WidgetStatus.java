@@ -17,11 +17,17 @@
  */
 package org.onexus.ui.website.widgets;
 
+import org.onexus.core.query.Query;
+import org.onexus.ui.website.WebsiteConfig;
+import org.onexus.ui.website.pages.PageConfig;
+
 import java.io.Serializable;
 
-public abstract class WidgetStatus implements Serializable {
+public abstract class WidgetStatus<C extends WidgetConfig> implements Serializable {
 
     private String id;
+
+    private transient C config;
 
     public WidgetStatus() {
         super();
@@ -39,6 +45,19 @@ public abstract class WidgetStatus implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
+    public C getConfig() {
+        return config;
+    }
+
+    public void setConfig(C config) {
+        this.config = config;
+    }
+
+    public void onQueryBuild(Query query) {
+        // Override this method if this widget contributes to the query
+    }
+
 
     @Override
     public int hashCode() {

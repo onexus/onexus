@@ -17,9 +17,16 @@
  */
 package org.onexus.ui.website.widgets.search;
 
+import org.onexus.core.query.Contains;
+import org.onexus.core.query.Filter;
+import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class SearchWidgetStatus extends WidgetStatus {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchWidgetStatus extends WidgetStatus<SearchWidgetConfig> {
 
     private String search;
 
@@ -37,6 +44,31 @@ public class SearchWidgetStatus extends WidgetStatus {
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
+
+        if (search != null) {
+
+            SearchWidgetConfig config = getConfig();
+
+            List<Filter> filters = new ArrayList<Filter>();
+
+            for (SearchField searchField : config.getFields()) {
+
+                String collectionAlias = QueryUtils.newCollectionAlias(query, searchField.getCollection());
+                String fields[] = searchField.getFields().split(",");
+
+                for (String field : fields) {
+                    filters.add(new Contains(collectionAlias, field.trim(), search));
+                }
+            }
+
+            QueryUtils.and(query, QueryUtils.joinOr(filters));
+
+        }
+
     }
 
 }

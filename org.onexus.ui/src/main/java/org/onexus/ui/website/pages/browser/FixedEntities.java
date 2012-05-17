@@ -23,13 +23,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.query.EqualId;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.EntityIterator;
@@ -37,18 +35,16 @@ import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.events.EventUnfixEntity;
-import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.FixedEntity;
 import org.onexus.ui.website.utils.SingleEntityQuery;
-import org.onexus.ui.website.widgets.IQueryContributor;
 
 import javax.inject.Inject;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class FixedEntities extends EventPanel implements IQueryContributor {
+public class FixedEntities extends EventPanel {
 
     @Inject
     public IResourceManager resourceManager;
@@ -56,9 +52,9 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
     @Inject
     public ICollectionManager collectionManager;
 
-    private IPageModel<BrowserPageStatus> pageModel;
+    private IModel<BrowserPageStatus> pageModel;
 
-    public FixedEntities(String id, IPageModel<BrowserPageStatus> pageModel) {
+    public FixedEntities(String id, IModel<BrowserPageStatus> pageModel) {
         super(id);
 
         this.pageModel = pageModel;
@@ -78,7 +74,7 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
 
         if (fixedEntities != null) {
 
-            String releaseURI = pageModel.getObject().getReleaseURI();
+            String releaseURI = pageModel.getObject().getRelease();
 
             for (FixedEntity fixedEntity : fixedEntities) {
 
@@ -169,18 +165,6 @@ public class FixedEntities extends EventPanel implements IQueryContributor {
         }
 
         return entityPattern;
-    }
-
-    @Override
-    public void onQueryBuild(Query query) {
-        Set<FixedEntity> fixedEntities = pageModel.getObject().getFixedEntities();
-
-        if (fixedEntities != null) {
-            for (FixedEntity fe : fixedEntities) {
-                    String collectionAlias = QueryUtils.newCollectionAlias(query, fe.getCollectionURI());
-                    QueryUtils.and(query, new EqualId(collectionAlias, fe.getEntityId()));
-            }
-        }
     }
 
 }

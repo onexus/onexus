@@ -18,9 +18,10 @@
 package org.onexus.ui.website.pages.browser.layouts;
 
 import org.apache.wicket.markup.html.panel.Panel;
-import org.onexus.ui.website.pages.IPageModel;
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
@@ -28,35 +29,20 @@ import java.util.List;
 
 public class AbstractLayout extends Panel {
 
-    public AbstractLayout(String panelId, IPageModel<BrowserPageStatus> statusModel) {
+    public AbstractLayout(String panelId, IModel<BrowserPageStatus> statusModel) {
         super(panelId, statusModel);
     }
 
-    public IPageModel<BrowserPageStatus> getPageModel() {
-        return (IPageModel<BrowserPageStatus>) getDefaultModel();
-    }
-
     public PageConfig getPageConfig() {
-        return getPageModel().getConfig();
+        BrowserPageStatus status = getPageStatus();
+        return (status == null ? null : status.getConfig());
     }
 
     public BrowserPageStatus getPageStatus() {
-        return getPageModel().getObject();
+        return (BrowserPageStatus) getDefaultModelObject();
     }
 
-    protected List<WidgetConfig> filterWidgets(String selectedWidgets) {
-
-        List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
-
-        if (selectedWidgets != null) {
-            for (String widget : selectedWidgets.split(",")) {
-                WidgetConfig widgetConfig = getPageConfig().getWidget(widget.trim());
-                if (widgetConfig!=null) {
-                    widgets.add(widgetConfig);
-                }
-            }
-        }
-
-        return widgets;
+    public List<WidgetConfig> filterWidgets(String selectedWidgets) {
+        return ViewConfig.getSelectedWidgetConfigs(getPageConfig(), selectedWidgets);
     }
 }

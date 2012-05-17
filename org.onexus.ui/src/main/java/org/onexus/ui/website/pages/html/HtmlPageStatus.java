@@ -19,9 +19,10 @@ package org.onexus.ui.website.pages.html;
 
 import org.onexus.ui.website.pages.PageStatus;
 
-public class HtmlPageStatus extends PageStatus {
+public class HtmlPageStatus extends PageStatus<HtmlPageConfig> {
 
     public HtmlPageStatus() {
+        super();
     }
 
     public HtmlPageStatus(String id) {

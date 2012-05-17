@@ -56,10 +56,10 @@ public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends Wi
 
     @SuppressWarnings("unchecked")
     @Override
-    public Widget<?, ?> create(String componentId, IWidgetModel<?> statusModel) {
-        return build(componentId, (IWidgetModel<S>) statusModel);
+    public Widget<?, ?> create(String componentId, IModel<?> statusModel) {
+        return build(componentId, (IModel<S>) statusModel);
     }
 
-    protected abstract Widget<?, ?> build(String componentId, IWidgetModel<S> statusModel);
+    protected abstract Widget<?, ?> build(String componentId, IModel<S> statusModel);
 
 }

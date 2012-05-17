@@ -18,11 +18,18 @@
 package org.onexus.ui.website.widgets;
 
 
+import org.apache.commons.lang3.SerializationUtils;
+import org.onexus.ui.website.pages.PageConfig;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public abstract class WidgetConfig implements Serializable {
 
     private String id;
+
+    private transient PageConfig pageConfig;
 
     public WidgetConfig() {
         super();
@@ -42,8 +49,32 @@ public abstract class WidgetConfig implements Serializable {
         this.id = id;
     }
 
+    public PageConfig getPageConfig() {
+        return pageConfig;
+    }
+
+    public void setPageConfig(PageConfig pageConfig) {
+        this.pageConfig = pageConfig;
+    }
+
     public abstract WidgetStatus getDefaultStatus();
 
     public abstract WidgetStatus createEmptyStatus();
+
+    public WidgetStatus newStatus() {
+
+        WidgetStatus status = getDefaultStatus();
+
+        if (status != null) {
+            status = SerializationUtils.clone(status);
+        } else {
+            status = createEmptyStatus();
+        }
+
+        status.setId(getId());
+        status.setConfig(this);
+
+        return status;
+    }
 
 }

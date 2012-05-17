@@ -17,19 +17,32 @@
  */
 package org.onexus.ui.website;
 
+import org.onexus.core.query.Query;
 import org.onexus.ui.website.pages.PageStatus;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class WebsiteStatus implements Serializable {
 
-    private String currentPageId;
-    private Set<PageStatus> pageStatus;
+    private String currentPage;
+
+    private List<PageStatus> pageStatuses;
+
+    private transient WebsiteConfig config;
+
+    public WebsiteConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(WebsiteConfig config) {
+        this.config = config;
+    }
 
     public PageStatus getPageStatus(String id) {
-        for (PageStatus status : getPageStatus()) {
+        for (PageStatus status : getPageStatuses()) {
             if (status.getId().equals(id)) {
                 return status;
             }
@@ -37,33 +50,30 @@ public class WebsiteStatus implements Serializable {
         return null;
     }
 
+    public void setPageStatus(PageStatus pageStatus) {
+        PageStatus oldStatus = getPageStatus(pageStatus.getId());
+        pageStatuses.add(pageStatus);
+        pageStatuses.remove(oldStatus);
+    }
 
     public String getCurrentPage() {
-        return currentPageId;
+        return currentPage;
     }
 
-
-    public void setCurrentPage(String currentPageId) {
-        this.currentPageId = currentPageId;
+    public void setCurrentPage(String currentPage) {
+        this.currentPage = currentPage;
     }
 
-    public Set<PageStatus> getPageStatus() {
-        if (pageStatus == null) {
-            pageStatus = new HashSet<PageStatus>();
-        }
-        return pageStatus;
+    public List<PageStatus> getPageStatuses() {
+        return pageStatuses;
     }
 
-    public void setPageStatus(PageStatus pageStatus) {
-
-        if (pageStatus != null) {
-            getPageStatus().add(pageStatus);
-        }
+    public void setPageStatuses(List<PageStatus> pageStatuses) {
+        this.pageStatuses = pageStatuses;
     }
 
-
-    public PageStatus getCurrentPageStatus() {
-        return getPageStatus(getCurrentPage());
+    public void onQueryBuild(Query query) {
+        query.setOn(getConfig().getURI());
     }
 
 

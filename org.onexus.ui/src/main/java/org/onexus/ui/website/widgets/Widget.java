@@ -17,96 +17,54 @@
  */
 package org.onexus.ui.website.widgets;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.IWrapModel;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.IWebsiteModel;
-import org.onexus.ui.website.Website;
-import org.onexus.ui.website.events.AbstractEvent;
+import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventPanel;
-import org.onexus.ui.website.pages.IPageModel;
-import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.PageStatus;
-import org.onexus.ui.website.pages.browser.BrowserPage;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel {
     
-    private IWidgetModel statusModel;
+    private IModel<S> statusModel;
 
-    public Widget(String componentId, IWidgetModel statusModel) {
+    public Widget(String componentId, IModel<S> statusModel) {
         super(componentId);
         
         this.statusModel = statusModel;
     }
 
-    @SuppressWarnings(value = "unchecked")
-    public C getConfig() {
-        return (C) statusModel.getConfig();
-    }
-
-    @SuppressWarnings(value = "unchecked")
     public S getStatus() {
-        return (S) statusModel.getObject();
+        return statusModel.getObject();
     }
 
-    protected IPageModel getPageModel() {
-        return statusModel.getPageModel();
+    public C getConfig() {
+        return (C) getStatus().getConfig();
     }
-    
-    protected IWebsiteModel getWebsiteModel() {
-        IPageModel pageModel = getPageModel();
 
-        if (pageModel != null) {
-            return pageModel.getWebsiteModel();
+    protected Query getQuery() {
+        WebsiteStatus websiteStatus = findParentStatus(statusModel, WebsiteStatus.class);
+        PageStatus pageStatus = findParentStatus(statusModel, PageStatus.class);
+        String baseUri = (websiteStatus == null ? null : ResourceUtils.getParentURI(websiteStatus.getConfig().getURI()));
+        return (pageStatus == null ? null : pageStatus.buildQuery(baseUri));
+    }
+
+    private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
+
+        Object obj = model.getObject();
+
+        if (obj != null && statusClass.isAssignableFrom(obj.getClass())) {
+            return (T) obj;
+        }
+
+        if (model instanceof IWrapModel) {
+            IModel<?> parentModel = ((IWrapModel)model).getWrappedModel();
+            return findParentStatus(parentModel, statusClass);
         }
 
         return null;
     }
 
-
-    public final static MetaDataKey<Query> QUERY = new MetaDataKey<Query>() {};
-
-    protected Query getQuery() {
-
-        Query query = RequestCycle.get().getMetaData(QUERY);
-
-        if (query == null) {
-            query = new Query();
-            findParent(Page.class).visitChildren(new QueryBuilder(query));
-            RequestCycle.get().setMetaData(QUERY, query);
-        }
-
-        return query;
-    }
-
-
-    private static final class QueryBuilder implements IVisitor<Component, Void> {
-
-        private final Query query;
-
-        public QueryBuilder(final Query query) {
-            super();
-            this.query = query;
-        }
-
-        @Override
-        public void component(Component component, IVisit<Void> visit) {
-            if (component instanceof IQueryContributor) {
-                ((IQueryContributor) component).onQueryBuild(query);
-            }
-        }
-
-    }
 
 }

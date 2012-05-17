@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.pages.browser;
 
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.AbstractPageCreator;
-import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.Page;
 
 public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, BrowserPageStatus> {
@@ -30,7 +30,7 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
     }
 
     @Override
-    protected Page<?, ?> build(String componentId, IPageModel<BrowserPageStatus> statusModel) {
+    protected Page<?, ?> build(String componentId, IModel<BrowserPageStatus> statusModel) {
         return new BrowserPage(componentId, statusModel);
     }
 

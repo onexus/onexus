@@ -17,10 +17,13 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.onexus.core.resources.IMetadata;
+import org.apache.commons.lang3.SerializationUtils;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.WidgetConfig;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PageConfig implements Serializable {
@@ -29,6 +32,8 @@ public abstract class PageConfig implements Serializable {
     private String label;
     private String title;
     private String description;
+
+    private transient WebsiteConfig websiteConfig;
 
     public PageConfig() {
         super();
@@ -66,6 +71,14 @@ public abstract class PageConfig implements Serializable {
         this.description = description;
     }
 
+    public WebsiteConfig getWebsiteConfig() {
+        return websiteConfig;
+    }
+
+    public void setWebsiteConfig(WebsiteConfig websiteConfig) {
+        this.websiteConfig = websiteConfig;
+    }
+
     public WidgetConfig getWidget(String id) {
 
         if (id != null) {
@@ -81,6 +94,30 @@ public abstract class PageConfig implements Serializable {
     public abstract List<WidgetConfig> getWidgets();
 
     public abstract PageStatus createEmptyStatus();
+
+    public PageStatus newStatus() {
+
+        PageStatus status = getDefaultStatus();
+
+        if (status != null) {
+            status = SerializationUtils.clone(status);
+        } else {
+            status = createEmptyStatus();
+        }
+
+        status.setId(getId());
+        status.setConfig(this);
+
+        // Add widget status
+        List<WidgetConfig> widgets = getWidgets();
+        List<WidgetStatus> statuses = new ArrayList<WidgetStatus>(widgets.size());
+        for (WidgetConfig widgetConfig : getWidgets()) {
+            statuses.add(widgetConfig.newStatus());
+        }
+        status.setWidgetStatuses(statuses);
+
+        return status;
+    }
 
     public abstract PageStatus getDefaultStatus();
 

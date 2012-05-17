@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.pages;
 
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 
 public interface IPageCreator {
@@ -29,6 +30,6 @@ public interface IPageCreator {
 
     public String getDescription();
 
-    public Page<?, ?> create(String componentId, IPageModel statusModel);
+    public Page<?, ?> create(String componentId, IModel<?> statusModel);
 
 }

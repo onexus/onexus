@@ -37,8 +37,8 @@ public abstract class AbstractPageCreator<C extends PageConfig, S extends PageSt
 
 
     @Override
-    public Page<?, ?> create(String componentId, IPageModel statusModel) {
-        return build(componentId, (IPageModel<S>) statusModel);
+    public Page<?, ?> create(String componentId, IModel<?> statusModel) {
+        return build(componentId, (IModel<S>) statusModel);
     }
 
     @Override
@@ -61,6 +61,6 @@ public abstract class AbstractPageCreator<C extends PageConfig, S extends PageSt
         return description;
     }
 
-    protected abstract Page<?, ?> build(String componentId, IPageModel<S> statusModel);
+    protected abstract Page<?, ?> build(String componentId, IModel<S> statusModel);
 
 }

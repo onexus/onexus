@@ -17,18 +17,25 @@
  */
 package org.onexus.ui.website.pages.browser;
 
+import org.apache.commons.lang3.StringUtils;
+import org.onexus.core.query.EqualId;
+import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.utils.FixedEntity;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class BrowserPageStatus extends PageStatus {
-    
-    private String releaseURI;
-    
+public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
+
+    private String release;
+
     private String currentTabId;
-    
+
     private String currentView;
 
     private Set<FixedEntity> fixedEntities = new HashSet<FixedEntity>();
@@ -40,8 +47,29 @@ public class BrowserPageStatus extends PageStatus {
         super(id);
     }
 
-    public String getReleaseURI() {
-        return releaseURI;
+    @Override
+    public List<WidgetStatus> getActiveWidgetStatuses() {
+
+        BrowserPageConfig pageConfig = getConfig();
+        TabConfig tabConfig = pageConfig.getTab(currentTabId);
+        ViewConfig viewConfig = tabConfig.getView(currentView);
+
+        return ViewConfig.getSelectedWidgetStatuses(
+                this,
+                viewConfig.getLeft(),
+                viewConfig.getTop(),
+                viewConfig.getTopRight(),
+                viewConfig.getMain()
+        );
+    }
+
+    public String getRelease() {
+
+        if (release == null) {
+            release = getConfig().getRelease();
+        }
+
+        return release;
     }
 
     public String getCurrentTabId() {
@@ -63,8 +91,8 @@ public class BrowserPageStatus extends PageStatus {
         this.currentView = currentView;
     }
 
-    public void setReleaseURI(String releaseURI) {
-        this.releaseURI = releaseURI;
+    public void setRelease(String releaseURI) {
+        this.release = releaseURI;
     }
 
     public Set<FixedEntity> getFixedEntities() {
@@ -73,5 +101,20 @@ public class BrowserPageStatus extends PageStatus {
 
     public void setFixedEntities(Set<FixedEntity> fixedEntities) {
         this.fixedEntities = fixedEntities;
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
+
+        if (!StringUtils.isEmpty(getRelease())) {
+            query.setOn(ResourceUtils.concatURIs(query.getOn(), getRelease()));
+        }
+
+        if (fixedEntities != null) {
+            for (FixedEntity fe : fixedEntities) {
+                String collectionAlias = QueryUtils.newCollectionAlias(query, fe.getCollectionURI());
+                QueryUtils.and(query, new EqualId(collectionAlias, fe.getEntityId()));
+            }
+        }
     }
 }

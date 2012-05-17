@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets.text;
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class TextWidgetStatus extends WidgetStatus {
+public class TextWidgetStatus extends WidgetStatus<TextWidgetConfig> {
 
     public TextWidgetStatus() {
     }

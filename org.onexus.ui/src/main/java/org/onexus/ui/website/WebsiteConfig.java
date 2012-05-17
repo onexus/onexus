@@ -18,9 +18,13 @@
 package org.onexus.ui.website;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.website.pages.PageConfig;
+import org.onexus.ui.website.pages.PageStatus;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @XStreamAlias("website")
@@ -44,18 +48,6 @@ public class WebsiteConfig extends Resource {
         this.authorization = authorization;
     }
 
-    public WebsiteStatus getDefault() {
-        return defaultStatus;
-    }
-
-    public WebsiteStatus createEmptyStatus() {
-        return new WebsiteStatus();
-    }
-
-    public void setDefault(WebsiteStatus defaultStatus) {
-        this.defaultStatus = defaultStatus;
-    }
-
     public List<PageConfig> getPages() {
         return pages;
     }
@@ -74,6 +66,40 @@ public class WebsiteConfig extends Resource {
 
     public void setPages(List<PageConfig> pages) {
         this.pages = pages;
+    }
+
+    public WebsiteStatus getDefaultStatus() {
+        return defaultStatus;
+    }
+
+    public WebsiteStatus createEmptyStatus() {
+        return new WebsiteStatus();
+    }
+
+    public void setDefault(WebsiteStatus defaultStatus) {
+        this.defaultStatus = defaultStatus;
+    }
+
+    public WebsiteStatus newStatus() {
+
+        WebsiteStatus status = getDefaultStatus();
+
+        if (status != null) {
+            status = SerializationUtils.clone(status);
+        } else {
+            status = createEmptyStatus();
+        }
+
+        status.setConfig(this);
+
+        // Add page status
+        List<PageStatus> pageStatuses = new ArrayList<PageStatus>();
+        for (PageConfig page : getPages()) {
+            pageStatuses.add(page.newStatus());
+        }
+        status.setPageStatuses(pageStatuses);
+
+        return status;
     }
 
 }

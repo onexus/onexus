@@ -29,15 +29,10 @@ import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
-import org.onexus.core.query.*;
-import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventViewChange;
-import org.onexus.ui.website.pages.IPageModel;
-import org.onexus.ui.website.pages.browser.BrowserPageConfig;
+import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.widgets.IQueryContributor;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.ui.website.widgets.tags.tagstore.TagStore;
@@ -45,18 +40,15 @@ import org.onexus.ui.website.widgets.tags.tagstore.TagStore;
 import javax.inject.Inject;
 import java.util.*;
 
-public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implements IQueryContributor {
+public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 
     public static final CssResourceReference CSS = new CssResourceReference(TagWidget.class, "TagWidget.css");
 
     @Inject
     public ITagStoreManager tagStoreManager;
 
-    private List<String> selectedTags;
 
-    private boolean filter = false;
-
-    public TagWidget(String componentId, IWidgetModel<TagWidgetStatus> statusModel) {
+    public TagWidget(String componentId, IModel<TagWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         Form<TagWidgetStatus> form = new Form<TagWidgetStatus>("form", new CompoundPropertyModel<TagWidgetStatus>(statusModel));
@@ -68,7 +60,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                TagWidget.this.filter = false;
+                TagWidget.this.getStatus().setFilter(false);
 
                 TagStore tagStore = getTagStore();
 
@@ -83,7 +75,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
                 target.appendJavaScript("clearSelected();");
 
                 // Clear selected tags
-                selectedTags.clear();
+                TagWidget.this.getStatus().getSelectedTags().clear();
 
                 sendEvent(EventViewChange.EVENT);
 
@@ -101,7 +93,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                TagWidget.this.filter = !getSelectedTags().isEmpty();
+                TagWidget.this.getStatus().setFilter( !getSelectedTags().isEmpty() );
                 sendEvent(EventFiltersUpdate.EVENT);
                 target.add(TagWidget.this);
             }
@@ -211,7 +203,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
     }
 
     private List<String> getSelectedTags() {
-        return selectedTags;
+        return getStatus().getSelectedTags();
     }
 
     @SuppressWarnings("unchecked")
@@ -257,32 +249,28 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
 
     private TagStore getTagStore() {
 
-        IPageModel pageModel = getPageModel();
-        if (pageModel != null && pageModel.getConfig() instanceof BrowserPageConfig) {
-            BrowserPageStatus status = (BrowserPageStatus) pageModel.getObject();
+        BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
 
-            String tagId = status.getCurrentTabId();
-            String releaseURI = status.getReleaseURI();
+        String tagId = status.getCurrentTabId();
+        String releaseURI = status.getRelease();
 
-            String namespace = releaseURI + "#" + tagId;
+        String namespace = releaseURI + "#" + tagId;
 
-            TagStore store = tagStoreManager.getUserStore(namespace);
+        TagStore store = tagStoreManager.getUserStore(namespace);
 
-            // Check that the default tags are present
-            Collection<String> keys = store.getTagKeys();
-            List<String> defaultTags = getConfig().getTags();
-            if (defaultTags != null) {
-                for (String defaultTag : defaultTags) {
-                    if (!keys.contains(defaultTag)) {
-                        store.putTagKey(defaultTag);
-                    }
+        // Check that the default tags are present
+        Collection<String> keys = store.getTagKeys();
+        List<String> defaultTags = getConfig().getTags();
+        if (defaultTags != null) {
+            for (String defaultTag : defaultTags) {
+                if (!keys.contains(defaultTag)) {
+                    store.putTagKey(defaultTag);
                 }
             }
-
-            return store;
-        } else {
-            return null;
         }
+
+        return store;
+
 
     }
 
@@ -294,33 +282,6 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> implemen
         }
 
     }
-
-    @Override
-    public void onQueryBuild(Query query) {
-
-        if (filter) {
-            Set<String> selectedValues = new HashSet<String>();
-
-            TagStore tagStore = getTagStore();
-
-            for (String tagKey : getSelectedTags()) {
-                selectedValues.addAll(tagStore.getTagValues(tagKey));
-            }
-
-            if (!selectedValues.isEmpty()) {
-
-                List<Filter> rules = new ArrayList<Filter>(selectedValues.size());
-                for (String value : selectedValues) {
-                    rules.add(new EqualId(query.getFrom(), value));
-                }
-
-                QueryUtils.and(query, QueryUtils.joinOr(rules));
-            }
-
-        }
-
-    }
-
 
     @Override
     public void renderHead(IHeaderResponse response) {

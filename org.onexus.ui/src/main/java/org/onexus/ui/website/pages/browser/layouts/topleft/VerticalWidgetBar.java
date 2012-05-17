@@ -17,14 +17,12 @@
  */
 package org.onexus.ui.website.pages.browser.layouts.topleft;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.Model;
-import org.onexus.ui.website.pages.IPageModel;
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.panels.icons.Icons;
 import org.onexus.ui.website.widgets.IWidgetManager;
@@ -44,7 +42,7 @@ public class VerticalWidgetBar extends Panel {
     private WebMarkupContainer boxesshowContainer;
     private WebMarkupContainer boxesContainer;
 
-    public VerticalWidgetBar(final String componentId, final Collection<WidgetConfig> widgets, IPageModel<BrowserPageStatus> pageModel) {
+    public VerticalWidgetBar(final String componentId, final Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {
         super(componentId);
         setOutputMarkupId(true);
 
@@ -81,7 +79,7 @@ public class VerticalWidgetBar extends Panel {
 
                 });
 
-                item.add(widgetManager.create("widget", new WidgetModel(widget, pageModel)));
+                item.add(widgetManager.create("widget", new WidgetModel(widget.getId(), pageModel)));
             }
         }
 

@@ -17,94 +17,66 @@
  */
 package org.onexus.ui.website.widgets;
 
-import org.onexus.core.IResourceSerializer;
+import org.apache.wicket.model.AbstractWrapModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.IWrapModel;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.PageStatus;
 
-import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import javax.net.ssl.SSLEngineResult;
 
-public class WidgetModel<S extends WidgetStatus> implements IWidgetModel<S> {
+public class WidgetModel<S extends WidgetStatus> extends AbstractWrapModel<S> {
 
-    private WidgetConfig config;
-    private IPageModel<? extends PageStatus> pageModel;
-    private S status;
+    private String widgetId;
+    private IModel<? extends PageStatus> pageModel;
 
-    @Inject
-    public IResourceSerializer serializer;
-
-    public WidgetModel(WidgetConfig config) {
-        this(config, null);
-    }
-
-    public WidgetModel(WidgetConfig config, IPageModel<? extends PageStatus> pageModel) {
+    public WidgetModel(String widgetId, IModel<? extends PageStatus> pageModel) {
         super();
-        OnexusWebApplication.get().getInjector().inject(this);
-        this.config = config;
+        this.widgetId = widgetId;
         this.pageModel = pageModel;
-    }
-
-    @Override
-    public WidgetConfig getConfig() {
-        return config;
-    }
-
-    @Override
-    public IPageModel getPageModel() {
-        return pageModel;
     }
 
     @Override
     public S getObject() {
 
-        if (status != null ) {
-            return status;
-        }
+        S status = (S) getPageStatus().getWidgetStatus(widgetId);
 
-        if (pageModel!=null) {
-            status = (S) pageModel.getObject().getWidgetStatus(config.getId());
-        }
-        
         if (status == null) {
-
-            status = (S) config.getDefaultStatus();
-
-            if (status != null) {
-
-                // We need to clone this object to avoid update defaultStatus on status changes.
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                serializer.serialize(status, buffer);
-                status = (S) serializer.unserialize(status.getClass(), new ByteArrayInputStream(buffer.toByteArray()));
-            }
-
-            if (status == null) {
-                status = (S) config.createEmptyStatus();
-            }
-            
-            if (status != null) {
-
-                // The status id must be the config id always.
-                status.setId(config.getId());
-
-                setObject(status);
-            }
+            status = (S) getConfig().newStatus();
+            setObject(status);
         }
-        
+
+        // Check config is set
+        if (status.getConfig() == null) {
+            status.setConfig(getConfig());
+        }
+
         return status;
+    }
+
+    private PageStatus getPageStatus() {
+        return pageModel.getObject();
+    }
+
+    private WidgetConfig getConfig() {
+
+        WidgetConfig config = getPageStatus().getConfig().getWidget(widgetId);
+
+        // Check pageConfig is set
+        if (config.getPageConfig() == null) {
+            config.setPageConfig(getPageStatus().getConfig());
+        }
+
+        return config;
     }
 
     @Override
     public void setObject(S object) {
-        status = object;
-
-        if (pageModel != null) {
-            pageModel.getObject().setWidgetStatus(object);
-        }
+        pageModel.getObject().setWidgetStatus(object);
     }
 
     @Override
-    public void detach() {
+    public IModel<?> getWrappedModel() {
+        return pageModel;
     }
 }

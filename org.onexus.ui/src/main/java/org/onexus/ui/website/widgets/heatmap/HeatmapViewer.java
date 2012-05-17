@@ -18,28 +18,24 @@
 package org.onexus.ui.website.widgets.heatmap;
 
 import org.apache.wicket.markup.html.link.InlineFrame;
+import org.apache.wicket.model.IModel;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventUnfixEntity;
-import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.widgets.IQueryContributor;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
 import javax.inject.Inject;
 
-public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> implements IQueryContributor {
-    
-    @Inject
-    public IResourceManager resourceManager;    
+public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> {
 
-    public HeatmapViewer(String componentId, IWidgetModel status) {
+    @Inject
+    public IResourceManager resourceManager;
+
+    public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {
         super(componentId, status);
 
         onEventFireUpdate(EventQueryUpdate.class, EventFixEntity.class, EventUnfixEntity.class);
@@ -51,48 +47,21 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         addOrReplace(new InlineFrame("heatmap", new HeatmapPage(getConfig(), getQuery())));
 
         super.onBeforeRender();
-        
+
     }
 
-    
+
     private String getReleaseURI() {
 
         BrowserPageStatus browserStatus = getPageStatus();
-        return (browserStatus != null ? browserStatus.getReleaseURI() : null);
+        return (browserStatus != null ? browserStatus.getRelease() : null);
     }
 
     private BrowserPageStatus getPageStatus() {
-        IPageModel pageModel = getPageModel();
-
-        return (BrowserPageStatus) (pageModel == null ? null : pageModel.getObject());
-    };
+        return findParent(BrowserPage.class).getStatus();
+    }
 
     private BrowserPageConfig getPageConfig() {
-        IPageModel pageModel = getPageModel();
-
-        return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
-    };
-
-    @Override
-    public void onQueryBuild(Query query) {
-
-        String releaseURI = getReleaseURI();
-        String collectionURI = getConfig().getCollection();
-
-        query.setOn( releaseURI );
-        String collectionAlias = QueryUtils.newCollectionAlias(query, collectionURI);
-        query.setFrom(collectionAlias);
-
-        for (ColumnConfig column : getConfig().getColumns()) {
-            column.buildQuery(query);
-        }
-
-        for (ColumnConfig column : getConfig().getRows()) {
-            column.buildQuery(query);
-        }
-
-        for (ColumnConfig column : getConfig().getCells()) {
-            column.buildQuery(query);
-        }
+        return (BrowserPageConfig) getPageStatus().getConfig();
     }
 }

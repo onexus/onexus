@@ -22,14 +22,14 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.ResourceLink;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
@@ -39,7 +39,7 @@ import java.io.UnsupportedEncodingException;
 
 public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus> {
 
-    public ExportWidget(String componentId, IWidgetModel<ExportWidgetStatus> statusModel) {
+    public ExportWidget(String componentId, IModel<ExportWidgetStatus> statusModel) {
         super(componentId, statusModel);
         onEventFireUpdate(EventQueryUpdate.class);
     }
@@ -85,17 +85,12 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
     }
 
     private BrowserPageStatus getPageStatus() {
-        IPageModel pageModel = getPageModel();
-
-        return (BrowserPageStatus) (pageModel == null ? null : pageModel.getObject());
-    }
-
+        return findParent(BrowserPage.class).getStatus();
+    };
 
     private BrowserPageConfig getPageConfig() {
-        IPageModel pageModel = getPageModel();
-
-        return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
-    }
+        return (BrowserPageConfig) getPageStatus().getConfig();
+    };
 
     private TableViewerStatus getTableViewerStatus() {
 

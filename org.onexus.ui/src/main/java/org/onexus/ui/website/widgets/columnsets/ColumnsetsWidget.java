@@ -23,14 +23,11 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventViewChange;
-import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.pages.browser.ViewConfig;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
@@ -41,7 +38,7 @@ import java.util.List;
 
 public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsWidgetStatus> {
 
-    public ColumnsetsWidget(String componentId, IWidgetModel statusModel) {
+    public ColumnsetsWidget(String componentId, IModel statusModel) {
         super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
@@ -60,15 +57,11 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
     }
 
     private BrowserPageStatus getPageStatus() {
-        IPageModel pageModel = getPageModel();
-
-        return (BrowserPageStatus) (pageModel == null ? null : pageModel.getObject());
+        return findParent(BrowserPage.class).getStatus();
     };
 
     private BrowserPageConfig getPageConfig() {
-        IPageModel pageModel = getPageModel();
-
-        return (BrowserPageConfig) (pageModel == null ? null : pageModel.getConfig());
+        return (BrowserPageConfig) getPageStatus().getConfig();
     };
 
     private TableViewerStatus getTableViewerStatus() {

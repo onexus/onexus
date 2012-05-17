@@ -17,80 +17,64 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.onexus.ui.website.IWebsiteModel;
+import org.apache.wicket.model.AbstractWrapModel;
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.WebsiteStatus;
 
 
-public class PageModel<S extends PageStatus> implements IPageModel<S> {
+public class PageModel<S extends PageStatus> extends AbstractWrapModel<S> {
 
+    private String pageId;
+    private IModel<? extends WebsiteStatus> websiteModel;
 
-    private PageConfig pageConfig;
-    private IWebsiteModel websiteModel;
-    private S status;
+    public PageModel(String pageId, IModel<? extends WebsiteStatus> websiteModel) {
+        super();
 
-    public PageModel(PageConfig pageConfig) {
-        this(pageConfig, null);
-    }
-
-    public PageModel(PageConfig pageConfig, IWebsiteModel websiteModel) {
-        this.pageConfig = pageConfig;
+        this.pageId = pageId;
         this.websiteModel = websiteModel;
-    }
-
-    @Override
-    public PageConfig getConfig() {
-        return pageConfig;
-    }
-
-    @Override
-    public IWebsiteModel getWebsiteModel() {
-        return websiteModel;
     }
 
     @Override
     public S getObject() {
 
-        if (status != null) {
-            return status;
-        }
-
-        WebsiteStatus websiteStatus = (websiteModel == null ? null : websiteModel.getObject());
-        if (websiteStatus != null) {
-            status = (S) websiteStatus.getPageStatus(pageConfig.getId());
-        }
+        S status = (S) getWebsiteStatus().getPageStatus(pageId);
 
         if (status == null) {
-            status = (S) pageConfig.getDefaultStatus();
+            status = (S) getConfig().newStatus();
+            setObject(status);
+        }
 
-            if (status == null) {
-                status = (S) pageConfig.createEmptyStatus();
-            }
-
-            if (status != null) {
-                setObject(status);
-            }
+        // Check config is set
+        if (status.getConfig() == null) {
+            status.setConfig(getConfig());
         }
 
         return status;
     }
 
-    @Override
-    public void setObject(S object) {
-        this.status = object;
+    private WebsiteStatus getWebsiteStatus() {
+        return websiteModel.getObject();
+    }
 
-        if (websiteModel != null) {
-            WebsiteStatus websiteStatus = websiteModel.getObject();
-            if (websiteStatus != null) {
-                websiteStatus.setPageStatus(object);
-            }
+    private PageConfig getConfig() {
+
+        PageConfig config = getWebsiteStatus().getConfig().getPage(pageId);
+
+        // Check pageConfig is set
+        if (config.getWebsiteConfig() == null) {
+            config.setWebsiteConfig(getWebsiteStatus().getConfig());
         }
 
+        return config;
     }
 
     @Override
-    public void detach() {
-        if (websiteModel != null) {
-            status = null;
-        }
+    public void setObject(S object) {
+        websiteModel.getObject().setPageStatus(object);
+    }
+
+    @Override
+    public IModel<?> getWrappedModel() {
+        return websiteModel;
     }
 }

@@ -18,9 +18,13 @@
 package org.onexus.ui.website.pages.browser;
 
 
+import org.onexus.ui.website.pages.PageConfig;
+import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.widgets.WidgetConfig;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViewConfig implements Serializable {
@@ -73,6 +77,46 @@ public class ViewConfig implements Serializable {
 
     public void setTopRight(String topRight) {
         this.topRight = topRight;
+    }
+
+    public static List<WidgetConfig> getSelectedWidgetConfigs(PageConfig pageConfig, String... selectedWidgets) {
+
+        List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
+
+        if (selectedWidgets != null) {
+            for (String selectedWidget : selectedWidgets) {
+                if (selectedWidget != null) {
+                    for (String widget : selectedWidget.split(",")) {
+                        WidgetConfig widgetConfig = pageConfig.getWidget(widget.trim());
+                        if (widgetConfig != null) {
+                            widgets.add(widgetConfig);
+                        }
+                    }
+                }
+            }
+        }
+
+        return widgets;
+    }
+
+    public static List<WidgetStatus> getSelectedWidgetStatuses(PageStatus pageStatus, String... selectedWidgets) {
+
+        List<WidgetStatus> widgets = new ArrayList<WidgetStatus>();
+
+        if (selectedWidgets != null) {
+            for (String selectedWidget : selectedWidgets) {
+                if (selectedWidget != null) {
+                    for (String widget : selectedWidget.split(",")) {
+                        WidgetStatus widgetStatus = pageStatus.getWidgetStatus(widget.trim());
+                        if (widgetStatus != null) {
+                            widgets.add(widgetStatus);
+                        }
+                    }
+                }
+            }
+        }
+
+        return widgets;
     }
 
     @Override

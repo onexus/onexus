@@ -30,11 +30,15 @@ public class DefaultWidgetManager implements IWidgetManager {
     private List<IWidgetCreator> creators;
 
     @Override
-    public Widget<?, ?> create(String componentId, IWidgetModel statusModel) {
+    public Widget<?, ?> create(String componentId, IModel<? extends WidgetStatus> statusModel) {
 
-        for (IWidgetCreator creator : creators) {
-            if (creator.canCreate(statusModel.getConfig())) {
-                return creator.create(componentId, statusModel);
+        WidgetStatus status = statusModel.getObject();
+
+        if (status != null) {
+            for (IWidgetCreator creator : creators) {
+                if (creator.canCreate(status.getConfig())) {
+                    return creator.create(componentId, statusModel);
+                }
             }
         }
 

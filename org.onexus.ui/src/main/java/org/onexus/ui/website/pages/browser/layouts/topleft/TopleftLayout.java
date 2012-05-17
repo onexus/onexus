@@ -19,8 +19,8 @@ package org.onexus.ui.website.pages.browser.layouts.topleft;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.onexus.ui.website.pages.IPageModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
@@ -30,7 +30,7 @@ public class TopleftLayout extends AbstractLayout {
     public static final CssResourceReference CSS = new CssResourceReference(TopleftLayout.class, "TopleftLayout.css");
 
 
-    public TopleftLayout(String panelId, ViewConfig viewConfig, IPageModel<BrowserPageStatus> statusModel) {
+    public TopleftLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
         super(panelId, statusModel);
 
         // Add left widgets

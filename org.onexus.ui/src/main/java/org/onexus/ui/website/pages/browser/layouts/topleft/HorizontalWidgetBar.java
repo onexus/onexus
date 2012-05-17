@@ -20,7 +20,7 @@ package org.onexus.ui.website.pages.browser.layouts.topleft;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.onexus.ui.website.pages.IPageModel;
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.IWidgetManager;
 import org.onexus.ui.website.widgets.WidgetConfig;
@@ -34,7 +34,7 @@ public class HorizontalWidgetBar extends Panel {
     @Inject
     public IWidgetManager widgetManager;
 
-    public HorizontalWidgetBar(String componentId, Collection<WidgetConfig> widgets, IPageModel<BrowserPageStatus> pageModel) {
+    public HorizontalWidgetBar(String componentId, Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {
         super(componentId);
 
         RepeatingView widgetsContainer = new RepeatingView("widgetsContainer");
@@ -45,7 +45,7 @@ public class HorizontalWidgetBar extends Panel {
                 WebMarkupContainer item = new WebMarkupContainer(widgetsContainer.newChildId());
                 widgetsContainer.add(item);
 
-                item.add(widgetManager.create("widget", new WidgetModel(widget, pageModel)));
+                item.add(widgetManager.create("widget", new WidgetModel(widget.getId(), pageModel)));
             }
         }
 

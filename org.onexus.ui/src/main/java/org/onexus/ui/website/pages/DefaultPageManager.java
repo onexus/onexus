@@ -18,6 +18,7 @@
 package org.onexus.ui.website.pages;
 
 
+import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
 import org.osgi.framework.ServiceReference;
 
@@ -29,11 +30,15 @@ public class DefaultPageManager implements IPageManager {
 
     private List<IPageCreator> creators;
 
-    public Page<?, ?> create(String componentId, IPageModel statusModel) {
+    public Page<?, ?> create(String componentId, IModel<? extends PageStatus> statusModel) {
 
-        for (IPageCreator creator : creators) {
-            if (creator.canCreate(statusModel.getConfig())) {
-                return creator.create(componentId, statusModel);
+        PageStatus status = statusModel.getObject();
+
+        if (status != null) {
+            for (IPageCreator creator : creators) {
+                if (creator.canCreate(status.getConfig())) {
+                    return creator.create(componentId, statusModel);
+                }
             }
         }
 

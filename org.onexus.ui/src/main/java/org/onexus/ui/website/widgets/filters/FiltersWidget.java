@@ -28,29 +28,20 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.onexus.core.IQueryParser;
-import org.onexus.core.query.Filter;
+import org.apache.wicket.model.IModel;
 import org.onexus.core.query.In;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.pages.IPageModel;
+import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
-import org.onexus.ui.website.widgets.IQueryContributor;
-import org.onexus.ui.website.widgets.IWidgetModel;
 import org.onexus.ui.website.widgets.Widget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * FilterBoxPanel contain a list of tab filters that could be actived or
@@ -61,16 +52,11 @@ import java.util.Map;
  *
  * @author armand
  */
-public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStatus> implements IQueryContributor {
+public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStatus> {
 
-    private static final Logger log = LoggerFactory.getLogger(FiltersWidget.class);
     private FilterModel model;
 
-    @Inject
-    private IQueryParser queryParser;
-
-
-    public FiltersWidget(String componentId, IWidgetModel<FiltersWidgetStatus> statusModel) {
+    public FiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
@@ -110,10 +96,10 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             protected void populateItem(final ListItem<FilterConfig> item) {
 
                 FilterConfig filter = item.getModelObject();
-                BrowserPageStatus browserStatus = getBrowserPageStatus();
+                BrowserPageStatus browserStatus = getPageStatus();
 
                 FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(browserStatus
-                        .getReleaseURI(), browserStatus.getFixedEntities());
+                        .getRelease(), browserStatus.getFixedEntities());
 
                 if (!filter.getHidden() && fixedPredicate.evaluate(filter)) {
 
@@ -203,63 +189,12 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     }
 
-    @Override
-    public void onQueryBuild(Query query) {
-
-        BrowserPageStatus status = getBrowserPageStatus();
-
-        FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(status.getReleaseURI(), status.getFixedEntities());
-
-        List<Filter> rules = new ArrayList<Filter>();
-        for (FilterConfig filter : this.model.getObject()) {
-            if (filter.getActive() && fixedPredicate.evaluate(filter)) {
-
-                String oqlDefine = filter.getDefine();
-                String oqlWhere = filter.getWhere();
-
-                if (oqlDefine != null && oqlWhere != null) {
-                    Map<String, String> define = queryParser.parseDefine(oqlDefine);
-                    Filter where = queryParser.parseWhere(oqlWhere);
-
-                if (define == null || where == null) {
-                    log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
-
-                } else {
-                    for (Map.Entry<String, String> entry : define.entrySet()) {
-                        query.addDefine(entry.getKey(), entry.getValue());
-                    }
-
-                    rules.add(where);
-                }
-                }
-
-
-            }
-        }
-
-        if (!rules.isEmpty()) {
-
-            boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
-
-            if (!union) {
-                QueryUtils.and(query, QueryUtils.joinAnd(rules));
-            } else {
-                QueryUtils.and(query, QueryUtils.joinOr(rules));
-            }
-
-        }
-
-
+    private BrowserPageStatus getPageStatus() {
+        return findParent(BrowserPage.class).getStatus();
     }
 
-    private BrowserPageStatus getBrowserPageStatus() {
-        IPageModel pageModel = getPageModel();
-
-        if (pageModel != null && pageModel.getConfig() instanceof BrowserPageConfig) {
-            return (BrowserPageStatus) pageModel.getObject();
-        }
-
-        return null;
+    private BrowserPageConfig getPageConfig() {
+        return (BrowserPageConfig) getPageStatus().getConfig();
     }
 
     public class FilterModel extends AbstractReadOnlyModel<List<? extends FilterConfig>> {

@@ -25,6 +25,6 @@ public interface IWidgetManager {
 
     List<IWidgetCreator> getCreators();
 
-    Widget<?, ?> create(String componentId, IWidgetModel statusModel);
+    Widget<?, ?> create(String componentId, IModel<? extends WidgetStatus> statusModel);
 
 }
