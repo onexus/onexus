@@ -28,7 +28,7 @@ import org.onexus.ui.website.events.AbstractEvent;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.utils.FixedEntity;
+import org.onexus.ui.website.pages.browser.FixedEntity;
 
 public class LinkDecorator extends FieldDecorator {
 
@@ -80,7 +80,7 @@ public class LinkDecorator extends FieldDecorator {
     protected AbstractEvent[] onClick(FixedEntity rowEntity, BrowserPageStatus status)  {
 
         // Fix current row entity
-        status.getFixedEntities().add(rowEntity);
+        status.getFilters().put(rowEntity.getId(), rowEntity);
 
         return new AbstractEvent[] { EventFixEntity.EVENT };
     }

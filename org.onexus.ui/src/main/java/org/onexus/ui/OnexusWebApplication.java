@@ -69,4 +69,18 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
         return (OnexusWebApplication) Application.get();
     }
 
+    public static void inject(Object object) {
+
+        OnexusWebApplication app = get();
+
+        if (app != null) {
+            OsgiComponentInjector injector = app.getInjector();
+
+            if (injector != null) {
+                injector.inject(object);
+            }
+        }
+
+    }
+
 }

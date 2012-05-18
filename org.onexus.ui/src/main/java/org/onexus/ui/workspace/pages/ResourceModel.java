@@ -34,12 +34,12 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     public ResourceModel() {
         super();
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
     }
 
     public ResourceModel(String resourceURI) {
         super();
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
         this.resourceURI = resourceURI;
     }
 

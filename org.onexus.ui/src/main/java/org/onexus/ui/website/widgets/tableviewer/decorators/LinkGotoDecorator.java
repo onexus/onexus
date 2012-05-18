@@ -26,7 +26,7 @@ import org.onexus.core.IEntity;
 import org.onexus.core.resources.Field;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
-import org.onexus.ui.website.utils.FixedEntity;
+import org.onexus.ui.website.pages.browser.FixedEntity;
 
 import java.util.Set;
 
@@ -61,8 +61,9 @@ public class LinkGotoDecorator extends FieldDecorator {
             @Override
             public void onClick(AjaxRequestTarget target) {
 
-                Set<FixedEntity> fixedEntities = getBrowserPageStatus().getFixedEntities();
-                fixedEntities.add(getModelObject());
+                FixedEntity fe = getModelObject();
+                getBrowserPageStatus().getFilters().put(fe.getId(), fe);
+
                 sendEvent(EventFixEntity.EVENT);
 
             }

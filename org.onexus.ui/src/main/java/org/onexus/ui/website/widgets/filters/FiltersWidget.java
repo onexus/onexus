@@ -35,7 +35,7 @@ import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.panels.HelpMark;
-import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
+import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 
 import java.util.Collection;
@@ -63,7 +63,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 FilterConfig filter = item.getModelObject();
                 BrowserPageStatus browserStatus = getPageStatus();
 
-                FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(getReleaseUri(), browserStatus.getFixedEntities());
+                VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters().values());
 
                 if (!filter.getHidden() && fixedPredicate.evaluate(filter)) {
 

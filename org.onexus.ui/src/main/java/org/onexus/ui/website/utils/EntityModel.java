@@ -22,6 +22,7 @@ import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.ui.OnexusWebApplication;
+import org.onexus.ui.website.pages.browser.FixedEntity;
 
 import javax.inject.Inject;
 
@@ -39,13 +40,9 @@ public class EntityModel implements IModel<IEntity> {
         this(null, null);
     }
 
-    public EntityModel(FixedEntity fe) {
-        this(fe.getCollectionURI(), fe.getEntityId());
-    }
-
     public EntityModel(String collectionId, String entityId) {
         super();
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
 
         this.collectionURI = collectionId;
         this.entityId = entityId;

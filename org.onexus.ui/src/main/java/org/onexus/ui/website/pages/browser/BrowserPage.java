@@ -43,7 +43,7 @@ import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
 import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
-import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
+import org.onexus.ui.website.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super(componentId, statusModel);
         onEventFireUpdate(EventTabSelected.class);
 
-        add(new FixedEntities("position", statusModel));
+        add(new FiltersPanel("position", statusModel));
 
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
@@ -191,7 +191,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             List<TabConfig> allTabs = getConfig().getTabs();
 
             // A predicate that filters the visible views
-            Predicate filter = new FixedEntitiesVisiblePredicate(getStatus().getRelease(), getStatus().getFixedEntities());
+            Predicate filter = new VisiblePredicate(getStatus().getRelease(), getStatus().getFilters().values());
 
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();

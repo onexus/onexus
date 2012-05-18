@@ -17,13 +17,11 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
-import org.onexus.core.ICollectionManager;
 import org.onexus.core.IQueryParser;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.WidgetStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

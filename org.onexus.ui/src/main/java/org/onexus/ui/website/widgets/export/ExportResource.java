@@ -61,7 +61,7 @@ public class ExportResource extends AbstractResource {
 
     public ExportResource() {
         super();
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
     }
 
     protected String getFieldSeparator() {

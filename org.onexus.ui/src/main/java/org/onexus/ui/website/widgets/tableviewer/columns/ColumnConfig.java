@@ -166,7 +166,7 @@ public class ColumnConfig implements IColumnConfig {
 
     private IResourceManager getResourceManager() {
         if (resourceManager == null) {
-            OnexusWebApplication.get().getInjector().inject(this);
+            OnexusWebApplication.inject(this);
         }
 
         return resourceManager;

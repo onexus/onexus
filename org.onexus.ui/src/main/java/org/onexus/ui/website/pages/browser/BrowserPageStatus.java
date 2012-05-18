@@ -19,19 +19,18 @@ package org.onexus.ui.website.pages.browser;
 
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.core.ICollectionManager;
-import org.onexus.core.query.EqualId;
+import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.PageStatus;
-import org.onexus.ui.website.utils.FixedEntity;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import javax.inject.Inject;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
@@ -41,7 +40,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private String currentView;
 
-    private Set<FixedEntity> fixedEntities = new HashSet<FixedEntity>();
+    private Map<String, IFilter> filters = new HashMap<String, IFilter>();
 
     @Inject
     public ICollectionManager collectionManager;
@@ -101,12 +100,12 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         this.release = releaseURI;
     }
 
-    public Set<FixedEntity> getFixedEntities() {
-        return fixedEntities;
+    public Map<String, IFilter> getFilters() {
+        return filters;
     }
 
-    public void setFixedEntities(Set<FixedEntity> fixedEntities) {
-        this.fixedEntities = fixedEntities;
+    public void setFilters(Map<String, IFilter> filters) {
+        this.filters = filters;
     }
 
     @Override
@@ -121,11 +120,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     @Override
     public void afterQueryBuild(Query query) {
 
-        if (fixedEntities != null) {
-            for (FixedEntity fe : fixedEntities) {
-                if (getCollectionManager().isLinkable(query, fe.getCollectionURI())) {
-                    String collectionAlias = QueryUtils.newCollectionAlias(query, fe.getCollectionURI());
-                    QueryUtils.and(query, new EqualId(collectionAlias, fe.getEntityId()));
+        if (filters != null) {
+            for (IFilter fe : filters.values()) {
+                if (getCollectionManager().isLinkable(query, fe.getFilteredCollection())) {
+                    Filter filter = fe.buildFilter(query);
+                    QueryUtils.and(query, filter);
                     fe.setEnable(true);
                 } else {
                     fe.setEnable(false);

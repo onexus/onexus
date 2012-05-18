@@ -48,7 +48,7 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
     public WorkspaceTreeModel(IModel<Resource> currentResource) {
         super();
 
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
 
         this.currentResource = currentResource;
 

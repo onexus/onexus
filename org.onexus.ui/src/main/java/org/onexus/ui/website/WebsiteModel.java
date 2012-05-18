@@ -42,7 +42,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
     public WebsiteModel(PageParameters pageParameters) {
         super();
 
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
 
         init(pageParameters);
 

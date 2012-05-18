@@ -50,7 +50,7 @@ public abstract class EntitiesRowProvider implements
 
     public EntitiesRowProvider(TableViewerConfig config,
                                IModel<TableViewerStatus> status) {
-        OnexusWebApplication.get().getInjector().inject(this);
+        OnexusWebApplication.inject(this);
         this.statusModel = status;
         this.config = config;
     }
