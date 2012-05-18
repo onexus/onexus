@@ -24,6 +24,7 @@ import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.pages.PageStatus;
+import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 
 public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel {
     
@@ -44,13 +45,21 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
     }
 
     protected Query getQuery() {
-        WebsiteStatus websiteStatus = findParentStatus(statusModel, WebsiteStatus.class);
         PageStatus pageStatus = findParentStatus(statusModel, PageStatus.class);
-        String baseUri = (websiteStatus == null ? null : ResourceUtils.getParentURI(websiteStatus.getConfig().getURI()));
-        return (pageStatus == null ? null : pageStatus.buildQuery(baseUri));
+        return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
     }
 
-    private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
+    protected String getBaseUri() {
+        WebsiteStatus websiteStatus = findParentStatus(statusModel, WebsiteStatus.class);
+        return (websiteStatus == null ? null : ResourceUtils.getParentURI(websiteStatus.getConfig().getURI()));
+    }
+
+    protected String getReleaseUri() {
+        BrowserPageStatus pageStatus = findParentStatus(statusModel, BrowserPageStatus.class);
+        return (pageStatus==null ? getBaseUri() : ResourceUtils.concatURIs(getBaseUri(), pageStatus.getRelease()));
+    }
+
+    public static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
 
         Object obj = model.getObject();
 

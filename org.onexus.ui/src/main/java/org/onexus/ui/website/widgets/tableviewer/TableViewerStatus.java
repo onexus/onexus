@@ -61,10 +61,20 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
     }
 
     @Override
-    public void onQueryBuild(Query query) {
+    public void beforeQueryBuild(Query query) {
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, getConfig().getCollection());
         query.setFrom(collectionAlias);
+
+    }
+
+    @Override
+    public void afterQueryBuild(Query query) {
+
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
 
         int currentColumnSet = getCurrentColumnSet();
 
@@ -76,11 +86,10 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
         if (orderWithCollection != null) {
             String collectionUri = QueryUtils.getAbsoluteCollectionUri(query, orderWithCollection.getCollectionRef());
-            collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
+            String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
             OrderBy orderWithAlias = new OrderBy(collectionAlias, orderWithCollection.getFieldId(), orderWithCollection.isAscendent());
             query.addOrderBy(orderWithAlias);
         }
-
 
     }
 }

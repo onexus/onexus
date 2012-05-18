@@ -54,7 +54,15 @@ public abstract class WidgetStatus<C extends WidgetConfig> implements Serializab
         this.config = config;
     }
 
+    public void beforeQueryBuild(Query query) {
+        // Override this method if this widget contributes to the query
+    }
+
     public void onQueryBuild(Query query) {
+        // Override this method if this widget contributes to the query
+    }
+
+    public void afterQueryBuild(Query query) {
         // Override this method if this widget contributes to the query
     }
 

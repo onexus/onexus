@@ -28,17 +28,23 @@ import org.apache.wicket.model.Model;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.EntityIterator;
+import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.website.WebsiteStatus;
+import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.events.EventUnfixEntity;
+import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.FixedEntity;
 import org.onexus.ui.website.utils.SingleEntityQuery;
+import org.onexus.ui.website.widgets.Widget;
 
 import javax.inject.Inject;
 import java.util.Set;
@@ -52,29 +58,25 @@ public class FixedEntities extends EventPanel {
     @Inject
     public ICollectionManager collectionManager;
 
-    private IModel<BrowserPageStatus> pageModel;
 
     public FixedEntities(String id, IModel<BrowserPageStatus> pageModel) {
-        super(id);
-
-        this.pageModel = pageModel;
+        super(id, pageModel);
 
         // Update this component if this events are fired.
-        onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class);
+        onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventFiltersUpdate.class);
     }
 
     @Override
     protected void onBeforeRender() {
-
         super.onBeforeRender();
 
         RepeatingView filterRules = new RepeatingView("fixedEntities");
 
-        Set<FixedEntity> fixedEntities = pageModel.getObject().getFixedEntities();
+        Set<FixedEntity> fixedEntities = getBrowserPage().getFixedEntities();
 
-        if (fixedEntities != null) {
+        if (fixedEntities != null && !fixedEntities.isEmpty()) {
 
-            String releaseURI = pageModel.getObject().getRelease();
+            Query query = getQuery();
 
             for (FixedEntity fixedEntity : fixedEntities) {
 
@@ -87,7 +89,7 @@ public class FixedEntities extends EventPanel {
                 }
 
                 // Make collection URI absolute
-                String absoluteCollectionURI = ResourceUtils.getAbsoluteURI(releaseURI, fixedEntity.getCollectionURI());
+                String absoluteCollectionURI = QueryUtils.getAbsoluteCollectionUri(query, fixedEntity.getCollectionURI());
                 fixedEntity.setCollectionURI(absoluteCollectionURI);
 
                 Collection collection = resourceManager.load(Collection.class, fixedEntity.getCollectionURI());
@@ -165,6 +167,20 @@ public class FixedEntities extends EventPanel {
         }
 
         return entityPattern;
+    }
+
+    private BrowserPageStatus getBrowserPage() {
+        return (BrowserPageStatus) getDefaultModelObject();
+    }
+
+    protected Query getQuery() {
+        PageStatus pageStatus = Widget.findParentStatus(getDefaultModel(), PageStatus.class);
+        return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
+    }
+
+    protected String getBaseUri() {
+        WebsiteStatus websiteStatus = Widget.findParentStatus(getDefaultModel(), WebsiteStatus.class);
+        return (websiteStatus == null ? null : ResourceUtils.getParentURI(websiteStatus.getConfig().getURI()));
     }
 
 }

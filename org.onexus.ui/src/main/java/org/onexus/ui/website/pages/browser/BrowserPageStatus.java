@@ -18,14 +18,17 @@
 package org.onexus.ui.website.pages.browser;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onexus.core.ICollectionManager;
 import org.onexus.core.query.EqualId;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.utils.FixedEntity;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +42,9 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     private String currentView;
 
     private Set<FixedEntity> fixedEntities = new HashSet<FixedEntity>();
+
+    @Inject
+    public ICollectionManager collectionManager;
 
     public BrowserPageStatus() {
     }
@@ -104,17 +110,45 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     @Override
-    public void onQueryBuild(Query query) {
+    public void beforeQueryBuild(Query query) {
 
         if (!StringUtils.isEmpty(getRelease())) {
             query.setOn(ResourceUtils.concatURIs(query.getOn(), getRelease()));
         }
 
+    }
+
+    @Override
+    public void afterQueryBuild(Query query) {
+
         if (fixedEntities != null) {
             for (FixedEntity fe : fixedEntities) {
-                String collectionAlias = QueryUtils.newCollectionAlias(query, fe.getCollectionURI());
-                QueryUtils.and(query, new EqualId(collectionAlias, fe.getEntityId()));
+                if (getCollectionManager().isLinkable(query, fe.getCollectionURI())) {
+                    String collectionAlias = QueryUtils.newCollectionAlias(query, fe.getCollectionURI());
+                    QueryUtils.and(query, new EqualId(collectionAlias, fe.getEntityId()));
+                    fe.setEnable(true);
+                } else {
+                    fe.setEnable(false);
+                }
             }
         }
+
+    }
+
+    @Override
+    public void onQueryBuild(Query query) {
+
+    }
+
+    private ICollectionManager getCollectionManager() {
+
+        if (collectionManager == null) {
+            OnexusWebApplication app = OnexusWebApplication.get();
+            if (app != null) {
+                app.getInjector().inject(this);
+            }
+        }
+
+        return collectionManager;
     }
 }

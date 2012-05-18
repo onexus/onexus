@@ -17,10 +17,12 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
+import org.onexus.core.ICollectionManager;
 import org.onexus.core.IQueryParser;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.utils.visible.FixedEntitiesVisiblePredicate;
 import org.onexus.ui.website.widgets.WidgetStatus;
 import org.slf4j.Logger;
@@ -36,93 +38,79 @@ public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
     @Inject
     private IQueryParser queryParser;
 
-    private Set<String> activeFilters;
-
-    private List<FilterConfig> userFilters = new ArrayList<FilterConfig>();
+    private List<FilterConfig> filters = new ArrayList<FilterConfig>();
 
     public FiltersWidgetStatus() {
         super();
     }
 
-    public FiltersWidgetStatus(String widgetId, String... activeFilters) {
+    public FiltersWidgetStatus(String widgetId) {
         super(widgetId);
-        this.activeFilters = new HashSet<String>(Arrays.asList(activeFilters));
-
     }
 
-    public Set<String> getActiveFilters() {
-        return activeFilters;
+    public List<FilterConfig> getFilters() {
+        return filters;
     }
 
-    public void setActiveFilters(Set<String> activeFilters) {
-        this.activeFilters = activeFilters;
-    }
-
-    public List<FilterConfig> getUserFilters() {
-        return userFilters;
-    }
-
-    public void setUserFilters(List<FilterConfig> userFilters) {
-        this.userFilters = userFilters;
-    }
-
-    public void updateFilter(FilterConfig filter) {
-        if (filter.getActive()) {
-            activeFilters.add(filter.getId());
-        } else {
-            if (activeFilters.contains(filter.getId())) {
-                activeFilters.remove(filter.getId());
-            }
-        }
+    public void setFilters(List<FilterConfig> filters) {
+        this.filters = filters;
     }
 
     @Override
     public void onQueryBuild(Query query) {
 
-
-        //TODO FixedEntitiesVisiblePredicate fixedPredicate = new FixedEntitiesVisiblePredicate(query.getOn(), status.getFixedEntities());
-
         List<Filter> rules = new ArrayList<Filter>();
-        for (FilterConfig filter : userFilters) {
-            // if (filter.getActive() && fixedPredicate.evaluate(filter)) {
+
+        for (FilterConfig filter : filters) {
             if (filter.getActive()) {
-
-                String oqlDefine = filter.getDefine();
-                String oqlWhere = filter.getWhere();
-
-                if (oqlDefine != null && oqlWhere != null) {
-                    Map<String, String> define = queryParser.parseDefine(oqlDefine);
-                    Filter where = queryParser.parseWhere(oqlWhere);
-
-                    if (define == null || where == null) {
-                        log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
-
-                    } else {
-                        for (Map.Entry<String, String> entry : define.entrySet()) {
-                            query.addDefine(entry.getKey(), entry.getValue());
-                        }
-
-                        rules.add(where);
-                    }
-                }
-
-
+                createFilter(rules, filter, query);
             }
         }
 
         if (!rules.isEmpty()) {
-
             boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
-
             if (!union) {
                 QueryUtils.and(query, QueryUtils.joinAnd(rules));
             } else {
                 QueryUtils.and(query, QueryUtils.joinOr(rules));
             }
-
         }
 
 
+    }
+
+    private void createFilter(List<Filter> filters, FilterConfig filter, Query query) {
+
+        String oqlDefine = filter.getDefine();
+        String oqlWhere = filter.getWhere();
+
+        if (oqlDefine != null && oqlWhere != null) {
+            Map<String, String> define = getQueryParser().parseDefine(oqlDefine);
+            Filter where = getQueryParser().parseWhere(oqlWhere);
+
+            if (define == null || where == null) {
+                log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
+
+            } else {
+                for (Map.Entry<String, String> entry : define.entrySet()) {
+                    query.addDefine(entry.getKey(), entry.getValue());
+                }
+
+                filters.add(where);
+            }
+        }
+    }
+
+    private IQueryParser getQueryParser() {
+
+        if (queryParser == null) {
+            OnexusWebApplication app = OnexusWebApplication.get();
+            if (app != null) {
+                app.getInjector().inject(this);
+            }
+        }
+
+        return queryParser;
     }
 
 }

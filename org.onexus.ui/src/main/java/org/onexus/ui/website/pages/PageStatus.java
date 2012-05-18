@@ -17,6 +17,9 @@
  */
 package org.onexus.ui.website.pages;
 
+import org.apache.wicket.MetaDataEntry;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
@@ -91,28 +94,60 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
         this.widgetStatuses = widgetStatuses;
     }
 
+    public MetaDataKey<Query> QUERY = new MetaDataKey<Query>() {};
+
     public Query buildQuery(String resourceUri) {
 
-        Query query = new Query();
+        Query query = RequestCycle.get().getMetaData(QUERY);
 
-        // Website contributions
+        if (query != null) {
+            return query;
+        } else {
+            query = new Query();
+        }
+
         query.setOn(resourceUri);
 
-        // Page contributions
-        onQueryBuild(query);
-
-        // Widget contributions
         List<WidgetStatus> activeWidgets = getActiveWidgetStatuses();
+
+        // Before cycle
+        beforeQueryBuild(query);
+        if (activeWidgets != null && !activeWidgets.isEmpty()) {
+            for (WidgetStatus status : activeWidgets) {
+                status.beforeQueryBuild(query);
+            }
+        }
+
+        // On cycle
+        onQueryBuild(query);
         if (activeWidgets != null && !activeWidgets.isEmpty()) {
             for (WidgetStatus status : activeWidgets) {
                 status.onQueryBuild(query);
             }
         }
 
+        // After cycle
+        afterQueryBuild(query);
+        if (activeWidgets != null && !activeWidgets.isEmpty()) {
+            for (WidgetStatus status : activeWidgets) {
+                status.afterQueryBuild(query);
+            }
+        }
+
+        RequestCycle.get().setMetaData(QUERY, query);
+
         return query;
     }
 
+    public void beforeQueryBuild(Query query) {
+        // Override this method if the page contributes to the query build
+    }
+
     public void onQueryBuild(Query query) {
+        // Override this method if the page contributes to the query build
+    }
+
+    public void afterQueryBuild(Query query) {
         // Override this method if the page contributes to the query build
     }
 }
