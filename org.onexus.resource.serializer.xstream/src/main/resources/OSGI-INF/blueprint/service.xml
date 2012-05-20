@@ -3,7 +3,7 @@
         >
 
     <service id="org.onexus.resource.serializer.xstream" interface="org.onexus.core.IResourceSerializer">
-        <bean class="org.onexus.resource.serializer.xstream.ResourceSerializer"/>
+        <bean class="org.onexus.resource.serializer.xstream.internal.ResourceSerializer"/>
     </service>
 
 </blueprint>

@@ -10,7 +10,7 @@
     </cm:property-placeholder>
 
     <service id="org.onexus.loader.biomart" interface="org.onexus.core.ILoader">
-        <bean class="org.onexus.loader.biomart.TaskExecutor" init-method="init">
+        <bean class="org.onexus.loader.biomart.internal.TaskExecutor" init-method="init">
             <property name="defaultMartService" value="${defaultMartService}"></property>
             <property name="defaultVirtualSchema" value="${defaultVirtualSchema}"></property>
         </bean>

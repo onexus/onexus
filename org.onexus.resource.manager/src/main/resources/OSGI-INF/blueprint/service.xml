@@ -12,7 +12,7 @@
     <reference id="serializerRef" interface="org.onexus.core.IResourceSerializer"/>
 
     <service id="org.onexus.resource.manager" interface="org.onexus.core.IResourceManager">
-        <bean class="org.onexus.resource.manager.ResourceManager" init-method="init">
+        <bean class="org.onexus.resource.manager.internal.ResourceManager" init-method="init">
             <property name="baseUrl" value="${baseUrl}"/>
             <property name="basePath" value="${basePath}"/>
             <property name="serializer" ref="serializerRef"/>

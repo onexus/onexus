@@ -5,7 +5,7 @@
     <reference id="sourceManagerRef" interface="org.onexus.core.ISourceManager"/>
 
     <service id="org.onexus.loader.tsv" interface="org.onexus.core.ILoader">
-        <bean class="org.onexus.loader.tsv.TaskExecutor">
+        <bean class="org.onexus.loader.tsv.internal.TaskExecutor">
             <property name="sourceManager" ref="sourceManagerRef"/>
         </bean>
     </service>

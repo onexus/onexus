@@ -11,7 +11,7 @@
     </cm:property-placeholder>
 
     <service id="org.onexus.loader.anduril" interface="org.onexus.core.ILoader">
-        <bean class="org.onexus.loader.anduril.TaskExecutor" init-method="init">
+        <bean class="org.onexus.loader.anduril.internal.TaskExecutor" init-method="init">
             <property name="andurilHome" value="${andurilHome}"></property>
             <property name="executionDir" value="${executionDir}"></property>
             <property name="heapSize" value="${heapSize}"></property>

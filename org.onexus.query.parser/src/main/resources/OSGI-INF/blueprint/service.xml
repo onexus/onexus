@@ -3,6 +3,6 @@
            xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
 
     <service id="org.onexus.query.parser" interface="org.onexus.core.IQueryParser">
-        <bean class="org.onexus.query.parser.QueryParser" />
+        <bean class="org.onexus.query.parser.internal.QueryParser" />
     </service>
 </blueprint>

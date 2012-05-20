@@ -5,7 +5,7 @@
     <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
 
     <service interface="org.onexus.core.ISourceManager">
-        <bean class="org.onexus.source.manager.SourceManager">
+        <bean class="org.onexus.source.manager.internal.SourceManager">
             <property name="resourceManager" ref="resourceManagerRef"/>
         </bean>
     </service>

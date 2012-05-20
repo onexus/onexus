@@ -13,7 +13,7 @@
     <reference id="taskManagerRef" interface="org.onexus.core.ITaskManager"/>
 
     <service id="org.onexus.collection.manager" interface="org.onexus.core.ICollectionManager">
-        <bean class="org.onexus.collection.manager.CollectionManager" init-method="init">
+        <bean class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
             <property name="maxThreads" value="${maxThreads}"/>
             <property name="resourceManager" ref="resourceManagerRef"/>
             <property name="collectionStore" ref="collectionStoreRef"/>

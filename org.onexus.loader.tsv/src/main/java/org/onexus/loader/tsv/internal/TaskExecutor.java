@@ -1,0 +1,117 @@
+/**
+ *  Copyright 2012 Universitat Pompeu Fabra.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
+package org.onexus.loader.tsv.internal;
+
+import org.onexus.core.ILoader;
+import org.onexus.core.ISourceManager;
+import org.onexus.core.ITask;
+import org.onexus.core.resources.Collection;
+import org.onexus.core.resources.Field;
+import org.onexus.core.resources.Loader;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+public class TaskExecutor implements ILoader {
+
+    public static final String FIELDS_AUTOADD_DATATYPE = "FIELDS_AUTOADD_DATATYPE";
+    public static final String FIELDS_AUTOADD_REGEXP = "FIELDS_AUTOADD_REGEXP";
+
+    private ISourceManager sourceManager;
+
+    public TaskExecutor() {
+        super();
+    }
+
+    @Override
+    public boolean isCallable(Loader loader) {
+        return "mvn:org.onexus/org.onexus.loader.tsv/0.2".equals(loader.getPlugin());
+    }
+
+    @Override
+    public ITask createCallable(Collection collection) {
+        return new TsvTaskCallable(sourceManager, collection);
+    }
+
+    @Override
+    public boolean preprocessCollection(Collection collection) {
+
+        Loader task = collection.getLoader();
+        String autoupdateRegExp = task.getParameter(FIELDS_AUTOADD_REGEXP);
+
+        if (autoupdateRegExp == null) {
+            return false;
+        }
+
+        String dataType = task.getParameter(FIELDS_AUTOADD_DATATYPE);
+
+        Class<?> dataTypeClass = String.class;
+        if (dataType != null) {
+            try {
+                dataTypeClass = Class.forName(dataType);
+            } catch (ClassNotFoundException e) {
+                dataTypeClass = String.class;
+            }
+        }
+
+        FileEntitySet fileEntitySet = new FileEntitySet(sourceManager, collection);
+
+        Pattern regExp = Pattern.compile(autoupdateRegExp);
+        boolean addedField = false;
+
+        // Remove fields that match the pattern and there are no columns
+        List<Field> removeMe = new ArrayList<Field>();
+        for (Field field : collection.getFields()) {
+            String fieldName = field.getId();
+
+            if (regExp.matcher(fieldName).matches()) {
+                if (!fileEntitySet.getHeaders().containsKey(fieldName)) {
+                    removeMe.add(field);
+                }
+            }
+        }
+        collection.getFields().removeAll(removeMe);
+
+        for (String columnName : fileEntitySet.getHeaders().keySet()) {
+            if (regExp.matcher(columnName).matches()) {
+
+                // Check if its already present
+                if (collection.getField(columnName) == null) {
+                    Field field = new Field();
+                    field.setId(columnName);
+                    field.setTitle(columnName);
+                    field.setType(dataTypeClass);
+                    collection.getFields().add(field);
+                    addedField = true;
+                }
+            }
+        }
+
+        return addedField;
+    }
+
+    public ISourceManager getSourceManager() {
+        return sourceManager;
+    }
+
+    public void setSourceManager(ISourceManager sourceManager) {
+        this.sourceManager = sourceManager;
+    }
+
+}

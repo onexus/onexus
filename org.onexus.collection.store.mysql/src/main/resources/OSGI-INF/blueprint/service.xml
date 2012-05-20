@@ -20,7 +20,7 @@
             <entry key="status" value="${status}"/>
         </service-properties>
 
-        <bean class="org.onexus.collection.store.mysql.MysqlCollectionStore" init-method="init">
+        <bean class="org.onexus.collection.store.mysql.internal.MysqlCollectionStore" init-method="init">
             <property name="server" value="${server}"/>
             <property name="port" value="${port}"/>
             <property name="database" value="${database}"/>
