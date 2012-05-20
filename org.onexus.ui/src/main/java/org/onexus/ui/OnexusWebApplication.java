@@ -23,6 +23,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.onexus.ui.ws.WebserviceResource;
 import org.wicketstuff.osgi.*;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
@@ -39,6 +40,9 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
     protected void init() {
         super.init();
         mountPage("/login", getSignInPageClass());
+
+        getSharedResources().add("webservice", new WebserviceResource());
+        mountResource("/onx", getSharedResources().get(Application.class, "webservice", null, null, null, true));
 
         getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
         getComponentInstantiationListeners().add(getInjector());

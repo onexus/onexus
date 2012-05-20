@@ -1,9 +1,6 @@
 package org.onexus.query.parser.internal;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.*;
 import org.onexus.core.IQueryParser;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.OrderBy;
@@ -95,7 +92,8 @@ public class QueryParser implements IQueryParser {
 
         //lexer splits input into tokens
         ANTLRStringStream input = new ANTLRStringStream(expression);
-        TokenStream tokens = new CommonTokenStream(new OqlLexer(input));
+        OqlLexer lexer = new OqlLexer(input);
+        TokenStream tokens = new BufferedTokenStream(lexer);
 
         //parser generates abstract syntax tree
         OqlParser parser = new OqlParser(tokens);

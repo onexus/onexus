@@ -26,12 +26,12 @@ oql
 
 /* DEFINE clause */
 defineClause 
-	:	DEFINE defineItem ( ',' defineItem )*
+	:	DEFINE defineItem ( ',' defineItem )* ' '
 ;
 
 defineItem 
-	:	alias=varname '=' uri=resourceUri 
-		{ query.addDefine( $alias.text, $uri.text ); }
+	:	alias=varname '=' uri=string 
+		{ query.addDefine( $alias.text, $uri.v ); }
 ;
 
 /* ON clause */

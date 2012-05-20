@@ -4,7 +4,7 @@
 
     <cm:property-placeholder persistent-id="org.onexus.resource.manager" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="baseUrl" value="http://localhost:8181/onx"/>
+            <cm:property name="baseUrl" value="http://localhost:8181/onexus/onx"/>
             <cm:property name="basePath" value="workspaces"/>
         </cm:default-properties>
     </cm:property-placeholder>
