@@ -34,6 +34,14 @@ form {
         background-color: #cfdde8;
 }
 
+#header.max {
+    height: 150px;
+}
+
+#header.min {
+    height: 30px;
+}
+
 #top {
 	height: 70px;
 	width: 400px;
