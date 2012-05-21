@@ -4,6 +4,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
+import org.onexus.core.utils.ResourceUtils;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,6 +32,7 @@ public class ListResourceResponse extends AbstractResponse {
         this.prettyPrint = (prettyPrint == null) ? true : prettyPrint;
 
         setContentType("text/tab-separated-values");
+        setFileName(ResourceUtils.getResourceName(url) + "-children.tsv");
     }
 
     @Override

@@ -1,5 +1,9 @@
 grammar Oql;
 
+options {
+  backtrack=true;
+}
+
 @lexer::header {
   package org.onexus.query.parser.internal;
 
@@ -26,18 +30,18 @@ oql
 
 /* DEFINE clause */
 defineClause 
-	:	DEFINE defineItem ( ',' defineItem )* ' '
+	:	DEFINE defineItem ( ',' defineItem )*
 ;
 
 defineItem 
-	:	alias=varname '=' uri=string 
+	:	alias=varname '=' uri=string
 		{ query.addDefine( $alias.text, $uri.v ); }
 ;
 
 /* ON clause */
 onClause 
-	:	ON uri=resourceUri 
-		{ query.setOn($uri.text); }
+	:	ON uri=string
+		{ query.setOn($uri.v); }
 ;
 
 /* SELECT clause */
@@ -46,14 +50,14 @@ selectClause
 ;
 
 selectItem 
-	:	alias=varname ( '(' fields=selectFields ')' ) 
+	:	alias=varname ('(' fields=selectFields ')')
 		{ query.addSelect($alias.text, $fields.l); }
 ;
 
 selectFields returns [List<String> l = new ArrayList<String>();] 
 	:
-		first=varname { $l.add($first.text); }
-	    ( ',' other=varname { $l.add($other.text); })*
+		first=string { $l.add($first.v); }
+	    ( ',' other=string { $l.add($other.v); })*
 	;
 
 /* FROM clause */
@@ -165,16 +169,13 @@ numberOrStringOrDateOrTime returns [Object v]
 numberOrDateOrTime returns [Object v]
     :
     ( num=number    { $v = $num.v; }
-    | dte=date      { $v = $dte.v; }
-    | tme=time      { $v = $tme.v; }
-    | tst=timestamp { $v = $tst.v; }
+    | dte=t_date      { $v = $dte.v; }
+    | tme=t_time      { $v = $tme.v; }
+    | tst=t_timestamp { $v = $tst.v; }
     )
 ;
 
 
-varname :
-     	LETTER (LETTER | DIGIT | MARK)*
-;
 
 integer returns [Long v]:
 	value=(DIGIT)+ { $v = Filter.convertToLong($value.text); }
@@ -188,44 +189,43 @@ doubleAndInteger :
 	(DIGIT)+ ( '.' (DIGIT)* (EXPONENT)? | EXPONENT)?
 ;
 
-
-resourceUri: 
-	(LETTER | DIGIT | MARK | HEX | '/' | ':' | '.')+
+t_timestamp returns [java.sql.Timestamp v]:
+    '#' value= '#' { $v = java.sql.Timestamp.valueOf($value.text); }
 ;
 
-timestamp returns [java.sql.Timestamp v]:
-    '#' value=TIMESTAMP '#' { $v = java.sql.Timestamp.valueOf($value.text); }
+t_time returns [java.sql.Time v]:
+    '#' value=time '#' { $v = java.sql.Time.valueOf($value.text); }
 ;
 
-time returns [java.sql.Time v]:
-    '#' value=TIME '#' { $v = java.sql.Time.valueOf($value.text); }
-;
-
-date returns [java.sql.Date v]:
-    '#' value=DATE '#' { $v = java.sql.Date.valueOf($value.text); }
+t_date returns [java.sql.Date v]:
+    '#' value=date '#' { $v = java.sql.Date.valueOf($value.text); }
 ;
 
 string returns [String v]:
-	value=STRING { $v = $value.text; }
+	value=STRING { $v = Query.unescapeString($value.text); }
+;
+
+timestamp :
+        date time ( '.' DIGIT+ )?
+;
+
+date :
+    	DIGIT DIGIT DIGIT DIGIT '-' DIGIT DIGIT '-' DIGIT DIGIT
+;
+
+time :
+        DIGIT DIGIT ':' DIGIT DIGIT ':' DIGIT DIGIT
 ;
 
 
 /* Literals */
+
+varname :
+     	LETTER (LETTER | DIGIT | MARK)*
+;
 	
 STRING :
-    	'\'' (~'\'' | '\\\'')* '\'' | '"' (~'"' | '\\"' )* '"'
-;
-
-TIMESTAMP :
-        DATE ' ' TIME ( '.' DIGIT+ )?
-;
-
-DATE :
-    	DIGIT DIGIT DIGIT DIGIT '-' DIGIT DIGIT '-' DIGIT DIGIT
-;
-
-TIME :
-        DIGIT DIGIT ':' DIGIT DIGIT ':' DIGIT DIGIT
+    	'\'' (~'\'' | '\\\'')* '\''
 ;
 
 fragment EXPONENT
@@ -234,7 +234,7 @@ fragment EXPONENT
 ;
 
 WS :
-    	(' ' | '\t' | '\n'|'\r')+  {$channel=HIDDEN;}
+    	(' ' | '\t' | '\n' | '\r')+  { $channel=HIDDEN;}
 ;
 
 LETTER :
@@ -261,28 +261,28 @@ LPAREN : '(' ;
 
 RPAREN : ')' ;
 
-OR : 'OR';
+OR : 'OR' | 'or';
 
 DEFINE
-	:	'DEFINE'
+	:	'DEFINE' | 'define'
 	;
 
 ON
-	:	'ON'
+	:	'ON' | 'on'
 	;
 
 SELECT
-	:	'SELECT'
+	:	'SELECT' | 'select'
 	;
 
 FROM
-	:	'FROM'
+	:	'FROM' | 'from'
 	;
 
 WHERE
-	:	'WHERE'
+	:	'WHERE' | 'where'
 	;
 
 AND
-	:	'AND'
+	:	'AND' | 'and'
 	;

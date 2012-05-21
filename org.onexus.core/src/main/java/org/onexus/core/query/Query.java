@@ -120,7 +120,7 @@ public class Query implements Serializable {
                 oql.append(prettyPrint ? "\n\t" : " ");
 
                 Map.Entry<String, String> entry = itDefine.next();
-                oql.append(entry.getKey()).append("=").append(entry.getValue());
+                oql.append(entry.getKey()).append("=").append(escapeString(entry.getValue()));
 
                 if (itDefine.hasNext()) {
                     oql.append(',');
@@ -151,7 +151,7 @@ public class Query implements Serializable {
                     if (fields.hasNext()) {
                         oql.append(" (");
                         while (fields.hasNext()) {
-                            oql.append(fields.next());
+                            oql.append(escapeString(fields.next()));
                             if (fields.hasNext()) {
                                 oql.append(", ");
                             }
@@ -207,6 +207,37 @@ public class Query implements Serializable {
         }
 
         return oql;
+    }
+
+    public static String unescapeString(String value) {
+
+        if (value == null) {
+            return null;
+        }
+
+        if (value.length() < 3) {
+            return "";
+        }
+
+        char quote = value.charAt(0);
+
+        value = value.substring(1, value.length()-1);
+        if (quote == '"') {
+            value = value.replace("\\\"", "\"");
+        } else {
+            value = value.replace("\\'", "'");
+        }
+
+        return value;
+
+    }
+
+    public static String escapeString(String value) {
+        if (value == null) {
+            return null;
+        }
+        value = "'" + value.replace("'", "\\'") + "'";
+        return value;
     }
 
 }

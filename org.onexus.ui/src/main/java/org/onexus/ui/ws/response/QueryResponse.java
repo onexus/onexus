@@ -7,8 +7,11 @@ import org.onexus.core.IEntityTable;
 import org.onexus.core.IQueryParser;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
+import org.onexus.core.utils.ResourceUtils;
 
 import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +42,8 @@ public class QueryResponse extends AbstractResponse {
 
     public QueryResponse(String url, String select, String where, String orderBy, String limit, Boolean count, String format, Boolean prettyPrint) {
         this(buildQuery(url, select, where, orderBy, limit), count, format, prettyPrint);
+
+        setFileName(ResourceUtils.getResourceName(url) + ".tsv");
     }
 
 
@@ -89,7 +94,7 @@ public class QueryResponse extends AbstractResponse {
             IEntity entity = table.getEntity(collection);
 
             for (String field : select.getValue()) {
-                response.write( String.valueOf( entity.get(field) ));
+                response.write(String.valueOf(entity.get(field)));
                 response.write("\t");
             }
         }
@@ -101,8 +106,27 @@ public class QueryResponse extends AbstractResponse {
 
         StringBuilder query = new StringBuilder();
 
-        query.append("DEFINE c=").append(url);
-        query.append(" SELECT c (").append(select).append(")");
+        query.append("DEFINE c='").append(url);
+
+        Iterator<String> fields = Arrays.asList(select.split(",")).iterator();
+
+        query.append("' SELECT c (");
+
+        while (fields.hasNext()) {
+            String field = fields.next();
+
+            if (field.startsWith("'")) {
+                query.append(field);
+            } else {
+                query.append(Query.escapeString(field));
+            }
+
+            if (fields.hasNext()) {
+                query.append(",");
+            }
+        }
+
+        query.append(")");
         query.append(" FROM c ");
 
         if (where != null) {

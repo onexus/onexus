@@ -93,11 +93,12 @@ public class QueryParser implements IQueryParser {
         //lexer splits input into tokens
         ANTLRStringStream input = new ANTLRStringStream(expression);
         OqlLexer lexer = new OqlLexer(input);
-        TokenStream tokens = new BufferedTokenStream(lexer);
+        TokenStream tokens = new CommonTokenStream(lexer);
 
         //parser generates abstract syntax tree
         OqlParser parser = new OqlParser(tokens);
 
         return parser;
     }
+
 }
