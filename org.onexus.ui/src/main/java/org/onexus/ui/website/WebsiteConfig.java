@@ -40,6 +40,8 @@ public class WebsiteConfig extends Resource {
 
     private String css;
 
+    private String bottom;
+
     public WebsiteConfig() {
         super();
     }
@@ -66,6 +68,14 @@ public class WebsiteConfig extends Resource {
 
     public void setCss(String css) {
         this.css = css;
+    }
+
+    public String getBottom() {
+        return bottom;
+    }
+
+    public void setBottom(String bottom) {
+        this.bottom = bottom;
     }
 
     public List<PageConfig> getPages() {
@@ -115,6 +125,7 @@ public class WebsiteConfig extends Resource {
         // Add page status
         List<PageStatus> pageStatuses = new ArrayList<PageStatus>();
         for (PageConfig page : getPages()) {
+            page.setWebsiteConfig(this);
             pageStatuses.add(page.newStatus());
         }
         status.setPageStatuses(pageStatuses);

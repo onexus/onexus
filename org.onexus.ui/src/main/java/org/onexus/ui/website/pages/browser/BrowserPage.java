@@ -43,6 +43,7 @@ import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
 import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
+import org.onexus.ui.website.pages.browser.layouts.topmain.TopmainLayout;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
@@ -50,8 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
-
-    public final static CssResourceReference CSS = new CssResourceReference(BrowserPage.class, "BrowserPage.css");
 
     @Inject
     public IResourceManager resourceManager;
@@ -176,6 +175,8 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             addOrReplace(new TopleftLayout("content", viewConfig, getModel()));
         } else if (viewConfig.getLeft() != null) {
             addOrReplace(new LeftMainLayout("content", viewConfig, getModel()));
+        } else if (viewConfig.getTop() != null || viewConfig.getTopRight() != null) {
+            addOrReplace(new TopmainLayout("content", viewConfig, getModel()));
         } else {
             addOrReplace(new SingleLayout("content", viewConfig, getModel()));
         }
@@ -199,13 +200,6 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             return tabs;
         }
 
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-
-        response.render(CssHeaderItem.forReference(CSS));
     }
 
 }

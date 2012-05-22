@@ -17,31 +17,16 @@
  */
 package org.onexus.ui.website.pages.html;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.website.pages.Page;
 
 public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
-
-    public final static CssResourceReference CSS = new CssResourceReference(HtmlPage.class, "HtmlPage.css");
 
     public HtmlPage(String componentId, IModel<HtmlPageStatus> statusModel) {
         super(componentId, statusModel);
         
         add(new Label("content", getConfig().getContent()).setEscapeModelStrings(false));
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(CssHeaderItem.forReference(CSS));
-        
-        if (getConfig().getCss() != null) {
-            response.render(CssHeaderItem.forCSS(getConfig().getCss(), "page-css"));
-        }
     }
 
 }

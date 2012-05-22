@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.pages.browser.layouts.topleft;
+package org.onexus.ui.website.pages.browser.layouts.topmain;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -25,18 +25,13 @@ import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
 import org.onexus.ui.website.pages.browser.layouts.HorizontalWidgetBar;
-import org.onexus.ui.website.pages.browser.layouts.VerticalWidgetBar;
 
-public class TopleftLayout extends AbstractLayout {
+public class TopmainLayout extends AbstractLayout {
 
-    public static final CssResourceReference CSS = new CssResourceReference(TopleftLayout.class, "TopleftLayout.css");
+    public static final CssResourceReference CSS = new CssResourceReference(TopmainLayout.class, "TopmainLayout.css");
 
-
-    public TopleftLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
+    public TopmainLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
         super(panelId, statusModel);
-
-        // Add left widgets
-        add(new VerticalWidgetBar("leftwidgets", filterWidgets(viewConfig.getLeft()), statusModel));
 
         // Add main widgets
         add(new HorizontalWidgetBar("topwidgets", filterWidgets(viewConfig.getTop()), statusModel));

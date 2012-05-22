@@ -41,6 +41,7 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
         super.init();
         mountPage("/login", getSignInPageClass());
 
+        getDebugSettings().setAjaxDebugModeEnabled(false);
         getSharedResources().add("webservice", new WebserviceResource());
         mountResource("/onx", getSharedResources().get(Application.class, "webservice", null, null, null, true));
 

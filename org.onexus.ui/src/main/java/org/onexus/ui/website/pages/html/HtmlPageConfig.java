@@ -32,8 +32,7 @@ import java.util.List;
 public class HtmlPageConfig extends PageConfig {
     
     private String content;
-    private String css;
-    
+
     public HtmlPageConfig() {
         super();
     }
@@ -49,14 +48,6 @@ public class HtmlPageConfig extends PageConfig {
     @Override
     public List<WidgetConfig> getWidgets() {
         return Collections.EMPTY_LIST;
-    }
-
-    public String getCss() {
-        return css;
-    }
-
-    public void setCss(String css) {
-        this.css = css;
     }
 
     @Override

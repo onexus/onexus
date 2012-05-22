@@ -17,27 +17,47 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.Application;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.onexus.core.query.Query;
-import org.onexus.ui.website.Website;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.onexus.core.ISourceManager;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
-import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.widgets.IWidgetManager;
-import org.onexus.ui.website.widgets.WidgetStatus;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel {
+
+
+    private ResourceReference PAGE_CSS;
 
     @Inject
     private IWidgetManager widgetManager;
 
+    @Inject
+    private ISourceManager sourceManager;
+
     public Page(String componentId, IModel<S> pageModel) {
         super(componentId, pageModel);
+
+        if (PAGE_CSS == null) {
+            PAGE_CSS = getCssResourceReference(getClass(), sourceManager, getConfig());
+        }
+
     }
 
     public IWidgetManager getWidgetManager() {
@@ -61,4 +81,36 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
         return (status == null ? null : (C) status.getConfig());
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(PAGE_CSS));
+    }
+
+
+    public static ResourceReference getCssResourceReference(Class<?> scope, ISourceManager sourceManager, PageConfig config) {
+
+        if (config.getCss() != null) {
+                WebsiteConfig websiteConfig = config.getWebsiteConfig();
+                String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
+                String cssUri = ResourceUtils.getAbsoluteURI(parentUri, config.getCss());
+                List<URL> urls = sourceManager.retrieve(cssUri);
+
+                try {
+
+                    URI uri = urls.get(0).toURI();
+                    IResource resource = new ResourceStreamResource(new FileResourceStream(new File(uri)));
+                    String resourceName = "css-" + Integer.toHexString(uri.toString().hashCode());
+
+                    Application.get().getSharedResources().add(scope, resourceName, null, null, null, resource);
+                    return Application.get().getSharedResources().get(scope, resourceName, null, null, null, true);
+
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+        }
+
+        return new CssResourceReference(scope, scope.getSimpleName() + ".css");
+
+    }
 }

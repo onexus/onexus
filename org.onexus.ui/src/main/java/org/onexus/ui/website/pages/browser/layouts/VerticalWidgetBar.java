@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.pages.browser.layouts.topleft;
+package org.onexus.ui.website.pages.browser.layouts;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.Image;

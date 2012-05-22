@@ -1,0 +1,129 @@
+div.topmainlayout {
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    width: 100%;
+}
+
+div.gridbar input {
+    border: 1px solid #ccc;
+    color: #475560;
+}
+
+div.gridbar {
+    padding: 8px 40px 0px 40px;
+    height: 25px;
+    color: #868686;
+    border-bottom: 1px dotted #BBB;
+    font-size: 12px;
+}
+
+div.gridbar div {
+    float: left;
+    margin-left: 3px;
+}
+
+div.gridbar button {
+    border: 1px solid #ccc;
+    color: #475560;
+}
+
+div.gridbar .overlay{
+     display: block;
+     position: fixed;
+     margin: 0;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: #000;
+     z-index:1001;
+     opacity:.75;
+     -moz-opacity: 0.75;
+     filter: alpha(opacity=75);
+}
+
+div.gridbar .close-modal {
+     display: block;
+      overflow: auto;
+      position: fixed;
+      top: 25%;
+      left: 25%;
+      padding: 5px;
+      background: #fff;
+      color: #333;
+      z-index:1003;
+      overflow: auto;
+      margin: 0px;
+}
+
+div.gridbar .modal {
+     display: block;
+     overflow: auto;
+     position: fixed;
+     top: 25%;
+     left: 25%;
+     width: 50%;
+     height: 50%;
+     padding: 16px;
+     background: #fff;
+     color: #333;
+     z-index:1002;
+     overflow: auto;
+     margin: 0;
+}
+
+div.gridbar-left {
+    float: left;
+}
+
+ul.filters {
+	list-style-type:none;
+	padding: 0px;
+}
+
+div.gridbar-right {
+    float: right;
+}
+
+div.griddata {
+     overflow: auto;
+     padding: 40px;
+}
+
+form {
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+
+div.boxes {
+    width: 200px;
+    margin: 0px 15px 0px 0px;
+
+}
+
+div.boxes h1 {
+	color:#C53F26;
+	font-size:12px;
+	margin:0px;
+	padding:0 0 5px 0;
+}
+
+div.boxes div.box {
+	width:175px;
+	position: relative;
+	margin: 5px;
+	padding: 2px 5px;
+        border-left: 1px solid #387186;
+	border-top: 1px solid #387186;
+	border-right: 1px solid #E0E0E0;
+	border-bottom: 1px solid #D0D0D0;
+	background-color:white;
+
+}
+
+div.boxes p {
+	margin: 0px;
+	padding: 0px 0px 0px 10px;
+}
+

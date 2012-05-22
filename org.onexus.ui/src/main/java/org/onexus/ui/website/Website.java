@@ -132,6 +132,13 @@ public class Website extends WebPage {
 
         }
 
+        String bottom = config.getBottom();
+
+        Label bottomLabel = new Label("bottom", bottom);
+        bottomLabel.setVisible(bottom != null);
+        bottomLabel.setEscapeModelStrings(false);
+        add(bottomLabel);
+
     }
 
     @Override

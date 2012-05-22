@@ -33,6 +33,8 @@ public abstract class PageConfig implements Serializable {
     private String title;
     private String description;
 
+    private String css;
+
     private transient WebsiteConfig websiteConfig;
 
     public PageConfig() {
@@ -69,6 +71,14 @@ public abstract class PageConfig implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCss() {
+        return css;
+    }
+
+    public void setCss(String css) {
+        this.css = css;
     }
 
     public WebsiteConfig getWebsiteConfig() {

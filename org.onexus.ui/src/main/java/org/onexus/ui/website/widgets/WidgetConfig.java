@@ -29,6 +29,8 @@ public abstract class WidgetConfig implements Serializable {
 
     private String id;
 
+    private String button;
+
     private transient PageConfig pageConfig;
 
     public WidgetConfig() {
@@ -47,6 +49,14 @@ public abstract class WidgetConfig implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getButton() {
+        return button;
+    }
+
+    public void setButton(String button) {
+        this.button = button;
     }
 
     public PageConfig getPageConfig() {

@@ -24,8 +24,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
-import org.onexus.ui.website.pages.browser.layouts.topleft.HorizontalWidgetBar;
-import org.onexus.ui.website.pages.browser.layouts.topleft.VerticalWidgetBar;
+import org.onexus.ui.website.pages.browser.layouts.HorizontalWidgetBar;
+import org.onexus.ui.website.pages.browser.layouts.VerticalWidgetBar;
 
 public class LeftMainLayout extends AbstractLayout {
 

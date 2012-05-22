@@ -15,14 +15,16 @@
  *
  *
  */
-package org.onexus.ui.website.pages.browser.layouts.topleft;
+package org.onexus.ui.website.pages.browser.layouts;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.widgets.IWidgetManager;
+import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.WidgetModel;
 
@@ -45,7 +47,15 @@ public class HorizontalWidgetBar extends Panel {
                 WebMarkupContainer item = new WebMarkupContainer(widgetsContainer.newChildId());
                 widgetsContainer.add(item);
 
-                item.add(widgetManager.create("widget", new WidgetModel(widget.getId(), pageModel)));
+                String button = widget.getButton();
+
+                Widget<?,?> widgetPanel = widgetManager.create("widget", new WidgetModel(widget.getId(), pageModel));
+
+                if (button == null) {
+                    item.add(widgetPanel);
+                } else {
+                    item.add(new ButtonWidget("widget", button, widgetPanel));
+                }
             }
         }
 
