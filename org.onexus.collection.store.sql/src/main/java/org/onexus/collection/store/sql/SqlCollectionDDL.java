@@ -31,18 +31,6 @@ public class SqlCollectionDDL implements Serializable {
     private final static Logger LOGGER = LoggerFactory
             .getLogger(SqlCollectionDDL.class);
 
-    private final static Map<Class<?>, String> columnTypes = new HashMap<Class<?>, String>();
-
-    static {
-        columnTypes.put(String.class, "VARCHAR(128)");
-        columnTypes.put(Boolean.class, "TINYINT(1)");
-        columnTypes.put(Date.class, "TIMESTAMP");
-        columnTypes.put(Integer.class, "INT(11)");
-        columnTypes.put(Long.class, "BIGINT");
-        columnTypes.put(Double.class, "DOUBLE");
-    }
-
-
     public final static char FIELD_SEPARATOR = '.';
 
     private Collection collection;
@@ -50,11 +38,11 @@ public class SqlCollectionDDL implements Serializable {
     private StringBuilder createTable;
     private Map<String, ColumnInfo> columnInfos;
 
-    private SqlDialect sqlUtils;
+    private SqlDialect sqlDialect;
 
-    public SqlCollectionDDL(SqlDialect sqlUtils, Collection collection) {
+    public SqlCollectionDDL(SqlDialect sqlDialect, Collection collection) {
 
-        this.sqlUtils = sqlUtils;
+        this.sqlDialect = sqlDialect;
         this.collection = collection;
         this.columnInfos = new HashMap<String, ColumnInfo>();
         this.tableName = convertURItoTableName(collection);
@@ -197,7 +185,7 @@ public class SqlCollectionDDL implements Serializable {
 
             this.columnType = field.getProperty("SQL_COLUMN_TYPE");
             if (this.columnType == null) {
-                this.columnType = columnTypes.get(field.getType());
+                this.columnType = sqlDialect.getColumnType(field.getType());
             }
             if (this.columnType == null) {
                 String msg = "Column type not found for the field: '" + field
@@ -233,7 +221,7 @@ public class SqlCollectionDDL implements Serializable {
         }
 
         public SqlAdapter getAdapter() {
-            return sqlUtils.getAdapter(field.getType());
+            return sqlDialect.getAdapter(field.getType());
         }
 
     }

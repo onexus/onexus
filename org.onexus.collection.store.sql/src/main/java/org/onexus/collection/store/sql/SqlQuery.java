@@ -250,7 +250,7 @@ public class SqlQuery {
             FilterBuilder builder = manager.getSqlDialect().getFilterBuilder(filter);
 
             StringBuilder where = new StringBuilder();
-            builder.build(manager.getResourceManager(), query, where, filter);
+            builder.build(manager, query, where, filter);
             this.where = where.toString();
         }
 
@@ -273,8 +273,9 @@ public class SqlQuery {
 
     private void addLimit() {
 
-        if (query.getOffset() != null) {
-            this.limit = query.getOffset() + ", " + query.getCount();
+        if (query.getCount() != null) {
+            Long offset = query.getOffset();
+            this.limit = (offset==null? "0" : offset) + ", " + query.getCount();
         }
     }
 

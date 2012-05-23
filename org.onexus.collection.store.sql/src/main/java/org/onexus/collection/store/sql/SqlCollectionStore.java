@@ -296,11 +296,11 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
     }
 
-    Collection getCollection(String collectionURI) {
+    public Collection getCollection(String collectionURI) {
         return getResourceManager().load(Collection.class, collectionURI);
     }
 
-    SqlCollectionDDL getDDL(String collectionURI) {
+    public SqlCollectionDDL getDDL(String collectionURI) {
         if (!ddls.containsKey(collectionURI)) {
             ddls.put(collectionURI, new SqlCollectionDDL(sqlDialect,
                     getCollection(collectionURI)));

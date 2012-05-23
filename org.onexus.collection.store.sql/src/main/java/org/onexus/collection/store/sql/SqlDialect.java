@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 public class SqlDialect {
 
@@ -41,33 +42,48 @@ public class SqlDialect {
     static final String SELECT_OBJECT_SQL = "SELECT version FROM system_properties WHERE name = ?";
     static final String SELECT_PROPERTIES_KEYS = "SELECT name FROM system_properties";
 
-    private final Map<Class<?>, SqlAdapter> sqlAdapters = new HashMap<Class<?>, SqlAdapter>();
 
-    private List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
+    private List<FilterBuilder> builders;
+    private Map<Class<?>, SqlAdapter> sqlAdapters;
+    private Map<Class<?>, String> columnTypes;
 
     public SqlDialect() {
-         super();
-         registerAdapters();
-        registerFilterBuilders();
+        super();
+        this.sqlAdapters = registerAdapters();
+        this.builders = registerFilterBuilders();
+        this.columnTypes = registerColumnTypes();
     }
 
-    protected void registerAdapters() {
+    protected Map<Class<?>, String> registerColumnTypes() {
+        Map<Class<?>, String> columnTypes = new HashMap<Class<?>, String>();
+        columnTypes.put(String.class, "VARCHAR(128)");
+        columnTypes.put(Boolean.class, "TINYINT(1)");
+        columnTypes.put(Date.class, "TIMESTAMP");
+        columnTypes.put(Integer.class, "INT(11)");
+        columnTypes.put(Long.class, "BIGINT");
+        columnTypes.put(Double.class, "DOUBLE");
+        return columnTypes;
+    }
+
+    protected Map<Class<?>, SqlAdapter> registerAdapters() {
+        Map<Class<?>, SqlAdapter> sqlAdapters = new HashMap<Class<?>, SqlAdapter>();
         sqlAdapters.put(Double.class, new DoubleAdapter());
         sqlAdapters.put(Integer.class, new IntegerAdapter());
         sqlAdapters.put(Long.class, new LongAdapter());
         sqlAdapters.put(String.class, new StringAdapter(this));
         sqlAdapters.put(Boolean.class, new BooleanAdapter());
+        return sqlAdapters;
     }
 
-    protected void registerFilterBuilders() {
-
-            builders.add( new AtomicFilterBuilder(this) );
-            builders.add( new EqualIdFilterBuilder(this) );
-            builders.add( new BinaryFilterBuilder(this) );
-            builders.add( new NotFilterBuilder(this) );
-            builders.add( new InFilterBuilder(this) );
-            builders.add( new IsNullFilterBuilder(this) );
-
+    protected List<FilterBuilder> registerFilterBuilders() {
+        List<FilterBuilder> builders = new ArrayList<FilterBuilder>();
+        builders.add(new AtomicFilterBuilder(this));
+        builders.add(new EqualIdFilterBuilder(this));
+        builders.add(new BinaryFilterBuilder(this));
+        builders.add(new NotFilterBuilder(this));
+        builders.add(new InFilterBuilder(this));
+        builders.add(new IsNullFilterBuilder(this));
+        return builders;
     }
 
     public void createSystemPropertiesTable(Connection conn)
@@ -327,6 +343,10 @@ public class SqlDialect {
 
     public SqlAdapter getAdapter(Class<?> classType) {
         return sqlAdapters.get(classType);
+    }
+
+    public String getColumnType(Class<?> type) {
+        return columnTypes.get(type);
     }
 
 

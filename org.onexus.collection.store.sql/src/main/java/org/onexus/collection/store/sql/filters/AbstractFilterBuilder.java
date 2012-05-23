@@ -1,10 +1,8 @@
 package org.onexus.collection.store.sql.filters;
 
-import org.apache.commons.lang3.StringUtils;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.store.sql.adapters.SqlAdapter;
-import org.onexus.core.IResourceManager;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.slf4j.Logger;
@@ -37,8 +35,8 @@ public abstract class AbstractFilterBuilder<T extends Filter> implements FilterB
     }
 
     @Override
-    public void build(IResourceManager resourceManager, Query query, StringBuilder where, Filter filter) {
-        innerBuild(resourceManager, query, where, (T) filter);
+    public void build(SqlCollectionStore store, Query query, StringBuilder where, Filter filter) {
+        innerBuild(store, query, where, (T) filter);
     }
 
     protected void encodeValue(StringBuilder oql, Class<?> type, Object value) {
@@ -53,6 +51,6 @@ public abstract class AbstractFilterBuilder<T extends Filter> implements FilterB
 
     }
 
-    protected abstract void innerBuild(IResourceManager resourceManager, Query query, StringBuilder where, T filter);
+    protected abstract void innerBuild(SqlCollectionStore store, Query query, StringBuilder where, T filter);
 
 }

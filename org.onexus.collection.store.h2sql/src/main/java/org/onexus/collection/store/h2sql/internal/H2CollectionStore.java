@@ -47,7 +47,7 @@ public class H2CollectionStore extends SqlCollectionStore {
     private IResourceManager resourceManager;
 
     public H2CollectionStore() {
-        super();
+        super(new H2Dialect());
     }
 
     protected DataSource newDataSource() {

@@ -1,9 +1,11 @@
 package org.onexus.collection.store.sql.filters;
 
+import org.onexus.collection.store.sql.SqlCollectionDDL;
+import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
-import org.onexus.core.IResourceManager;
 import org.onexus.core.query.IsNull;
 import org.onexus.core.query.Query;
+import org.onexus.core.utils.QueryUtils;
 
 
 public class IsNullFilterBuilder extends AbstractFilterBuilder<IsNull> {
@@ -13,8 +15,15 @@ public class IsNullFilterBuilder extends AbstractFilterBuilder<IsNull> {
     }
 
     @Override
-    protected void innerBuild(IResourceManager resourceManager, Query query, StringBuilder where, IsNull filter) {
-         where.append("`").append(filter.getCollectionAlias()).append("`.`").append(filter.getFieldId()).append("`");
-         where.append(" IS NULL");
+    protected void innerBuild(SqlCollectionStore store, Query query, StringBuilder where, IsNull filter) {
+
+        // Collection
+        String collectionAlias = filter.getCollectionAlias();
+        String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+        SqlCollectionDDL collection = store.getDDL(collectionUri);
+        SqlCollectionDDL.ColumnInfo column = collection.getColumnInfoByFieldName(filter.getFieldId());
+
+        where.append("`").append(filter.getCollectionAlias()).append("`.`").append(column.getColumnName()).append("`");
+        where.append(" IS NULL");
     }
 }

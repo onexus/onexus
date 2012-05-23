@@ -1,12 +1,12 @@
 package org.onexus.collection.store.sql.filters;
 
+import org.onexus.collection.store.sql.SqlCollectionDDL;
+import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
-import org.onexus.core.IResourceManager;
 import org.onexus.core.query.EqualId;
 import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
-import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+import org.onexus.core.utils.QueryUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +19,14 @@ public class EqualIdFilterBuilder extends AbstractFilterBuilder<EqualId> {
 
 
     @Override
-    protected void innerBuild(IResourceManager resourceManager, Query query, StringBuilder where, EqualId filter) {
+    protected void innerBuild(SqlCollectionStore store,  Query query, StringBuilder where, EqualId filter) {
 
         String collectionAlias = filter.getCollectionAlias();
         String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
-        Collection collection = resourceManager.load(Collection.class, collectionUri);
-
+        SqlCollectionDDL collection = store.getDDL(collectionUri);
 
         List<Field> primaryKey = new ArrayList<Field>();
-        for (Field field : collection.getFields()) {
+        for (Field field : collection.getCollection().getFields()) {
             if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
                 primaryKey.add(field);
             }
@@ -47,9 +46,10 @@ public class EqualIdFilterBuilder extends AbstractFilterBuilder<EqualId> {
 
             Field keyField = primaryKey.get(i);
 
+            String columnName = collection.getColumnInfoByFieldName(keyField.getId()).getColumnName();
 
             where.append("`").append(collectionAlias).append("`.`");
-            where.append(keyField.getId()).append("` = ");
+            where.append(columnName).append("` = ");
 
             encodeValue(where, keyField.getType(), ids[i]);
 
