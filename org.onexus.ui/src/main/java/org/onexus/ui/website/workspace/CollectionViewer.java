@@ -22,26 +22,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Resource;
-import org.onexus.ui.website.pages.PageModel;
-import org.onexus.ui.website.pages.browser.BrowserPageConfig;
-import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
-import org.onexus.ui.website.widgets.WidgetConfig;
-import org.onexus.ui.website.widgets.WidgetModel;
-import org.onexus.ui.website.widgets.export.ExportWidgetConfig;
-import org.onexus.ui.website.widgets.search.SearchField;
-import org.onexus.ui.website.widgets.search.SearchWidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
 import org.onexus.ui.website.widgets.tableviewer.TableViewer;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class CollectionViewer extends Panel {
 

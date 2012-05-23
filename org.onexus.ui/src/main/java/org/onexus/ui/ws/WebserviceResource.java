@@ -1,21 +1,26 @@
 package org.onexus.ui.ws;
 
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.caching.IStaticCacheableResource;
+import org.apache.wicket.util.time.Duration;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.ws.response.ListResourceResponse;
 import org.onexus.ui.ws.response.QueryResponse;
 import org.onexus.ui.ws.response.SingleResourceResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 
 public class WebserviceResource extends AbstractResource {
-
-    public WebserviceResource() {
-        super();
-    }
 
     @Override
     protected ResourceResponse newResourceResponse(Attributes attributes) {
@@ -29,6 +34,28 @@ public class WebserviceResource extends AbstractResource {
 
         // Parse parameters
         String query = parameters.get("query").toOptionalString();
+
+        if (query == null) {
+
+            try {
+                BufferedReader reader = request.getReader();
+
+                StringBuilder sb = new StringBuilder();
+                String line = reader.readLine();
+                while (line != null) {
+                    sb.append(line + "\n");
+                    line = reader.readLine();
+                }
+                reader.close();
+                if (sb.length() > 0) {
+                    query = sb.toString();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
         String children = parameters.get("children").toOptionalString();
         String select = parameters.get("select").toOptionalString();
         String orderBy = parameters.get("orderby").toOptionalString();
@@ -60,4 +87,13 @@ public class WebserviceResource extends AbstractResource {
     }
 
 
+    @Override
+    public void respond(Attributes attributes) {
+        ResourceResponse data = newResourceResponse(attributes);
+
+        // set response header
+        setResponseHeaders(data, attributes);
+
+        data.getWriteCallback().writeData(attributes);
+    }
 }

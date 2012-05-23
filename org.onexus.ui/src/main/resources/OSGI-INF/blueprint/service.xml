@@ -113,7 +113,7 @@
         <bean class="org.onexus.ui.website.widgets.bookmark.BookmarkWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
-        <bean class="org.onexus.ui.website.widgets.export.ExportWidgetCreator"/>
+        <bean class="org.onexus.ui.website.widgets.download.DownloadWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.filters.FiltersWidgetCreator"/>

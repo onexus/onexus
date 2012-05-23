@@ -15,30 +15,30 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.export;
+package org.onexus.ui.website.widgets.download;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
-@XStreamAlias("widget-export")
-public class ExportWidgetConfig extends WidgetConfig {
+@XStreamAlias("widget-download")
+public class DownloadWidgetConfig extends WidgetConfig {
 
-    private ExportWidgetStatus defaultStatus;
+    private DownloadWidgetStatus defaultStatus;
 
-    public ExportWidgetConfig() {
+    public DownloadWidgetConfig() {
         super();
     }
 
     @Override
-    public ExportWidgetStatus createEmptyStatus() {
-        return new ExportWidgetStatus(getId());
+    public DownloadWidgetStatus createEmptyStatus() {
+        return new DownloadWidgetStatus(getId());
     }
 
-    public ExportWidgetStatus getDefaultStatus() {
+    public DownloadWidgetStatus getDefaultStatus() {
         return defaultStatus;
     }
 
-    public void setDefaultStatus(ExportWidgetStatus defaultStatus) {
+    public void setDefaultStatus(DownloadWidgetStatus defaultStatus) {
         this.defaultStatus = defaultStatus;
     }
 

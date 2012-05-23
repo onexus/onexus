@@ -15,17 +15,17 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.export;
+package org.onexus.ui.website.widgets.download;
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class ExportWidgetStatus extends WidgetStatus<ExportWidgetConfig> {
+public class DownloadWidgetStatus extends WidgetStatus<DownloadWidgetConfig> {
 
-    public ExportWidgetStatus() {
+    public DownloadWidgetStatus() {
         super();
     }
 
-    public ExportWidgetStatus(String widgetId) {
+    public DownloadWidgetStatus(String widgetId) {
         super(widgetId);
     }
 

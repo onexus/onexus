@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.export;
+package org.onexus.ui.website.widgets.download;
 
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
@@ -23,21 +23,21 @@ import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.Widget;
 
-public class ExportWidgetCreator extends AbstractWidgetCreator<ExportWidgetConfig, ExportWidgetStatus> {
+public class DownloadWidgetCreator extends AbstractWidgetCreator<DownloadWidgetConfig, DownloadWidgetStatus> {
 
-    public ExportWidgetCreator() {
-        super(ExportWidgetConfig.class, "export-widget", "Download current table");
+    public DownloadWidgetCreator() {
+        super(DownloadWidgetConfig.class, "widget-download", "Download current data");
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, IModel<ExportWidgetStatus> statusModel) {
-        return new ExportWidget(componentId, statusModel);
+    protected Widget<?, ?> build(String componentId, IModel<DownloadWidgetStatus> statusModel) {
+        return new DownloadWidget(componentId, statusModel);
     }
 
     @Override
     public void register(IResourceRegister resourceRegister) {
         super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-export><id>export</id></widget-export>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-download><id>download</id></widget-download>");
     }
 
 }

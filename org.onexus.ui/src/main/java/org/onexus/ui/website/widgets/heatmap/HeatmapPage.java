@@ -24,11 +24,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.IResource;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.widgets.export.ExportResource;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HeatmapPage extends WebPage implements IResourceListener {
     
@@ -40,7 +35,7 @@ public class HeatmapPage extends WebPage implements IResourceListener {
     public HeatmapPage(HeatmapViewerConfig config, Query query) {
         super();
         this.config = config;
-        this.resource = new StatefulExportResource(query);
+        //TODO this.resource = new StatefulExportResource(query);
     }
 
     @Override
@@ -98,23 +93,4 @@ public class HeatmapPage extends WebPage implements IResourceListener {
         this.resource.respond(a);
     }
 
-    private static class StatefulExportResource extends ExportResource {
-
-        private Query query;
-
-        private StatefulExportResource(Query query) {
-            this.query = query;
-        }
-
-        protected WriteCallback newWriteCallback() {
-
-            return new WriteCallback() {
-                @Override
-                public void writeData(final Attributes attributes) {
-                    writeTSV(attributes.getResponse(), query);
-                }
-            };
-
-        }
-    }
 }

@@ -21,7 +21,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.Website;
-import org.onexus.ui.website.widgets.export.ExportResource;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
 public class WorkspaceApplication extends OnexusWebApplication {
@@ -38,9 +37,6 @@ public class WorkspaceApplication extends OnexusWebApplication {
     @Override
     protected void init() {
         super.init();
-
-        getSharedResources().add("export", new ExportResource());
-        mountResource("download", getSharedResources().get(Application.class, "export", null, null, null, true));
 
         mountPages();
 

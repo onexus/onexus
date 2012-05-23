@@ -133,7 +133,7 @@ public class Query implements Serializable {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("ON");
             oql.append(prettyPrint ? "\n\t" : " ");
-            oql.append(on);
+            oql.append(escapeString(on));
         }
 
 

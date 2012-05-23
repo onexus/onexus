@@ -15,12 +15,13 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.export;
+package org.onexus.ui.website.widgets.download;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -37,9 +38,9 @@ import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 
 import java.io.UnsupportedEncodingException;
 
-public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus> {
+public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetStatus> {
 
-    public ExportWidget(String componentId, IModel<ExportWidgetStatus> statusModel) {
+    public DownloadWidget(String componentId, IModel<DownloadWidgetStatus> statusModel) {
         super(componentId, statusModel);
         onEventFireUpdate(EventQueryUpdate.class);
     }
@@ -52,32 +53,35 @@ public class ExportWidget extends Widget<ExportWidgetConfig, ExportWidgetStatus>
         TableViewerStatus vs = getTableViewerStatus();
         if (config != null && vs != null) {
 
-            Query query = getQuery();
-
-            String statusEncoded;
-            try {
-                statusEncoded = ExportResource.encodeQuery(query);
-            } catch (UnsupportedEncodingException e) {
-                throw new WicketRuntimeException("Unable to encode the URL parameter 'query'", e);
-            }
+            String query = getQuery().toString();
 
             PageParameters params = new PageParameters();
-            params.add(ExportResource.STATUS, statusEncoded);
-            params.add(ExportResource.FILENAME, "file-name." + ExportResource.FORMAT_TSV);
+            params.add("query", getQuery());
 
-            ResourceReference rr = Application.get().getSharedResources()
-                    .get(Application.class, "export", null, null, null, true);
-            addOrReplace(new ResourceLink<String>("tsvLink", rr, params));
+            ResourceReference webservice = Application.get().getSharedResources().get(Application.class, "webservice", null, null, null, true);
+            addOrReplace(new ResourceLink<String>("tsvLink", webservice, params));
+
+            String url = "http://localhost:8181/onexus/onx";
+            String bashScript = "#!/bin/bash\n" +
+                    "\n" +
+                    "query=\"" + query + "\"\n" +
+                    "\n" +
+                    "echo $query | curl -X POST -d @- " + url;
+
+            addOrReplace(new Label("query", bashScript).setEscapeModelStrings(true));
 
         } else {
             addOrReplace(new AjaxLink<String>("tsvLink") {
 
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    target.add(ExportWidget.this);
+                    target.add(DownloadWidget.this);
                 }
 
             }.setEnabled(false));
+
+            addOrReplace(new Label("query"));
+
         }
 
         super.onBeforeRender();
