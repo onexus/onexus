@@ -23,6 +23,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.ui.ws.WebserviceResource;
 import org.wicketstuff.osgi.*;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
@@ -88,4 +89,7 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
 
     }
 
+    public ResourceReference getWebService() {
+        return getSharedResources().get(Application.class, "webservice", null, null, null, true);
+    }
 }

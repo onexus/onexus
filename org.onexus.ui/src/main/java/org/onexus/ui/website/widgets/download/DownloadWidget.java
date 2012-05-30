@@ -17,26 +17,31 @@
  */
 package org.onexus.ui.website.widgets.download;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.markup.html.link.ResourceLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.core.query.Query;
+import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.pages.browser.BrowserPage;
-import org.onexus.ui.website.pages.browser.BrowserPageConfig;
-import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.Widget;
-import org.onexus.ui.website.widgets.WidgetConfig;
-import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
-import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
+import org.onexus.ui.website.widgets.download.scripts.BashScript;
+import org.onexus.ui.website.widgets.download.scripts.IQueryScript;
 
-import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 
 public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetStatus> {
 
@@ -48,87 +53,17 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
     @Override
     protected void onBeforeRender() {
 
+        StringBuilder oql = new StringBuilder();
 
-        TableViewerConfig config = getTableViewerConfig();
-        TableViewerStatus vs = getTableViewerStatus();
-        if (config != null && vs != null) {
+        Query query = getQuery();
+        query.toString(oql, false);
 
-            String query = getQuery().toString();
+        PageParameters parameters = new PageParameters();
+        parameters.add("query", oql.toString());
 
-            PageParameters params = new PageParameters();
-            params.add("query", getQuery());
-
-            ResourceReference webservice = Application.get().getSharedResources().get(Application.class, "webservice", null, null, null, true);
-            addOrReplace(new ResourceLink<String>("tsvLink", webservice, params));
-
-            String url = "http://localhost:8181/onexus/onx";
-            String bashScript = "#!/bin/bash\n" +
-                    "\n" +
-                    "query=\"" + query + "\"\n" +
-                    "\n" +
-                    "echo $query | curl -X POST -d @- " + url;
-
-            addOrReplace(new Label("query", bashScript).setEscapeModelStrings(true));
-
-        } else {
-            addOrReplace(new AjaxLink<String>("tsvLink") {
-
-                @Override
-                public void onClick(AjaxRequestTarget target) {
-                    target.add(DownloadWidget.this);
-                }
-
-            }.setEnabled(false));
-
-            addOrReplace(new Label("query"));
-
-        }
+        addOrReplace(new InlineFrame("iframe", DownloadPage.class, parameters));
 
         super.onBeforeRender();
-
     }
-
-    private BrowserPageStatus getPageStatus() {
-        return findParent(BrowserPage.class).getStatus();
-    };
-
-    private BrowserPageConfig getPageConfig() {
-        return (BrowserPageConfig) getPageStatus().getConfig();
-    };
-
-    private TableViewerStatus getTableViewerStatus() {
-
-        TableViewerConfig tableConfig = getTableViewerConfig();
-        if (tableConfig == null) {
-            return null;
-        }
-
-        String widgetId = getTableViewerConfig().getId();
-        if (widgetId == null) {
-            return null;
-        }
-
-        return (TableViewerStatus) getPageStatus().getWidgetStatus(widgetId);
-
-    }
-
-    private TableViewerConfig getTableViewerConfig() {
-
-        try {
-            String currentTab = getPageStatus().getCurrentTabId();
-            String currentView = getPageStatus().getCurrentView();
-            String mainWidgetId = getPageConfig().getTab(currentTab).getView(currentView).getMain().trim();
-            WidgetConfig widgetConfig = getPageConfig().getWidget(mainWidgetId);
-
-            if (widgetConfig instanceof TableViewerConfig) {
-                return (TableViewerConfig) widgetConfig;
-            }
-        } catch (NullPointerException e) {
-            // Return null on any null pointer exception
-        }
-
-        return null;
-    }
-
 
 }
