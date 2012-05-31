@@ -8,6 +8,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -58,12 +59,16 @@ public class DownloadPage extends WebPage {
 
 
         final String query = parameters.get("query").toString("");
+        String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
         final String url = RequestUtils.toAbsolutePath( rootUrl, wsPath.toString() );
 
         // Add download file link
         PageParameters params = new PageParameters();
         params.add("query", query);
-        add(new ResourceLink<String>("tsvLink", webservice, params));
+        params.add("filename", fileName);
+        Link<String> link = new ResourceLink<String>("tsvLink", webservice, params);
+        link.add(new Label("filename", fileName));
+        add(link);
 
         // Add Scripts tabs
         add(new ListView<IQueryScript>("scripts", scripts) {

@@ -27,23 +27,25 @@ public class QueryResponse extends AbstractResponse {
     private boolean count;
     private String format;
     private boolean prettyPrint;
+    private String fileName;
 
-    public QueryResponse(String query, Boolean count, String format, Boolean prettyPrint) {
+    public QueryResponse(String query, Boolean count, String format, Boolean prettyPrint, String fileName) {
         super();
 
         this.query = query;
         this.count = (count == null) ? false : count;
         this.format = (format == null) ? "tsv" : format;
         this.prettyPrint = (prettyPrint == null) ? false : prettyPrint;
+        this.fileName = (fileName == null) ? "query-" + Integer.toHexString(query.hashCode()) + ".tsv" : fileName;
 
         setContentType("text/tab-separated-values");
-
+        setFileName(fileName);
     }
 
     public QueryResponse(String url, String select, String where, String orderBy, String limit, Boolean count, String format, Boolean prettyPrint) {
-        this(buildQuery(url, select, where, orderBy, limit), count, format, prettyPrint);
+        this(buildQuery(url, select, where, orderBy, limit), count, format, prettyPrint, ResourceUtils.getResourceName(url) + ".tsv");
 
-        setFileName(ResourceUtils.getResourceName(url) + ".tsv");
+
     }
 
 

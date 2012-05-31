@@ -17,31 +17,12 @@
  */
 package org.onexus.ui.website.widgets.download;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.InlineFrame;
-import org.apache.wicket.markup.html.link.ResourceLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.core.query.Query;
-import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.widgets.Widget;
-import org.onexus.ui.website.widgets.download.scripts.BashScript;
-import org.onexus.ui.website.widgets.download.scripts.IQueryScript;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetStatus> {
 

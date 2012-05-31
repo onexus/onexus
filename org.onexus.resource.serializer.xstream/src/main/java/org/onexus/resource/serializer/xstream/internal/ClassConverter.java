@@ -32,6 +32,7 @@ public class ClassConverter implements SingleValueConverter {
         registerType("string", String.class);
         registerType("double", Double.class);
         registerType("boolean", Boolean.class);
+        registerType("text", CharSequence.class);
     }
 
     public static void registerType(String text, Class type) {

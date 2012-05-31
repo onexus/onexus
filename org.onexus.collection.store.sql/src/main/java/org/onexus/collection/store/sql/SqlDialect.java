@@ -57,6 +57,7 @@ public class SqlDialect {
     protected Map<Class<?>, String> registerColumnTypes() {
         Map<Class<?>, String> columnTypes = new HashMap<Class<?>, String>();
         columnTypes.put(String.class, "VARCHAR(128)");
+        columnTypes.put(CharSequence.class, "TEXT");
         columnTypes.put(Boolean.class, "TINYINT(1)");
         columnTypes.put(Date.class, "TIMESTAMP");
         columnTypes.put(Integer.class, "INT(11)");

@@ -65,10 +65,11 @@ public class WebserviceResource extends AbstractResource {
         String recursive = parameters.get("recursive").toOptionalString();
         Boolean prettyPrint = parameters.get("prettyPrint").toOptionalBoolean();
         String format = parameters.get("format").toOptionalString();
+        String filename = parameters.get("filename").toOptionalString();
 
         // Multiple collection query
         if (query != null) {
-            return new QueryResponse(query, count, format, prettyPrint);
+            return new QueryResponse(query, count, format, prettyPrint, filename);
         }
 
         // Single collection query
