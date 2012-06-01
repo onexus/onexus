@@ -4,14 +4,14 @@ public class EqualId extends Filter {
 
     private String collectionAlias;
 
-    private String id;
+    private Object id;
 
 
     public EqualId() {
         super();
     }
 
-    public EqualId(String collectionAlias, String id) {
+    public EqualId(String collectionAlias, Object id) {
         this.collectionAlias = collectionAlias;
         this.id = id;
     }
@@ -20,7 +20,7 @@ public class EqualId extends Filter {
         return collectionAlias;
     }
 
-    public String getId() {
+    public Object getId() {
         return id;
     }
 
@@ -28,7 +28,7 @@ public class EqualId extends Filter {
         this.collectionAlias = collectionAlias;
     }
 
-    public void setId(String id) {
+    public void setId(Object id) {
         this.id = id;
     }
 
@@ -37,7 +37,7 @@ public class EqualId extends Filter {
 
         oql.append(collectionAlias);
         oql.append(" = ");
-        oql.append(id);
+        oql.append(Filter.convertToOQL(id));
 
         return oql;
     }

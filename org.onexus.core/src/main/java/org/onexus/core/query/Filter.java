@@ -28,6 +28,10 @@ public abstract class Filter implements Serializable {
             return "#" + String.valueOf(value) + "#";
         }
 
+        if (value instanceof String) {
+            return Query.escapeString(value.toString());
+        }
+
         return String.valueOf(value);
     }
 

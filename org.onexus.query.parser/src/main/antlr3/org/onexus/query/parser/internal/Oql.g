@@ -86,6 +86,7 @@ filterItem returns [Filter f]
 
 filterAtomic returns [Filter f]
 	: 	equal=filterEqual {$f=$equal.f;}
+	     | equalid=filterEqualId {$f=$equalid.f;}
 		 | notequal=filterNotEqual {$f=$notequal.f;}
 		 | lt=filterLessThan {$f=$lt.f;}
 		 | lte=filterLessThanOrEqual {$f=$lte.f;}
@@ -104,6 +105,10 @@ filterNot returns [Not f]
 
 filterEqual returns [Equal f]
 	:	alias=varname '.' field=varname '=' value=numberOrStringOrDateOrTime    { $f=new Equal($alias.text, $field.text, $value.v); }
+;
+
+filterEqualId returns [EqualId f]
+    :   alias=varname '=' value=numberOrStringOrDateOrTime  { $f=new EqualId($alias.text, $value.v); }
 ;
 
 filterNotEqual returns [NotEqual f]

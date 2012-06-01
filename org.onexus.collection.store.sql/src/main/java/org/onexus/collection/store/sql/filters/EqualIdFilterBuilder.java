@@ -32,7 +32,10 @@ public class EqualIdFilterBuilder extends AbstractFilterBuilder<EqualId> {
             }
         }
 
-        String ids[] = filter.getId().split("\t");
+        Object id = filter.getId();
+
+        //TODO check composed identifiers
+        Object[] ids = new Object[] { id };
 
         if (primaryKey.size() != ids.length) {
             throw new RuntimeException("Error on filter: " + filter);

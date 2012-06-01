@@ -137,7 +137,11 @@ public class SqlQuery {
                         collectionsFixed.add(fixedCollection);
 
                         List<String> fields = colLink.getFields();
-                        String[] ids = se.getId().split("\t");
+
+                        Object id = se.getId();
+                        //TODO manage composed keys
+                        Object[] ids = new Object[] { id };
+
                         if (fields.size() != ids.length) {
                             throw new RuntimeException("Bad entity id: " + se);
                         }
