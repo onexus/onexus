@@ -18,14 +18,22 @@
 package org.onexus.ui.website.widgets.share;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.RequestUtils;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.widgets.Widget;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
@@ -54,18 +62,26 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
         }
 
-        BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("directLink", getPage().getClass(), params);
-        link.add(new Image("image", "link.png"));
+        String linkURL = toAbsolutePath(urlFor(getPage().getClass(), params));
+        WebMarkupContainer link = new WebMarkupContainer("link");
+        link.add(new AttributeModifier("value", linkURL));
         addOrReplace(link);
 
         PageParameters embedParams = new PageParameters(params);
         embedParams.set("embed", true);
-        BookmarkablePageLink<String> elink = new BookmarkablePageLink<String>("embedLink", getPage().getClass(), embedParams);
-        elink.add(new Image("image", "link.png"));
-        addOrReplace(elink);
+
+        String embedHTML = toAbsolutePath(urlFor(getPage().getClass(), embedParams));
+        WebMarkupContainer embed = new WebMarkupContainer("embed");
+        embed.add(new AttributeModifier("value", embedHTML));
+        addOrReplace(embed);
 
         super.onBeforeRender();
 
+    }
+
+    public final static String toAbsolutePath(final CharSequence relativePagePath) {
+        HttpServletRequest req = (HttpServletRequest)((WebRequest)RequestCycle.get().getRequest()).getContainerRequest();
+        return RequestUtils.toAbsolutePath(req.getRequestURL().toString(), relativePagePath.toString());
     }
 
 }
