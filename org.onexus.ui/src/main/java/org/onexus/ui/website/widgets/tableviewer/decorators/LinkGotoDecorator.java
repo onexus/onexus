@@ -62,7 +62,7 @@ public class LinkGotoDecorator extends FieldDecorator {
             public void onClick(AjaxRequestTarget target) {
 
                 FixedEntity fe = getModelObject();
-                getBrowserPageStatus().getFilters().put(fe.getId(), fe);
+                getBrowserPageStatus().getFilters().add(fe);
 
                 sendEvent(EventFixEntity.EVENT);
 

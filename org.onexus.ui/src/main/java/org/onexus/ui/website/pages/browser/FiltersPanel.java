@@ -38,6 +38,7 @@ import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.widgets.Widget;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Map;
 
 public class FiltersPanel extends EventPanel {
@@ -62,13 +63,15 @@ public class FiltersPanel extends EventPanel {
 
         RepeatingView filterRules = new RepeatingView("fixedEntities");
 
-        Map<String, IFilter> filters = getBrowserPage().getFilters();
+        List<IFilter> filters = getBrowserPage().getFilters();
 
         if (filters != null && !filters.isEmpty()) {
 
             Query query = getQuery();
 
-            for (IFilter filter : filters.values()) {
+            for (int i=0; i < filters.size(); i++ ) {
+
+                IFilter filter = filters.get(i);
 
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
@@ -79,12 +82,12 @@ public class FiltersPanel extends EventPanel {
                 container.add(labelComponent);
                 container.add(filter.getTooltip("box", query));
 
-                BrowserPageLink<String> removeLink = new BrowserPageLink<String>("remove", Model.of(filter.getId())) {
+                BrowserPageLink<Integer> removeLink = new BrowserPageLink<Integer>("remove", Model.of(i)) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String filterId = getModelObject();
-                        getBrowserPageStatus().getFilters().remove(filterId);
+                        Integer pos = getModelObject();
+                        getBrowserPageStatus().getFilters().remove(pos.intValue());
                         sendEvent(EventUnfixEntity.EVENT);
                     }
 

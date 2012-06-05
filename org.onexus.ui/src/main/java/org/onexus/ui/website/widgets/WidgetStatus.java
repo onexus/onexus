@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.widgets;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.PageConfig;
@@ -66,6 +67,13 @@ public abstract class WidgetStatus<C extends WidgetConfig> implements Serializab
         // Override this method if this widget contributes to the query
     }
 
+    public void encodeParameters(PageParameters parameters, String keyPrefix) {
+
+    }
+
+    public void decodeParameters(PageParameters parameters, String keyPrefix) {
+
+    }
 
     @Override
     public int hashCode() {

@@ -18,6 +18,8 @@
 package org.onexus.ui.website.pages.browser;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
@@ -28,9 +30,8 @@ import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import javax.inject.Inject;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
@@ -40,7 +41,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private String currentView;
 
-    private Map<String, IFilter> filters = new HashMap<String, IFilter>();
+    private List<IFilter> filters = new ArrayList<IFilter>();
 
     @Inject
     public ICollectionManager collectionManager;
@@ -100,11 +101,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         this.release = releaseURI;
     }
 
-    public Map<String, IFilter> getFilters() {
+    public List<IFilter> getFilters() {
         return filters;
     }
 
-    public void setFilters(Map<String, IFilter> filters) {
+    public void setFilters(List<IFilter> filters) {
         this.filters = filters;
     }
 
@@ -121,7 +122,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     public void afterQueryBuild(Query query) {
 
         if (filters != null) {
-            for (IFilter fe : filters.values()) {
+            for (IFilter fe : filters) {
                 if (getCollectionManager().isLinkable(query, fe.getFilteredCollection())) {
                     Filter filter = fe.buildFilter(query);
                     QueryUtils.and(query, filter);
@@ -149,5 +150,47 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         }
 
         return collectionManager;
+    }
+
+    @Override
+    public void encodeParameters(PageParameters parameters, String keyPrefix) {
+
+        BrowserPageStatus defaultStatus = getConfig().getDefaultStatus();
+        if (defaultStatus == null) {
+            defaultStatus = getConfig().createEmptyStatus();
+        }
+
+        if (!StringUtils.equals(currentTabId, defaultStatus.getCurrentTabId())) {
+            parameters.add(keyPrefix + "tab", currentTabId);
+        }
+
+        for (IFilter filter : filters) {
+            parameters.add(keyPrefix + "f", filter.toUrlParameter());
+        }
+
+
+        super.encodeParameters(parameters, keyPrefix);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void decodeParameters(PageParameters parameters, String keyPrefix) {
+
+        StringValue currentTabId = parameters.get(keyPrefix + "tab");
+        if (!currentTabId.isEmpty()) {
+            this.currentTabId = currentTabId.toString();
+        }
+
+        List<StringValue> values = parameters.getValues(keyPrefix + "f");
+        if (!values.isEmpty()) {
+            this.filters = new ArrayList<IFilter>(values.size());
+            for (StringValue value : values) {
+                FixedEntity fe = new FixedEntity();
+                fe.loadUrlPrameter(value.toString());
+                this.filters.add(fe);
+            }
+        }
+
+
+        super.decodeParameters(parameters, keyPrefix);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

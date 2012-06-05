@@ -15,17 +15,17 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.bookmark;
+package org.onexus.ui.website.widgets.share;
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 
-public class BookmarkWidgetStatus extends WidgetStatus<BookmarkWidgetConfig> {
+public class ShareWidgetStatus extends WidgetStatus<ShareWidgetConfig> {
 
-    public BookmarkWidgetStatus() {
+    public ShareWidgetStatus() {
         super();
     }
 
-    public BookmarkWidgetStatus(String widgetId) {
+    public ShareWidgetStatus(String widgetId) {
         super(widgetId);
     }
 

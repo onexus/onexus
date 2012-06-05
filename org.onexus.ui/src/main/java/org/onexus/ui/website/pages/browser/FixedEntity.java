@@ -2,7 +2,9 @@ package org.onexus.ui.website.pages.browser;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.util.string.*;
 import org.h2.util.StringUtils;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
@@ -62,11 +64,6 @@ public class FixedEntity implements IFilter {
         this.entityId = entityId;
         this.deletable = deletable;
         this.enable = true;
-    }
-
-    @Override
-    public String getId() {
-        return "fixed-" + filteredCollection;
     }
 
     @Override
@@ -135,6 +132,23 @@ public class FixedEntity implements IFilter {
 
         return (StringUtils.equals(fieldValue , rule.getValue()) ? !negated : negated);
     }
+
+    @Override
+    public String toUrlParameter() {
+        return filteredCollection + "::" + entityId + "::" + (deletable?"d":"") + (enable?"e":"");
+    }
+
+    @Override
+    public void loadUrlPrameter(String parameter) {
+        String[] values = parameter.split("::");
+
+        this.filteredCollection = values[0];
+        this.entityId = values[1];
+        String flags = values[2];
+        deletable = flags.contains("d");
+        enable = flags.contains("e");
+    }
+
 
     @Override
     public String getLabel(Query query) {
@@ -248,6 +262,7 @@ public class FixedEntity implements IFilter {
             return false;
         return true;
     }
+
 
 
 }

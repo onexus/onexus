@@ -27,7 +27,7 @@ public class WorkspaceApplication extends OnexusWebApplication {
 
     private void mountPages() {
         mountPage("admin", ResourcesPage.class);
-        mountPage("website", Website.class);
+        mountPage("website/${"+Website.PARAMETER_PAGE+"}/${ptab}", Website.class);
     }
 
     public Class<? extends Page> getHomePage() {

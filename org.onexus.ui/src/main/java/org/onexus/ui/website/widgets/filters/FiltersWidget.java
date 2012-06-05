@@ -63,7 +63,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 FilterConfig filter = item.getModelObject();
                 BrowserPageStatus browserStatus = getPageStatus();
 
-                VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters().values());
+                VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters());
 
                 if (!filter.getHidden() && fixedPredicate.evaluate(filter)) {
 

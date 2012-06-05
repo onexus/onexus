@@ -17,9 +17,9 @@
  */
 package org.onexus.ui.website.pages;
 
-import org.apache.wicket.MetaDataEntry;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
@@ -149,5 +149,26 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
     public void afterQueryBuild(Query query) {
         // Override this method if the page contributes to the query build
+    }
+
+    public void encodeParameters(PageParameters parameters, String keyPrefix) {
+
+        if (widgetStatuses != null) {
+
+            for (WidgetStatus status : widgetStatuses) {
+                status.encodeParameters(parameters, keyPrefix + "w" + status.getId());
+            }
+        }
+
+    }
+
+    public void decodeParameters(PageParameters parameters, String keyPrefix) {
+
+        if (widgetStatuses != null) {
+            for (WidgetStatus status : widgetStatuses) {
+                status.decodeParameters(parameters, keyPrefix + "w" + status.getId());
+            }
+        }
+
     }
 }

@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.bookmark;
+package org.onexus.ui.website.widgets.share;
 
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.IResourceRegister;
@@ -23,21 +23,21 @@ import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.Widget;
 
-public class BookmarkWidgetCreator extends AbstractWidgetCreator<BookmarkWidgetConfig, BookmarkWidgetStatus> {
+public class ShareWidgetCreator extends AbstractWidgetCreator<ShareWidgetConfig, ShareWidgetStatus> {
 
-    public BookmarkWidgetCreator() {
-        super(BookmarkWidgetConfig.class, "bookmark-widget", "Create linkable bookmarks.");
+    public ShareWidgetCreator() {
+        super(ShareWidgetConfig.class, "share-widget", "Create linkable bookmarks.");
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, IModel<BookmarkWidgetStatus> statusModel) {
-        return new BookmarkWidget(componentId, statusModel);
+    protected Widget<?, ?> build(String componentId, IModel<ShareWidgetStatus> statusModel) {
+        return new ShareWidget(componentId, statusModel);
     }
 
     @Override
     public void register(IResourceRegister resourceRegister) {
         super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-bookmark><id>bookmark</id></widget-bookmark>");
+        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-share><id>share</id></widget-share>");
     }
 
 }

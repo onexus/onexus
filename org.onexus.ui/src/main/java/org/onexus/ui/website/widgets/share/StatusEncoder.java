@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.bookmark;
+package org.onexus.ui.website.widgets.share;
 
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.codec.binary.Base64;

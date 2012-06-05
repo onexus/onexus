@@ -15,34 +15,34 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.bookmark;
+package org.onexus.ui.website.widgets.share;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
-@XStreamAlias("widget-bookmark")
-public class BookmarkWidgetConfig extends WidgetConfig {
+@XStreamAlias("widget-share")
+public class ShareWidgetConfig extends WidgetConfig {
 
-    private BookmarkWidgetStatus defaultStatus;
+    private ShareWidgetStatus defaultStatus;
 
-    public BookmarkWidgetConfig() {
+    public ShareWidgetConfig() {
         super();
     }
 
-    public BookmarkWidgetConfig(String id) {
+    public ShareWidgetConfig(String id) {
         super(id);
     }
 
     @Override
-    public BookmarkWidgetStatus createEmptyStatus() {
-        return new BookmarkWidgetStatus(getId());
+    public ShareWidgetStatus createEmptyStatus() {
+        return new ShareWidgetStatus(getId());
     }
 
-    public BookmarkWidgetStatus getDefaultStatus() {
+    public ShareWidgetStatus getDefaultStatus() {
         return defaultStatus;
     }
 
-    public void setDefaultStatus(BookmarkWidgetStatus defaultStatus) {
+    public void setDefaultStatus(ShareWidgetStatus defaultStatus) {
         this.defaultStatus = defaultStatus;
     }
 

@@ -17,13 +17,13 @@
  */
 package org.onexus.ui.website;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.pages.PageStatus;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class WebsiteStatus implements Serializable {
 
@@ -74,6 +74,33 @@ public class WebsiteStatus implements Serializable {
 
     public void onQueryBuild(Query query) {
         query.setOn(getConfig().getURI());
+    }
+
+    public void encodeParameters(PageParameters parameters) {
+
+        if (pageStatuses != null) {
+            parameters.add(Website.PARAMETER_PAGE, currentPage);
+            PageStatus status = getPageStatus(currentPage);
+            status.encodeParameters(parameters, "p");
+        }
+
+    }
+
+    public void decodeParameters(PageParameters parameters) {
+
+        if (pageStatuses != null) {
+
+            StringValue c = parameters.get(Website.PARAMETER_PAGE);
+            if (!c.isEmpty()) {
+                currentPage = c.toString();
+            }
+
+            PageStatus status = getPageStatus(currentPage);
+            if (status != null) {
+                status.decodeParameters(parameters, "p");
+            }
+        }
+
     }
 
 

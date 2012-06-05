@@ -21,6 +21,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.util.string.*;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
@@ -46,8 +47,24 @@ public class TopmainLayout extends AbstractLayout {
     }
 
     @Override
+    protected void onBeforeRender() {
+        StringValue embed = getPage().getPageParameters().get("embed");
+
+        boolean visible = !embed.toBoolean(false);
+        get("topwidgets").setVisible(visible);
+        get("toprightwidgets").setVisible(visible);
+        get("main").setEnabled(visible);
+
+        super.onBeforeRender();
+    }
+
+    @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(CSS));
+
+        if (isEmbed()) {
+            response.render(CssHeaderItem.forCSS("div.gridbar { display: none; }", "embed-layout"));
+        }
     }
 }

@@ -21,6 +21,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.util.string.*;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.browser.layouts.AbstractLayout;
@@ -49,6 +50,15 @@ public class LeftMainLayout extends AbstractLayout {
         response.render(CssHeaderItem.forReference(CSS));
     }
 
+    @Override
+    protected void onBeforeRender() {
+        StringValue embed = getPage().getPageParameters().get("embed");
+
+        boolean visible = !embed.toBoolean(false);
+        get("leftwidgets").setVisible(visible);
+
+        super.onBeforeRender();
+    }
 
 
 }

@@ -26,6 +26,7 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.string.*;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
@@ -87,6 +88,10 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
         response.render(CssHeaderItem.forReference(PAGE_CSS));
     }
 
+    protected boolean isEmbed() {
+        StringValue embed = getPage().getPageParameters().get("embed");
+       return embed.toBoolean(false);
+    }
 
     public static ResourceReference getCssResourceReference(Class<?> scope, ISourceManager sourceManager, PageConfig config) {
 

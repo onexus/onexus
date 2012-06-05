@@ -34,6 +34,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.util.string.*;
 import org.onexus.core.IResourceManager;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventTabSelected;
@@ -110,7 +111,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         });
 
         // Check if the current selected tab is visible.
-            String currentTabId = getStatus().getCurrentTabId();
+        String currentTabId = getStatus().getCurrentTabId();
 
         // Set a current tab if there is no one.
         if (currentTabId == null) {
@@ -181,6 +182,13 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             addOrReplace(new SingleLayout("content", viewConfig, getModel()));
         }
 
+
+        boolean visible = !isEmbed();
+        get("position").setVisible(visible);
+        get("tabs").setVisible(visible);
+        get("viewselector").setVisible(visible);
+
+
         super.onBeforeRender();
     }
 
@@ -192,7 +200,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             List<TabConfig> allTabs = getConfig().getTabs();
 
             // A predicate that filters the visible views
-            Predicate filter = new VisiblePredicate(getStatus().getRelease(), getStatus().getFilters().values());
+            Predicate filter = new VisiblePredicate(getStatus().getRelease(), getStatus().getFilters());
 
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();
@@ -202,4 +210,12 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        if (isEmbed()) {
+            response.render(CssHeaderItem.forCSS("div.tab-row { display: none; }", "embed-browser-page"));
+        }
+    }
 }

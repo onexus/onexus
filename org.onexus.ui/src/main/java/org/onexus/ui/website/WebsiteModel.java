@@ -23,11 +23,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.IResourceSerializer;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.widgets.bookmark.StatusEncoder;
+import org.onexus.ui.website.pages.PageConfig;
+import org.onexus.ui.website.pages.PageStatus;
+import org.onexus.ui.website.widgets.WidgetConfig;
+import org.onexus.ui.website.widgets.WidgetStatus;
 
 import javax.inject.Inject;
-import java.io.UnsupportedEncodingException;
 
 public class WebsiteModel implements IModel<WebsiteStatus> {
 
@@ -38,6 +41,10 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
 
     @Inject
     public IResourceManager resourceManager;
+
+    @Inject
+    public IResourceSerializer serializer;
+
 
     public WebsiteModel(PageParameters pageParameters) {
         super();
@@ -54,11 +61,13 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
         if (status == null) {
             status = getConfig().newStatus();
             setObject(status);
+            attachConfigs();
         }
 
         // Check config is set
         if (status.getConfig() == null) {
             status.setConfig(getConfig());
+            attachConfigs();
         }
 
         return status;
@@ -66,12 +75,37 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
 
     private WebsiteConfig getConfig() {
 
+        // On attach
         if (websiteConfig == null) {
+
+            // Attach website config
             websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+
         }
 
         return websiteConfig;
     }
+
+    private void attachConfigs() {
+
+        // Attach pages
+        if (status.getPageStatuses() != null) {
+            for (PageStatus pageStatus : status.getPageStatuses()) {
+                PageConfig pageConfig = websiteConfig.getPage(pageStatus.getId());
+                pageStatus.setConfig(pageConfig);
+
+                // Attach widgets
+                if (pageStatus.getWidgetStatuses() != null) {
+                    for (Object obj : pageStatus.getWidgetStatuses()) {
+                        WidgetStatus widgetStatus = (WidgetStatus) obj;
+                        WidgetConfig widgetConfig = pageConfig.getWidget(widgetStatus.getId());
+                        widgetStatus.setConfig(widgetConfig);
+                    }
+                }
+            }
+        }
+    }
+
 
     public void setObject(WebsiteStatus object) {
         this.status = object;
@@ -108,24 +142,11 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
             this.websiteUri = websiteParameter.toString();
         }
 
-        // Load Website status
+        // Force load default config and status
+        getObject();
 
-        StringValue encodedStatus = pageParameters.get(Website.PARAMETER_STATUS);
-        if (!encodedStatus.isEmpty()) {
-                try {
-                    StatusEncoder statusEncoder = new StatusEncoder(getClass().getClassLoader());
-                    status = statusEncoder.decodeStatus(encodedStatus.toString());
-                } catch (UnsupportedEncodingException e) {
-                    //TODO
-                }
-        }
-
-        // Set current page
-
-        StringValue pageId = pageParameters.get(Website.PARAMETER_PAGE);
-        if (!pageId.isEmpty()) {
-            getObject().setCurrentPage(pageId.toString());
-        }
+        // Update status
+        status.decodeParameters(pageParameters);
 
     }
 

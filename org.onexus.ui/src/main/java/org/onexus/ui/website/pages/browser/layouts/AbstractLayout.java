@@ -19,6 +19,7 @@ package org.onexus.ui.website.pages.browser.layouts;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.string.*;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.ViewConfig;
@@ -45,4 +46,10 @@ public class AbstractLayout extends Panel {
     public List<WidgetConfig> filterWidgets(String selectedWidgets) {
         return ViewConfig.getSelectedWidgetConfigs(getPageConfig(), selectedWidgets);
     }
+
+    protected boolean isEmbed() {
+        StringValue embed = getPage().getPageParameters().get("embed");
+        return embed.toBoolean(false);
+    }
+
 }

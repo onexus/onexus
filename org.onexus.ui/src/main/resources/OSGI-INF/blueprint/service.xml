@@ -110,7 +110,7 @@
         <bean class="org.onexus.ui.website.widgets.heatmap.HeatmapViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
-        <bean class="org.onexus.ui.website.widgets.bookmark.BookmarkWidgetCreator"/>
+        <bean class="org.onexus.ui.website.widgets.share.ShareWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.download.DownloadWidgetCreator"/>

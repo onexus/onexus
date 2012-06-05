@@ -17,6 +17,8 @@
  */
 package org.onexus.ui.website.widgets.tableviewer;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.*;
 import org.onexus.core.query.OrderBy;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
@@ -91,5 +93,43 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
             query.addOrderBy(orderWithAlias);
         }
 
+    }
+
+    @Override
+    public void encodeParameters(PageParameters parameters, String keyPrefix) {
+
+        TableViewerStatus defaultStatus = getConfig().getDefaultStatus();
+        if (defaultStatus == null) {
+            defaultStatus = getConfig().createEmptyStatus();
+        }
+
+        if (currentColumnSet != defaultStatus.currentColumnSet) {
+            parameters.add(keyPrefix + "cs", currentColumnSet);
+        }
+
+        if (order != null && !order.equals(defaultStatus.getOrder())) {
+            parameters.add(keyPrefix + "o", order.getCollectionRef() + "::" + order.getFieldId() + "::" + (order.isAscendent()?"a":"d"));
+        }
+
+        super.encodeParameters(parameters, keyPrefix);
+    }
+
+    @Override
+    public void decodeParameters(PageParameters parameters, String keyPrefix) {
+
+        StringValue cs = parameters.get(keyPrefix + "cs");
+
+        if (!cs.isEmpty()) {
+            currentColumnSet = Integer.parseInt(cs.toString("0"));
+        }
+
+        StringValue o = parameters.get(keyPrefix + "o");
+
+        if (!o.isEmpty()) {
+            String[] values = o.toString().split("::");
+            order = new OrderBy(values[0], values[1], (values[2].contains("a")));
+        }
+
+        super.decodeParameters(parameters, keyPrefix);
     }
 }

@@ -80,7 +80,7 @@ public class LinkDecorator extends FieldDecorator {
     protected AbstractEvent[] onClick(FixedEntity rowEntity, BrowserPageStatus status)  {
 
         // Fix current row entity
-        status.getFilters().put(rowEntity.getId(), rowEntity);
+        status.getFilters().add(rowEntity);
 
         return new AbstractEvent[] { EventFixEntity.EVENT };
     }

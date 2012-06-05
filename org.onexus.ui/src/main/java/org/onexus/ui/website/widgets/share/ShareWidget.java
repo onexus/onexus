@@ -15,35 +15,27 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.bookmark;
+package org.onexus.ui.website.widgets.share;
 
-import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.ui.website.Website;
+import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.widgets.Widget;
 
-import java.io.UnsupportedEncodingException;
+public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
-public class BookmarkWidget extends Widget<BookmarkWidgetConfig, BookmarkWidgetStatus> {
 
-    private transient StatusEncoder statusEncoder;
-
-    public BookmarkWidget(String componentId, IModel<BookmarkWidgetStatus> statusModel) {
+    public ShareWidget(String componentId, IModel<ShareWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
     }
 
-    private StatusEncoder getStatusEncoder() {
-        if (statusEncoder == null) {
-            statusEncoder = new StatusEncoder(getClass().getClassLoader());
-        }
-        return statusEncoder;
-    }
 
     @Override
     protected void onBeforeRender() {
@@ -52,24 +44,25 @@ public class BookmarkWidget extends Widget<BookmarkWidgetConfig, BookmarkWidgetS
         PageParameters params = new PageParameters();
 
         if (website != null) {
-            String strStatus;
-            try {
-                strStatus = getStatusEncoder().encodeStatus(website.getStatus());
-            } catch (UnsupportedEncodingException e) {
-                throw new WicketRuntimeException("Unable to encode the URL parameter 'status'", e);
+            WebsiteStatus status = website.getStatus();
+            status.encodeParameters(params);
+
+            // If the website URI is not defined at Application level then add it as a parameter.
+            if (Application.get().getMetaData(Website.WEBSITE_CONFIG) == null) {
+                params.add(Website.PARAMETER_WEBSITE, website.getConfig().getURI());
             }
 
-            params.add(Website.PARAMETER_STATUS, strStatus);
-            params.add(Website.PARAMETER_WEBSITE, website.getConfig().getURI());
         }
 
         BookmarkablePageLink<String> link = new BookmarkablePageLink<String>("directLink", getPage().getClass(), params);
         link.add(new Image("image", "link.png"));
         addOrReplace(link);
 
-        if (website == null) {
-            link.setEnabled(false);
-        }
+        PageParameters embedParams = new PageParameters(params);
+        embedParams.set("embed", true);
+        BookmarkablePageLink<String> elink = new BookmarkablePageLink<String>("embedLink", getPage().getClass(), embedParams);
+        elink.add(new Image("image", "link.png"));
+        addOrReplace(elink);
 
         super.onBeforeRender();
 

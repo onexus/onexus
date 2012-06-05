@@ -37,6 +37,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
+import org.apache.wicket.util.string.*;
 import org.onexus.core.ISourceManager;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
@@ -57,9 +58,8 @@ public class Website extends WebPage {
     public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {};
 
     // Parameters
-    public final static String PARAMETER_WEBSITE = "onexus-website";
-    public final static String PARAMETER_STATUS = "onexus-status";
-    public final static String PARAMETER_PAGE = "onexus-page";
+    public final static String PARAMETER_WEBSITE = "uri";
+    public final static String PARAMETER_PAGE = "c";
 
     public final static ResourceReference CSS = new CssResourceReference(Website.class, "Website.css");
 
@@ -82,8 +82,9 @@ public class Website extends WebPage {
             status.setCurrentPage(config.getPages().get(0).getId());
         }
 
-        add(new ProgressBar("progressbar", false));
         add(new Label("windowTitle", config.getTitle()));
+
+        add(new ProgressBar("progressbar", false));
 
         boolean showHeader = (config.getShowHeader() == null) ? true : config.getShowHeader();
         WebMarkupContainer header = new WebMarkupContainer("header");
@@ -103,7 +104,12 @@ public class Website extends WebPage {
 
                 PageParameters parameters = new PageParameters();
                 parameters.add(PARAMETER_PAGE, pageConfig.getId());
-                parameters.add(PARAMETER_WEBSITE, config.getURI());
+
+                // If the website URI is not defined at Application level then add it as a parameter.
+                if (Application.get().getMetaData(Website.WEBSITE_CONFIG) == null) {
+                    parameters.add(PARAMETER_WEBSITE, config.getURI());
+                }
+
                 Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
                 link.add(new Label("name", pageConfig.getLabel()));
 
@@ -120,7 +126,7 @@ public class Website extends WebPage {
 
         String currentPage = status.getCurrentPage();
 
-        add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel() )));
+        add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
 
         if (config != null && config.getAuthorization() != null) {
 
@@ -139,6 +145,18 @@ public class Website extends WebPage {
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);
 
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        StringValue embed = getPage().getPageParameters().get("embed");
+
+        boolean visible = !embed.toBoolean(false);
+
+        get("header").setVisible(visible);
+        get("bottom").setVisible(visible);
+
+        super.onBeforeRender();
     }
 
     @Override

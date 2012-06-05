@@ -8,11 +8,6 @@ div.data > div.content {
 	color: #444;
 	text-align: justify;
 	min-height: 600px;
-
-	-moz-box-shadow: -4px 7px 7px #c3c3c3;
-	-o-box-shadow: -4px 7px 7px #c3c3c3;
-	-icab-box-shadow: -4px 7px 7px #c3c3c3;
-	-khtml-box-shadow: -4px 7px 7px #c3c3c3;
-	box-shadow: -4px 7px 7px #c3c3c3;
+    box-shadow: -4px 7px 7px #c3c3c3;
 }
 
