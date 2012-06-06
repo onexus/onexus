@@ -8,6 +8,10 @@ public class ResourceFile extends Resource {
         super();
     }
 
+    public ResourceFile(String localPath) {
+        this.localPath = localPath;
+    }
+
     public String getLocalPath() {
         return localPath;
     }

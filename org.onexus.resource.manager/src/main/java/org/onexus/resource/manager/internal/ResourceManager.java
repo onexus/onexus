@@ -22,15 +22,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
 import org.onexus.core.exceptions.UnserializeException;
-import org.onexus.core.resources.Folder;
-import org.onexus.core.resources.Project;
-import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Workspace;
+import org.onexus.core.resources.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class ResourceManager implements IResourceManager {
@@ -122,23 +120,36 @@ public class ResourceManager implements IResourceManager {
             }
 
             @SuppressWarnings("unchecked")
-            Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, new String[]{ONEXUS_FILE_EXTENSION}, true);
+            Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, null, true);
 
             for (File file : files) {
 
                 Resource resource = null;
-                try {
-                    resource = checkoutFile(file, ws.getKey(), ws.getValue());
-                } catch (FileNotFoundException e) {
-                    LOGGER.error("File '" + file.getPath() + "' not found.");
-                    continue;
-                } catch (UnserializeException e) {
-                    LOGGER.error("Parsing file " + file.getPath() + " at line " + e.getLine() + " on " + e.getPath());
-                    continue;
-                } catch (Exception e) {
-                    LOGGER.error("Parsing file " + file.getPath());
-                    continue;
+
+                if (ONEXUS_FILE_EXTENSION.equals(FilenameUtils.getExtension(file.getName()))) {
+
+                    try {
+                        resource = checkoutFile(file, ws.getKey(), ws.getValue());
+                    } catch (FileNotFoundException e) {
+                        LOGGER.error("File '" + file.getPath() + "' not found.");
+                        continue;
+                    } catch (UnserializeException e) {
+                        LOGGER.error("Parsing file " + file.getPath() + " at line " + e.getLine() + " on " + e.getPath());
+                        resource = new ResourceFile(file.getPath());
+                    } catch (Exception e) {
+                        resource = new ResourceFile(file.getPath());
+                    }
+
+                } else {
+                    resource = new ResourceFile(file.getPath());
+
+                    String resourceURI = buildURIFromFile(file, ws.getKey(), ws.getValue());
+                    resource.setURI(resourceURI);
+
+                    String resourceName = FilenameUtils.getName(file.getAbsolutePath());
+                    resource.setName(resourceName);
                 }
+
 
                 resources.put(resource.getURI(), resource);
                 uriToAbsolutePath.put(resource.getURI(), file.getAbsolutePath());
