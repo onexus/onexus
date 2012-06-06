@@ -119,7 +119,7 @@
 								<feature>org.onexus.loader.tsv</feature>
 								<feature>org.onexus.loader.biomart</feature>
 								<feature>org.onexus.resource.manager</feature>
-                                				<feature>org.onexus.source.manager</feature>
+                                				<feature>org.onexus.data.manager</feature>
 								<feature>org.onexus.resource.serializer.xstream</feature>
 								<feature>org.onexus.collection.store.mysql</feature>
 								<feature>org.onexus.collection.store.h2sql</feature>

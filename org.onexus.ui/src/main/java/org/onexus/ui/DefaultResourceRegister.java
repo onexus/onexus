@@ -53,12 +53,12 @@ public class DefaultResourceRegister implements IResourceRegister {
         addAutoComplete(Release.class, "release", "<property><key>[key]</key><value>[value]</value></property>");
 
         // Source
-        addAutoComplete(Source.class, "source", "<title>[title]</title>");
-        addAutoComplete(Source.class, "source", "<description>[description]</description>");
-        addAutoComplete(Source.class, "source", "<content-type>[title]</content-type>");
-        addAutoComplete(Source.class, "source", "<repository>[repository]</repository>");
-        addAutoComplete(Source.class, "source", "<path>[path]</path>");
-        addAutoComplete(Source.class, "source", "<property><key>[key]</key><value>[value]</value></property>");
+        addAutoComplete(Data.class, "data", "<title>[title]</title>");
+        addAutoComplete(Data.class, "data", "<description>[description]</description>");
+        addAutoComplete(Data.class, "data", "<content-type>[title]</content-type>");
+        addAutoComplete(Data.class, "data", "<repository>[repository]</repository>");
+        addAutoComplete(Data.class, "data", "<path>[path]</path>");
+        addAutoComplete(Data.class, "data", "<property><key>[key]</key><value>[value]</value></property>");
 
         // Collection
         addAutoComplete(Collection.class, "collection", "<title>[title]</title>");

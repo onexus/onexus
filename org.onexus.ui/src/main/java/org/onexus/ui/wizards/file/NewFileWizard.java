@@ -29,9 +29,9 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.onexus.core.ISourceManager;
+import org.onexus.core.IDataManager;
+import org.onexus.core.resources.Data;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Source;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractNewResourceWizard;
 
@@ -42,10 +42,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewFileWizard extends AbstractNewResourceWizard<Source> {
+public class NewFileWizard extends AbstractNewResourceWizard<Data> {
 
     @Inject
-    public ISourceManager sourceManager;
+    public IDataManager dataManager;
 
     private transient List<FileUpload> tmpFile;
     private FileReference fileUpload = null;
@@ -75,7 +75,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
     @Override
     public void onFinish() {
 
-        Source resource = getResource();
+        Data resource = getResource();
         String parentUri = getParentUri();
 
         if (resource != null && parentUri != null && fileUpload != null) {
@@ -144,8 +144,8 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
     }
 
     @Override
-    protected Source getDefaultResource() {
-        return new Source();
+    protected Data getDefaultResource() {
+        return new Data();
     }
 
     private final class ResourceName extends WizardStep {
@@ -212,8 +212,8 @@ public class NewFileWizard extends AbstractNewResourceWizard<Source> {
         public void applyState() {
 
             if (fileUpload != null) {
-                Source source = getResource();
-                source.setName(fileUpload.fileName.replaceAll("[^\\w-.\\+]", "_"));
+                Data data = getResource();
+                data.setName(fileUpload.fileName.replaceAll("[^\\w-.\\+]", "_"));
             }
         }
 

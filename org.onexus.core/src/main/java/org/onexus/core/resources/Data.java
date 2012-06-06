@@ -20,17 +20,17 @@ package org.onexus.core.resources;
 
 import java.util.List;
 
-public class Source extends Resource {
+public class Data extends Resource {
 
     private String repository;
 
     private List<String> paths;
 
-    public Source() {
+    public Data() {
         super();
     }
 
-    public Source(String contentType) {
+    public Data(String contentType) {
         super();
     }
 

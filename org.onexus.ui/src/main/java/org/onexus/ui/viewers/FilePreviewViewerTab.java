@@ -19,8 +19,8 @@ package org.onexus.ui.viewers;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.onexus.core.resources.Data;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Source;
 import org.onexus.ui.IViewerCreator;
 
 public class FilePreviewViewerTab implements IViewerCreator {
@@ -43,6 +43,6 @@ public class FilePreviewViewerTab implements IViewerCreator {
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
-        return Source.class.isAssignableFrom(resourceType);
+        return Data.class.isAssignableFrom(resourceType);
     }
 }

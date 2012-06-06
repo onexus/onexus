@@ -58,7 +58,7 @@
         <module>org.onexus.loader.anduril</module>
         <module>org.onexus.collection.store.h2sql</module>
         <module>onexus-resources</module>
-        <module>org.onexus.source.manager</module>
+        <module>org.onexus.data.manager</module>
         <module>onexus-archetypes/widget</module>
     </modules>
 
@@ -276,7 +276,7 @@
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.source.manager</artifactId>
+                <artifactId>org.onexus.data.manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

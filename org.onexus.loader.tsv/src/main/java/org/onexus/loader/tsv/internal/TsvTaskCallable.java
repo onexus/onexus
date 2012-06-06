@@ -17,22 +17,22 @@
  */
 package org.onexus.loader.tsv.internal;
 
+import org.onexus.core.IDataManager;
 import org.onexus.core.IEntitySet;
-import org.onexus.core.ISourceManager;
 import org.onexus.core.ITask;
 import org.onexus.core.TaskStatus;
 import org.onexus.core.resources.Collection;
 
 public class TsvTaskCallable implements ITask {
 
-    private ISourceManager sourceManager;
+    private IDataManager dataManager;
     private TaskStatus status;
     private Collection collection;
 
-    public TsvTaskCallable(ISourceManager sourceManager, Collection collection) {
+    public TsvTaskCallable(IDataManager dataManager, Collection collection) {
         super();
 
-        this.sourceManager = sourceManager;
+        this.dataManager = dataManager;
         this.status = new TaskStatus(Long.toHexString(System.currentTimeMillis() + collection.hashCode()), "Loading TSV file '" + collection.getLoader().getParameter("FILE_URL") + "'");
         this.collection = collection;
     }
@@ -41,7 +41,7 @@ public class TsvTaskCallable implements ITask {
     public IEntitySet call() throws Exception {
         status.addLog(status.getTitle());
         try {
-            return new FileEntitySet(sourceManager, collection);
+            return new FileEntitySet(dataManager, collection);
         } finally {
             this.status.setDone(true);
         }

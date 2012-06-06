@@ -27,7 +27,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.string.*;
-import org.onexus.core.ISourceManager;
+import org.onexus.core.IDataManager;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.EventPanel;
@@ -39,7 +39,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import java.util.Locale;
 
 public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel {
 
@@ -50,13 +49,13 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
     private IWidgetManager widgetManager;
 
     @Inject
-    private ISourceManager sourceManager;
+    private IDataManager dataManager;
 
     public Page(String componentId, IModel<S> pageModel) {
         super(componentId, pageModel);
 
         if (PAGE_CSS == null) {
-            PAGE_CSS = getCssResourceReference(getClass(), sourceManager, getConfig());
+            PAGE_CSS = getCssResourceReference(getClass(), dataManager, getConfig());
         }
 
     }
@@ -93,13 +92,13 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
        return embed.toBoolean(false);
     }
 
-    public static ResourceReference getCssResourceReference(Class<?> scope, ISourceManager sourceManager, PageConfig config) {
+    public static ResourceReference getCssResourceReference(Class<?> scope, IDataManager dataManager, PageConfig config) {
 
         if (config.getCss() != null) {
                 WebsiteConfig websiteConfig = config.getWebsiteConfig();
                 String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
                 String cssUri = ResourceUtils.getAbsoluteURI(parentUri, config.getCss());
-                List<URL> urls = sourceManager.retrieve(cssUri);
+                List<URL> urls = dataManager.retrieve(cssUri);
 
                 try {
 

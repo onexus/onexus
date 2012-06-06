@@ -10,13 +10,13 @@
     </parent>
 
     <properties>
-        <bundle.symbolicName>org.onexus.source.manager</bundle.symbolicName>
-        <bundle.namespace>org.onexus.source.manager</bundle.namespace>
+        <bundle.symbolicName>org.onexus.data.manager</bundle.symbolicName>
+        <bundle.namespace>org.onexus.data.manager</bundle.namespace>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onexus</groupId>
-    <artifactId>org.onexus.source.manager</artifactId>
+    <artifactId>org.onexus.data.manager</artifactId>
 
     <name>${bundle.symbolicName}</name>
 

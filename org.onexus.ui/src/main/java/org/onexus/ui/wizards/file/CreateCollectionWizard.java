@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.ISourceManager;
+import org.onexus.core.IDataManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.*;
 import org.onexus.core.utils.ResourceUtils;
@@ -42,7 +42,7 @@ import java.util.*;
 public class CreateCollectionWizard extends AbstractWizard {
 
     @Inject
-    public ISourceManager sourceManager;
+    public IDataManager dataManager;
 
     @Inject
     public IResourceManager resourceManager;
@@ -81,7 +81,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             separator = "\t";
         }
 
-        List<URL> urls = sourceManager.retrieve(sourceURI);
+        List<URL> urls = dataManager.retrieve(sourceURI);
 
         if (urls == null && urls.isEmpty()) {
             return;

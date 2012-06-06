@@ -135,6 +135,9 @@ public class ResourceManager implements IResourceManager {
                 } catch (UnserializeException e) {
                     LOGGER.error("Parsing file " + file.getPath() + " at line " + e.getLine() + " on " + e.getPath());
                     continue;
+                } catch (Exception e) {
+                    LOGGER.error("Parsing file " + file.getPath());
+                    continue;
                 }
 
                 resources.put(resource.getURI(), resource);

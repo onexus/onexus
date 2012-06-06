@@ -20,9 +20,8 @@ package org.onexus.ui.wizards.file;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Source;
+import org.onexus.core.resources.Data;
 import org.onexus.ui.IWizardCreator;
-import org.onexus.ui.website.widgets.IWidgetCreator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -60,6 +59,6 @@ public class CreateCollectionWizardCreator implements IWizardCreator {
 
     @Override
     public boolean isVisible(Resource resource) {
-        return Source.class.isAssignableFrom(resource.getClass());
+        return Data.class.isAssignableFrom(resource.getClass());
     }
 }

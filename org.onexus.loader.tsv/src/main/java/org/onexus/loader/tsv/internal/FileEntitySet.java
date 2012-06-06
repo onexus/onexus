@@ -19,7 +19,7 @@ package org.onexus.loader.tsv.internal;
 
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntitySet;
-import org.onexus.core.ISourceManager;
+import org.onexus.core.IDataManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.core.utils.ResourceUtils;
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 
 public class FileEntitySet extends FileEntity implements IEntitySet {
 
-    private ISourceManager sourceManager;
+    private IDataManager dataManager;
     private long currentPosition;
     private String currentLine;
 
@@ -66,10 +66,10 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
     }
 
 
-    public FileEntitySet(ISourceManager sourceManager, Collection collection) {
+    public FileEntitySet(IDataManager dataManager, Collection collection) {
         super(collection, "", -1);
 
-        this.sourceManager = sourceManager;
+        this.dataManager = dataManager;
         this.urls = new ArrayDeque<URL>();
 
         initializeURLs(collection.getLoader().getParameter("SOURCE_URI"), ResourceUtils.getProperties(collection.getURI()));
@@ -100,7 +100,7 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
         String resourceURI = (parametersSeparator > 0 ? strUrl.substring(0, parametersSeparator) : strUrl);
 
         // Check if the URL is a directory
-        urls.addAll(sourceManager.retrieve(resourceURI));
+        urls.addAll(dataManager.retrieve(resourceURI));
 
     }
 

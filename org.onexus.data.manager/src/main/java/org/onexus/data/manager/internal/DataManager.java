@@ -15,29 +15,29 @@
  *
  *
  */
-package org.onexus.source.manager.internal;
+package org.onexus.data.manager.internal;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.onexus.core.IDataManager;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.ISourceManager;
-import org.onexus.core.resources.Source;
+import org.onexus.core.resources.Data;
 import org.onexus.core.utils.ResourceUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
-public class SourceManager implements ISourceManager {
+public class DataManager implements IDataManager {
 
+    private static final Logger log = LoggerFactory.getLogger(DataManager.class);
     public final static String ONEXUS_REPOSITORY_ENV = "ONEXUS_REPOSITORY";
 
     private String repoPath;
@@ -45,7 +45,7 @@ public class SourceManager implements ISourceManager {
     private IResourceManager resourceManager;
 
 
-    public SourceManager() {
+    public DataManager() {
         super();
 
         repoPath = System.getenv(ONEXUS_REPOSITORY_ENV);
@@ -58,27 +58,32 @@ public class SourceManager implements ISourceManager {
     @Override
     public List<URL> retrieve(String sourceURI) {
 
-        Source source = resourceManager.load(Source.class, sourceURI);
+        Data data = resourceManager.load(Data.class, sourceURI);
 
-        if (source.getRepository() == null) {
-            source.setRepository("local");
+        if (data == null) {
+            log.error("Unknown source " + sourceURI);
+            return Collections.emptyList();
         }
 
-        if (source.getPaths() == null) {
-            source.setPaths(new ArrayList<String>());
+        if (data.getRepository() == null) {
+            data.setRepository("local");
         }
 
-        if (source.getPaths().isEmpty()) {
-            source.getPaths().add("${workspace.name}/${project.name}/${release.name}/${resource.name}");
+        if (data.getPaths() == null) {
+            data.setPaths(new ArrayList<String>());
         }
 
-        if (!source.getRepository().equals("local")) {
-            throw new UnsupportedOperationException("Repository '" + source.getRepository() + "' not supported.");
+        if (data.getPaths().isEmpty()) {
+            data.getPaths().add("${workspace.name}/${project.name}/${release.name}/${resource.name}");
+        }
+
+        if (!data.getRepository().equals("local")) {
+            throw new UnsupportedOperationException("Repository '" + data.getRepository() + "' not supported.");
         }
 
         List<URL> urls = new ArrayList<URL>();
 
-        for (String templatePath : source.getPaths()) {
+        for (String templatePath : data.getPaths()) {
             String path = replaceProperties(templatePath, ResourceUtils.getProperties(sourceURI));
             String fileName = FilenameUtils.getName(path);
 

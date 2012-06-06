@@ -36,9 +36,8 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.string.*;
-import org.onexus.core.ISourceManager;
+import org.onexus.core.IDataManager;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageManager;
@@ -69,7 +68,7 @@ public class Website extends WebPage {
     public IPageManager pageManager;
 
     @Inject
-    public ISourceManager sourceManager;
+    public IDataManager dataManager;
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
@@ -172,7 +171,7 @@ public class Website extends WebPage {
                 String parentUri = ResourceUtils.getParentURI(config.getURI());
                 String fileUri = ResourceUtils.getAbsoluteURI(parentUri, css);
 
-                List<URL> urls = sourceManager.retrieve(fileUri);
+                List<URL> urls = dataManager.retrieve(fileUri);
 
                 if (urls.isEmpty()) {
                     WEBSITE_CSS = CSS;

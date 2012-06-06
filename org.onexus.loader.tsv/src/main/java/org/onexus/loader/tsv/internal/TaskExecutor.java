@@ -17,8 +17,8 @@
  */
 package org.onexus.loader.tsv.internal;
 
+import org.onexus.core.IDataManager;
 import org.onexus.core.ILoader;
-import org.onexus.core.ISourceManager;
 import org.onexus.core.ITask;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
@@ -33,7 +33,7 @@ public class TaskExecutor implements ILoader {
     public static final String FIELDS_AUTOADD_DATATYPE = "FIELDS_AUTOADD_DATATYPE";
     public static final String FIELDS_AUTOADD_REGEXP = "FIELDS_AUTOADD_REGEXP";
 
-    private ISourceManager sourceManager;
+    private IDataManager dataManager;
 
     public TaskExecutor() {
         super();
@@ -46,7 +46,7 @@ public class TaskExecutor implements ILoader {
 
     @Override
     public ITask createCallable(Collection collection) {
-        return new TsvTaskCallable(sourceManager, collection);
+        return new TsvTaskCallable(dataManager, collection);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TaskExecutor implements ILoader {
             }
         }
 
-        FileEntitySet fileEntitySet = new FileEntitySet(sourceManager, collection);
+        FileEntitySet fileEntitySet = new FileEntitySet(dataManager, collection);
 
         Pattern regExp = Pattern.compile(autoupdateRegExp);
         boolean addedField = false;
@@ -106,12 +106,12 @@ public class TaskExecutor implements ILoader {
         return addedField;
     }
 
-    public ISourceManager getSourceManager() {
-        return sourceManager;
+    public IDataManager getDataManager() {
+        return dataManager;
     }
 
-    public void setSourceManager(ISourceManager sourceManager) {
-        this.sourceManager = sourceManager;
+    public void setDataManager(IDataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
 }

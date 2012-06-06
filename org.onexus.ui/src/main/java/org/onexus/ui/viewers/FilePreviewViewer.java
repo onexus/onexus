@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.onexus.core.ISourceManager;
+import org.onexus.core.IDataManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.editor.tabs.xmleditor.XmlEditorTab;
 
@@ -39,7 +39,7 @@ import java.util.List;
 public class FilePreviewViewer extends Panel {
 
     @Inject
-    public ISourceManager sourceManager;
+    public IDataManager dataManager;
     
     public final static int MAXIMUM_LINES = 100;
 
@@ -75,7 +75,7 @@ public class FilePreviewViewer extends Panel {
                 return null;                
             }
             
-            List<URL> urls = sourceManager.retrieve(resource.getURI());
+            List<URL> urls = dataManager.retrieve(resource.getURI());
             
             if (urls == null && urls.isEmpty()) {
                 return null;

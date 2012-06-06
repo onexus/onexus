@@ -11,7 +11,7 @@
 		<feature version='${project.version}'>org.onexus.loader.tsv</feature>
 		<feature version='${project.version}'>org.onexus.loader.biomart</feature>
 		<feature version='${project.version}'>org.onexus.resource.manager</feature>
-		<feature version='${project.version}'>org.onexus.source.manager</feature>
+		<feature version='${project.version}'>org.onexus.data.manager</feature>
 		<feature version='${project.version}'>org.onexus.resource.serializer.xstream</feature>
         <feature version='${project.version}'>org.onexus.collection.store.sql</feature>
 		<feature version='${project.version}'>org.onexus.collection.store.mysql</feature>

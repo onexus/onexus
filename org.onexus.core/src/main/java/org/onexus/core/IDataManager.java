@@ -17,13 +17,10 @@
  */
 package org.onexus.core;
 
-import org.onexus.core.resources.Source;
-
-import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-public interface ISourceManager {
+public interface IDataManager {
 
     public List<URL> retrieve(String sourceURI);
 

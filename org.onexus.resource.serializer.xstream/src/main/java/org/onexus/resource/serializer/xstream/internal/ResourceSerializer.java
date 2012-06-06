@@ -75,9 +75,9 @@ public class ResourceSerializer implements IResourceSerializer {
         alias("folder", Folder.class);
 
         // Source
-        alias("source", Source.class);
-        xstream.addImplicitCollection(Source.class, "paths", "path", String.class);
-        xstream.addImplicitCollection(Source.class, "properties", "property", Property.class);
+        alias("data", Data.class);
+        xstream.addImplicitCollection(Data.class, "paths", "path", String.class);
+        xstream.addImplicitCollection(Data.class, "properties", "property", Property.class);
 
         // Collection
         alias("collection", Collection.class);
