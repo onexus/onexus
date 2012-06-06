@@ -1,12 +1,21 @@
 <html xmlns:wicket>
 <wicket:panel>
-    <h1>Share this page</h1>
 
-    <p>Paste link in <strong>email</strong> or <strong>IM</strong></p>
-    <input type="text" wicket:id="link" />
+    <br />
+    <h3>Paste link in email or IM</h3>
+    <input type="text" wicket:id="link" style="width: 100%;" onclick="this.select();" />
 
-    <p>Paste HTML to embed in website</p>
-    <input type="text" wicket:id="embed" />
+    <h3>Paste HTML to embed in website</h3>
+    <p><strong><form wicket:id="form">
+        width&nbsp;<input wicket:id="width" type="text" value="890" style="width: 40px; text-align: right;">px&nbsp;&nbsp;&nbsp;
+        height&nbsp;<input wicket:id="height" type="text" value="790" style="width: 40px; text-align: right;">px
+    </form></strong></p>
+    <input type="text" wicket:id="embed" style="width: 100%;" onclick="this.select();" />
+
+    <br />
+    <h3>Preview</h3>
+    <div wicket:id="preview">
+    </div>
 
 </wicket:panel>
 </html>

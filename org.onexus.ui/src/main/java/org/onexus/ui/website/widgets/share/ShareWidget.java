@@ -19,11 +19,19 @@ package org.onexus.ui.website.widgets.share;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
@@ -37,11 +45,40 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
+    private String width = "890";
+    private String height = "790";
+
+    private String linkURL;
+    private String embedURL;
 
     public ShareWidget(String componentId, IModel<ShareWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         onEventFireUpdate(EventQueryUpdate.class);
+
+        Form form = new Form<ShareWidget>("form");
+
+        TextField<String> width = new TextField<String>("width", new PropertyModel<String>(this, "width"));
+        width.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add( ShareWidget.this.get("embed"));
+                target.add( ShareWidget.this.get("preview"));
+            }
+        });
+        form.add(width);
+
+        TextField<String> height = new TextField<String>("height", new PropertyModel<String>(this, "height"));
+        height.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add( ShareWidget.this.get("embed") );
+                target.add( ShareWidget.this.get("preview"));
+            }
+        });
+        form.add(height);
+
+        add(form);
     }
 
 
@@ -62,7 +99,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
         }
 
-        String linkURL = toAbsolutePath(urlFor(getPage().getClass(), params));
+        linkURL = toAbsolutePath(urlFor(getPage().getClass(), params));
         WebMarkupContainer link = new WebMarkupContainer("link");
         link.add(new AttributeModifier("value", linkURL));
         addOrReplace(link);
@@ -70,18 +107,61 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
         PageParameters embedParams = new PageParameters(params);
         embedParams.set("embed", true);
 
-        String embedHTML = toAbsolutePath(urlFor(getPage().getClass(), embedParams));
+        embedURL = toAbsolutePath(urlFor(getPage().getClass(), embedParams));
         WebMarkupContainer embed = new WebMarkupContainer("embed");
-        embed.add(new AttributeModifier("value", embedHTML));
+        embed.setOutputMarkupId(true);
+
+        IModel<String> embedModel = new PropertyModel<String>(this, "embedCode");
+        embed.add(new AttributeModifier("value", embedModel));
         addOrReplace(embed);
+
+        addOrReplace(new Label("preview", embedModel).setEscapeModelStrings(false).setOutputMarkupId(true));
 
         super.onBeforeRender();
 
     }
 
+    public String getEmbedCode() {
+        return getEmbedHTML(embedURL, linkURL, getWidth(), getHeight());
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
     public final static String toAbsolutePath(final CharSequence relativePagePath) {
         HttpServletRequest req = (HttpServletRequest)((WebRequest)RequestCycle.get().getRequest()).getContainerRequest();
         return RequestUtils.toAbsolutePath(req.getRequestURL().toString(), relativePagePath.toString());
+    }
+
+    private final static String getEmbedHTML(String embedURL, String browseURL, String width, String height) {
+
+        StringBuilder code = new StringBuilder();
+
+        code.append("<div style=\"width:").append(width).append("px; height: ").append(height).append("px; border: 1px solid #ccc; margin: 5px auto; padding: 5px;\">");
+        code.append("<div style=\"position: absolute; width:").append(width).append("px; height: ").append(height).append("px; background: transparent; z-index: 100;\" onclick=\"document.getElementById('43DFX').click();\"></div>");
+        code.append("<div style=\"float: right; width: 65px;\">");
+        code.append("<a id=\"43DFX\" target=\"_tab\" style=\"position: absolute;\"");
+        code.append("href=\"").append(browseURL).append("\">browse</a>");
+        code.append("</div>");
+        code.append("<iframe align=\"middle\" style=\"width:").append(width).append("px; border: 0px; height: ").append(height).append("px; overflow: hidden;\" scrolling=\"no\"");
+        code.append("src=\"").append(embedURL).append("\"></iframe>");
+        code.append("</div>");
+
+        return code.toString();
+
     }
 
 }
