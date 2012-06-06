@@ -25,6 +25,8 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.core.IDataManager;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Data;
+import org.onexus.core.resources.Resource;
+import org.onexus.core.resources.ResourceFile;
 import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,14 +58,34 @@ public class DataManager implements IDataManager {
     }
 
     @Override
-    public List<URL> retrieve(String sourceURI) {
+    public List<URL> retrieve(String dataURI) {
 
-        Data data = resourceManager.load(Data.class, sourceURI);
+        Resource resource = resourceManager.load(Resource.class, dataURI);
 
-        if (data == null) {
-            log.error("Unknown source " + sourceURI);
+        if (resource instanceof ResourceFile) {
+
+            ResourceFile resourceFile = (ResourceFile) resource;
+
+            // Use resource as a data source.
+            if (resourceFile != null) {
+
+                File sourceFile = new File(resourceFile.getLocalPath());
+                List<URL> urls = new ArrayList<URL>();
+
+                try {
+                    urls.add(sourceFile.toURI().toURL());
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
+
+                return urls;
+            }
+
+            log.error("Unknown source " + dataURI);
             return Collections.emptyList();
         }
+
+        Data data = (Data) resource;
 
         if (data.getRepository() == null) {
             data.setRepository("local");
@@ -84,7 +106,7 @@ public class DataManager implements IDataManager {
         List<URL> urls = new ArrayList<URL>();
 
         for (String templatePath : data.getPaths()) {
-            String path = replaceProperties(templatePath, ResourceUtils.getProperties(sourceURI));
+            String path = replaceProperties(templatePath, ResourceUtils.getProperties(dataURI));
             String fileName = FilenameUtils.getName(path);
 
             // Check if it is a wildcard filter
