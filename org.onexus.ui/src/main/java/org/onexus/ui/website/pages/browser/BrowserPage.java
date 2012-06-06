@@ -162,7 +162,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
 
         addOrReplace(viewSelector);
-        viewSelector.setVisible(views.size() > 1);
+
 
         ViewConfig viewConfig = null;
         for (ViewConfig view : getCurrentTab().getViews()) {
@@ -186,8 +186,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         boolean visible = !isEmbed();
         get("position").setVisible(visible);
         get("tabs").setVisible(visible);
-        get("viewselector").setVisible(visible);
-
+        viewSelector.setVisible(visible && views.size()>1);
 
         super.onBeforeRender();
     }
