@@ -37,15 +37,15 @@ import javax.inject.Inject;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-public class WorkspaceTree extends LinkTree {
+public class ProjectTree extends LinkTree {
 
     @Inject
     private IResourceManager resourceManager;
 
     private IModel<Resource> currentResource;
 
-    public WorkspaceTree(String id, IModel<Resource> currentResource) {
-        super(id, new WorkspaceTreeModel(currentResource));
+    public ProjectTree(String id, IModel<Resource> currentResource) {
+        super(id, new ProjectTreeModel(currentResource));
         setOutputMarkupId(true);
 
         this.currentResource = currentResource;

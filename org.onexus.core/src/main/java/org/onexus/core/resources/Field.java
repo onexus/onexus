@@ -17,17 +17,11 @@
  */
 package org.onexus.core.resources;
 
-import java.util.List;
-
-public class Field implements IMetadata {
+public class Field extends AbstractMetadata {
 
     private String id;
-    private String label;
-    private String title;
-    private String description;
     private Class<?> type;
     private Boolean primaryKey;
-    private List<Property> properties;
 
     public Field() {
         super();
@@ -36,12 +30,11 @@ public class Field implements IMetadata {
     public Field(String id, String label, String title, Class<?> type) {
         super();
         this.id = id;
-        this.label = label;
-        this.title = title;
         this.type = type;
         this.primaryKey = null;
+        setLabel(label);
+        setTitle(title);
     }
-
 
     public String getId() {
         return id;
@@ -53,37 +46,6 @@ public class Field implements IMetadata {
 
     public void setType(Class<?> type) {
         this.type = type;
-    }
-
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Class<?> getType() {
@@ -98,24 +60,6 @@ public class Field implements IMetadata {
         this.primaryKey = primaryKey;
     }
 
-    @Override
-    public List<Property> getProperties() {
-        return properties;
-    }
-
-    @Override
-    public String getProperty(String key) {
-        if (this.properties == null) {
-            return null;
-        }
-
-        for (Property p : this.properties) {
-            if (p.getKey().equals(key)) {
-                return p.getValue();
-            }
-        }
-        return null;
-    }
 
     @Override
     public int hashCode() {
@@ -144,10 +88,10 @@ public class Field implements IMetadata {
 
     @Override
     public String toString() {
-        return "Field [id=" + id + ", label=" + label + ", title="
-                + title + ", description=" + description + ", type="
-                + type + ", primaryKey=" + primaryKey + ", properties="
-                + properties + "]";
+        return "Field{" +
+                "id='" + id + '\'' +
+                ", type=" + type +
+                ", primaryKey=" + primaryKey +
+                '}';
     }
-
 }

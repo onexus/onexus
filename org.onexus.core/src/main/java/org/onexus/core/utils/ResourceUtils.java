@@ -38,7 +38,7 @@ public class ResourceUtils {
         return resourceURI.substring(0, onx + 3);
     }
 
-    public static String getWorkspaceURI(String resourceURI) {
+    public static String getProjectURI(String resourceURI) {
 
         int onx = resourceURI.indexOf(ONEXUS_TAG);
         if (onx < 0) return null;
@@ -47,23 +47,6 @@ public class ResourceUtils {
         if (sep1 < 0) return null;
 
         return resourceURI.substring(0, sep1);
-    }
-
-    public static String getWorkspaceName(String resourceURI) {
-        return getResourceName(getWorkspaceURI(resourceURI));
-    }
-
-    public static String getProjectURI(String resourceURI) {
-        int onx = resourceURI.indexOf(ONEXUS_TAG);
-        if (onx < 0) return null;
-
-        int sep1 = resourceURI.indexOf(SEPARATOR, onx + 4);
-        if (sep1 < 0) return null;
-
-        int sep2 = resourceURI.indexOf(SEPARATOR, sep1 + 1);
-        if (sep2 < 0) return null;
-
-        return resourceURI.substring(0, sep2);
     }
 
     public static String getProjectName(String resourceURI) {
@@ -80,10 +63,7 @@ public class ResourceUtils {
         int sep2 = resourceURI.indexOf(SEPARATOR, sep1 + 1);
         if (sep2 < 0) return null;
 
-        int sep3 = resourceURI.indexOf(SEPARATOR, sep2 + 1);
-        if (sep3 < 0) return null;
-
-        return resourceURI.substring(0, sep3);
+        return resourceURI.substring(0, sep2);
     }
 
     public static String getReleaseName(String resourceURI) {
@@ -147,8 +127,6 @@ public class ResourceUtils {
         if (resourceURI != null) {
 
             properties.put("server.uri", getServerURI(resourceURI));
-            properties.put("workspace.uri", getWorkspaceURI(resourceURI));
-            properties.put("workspace.name", getWorkspaceName(resourceURI));
             properties.put("project.uri", getProjectURI(resourceURI));
             properties.put("project.name", getProjectName(resourceURI));
             properties.put("release.uri", getReleaseURI(resourceURI));
@@ -177,9 +155,9 @@ public class ResourceUtils {
             return collectionURI;
         }
 
-        // Relative to Workspace URI
+        // Relative to server URI
         if (collectionURI.charAt(0) == Resource.SEPARATOR) {
-            return getWorkspaceURI(releaseURI) + collectionURI;
+            return getServerURI(releaseURI) + collectionURI;
         }
 
         // Relative URI (../../resorce-name)

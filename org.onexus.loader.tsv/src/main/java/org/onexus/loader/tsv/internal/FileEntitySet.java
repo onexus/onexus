@@ -107,7 +107,9 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
     private String replaceProperties(String strUrl, Map<String, String> properties) {
 
         for (Map.Entry<String, String> entry : properties.entrySet()) {
-            strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
+            if (entry.getValue() != null) {
+                strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
+            }
         }
 
         return strUrl;

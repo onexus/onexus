@@ -37,11 +37,6 @@ public class DefaultResourceRegister implements IResourceRegister {
     
     public DefaultResourceRegister() {
 
-        // Workspace
-        addAutoComplete(Workspace.class, "workspace", "<title>[title]</title>");
-        addAutoComplete(Workspace.class, "workspace", "<description>[description]</description>");
-        addAutoComplete(Workspace.class, "workspace", "<property><key>[key]</key><value>[value]</value></property>");
-
         // Project
         addAutoComplete(Project.class, "project", "<title>[title]</title>");
         addAutoComplete(Project.class, "project", "<description>[description]</description>");
@@ -174,7 +169,7 @@ public class DefaultResourceRegister implements IResourceRegister {
 
             // Without this we have a ClassNotFoundException when
             // unserializating
-            // the DefaultTreeModel object that uses WorkspaceTree. (may be the
+            // the DefaultTreeModel object that uses ProjectTree. (may be the
             // problem was that we weren't importing javax.swing.event package)
             return TreeModelListener.class.getClassLoader().loadClass(name);
         }

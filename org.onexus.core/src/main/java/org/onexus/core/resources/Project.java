@@ -17,15 +17,28 @@
  */
 package org.onexus.core.resources;
 
+import java.util.List;
+
 public class Project extends Resource {
+
+    private List<Repository> repositories;
 
     public Project() {
         super();
     }
 
-    @Override
-    public String toString() {
-        return "Project [getURI()=" + getURI() + "]";
+    public List<Repository> getRepositories() {
+        return repositories;
     }
 
+    public void setRepositories(List<Repository> repositories) {
+        this.repositories = repositories;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "repositories=" + repositories +
+                '}';
+    }
 }

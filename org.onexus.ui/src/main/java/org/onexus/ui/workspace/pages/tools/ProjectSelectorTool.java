@@ -23,24 +23,24 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Workspace;
+import org.onexus.core.resources.Project;
 import org.onexus.ui.workspace.pages.ResourcesPage;
 
 import javax.inject.Inject;
 import java.util.List;
 
-public class WorkspaceSelectorTool extends AbstractTool<Workspace> {
+public class ProjectSelectorTool extends AbstractTool<Project> {
 
     @Inject
     private IResourceManager resourceManager;
 
-    public WorkspaceSelectorTool() {
-        super(new Model<Workspace>());
+    public ProjectSelectorTool() {
+        super(new Model<Project>());
 
-        add(new DropDownChoice<Workspace>("resources-toolbar-selector", getModel(), new WorkspacesListModel(), new WorkspaceRenderer()) {
+        add(new DropDownChoice<Project>("resources-toolbar-selector", getModel(), new WorkspacesListModel(), new WorkspaceRenderer()) {
 
             @Override
-            protected void onSelectionChanged(Workspace newSelection) {
+            protected void onSelectionChanged(Project newSelection) {
 
                 if (newSelection != null) {
                     PageParameters parameters = new PageParameters();
@@ -60,27 +60,27 @@ public class WorkspaceSelectorTool extends AbstractTool<Workspace> {
         });
     }
 
-    private class WorkspacesListModel extends AbstractReadOnlyModel<List<Workspace>> {
+    private class WorkspacesListModel extends AbstractReadOnlyModel<List<Project>> {
 
         @Override
-        public List<Workspace> getObject() {
+        public List<Project> getObject() {
 
-            List<Workspace> workspaces = resourceManager.loadChildren(Workspace.class, null);
+            List<Project> workspaces = resourceManager.loadChildren(Project.class, null);
             return workspaces;
 
         }
 
     }
 
-    private class WorkspaceRenderer implements IChoiceRenderer<Workspace> {
+    private class WorkspaceRenderer implements IChoiceRenderer<Project> {
 
         @Override
-        public Object getDisplayValue(Workspace workspace) {
+        public Object getDisplayValue(Project workspace) {
             return workspace.getName();
         }
 
         @Override
-        public String getIdValue(Workspace object, int index) {
+        public String getIdValue(Project object, int index) {
             return Integer.toString(index);
         }
 

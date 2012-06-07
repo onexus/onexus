@@ -24,9 +24,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.core.IDataManager;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Data;
-import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.ResourceFile;
+import org.onexus.core.resources.*;
 import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,72 +33,51 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class DataManager implements IDataManager {
 
     private static final Logger log = LoggerFactory.getLogger(DataManager.class);
-    public final static String ONEXUS_REPOSITORY_ENV = "ONEXUS_REPOSITORY";
-
-    private String repoPath;
 
     private IResourceManager resourceManager;
 
-
     public DataManager() {
         super();
-
-        repoPath = System.getenv(ONEXUS_REPOSITORY_ENV);
-
-        if (repoPath == null) {
-            repoPath = "repository";
-        }
     }
 
     @Override
     public List<URL> retrieve(String dataURI) {
 
-        Resource resource = resourceManager.load(Resource.class, dataURI);
-
-        if (resource instanceof ResourceFile) {
-
-            ResourceFile resourceFile = (ResourceFile) resource;
-
-            // Use resource as a data source.
-            if (resourceFile != null) {
-
-                File sourceFile = new File(resourceFile.getLocalPath());
-                List<URL> urls = new ArrayList<URL>();
-
-                try {
-                    urls.add(sourceFile.toURI().toURL());
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-
-                return urls;
-            }
-
-            log.error("Unknown source " + dataURI);
-            return Collections.emptyList();
-        }
-
-        Data data = (Data) resource;
-
-        if (data.getRepository() == null) {
-            data.setRepository("local");
-        }
+        Data data = resourceManager.load(Data.class, dataURI);
 
         if (data.getPaths() == null) {
             data.setPaths(new ArrayList<String>());
         }
 
-        if (data.getPaths().isEmpty()) {
-            data.getPaths().add("${workspace.name}/${project.name}/${release.name}/${resource.name}");
+        String projectURI = ResourceUtils.getProjectURI(dataURI);
+        Project project = resourceManager.load(Project.class, projectURI);
+        Repository repository = null;
+        if (data.getRepository() == null) {
+            if (!project.getRepositories().isEmpty()) {
+                repository = project.getRepositories().get(0);
+            }
+        } else {
+            for (Repository r : project.getRepositories()) {
+                if (data.getRepository().equals(r.getId())) {
+                    repository = r;
+                    break;
+                }
+            }
         }
 
-        if (!data.getRepository().equals("local")) {
-            throw new UnsupportedOperationException("Repository '" + data.getRepository() + "' not supported.");
+
+        if (repository == null) {
+            throw new UnsupportedOperationException("Repository '" + data.getRepository() + "' not defined in project " + projectURI);
+        }
+
+        if (!"file".equals(repository.getType())) {
+            throw new UnsupportedOperationException("Repository of type '" + repository.getType() + "' not supported.");
         }
 
         List<URL> urls = new ArrayList<URL>();
@@ -119,7 +96,7 @@ public class DataManager implements IDataManager {
                     path = path.replace("**/", "");
                 }
 
-                String sourceContainer = repoPath + File.separator + FilenameUtils.getFullPathNoEndSeparator(path);
+                String sourceContainer = repository.getLocation() + File.separator + FilenameUtils.getFullPathNoEndSeparator(path);
                 File sourceFile = new File(sourceContainer);
 
                 for (File file : (Collection<File>) FileUtils.listFiles(sourceFile, new WildcardFileFilter(fileName), dirFilter)) {
@@ -131,7 +108,7 @@ public class DataManager implements IDataManager {
                 }
 
             } else {
-                String sourcePath = repoPath + File.separator + path;
+                String sourcePath = repository.getLocation() + File.separator + path;
                 File sourceFile = new File(sourcePath);
 
                 try {

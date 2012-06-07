@@ -59,9 +59,6 @@
 
     <!-- Default wizards -->
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.project.NewProjectWizardCreator"/>
-    </service>
-    <service interface="org.onexus.ui.IWizardCreator">
         <bean class="org.onexus.ui.wizards.folder.NewFolderWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">

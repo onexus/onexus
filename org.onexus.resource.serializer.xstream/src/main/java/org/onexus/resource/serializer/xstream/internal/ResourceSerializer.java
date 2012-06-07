@@ -59,13 +59,10 @@ public class ResourceSerializer implements IResourceSerializer {
 
         this.xstream.setClassLoader(new RegisteredClassLoader());
 
-        // Workspace
-        alias("workspace", Workspace.class);
-        xstream.addImplicitCollection(Workspace.class, "properties", "property", Property.class);
-
         // Project
         alias("project", Project.class);
         xstream.addImplicitCollection(Project.class, "properties", "property", Property.class);
+        xstream.addImplicitCollection(Project.class, "repositories", "repository", Repository.class);
 
         // Release
         alias("release", Release.class);

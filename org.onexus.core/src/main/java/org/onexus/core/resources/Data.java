@@ -18,6 +18,8 @@
 package org.onexus.core.resources;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Data extends Resource {
@@ -30,8 +32,10 @@ public class Data extends Resource {
         super();
     }
 
-    public Data(String contentType) {
+    public Data(String repository, String... paths) {
         super();
+        this.repository = repository;
+        this.paths = new ArrayList<String>(Arrays.asList(paths));
     }
 
     public String getRepository() {

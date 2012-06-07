@@ -19,25 +19,25 @@ package org.onexus.ui.workspace.tree;
 
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Workspace;
+import org.onexus.core.resources.Project;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class WorkspaceListModel extends AbstractReadOnlyModel<List<Workspace>> {
+public abstract class ProjectsListModel extends AbstractReadOnlyModel<List<Project>> {
 
-    private transient List<Workspace> workspaces;
+    private transient List<Project> projects;
 
     @Override
-    public List<Workspace> getObject() {
+    public List<Project> getObject() {
 
-        if (workspaces == null) {
-            workspaces = new ArrayList<Workspace>();
+        if (projects == null) {
+            projects = new ArrayList<Project>();
 
-            workspaces = getResourceManager().loadChildren(Workspace.class, null);
+            projects = getResourceManager().loadChildren(Project.class, null);
         }
 
-        return workspaces;
+        return projects;
     }
 
     protected abstract IResourceManager getResourceManager();

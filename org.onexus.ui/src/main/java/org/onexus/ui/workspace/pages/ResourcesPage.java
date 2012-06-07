@@ -32,11 +32,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Workspace;
 import org.onexus.ui.workspace.events.EventResourceSelect;
-import org.onexus.ui.workspace.pages.tools.WorkspaceSelectorTool;
-import org.onexus.ui.workspace.tree.WorkspaceTree;
+import org.onexus.ui.workspace.pages.tools.ProjectSelectorTool;
+import org.onexus.ui.workspace.tree.ProjectTree;
 import org.onexus.ui.workspace.viewers.ViewerTabs;
 
 import javax.inject.Inject;
@@ -60,12 +60,12 @@ public class ResourcesPage extends BasePage {
 
     public ResourcesPage(PageParameters parameters) {
 
-        String defaultResourceURI = getDefaultResourceURI();
+        String defaultResourceURI = getDefaultProjectURI();
         String resourceURI = parameters.get(RESOURCE).toString(defaultResourceURI);
 
         IModel<Resource> currentResource = new ResourceModel(resourceURI);
 
-        add(new WorkspaceTree("tree", currentResource));
+        add(new ProjectTree("tree", currentResource));
 
         resourcesTabs = new WebMarkupContainer("resourcesTabs");
         resourcesTabs.setOutputMarkupId(true);
@@ -106,15 +106,15 @@ public class ResourcesPage extends BasePage {
 
         add(resourcesTabs);
 
-        addTool(new WorkspaceSelectorTool());
+        addTool(new ProjectSelectorTool());
 
     }
 
-    private String getDefaultResourceURI() {
-        List<Workspace> workspaces = resourceManager.loadChildren(Workspace.class, null);
+    private String getDefaultProjectURI() {
+        List<Project> projects = resourceManager.loadChildren(Project.class, null);
 
-        if (workspaces != null && !workspaces.isEmpty()) {
-            return workspaces.get(0).getURI();
+        if (projects != null && !projects.isEmpty()) {
+            return projects.get(0).getURI();
         }
 
         return null;

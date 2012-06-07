@@ -19,8 +19,8 @@ package org.onexus.ui.wizards.resource;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Workspace;
 import org.onexus.ui.IWizardCreator;
 
 public class RemoveResourceWizardCreator implements IWizardCreator {
@@ -52,7 +52,7 @@ public class RemoveResourceWizardCreator implements IWizardCreator {
 
     @Override
     public boolean isVisible(Resource resource) {
-        return !Workspace.class.isAssignableFrom(resource.getClass());
+        return !Project.class.isAssignableFrom(resource.getClass());
     }
 
 }

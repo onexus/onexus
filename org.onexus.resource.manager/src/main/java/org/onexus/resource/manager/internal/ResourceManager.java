@@ -19,10 +19,14 @@ package org.onexus.resource.manager.internal;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.HiddenFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
 import org.onexus.core.exceptions.UnserializeException;
 import org.onexus.core.resources.*;
+import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +38,10 @@ import java.util.regex.Pattern;
 public class ResourceManager implements IResourceManager {
 
     @SuppressWarnings("rawtypes")
-    public final static Class[] DEFAULT_CONTAINER_RESOURCES = {Workspace.class, Project.class, Folder.class};
+    public final static Class[] DEFAULT_CONTAINER_RESOURCES = {Project.class, Folder.class};
     private final static Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
     private final static String ONEXUS_CONTAINER_PREFIX = "onexus-";
     private final static String ONEXUS_FILE_EXTENSION = "onx";
-    private static final String ONEXUS_WORKSPACE_ENV = "ONEXUS_WORKSPACES";
 
     // Config properties
     private String baseUrl;
@@ -48,7 +51,7 @@ public class ResourceManager implements IResourceManager {
     //TODO Make this Session dependent
     private transient boolean checkedout = false;
     private transient Map<String, String> uriToAbsolutePath = new HashMap<String, String>();
-    private transient Map<String, String> workspacesPaths = new HashMap<String, String>();
+    private transient Map<String, String> projectsPaths = new HashMap<String, String>();
     private transient Map<String, Resource> resources = new HashMap<String, Resource>();
     private transient Set<String> uncommitRemoves = new HashSet<String>();
     private transient Set<String> uncommitSaves = new HashSet<String>();
@@ -58,43 +61,32 @@ public class ResourceManager implements IResourceManager {
     }
 
     public void init() {
-        loadWorkspaces();
+        loadProjects();
     }
 
-    private void loadWorkspaces() {
-        this.workspacesPaths.clear();
+    private void loadProjects() {
+        this.projectsPaths.clear();
 
-        String envBasePath = System.getenv(ONEXUS_WORKSPACE_ENV);
+        Properties projects = loadProperties();
 
-        if (envBasePath == null) {
-            envBasePath = this.basePath;
+        for (String projectName : projects.stringPropertyNames()) {
+            String projectPath = projects.getProperty(projectName);
+            this.projectsPaths.put(this.baseUrl + "/" + projectName, projectPath);
         }
 
-        File workspacesFolder = new File(envBasePath);
-
-        if (workspacesFolder.isDirectory()) {
-            for (File workspaceFolder : workspacesFolder.listFiles()) {
-
-                if (workspaceFolder.isDirectory()) {
-                    String wsName = workspaceFolder.getName();
-                    this.workspacesPaths.put(this.baseUrl + "/" + wsName, envBasePath + File.separator + wsName);
-                }
-
-            }
-        }
     }
 
     private boolean isValidURI(String resourceURI) {
-        return getWorkspacePathEntry(resourceURI) != null;
+        return getProjectPathEntry(resourceURI) != null;
     }
 
-    private Map.Entry<String, String> getWorkspacePathEntry(String resourceURI) {
+    private Map.Entry<String, String> getProjectPathEntry(String resourceURI) {
 
         if (resourceURI == null) {
             return null;
         }
 
-        for (Map.Entry<String, String> ws : this.workspacesPaths.entrySet()) {
+        for (Map.Entry<String, String> ws : this.projectsPaths.entrySet()) {
             if (resourceURI.startsWith(ws.getKey())) {
                 return ws;
             }
@@ -112,7 +104,7 @@ public class ResourceManager implements IResourceManager {
     @Override
     public void checkout() {
 
-        for (Map.Entry<String, String> ws : this.workspacesPaths.entrySet()) {
+        for (Map.Entry<String, String> ws : this.projectsPaths.entrySet()) {
             File folder = new File(ws.getValue());
 
             if (!folder.exists()) {
@@ -120,7 +112,7 @@ public class ResourceManager implements IResourceManager {
             }
 
             @SuppressWarnings("unchecked")
-            Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, null, true);
+            Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, HiddenFileFilter.VISIBLE, HiddenFileFilter.VISIBLE);
 
             for (File file : files) {
 
@@ -134,14 +126,26 @@ public class ResourceManager implements IResourceManager {
                         LOGGER.error("File '" + file.getPath() + "' not found.");
                         continue;
                     } catch (UnserializeException e) {
-                        LOGGER.error("Parsing file " + file.getPath() + " at line " + e.getLine() + " on " + e.getPath());
-                        resource = new ResourceFile(file.getPath());
+                        String msg = "Parsing file " + file.getPath() + " at line " + e.getLine() + " on " + e.getPath();
+                        LOGGER.error(msg);
+                        String relativePath = file.getPath().replaceFirst(Pattern.quote(folder.getPath() + File.separator), "");
+                        resource = new Data("resource", relativePath);
+                        String resourceURI = buildURIFromFile(file, ws.getKey(), ws.getValue());
+                        resource.setURI(resourceURI);
+                        resource.setName(ResourceUtils.getResourceName(resourceURI));
+                        resource.setDescription("ERROR: " + msg);
                     } catch (Exception e) {
-                        resource = new ResourceFile(file.getPath());
+                        String relativePath = file.getPath().replaceFirst(Pattern.quote(folder.getPath() + File.separator), "");
+                        resource = new Data("resource", relativePath);
+                        String resourceURI = buildURIFromFile(file, ws.getKey(), ws.getValue());
+                        resource.setURI(resourceURI);
+                        resource.setName(ResourceUtils.getResourceName(resourceURI));
+                        resource.setDescription(e.getMessage());
                     }
 
                 } else {
-                    resource = new ResourceFile(file.getPath());
+                    String relativePath = file.getPath().replaceFirst(Pattern.quote(folder.getPath() + File.separator), "");
+                    resource = new Data("resource", relativePath);
 
                     String resourceURI = buildURIFromFile(file, ws.getKey(), ws.getValue());
                     resource.setURI(resourceURI);
@@ -150,6 +154,14 @@ public class ResourceManager implements IResourceManager {
                     resource.setName(resourceName);
                 }
 
+                if (resource instanceof Project) {
+                    Project project = (Project) resource;
+                    if (project.getRepositories() == null) {
+                        project.setRepositories(new ArrayList<Repository>());
+                    }
+
+                    project.getRepositories().add(new Repository("resource", "file", projectsPaths.get(project.getURI())));
+                }
 
                 resources.put(resource.getURI(), resource);
                 uriToAbsolutePath.put(resource.getURI(), file.getAbsolutePath());
@@ -157,21 +169,14 @@ public class ResourceManager implements IResourceManager {
         }
     }
 
-    private Resource checkoutFile(File file, String workspaceURI, String workspacePath) throws FileNotFoundException {
+    private Resource checkoutFile(File file, String projectURI, String projectPath) throws FileNotFoundException {
 
         Resource resource;
         resource = serializer.unserialize(Resource.class, new FileInputStream(file));
 
-        String resourceURI = buildURIFromFile(file, workspaceURI, workspacePath);
+        String resourceURI = buildURIFromFile(file, projectURI, projectPath);
         resource.setURI(resourceURI);
-
-        String resourceName = FilenameUtils.getName(file.getAbsolutePath()).replace("." + ONEXUS_FILE_EXTENSION, "");
-
-        if (resourceName.startsWith(ONEXUS_CONTAINER_PREFIX)) {
-            resourceName = FilenameUtils.getName(file.getParent());
-        }
-
-        resource.setName(resourceName);
+        resource.setName(ResourceUtils.getResourceName(resourceURI));
 
         return resource;
     }
@@ -186,7 +191,36 @@ public class ResourceManager implements IResourceManager {
 
             if (uncommitSaves.contains(resourceURI)) {
                 Resource resource = resources.get(resourceURI);
-                file = buildFile(resource, getWorkspacePathEntry(resource.getURI()));
+
+                // Remove 'resource' repository
+                if (resource instanceof Project) {
+                    Project project = (Project) resource;
+
+                    if (project.getRepositories() != null) {
+                        Repository resourceRepository = null;
+                        for (Repository r : project.getRepositories()) {
+                            if ("resource".equals(r.getId())) {
+                                resourceRepository = r;
+                                break;
+                            }
+                        }
+
+                        if (resourceRepository != null) {
+                            project.getRepositories().remove(resourceRepository);
+                        }
+                    }
+
+                }
+
+                // Don't save 'resource' repository data
+                if (resource instanceof Data) {
+                    Data data = (Data) resource;
+                    if ("resource".equals(data.getRepository())) {
+                        return;
+                    }
+                }
+
+                file = buildFile(resource, getProjectPathEntry(resource.getURI()));
 
                 if (file.exists()) {
                     file.delete();
@@ -281,9 +315,16 @@ public class ResourceManager implements IResourceManager {
 
         List<T> children = new ArrayList<T>();
 
-        if (parentURI == null && Workspace.class.isAssignableFrom(resourceType)) {
-            for (String wsPath : this.workspacesPaths.keySet()) {
-                children.add(load(resourceType, wsPath));
+        // Return ROOT projects
+        if (Project.class.isAssignableFrom(resourceType) && parentURI == null) {
+            for (String projectUri : projectsPaths.keySet()) {
+
+                T resource = load(resourceType, projectUri);
+
+                if (resource != null) {
+                    children.add(resource);
+                }
+
             }
 
             return children;
@@ -314,33 +355,33 @@ public class ResourceManager implements IResourceManager {
     }
 
     @SuppressWarnings("rawtypes")
-    private static File buildFile(Resource resource, Map.Entry<String, String> workspaceEntry) {
+    private static File buildFile(Resource resource, Map.Entry<String, String> projectEntry) {
         for (Class clazz : DEFAULT_CONTAINER_RESOURCES) {
             if (clazz.isAssignableFrom(resource.getClass())) {
-                return buildFile(resource, true, workspaceEntry);
+                return buildFile(resource, true, projectEntry);
             }
         }
 
-        return buildFile(resource, false, workspaceEntry);
+        return buildFile(resource, false, projectEntry);
     }
 
-    private static File buildFile(Resource resource, boolean container, Map.Entry<String, String> workspaceEntry) {
+    private static File buildFile(Resource resource, boolean container, Map.Entry<String, String> projectEntry) {
 
         String resourceURI = resource.getURI();
         String fileName;
 
-        fileName = resourceURI.replaceFirst(workspaceEntry.getKey(), "");
+        fileName = resourceURI.replaceFirst(projectEntry.getKey(), "");
         fileName = fileName.replaceAll(String.valueOf(Resource.SEPARATOR), File.separator);
 
         File containerFolder = null;
         if (container) {
-            containerFolder = new File(workspaceEntry.getValue() + fileName);
+            containerFolder = new File(projectEntry.getValue() + fileName);
             fileName = fileName + File.separator + ONEXUS_CONTAINER_PREFIX
                     + resource.getClass().getSimpleName().toLowerCase() + "." + ONEXUS_FILE_EXTENSION;
         } else {
             int lastSeparator = fileName.lastIndexOf(File.separator);
             if (lastSeparator > 0) {
-                containerFolder = new File(workspaceEntry.getValue() + fileName.substring(0, lastSeparator));
+                containerFolder = new File(projectEntry.getValue() + fileName.substring(0, lastSeparator));
             }
             fileName = fileName + "." + ONEXUS_FILE_EXTENSION;
         }
@@ -349,7 +390,7 @@ public class ResourceManager implements IResourceManager {
             containerFolder.mkdirs();
         }
 
-        return new File(workspaceEntry.getValue() + fileName);
+        return new File(projectEntry.getValue() + fileName);
 
     }
 
@@ -379,18 +420,18 @@ public class ResourceManager implements IResourceManager {
         return true;
     }
 
-    private static String buildURIFromFile(File file, String workspaceURI, String workspacePath) {
+    private static String buildURIFromFile(File file, String projectUri, String projectPath) {
         String path = "";
         String filePath = file.getPath();
-        if (workspacePath.startsWith(File.separator)) {
-            path = filePath.replace(workspacePath, "");
+        if (projectPath.startsWith(File.separator)) {
+            path = filePath.replace(projectPath, "");
         } else {
-            path = filePath.substring(filePath.lastIndexOf(workspacePath) + workspacePath.length());
+            path = filePath.substring(filePath.lastIndexOf(projectPath) + projectPath.length());
         }
 
         path = path.replaceAll(Pattern.quote(File.separator), String.valueOf(Resource.SEPARATOR));
 
-        String resourceURI = workspaceURI + path;
+        String resourceURI = projectUri + path;
 
         if (file.isFile() && file.getName().startsWith(ONEXUS_CONTAINER_PREFIX)) {
             int lastSeparator = resourceURI.lastIndexOf(Resource.SEPARATOR);
@@ -431,9 +472,9 @@ public class ResourceManager implements IResourceManager {
         Resource resource;
         try {
 
-            Map.Entry<String, String> ws = getWorkspacePathEntry(resourceURI);
+            Map.Entry<String, String> projectPath = getProjectPathEntry(resourceURI);
             if (resourceFile != null) {
-                resource = checkoutFile(new File(resourceFile), ws.getKey(), ws.getValue());
+                resource = checkoutFile(new File(resourceFile), projectPath.getKey(), projectPath.getValue());
 
                 if (resource != null) {
                     resources.put(resourceURI, resource);
@@ -474,5 +515,40 @@ public class ResourceManager implements IResourceManager {
     public void setSerializer(IResourceSerializer serializer) {
         this.serializer = serializer;
     }
+
+
+    private static Properties loadProperties() {
+        String userHome = System.getProperty("user.home");
+        if (userHome == null) {
+            throw new IllegalStateException("user.home==null");
+        }
+        File home = new File(userHome);
+        File settingsDirectory = new File(home, ".onexus");
+        if (!settingsDirectory.exists()) {
+            if (!settingsDirectory.mkdir()) {
+                throw new IllegalStateException(settingsDirectory.toString());
+            }
+        }
+
+        File settingsFile = new File(settingsDirectory, "projects.ini");
+        if (!settingsFile.exists()) {
+            try {
+                settingsFile.createNewFile();
+            } catch (IOException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        Properties properties = new Properties();
+
+        try {
+            properties.load(new FileInputStream(settingsFile));
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+
+        return properties;
+    }
+
 
 }

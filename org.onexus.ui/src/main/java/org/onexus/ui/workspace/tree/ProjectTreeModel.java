@@ -20,10 +20,9 @@ package org.onexus.ui.workspace.tree;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
-import org.onexus.core.resources.Workspace;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.OnexusWebSession;
 
 import javax.inject.Inject;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,7 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
+public class ProjectTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
     private IModel<Resource> currentResource;
 
@@ -45,7 +44,7 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
     @Inject
     public IResourceManager resourceManager;
 
-    public WorkspaceTreeModel(IModel<Resource> currentResource) {
+    public ProjectTreeModel(IModel<Resource> currentResource) {
         super();
 
         OnexusWebApplication.inject(this);
@@ -61,22 +60,22 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
             return tree;
         }
 
-        Workspace workspace = getCurrentWorkspace();
+        Project project = getCurrentProject();
 
-        if (workspace == null) {
+        if (project == null) {
             return new DefaultTreeModel(ResourceNode.create(null));
         }
 
-        MutableTreeNode workspaceNode = createTreeNode(workspace);
+        MutableTreeNode workspaceNode = createTreeNode(project);
         tree = new DefaultTreeModel(workspaceNode);
 
         return tree;
     }
 
     /**
-     * @return The workspace of the current resource selection
+     * @return The project of the current resource selection
      */
-    private Workspace getCurrentWorkspace() {
+    private Project getCurrentProject() {
 
         Resource resource = currentResource.getObject();
 
@@ -84,11 +83,11 @@ public class WorkspaceTreeModel extends AbstractReadOnlyModel<TreeModel> {
 
             String resourceURI = resource.getURI();
 
-            List<Workspace> workspaces = resourceManager.loadChildren(Workspace.class, null);
+            List<Project> projects = resourceManager.loadChildren(Project.class, null);
 
-            for (Workspace workspace : workspaces) {
-                if (resourceURI.startsWith(workspace.getURI())) {
-                    return workspace;
+            for (Project project : projects) {
+                if (resourceURI.startsWith(project.getURI())) {
+                    return project;
                 }
             }
 
