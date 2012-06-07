@@ -67,6 +67,8 @@ public class ResourcesPage extends BasePage {
 
         add(new ProjectTree("tree", currentResource));
 
+        //add(new DefaultNestedTree<Resource>("tree"));
+
         resourcesTabs = new WebMarkupContainer("resourcesTabs");
         resourcesTabs.setOutputMarkupId(true);
 
