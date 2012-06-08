@@ -111,8 +111,7 @@ public class ResourceManager implements IResourceManager {
                 folder.mkdirs();
             }
 
-            @SuppressWarnings("unchecked")
-            Collection<File> files = (Collection<File>) FileUtils.listFiles(folder, HiddenFileFilter.VISIBLE, HiddenFileFilter.VISIBLE);
+            Collection<File> files = addFilesRecursive(new ArrayList<File>(), folder);
 
             for (File file : files) {
 
@@ -144,8 +143,12 @@ public class ResourceManager implements IResourceManager {
                     }
 
                 } else {
-                    String relativePath = file.getPath().replaceFirst(Pattern.quote(folder.getPath() + File.separator), "");
-                    resource = new Data("resource", relativePath);
+                    if (file.isDirectory()) {
+                        resource = new Folder();
+                    } else {
+                        String relativePath = file.getPath().replaceFirst(Pattern.quote(folder.getPath() + File.separator), "");
+                        resource = new Data("resource", relativePath);
+                    }
 
                     String resourceURI = buildURIFromFile(file, ws.getKey(), ws.getValue());
                     resource.setURI(resourceURI);
@@ -167,6 +170,25 @@ public class ResourceManager implements IResourceManager {
                 uriToAbsolutePath.put(resource.getURI(), file.getAbsolutePath());
             }
         }
+    }
+
+    private Collection<File> addFilesRecursive(Collection<File> files, File parentFolder) {
+
+        if (parentFolder.isDirectory()) {
+            File[] inFiles = parentFolder.listFiles();
+            if (inFiles != null) {
+                for (File file : inFiles) {
+                    if (!file.isHidden()) {
+                        files.add(file);
+                        if (file.isDirectory()) {
+                            addFilesRecursive(files, file);
+                        }
+                    }
+                }
+            }
+        }
+
+        return files;
     }
 
     private Resource checkoutFile(File file, String projectURI, String projectPath) throws FileNotFoundException {
