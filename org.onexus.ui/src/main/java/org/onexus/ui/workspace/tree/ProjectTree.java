@@ -1,167 +1,126 @@
-/**
- *  Copyright 2012 Universitat Pompeu Fabra.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *
- */
 package org.onexus.ui.workspace.tree;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.event.IEvent;
-import org.apache.wicket.extensions.markup.html.tree.BaseTree;
-import org.apache.wicket.extensions.markup.html.tree.ITreeState;
-import org.apache.wicket.extensions.markup.html.tree.LinkTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.content.Folder;
+import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
+import org.apache.wicket.extensions.markup.html.repeater.util.ProviderSubset;
 import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.IResourceManager.ResourceStatus;
+import org.apache.wicket.model.PropertyModel;
+import org.h2.util.StringUtils;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.workspace.events.EventResourceSelect;
-import org.onexus.ui.workspace.events.EventResourceSync;
 
-import javax.inject.Inject;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
+import java.util.Set;
 
-public class ProjectTree extends LinkTree {
+public class ProjectTree extends NestedTree<Resource> {
 
-    @Inject
-    private IResourceManager resourceManager;
+    private ITreeProvider<Resource> provider;
 
-    private IModel<Resource> currentResource;
+    private IModel<Resource> selected;
 
-    public ProjectTree(String id, IModel<Resource> currentResource) {
-        super(id, new ProjectTreeModel(currentResource));
+    private Set<Resource> state;
+
+    public ProjectTree(String id, ITreeProvider<Resource> treeProvider, IModel<Resource> selectedResource) {
+        super(id, treeProvider);
+
+        this.state = new ProviderSubset<Resource>(treeProvider);
+        this.provider = treeProvider;
+        this.selected = selectedResource;
+
         setOutputMarkupId(true);
+        setModel(newStateModel());
+        add(new WindowsTheme());
 
-        this.currentResource = currentResource;
-
-        setRootLess(false);
-
-        selectCurrentResource();
 
     }
 
-    private void selectCurrentResource() {
-        Resource resource = currentResource.getObject();
-        if (resource != null) {
-            ITreeState treeState = getTreeState();
-            DefaultMutableTreeNode node = ResourceNode.get(resource);
-            expandRecursive(treeState, node);
-            treeState.selectNode(node, true);
-        }
-    }
+    protected boolean isSelected(Resource resource) {
 
-    private static void expandRecursive(ITreeState treeState, TreeNode node) {
-
-        TreeNode parent = node.getParent();
-        if (parent != null) {
-            expandRecursive(treeState, parent);
+        if (resource != null && selected.getObject() != null) {
+            return StringUtils.equals(resource.getURI(), selected.getObject().getURI());
         }
 
-        treeState.expandNode(node);
-
+        return false;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected IModel<?> getNodeTextModel(IModel<?> nodeModel) {
-        return new DirtyModel((IModel<DefaultMutableTreeNode>) nodeModel);
-    }
 
-    @Override
-    protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target) {
+    protected void select(Resource resource, final AjaxRequestTarget target) {
 
-        ResourceNode resourceNode = (ResourceNode) ((DefaultMutableTreeNode) node).getUserObject();
+        // Update unselected node
+        updateNode(selected.getObject(), target);
 
-        String resourceURI = resourceNode.getUri();
+        // Select new node
+        selected.setObject(resource);
 
-        Resource resource = resourceManager.load(Resource.class, resourceURI);
-
-        currentResource.setObject(resource);
+        // Update new selection
+        updateNode(resource, target);
 
         send(getPage(), Broadcast.BREADTH, EventResourceSelect.EVENT);
     }
 
+    private IModel<Set<Resource>> newStateModel()
+    {
+        return new AbstractReadOnlyModel<Set<Resource>>()
+        {
+            @Override
+            public Set<Resource> getObject()
+            {
+                return state;
+            }
+
+            /**
+             * Super class doesn't detach - would be nice though.
+             */
+            @Override
+            public void detach()
+            {
+                ((IDetachable)state).detach();
+            }
+        };
+    }
+
     @Override
-    public void onEvent(IEvent<?> event) {
-
-        Object payLoad = event.getPayload();
-
-        if (payLoad == null) {
-            return;
+    protected void onDetach() {
+        if (selected != null) {
+            selected.detach();
         }
-
-        if (EventResourceSync.EVENT == payLoad) {
-            updateAJAX(this);
-        }
-
+        super.onDetach();
     }
 
-    private static void updateAJAX(Component component) {
-        AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
-        if (target != null) {
-            target.add(component);
-        }
+
+    @Override
+    protected Component newContentComponent(String id, IModel<Resource> model) {
+        return new Folder<Resource>(id, this, model) {
+
+            @Override
+            protected boolean isClickable() {
+                return true;
+            }
+
+
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                ProjectTree.this.select(getModelObject(), target);
+            }
+
+
+            @Override
+            protected boolean isSelected() {
+                return ProjectTree.this.isSelected(getModelObject());
+            }
+
+            @Override
+            protected IModel<?> newLabelModel(IModel<Resource> resourceIModel) {
+                return new PropertyModel<String>(resourceIModel, "name");
+            }
+        };
     }
-
-    private class DirtyModel extends AbstractReadOnlyModel<String> {
-
-        private IModel<DefaultMutableTreeNode> innerModel;
-
-        public DirtyModel(IModel<DefaultMutableTreeNode> nodeModel) {
-            super();
-            this.innerModel = nodeModel;
-        }
-
-        @Override
-        public String getObject() {
-
-            DefaultMutableTreeNode node = innerModel.getObject();
-
-            if (node == null) {
-                return null;
-            }
-
-            ResourceNode resourceNode = (ResourceNode) node.getUserObject();
-
-            if (resourceNode == null) {
-                return null;
-            }
-
-            ResourceStatus status = resourceManager.status(resourceNode.getUri());
-
-            String prefix = "";
-            switch (status) {
-                case ADD:
-                    prefix = "(A) ";
-                    break;
-                case REMOVE:
-                    prefix = "(D) ";
-                    break;
-                case UPDATE:
-                    prefix = "(*) ";
-                    break;
-            }
-
-            return prefix + resourceNode.toString();
-
-        }
-
-    }
-
 }
+
+

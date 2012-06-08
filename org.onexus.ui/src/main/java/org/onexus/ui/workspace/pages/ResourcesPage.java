@@ -31,12 +31,15 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.h2.util.StringUtils;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.workspace.events.EventResourceSelect;
 import org.onexus.ui.workspace.pages.tools.ProjectSelectorTool;
 import org.onexus.ui.workspace.tree.ProjectTree;
+import org.onexus.ui.workspace.tree.ResourceTreeProvider;
 import org.onexus.ui.workspace.viewers.ViewerTabs;
 
 import javax.inject.Inject;
@@ -52,6 +55,8 @@ public class ResourcesPage extends BasePage {
     public final static CssResourceReference CSS = new CssResourceReference(ResourcesPage.class, "ResourcesPage.css");
 
 
+    private String selectedResource;
+
     @Inject
     private IResourceManager resourceManager;
 
@@ -60,22 +65,24 @@ public class ResourcesPage extends BasePage {
 
     public ResourcesPage(PageParameters parameters) {
 
-        String defaultResourceURI = getDefaultProjectURI();
-        String resourceURI = parameters.get(RESOURCE).toString(defaultResourceURI);
+        selectedResource = parameters.get(RESOURCE).toOptionalString();
 
-        IModel<Resource> currentResource = new ResourceModel(resourceURI);
+        if (selectedResource == null) {
+            selectedResource = getDefaultProjectURI();
+        }
 
-        add(new ProjectTree("tree", currentResource));
+        IModel<Resource> selectedModel = new SelectedModel();
 
-        //add(new DefaultNestedTree<Resource>("tree"));
+        String projectURI = ResourceUtils.getProjectURI(selectedResource);
+        add(new ProjectTree("tree", new ResourceTreeProvider(projectURI), selectedModel));
 
         resourcesTabs = new WebMarkupContainer("resourcesTabs");
         resourcesTabs.setOutputMarkupId(true);
 
         resourceInfo = new WebMarkupContainer("resourceInfo");
         resourceInfo.setOutputMarkupId(true);
-        resourceInfo.add(new Label("resourceType", new PropertyModel<String>(currentResource, "class.simpleName")));
-        resourceInfo.add(new Label("resourceUri", new PropertyModel<String>(currentResource, "URI")));
+        resourceInfo.add(new Label("resourceType", new PropertyModel<String>(selectedModel, "class.simpleName")));
+        resourceInfo.add(new Label("resourceUri", new PropertyModel<String>(selectedModel, "URI")));
         resourcesTabs.add(resourceInfo);
 
         AjaxLink<Boolean> fullscreenLink = new AjaxLink<Boolean>("fullscreen", Model.of(Boolean.FALSE)) {
@@ -104,7 +111,7 @@ public class ResourcesPage extends BasePage {
 
         resourceInfo.add(fullscreenLink);
 
-        resourcesTabs.add(new ViewerTabs("viewers", currentResource));
+        resourcesTabs.add(new ViewerTabs("viewers", selectedModel));
 
         add(resourcesTabs);
 
@@ -136,6 +143,41 @@ public class ResourcesPage extends BasePage {
         super.renderHead(response);
 
         response.render(CssHeaderItem.forReference(CSS));
+    }
+
+    private class SelectedModel implements IModel<Resource> {
+
+        @Override
+        public Resource getObject() {
+            return resourceManager.load(Resource.class, selectedResource);
+        }
+
+        @Override
+        public void setObject(Resource object) {
+            selectedResource = object.getURI();
+        }
+
+        @Override
+        public void detach() {
+        }
+
+        @Override
+        public int hashCode() {
+            return selectedResource.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+
+            if (obj instanceof SelectedModel) {
+                Resource resource = ((SelectedModel) obj).getObject();
+                if (resource != null) {
+                    return StringUtils.equals(selectedResource, resource.getURI());
+                }
+            }
+
+            return false;
+        }
     }
 
 }

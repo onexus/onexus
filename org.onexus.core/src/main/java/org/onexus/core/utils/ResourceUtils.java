@@ -44,7 +44,9 @@ public class ResourceUtils {
         if (onx < 0) return null;
 
         int sep1 = resourceURI.indexOf(SEPARATOR, onx + 4);
-        if (sep1 < 0) return null;
+        if (sep1 < 0) {
+            sep1 = resourceURI.length();
+        }
 
         return resourceURI.substring(0, sep1);
     }

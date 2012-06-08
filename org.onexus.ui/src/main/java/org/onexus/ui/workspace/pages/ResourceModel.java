@@ -45,6 +45,14 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     public ResourceModel(Resource resource) {
         super(resource);
+        OnexusWebApplication.inject(this);
+        this.resourceURI = resource.getURI();
+    }
+
+    @Override
+    public void setObject(Resource object) {
+        super.setObject(object);
+        this.resourceURI = object.getURI();
     }
 
     @Override
@@ -65,5 +73,22 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
             this.resourceURI = null;
         }
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ResourceModel)
+        {
+            return ((ResourceModel)obj).resourceURI.equals(this.resourceURI);
+        }
+        return false;
+    }
+
+
+    public int hashCode()
+    {
+        return resourceURI.hashCode();
+    }
+
 
 }

@@ -162,11 +162,7 @@ public class DefaultResourceRegister implements IResourceRegister {
                 }
             }
 
-            // Without this we have a ClassNotFoundException when
-            // unserializating
-            // the DefaultTreeModel object that uses ProjectTree. (may be the
-            // problem was that we weren't importing javax.swing.event package)
-            return TreeModelListener.class.getClassLoader().loadClass(name);
+            return null;
         }
     }
 }
