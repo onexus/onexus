@@ -28,6 +28,6 @@ public interface IColumnConfig extends Serializable {
 
     public void buildQuery(Query query);
 
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, String releaseURI);
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, String parentURI);
 
 }

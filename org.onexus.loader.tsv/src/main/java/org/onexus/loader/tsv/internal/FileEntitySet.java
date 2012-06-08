@@ -72,7 +72,12 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
         this.dataManager = dataManager;
         this.urls = new ArrayDeque<URL>();
 
-        initializeURLs(collection.getLoader().getParameter("SOURCE_URI"), ResourceUtils.getProperties(collection.getURI()));
+        String sourceURI = ResourceUtils.getAbsoluteURI(
+                ResourceUtils.getParentURI(collection.getURI()),
+                collection.getLoader().getParameter("SOURCE_URI")
+        );
+
+        initializeURLs(sourceURI, ResourceUtils.getProperties(collection.getURI()));
 
         NULL_CHAR = collection.getLoader().getParameter("NULL_VALUE");
         SEPARATOR = collection.getLoader().getParameter("SEPARATOR");

@@ -44,7 +44,7 @@ public class NewFolderWizard extends AbstractNewResourceWizard<Folder> {
     private final class ResourceName extends WizardStep {
 
         public ResourceName() {
-            super("New folder", "Creates a new folder inside the current release");
+            super("New folder", "Creates a new folder inside the current folder");
 
             add(getFieldResourceName());
 

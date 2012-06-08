@@ -44,7 +44,7 @@ public class NewCollectionWizard extends AbstractNewResourceWizard<Collection> {
     private final class ResourceName extends WizardStep {
 
         public ResourceName() {
-            super("New collection", "Creates a new collection inside the current release");
+            super("New collection", "Creates a new collection inside the current folder");
 
             add(getFieldResourceName());
 

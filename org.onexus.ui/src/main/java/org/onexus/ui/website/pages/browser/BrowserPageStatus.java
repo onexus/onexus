@@ -35,7 +35,7 @@ import java.util.List;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
-    private String release;
+    private String base;
 
     private String currentTabId;
 
@@ -69,13 +69,13 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         );
     }
 
-    public String getRelease() {
+    public String getBase() {
 
-        if (release == null) {
-            release = getConfig().getRelease();
+        if (base == null) {
+            base = getConfig().getBase();
         }
 
-        return release;
+        return base;
     }
 
     public String getCurrentTabId() {
@@ -97,8 +97,8 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         this.currentView = currentView;
     }
 
-    public void setRelease(String releaseURI) {
-        this.release = releaseURI;
+    public void setBase(String baseURI) {
+        this.base = baseURI;
     }
 
     public List<IFilter> getFilters() {
@@ -112,8 +112,8 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     @Override
     public void beforeQueryBuild(Query query) {
 
-        if (!StringUtils.isEmpty(getRelease())) {
-            query.setOn(ResourceUtils.concatURIs(query.getOn(), getRelease()));
+        if (!StringUtils.isEmpty(getBase())) {
+            query.setOn(ResourceUtils.concatURIs(query.getOn(), getBase()));
         }
 
     }

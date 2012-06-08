@@ -26,18 +26,18 @@ import java.util.List;
 
 public class LinkUtils {
 
-    public static List<FieldLink> getLinkFields(String releaseURI,
+    public static List<FieldLink> getLinkFields(String parentURI,
                                          Collection a, Collection b) {
-        List<FieldLink> fieldLinks = getLeftLinkFields(releaseURI, a, b);
+        List<FieldLink> fieldLinks = getLeftLinkFields(parentURI, a, b);
 
         if (fieldLinks.isEmpty()) {
-            fieldLinks = getLeftLinkFields(releaseURI, b, a);
+            fieldLinks = getLeftLinkFields(parentURI, b, a);
         }
 
         return fieldLinks;
     }
 
-    private static List<FieldLink> getLeftLinkFields(String releaseURI,
+    private static List<FieldLink> getLeftLinkFields(String parentURI,
                                                     Collection a, Collection b) {
 
         List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
@@ -48,7 +48,7 @@ public class LinkUtils {
         // Case 1: A has a direct link to B
 
         for (Link link : linksA) {
-            if (ResourceUtils.getAbsoluteURI(releaseURI, link.getCollection()).equals(b.getURI())) {
+            if (ResourceUtils.getAbsoluteURI(parentURI, link.getCollection()).equals(b.getURI())) {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(a.getURI(), Link
                             .getFromFieldName(field), b.getURI(), Link
@@ -78,9 +78,9 @@ public class LinkUtils {
                 for (Link linkB : linksB) {
                     for (Link linkA : keyLinks) {
                         String linkBCollection = ResourceUtils.getAbsoluteURI(
-                                releaseURI, linkB.getCollection());
+                                parentURI, linkB.getCollection());
                         String linkACollection = ResourceUtils.getAbsoluteURI(
-                                releaseURI, linkA.getCollection());
+                                parentURI, linkA.getCollection());
 
                         if (linkBCollection.equals(linkACollection)) {
 

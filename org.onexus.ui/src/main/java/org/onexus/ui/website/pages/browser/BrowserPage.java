@@ -33,8 +33,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.util.string.*;
 import org.onexus.core.IResourceManager;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventTabSelected;
@@ -199,7 +197,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             List<TabConfig> allTabs = getConfig().getTabs();
 
             // A predicate that filters the visible views
-            Predicate filter = new VisiblePredicate(getStatus().getRelease(), getStatus().getFilters());
+            Predicate filter = new VisiblePredicate(getStatus().getBase(), getStatus().getFilters());
 
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();

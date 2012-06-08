@@ -64,12 +64,10 @@ public class ResourceSerializer implements IResourceSerializer {
         xstream.addImplicitCollection(Project.class, "properties", "property", Property.class);
         xstream.addImplicitCollection(Project.class, "repositories", "repository", Repository.class);
 
-        // Release
-        alias("release", Release.class);
-        xstream.addImplicitCollection(Release.class, "properties", "property", Property.class);
-
         // Folder
         alias("folder", Folder.class);
+        xstream.addImplicitCollection(Folder.class, "properties", "property", Property.class);
+
 
         // Source
         alias("data", Data.class);
@@ -79,7 +77,7 @@ public class ResourceSerializer implements IResourceSerializer {
         // Collection
         alias("collection", Collection.class);
         xstream.addImplicitCollection(Collection.class, "properties", "property", Property.class);
-        alias("task", Loader.class);
+
         alias("parameter", Parameter.class);
         alias("parameter-value", Parameter.class);
         xstream.addImplicitCollection(Loader.class, "parameters", "parameter", Parameter.class );

@@ -151,7 +151,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Data> {
     private final class ResourceName extends WizardStep {
 
         public ResourceName() {
-            super("New file", "Creates a new file source inside the current release");
+            super("New file", "Creates a new file source inside the current folder");
 
             add(getFieldResourceName());
 
@@ -168,7 +168,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Data> {
     private final class UploadFile extends WizardStep {
 
         public UploadFile() {
-            super("New file", "Upload a file inside the current release");
+            super("New file", "Upload a file inside the current folder");
 
             add(new FileUploadField("tmpFile") {
 

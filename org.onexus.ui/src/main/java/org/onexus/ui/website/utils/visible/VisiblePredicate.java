@@ -25,13 +25,13 @@ import java.util.Collection;
 
 public class VisiblePredicate implements Predicate {
 
-    private String releaseURI;
+    private String parentURI;
     private Collection<IFilter> filters;
 
-    public VisiblePredicate(String releaseURI, Collection<IFilter> filters) {
+    public VisiblePredicate(String parentURI, Collection<IFilter> filters) {
         super();
 
-        this.releaseURI = releaseURI;
+        this.parentURI = parentURI;
         this.filters = filters;
     }
 
@@ -52,7 +52,7 @@ public class VisiblePredicate implements Predicate {
 
         String visibleRules[] = visibleQuery.split(",");
 
-        for (VisibleRule rule : VisibleRule.parseRules(releaseURI, visible.getVisible())) {
+        for (VisibleRule rule : VisibleRule.parseRules(parentURI, visible.getVisible())) {
             for (IFilter filter : filters) {
                 if (!filter.isVisible(rule)) {
                     return false;

@@ -42,7 +42,7 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
                 "<browser>" +
                         "<id>[page-id]</id>" +
                         "<label>[page-name]</label>" +
-                        "<release>[release-name]</release>" +
+                        "<base>[base-uri]</base>" +
                         "<tabs></tabs>" +
                         "<widgets></widgets>" +
                         "</browser>");

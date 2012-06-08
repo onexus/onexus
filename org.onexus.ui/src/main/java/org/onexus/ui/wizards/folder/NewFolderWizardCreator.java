@@ -32,7 +32,7 @@ public class NewFolderWizardCreator implements IWizardCreator {
 
     @Override
     public String getTitle() {
-        return "Creates a new folder inside the release";
+        return "Creates a new folder inside the folder";
     }
 
     @Override

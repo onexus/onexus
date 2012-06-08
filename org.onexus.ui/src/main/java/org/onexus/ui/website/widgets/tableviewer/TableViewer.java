@@ -96,10 +96,10 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         List<IColumnConfig> columnsConfig = getConfig().getColumnSets().get(ccs).getColumns();
         List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
 
-        String releaseUri = getQuery().getOn();
+        String parentURI = getQuery().getOn();
 
         for (IColumnConfig columnConfig : columnsConfig) {
-            columnConfig.addColumns(columns, releaseUri );
+            columnConfig.addColumns(columns, parentURI );
         }
 
         DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider,

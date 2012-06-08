@@ -113,7 +113,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             // Create collection
             Collection collection = newCollection();
 
-            // Collect fields from other collections in the same release
+            // Collect fields from other collections in the same folder
             Map<String, Field> otherFields = collectFields();
 
             List<Field> fields = new ArrayList<Field>();
@@ -133,7 +133,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             }
             collection.setFields(fields);
 
-            // Deduce links from other collections in the same release
+            // Deduce links from other collections in the same folder
             Map<String, Link> otherLinks = collectLinks();
             List<Link> links = new ArrayList<Link>();
             for (String header : headers) {
@@ -150,7 +150,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             Loader loader = new Loader();
             loader.setPlugin("mvn:org.onexus/org.onexus.loader.tsv/0.2");
             List<Parameter> parameters = new ArrayList<Parameter>();
-            parameters.add(new Parameter("SOURCE_URI", "${release.uri}/" + ResourceUtils.getResourceName(sourceURI)));
+            parameters.add(new Parameter("SOURCE_URI", ResourceUtils.getResourceName(sourceURI)));
             loader.setParameters(parameters);
             collection.setLoader(loader);
 
@@ -171,8 +171,8 @@ public class CreateCollectionWizard extends AbstractWizard {
     private Map<String, Link> collectLinks() {
         Map<String, Link> links = new HashMap<String, Link>();
 
-        String releaseURI = ResourceUtils.getParentURI(sourceURI);
-        List<Collection> collections = resourceManager.loadChildren(Collection.class, releaseURI);
+        String parentURI = ResourceUtils.getParentURI(sourceURI);
+        List<Collection> collections = resourceManager.loadChildren(Collection.class, parentURI);
 
         for (Collection collection : collections) {
             for (Link link : collection.getLinks()) {
@@ -191,8 +191,8 @@ public class CreateCollectionWizard extends AbstractWizard {
     private Map<String, Field> collectFields() {
         Map<String, Field> fields = new HashMap<String, Field>();
 
-        String releaseURI = ResourceUtils.getParentURI(sourceURI);
-        List<Collection> collections = resourceManager.loadChildren(Collection.class, releaseURI);
+        String parentURI = ResourceUtils.getParentURI(sourceURI);
+        List<Collection> collections = resourceManager.loadChildren(Collection.class, parentURI);
 
         for (Collection collection : collections) {
             for (Field field : collection.getFields()) {

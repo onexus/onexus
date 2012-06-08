@@ -53,23 +53,6 @@ public class ResourceUtils {
         return getResourceName(getProjectURI(resourceURI));
     }
 
-    public static String getReleaseURI(String resourceURI) {
-        int onx = resourceURI.indexOf(ONEXUS_TAG);
-        if (onx < 0) return null;
-
-        int sep1 = resourceURI.indexOf(SEPARATOR, onx + 4);
-        if (sep1 < 0) return null;
-
-        int sep2 = resourceURI.indexOf(SEPARATOR, sep1 + 1);
-        if (sep2 < 0) return null;
-
-        return resourceURI.substring(0, sep2);
-    }
-
-    public static String getReleaseName(String resourceURI) {
-        return getResourceName(getReleaseURI(resourceURI));
-    }
-
     public static String getRelativeURI(String parentURI, String resourceURI) {
 
         if (parentURI == null) {
@@ -85,26 +68,6 @@ public class ResourceUtils {
         }
 
         return resourceURI.replace(parentURI + Resource.SEPARATOR, "");
-    }
-
-    public static String getReleasePath(String resourceURI) {
-
-        if (resourceURI==null) return null;
-
-        String releaseURI = getReleaseURI(resourceURI);
-        if (releaseURI==null) return null;
-
-        String path = resourceURI.replace(releaseURI, "").replace(getResourceName(resourceURI), "");
-
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-
-        if (path.endsWith("/")) {
-            path = path.substring(0, path.length() - 1);
-        }
-
-        return path;
     }
 
     public static String getParentURI(String resourceURI) {
@@ -129,9 +92,6 @@ public class ResourceUtils {
             properties.put("server.uri", getServerURI(resourceURI));
             properties.put("project.uri", getProjectURI(resourceURI));
             properties.put("project.name", getProjectName(resourceURI));
-            properties.put("release.uri", getReleaseURI(resourceURI));
-            properties.put("release.name", getReleaseName(resourceURI));
-            properties.put("release.path", getReleasePath(resourceURI));
             properties.put("resource.name", getResourceName(resourceURI));
 
         }
@@ -144,31 +104,31 @@ public class ResourceUtils {
         return parentURI + Resource.SEPARATOR + resourceName;
     }
 
-    public static String getAbsoluteURI(String releaseURI, String collectionURI) {
+    public static String getAbsoluteURI(String parentURI, String collectionURI) {
 
-        releaseURI = formatURL(releaseURI);
+        parentURI = formatURL(parentURI);
         collectionURI = formatURL(collectionURI);
 
         // Already absolute URI
-        if (collectionURI.contains("://") || releaseURI == null
-                || releaseURI.isEmpty()) {
+        if (collectionURI.contains("://") || parentURI == null
+                || parentURI.isEmpty()) {
             return collectionURI;
         }
 
         // Relative to server URI
         if (collectionURI.charAt(0) == Resource.SEPARATOR) {
-            return getServerURI(releaseURI) + collectionURI;
+            return getServerURI(parentURI) + collectionURI;
         }
 
         // Relative URI (../../resorce-name)
         String relative = ".." + Resource.SEPARATOR;
         while (collectionURI.startsWith(relative)) {
-            releaseURI = getParentURI(releaseURI);
+            parentURI = getParentURI(parentURI);
             collectionURI = collectionURI.substring(3);
         }
 
-        // Same release URI
-        return concatURIs(releaseURI, collectionURI);
+        // Same parent URI
+        return concatURIs(parentURI, collectionURI);
     }
 
     private static String formatURL(String url) {

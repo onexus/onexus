@@ -5,7 +5,7 @@
         <plugin>mvn:org.onexus/org.onexus.loader.tsv/0.2</plugin>
         <parameter>
             <key>SOURCE_URI</key>
-            <value>${release.uri}/gene-project-oncodrive.tsv</value>
+            <value>gene-project-oncodrive.tsv</value>
         </parameter>
     </loader>
     <fields>

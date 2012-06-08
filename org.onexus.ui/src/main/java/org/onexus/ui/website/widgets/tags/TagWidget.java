@@ -252,9 +252,9 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
         BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
 
         String tagId = status.getCurrentTabId();
-        String releaseURI = status.getRelease();
+        String baseURI = status.getBase();
 
-        String namespace = releaseURI + "#" + tagId;
+        String namespace = baseURI + "#" + tagId;
 
         TagStore store = tagStoreManager.getUserStore(namespace);
 

@@ -17,29 +17,23 @@
  */
 package org.onexus.ui.website.utils.visible;
 
-import org.apache.wicket.model.IModel;
-import org.onexus.core.IEntity;
-import org.onexus.core.utils.ResourceUtils;
-import org.onexus.ui.website.pages.browser.IFilter;
-import org.onexus.ui.website.utils.EntityModel;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VisibleRule implements Serializable {
 
-    private String releaseUri;
+    private String parentURI;
     private String filteredCollection;
     private String field;
     private String operator;
     private String value;
     private boolean negated;
 
-    private VisibleRule(String releaseUri, String rule) {
+    private VisibleRule(String parentURI, String rule) {
         super();
 
-        this.releaseUri = releaseUri;
+        this.parentURI = parentURI;
 
         rule = rule.trim();
 
@@ -61,8 +55,8 @@ public class VisibleRule implements Serializable {
 
     }
 
-    public String getReleaseUri() {
-        return releaseUri;
+    public String getParentURI() {
+        return parentURI;
     }
 
     public String getFilteredCollection() {
@@ -85,7 +79,7 @@ public class VisibleRule implements Serializable {
         return negated;
     }
 
-    public static List<VisibleRule> parseRules(String releaseUri, String visible ) {
+    public static List<VisibleRule> parseRules(String parentURI, String visible ) {
 
         List<VisibleRule> rules = new ArrayList<VisibleRule>();
 
@@ -94,7 +88,7 @@ public class VisibleRule implements Serializable {
         }
 
         for (String rule : visible.split(",")) {
-            rules.add(new VisibleRule(releaseUri, rule));
+            rules.add(new VisibleRule(parentURI, rule));
         }
 
         return rules;

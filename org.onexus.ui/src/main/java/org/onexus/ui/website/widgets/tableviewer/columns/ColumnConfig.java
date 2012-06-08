@@ -94,9 +94,9 @@ public class ColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, String releaseURI) {
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, String parentURI) {
 
-        String collectionURI = ResourceUtils.getAbsoluteURI(releaseURI, collection);
+        String collectionURI = ResourceUtils.getAbsoluteURI(parentURI, collection);
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {

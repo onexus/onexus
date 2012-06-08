@@ -18,10 +18,6 @@
 package org.onexus.ui.website.pages.browser;
 
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.util.string.*;
 import org.h2.util.StringUtils;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
@@ -142,7 +138,7 @@ public class FixedEntity implements IFilter {
             return (StringUtils.equals(entityId, rule.getField()) ? !negated : negated);
         }
 
-        String collectionUri = ResourceUtils.getAbsoluteURI(rule.getReleaseUri(), filteredCollection);
+        String collectionUri = ResourceUtils.getAbsoluteURI(rule.getParentURI(), filteredCollection);
         IEntity entity = (new EntityModel(collectionUri, entityId)).getObject();
 
         String fieldValue = String.valueOf(entity.get(rule.getField()));

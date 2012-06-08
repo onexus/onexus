@@ -29,7 +29,7 @@ public class BrowserPageConfig extends PageConfig {
 
     private BrowserPageStatus defaultStatus;
 
-    private String release;
+    private String base;
 
     private List<TabConfig> tabs = new ArrayList<TabConfig>();
 
@@ -57,12 +57,12 @@ public class BrowserPageConfig extends PageConfig {
         this.tabs = tabs;
     }
 
-    public String getRelease() {
-        return release;
+    public String getBase() {
+        return base;
     }
 
-    public void setRelease(String release) {
-        this.release = release;
+    public void setBase(String base) {
+        this.base = base;
     }
 
     public List<WidgetConfig> getWidgets() {

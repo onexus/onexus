@@ -54,7 +54,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
     private String getReleaseURI() {
 
         BrowserPageStatus browserStatus = getPageStatus();
-        return (browserStatus != null ? browserStatus.getRelease() : null);
+        return (browserStatus != null ? browserStatus.getBase() : null);
     }
 
     private BrowserPageStatus getPageStatus() {

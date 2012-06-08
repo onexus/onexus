@@ -56,7 +56,7 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     protected String getReleaseUri() {
         BrowserPageStatus pageStatus = findParentStatus(statusModel, BrowserPageStatus.class);
-        return (pageStatus==null ? getBaseUri() : ResourceUtils.concatURIs(getBaseUri(), pageStatus.getRelease()));
+        return (pageStatus==null ? getBaseUri() : ResourceUtils.concatURIs(getBaseUri(), pageStatus.getBase()));
     }
 
     public static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {

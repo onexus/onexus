@@ -79,8 +79,8 @@ public class TagColumnItem extends Panel {
     private TagStore getTagStore() {
         BrowserPageStatus status = findParent(BrowserPage.class).getStatus();
         String tagId = status.getCurrentTabId();
-        String releaseURI = status.getRelease();
-        String namespace = releaseURI + "#" + tagId;
+        String baseURI = status.getBase();
+        String namespace = baseURI + "#" + tagId;
 
         return tagStoreManager.getUserStore(namespace);
     }

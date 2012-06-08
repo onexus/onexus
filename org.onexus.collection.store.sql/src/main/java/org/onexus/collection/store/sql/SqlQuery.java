@@ -167,8 +167,8 @@ public class SqlQuery {
             }
 
             // Add links
-            String releaseURI = query.getOn();
-            List<FieldLink> linkFields = LinkUtils.getLinkFields(releaseURI, joinCollection, fromCollection);
+            String parentURI = query.getOn();
+            List<FieldLink> linkFields = LinkUtils.getLinkFields(parentURI, joinCollection, fromCollection);
 
             // Add thirdParty joins
             if (linkFields.isEmpty()) {
@@ -191,7 +191,7 @@ public class SqlQuery {
 
                     Collection tpJoinCollection = manager.getCollection(tpCollectionUri);
 
-                    linkFields.addAll(LinkUtils.getLinkFields(releaseURI, joinCollection, tpJoinCollection));
+                    linkFields.addAll(LinkUtils.getLinkFields(parentURI, joinCollection, tpJoinCollection));
                 }
             }
 
