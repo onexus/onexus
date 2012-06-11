@@ -9,13 +9,12 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference-list id="executorsRef" interface="org.onexus.core.ILoader"/>
 
     <service id="org.onexus.task.manager" interface="org.onexus.core.ITaskManager">
         <bean class="org.onexus.task.manager.internal.TaskManager" init-method="init">
             <property name="timeout" value="${timeout}"/>
             <property name="maxThreads" value="${maxThreads}"/>
-            <property name="executors" ref="executorsRef"/>
+            <property name="context" ref="blueprintBundleContext"/>
         </bean>
     </service>
 </blueprint>

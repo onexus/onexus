@@ -23,6 +23,7 @@ import org.onexus.core.ITask;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Loader;
+import org.onexus.core.resources.Project;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +41,12 @@ public class TaskExecutor implements ILoader {
     }
 
     @Override
-    public boolean isCallable(Loader loader) {
-        return "mvn:org.onexus/org.onexus.loader.tsv/0.2".equals(loader.getPlugin());
-    }
-
-    @Override
-    public ITask createCallable(Collection collection) {
+    public ITask createCallable(Project project, Collection collection) {
         return new TsvTaskCallable(dataManager, collection);
     }
 
     @Override
-    public boolean preprocessCollection(Collection collection) {
+    public boolean preprocessCollection(Project project, Collection collection) {
 
         Loader task = collection.getLoader();
         String autoupdateRegExp = task.getParameter(FIELDS_AUTOADD_REGEXP);

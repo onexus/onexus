@@ -23,6 +23,7 @@ import org.onexus.core.ILoader;
 import org.onexus.core.ITask;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Loader;
+import org.onexus.core.resources.Project;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,17 +57,12 @@ public class TaskExecutor implements ILoader {
     }
 
     @Override
-    public boolean isCallable(Loader loader) {
-        return "mvn:org.onexus/org.onexus.loader.anduril/0.2".equals(loader.getPlugin());
-    }
-
-    @Override
-    public ITask createCallable(Collection collection) {
+    public ITask createCallable(Project project, Collection collection) {
         return new TaskCallable(repository, executionDir, collection);
     }
 
     @Override
-    public boolean preprocessCollection(Collection collection) {
+    public boolean preprocessCollection(Project project, Collection collection) {
         return false;
     }
 

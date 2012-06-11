@@ -17,14 +17,33 @@
  */
 package org.onexus.core.resources;
 
+
 import java.util.List;
 
 public class Project extends Resource {
 
     private List<Repository> repositories;
 
+    private List<Plugin> plugins;
+
     public Project() {
         super();
+    }
+
+    public Repository getRepository(String repositoryId) {
+
+        if (repositories == null || repositoryId == null) {
+            return null;
+        }
+
+        for (Repository repository : repositories ) {
+            if (repositoryId.equals(repository.getId())) {
+                return repository;
+            }
+        }
+
+        return null;
+
     }
 
     public List<Repository> getRepositories() {
@@ -33,6 +52,29 @@ public class Project extends Resource {
 
     public void setRepositories(List<Repository> repositories) {
         this.repositories = repositories;
+    }
+
+    public Plugin getPlugin(String pluginId) {
+
+        if (plugins == null || pluginId == null) {
+            return null;
+        }
+
+        for (Plugin plugin : plugins) {
+            if (pluginId.equals(plugin.getId())) {
+                return plugin;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Plugin> getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(List<Plugin> plugins) {
+        this.plugins = plugins;
     }
 
     @Override

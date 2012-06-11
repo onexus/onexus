@@ -19,12 +19,11 @@ package org.onexus.core;
 
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Loader;
+import org.onexus.core.resources.Project;
 
 public interface ILoader {
 
-    public boolean isCallable(Loader loader);
+    public ITask createCallable(Project project, Collection collection);
 
-    public ITask createCallable(Collection collection);
-
-    public boolean preprocessCollection(Collection collection);
+    public boolean preprocessCollection(Project project, Collection collection);
 }

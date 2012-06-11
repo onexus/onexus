@@ -27,6 +27,9 @@ import org.onexus.core.IResourceSerializer;
 import org.onexus.core.exceptions.UnserializeException;
 import org.onexus.core.resources.*;
 import org.onexus.core.utils.ResourceUtils;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +50,7 @@ public class ResourceManager implements IResourceManager {
     private String baseUrl;
     private String basePath;
     private IResourceSerializer serializer;
+    private BundleContext context;
 
     //TODO Make this Session dependent
     private transient boolean checkedout = false;
@@ -62,6 +66,7 @@ public class ResourceManager implements IResourceManager {
 
     public void init() {
         loadProjects();
+        checkout();
     }
 
     private void loadProjects() {
@@ -110,6 +115,14 @@ public class ResourceManager implements IResourceManager {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
+
+            try {
+                Resource project = checkoutFile(new File(folder, ONEXUS_CONTAINER_PREFIX + "project." + ONEXUS_FILE_EXTENSION), ws.getKey(), ws.getValue());
+                loadPlugins((Project) project);
+            } catch (Exception e) {
+                LOGGER.error("Loading project plugins", e);
+            }
+
 
             Collection<File> files = addFilesRecursive(new ArrayList<File>(), folder);
 
@@ -538,6 +551,13 @@ public class ResourceManager implements IResourceManager {
         this.serializer = serializer;
     }
 
+    public BundleContext getContext() {
+        return context;
+    }
+
+    public void setContext(BundleContext context) {
+        this.context = context;
+    }
 
     private static Properties loadProperties() {
         String userHome = System.getProperty("user.home");
@@ -570,6 +590,52 @@ public class ResourceManager implements IResourceManager {
         }
 
         return properties;
+    }
+
+    private void loadPlugins(Project project) {
+
+        if (project.getPlugins() != null) {
+            for (Plugin plugin : project.getPlugins()) {
+
+                String location = plugin.getLocation();
+
+                if (location == null) {
+                    LOGGER.error("Plugin " + plugin.getId() + " without location.");
+                    continue;
+                }
+
+                location = location.trim();
+
+                if (location.isEmpty()) {
+                    LOGGER.error("Plugin " + plugin.getId() + " without location.");
+                    continue;
+                }
+
+                Bundle bundle = null;
+                try {
+                    bundle = context.installBundle(location, null);
+                } catch (IllegalStateException ex) {
+                    LOGGER.error(ex.toString());
+                } catch (BundleException ex) {
+                    if (ex.getNestedException() != null) {
+                        LOGGER.error(ex.getNestedException().toString());
+                    } else {
+                        LOGGER.error(ex.toString());
+                    }
+                }
+
+
+                if (bundle != null) {
+                    try {
+                        bundle.start();
+                        LOGGER.debug("Plugin "+plugin.getId()+" installed and started. Bundle ID: " + bundle.getBundleId());
+                    } catch (BundleException e) {
+                        LOGGER.error("Plugin "+plugin.getId()+" installed but NOT started. Bundle ID: " + bundle.getBundleId(), e);
+                    }
+                }
+            }
+        }
+
     }
 
 

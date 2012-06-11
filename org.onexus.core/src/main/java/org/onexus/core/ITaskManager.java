@@ -18,15 +18,16 @@
 package org.onexus.core;
 
 import org.onexus.core.resources.Collection;
+import org.onexus.core.resources.Project;
 
 public interface ITaskManager {
 
-    public TaskStatus submitCollection(Collection collection);
+    public TaskStatus submitCollection(Project project, Collection collection);
 
     public TaskStatus getTaskStatus(String taskId);
 
     public IEntitySet getTaskOutput(String taskId);
 
-    public boolean preprocessCollection(Collection collection);
+    public boolean preprocessCollection(Project project, Collection collection);
 
 }

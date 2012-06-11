@@ -20,6 +20,7 @@ package org.onexus.collection.manager.internal;
 import org.onexus.core.*;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
+import org.onexus.core.resources.Project;
 import org.onexus.core.utils.FieldLink;
 import org.onexus.core.utils.LinkUtils;
 import org.onexus.core.utils.QueryUtils;
@@ -109,6 +110,8 @@ public class CollectionManager implements ICollectionManager {
 
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
+                Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(collectionURI));
+
                 if (collection == null) {
                     throw new UnsupportedOperationException("Unknown collection '" + collectionURI +"'");
                 }
@@ -116,7 +119,7 @@ public class CollectionManager implements ICollectionManager {
                 taskId = Integer.toHexString(collectionURI.hashCode());
                 TaskStatus storeCollection = new TaskStatus(taskId, "Running '" + collection.getName() + "'");
 
-                boolean collectionUpdated = taskManager.preprocessCollection(collection);
+                boolean collectionUpdated = taskManager.preprocessCollection(project, collection);
                 if (collectionUpdated) {
                     resourceManager.save(collection);
                     resourceManager.commit(collection.getURI());
@@ -154,8 +157,9 @@ public class CollectionManager implements ICollectionManager {
 
             try {
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
+                Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(collectionURI));
 
-                TaskStatus task = taskManager.submitCollection(collection);
+                TaskStatus task = taskManager.submitCollection(project, collection);
 
                 // Wait until task finish.
                 while (!task.isDone()) {

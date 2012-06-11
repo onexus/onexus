@@ -20,6 +20,9 @@ package org.onexus.task.manager.internal;
 import org.onexus.core.*;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Loader;
+import org.onexus.core.resources.Plugin;
+import org.onexus.core.resources.Project;
+import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +36,7 @@ public class TaskManager implements ITaskManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskManager.class);
 
-    private List<ILoader> executors;
+    private BundleContext context;
 
     private int timeout = 50;
 
@@ -42,6 +45,8 @@ public class TaskManager implements ITaskManager {
     private Map<String, ITask> taskCallables;
     private Map<String, FutureTask<IEntitySet>> taskFutures;
     private ExecutorService executorService;
+
+
 
     public TaskManager() {
         super();
@@ -57,13 +62,13 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public TaskStatus submitCollection(Collection collection) {
+    public TaskStatus submitCollection(Project project, Collection collection) {
         LOGGER.debug("Submiting collection {}", collection.getURI());
 
         Loader loader = collection.getLoader();
 
-        ILoader executor = getToolExecutor(loader);
-        ITask taskCall = executor.createCallable(collection);
+        ILoader executor = getLoader(project, loader);
+        ITask taskCall = executor.createCallable(project, collection);
         FutureTask<IEntitySet> taskFuture = new FutureTask<IEntitySet>(taskCall);
         executorService.submit(taskFuture);
 
@@ -75,12 +80,12 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public boolean preprocessCollection(Collection collection) {
+    public boolean preprocessCollection(Project project, Collection collection) {
 
         Loader loader = collection.getLoader();
-        ILoader executor = getToolExecutor(loader);
+        ILoader executor = getLoader(project, loader);
 
-        return executor.preprocessCollection(collection);
+        return executor.preprocessCollection(project, collection);
     }
 
     @Override
@@ -115,24 +120,49 @@ public class TaskManager implements ITaskManager {
         }
     }
 
-    private ILoader getToolExecutor(Loader loader) {
-        for (ILoader executor : executors) {
-            if (executor.isCallable(loader)) {
-                return executor;
+    private ILoader getLoader(Project project, Loader loader) {
+
+        Plugin plugin = project.getPlugin(loader.getPlugin());
+
+        if (plugin == null || plugin.getLocation() == null) {
+            String msg = "Plugin '" + loader.getPlugin() + "' not defined in project " + project.getURI();
+            LOGGER.error(msg);
+            throw new RuntimeException(msg);
+        }
+
+        String pluginLocation = plugin.getLocation();
+
+        try {
+            for (ServiceReference service : context.getServiceReferences(ILoader.class.getName(), null)) {
+
+                Bundle bundle = service.getBundle();
+
+                if (bundle == null) {
+                    continue;
+                }
+
+                if (pluginLocation.equals(bundle.getLocation())) {
+                    LOGGER.info("Using bundle " + bundle.getBundleId() + " to execute " + loader.getPlugin());
+                    return (ILoader) context.getService(service);
+                }
+
             }
+        } catch (InvalidSyntaxException e) {
+            LOGGER.error("On context.getServiceReferences()", e);
         }
 
         // TODO Auto-install tool
         String msg = "Plugin for '" + loader + "' not found.";
+        LOGGER.error(msg);
         throw new RuntimeException(msg);
     }
 
-    public List<ILoader> getExecutors() {
-        return executors;
+    public BundleContext getContext() {
+        return context;
     }
 
-    public void setExecutors(List<ILoader> executors) {
-        this.executors = executors;
+    public void setContext(BundleContext context) {
+        this.context = context;
     }
 
     public int getTimeout() {

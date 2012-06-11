@@ -16,6 +16,7 @@
             <property name="baseUrl" value="${baseUrl}"/>
             <property name="basePath" value="${basePath}"/>
             <property name="serializer" ref="serializerRef"/>
+            <property name="context" ref="blueprintBundleContext"/>
         </bean>
     </service>
 

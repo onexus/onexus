@@ -30,6 +30,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.core</artifactId>
         </dependency>

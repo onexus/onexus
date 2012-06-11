@@ -21,17 +21,13 @@ import org.onexus.core.ILoader;
 import org.onexus.core.ITask;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Loader;
+import org.onexus.core.resources.Project;
 
 public class TaskExecutor implements ILoader {
 
     private String defaultMartService;
 
     private String defaultVirtualSchema;
-
-    @Override
-    public boolean isCallable(Loader loader) {
-        return "mvn:org.onexus/org.onexus.loader.biomart/0.2".equals(loader.getPlugin());
-    }
 
     /**
      * Initialization method called when configuration is updated
@@ -41,12 +37,12 @@ public class TaskExecutor implements ILoader {
     }
 
     @Override
-    public ITask createCallable(Collection collection) {
+    public ITask createCallable(Project project, Collection collection) {
         return new TaskCallable(new BiomartRequest(collection, defaultMartService, defaultVirtualSchema));
     }
 
     @Override
-    public boolean preprocessCollection(Collection collection) {
+    public boolean preprocessCollection(Project project, Collection collection) {
         return false;
     }
 
