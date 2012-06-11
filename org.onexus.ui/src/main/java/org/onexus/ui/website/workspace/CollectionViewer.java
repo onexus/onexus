@@ -21,13 +21,21 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.website.pages.PageModel;
+import org.onexus.ui.website.pages.PageStatus;
+import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.widgets.WidgetStatus;
 import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
 import org.onexus.ui.website.widgets.tableviewer.TableViewer;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
+
+import java.util.List;
 
 public class CollectionViewer extends Panel {
 
@@ -52,7 +60,24 @@ public class CollectionViewer extends Panel {
             viewerStatus.setCurrentColumnSet(0);
             viewerStatus.setConfig(viewerConfig);
 
-            add(new TableViewer("table", Model.of(viewerStatus)));
+            add(new TableViewer("table", Model.of(viewerStatus)) {
+                @Override
+                protected Query getQuery() {
+
+                    Query query = new Query();
+
+                    TableViewerStatus status = getStatus();
+
+                    if (status != null) {
+                        status.beforeQueryBuild(query);
+                        status.onQueryBuild(query);
+                        status.afterQueryBuild(query);
+                    }
+
+                    return query;
+
+                }
+            });
 
         } else {
             add(new EmptyPanel("table"));
