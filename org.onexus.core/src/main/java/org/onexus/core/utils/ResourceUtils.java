@@ -117,9 +117,9 @@ public class ResourceUtils {
             return collectionURI;
         }
 
-        // Relative to server URI
+        // Relative to project URI
         if (collectionURI.charAt(0) == Resource.SEPARATOR) {
-            return getServerURI(parentURI) + collectionURI;
+            return getProjectURI(parentURI) + collectionURI;
         }
 
         // Relative URI (../../resorce-name)
