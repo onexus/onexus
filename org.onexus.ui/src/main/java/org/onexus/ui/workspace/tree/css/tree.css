@@ -1,0 +1,28 @@
+
+.tree-theme-windows .tree-collection {
+  padding-left: 18px;
+  background-image: url(resource-collection.png);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}
+
+.tree-theme-windows .tree-website {
+  padding-left: 18px;
+  background-image: url(resource-website.png);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}
+
+.tree-theme-windows .tree-project-closed {
+  padding-left: 18px;
+  background-image: url(project-closed.gif);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}
+
+.tree-theme-windows .tree-project-open {
+  padding-left: 18px;
+  background-image: url(project-open.gif);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}

@@ -10,10 +10,7 @@ import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.workspace.pages.ResourceModel;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
@@ -67,6 +64,13 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
         }
 
         List<Resource> children = resourceManager.loadChildren(Resource.class, node.getURI());
+
+        Collections.sort(children, new Comparator<Resource>() {
+            @Override
+            public int compare(Resource o1, Resource o2) {
+                return (o1!=null && (o1 instanceof Folder)) ? 0 : 1;
+            }
+        });
 
         if (children == null) {
             return EMPTY_ITERATOR;
