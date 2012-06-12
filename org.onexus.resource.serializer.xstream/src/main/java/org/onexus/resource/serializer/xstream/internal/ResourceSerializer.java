@@ -62,17 +62,20 @@ public class ResourceSerializer implements IResourceSerializer {
         // Project
         alias("project", Project.class);
         xstream.addImplicitCollection(Project.class, "properties", "property", Property.class);
-        xstream.addImplicitCollection(Project.class, "repositories", "repository", Repository.class);
-        xstream.addImplicitCollection(Project.class, "plugins", "plugin", Plugin.class);
         xstream.addImplicitCollection(Plugin.class, "parameters", "parameter", Parameter.class);
 
+        // Repository
+        alias("repository", Repository.class);
+        xstream.addImplicitCollection(Repository.class, "mirrors", "mirror", String.class);
+
+        // Plugin
+        alias("plugin", Plugin.class);
 
         // Folder
         alias("folder", Folder.class);
         xstream.addImplicitCollection(Folder.class, "properties", "property", Property.class);
 
-
-        // Source
+        // Data
         alias("data", Data.class);
         xstream.addImplicitCollection(Data.class, "paths", "path", String.class);
         xstream.addImplicitCollection(Data.class, "properties", "property", Property.class);

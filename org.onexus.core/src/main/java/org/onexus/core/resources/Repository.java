@@ -17,17 +17,18 @@
  */
 package org.onexus.core.resources;
 
+import java.util.List;
+
 public class Repository extends AbstractMetadata {
 
     private String id;
 
-    private String type;
-
     private String location;
 
-    public Repository(String id, String type, String location) {
+    private List<String> mirrors;
+
+    public Repository(String id, String location) {
         this.id = id;
-        this.type = type;
         this.location = location;
     }
 
@@ -39,19 +40,19 @@ public class Repository extends AbstractMetadata {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getLocation() {
         return location;
     }
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<String> getMirrors() {
+        return mirrors;
+    }
+
+    public void setMirrors(List<String> mirrors) {
+        this.mirrors = mirrors;
     }
 }

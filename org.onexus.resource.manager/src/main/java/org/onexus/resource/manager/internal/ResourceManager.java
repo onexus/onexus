@@ -176,7 +176,7 @@ public class ResourceManager implements IResourceManager {
                         project.setRepositories(new ArrayList<Repository>());
                     }
 
-                    project.getRepositories().add(new Repository("resource", "file", projectsPaths.get(project.getURI())));
+                    project.getRepositories().add(new Repository("resource", projectsPaths.get(project.getURI())));
                 }
 
                 resources.put(resource.getURI(), resource);

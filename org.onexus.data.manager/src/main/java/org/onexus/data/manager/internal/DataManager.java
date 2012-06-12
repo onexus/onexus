@@ -24,7 +24,9 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.core.IDataManager;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.*;
+import org.onexus.core.resources.Data;
+import org.onexus.core.resources.Project;
+import org.onexus.core.resources.Repository;
 import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +35,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 public class DataManager implements IDataManager {
@@ -76,10 +77,6 @@ public class DataManager implements IDataManager {
             throw new UnsupportedOperationException("Repository '" + data.getRepository() + "' not defined in project " + projectURI);
         }
 
-        if (!"file".equals(repository.getType())) {
-            throw new UnsupportedOperationException("Repository of type '" + repository.getType() + "' not supported.");
-        }
-
         List<URL> urls = new ArrayList<URL>();
 
         for (String templatePath : data.getPaths()) {
@@ -111,13 +108,32 @@ public class DataManager implements IDataManager {
                 String sourcePath = repository.getLocation() + File.separator + path;
                 File sourceFile = new File(sourcePath);
 
-                try {
-                    urls.add(sourceFile.toURI().toURL());
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
+                if (sourceFile.exists()) {
+                    try {
+                        urls.add(sourceFile.toURI().toURL());
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
 
+                    // Try mirrors
+                    Random rand = new Random();
+                    if (repository.getMirrors() != null && !repository.getMirrors().isEmpty()) {
+                        int randomMirror = rand.nextInt(repository.getMirrors().size());
+
+                        String mirror = repository.getMirrors().get(randomMirror);
+                        String remoteFile = mirror + '/' + path;
+
+                        try {
+                            URL url = new URL(remoteFile);
+                            urls.add(url);
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
             }
+
         }
 
         return urls;
