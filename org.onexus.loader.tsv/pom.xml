@@ -20,8 +20,6 @@
 
     <name>${bundle.symbolicName}</name>
 
-    <version>0.3.1-SNAPSHOT</version>
-
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -37,31 +35,7 @@
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.core</artifactId>
-	    <version>0.3.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-remote-resources-plugin</artifactId>
-            <version>1.2.1</version>
-            <executions>
-                <execution>
-                    <id>process-remote-resources</id>
-                    <goals>
-                        <goal>process</goal>
-                    </goals>
-                    <configuration>
-                        <resourceBundles>
-                            <resourceBundle>org.onexus:onexus-resources:0.3.0-SNAPSHOT</resourceBundle>
-                        </resourceBundles>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-    </build>
 
 </project>

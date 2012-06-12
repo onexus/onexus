@@ -26,8 +26,10 @@ import org.onexus.core.utils.ResourceUtils;
 import org.onexus.loader.tsv.internal.tools.BufferedFileChannel;
 import org.onexus.loader.tsv.internal.tools.Token;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -42,6 +44,7 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
     private Deque<URL> urls;
     private BufferedFileChannel fc;
+    private BufferedReader fr;
     private File file;
 
     public FileEntitySet(String fileURL, String nullChar, String separator, Collection collection) {
@@ -130,8 +133,16 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
             // Load next file
             URL url = urls.poll();
-            this.file = new File(url.toURI());
-            this.fc = new BufferedFileChannel(file);
+
+            if ("file".equals(url.getProtocol())) {
+                this.file = new File(url.toURI());
+                this.fc = new BufferedFileChannel(file);
+                this.fr = null;
+            } else {
+                this.file = null;
+                this.fc = null;
+                this.fr = new BufferedReader(new InputStreamReader(url.openStream()));
+            }
 
         } catch (java.io.FileNotFoundException e) {
 
@@ -149,7 +160,12 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
         // Read first line the headers
         try {
-            String firstLine = this.fc.readLine(Token.UTF8);
+            String firstLine;
+            if (this.fc == null) {
+                firstLine = this.fr.readLine();
+            } else {
+                firstLine = this.fc.readLine(Token.UTF8);
+            }
 
             setHeaders(new HashMap<String, Integer>());
 
@@ -172,11 +188,16 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
         // Read first row of data
         try {
 
-            if (fc == null) {
+            if (fc == null && fr == null) {
                 return false;
             }
 
-            currentPosition = fc.position();
+            if (fc != null) {
+                currentPosition = fc.position();
+            } else {
+                currentPosition = -1;
+            }
+
             currentLine = nextLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -197,18 +218,28 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
         try {
 
-            if (fc == null) {
+            if (fc == null && fr == null) {
                 return null;
             }
 
-            String line = fc.readLine(Token.UTF8);
+            String line;
+
+            if (fc != null) {
+                line = fc.readLine(Token.UTF8);
+            } else {
+                line = fr.readLine();
+            }
 
             if (line == null) {
                 if (!urls.isEmpty()) {
                     nextFileChannel();
                     return nextLine();
                 } else {
-                    fc.close();
+                    if (fc != null) {
+                        fc.close();
+                    } else {
+                        fr.close();
+                    }
                 }
             } else {
                 return line;
@@ -218,6 +249,13 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
             if (fc != null)
                 try {
                     fc.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+            if (fr != null)
+                try {
+                    fr.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -247,6 +285,14 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
         if (fc != null) {
             try {
                 fc.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        if (fr != null) {
+            try {
+                fr.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
