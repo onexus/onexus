@@ -90,6 +90,7 @@ public class BasePage extends WebPage {
 
     }
 
+
     @Override
     public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(DEFAULT_CSS));
