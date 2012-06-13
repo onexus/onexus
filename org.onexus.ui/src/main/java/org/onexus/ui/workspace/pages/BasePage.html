@@ -1,35 +1,80 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title>ONEXUS</title>
-    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
 </head>
+
 <body>
 
-<div wicket:id="progressbar"></div>
+<div class="container">
 
-<div id="header">
-    <div>
-        <a href="http://www.onexus.org" target="_tab">
-            <img id="logo" src="http://www.onexus.org/images/onexus-white.png" alt="onexus">
-        </a>
-    </div>
-    <div id="nav">
-        <ul>
-            <li wicket:id="menu"><a wicket:id="link" href="#"><span wicket:id="label">Resources</span></a></li>
-        </ul>
-    </div>
-    <div id="login">
-        <a wicket:id="signout" href="faq.html">Sign out</a><span wicket:id="username"></span>
-    </div>
-    <div id="toolbar">
-        <div wicket:id="toolbar">
-            <div wicket:id="tool"></div>
+    <section id="menu">
+        <div class="row">
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+
+                        <a class="pull-left" href="http://www.onexus.org/">
+                            <wicket:link><img src="img/logo.png" height="40" alt="onexus"></wicket:link></a>
+
+                        <div class="btn-group pull-right">
+                            <a wicket:id="account-details" class="btn btn-inverse" href="#" rel="tooltip" title="Account Details">
+                                <i class="icon-user icon-white"></i> <span wicket:id="username">jordeu</span>
+                            </a>
+                            <a wicket:id="signout" class="btn btn-inverse" href="#" rel="tooltip" title="Log Out"><i class="icon-off icon-white"></i></a>
+                        </div>
+
+                        <div class="nav-collapse collapse">
+                            <ul class="nav">
+                                <li class="divider-vertical"></li>
+                                <li wicket:id="menu-projects" class="dropdown active">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        Projects
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">New Project...</a></li>
+                                        <li><a href="#">Import Project...</a></li>
+                                        <li class="divider"></li>
+                                        <li class="active"><a href="#">intogen</a></li>
+                                        <li><a href="#">tnbreast</a></li>
+                                    </ul>
+                                </li>
+                                <li class="">
+                                    <a href="#">Services</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<div id="container">
     <wicket:child/>
+
+    <footer class="footer">
+        <div class="row">
+            <p class="pull-right"><a href="#">Back to top</a></p>
+        </div>
+    </footer>
+
 </div>
 
 </body>

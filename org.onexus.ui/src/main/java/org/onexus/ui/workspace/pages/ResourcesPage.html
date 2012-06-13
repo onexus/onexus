@@ -1,8 +1,57 @@
 <wicket:extend>
-    <div class="lefttoolbar"></div>
-    <div class="resources-tree">
-        <div wicket:id="tree"></div>
+
+<section id="toolbar">
+    <div class="row">
+        <div class="span12">
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button class="btn" href="" rel="tooltip" title="Reload project"><i class="icon-refresh"></i></button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn" href="" rel="tooltip" title="Copy resource URI to the clipboard"><i class="icon-share"></i>
+                    </button>
+                    <ul class="btn">
+                        <li>
+                            www.onexus.org <span class="divider">/</span> onx <span class="divider">/</span>
+                        </li>
+                        <li>
+                            <a href="#">intogen</a> <span class="divider">/</span>
+                        </li>
+                        <li>
+                            <a href="#">collections</a> <span class="divider">/</span>
+                        </li>
+                        <li class="active">genes</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </div>
+</section>
+
+<section id="tabs">
+    <div class="row">
+        <div class="span12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">Files</a></li>
+                <li><a href="#">Wizards</a></li>
+                <li><a href="#">Editor</a></li>
+                <li><a href="#">Preview</a></li>
+                <li><a href="#">Definition</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section id="main">
+    <div class="row">
+        <div class="span12">
+            <div class="resources-tree">
+                <div wicket:id="tree"></div>
+            </div>
+        </div>
+    </div>
+</section>
 
     <div wicket:id="resourcesTabs" class="resources-tabs resources-tabs-min">
         <div class="resourceuri" wicket:id="resourceInfo">
@@ -11,4 +60,5 @@
                 wicket:id="resourceUri">http://localhost:8181/onx/demo/basic)</span></div>
         <div wicket:id="viewers"></div>
     </div>
+
 </wicket:extend>

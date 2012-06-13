@@ -1,0 +1,33 @@
+body {
+    background-color: #FFFFFF;
+    background-position: 0 40px;
+    background-repeat: repeat-x;
+    position: relative;
+    margin-top: 5px;
+}
+
+
+.navbar .btn-navbar {
+    float: left;
+}
+
+ul.btn {
+    list-style: none outside none;
+    background: none;
+    margin: 0px;
+}
+
+ul.btn li {
+    display: inline-block;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.footer {
+    border-top: 1px solid #E5E5E5;
+    margin-top: 45px;
+    padding: 35px 0 36px;
+}
+.footer p {
+    color: #555555;
+    margin-bottom: 0;
+}

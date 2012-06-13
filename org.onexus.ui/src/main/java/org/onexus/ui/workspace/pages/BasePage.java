@@ -21,6 +21,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,6 +30,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.ui.OnexusWebSession;
 import org.onexus.ui.workspace.pages.tools.AbstractTool;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
@@ -36,65 +38,49 @@ import org.onexus.ui.workspace.progressbar.ProgressBar;
 @AuthorizeInstantiation("onexus-admin")
 public class BasePage extends WebPage {
 
-    public static final CssResourceReference DEFAULT_CSS = new CssResourceReference(ResourcesPage.class, "BasePage.css");
-    public static final CssResourceReference STYLE_CSS = new CssResourceReference(ResourcesPage.class, "style.css");
-
-    private RepeatingView toolbar;
+    public static final CssResourceReference BOOTSTRAP_CSS = new CssResourceReference(ResourcesPage.class, "css/bootstrap.min.css");
+    public static final JQueryPluginResourceReference BOOTSTRAP_JS = new JQueryPluginResourceReference(ResourcesPage.class, "js/bootstrap.min.js");
+    public static final CssResourceReference STYLE_CSS = new CssResourceReference(ResourcesPage.class, "css/style.css");
 
     public BasePage() {
         super();
 
-        RepeatingView menu = new RepeatingView("menu");
+        Link<String> link = new Link<String>("account-details") {
+            @Override
+            public void onClick() {
 
-        addMenuItem(menu, ResourcesPage.class, "Resources");
-
-        add(menu);
-
-        //add(new ProgressBar("progressbar", true));
-        add(new EmptyPanel("progressbar"));
+            }
+        };
+        link.add(new Label("username", OnexusWebSession.get().getUserToken()));
+        add(link);
 
         add(new Link<String>("signout") {
-
             @Override
             public void onClick() {
                 OnexusWebSession.get().invalidate();
             }
-
         });
 
-        add(new Label("username", OnexusWebSession.get().getUserToken()));
+        WebMarkupContainer menuProjects = new WebMarkupContainer("menu-projects");
+        add(menuProjects);
 
-        this.toolbar = new RepeatingView("toolbar");
-        add(toolbar);
-    }
-
-    protected void addTool(AbstractTool<?> tool) {
-        WebMarkupContainer toolContainer = new WebMarkupContainer(toolbar.newChildId());
-        toolContainer.add(tool);
-        toolbar.add(toolContainer);
-    }
-
-    private void addMenuItem(RepeatingView menu, Class<ResourcesPage> pageClass, String label) {
-
-        WebMarkupContainer childItem = new WebMarkupContainer(menu.newChildId());
-
-        if (pageClass.isAssignableFrom(getClass())) {
-            childItem.add(new AttributeModifier("id", "current"));
+        if (ResourcesPage.class.isAssignableFrom(getClass())) {
+            menuProjects.add(new AttributeModifier("class", "dropdown active"));
+        } else {
+            menuProjects.add(new AttributeModifier("class", "dropdown"));
         }
 
-        Link<String> link = new BookmarkablePageLink<String>("link", pageClass);
-        link.add(new Label("label", label));
-        childItem.add(link);
-
-        menu.add(childItem);
-
     }
-
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(DEFAULT_CSS));
+        response.render(CssHeaderItem.forReference(BOOTSTRAP_CSS));
         response.render(CssHeaderItem.forReference(STYLE_CSS));
+        response.render(JavaScriptHeaderItem.forReference(BOOTSTRAP_JS));
+        response.render(JavaScriptHeaderItem.forScript("     $(document).ready(function () {\n" +
+                "        $(\"[rel=tooltip]\").tooltip({ placement: 'bottom'});\n" +
+                "        });\n" +
+                "   ", "bootstrap-tooltip"));
     }
 
 }

@@ -122,8 +122,8 @@ public class ResourcesPage extends BasePage {
 
         add(resourcesTabs);
 
-        addTool(new ProjectSelectorTool());
-        addTool(new AddNewProjectTool());
+        //addTool(new ProjectSelectorTool());
+        //addTool(new AddNewProjectTool());
 
     }
 
