@@ -84,3 +84,7 @@
 	top: 72px;
 	height: 45px;
 }
+
+#header #toolbar div {
+    float: left;
+}

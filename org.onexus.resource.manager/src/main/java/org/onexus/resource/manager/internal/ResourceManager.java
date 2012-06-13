@@ -65,7 +65,6 @@ public class ResourceManager implements IResourceManager {
     }
 
     public void init() {
-        loadProjects();
         checkout();
     }
 
@@ -108,6 +107,8 @@ public class ResourceManager implements IResourceManager {
 
     @Override
     public void checkout() {
+
+        loadProjects();
 
         for (Map.Entry<String, String> ws : this.projectsPaths.entrySet()) {
             File folder = new File(ws.getValue());

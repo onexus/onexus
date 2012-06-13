@@ -23,9 +23,7 @@ import java.util.List;
 
 public interface IResourceManager {
 
-    public enum ResourceStatus {SYNC, REMOVE, UPDATE, ADD}
-
-    ;
+    public enum ResourceStatus {SYNC, REMOVE, UPDATE, ADD};
 
     public <T extends Resource> T load(Class<T> resourceType, String resourceURI);
 

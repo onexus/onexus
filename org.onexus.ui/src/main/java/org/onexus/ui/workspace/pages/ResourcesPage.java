@@ -25,6 +25,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -37,6 +38,7 @@ import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.workspace.events.EventResourceSelect;
+import org.onexus.ui.workspace.pages.tools.AddNewProjectTool;
 import org.onexus.ui.workspace.pages.tools.ProjectSelectorTool;
 import org.onexus.ui.workspace.tree.ProjectTree;
 import org.onexus.ui.workspace.tree.ResourceTreeProvider;
@@ -73,8 +75,13 @@ public class ResourcesPage extends BasePage {
 
         IModel<Resource> selectedModel = new SelectedModel();
 
-        String projectURI = ResourceUtils.getProjectURI(selectedResource);
-        add(new ProjectTree("tree", new ResourceTreeProvider(projectURI), selectedModel));
+        if (selectedResource != null) {
+            String projectURI = ResourceUtils.getProjectURI(selectedResource);
+            add(new ProjectTree("tree", new ResourceTreeProvider(projectURI), selectedModel));
+        } else {
+            add(new EmptyPanel("tree"));
+        }
+
 
         resourcesTabs = new WebMarkupContainer("resourcesTabs");
         resourcesTabs.setOutputMarkupId(true);
@@ -116,6 +123,7 @@ public class ResourcesPage extends BasePage {
         add(resourcesTabs);
 
         addTool(new ProjectSelectorTool());
+        addTool(new AddNewProjectTool());
 
     }
 
