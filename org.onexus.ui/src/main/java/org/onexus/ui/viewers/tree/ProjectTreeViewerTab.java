@@ -15,33 +15,34 @@
  *
  *
  */
-package org.onexus.ui.wizards;
+package org.onexus.ui.viewers.tree;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.onexus.core.resources.Data;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IViewerCreator;
 
-public class WizardViewerTab implements IViewerCreator {
+public class ProjectTreeViewerTab implements IViewerCreator {
+
 
     @Override
     public String getTitle() {
-        return "Wizards";
+        return "Resources";
     }
 
     @Override
     public Panel getPanel(String containerId, IModel<? extends Resource> model) {
-        return new WizardViewerTabPanel(containerId, model);
+        return new ProjectTree(containerId, new ResourceTreeProvider(model), model);
+    }
+
+    @Override
+    public double getOrder() {
+        return 0;
     }
 
     @Override
     public boolean isVisible(Class<? extends Resource> resourceType) {
         return true;
     }
-
-    @Override
-    public double getOrder() {
-        return 1;
-    }
-
 }

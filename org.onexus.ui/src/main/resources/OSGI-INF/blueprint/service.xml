@@ -34,13 +34,16 @@
 
     <!-- Default ViewersCreators -->
     <service interface="org.onexus.ui.IViewerCreator">
-        <bean class="org.onexus.ui.wizards.WizardViewerTab"/>
+        <bean class="org.onexus.ui.viewers.wizards.WizardViewerTab"/>
     </service>
     <service interface="org.onexus.ui.IViewerCreator">
-        <bean class="org.onexus.ui.editor.EditorViewerTab"/>
+        <bean class="org.onexus.ui.viewers.editor.EditorViewerTab"/>
     </service>
     <service interface="org.onexus.ui.IViewerCreator">
-        <bean class="org.onexus.ui.viewers.FilePreviewViewerTab"/>
+        <bean class="org.onexus.ui.viewers.tree.ProjectTreeViewerTab"/>
+    </service>
+    <service interface="org.onexus.ui.IViewerCreator">
+        <bean class="org.onexus.ui.viewers.preview.FilePreviewViewerTab"/>
     </service>
     <service interface="org.onexus.ui.IViewerCreator">
         <bean class="org.onexus.ui.website.workspace.PreviewBrowserViewerTab"/>
@@ -51,8 +54,8 @@
 
     <!-- Default Viewers manager -->
     <reference-list id="viewerCreatorsRef" interface="org.onexus.ui.IViewerCreator" availability="optional"/>
-    <service interface="org.onexus.ui.workspace.viewers.IViewersManager">
-        <bean class="org.onexus.ui.workspace.viewers.DefaultViewersManager">
+    <service interface="org.onexus.ui.viewers.IViewersManager">
+        <bean class="org.onexus.ui.viewers.DefaultViewersManager">
             <property name="viewerCreators" ref="viewerCreatorsRef"/>
         </bean>
     </service>

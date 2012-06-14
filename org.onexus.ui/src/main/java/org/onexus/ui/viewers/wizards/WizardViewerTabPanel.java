@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards;
+package org.onexus.ui.viewers.wizards;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,6 +31,7 @@ import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IWizardCreator;
 import org.onexus.ui.website.utils.panels.HelpMark;
+import org.onexus.ui.wizards.IWizardsManager;
 
 import javax.inject.Inject;
 import java.util.List;

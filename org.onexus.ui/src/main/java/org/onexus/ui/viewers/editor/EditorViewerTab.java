@@ -15,25 +15,38 @@
  *
  *
  */
-package org.onexus.ui.editor.tabs;
+package org.onexus.ui.viewers.editor;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.resources.Resource;
+import org.onexus.ui.IViewerCreator;
 
-public abstract class AbstractEditorTabPanel extends Panel {
+public class EditorViewerTab implements IViewerCreator {
 
-    public AbstractEditorTabPanel(String id, IModel<? extends Resource> model) {
-        super(id, model);
+    public EditorViewerTab() {
+        super();
     }
 
-    @SuppressWarnings("unchecked")
-    public IModel<? extends Resource> getModel() {
-        return (IModel<? extends Resource>) getDefaultModel();
+    @Override
+    public String getTitle() {
+        return "Definition";
     }
 
-    public Resource getModelObject() {
-        return getModel().getObject();
+    @Override
+    public Panel getPanel(String containerId, IModel<? extends Resource> model) {
+        return new XmlEditorTab(containerId, (IModel<Resource>) model);
     }
+
+    @Override
+    public boolean isVisible(Class<? extends Resource> resourceType) {
+        return true;
+    }
+
+    @Override
+    public double getOrder() {
+        return 1000;
+    }
+
 
 }

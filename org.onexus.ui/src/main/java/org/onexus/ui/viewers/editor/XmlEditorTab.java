@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.editor.tabs.xmleditor;
+package org.onexus.ui.viewers.editor;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -30,15 +30,14 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceManager.ResourceStatus;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IResourceRegister;
-import org.onexus.ui.editor.tabs.AbstractEditorTabPanel;
 import org.onexus.ui.workspace.events.EventResourceSync;
 
 import javax.inject.Inject;
@@ -47,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class XmlEditorTab extends AbstractEditorTabPanel {
+public class XmlEditorTab extends Panel {
 
     @Inject
     public IResourceManager resourceManager;
@@ -172,6 +171,15 @@ public class XmlEditorTab extends AbstractEditorTabPanel {
         }
 
         return js.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public IModel<? extends Resource> getModel() {
+        return (IModel<? extends Resource>) getDefaultModel();
+    }
+
+    public Resource getModelObject() {
+        return getModel().getObject();
     }
 
 }

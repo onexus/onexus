@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.editor.tabs.xmleditor;
+package org.onexus.ui.viewers.editor;
 
 /**
  * XML utils, including formatting.

@@ -18,6 +18,7 @@ function initCodeMirror( componentId ) {
             lineWrapping: true,
             onGutterClick: foldFunc,
             onChange : alertOnChange,
+            readOnly : true,
             onCursorActivity : function() {
             editor.setLineClass(hlLine, null);
             hlLine = editor.setLineClass(editor.getCursor().line,

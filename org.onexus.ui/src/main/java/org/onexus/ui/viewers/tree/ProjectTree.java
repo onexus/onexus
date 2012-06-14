@@ -1,4 +1,4 @@
-package org.onexus.ui.workspace.tree;
+package org.onexus.ui.viewers.tree;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,7 +20,6 @@ import org.h2.util.StringUtils;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
-import org.onexus.ui.website.Website;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.workspace.events.EventResourceSelect;
 
@@ -36,17 +35,16 @@ public class ProjectTree extends NestedTree<Resource> {
 
     private static final ResourceReference CSS = new CssResourceReference(ProjectTree.class, "css/tree.css");
 
-    public ProjectTree(String id, ITreeProvider<Resource> treeProvider, IModel<Resource> selectedResource) {
+    public ProjectTree(String id, ITreeProvider<Resource> treeProvider, IModel<? extends Resource> selectedResource) {
         super(id, treeProvider);
 
-        this.state = new ProviderSubset<Resource>(treeProvider);
+        this.state = new InverseSet<Resource>(new ProviderSubset<Resource>(treeProvider));
         this.provider = treeProvider;
-        this.selected = selectedResource;
+        this.selected = (IModel<Resource>) selectedResource;
 
         setOutputMarkupId(true);
         setModel(newStateModel());
         add(new WindowsTheme());
-
 
     }
 

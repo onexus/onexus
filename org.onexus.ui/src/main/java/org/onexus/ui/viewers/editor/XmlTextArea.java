@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.editor.tabs.xmleditor;
+package org.onexus.ui.viewers.editor;
 
 import com.thoughtworks.xstream.converters.ErrorWriter;
 import org.apache.wicket.markup.html.form.TextArea;

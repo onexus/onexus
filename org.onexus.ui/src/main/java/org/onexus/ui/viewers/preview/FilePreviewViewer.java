@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.viewers;
+package org.onexus.ui.viewers.preview;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.core.IDataManager;
 import org.onexus.core.resources.Resource;
-import org.onexus.ui.editor.tabs.xmleditor.XmlEditorTab;
+import org.onexus.ui.viewers.editor.XmlEditorTab;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;

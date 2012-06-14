@@ -5,26 +5,17 @@
         <div class="span12">
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <button class="btn" href="" rel="tooltip" title="Reload project"><i class="icon-refresh"></i></button>
+                    <a wicket:id="projectReload" class="btn" href="" rel="tooltip" title="Reload project"><i class="icon-refresh"></i></a>
                 </div>
                 <div class="btn-group">
-                    <button class="btn" href="" rel="tooltip" title="Copy resource URI to the clipboard"><i class="icon-share"></i>
-                    </button>
-                    <ul class="btn">
-                        <li>
-                            www.onexus.org <span class="divider">/</span> onx <span class="divider">/</span>
+                    <a wicket:id="copyURI" class="btn" href="" rel="tooltip" title="Link to the resource URI" target="tab"><i class="icon-share"></i></a>
+                    <ul wicket:id="uriBreadCrumb" class="btn breadcrumb">
+                        <li wicket:id="uri">
+                            <a wicket:id="link" href="#"><span wicket:id="name">www.onexus.org</span></a> <span wicket:id="divider" class="divider">/</span>
                         </li>
-                        <li>
-                            <a href="#">intogen</a> <span class="divider">/</span>
-                        </li>
-                        <li>
-                            <a href="#">collections</a> <span class="divider">/</span>
-                        </li>
-                        <li class="active">genes</li>
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -32,33 +23,19 @@
 <section id="tabs">
     <div class="row">
         <div class="span12">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#">Files</a></li>
-                <li><a href="#">Wizards</a></li>
-                <li><a href="#">Editor</a></li>
-                <li><a href="#">Preview</a></li>
-                <li><a href="#">Definition</a></li>
+            <ul wicket:id="tabs" class="nav nav-tabs">
+                <li wicket:id="tab"><a wicket:id="link" href="#"><span wicket:id="label">Files</span></a></li>
             </ul>
         </div>
     </div>
 </section>
 
 <section id="main">
-    <div class="row">
+    <div class="row minh750">
         <div class="span12">
-            <div class="resources-tree">
-                <div wicket:id="tree"></div>
-            </div>
+            <div wicket:id="main"></div>
         </div>
     </div>
 </section>
-
-    <div wicket:id="resourcesTabs" class="resources-tabs resources-tabs-min">
-        <div class="resourceuri" wicket:id="resourceInfo">
-            <a href="#" wicket:id="fullscreen"><span wicket:id="label"></span></a>
-            <span wicket:id="resourceType">Project</span> <span
-                wicket:id="resourceUri">http://localhost:8181/onx/demo/basic)</span></div>
-        <div wicket:id="viewers"></div>
-    </div>
 
 </wicket:extend>

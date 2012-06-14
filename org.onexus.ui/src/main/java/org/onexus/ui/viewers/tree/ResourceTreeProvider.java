@@ -1,4 +1,4 @@
-package org.onexus.ui.workspace.tree;
+package org.onexus.ui.viewers.tree;
 
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
@@ -6,6 +6,7 @@ import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Folder;
 import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.workspace.pages.ResourceModel;
 
@@ -14,26 +15,32 @@ import java.util.*;
 
 public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
-    private String projectURI;
+    private IModel<? extends Resource> currentResource;
 
     @Inject
     public IResourceManager resourceManager;
 
     private final static Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
 
-    public ResourceTreeProvider(String projectURI) {
+    public ResourceTreeProvider(IModel<? extends Resource> resource) {
         super();
 
         OnexusWebApplication.inject(this);
 
-        this.projectURI = projectURI;
+        this.currentResource = resource;
 
     }
 
     @Override
     public Iterator<? extends Resource> getRoots() {
 
-        Project project = resourceManager.load(Project.class, projectURI);
+        Resource resource = currentResource.getObject();
+
+        if (resource == null) {
+            return EMPTY_ITERATOR;
+        }
+
+        Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(resource.getURI()));
 
         if (project == null) {
             return EMPTY_ITERATOR;

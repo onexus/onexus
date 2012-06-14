@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.workspace.viewers;
+package org.onexus.ui.viewers;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;

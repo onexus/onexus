@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.ui.OnexusWebSession;
@@ -42,8 +43,8 @@ public class BasePage extends WebPage {
     public static final JQueryPluginResourceReference BOOTSTRAP_JS = new JQueryPluginResourceReference(ResourcesPage.class, "js/bootstrap.min.js");
     public static final CssResourceReference STYLE_CSS = new CssResourceReference(ResourcesPage.class, "css/style.css");
 
-    public BasePage() {
-        super();
+    public BasePage(PageParameters parameters) {
+        super(parameters);
 
         Link<String> link = new Link<String>("account-details") {
             @Override
