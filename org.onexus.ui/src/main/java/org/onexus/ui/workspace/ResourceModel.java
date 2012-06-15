@@ -15,13 +15,12 @@
  *
  *
  */
-package org.onexus.ui.workspace.pages;
+package org.onexus.ui.workspace;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.OnexusWebSession;
 
 import javax.inject.Inject;
 

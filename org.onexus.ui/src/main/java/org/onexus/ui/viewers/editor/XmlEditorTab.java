@@ -24,7 +24,6 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -35,10 +34,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.IResourceManager.ResourceStatus;
 import org.onexus.core.resources.Resource;
 import org.onexus.ui.IResourceRegister;
-import org.onexus.ui.workspace.events.EventResourceSync;
 
 import javax.inject.Inject;
 import java.util.Iterator;
@@ -81,25 +78,10 @@ public class XmlEditorTab extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
 
-                Resource resource = XmlEditorTab.this.getModelObject();
-
-                if (resource != null) {
-
-                    boolean wasSynchronized = (resourceManager.status(resource.getURI()) == ResourceStatus.SYNC);
-                    resourceManager.save(resource);
-
-                    // Send only the event the first time that we pass form
-                    // synchronized resource to non-synchronized.
-                    if (wasSynchronized) {
-                        send(getPage(), Broadcast.BREADTH, EventResourceSync.EVENT);
-                    }
-                }
-
             }
 
             @Override
-            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes)
-            {
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
 
                 String id = "throttle-" + textArea.getMarkupId();
@@ -137,7 +119,7 @@ public class XmlEditorTab extends Panel {
         response.render(JavaScriptHeaderItem.forScript(autocomplete, Integer.toString(autocomplete.hashCode())));
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_XML_HINT_JS));
         response.render(JavaScriptHeaderItem.forReference(LOAD_JS));
-        response.render(OnDomReadyHeaderItem.forScript("initCodeMirror('"+textArea.getMarkupId()+"');"));
+        response.render(OnDomReadyHeaderItem.forScript("initCodeMirror('" + textArea.getMarkupId() + "');"));
     }
 
     private static String createAutocompleteJS(Map<String, List<String>> autocompleteMap) {

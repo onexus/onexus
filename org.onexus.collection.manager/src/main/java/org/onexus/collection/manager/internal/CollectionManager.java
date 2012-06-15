@@ -120,10 +120,10 @@ public class CollectionManager implements ICollectionManager {
                 TaskStatus storeCollection = new TaskStatus(taskId, "Running '" + collection.getName() + "'");
 
                 boolean collectionUpdated = taskManager.preprocessCollection(project, collection);
-                if (collectionUpdated) {
+                /*TODO if (collectionUpdated) {
                     resourceManager.save(collection);
                     resourceManager.commit(collection.getURI());
-                }
+                }*/
 
                 LOGGER.info("Registering collection {}", collectionURI);
                 collectionStore.registerCollection(collectionURI);

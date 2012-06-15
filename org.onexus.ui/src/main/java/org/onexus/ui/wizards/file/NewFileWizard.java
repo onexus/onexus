@@ -92,7 +92,7 @@ public class NewFileWizard extends AbstractNewResourceWizard<Data> {
     }
 
     private String convertURItoContainerPath(String sourceURI) {
-        String serverUri = ResourceUtils.getServerURI(sourceURI);
+        String serverUri = ResourceUtils.getProjectURI(sourceURI);
         String relativePath = sourceURI.replace(serverUri + Resource.SEPARATOR, "");
         relativePath.replace(Resource.SEPARATOR, File.separatorChar);
         return relativePath;

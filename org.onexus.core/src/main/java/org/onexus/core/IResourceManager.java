@@ -17,29 +17,32 @@
  */
 package org.onexus.core;
 
+import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
 
+import java.net.URL;
 import java.util.List;
 
 public interface IResourceManager {
 
-    public enum ResourceStatus {SYNC, REMOVE, UPDATE, ADD};
+    public List<Project> getProjects();
+
+    public Project getProject(String projectUri);
+
+    public void importProject(String projectURI);
+
+    public void syncProject(String projectURI);
 
     public <T extends Resource> T load(Class<T> resourceType, String resourceURI);
 
-    public <T extends Resource> List<T> loadChildren(Class<T> resourceType,
-                                                     String parentURI);
+    public <T extends Resource> List<T> loadChildren(Class<T> resourceType, String parentURI);
 
-    public <T extends Resource> void save(T resource);
+    public void save(Resource resource);
 
-    public void remove(String resourceURI);
+    public void remove(String resourceUri);
 
-    public ResourceStatus status(String resourceURI);
 
-    public void revert(String resourceURI);
 
-    public void checkout();
 
-    public void commit(String resourceURI);
 
 }

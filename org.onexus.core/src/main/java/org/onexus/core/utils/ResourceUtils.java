@@ -20,8 +20,10 @@ package org.onexus.core.utils;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Resource;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class ResourceUtils {
 
@@ -29,26 +31,13 @@ public class ResourceUtils {
     public static final String ONEXUS_TAG = "onx";
 
 
-    public static String getServerURI(String resourceURI) {
+    public static String getProjectURI(String resourceURI) {
 
         if (resourceURI == null) return null;
         int onx = resourceURI.indexOf(ONEXUS_TAG);
-        if (onx < 0) return null;
+        if (onx < 0) return resourceURI;
 
-        return resourceURI.substring(0, onx + 3);
-    }
-
-    public static String getProjectURI(String resourceURI) {
-
-        int onx = resourceURI.indexOf(ONEXUS_TAG);
-        if (onx < 0) return null;
-
-        int sep1 = resourceURI.indexOf(SEPARATOR, onx + 4);
-        if (sep1 < 0) {
-            sep1 = resourceURI.length();
-        }
-
-        return resourceURI.substring(0, sep1);
+        return resourceURI.substring(0, onx);
     }
 
     public static String getProjectName(String resourceURI) {
@@ -91,7 +80,6 @@ public class ResourceUtils {
 
         if (resourceURI != null) {
 
-            properties.put("server.uri", getServerURI(resourceURI));
             properties.put("project.uri", getProjectURI(resourceURI));
             properties.put("project.name", getProjectName(resourceURI));
             properties.put("resource.name", getResourceName(resourceURI));
@@ -137,4 +125,23 @@ public class ResourceUtils {
         return (url == null ? null : url.replaceAll("[\n\t ]", ""));
     }
 
+    public static String normalizeUri(String resourceURI) {
+
+        String normalizedUri = resourceURI.trim();
+
+        // Convert Windows separator to linux separator
+        normalizedUri = normalizedUri.replaceAll(Pattern.quote("\\"), String.valueOf(Resource.SEPARATOR));
+
+        // Remove ending separator if exists
+        if (normalizedUri.charAt(normalizedUri.length() - 1) == Resource.SEPARATOR) {
+            normalizedUri = normalizedUri.substring(0, normalizedUri.length() - 1);
+        }
+
+        // Add file protocol if it's empty
+        if (normalizedUri.charAt(0) == Resource.SEPARATOR) {
+            normalizedUri = "file:" + normalizedUri;
+        }
+
+        return normalizedUri;
+    }
 }

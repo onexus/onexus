@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.workspace.pages;
+package org.onexus.ui.workspace.pages.resource;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -27,7 +27,6 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractWrapModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -35,7 +34,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.h2.util.StringUtils;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.IViewerCreator;
@@ -43,8 +41,7 @@ import org.onexus.ui.viewers.EmptyPanelViewerCreator;
 import org.onexus.ui.viewers.IViewersManager;
 import org.onexus.ui.workspace.events.AjaxUpdateOnEvent;
 import org.onexus.ui.workspace.events.EventResourceSelect;
-import org.onexus.ui.viewers.tree.ProjectTree;
-import org.onexus.ui.viewers.tree.ResourceTreeProvider;
+import org.onexus.ui.workspace.ResourceModel;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -53,9 +50,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ResourcesPage extends BasePage {
+public class ResourcesPage extends BaseResourcePage {
 
-    public final static String RESOURCE = "uri";
+    public final static String PARAMETER_RESOURCE = "uri";
 
     @Inject
     public IResourceManager resourceManager;
@@ -64,22 +61,19 @@ public class ResourcesPage extends BasePage {
     public IViewersManager viewersManager;
 
     public ResourcesPage(PageParameters parameters) {
-        super(parameters);
-
-        // Current selected resource model
-        final IModel<Resource> resourceModel = new CurrentResourceModel(parameters);
+        super(new ResourceModel(parameters.get(PARAMETER_RESOURCE).toOptionalString()));
 
         // Reload project
         add(new ToolProjectReload("projectReload"));
 
         // Copy resource URI
-        add(new ToolCopyUri("copyURI", resourceModel));
+        add(new ToolCopyUri("copyURI", getModel()));
 
         // Resource URI breadcrumb
-        add(new ToolUriBreadCrumb("uriBreadCrumb", resourceModel));
+        add(new ToolUriBreadCrumb("uriBreadCrumb", getModel()));
 
         // Tabs
-        add(new ViewerTabs("tabs", resourceModel ));
+        add(new ViewerTabs("tabs", getModel() ));
 
     }
 
@@ -91,7 +85,11 @@ public class ResourcesPage extends BasePage {
 
         @Override
         public void onClick() {
-            resourceManager.checkout();
+            Resource resource = getModelObject();
+
+            if (resource != null) {
+                resourceManager.syncProject(ResourceUtils.getProjectURI(resource.getURI()));
+            }
         }
     }
 
@@ -134,7 +132,7 @@ public class ResourcesPage extends BasePage {
 
 
                     Resource resource = model.getWrappedModel().getObject();
-                    String serverUri = (resource == null ? null : ResourceUtils.getServerURI(resource.getURI()));
+                    String serverUri = (resource == null ? null : ResourceUtils.getProjectURI(resource.getURI()));
 
                     for (int i = 0; i < uriItems.size(); i++) {
                         String uriItem = uriItems.get(i);
@@ -169,7 +167,7 @@ public class ResourcesPage extends BasePage {
                     // Link
                     PageParameters parameters = new PageParameters();
                     String resourceUri = links.get(item.getIndex());
-                    parameters.set(ResourcesPage.RESOURCE, resourceUri);
+                    parameters.set(ResourcesPage.PARAMETER_RESOURCE, resourceUri);
                     Link<String> link = new BookmarkablePageLink<String>("link", ResourcesPage.class, parameters);
                     link.setEnabled(resourceUri != null);
 
@@ -331,65 +329,6 @@ public class ResourcesPage extends BasePage {
         @Override
         public IModel<Resource> getWrappedModel() {
             return resource;
-        }
-    }
-
-
-
-    private class CurrentResourceModel implements IModel<Resource> {
-
-        private String selectedResource;
-
-        public CurrentResourceModel(PageParameters parameters) {
-            super();
-
-            selectedResource = parameters.get(RESOURCE).toOptionalString();
-
-            if (selectedResource == null) {
-                selectedResource = getDefaultProjectURI();
-            }
-        }
-
-        @Override
-        public Resource getObject() {
-            return resourceManager.load(Resource.class, selectedResource);
-        }
-
-        @Override
-        public void setObject(Resource object) {
-            selectedResource = object.getURI();
-        }
-
-        @Override
-        public void detach() {
-        }
-
-        @Override
-        public int hashCode() {
-            return selectedResource.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-
-            if (obj instanceof CurrentResourceModel) {
-                Resource resource = ((CurrentResourceModel) obj).getObject();
-                if (resource != null) {
-                    return StringUtils.equals(selectedResource, resource.getURI());
-                }
-            }
-
-            return false;
-        }
-
-        private String getDefaultProjectURI() {
-            List<Project> projects = resourceManager.loadChildren(Project.class, null);
-
-            if (projects != null && !projects.isEmpty()) {
-                return projects.get(0).getURI();
-            }
-
-            return null;
         }
     }
 

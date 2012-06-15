@@ -33,7 +33,7 @@ import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
-import org.onexus.ui.workspace.pages.ResourcesPage;
+import org.onexus.ui.workspace.pages.resource.ResourcesPage;
 
 import javax.inject.Inject;
 

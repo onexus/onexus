@@ -30,7 +30,7 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.*;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractWizard;
-import org.onexus.ui.workspace.pages.ResourcesPage;
+import org.onexus.ui.workspace.pages.resource.ResourcesPage;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;

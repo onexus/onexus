@@ -8,7 +8,7 @@ import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.workspace.pages.ResourceModel;
+import org.onexus.ui.workspace.ResourceModel;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -40,7 +40,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(resource.getURI()));
+        Project project = resourceManager.getProject( ResourceUtils.getProjectURI(resource.getURI()) );
 
         if (project == null) {
             return EMPTY_ITERATOR;

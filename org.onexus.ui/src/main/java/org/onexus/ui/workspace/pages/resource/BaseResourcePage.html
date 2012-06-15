@@ -19,6 +19,8 @@
 
 <div class="container">
 
+    <div id="importProjectModal" class="modal hide fade" wicket:id="importProject"></div>
+
     <section id="menu">
         <div class="row">
             <div class="navbar">
@@ -31,7 +33,7 @@
                         </a>
 
                         <a class="pull-left" href="http://www.onexus.org/">
-                            <wicket:link><img src="img/logo.png" height="40" alt="onexus"></wicket:link></a>
+                            <wicket:link><img src="logo.png" height="40" alt="onexus"></wicket:link></a>
 
                         <div class="btn-group pull-right">
                             <a wicket:id="account-details" class="btn btn-inverse" href="#" rel="tooltip" title="Account Details">
@@ -43,21 +45,16 @@
                         <div class="nav-collapse collapse">
                             <ul class="nav">
                                 <li class="divider-vertical"></li>
-                                <li wicket:id="menu-projects" class="dropdown active">
+                                <li wicket:id="menuProjects" class="dropdown active">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         Projects
                                         <b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">New Project...</a></li>
-                                        <li><a href="#">Import Project...</a></li>
+                                        <li><a data-toggle="modal" href="#importProjectModal">Import Project...</a></li>
                                         <li class="divider"></li>
-                                        <li class="active"><a href="#">intogen</a></li>
-                                        <li><a href="#">tnbreast</a></li>
+                                        <li wicket:id="projects" class="dropdown"><a wicket:id="link" href="#"><span wicket:id="label">intogen</span></a></li>
                                     </ul>
-                                </li>
-                                <li class="">
-                                    <a href="#">Services</a>
                                 </li>
                             </ul>
                         </div>
