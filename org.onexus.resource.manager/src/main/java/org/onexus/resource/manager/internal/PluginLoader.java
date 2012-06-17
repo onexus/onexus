@@ -1,6 +1,7 @@
 package org.onexus.resource.manager.internal;
 
 import org.onexus.core.resources.Plugin;
+import org.onexus.core.resources.Project;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -18,6 +19,16 @@ public class PluginLoader implements Serializable {
     public PluginLoader(BundleContext context) {
         super();
         this.context = context;
+    }
+
+    public void load(Project project) {
+
+        if (project.getPlugins() != null) {
+            for (Plugin plugin : project.getPlugins()) {
+                load(plugin);
+            }
+        }
+
     }
 
     public void load(Plugin plugin) throws InvalidParameterException {
@@ -50,12 +61,26 @@ public class PluginLoader implements Serializable {
 
         if (bundle != null) {
             try {
+
+                int previousState = bundle.getState();
+
                 bundle.start();
+
                 log.debug("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
+
+               /* if (previousState != Bundle.ACTIVE) {
+
+                    log.info("Waiting 3 seconds while bundle '"+bundle.getLocation()+"' starts.");
+                    Thread.sleep(3000);
+
+                } */
+
             } catch (BundleException e) {
                 String msg = "Plugin " + plugin.getId() + " installed but NOT started. Bundle ID: " + bundle.getBundleId();
                 log.error(msg, e);
                 throw new InvalidParameterException(msg);
+            /*} catch (InterruptedException e) {
+                log.error(e.getMessage()); */
             }
         }
     }

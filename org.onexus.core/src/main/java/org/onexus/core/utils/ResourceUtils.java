@@ -17,10 +17,8 @@
  */
 package org.onexus.core.utils;
 
-import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Resource;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -28,7 +26,7 @@ import java.util.regex.Pattern;
 public class ResourceUtils {
 
     private static final char SEPARATOR = Resource.SEPARATOR;
-    public static final String ONEXUS_TAG = "onx";
+    public static final String ONEXUS_TAG = "?";
 
 
     public static String getProjectURI(String resourceURI) {
@@ -62,7 +60,9 @@ public class ResourceUtils {
     }
 
     public static String getParentURI(String resourceURI) {
-        return resourceURI.substring(0, resourceURI.lastIndexOf(SEPARATOR));
+        int qMark = resourceURI.lastIndexOf('?');
+        int sMark = resourceURI.lastIndexOf(SEPARATOR);
+        return resourceURI.substring(0, (qMark > sMark ? qMark : sMark));
     }
 
     public static String getResourceName(String resourceURI) {
@@ -91,7 +91,10 @@ public class ResourceUtils {
 
 
     public static String concatURIs(String parentURI, String resourceName) {
-        return parentURI + Resource.SEPARATOR + resourceName;
+
+        char sep = (parentURI.indexOf('?') < 0 ? '?' : Resource.SEPARATOR );
+
+        return parentURI + sep + resourceName;
     }
 
     public static String getAbsoluteURI(String parentURI, String collectionURI) {
@@ -106,8 +109,9 @@ public class ResourceUtils {
         }
 
         // Relative to project URI
-        if (collectionURI.charAt(0) == Resource.SEPARATOR) {
-            return getProjectURI(parentURI) + collectionURI;
+        if (collectionURI.startsWith(String.valueOf(Resource.SEPARATOR))) {
+            String projectUri = getParentURI(parentURI);
+            return  concatURIs(projectUri, collectionURI.substring(1));
         }
 
         // Relative URI (../../resorce-name)
@@ -117,8 +121,8 @@ public class ResourceUtils {
             collectionURI = collectionURI.substring(3);
         }
 
-        // Same parent URI
         return concatURIs(parentURI, collectionURI);
+
     }
 
     private static String formatURL(String url) {
@@ -143,5 +147,16 @@ public class ResourceUtils {
         }
 
         return normalizedUri;
+    }
+
+    public static String getResourcePath(String uri) {
+
+        int qMark = uri.indexOf('?');
+
+        if (qMark < 0) {
+            return "";
+        }
+
+        return uri.substring(qMark + 1, uri.length());
     }
 }

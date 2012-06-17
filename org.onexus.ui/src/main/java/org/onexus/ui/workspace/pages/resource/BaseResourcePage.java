@@ -98,7 +98,7 @@ public class BaseResourcePage extends WebPage {
                     Resource currentResource = BaseResourcePage.this.getModelObject();
                     if (currentResource != null) {
                         if (StringUtils.equals(projectURI, currentResource.getURI())) {
-                            item.add(new AttributeAppender("class", "active"));
+                            item.add(new AttributeAppender("class", " active"));
                         }
                     }
 

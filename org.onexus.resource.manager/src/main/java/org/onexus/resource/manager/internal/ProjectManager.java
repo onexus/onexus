@@ -36,7 +36,6 @@ public class ProjectManager {
         this.projectUri = projectUri;
         this.projectFolder = projectFolder;
 
-        loadResources();
     }
 
     public Project getProject() {
@@ -48,8 +47,6 @@ public class ProjectManager {
     }
 
     public void loadResources() {
-
-        loadProject();
 
         this.resources = new HashMap<String, Resource>();
 
@@ -73,6 +70,10 @@ public class ProjectManager {
 
     public Resource getResource(String resourceUri) {
 
+        if (projectUri.equals(resourceUri)) {
+            return project;
+        }
+
         if (resources == null) {
             loadResources();
         }
@@ -86,7 +87,16 @@ public class ProjectManager {
         String projectURI = ResourceUtils.getProjectURI(parentURI);
 
         if (projectURI.equals(parentURI)) {
-            parentURI = projectURI + Resource.SEPARATOR + "onx";
+            parentURI = projectURI + "?";
+        } else {
+            // End parentURI with a SEPARATOR if it's not present.
+            if (parentURI.charAt(parentURI.length() - 1) != Resource.SEPARATOR) {
+                parentURI = parentURI + Resource.SEPARATOR;
+            }
+        }
+
+        if (resources == null) {
+            loadResources();
         }
 
         List<T> children = new ArrayList<T>();
@@ -99,7 +109,7 @@ public class ProjectManager {
         return children;
     }
 
-    private void loadProject() {
+    public void loadProject() {
         File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
 
         if (!projectOnx.exists()) {
@@ -160,18 +170,18 @@ public class ProjectManager {
             return null;
         }
 
-        String projectPath = projectFolder.getAbsolutePath();
+        String projectPath = projectFolder.getAbsolutePath() + File.separator;
         String filePath = resourceFile.getAbsolutePath();
         String relativePath = filePath.replace(projectPath, "");
 
         String resourceURI;
-        if (relativePath.isEmpty()) {
+        if (relativePath.equals(ONEXUS_PROJECT_FILE)) {
             resourceURI = projectUri;
             if (resource.getName() == null) {
                 resource.setName(ResourceUtils.getResourceName(projectUri));
             }
         } else {
-            resourceURI = projectUri + Resource.SEPARATOR + ONEXUS_EXTENSION + relativePath;
+            resourceURI = projectUri + "?" + relativePath;
             resourceURI = resourceURI.replace(".onx", "");
             resource.setName(resourceName);
         }
@@ -202,16 +212,11 @@ public class ProjectManager {
         parentURI = parentURI.trim();
         resourceURI = resourceURI.trim();
 
-        // End parentURI with a SEPARATOR if it's not present.
-        if (parentURI.charAt(parentURI.length() - 1) != Resource.SEPARATOR) {
-            parentURI = parentURI + Resource.SEPARATOR;
-        }
-
         if (!resourceURI.startsWith(parentURI)) {
             return false;
         }
 
-        String diff = resourceURI.replaceFirst(parentURI, "");
+        String diff = resourceURI.replace(parentURI, "");
         if (diff.indexOf(Resource.SEPARATOR) != -1 || diff.isEmpty()) {
             return false;
         }
@@ -219,7 +224,7 @@ public class ProjectManager {
         return true;
     }
 
-    public static Collection<File> addFilesRecursive(Collection<File> files, File parentFolder) {
+    private static Collection<File> addFilesRecursive(Collection<File> files, File parentFolder) {
 
         if (parentFolder.isDirectory()) {
             File[] inFiles = parentFolder.listFiles();

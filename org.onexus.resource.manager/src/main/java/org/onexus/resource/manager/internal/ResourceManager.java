@@ -19,19 +19,20 @@ package org.onexus.resource.manager.internal;
 
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.*;
+import org.onexus.core.resources.Plugin;
+import org.onexus.core.resources.Project;
+import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
 import org.osgi.framework.BundleContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ResourceManager implements IResourceManager {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
 
     // Injected OSGi services
     private IResourceSerializer serializer;
@@ -51,23 +52,24 @@ public class ResourceManager implements IResourceManager {
         // Projects container
         this.projectsContainer = new ProjectsContainer();
 
+        // Plugin loader
+        this.pluginLoader = new PluginLoader(context);
+
         // Load projects managers
         this.projectManagers = new HashMap<String, ProjectManager>();
         for (String projectUri : this.projectsContainer.getProjectUris()) {
             File projectFolder = projectsContainer.getProjectFolder(projectUri);
-            this.projectManagers.put(projectUri, new ProjectManager(serializer, projectUri, projectFolder));
+
+            this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
         }
 
-        // Load plugins
-        this.pluginLoader = new PluginLoader(context);
-        for (Project project : getProjects()) {
-            if (project.getPlugins() != null) {
-                for (Plugin plugin : project.getPlugins()) {
-                     this.pluginLoader.load(plugin);
-                }
-            }
-        }
+    }
 
+    private ProjectManager newProjectManager(String projectUri, File projectFolder) {
+        ProjectManager projectManager = new ProjectManager(serializer, projectUri, projectFolder);
+        projectManager.loadProject();
+        this.pluginLoader.load(projectManager.getProject());
+        return projectManager;
     }
 
     @Override
@@ -146,13 +148,16 @@ public class ResourceManager implements IResourceManager {
 
     @Override
     public void importProject(String projectUri) {
+        projectUri = ResourceUtils.normalizeUri(projectUri);
         File projectFolder = projectsContainer.projectImport(projectUri);
-        this.projectManagers.put(projectUri, new ProjectManager(serializer, projectUri, projectFolder));
+        this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
     }
 
     @Override
     public void syncProject(String projectURI) {
         ProjectManager projectManager = getProjectManager(projectURI);
+        projectManager.loadProject();
+        this.pluginLoader.load(projectManager.getProject());
         projectManager.loadResources();
     }
 

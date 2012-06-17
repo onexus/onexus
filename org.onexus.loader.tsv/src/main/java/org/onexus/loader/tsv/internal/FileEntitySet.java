@@ -103,12 +103,8 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
 
         strUrl = replaceProperties(strUrl, properties);
 
-        int parametersSeparator = strUrl.indexOf("?");
-
-        String resourceURI = (parametersSeparator > 0 ? strUrl.substring(0, parametersSeparator) : strUrl);
-
         // Check if the URL is a directory
-        urls.addAll(dataManager.retrieve(resourceURI));
+        urls.addAll(dataManager.retrieve(strUrl));
 
     }
 

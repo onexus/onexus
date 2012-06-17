@@ -85,10 +85,16 @@ public class ResourcesPage extends BaseResourcePage {
 
         @Override
         public void onClick() {
-            Resource resource = getModelObject();
+            Resource resource = ResourcesPage.this.getModelObject();
 
             if (resource != null) {
-                resourceManager.syncProject(ResourceUtils.getProjectURI(resource.getURI()));
+                String projectUri = ResourceUtils.getProjectURI(resource.getURI());
+                resourceManager.syncProject(projectUri);
+
+                PageParameters parameters = new PageParameters();
+                parameters.set(ResourcesPage.PARAMETER_RESOURCE, projectUri);
+
+                setResponsePage(ResourcesPage.class, parameters);
             }
         }
     }
@@ -127,30 +133,17 @@ public class ResourcesPage extends BaseResourcePage {
                     }
 
                     links = new ArrayList<String>(uriItems.size());
-
-                    int positionOnxItem = -1;
-
-
                     Resource resource = model.getWrappedModel().getObject();
-                    String serverUri = (resource == null ? null : ResourceUtils.getProjectURI(resource.getURI()));
+                    String projectUri = (resource == null ? null : ResourceUtils.getProjectURI(resource.getURI()));
 
-                    for (int i = 0; i < uriItems.size(); i++) {
+                    links.add(projectUri);
+                    for (int i = 1; i < uriItems.size(); i++) {
                         String uriItem = uriItems.get(i);
 
-                        if (uriItem.equalsIgnoreCase("ONX")) {
-                            positionOnxItem = i;
-                            links.add(null);
-                            continue;
-                        }
-
-                        if (positionOnxItem < 0) {
-                            links.add(null);
-                            continue;
-                        }
-
                         StringBuilder link = new StringBuilder();
-                        link.append(serverUri);
-                        for (int t = positionOnxItem + 1; t <= i; t++) {
+                        link.append(projectUri).append("?");
+                        link.append(uriItems.get(1));
+                        for (int t = 2; t <= i; t++) {
                             link.append(Resource.SEPARATOR);
                             link.append(uriItems.get(t));
                         }
@@ -282,6 +275,7 @@ public class ResourcesPage extends BaseResourcePage {
     private static class BreadCrumbItemsModel extends AbstractWrapModel<List<String>> {
 
         private IModel<Resource> resource;
+        private String lastResourceUri;
         private transient List<String> object;
 
         private BreadCrumbItemsModel(IModel<Resource> resource) {
@@ -292,9 +286,19 @@ public class ResourcesPage extends BaseResourcePage {
         @Override
         public List<String> getObject() {
 
+
+            if (resource.getObject() == null) {
+                return Collections.EMPTY_LIST;
+            }
+
+            if (!resource.getObject().getURI().equals(lastResourceUri)) {
+                this.object = null;
+            }
+
             if (object == null) {
 
                 Resource resource = this.resource.getObject();
+                lastResourceUri = resource.getURI();
 
                 if (resource == null || StringUtils.isNullOrEmpty(resource.getURI())) {
                     return Collections.EMPTY_LIST;
@@ -302,20 +306,18 @@ public class ResourcesPage extends BaseResourcePage {
 
                 String uri = resource.getURI();
 
-                // Remove protocol section
-                int protocol = uri.indexOf(":/");
-                uri = (protocol > 0) ? uri.substring(protocol + 2) : uri;
+                // Separate project uri and path
+                String projectUri = ResourceUtils.getProjectURI(uri);
+                String projectName = ResourceUtils.getProjectName(uri);
+                String resourcePath = ResourceUtils.getResourcePath(uri);
 
-                // Remove separators at first positon
-                if (uri.charAt(0) == '/') {
-                    uri = uri.substring(1);
+                object = new ArrayList<String>();
+                object.add(projectName);
+
+                if (!resourcePath.isEmpty()) {
+                    object.addAll(Arrays.asList(resourcePath.split(Pattern.quote(String.valueOf(Resource.SEPARATOR)))));
                 }
 
-                if (uri.charAt(uri.length() - 1) == '/') {
-                    uri = uri.substring(0, uri.length() - 2);
-                }
-
-                object = Arrays.asList(uri.split(Pattern.quote("/")));
             }
 
             return object;

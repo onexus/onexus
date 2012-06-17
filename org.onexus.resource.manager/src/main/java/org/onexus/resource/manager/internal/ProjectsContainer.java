@@ -1,6 +1,8 @@
 package org.onexus.resource.manager.internal;
 
 import org.onexus.core.utils.ResourceUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -12,6 +14,7 @@ import java.util.zip.ZipInputStream;
 
 public class ProjectsContainer {
 
+    private static final Logger log = LoggerFactory.getLogger(ProjectsContainer.class);
     private final static String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
     private final static String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
     private final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
@@ -63,43 +66,41 @@ public class ProjectsContainer {
         assert projectUri != null;
         assert !projectUri.isEmpty();
 
-        projectUri = ResourceUtils.normalizeUri(projectUri);
-
         URL url;
         try {
             url = new URL(projectUri);
-
-            File outputFolder = new File(projectsFolder, Integer.toHexString(url.hashCode()));
-            if (outputFolder.exists()) {
-                throw new InvalidParameterException("This project is already imported");
-            }
-            outputFolder.mkdir();
 
             byte[] buffer = new byte[1024];
             ZipInputStream zis = new ZipInputStream(url.openStream());
             ZipEntry ze = zis.getNextEntry();
 
             // It's not a ZIP file return it.
+            File projectFolder;
             if (ze == null) {
-                outputFolder = new File(url.toURI());
-                properties.setProperty(projectUri, outputFolder.getAbsolutePath());
+                projectFolder = new File(url.toURI());
+                properties.setProperty(projectUri, projectFolder.getAbsolutePath());
                 properties.store(new FileWriter(propertiesFile), "Onexus Projects");
-                return outputFolder;
+                return projectFolder;
             }
 
-            File projectFolder = outputFolder;
+            projectFolder = new File(projectsFolder, Integer.toHexString(url.hashCode()));
+            if (projectFolder.exists()) {
+                throw new InvalidParameterException("This project is already imported");
+            }
+            projectFolder.mkdir();
 
+            File outputFolder = projectFolder;
             if (ze.isDirectory()) {
                 String fileName = ze.getName();
-                projectFolder = new File(outputFolder, fileName);
-                projectFolder.mkdir();
+                outputFolder = new File(projectFolder, fileName);
+                outputFolder.mkdir();
                 ze = zis.getNextEntry();
             }
 
             while (ze != null) {
 
                 String fileName = ze.getName();
-                File newFile = new File(outputFolder, fileName);
+                File newFile = new File(projectFolder, fileName);
                 if (ze.isDirectory()) {
                     newFile.mkdir();
                 } else {
@@ -116,12 +117,13 @@ public class ProjectsContainer {
             }
             zis.close();
 
-            properties.setProperty(projectUri, projectFolder.getAbsolutePath());
+            properties.setProperty(projectUri, outputFolder.getAbsolutePath());
             properties.store(new FileWriter(propertiesFile), "Onexus Projects");
-            return projectFolder;
+            return outputFolder;
 
 
         } catch (Exception e) {
+            log.error("Importing project '" + projectUri +"'", e);
             throw new InvalidParameterException("Invalid Onexus URL project");
         }
 
