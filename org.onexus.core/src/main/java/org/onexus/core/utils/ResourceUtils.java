@@ -103,7 +103,7 @@ public class ResourceUtils {
         collectionURI = formatURL(collectionURI);
 
         // Already absolute URI
-        if (collectionURI.contains("://") || parentURI == null
+        if (collectionURI.contains(":/") || parentURI == null
                 || parentURI.isEmpty()) {
             return collectionURI;
         }
