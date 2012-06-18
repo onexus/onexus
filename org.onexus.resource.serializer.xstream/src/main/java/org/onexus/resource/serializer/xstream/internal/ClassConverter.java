@@ -18,6 +18,7 @@
 package org.onexus.resource.serializer.xstream.internal;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
+import org.onexus.core.types.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class ClassConverter implements SingleValueConverter {
         registerType("string", String.class);
         registerType("double", Double.class);
         registerType("boolean", Boolean.class);
-        registerType("text", CharSequence.class);
+        registerType("text", Text.class);
     }
 
     public static void registerType(String text, Class type) {

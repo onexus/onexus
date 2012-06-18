@@ -65,13 +65,10 @@
         <bean class="org.onexus.ui.wizards.folder.NewFolderWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.file.NewFileWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.data.NewFileWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.file.CreateCollectionWizardCreator"/>
-    </service>
-    <service interface="org.onexus.ui.IWizardCreator">
-        <bean class="org.onexus.ui.wizards.resource.RemoveResourceWizardCreator"/>
+        <bean class="org.onexus.ui.wizards.data.CreateCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.IWizardCreator">
         <bean class="org.onexus.ui.wizards.collection.NewCollectionWizardCreator"/>

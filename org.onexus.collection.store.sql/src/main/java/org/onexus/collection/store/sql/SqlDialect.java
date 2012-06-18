@@ -20,6 +20,7 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.store.sql.SqlCollectionDDL.ColumnInfo;
 import org.onexus.collection.store.sql.adapters.*;
 import org.onexus.collection.store.sql.filters.*;
+import org.onexus.core.types.Text;
 import org.onexus.core.IEntity;
 import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
@@ -57,7 +58,7 @@ public class SqlDialect {
     protected Map<Class<?>, String> registerColumnTypes() {
         Map<Class<?>, String> columnTypes = new HashMap<Class<?>, String>();
         columnTypes.put(String.class, "VARCHAR(128)");
-        columnTypes.put(CharSequence.class, "TEXT");
+        columnTypes.put(Text.class, "TEXT");
         columnTypes.put(Boolean.class, "TINYINT(1)");
         columnTypes.put(Date.class, "TIMESTAMP");
         columnTypes.put(Integer.class, "INT(11)");
@@ -73,6 +74,7 @@ public class SqlDialect {
         sqlAdapters.put(Long.class, new LongAdapter());
         sqlAdapters.put(String.class, new StringAdapter(this));
         sqlAdapters.put(Boolean.class, new BooleanAdapter());
+        sqlAdapters.put(Text.class, new TextAdapter(this));
         return sqlAdapters;
     }
 

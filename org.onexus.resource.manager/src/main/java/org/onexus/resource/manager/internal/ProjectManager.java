@@ -8,9 +8,7 @@ import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.Collection;
@@ -182,7 +180,7 @@ public class ProjectManager {
             }
         } else {
             resourceURI = projectUri + "?" + relativePath;
-            resourceURI = resourceURI.replace(".onx", "");
+            resourceURI = resourceURI.replace("." + ONEXUS_EXTENSION, "");
             resource.setName(resourceName);
         }
 
@@ -244,10 +242,47 @@ public class ProjectManager {
     }
 
     public void save(Resource resource) {
-        throw new UnsupportedOperationException("Read only project");
+
+        if (resource == null) {
+            return;
+        }
+
+        if (resource instanceof Project) {
+            throw new IllegalArgumentException("Cannot create a project '" + resource.getURI() + "' inside project '" + projectUri + "'");
+        }
+
+        String filePath = ResourceUtils.getResourcePath(resource.getURI());
+
+        File file;
+        if (resource instanceof Folder) {
+            file = new File(projectFolder, filePath);
+            file.mkdirs();
+
+            return;
+        }
+
+
+        file = new File(projectFolder, filePath + "." + ONEXUS_EXTENSION);
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            FileOutputStream os = new FileOutputStream(file);
+            serializer.serialize(resource, os);
+            os.close();
+
+        } catch (IOException e) {
+            log.error("Saving resource '" + resource.getURI() + "' in file '" + file.getAbsolutePath() + "'", e);
+        }
+
+        if (resources == null) {
+            loadResources();
+        }
+
+        this.resources.put(resource.getURI(), resource);
+
     }
 
-    public void remove(String resourceUri) {
-        throw new UnsupportedOperationException("Read only project");
-    }
 }

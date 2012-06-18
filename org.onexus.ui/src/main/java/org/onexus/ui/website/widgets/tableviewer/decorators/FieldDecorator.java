@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Field;
+import org.onexus.core.types.Text;
 import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
 import org.onexus.ui.website.widgets.tableviewer.formaters.ITextFormater;
 import org.onexus.ui.website.widgets.tableviewer.formaters.StringFormater;
@@ -127,6 +128,10 @@ public class FieldDecorator implements IDecorator {
             }
 
             return new StringFormater(maxLength, true);
+        }
+
+        if (field.getType().equals(Text.class)) {
+            return new StringFormater(50, true);
         }
 
         if (field.getType().equals(Double.class)

@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.file;
+package org.onexus.ui.wizards.data;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;

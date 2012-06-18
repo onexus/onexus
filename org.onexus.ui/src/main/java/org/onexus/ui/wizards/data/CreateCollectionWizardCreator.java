@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.file;
+package org.onexus.ui.wizards.data;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;

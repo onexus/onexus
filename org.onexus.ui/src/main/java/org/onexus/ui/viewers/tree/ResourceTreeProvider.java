@@ -75,7 +75,29 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
         Collections.sort(children, new Comparator<Resource>() {
             @Override
             public int compare(Resource o1, Resource o2) {
-                return (o1!=null && (o1 instanceof Folder)) ? 0 : 1;
+
+                if (o1 == null) {
+                    return 1;
+                }
+
+                if (o2 == null) {
+                    return 0;
+                }
+
+                // First folders
+                boolean f1 = (o1 instanceof Folder);
+                boolean f2 = (o2 instanceof Folder);
+
+                if (f1 && !f2) {
+                    return 0;
+                }
+
+                if (f2 && !f1) {
+                    return 1;
+                }
+
+                return o1.getName().compareTo(o2.getName());
+
             }
         });
 

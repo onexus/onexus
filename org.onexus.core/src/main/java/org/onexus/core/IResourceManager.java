@@ -39,10 +39,4 @@ public interface IResourceManager {
 
     public void save(Resource resource);
 
-    public void remove(String resourceUri);
-
-
-
-
-
 }

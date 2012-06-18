@@ -19,6 +19,7 @@ package org.onexus.ui.website.widgets.tableviewer.decorators;
 
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+import org.onexus.core.types.Text;
 import org.onexus.ui.website.widgets.tableviewer.decorators.color.BinaryColorScale;
 import org.onexus.ui.website.widgets.tableviewer.decorators.color.IColorScaleHtml;
 import org.onexus.ui.website.widgets.tableviewer.decorators.color.LinearColorScale;
@@ -85,6 +86,10 @@ public class DecoratorFactory {
             }
 
             if (field.getType().equals(String.class)) {
+                return new FieldDecorator(field, cssClass);
+            }
+
+            if (field.getType().equals(Text.class)) {
                 return new FieldDecorator(field, cssClass);
             }
 

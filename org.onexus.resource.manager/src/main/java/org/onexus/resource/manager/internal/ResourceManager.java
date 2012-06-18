@@ -19,7 +19,6 @@ package org.onexus.resource.manager.internal;
 
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.Plugin;
 import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
@@ -132,18 +131,6 @@ public class ResourceManager implements IResourceManager {
 
         ProjectManager projectManager = getProjectManager(resource.getURI());
         projectManager.save(resource);
-    }
-
-    @Override
-    public void remove(String resourceUri) {
-
-        if (resourceUri == null) {
-            return;
-        }
-
-        ProjectManager projectManager = getProjectManager(resourceUri);
-        projectManager.remove(resourceUri);
-
     }
 
     @Override

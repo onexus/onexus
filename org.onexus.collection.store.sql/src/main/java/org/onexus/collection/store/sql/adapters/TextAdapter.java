@@ -17,31 +17,22 @@
  */
 package org.onexus.collection.store.sql.adapters;
 
-import org.apache.commons.lang3.StringUtils;
 import org.onexus.collection.store.sql.SqlDialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 
-public class StringAdapter extends SqlAdapter {
+public class TextAdapter extends SqlAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(StringAdapter.class);
     private SqlDialect sqlUtils;
 
-    public StringAdapter(SqlDialect sqlUtils) {
+    public TextAdapter(SqlDialect sqlUtils) {
         super(String.class);
         this.sqlUtils = sqlUtils;
     }
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-        String value = (String) object;
-        if (value.length() > 128) {
-            value = StringUtils.abbreviate(value, 128);
-            log.info("Value '" + object + "' abbreviated.");
-        }
-        container.append(sqlUtils.quoteString(value));
+        container.append(sqlUtils.quoteString(object));
     }
 
     @Override

@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.wizards.file;
+package org.onexus.ui.wizards.data;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.wizard.WizardModel;
@@ -28,6 +28,7 @@ import org.onexus.core.IResourceManager;
 import org.onexus.core.IDataManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.*;
+import org.onexus.core.types.Text;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.wizards.AbstractWizard;
 import org.onexus.ui.workspace.pages.resource.ResourcesPage;
@@ -101,9 +102,22 @@ public class CreateCollectionWizard extends AbstractWizard {
                 data.put(header, new HashSet<String>());
             }
             String line = in.readLine();
+
+            int nullEmpty = 0;
+            int nullDash = 0;
+            int nullString = 0;
             for (int i = 0; i < MAXIMUM_LINES && line != null; i++) {
                 String values[] = line.split(separator);
                 for (int h = 0; h < headers.length && h < values.length; h++) {
+
+                    if (values[h] == null || values[h].isEmpty()) {
+                        nullEmpty++;
+                    } else if (values[h].equals("-")) {
+                        nullDash++;
+                    } else if (values[h].equals("NULL")) {
+                        nullString++;
+                    }
+
                     data.get(headers[h]).add(values[h]);
                 }
                 line = in.readLine();
@@ -147,17 +161,26 @@ public class CreateCollectionWizard extends AbstractWizard {
             }
             collection.setLinks(links);
 
+
             Loader loader = new Loader();
-            loader.setPlugin("mvn:org.onexus/org.onexus.loader.tsv/0.2");
+            loader.setPlugin("tsv-loader");
             List<Parameter> parameters = new ArrayList<Parameter>();
             parameters.add(new Parameter("SOURCE_URI", ResourceUtils.getResourceName(sourceURI)));
+
+            if (nullEmpty > nullDash && nullEmpty > nullString) {
+                parameters.add(new Parameter("NULL_VALUE", ""));
+            }
+
+            if (nullString > nullDash && nullString > nullEmpty) {
+                parameters.add(new Parameter("NULL_VALUE", "NULL"));
+            }
+
             loader.setParameters(parameters);
             collection.setLoader(loader);
 
             resourceManager.save(collection);
 
-
-            PageParameters params = new PageParameters().add("uri", collection.getURI());
+            PageParameters params = new PageParameters().add(ResourcesPage.PARAMETER_RESOURCE, collection.getURI());
             setResponsePage(ResourcesPage.class, params);
 
         } catch (IOException e) {
@@ -239,6 +262,7 @@ public class CreateCollectionWizard extends AbstractWizard {
 
     private static Class<?> deduceClass(Set<String> values) {
 
+        boolean longString = false;
         boolean integerType = true;
         boolean doubleType = false;
 
@@ -266,8 +290,8 @@ public class CreateCollectionWizard extends AbstractWizard {
                 }
             }
 
-            if (!integerType && !doubleType) {
-                break;
+            if (value.length() > 127) {
+                longString = true;
             }
         }
 
@@ -279,7 +303,11 @@ public class CreateCollectionWizard extends AbstractWizard {
             return Double.class;
         }
 
-        return String.class;
+        if (longString) {
+            return Text.class;
+        } else {
+            return String.class;
+        }
     }
 
 
