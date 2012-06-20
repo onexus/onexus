@@ -164,9 +164,9 @@ public class CreateCollectionWizard extends AbstractWizard {
                 } else {
 
                     for (Collection col : allProjectCollections) {
-                         Field field = col.getField(header);
+                        Field field = col.getField(header);
 
-                        if (field != null) {
+                        if (field != null && (header.toLowerCase().endsWith("id") || header.toLowerCase().endsWith("key"))) {
 
                             // Only link to collections without any link
                             if (col.getLinks() == null || col.getLinks().isEmpty()) {
