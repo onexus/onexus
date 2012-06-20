@@ -110,7 +110,7 @@ public class ResourceUtils {
 
         // Relative to project URI
         if (collectionURI.startsWith(String.valueOf(Resource.SEPARATOR))) {
-            String projectUri = getParentURI(parentURI);
+            String projectUri = getProjectURI(parentURI);
             return  concatURIs(projectUri, collectionURI.substring(1));
         }
 

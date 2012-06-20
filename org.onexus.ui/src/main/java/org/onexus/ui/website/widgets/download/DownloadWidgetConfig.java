@@ -25,6 +25,10 @@ public class DownloadWidgetConfig extends WidgetConfig {
 
     private DownloadWidgetStatus defaultStatus;
 
+    public DownloadWidgetConfig(String id) {
+        super(id);
+    }
+
     public DownloadWidgetConfig() {
         super();
     }

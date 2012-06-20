@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -136,8 +137,10 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
 
         List<String> views = new ArrayList<String>();
-        for (ViewConfig view : getCurrentTab().getViews()) {
-            views.add(view.getTitle());
+        if (getCurrentTab().getViews() != null) {
+            for (ViewConfig view : getCurrentTab().getViews()) {
+                views.add(view.getTitle());
+            }
         }
 
         WebMarkupContainer viewSelector = new WebMarkupContainer("viewselector");
@@ -163,28 +166,33 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
 
         ViewConfig viewConfig = null;
-        for (ViewConfig view : getCurrentTab().getViews()) {
-            if (view.getTitle().equals(getStatus().getCurrentView())) {
-                viewConfig = view;
-                break;
+        if (getCurrentTab().getViews() != null) {
+            for (ViewConfig view : getCurrentTab().getViews()) {
+                if (view.getTitle().equals(getStatus().getCurrentView())) {
+                    viewConfig = view;
+                    break;
+                }
             }
         }
 
-        if (viewConfig.getLeft() != null && viewConfig.getTop() != null) {
-            addOrReplace(new TopleftLayout("content", viewConfig, getModel()));
-        } else if (viewConfig.getLeft() != null) {
-            addOrReplace(new LeftMainLayout("content", viewConfig, getModel()));
-        } else if (viewConfig.getTop() != null || viewConfig.getTopRight() != null) {
-            addOrReplace(new TopmainLayout("content", viewConfig, getModel()));
+        if (viewConfig == null) {
+            addOrReplace(new EmptyPanel("content"));
         } else {
-            addOrReplace(new SingleLayout("content", viewConfig, getModel()));
+            if (viewConfig.getLeft() != null && viewConfig.getTop() != null) {
+                addOrReplace(new TopleftLayout("content", viewConfig, getModel()));
+            } else if (viewConfig.getLeft() != null) {
+                addOrReplace(new LeftMainLayout("content", viewConfig, getModel()));
+            } else if (viewConfig.getTop() != null || viewConfig.getTopRight() != null) {
+                addOrReplace(new TopmainLayout("content", viewConfig, getModel()));
+            } else {
+                addOrReplace(new SingleLayout("content", viewConfig, getModel()));
+            }
         }
-
 
         boolean visible = !isEmbed();
         get("position").setVisible(visible);
         get("tabs").setVisible(visible);
-        viewSelector.setVisible(visible && views.size()>1);
+        viewSelector.setVisible(visible && views.size() > 1);
 
         super.onBeforeRender();
     }

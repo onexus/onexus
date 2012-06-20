@@ -150,6 +150,10 @@ public class CreateCollectionWizard extends AbstractWizard {
             // Deduce links from other collections in the same folder
             Map<String, Link> otherLinks = collectLinks();
             List<Link> links = new ArrayList<Link>();
+
+            List<Collection> allProjectCollections = new ArrayList<Collection>();
+            addAllCollections(allProjectCollections, ResourceUtils.getProjectURI(sourceURI) );
+
             for (String header : headers) {
                 if (otherLinks.containsKey(header)) {
                     Link otherLink = otherLinks.get(header);
@@ -157,6 +161,24 @@ public class CreateCollectionWizard extends AbstractWizard {
                     link.setCollection(otherLink.getCollection());
                     link.getFields().add(otherLink.getFields().get(0));
                     links.add(link);
+                } else {
+
+                    for (Collection col : allProjectCollections) {
+                         Field field = col.getField(header);
+
+                        if (field != null) {
+
+                            // Only link to collections without any link
+                            if (col.getLinks() == null || col.getLinks().isEmpty()) {
+                                Link link = new Link();
+                                link.setCollection( Resource.SEPARATOR + ResourceUtils.getResourcePath(col.getURI()));
+                                link.getFields().add(header);
+                                links.add(link);
+                            }
+                        }
+                    }
+
+
                 }
             }
             collection.setLinks(links);
@@ -194,8 +216,8 @@ public class CreateCollectionWizard extends AbstractWizard {
     private Map<String, Link> collectLinks() {
         Map<String, Link> links = new HashMap<String, Link>();
 
-        String parentURI = ResourceUtils.getParentURI(sourceURI);
-        List<Collection> collections = resourceManager.loadChildren(Collection.class, parentURI);
+        List<Collection> collections = new ArrayList<Collection>();
+        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI) );
 
         for (Collection collection : collections) {
             for (Link link : collection.getLinks()) {
@@ -214,8 +236,8 @@ public class CreateCollectionWizard extends AbstractWizard {
     private Map<String, Field> collectFields() {
         Map<String, Field> fields = new HashMap<String, Field>();
 
-        String parentURI = ResourceUtils.getParentURI(sourceURI);
-        List<Collection> collections = resourceManager.loadChildren(Collection.class, parentURI);
+        List<Collection> collections = new ArrayList<Collection>();
+        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI) );
 
         for (Collection collection : collections) {
             for (Field field : collection.getFields()) {
@@ -251,6 +273,13 @@ public class CreateCollectionWizard extends AbstractWizard {
         return collection;
     }
 
+    private void addAllCollections(List<Collection> collections, String parentUri) {
+        collections.addAll(resourceManager.loadChildren(Collection.class, parentUri));
+        List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);
+        for (Folder folder : folders) {
+            addAllCollections(collections, folder.getURI());
+        }
+    }
 
     public String getSelected() {
         return selected;
