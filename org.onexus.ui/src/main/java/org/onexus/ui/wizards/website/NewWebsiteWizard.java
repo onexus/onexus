@@ -36,6 +36,8 @@ import org.onexus.ui.website.pages.browser.ViewConfig;
 import org.onexus.ui.website.pages.html.HtmlPageConfig;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.download.DownloadWidgetConfig;
+import org.onexus.ui.website.widgets.search.SearchField;
+import org.onexus.ui.website.widgets.search.SearchWidgetConfig;
 import org.onexus.ui.website.widgets.share.ShareWidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
 import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
@@ -187,23 +189,41 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             view.setTitle("default");
 
             String tableWidgetId = currentTab.getId() + "-table";
+            String searchWidgetId = currentTab.getId() + "-search";
             view.setMain(tableWidgetId);
+            view.setTop(searchWidgetId);
             view.setTopRight("download, share");
 
+            // Create search widget
+            SearchWidgetConfig searchWidget = new SearchWidgetConfig(searchWidgetId);
+            List<SearchField> searchFields = new ArrayList<SearchField>();
+            searchWidget.setFields(searchFields);
+            browserPage.getWidgets().add(searchWidget);
+
+            // Create table widget
             TableViewerConfig tableWidget = new TableViewerConfig(tableWidgetId, mainTabCollection);
             tableWidget.setColumnSets(new ArrayList<ColumnSet>());
 
             // Main collection columns
             Collection collection = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), mainTabCollection));
             StringBuilder fields = new StringBuilder();
+            StringBuilder search = new StringBuilder();
             Iterator<Field> fieldIterator = collection.getFields().iterator();
             while (fieldIterator.hasNext()) {
-                fields.append(fieldIterator.next().getId());
+                Field field = fieldIterator.next();
+                fields.append(field.getId());
                 if (fieldIterator.hasNext()) {
                     fields.append(", ");
                 }
+                if (String.class.equals(field.getType())) {
+                    if (search.length() > 0) {
+                        search.append(", ");
+                    }
+                    search.append(field.getId());
+                }
             }
             ColumnConfig mainColumns = new ColumnConfig(mainTabCollection, fields.toString());
+            searchFields.add(new SearchField(mainTabCollection, search.toString()));
 
             ColumnSet columnSet = new ColumnSet();
             columnSet.setTitle("default");
