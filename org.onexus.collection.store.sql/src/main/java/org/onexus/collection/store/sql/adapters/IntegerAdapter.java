@@ -27,10 +27,7 @@ public class IntegerAdapter extends SqlAdapter {
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-        // FIXME Fails with negative values
-        // NumericTools.toHexString(container, ((Integer) object).intValue());
-
-        container.append(Integer.toString((Integer) object));
+        container.append(String.valueOf(object));
     }
 
     @Override

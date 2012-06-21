@@ -161,6 +161,14 @@ public class ColumnConfig implements IColumnConfig {
             query.addSelect(columnAlias, getFields(collection));
         }
 
+        // The primary key fields must always be present
+        List<String> currentFields = query.getSelect().get(columnAlias);
+        for (Field field : collection.getFields()) {
+            if (field.isPrimaryKey() != null && field.isPrimaryKey() && !currentFields.contains(field.getId())) {
+                currentFields.add(field.getId());
+            }
+        }
+
 
     }
 
