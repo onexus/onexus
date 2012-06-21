@@ -115,11 +115,29 @@ public abstract class SqlCollectionStore implements ICollectionStore {
         SqlCollectionDDL ddl = getDDL(collectionURI);
         Connection conn = null;
         try {
-
             conn = dataSource.getConnection();
 
-            sqlDialect.execute(conn, ddl.getDropTable());
-            sqlDialect.execute(conn, ddl.getCreateTable());
+                String dropTable = ddl.getDropTable();
+                LOGGER.debug(dropTable);
+                try { sqlDialect.execute(conn, dropTable); } catch (Exception e) {};
+
+                List<String> dropIndex = ddl.getDropIndex();
+                for (String indexSQL : dropIndex) {
+                    LOGGER.debug(indexSQL);
+                    try { sqlDialect.execute(conn, indexSQL); } catch (Exception e) {};
+                }
+
+
+            String createTable = ddl.getCreateTable();
+            LOGGER.debug(createTable);
+            sqlDialect.execute(conn, createTable);
+
+            List<String> createIndex = ddl.getCreateIndex();
+            for (String indexSQL : createIndex) {
+                LOGGER.debug(indexSQL);
+                sqlDialect.execute(conn, indexSQL);
+            }
+
             sqlDialect.createSystemPropertiesTable(conn, false);
             sqlDialect.saveProperty(conn, collectionURI, ddl.getTableName());
 
@@ -330,5 +348,9 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     public Statement createReadStatement(Connection dataConn) throws SQLException {
         return dataConn.createStatement(ResultSet.TYPE_FORWARD_ONLY,
                 ResultSet.CONCUR_READ_ONLY);
+    }
+
+    public SqlQuery newSqlQuery(Query query) {
+        return new SqlQuery(this, query);
     }
 }

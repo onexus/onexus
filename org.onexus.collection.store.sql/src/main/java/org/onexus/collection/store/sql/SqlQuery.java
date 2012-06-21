@@ -39,7 +39,7 @@ public class SqlQuery {
     private List<String> select = new ArrayList<String>();
     private String from;
     private String where;
-    private List<String> orderBy = new ArrayList<String>();
+    protected List<String> orderBy = new ArrayList<String>();
     private String limit;
 
     private List<String> leftJoins = new ArrayList<String>();
@@ -47,7 +47,7 @@ public class SqlQuery {
     private StringBuilder sqlCount;
     private StringBuilder sqlSelect;
 
-    private Query query;
+    protected Query query;
     private SqlCollectionStore manager;
 
     public SqlQuery(SqlCollectionStore manager, Query query) {
@@ -65,7 +65,7 @@ public class SqlQuery {
 
     }
 
-    private void addSelect() {
+    protected void addSelect() {
 
         for (Map.Entry<String, List<String>> selectCollection : query.getSelect().entrySet()) {
 
@@ -90,7 +90,7 @@ public class SqlQuery {
 
     }
 
-    private void addFrom() {
+    protected void addFrom() {
 
         String collectionAlias = query.getFrom();
         String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
@@ -99,7 +99,7 @@ public class SqlQuery {
         this.from = "`" + collectionTable + "` AS " + collectionAlias;
     }
 
-    private void addJoins() {
+    protected void addJoins() {
 
         Collection fromCollection = manager.getCollection(QueryUtils.getCollectionUri(query, query.getFrom()));
 
@@ -232,7 +232,7 @@ public class SqlQuery {
 
     }
 
-    public void addEqualIdFilters(List<EqualId> equalIds, Filter filter) {
+    protected void addEqualIdFilters(List<EqualId> equalIds, Filter filter) {
 
         if (filter instanceof EqualId) {
             equalIds.add((EqualId) filter);
@@ -246,7 +246,7 @@ public class SqlQuery {
     }
 
 
-    private void addWhere() {
+    protected void addWhere() {
 
         Filter filter = query.getWhere();
 
@@ -261,7 +261,7 @@ public class SqlQuery {
     }
 
 
-    private void addOrderBy() {
+    protected void addOrderBy() {
 
         List<OrderBy> ordersOql = query.getOrders();
 
@@ -275,7 +275,7 @@ public class SqlQuery {
 
     }
 
-    private void addLimit() {
+    protected void addLimit() {
 
         if (query.getCount() != null) {
             Long offset = query.getOffset();
@@ -283,7 +283,7 @@ public class SqlQuery {
         }
     }
 
-    public String toSelectSQL() {
+    protected String toSelectSQL() {
         if (sqlSelect == null) {
             sqlSelect = new StringBuilder();
 
@@ -318,7 +318,7 @@ public class SqlQuery {
         return sqlSelect.toString();
     }
 
-    public String toCountSQL() {
+    protected String toCountSQL() {
         if (sqlCount == null) {
             sqlCount = new StringBuilder();
             sqlCount.append("SELECT COUNT(*) AS `size` FROM ").append(from);

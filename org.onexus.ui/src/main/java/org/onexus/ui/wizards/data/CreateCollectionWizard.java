@@ -142,7 +142,6 @@ public class CreateCollectionWizard extends AbstractWizard {
     public void onFinish() {
         super.onFinish();
 
-
         // Create collection
         Collection collection = newCollection();
 

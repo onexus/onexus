@@ -53,7 +53,7 @@ public class SqlEntityTable implements IEntityTable {
 
         this.store = store;
         this.query = query;
-        this.mysqlQuery = new SqlQuery(store, query);
+        this.mysqlQuery = store.newSqlQuery(query);
         this.dataConn = conn;
     }
 

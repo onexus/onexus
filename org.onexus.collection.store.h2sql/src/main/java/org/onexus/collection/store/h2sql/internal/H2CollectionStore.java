@@ -24,8 +24,10 @@ import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.h2.Driver;
 import org.onexus.collection.store.sql.SqlCollectionStore;
+import org.onexus.collection.store.sql.SqlQuery;
 import org.onexus.core.ICollectionStore;
 import org.onexus.core.IResourceManager;
+import org.onexus.core.query.Query;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -48,6 +50,11 @@ public class H2CollectionStore extends SqlCollectionStore {
 
     public H2CollectionStore() {
         super(new H2Dialect());
+    }
+
+    @Override
+    public SqlQuery newSqlQuery(Query query) {
+        return new H2Query(this, query);
     }
 
     protected DataSource newDataSource() {

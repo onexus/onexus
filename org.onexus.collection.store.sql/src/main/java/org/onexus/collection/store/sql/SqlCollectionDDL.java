@@ -20,6 +20,8 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.store.sql.adapters.*;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+import org.onexus.core.resources.Link;
+import org.onexus.core.utils.LinkUtils;
 import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,8 @@ public class SqlCollectionDDL implements Serializable {
     private Map<String, ColumnInfo> columnInfos;
 
     private SqlDialect sqlDialect;
+    private List<String> createIndex;
+    private List<String> dropIndex;
 
     public SqlCollectionDDL(SqlDialect sqlDialect, Collection collection) {
 
@@ -49,6 +53,40 @@ public class SqlCollectionDDL implements Serializable {
 
         prepareFieldInfoMap(null, collection);
         prepareCreateTable(collection);
+        prepareCreateIndex(collection);
+
+    }
+
+    private void prepareCreateIndex(Collection collection) {
+
+        this.createIndex = new ArrayList<String>();
+        this.dropIndex = new ArrayList<String>();
+        if (collection.getLinks() != null) {
+            StringBuilder linkSQL, dropIndexSQL;
+            int i = 0;
+            for (Link link : collection.getLinks()) {
+                linkSQL = new StringBuilder();
+                dropIndexSQL = new StringBuilder();
+
+                String indexName = getTableName() + "-" + Integer.toString(i);
+                linkSQL.append("CREATE INDEX `").append(indexName);
+                linkSQL.append("` ON `").append(getTableName()).append("` (");
+
+                dropIndexSQL.append("DROP INDEX `").append(indexName).append("`");
+
+                Iterator<String> fieldIt = link.getFields().iterator();
+                while (fieldIt.hasNext()) {
+                    linkSQL.append("`").append(Link.getFromFieldName(fieldIt.next())).append("`");
+                    if (fieldIt.hasNext()) {
+                        linkSQL.append(", ");
+                    }
+                }
+                linkSQL.append(")");
+                this.createIndex.add(linkSQL.toString());
+                this.dropIndex.add(dropIndexSQL.toString());
+                i++;
+            }
+        }
 
     }
 
@@ -171,6 +209,14 @@ public class SqlCollectionDDL implements Serializable {
 
     private static String removeNonValidChars(String id) {
         return id.toLowerCase().trim().replaceAll("[^(a-z|0-9)]", "_");
+    }
+
+    public List<String> getCreateIndex() {
+        return createIndex;
+    }
+
+    public List<String> getDropIndex() {
+        return dropIndex;
     }
 
     public class ColumnInfo implements Serializable {

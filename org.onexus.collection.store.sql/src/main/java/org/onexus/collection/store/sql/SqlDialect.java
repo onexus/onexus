@@ -191,7 +191,7 @@ public class SqlDialect {
             throws SQLException {
         Statement st = null;
         try {
-            LOGGER.debug("Execute: " + query);
+            LOGGER.trace("Execute: " + query);
             st = conn.createStatement();
             st.execute(query);
         } finally {
