@@ -20,6 +20,8 @@ package org.onexus.loader.tsv.internal;
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ import java.util.Map;
 
 public class FileEntity implements IEntity {
 
+    private static final Logger log = LoggerFactory.getLogger(FileEntity.class);
     private long position;
     private Collection collection;
 
@@ -120,9 +123,11 @@ public class FileEntity implements IEntity {
 
             return constructor.newInstance(value);
         } catch (Exception e) {
-            throw new RuntimeException("The value '" + value
+            log.warn("The value '" + value
                     + "' for the field '" + fieldId
-                    + "' is malformed on line '" + line + "'", e);
+                    + "' is malformed on line '" + line + "'. Loading as NULL value.");
+
+            return null;
         }
 
     }
