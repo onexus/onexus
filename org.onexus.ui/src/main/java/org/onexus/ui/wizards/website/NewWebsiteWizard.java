@@ -17,8 +17,10 @@
  */
 package org.onexus.ui.wizards.website;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.wizard.*;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -27,6 +29,8 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.resources.Folder;
 import org.onexus.core.resources.Resource;
+import org.onexus.core.utils.FieldLink;
+import org.onexus.core.utils.LinkUtils;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.PageConfig;
@@ -56,6 +60,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
     private Boolean addTab = true;
     private String tabName = "Tab-0";
     private String mainTabCollection;
+    private List<String> linkCollections = new ArrayList<String>();
     private TabConfig currentTab;
 
     @Inject
@@ -70,6 +75,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
         model.add(new AddTabs());
         model.add(new TabName(), condition);
         model.add(new MainTabCollection(), condition);
+        model.add(new LinkedCollections(), condition);
         model.add(new StaticContentStep(Model.of("New website"), Model.of("Confirm website"), "Done", false));
 
         init(model);
@@ -167,20 +173,6 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
         }
 
-        private void addAllCollections(List<String> collectionUris, String parentUri) {
-
-            List<Collection> collections = resourceManager.loadChildren(Collection.class, parentUri);
-            for (Collection collection : collections) {
-                collectionUris.add(ResourceUtils.getResourcePath(collection.getURI()));
-            }
-
-            List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);
-            for (Folder folder : folders) {
-                addAllCollections(collectionUris, folder.getURI());
-            }
-
-        }
-
         @Override
         public void applyState() {
 
@@ -206,31 +198,39 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
             // Main collection columns
             Collection collection = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), mainTabCollection));
-            StringBuilder fields = new StringBuilder();
-            StringBuilder search = new StringBuilder();
-            Iterator<Field> fieldIterator = collection.getFields().iterator();
-            while (fieldIterator.hasNext()) {
-                Field field = fieldIterator.next();
-                fields.append(field.getId());
-                if (fieldIterator.hasNext()) {
-                    fields.append(", ");
+
+            List<String> keyFields = new ArrayList<String>();
+            List<String> fields = new ArrayList<String>();
+            List<String> search = new ArrayList<String>();
+
+            for (Field field : collection.getFields()) {
+
+                if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
+                    keyFields.add(field.getId());
+                } else {
+                    fields.add(field.getId());
                 }
+
                 if (String.class.equals(field.getType())) {
-                    if (search.length() > 0) {
-                        search.append(", ");
-                    }
-                    search.append(field.getId());
+                    search.add(field.getId());
                 }
             }
-            ColumnConfig mainColumns = new ColumnConfig(mainTabCollection, fields.toString());
-            searchFields.add(new SearchField(mainTabCollection, search.toString()));
+
+            searchFields.add(new SearchField(mainTabCollection, StringUtils.join(search, ',')));
 
             ColumnSet columnSet = new ColumnSet();
             columnSet.setTitle("default");
             columnSet.setColumns(new ArrayList<IColumnConfig>());
-            columnSet.getColumns().add(mainColumns);
-            tableWidget.getColumnSets().add(columnSet);
 
+            if (!keyFields.isEmpty()) {
+                columnSet.getColumns().add(new ColumnConfig(mainTabCollection, StringUtils.join(keyFields, ','), "LINK"));
+            }
+
+            if (!fields.isEmpty()) {
+                columnSet.getColumns().add(new ColumnConfig(mainTabCollection, StringUtils.join(fields, ',')));
+            }
+
+            tableWidget.getColumnSets().add(columnSet);
             browserPage.getWidgets().add(tableWidget);
 
             // Add view
@@ -240,15 +240,88 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             // Add current tab
             browserPage.getTabs().add(currentTab);
 
+        }
+    }
+
+    private final class LinkedCollections extends WizardStep {
+
+        private List<String> linkedCollections;
+
+        public LinkedCollections() {
+            super("New website", "Linked collections");
+
+        }
+
+        @Override
+        protected void onBeforeRender() {
+
+            List<String> projectCollections = new ArrayList<String>();
+            addAllCollections(projectCollections, getParentUri());
+
+            linkedCollections = new ArrayList<String>();
+
+
+            Collection colA = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), getMainTabCollection()));
+
+            for (String collection : projectCollections) {
+
+
+                Collection colB = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), collection));
+
+                if (colA.getURI().equals(colB.getURI())) {
+                    continue;
+                }
+
+                List<FieldLink> links = LinkUtils.getLinkFields(getParentUri(), colA, colB);
+
+                if (!links.isEmpty()) {
+                    linkedCollections.add(collection);
+                }
+            }
+
+            addOrReplace(new ListMultipleChoice<String>("linkCollections", linkedCollections));
+
+            super.onBeforeRender();
+        }
+
+        @Override
+        public void applyState() {
+
+            BrowserPageConfig browserPage = getBrowserPage();
+
+            if (!linkCollections.isEmpty()) {
+
+                String tableWidgetId = currentTab.getId() + "-table";
+                TableViewerConfig tableWidget = (TableViewerConfig) browserPage.getWidget(tableWidgetId);
+                ColumnSet columnSet = tableWidget.getColumnSets().get(0);
+
+                for (String linkCollection : linkCollections) {
+
+                    String resourceUri = ResourceUtils.getAbsoluteURI(getParentUri(), linkCollection);
+                    Collection collection = resourceManager.load(Collection.class, resourceUri);
+
+                    List<String> otherFields = new ArrayList<String>();
+
+                    for (Field field : collection.getFields()) {
+                        otherFields.add(field.getId());
+                    }
+
+                    if (!otherFields.isEmpty()) {
+                        columnSet.getColumns().add(new ColumnConfig(linkCollection, StringUtils.join(otherFields, ',')));
+                    }
+                }
+            }
+
             // Prepare next tab iteration
             tabName = "Tab-" + browserPage.getTabs().size();
+            mainTabCollection = null;
+            linkCollections.clear();
             currentTab = null;
             WizardModel model = (WizardModel) getWizardModel();
             IWizardStep firstStep = model.stepIterator().next();
             model.setActiveStep(firstStep);
-
-
         }
+
     }
 
     private final class AddTabCondition implements WizardModel.ICondition {
@@ -273,6 +346,28 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
     public void setTabName(String tabName) {
         this.tabName = tabName;
+    }
+
+    public String getMainTabCollection() {
+        return mainTabCollection;
+    }
+
+    public void setMainTabCollection(String mainTabCollection) {
+        this.mainTabCollection = mainTabCollection;
+    }
+
+    private void addAllCollections(List<String> collectionUris, String parentUri) {
+
+        List<Collection> collections = resourceManager.loadChildren(Collection.class, parentUri);
+        for (Collection collection : collections) {
+            collectionUris.add(ResourceUtils.getResourcePath(collection.getURI()));
+        }
+
+        List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);
+        for (Folder folder : folders) {
+            addAllCollections(collectionUris, folder.getURI());
+        }
+
     }
 
 

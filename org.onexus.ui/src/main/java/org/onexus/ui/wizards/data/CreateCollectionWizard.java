@@ -20,6 +20,7 @@ package org.onexus.ui.wizards.data;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -58,7 +59,16 @@ public class CreateCollectionWizard extends AbstractWizard {
     private final static int MAXIMUM_UNIQUE_VALUES = 1500;
 
     private String selected = TSV;
+    private List<String> primaryKeys = new ArrayList<String>();
     private String sourceURI;
+
+    // Data information
+    private String headers[];
+    private Map<String, Set<String>> sampleData;
+    int nullEmpty = 0;
+    int nullDash = 0;
+    int nullString = 0;
+    int nullNA = 0;
 
     public CreateCollectionWizard(String id, IModel<? extends Resource> model) {
         super(id);
@@ -67,12 +77,11 @@ public class CreateCollectionWizard extends AbstractWizard {
 
         WizardModel wizardModel = new WizardModel();
         wizardModel.add(new ChooseFormat());
+        wizardModel.add(new PrimaryKeys());
         init(wizardModel);
     }
 
-    @Override
-    public void onFinish() {
-        super.onFinish();
+    private void readData() throws IOException {
 
         String separator = " ";
         if (selected.equals(CSV)) {
@@ -91,151 +100,156 @@ public class CreateCollectionWizard extends AbstractWizard {
 
         URL url = urls.get(0);
 
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(urls.get(0).openStream()));
 
-            // Get headers
-            String headers[] = in.readLine().split(separator);
+        BufferedReader in = new BufferedReader(new InputStreamReader(urls.get(0).openStream()));
 
-            // Build values map
-            Map<String, Set<String>> data = new HashMap<String, Set<String>>();
-            for (String header : headers) {
-                data.put(header, new HashSet<String>());
-            }
-            String line = in.readLine();
+        // Get headers
+        headers = in.readLine().split(separator);
 
-            int nullEmpty = 0;
-            int nullDash = 0;
-            int nullString = 0;
-            int nullNA = 0;
-            for (int i = 0; i < MAXIMUM_LINES && line != null; i++) {
-                String values[] = line.split(separator);
-                for (int h = 0; h < headers.length && h < values.length; h++) {
-
-                    if (values[h] == null || values[h].isEmpty()) {
-                        nullEmpty++;
-                    } else if (values[h].equals("-")) {
-                        nullDash++;
-                    } else if (values[h].equals("NULL")) {
-                        nullString++;
-                    } else if (values[h].equals("NA")) {
-                        nullNA++;
-                    }
-
-                    Set<String> columnValues = data.get(headers[h]);
-                    if (columnValues.size() < MAXIMUM_UNIQUE_VALUES) {
-                        data.get(headers[h]).add(values[h]);
-                    }
-                }
-                line = in.readLine();
-            }
-            in.close();
-
-            // Create collection
-            Collection collection = newCollection();
-
-            // Collect fields from other collections in the same folder
-            Map<String, Field> otherFields = collectFields();
-
-            List<Field> fields = new ArrayList<Field>();
-            for (String header : headers) {
-                String shortName, title;
-                if (otherFields.containsKey(header)) {
-                    Field field = otherFields.get(header);
-                    shortName = field.getLabel();
-                    title = field.getTitle();
-                } else {
-                    String lower = StringUtils.lowerCase(header);
-                    shortName = StringUtils.abbreviate(lower, 20);
-                    title = StringUtils.capitalize(lower);
-                }
-
-                Field field = new Field(header, shortName, title, deduceClass(data.get(header)));
-
-                if (header.toLowerCase().contains("pvalue") || header.toLowerCase().contains("qvalue")) {
-                    field.setProperties(Arrays.asList( new Property[] {
-                            new Property("BROWSER_DECORATOR", "PVALUE2")
-                    }));
-                }
-                fields.add(field);
-            }
-            collection.setFields(fields);
-
-            // Deduce links from other collections in the same folder
-            Map<String, Link> otherLinks = collectLinks();
-            List<Link> links = new ArrayList<Link>();
-
-            List<Collection> allProjectCollections = new ArrayList<Collection>();
-            addAllCollections(allProjectCollections, ResourceUtils.getProjectURI(sourceURI) );
-
-            for (String header : headers) {
-                if (otherLinks.containsKey(header)) {
-                    Link otherLink = otherLinks.get(header);
-                    Link link = new Link();
-                    link.setCollection(otherLink.getCollection());
-                    link.getFields().add(otherLink.getFields().get(0));
-                    links.add(link);
-                } else {
-
-                    for (Collection col : allProjectCollections) {
-                        Field field = col.getField(header);
-
-                        if (field != null && (header.toLowerCase().endsWith("id") || header.toLowerCase().endsWith("key"))) {
-
-                            // Only link to collections without any link
-                            if (col.getLinks() == null || col.getLinks().isEmpty()) {
-                                Link link = new Link();
-                                link.setCollection( Resource.SEPARATOR + ResourceUtils.getResourcePath(col.getURI()));
-                                link.getFields().add(header);
-                                links.add(link);
-                            }
-                        }
-                    }
-
-
-                }
-            }
-            collection.setLinks(links);
-
-
-            Loader loader = new Loader();
-            loader.setPlugin("tsv-loader");
-            List<Parameter> parameters = new ArrayList<Parameter>();
-            parameters.add(new Parameter("SOURCE_URI", Resource.SEPARATOR + ResourceUtils.getResourcePath(sourceURI)));
-
-            if (nullEmpty > nullDash && nullEmpty > nullString && nullEmpty > nullNA) {
-                parameters.add(new Parameter("NULL_VALUE", ""));
-            }
-
-            if (nullString > nullDash && nullString > nullEmpty && nullEmpty > nullNA) {
-                parameters.add(new Parameter("NULL_VALUE", "NULL"));
-            }
-
-            if (nullNA > nullDash && nullNA > nullString && nullNA > nullEmpty) {
-                parameters.add(new Parameter("NULL_VALUE", "NA"));
-            }
-
-            loader.setParameters(parameters);
-            collection.setLoader(loader);
-
-            resourceManager.save(collection);
-
-            PageParameters params = new PageParameters().add(ResourcesPage.PARAMETER_RESOURCE, collection.getURI());
-            setResponsePage(ResourcesPage.class, params);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        // Build values map
+        sampleData = new HashMap<String, Set<String>>();
+        for (String header : headers) {
+            sampleData.put(header, new HashSet<String>());
         }
+        String line = in.readLine();
+
+        for (int i = 0; i < MAXIMUM_LINES && line != null; i++) {
+            String values[] = line.split(separator);
+            for (int h = 0; h < headers.length && h < values.length; h++) {
+
+                if (values[h] == null || values[h].isEmpty()) {
+                    nullEmpty++;
+                } else if (values[h].equalsIgnoreCase("-")) {
+                    nullDash++;
+                } else if (values[h].equalsIgnoreCase("NULL")) {
+                    nullString++;
+                } else if (values[h].equalsIgnoreCase("NA")) {
+                    nullNA++;
+                }
+
+                Set<String> columnValues = sampleData.get(headers[h]);
+                if (columnValues.size() < MAXIMUM_UNIQUE_VALUES) {
+                    sampleData.get(headers[h]).add(values[h]);
+                }
+            }
+            line = in.readLine();
+        }
+        in.close();
 
     }
 
+    @Override
+    public void onFinish() {
+        super.onFinish();
+
+
+        // Create collection
+        Collection collection = newCollection();
+
+        // Collect fields from other collections in the same folder
+        Map<String, Field> otherFields = collectFields();
+
+        List<Field> fields = new ArrayList<Field>();
+        for (String header : headers) {
+            String shortName, title;
+            if (otherFields.containsKey(header)) {
+                Field field = otherFields.get(header);
+                shortName = field.getLabel();
+                title = field.getTitle();
+            } else {
+                String lower = StringUtils.lowerCase(header);
+                shortName = StringUtils.abbreviate(lower, 20);
+                title = StringUtils.capitalize(lower);
+            }
+
+            Field field = new Field(header, shortName, title, deduceClass(sampleData.get(header)));
+
+            if (header.toLowerCase().contains("pvalue") || header.toLowerCase().contains("qvalue")) {
+                field.setProperties(Arrays.asList(new Property[]{
+                        new Property("BROWSER_DECORATOR", "PVALUE2")
+                }));
+            }
+
+            if (primaryKeys.contains(header)) {
+                field.setPrimaryKey(Boolean.TRUE);
+            }
+
+            fields.add(field);
+
+        }
+        collection.setFields(fields);
+
+        // Deduce links from other collections in the same folder
+        Map<String, Link> otherLinks = collectLinks();
+        List<Link> links = new ArrayList<Link>();
+
+        List<Collection> allProjectCollections = new ArrayList<Collection>();
+        addAllCollections(allProjectCollections, ResourceUtils.getProjectURI(sourceURI));
+
+        for (String header : headers) {
+            if (otherLinks.containsKey(header)) {
+                Link otherLink = otherLinks.get(header);
+                Link link = new Link();
+                link.setCollection(otherLink.getCollection());
+                link.getFields().add(otherLink.getFields().get(0));
+                links.add(link);
+            } else {
+
+                for (Collection col : allProjectCollections) {
+                    Field field = col.getField(header);
+
+                    if (field != null && (header.toLowerCase().endsWith("id") || header.toLowerCase().endsWith("key"))) {
+
+                        // Only link to collections without any link
+                        if (col.getLinks() == null || col.getLinks().isEmpty()) {
+                            Link link = new Link();
+                            link.setCollection(Resource.SEPARATOR + ResourceUtils.getResourcePath(col.getURI()));
+                            link.getFields().add(header);
+                            links.add(link);
+                        }
+                    }
+                }
+
+
+            }
+        }
+        collection.setLinks(links);
+
+
+        Loader loader = new Loader();
+        loader.setPlugin("tsv-loader");
+        List<Parameter> parameters = new ArrayList<Parameter>();
+        parameters.add(new Parameter("SOURCE_URI", Resource.SEPARATOR + ResourceUtils.getResourcePath(sourceURI)));
+
+        if (nullEmpty > nullDash && nullEmpty > nullString && nullEmpty > nullNA) {
+            parameters.add(new Parameter("NULL_VALUE", ""));
+        }
+
+        if (nullString > nullDash && nullString > nullEmpty && nullString > nullNA) {
+            parameters.add(new Parameter("NULL_VALUE", "NULL"));
+        }
+
+        if (nullNA > nullDash && nullNA > nullString && nullNA > nullEmpty) {
+            parameters.add(new Parameter("NULL_VALUE", "NA"));
+        }
+
+        loader.setParameters(parameters);
+        collection.setLoader(loader);
+
+        resourceManager.save(collection);
+
+        PageParameters params = new PageParameters().add(ResourcesPage.PARAMETER_RESOURCE, collection.getURI());
+        setResponsePage(ResourcesPage.class, params);
+
+
+    }
 
 
     private Map<String, Link> collectLinks() {
         Map<String, Link> links = new HashMap<String, Link>();
 
         List<Collection> collections = new ArrayList<Collection>();
-        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI) );
+        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI));
 
         for (Collection collection : collections) {
             for (Link link : collection.getLinks()) {
@@ -255,7 +269,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         Map<String, Field> fields = new HashMap<String, Field>();
 
         List<Collection> collections = new ArrayList<Collection>();
-        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI) );
+        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI));
 
         for (Collection collection : collections) {
             for (Field field : collection.getFields()) {
@@ -361,13 +375,41 @@ public class CreateCollectionWizard extends AbstractWizard {
     private final class ChooseFormat extends WizardStep {
 
         public ChooseFormat() {
-            super("Format", "Choose one file format");
+            super("Create collection", "Choose one file format");
 
             RadioChoice<String> commandOptions = new RadioChoice<String>("formats", new PropertyModel<String>(CreateCollectionWizard.this, "selected"), FORMATS);
             add(commandOptions);
 
         }
+
+        @Override
+        public void applyState() {
+            try {
+                readData();
+            } catch (IOException e) {
+                error(e.getMessage());
+            }
+        }
     }
 
+    private final class PrimaryKeys extends WizardStep {
 
+        public PrimaryKeys() {
+            super("Create collection", "Select primary keys");
+        }
+
+        @Override
+        protected void onBeforeRender() {
+            addOrReplace(new ListMultipleChoice<String>("primaryKeys", Arrays.asList(headers)));
+            super.onBeforeRender();
+        }
+    }
+
+    public List<String> getPrimaryKeys() {
+        return primaryKeys;
+    }
+
+    public void setPrimaryKeys(List<String> primaryKeys) {
+        this.primaryKeys = primaryKeys;
+    }
 }
