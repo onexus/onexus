@@ -54,7 +54,8 @@ public class CreateCollectionWizard extends AbstractWizard {
     private static final List<String> FORMATS = Arrays.asList(new String[]{TSV, CSV});
 
     // Maximum lines to load to deduce the datatype 
-    private final static int MAXIMUM_LINES = 100;
+    private final static int MAXIMUM_LINES = 10000;
+    private final static int MAXIMUM_UNIQUE_VALUES = 1500;
 
     private String selected = TSV;
     private String sourceURI;
@@ -106,6 +107,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             int nullEmpty = 0;
             int nullDash = 0;
             int nullString = 0;
+            int nullNA = 0;
             for (int i = 0; i < MAXIMUM_LINES && line != null; i++) {
                 String values[] = line.split(separator);
                 for (int h = 0; h < headers.length && h < values.length; h++) {
@@ -116,9 +118,14 @@ public class CreateCollectionWizard extends AbstractWizard {
                         nullDash++;
                     } else if (values[h].equals("NULL")) {
                         nullString++;
+                    } else if (values[h].equals("NA")) {
+                        nullNA++;
                     }
 
-                    data.get(headers[h]).add(values[h]);
+                    Set<String> columnValues = data.get(headers[h]);
+                    if (columnValues.size() < MAXIMUM_UNIQUE_VALUES) {
+                        data.get(headers[h]).add(values[h]);
+                    }
                 }
                 line = in.readLine();
             }
@@ -139,11 +146,18 @@ public class CreateCollectionWizard extends AbstractWizard {
                     title = field.getTitle();
                 } else {
                     String lower = StringUtils.lowerCase(header);
-                    shortName = StringUtils.abbreviate(lower, 10);
+                    shortName = StringUtils.abbreviate(lower, 20);
                     title = StringUtils.capitalize(lower);
                 }
 
-                fields.add(new Field(header, shortName, title, deduceClass(data.get(header))));
+                Field field = new Field(header, shortName, title, deduceClass(data.get(header)));
+
+                if (header.toLowerCase().contains("pvalue") || header.toLowerCase().contains("qvalue")) {
+                    field.setProperties(Arrays.asList( new Property[] {
+                            new Property("BROWSER_DECORATOR", "PVALUE2")
+                    }));
+                }
+                fields.add(field);
             }
             collection.setFields(fields);
 
@@ -189,12 +203,16 @@ public class CreateCollectionWizard extends AbstractWizard {
             List<Parameter> parameters = new ArrayList<Parameter>();
             parameters.add(new Parameter("SOURCE_URI", ResourceUtils.getResourceName(sourceURI)));
 
-            if (nullEmpty > nullDash && nullEmpty > nullString) {
+            if (nullEmpty > nullDash && nullEmpty > nullString && nullEmpty > nullNA) {
                 parameters.add(new Parameter("NULL_VALUE", ""));
             }
 
-            if (nullString > nullDash && nullString > nullEmpty) {
+            if (nullString > nullDash && nullString > nullEmpty && nullEmpty > nullNA) {
                 parameters.add(new Parameter("NULL_VALUE", "NULL"));
+            }
+
+            if (nullNA > nullDash && nullNA > nullString && nullNA > nullEmpty) {
+                parameters.add(new Parameter("NULL_VALUE", "NA"));
             }
 
             loader.setParameters(parameters);
