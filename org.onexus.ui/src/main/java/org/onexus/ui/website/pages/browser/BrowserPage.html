@@ -9,7 +9,11 @@
             <ul>
                 <li wicket:id="tabs">
                     <a wicket:id="link" class="styled smallselect"><span wicket:id="label"></span></a>
+                    <ul class="dropdown-menu" wicket:id="submenu">
+                        <li wicket:id="item"><a wicket:id="link"><span wicket:id="label"></span></a></li>
+                    </ul>
                 </li>
+
             </ul>
         </div>
         <div class="gridviewers tab-panel shadowbox" wicket:id="content"></div>

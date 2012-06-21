@@ -47,8 +47,11 @@ import org.onexus.ui.website.pages.browser.layouts.topmain.TopmainLayout;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
@@ -81,28 +84,79 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         VisibleTabs visibleTabs = new VisibleTabs();
 
         // Tabs can change when we fix/unfix entities
-        addOrReplace(new ListView<TabConfig>("tabs", visibleTabs) {
+        addOrReplace(new ListView<TabGroup>("tabs", visibleTabs) {
 
             @Override
-            protected void populateItem(ListItem<TabConfig> item) {
+            protected void populateItem(ListItem<TabGroup> item) {
 
-                TabConfig tab = item.getModelObject();
+                TabGroup tabGroup = item.getModelObject();
 
-                BrowserPageLink<String> link = new BrowserPageLink<String>("link", Model.of(tab.getId())) {
+                if (tabGroup.hasSubMenu()) {
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        getStatus().setCurrentTabId(getModelObject());
-                        sendEvent(EventTabSelected.EVENT);
+                    WebMarkupContainer link = new WebMarkupContainer("link");
+                    link.add(new AttributeModifier("class", "dropdown-toggle"));
+                    link.add(new AttributeModifier("data-toggle", "dropdown"));
+                    link.add(new AttributeModifier("href", "#"));
+                    link.add(new Label("label", tabGroup.getGroupLabel() + "<b class='caret'></b>").setEscapeModelStrings(false));
+
+                    item.add(link);
+
+                    if (tabGroup.containsTab(getStatus().getCurrentTabId())) {
+                        item.add(new AttributeModifier("class", "dropdown active selected"));
+                    } else {
+                        item.add(new AttributeModifier("class", "dropdown"));
                     }
 
-                };
+                    WebMarkupContainer submenu = new WebMarkupContainer("submenu");
+                    submenu.add(new ListView<TabConfig>("item", tabGroup.getTabConfigs()) {
 
-                link.add(new Label("label", tab.getTitle()));
-                item.add(link);
+                        @Override
+                        protected void populateItem(ListItem<TabConfig> item) {
 
-                if (isCurrentTab(tab.getId())) {
-                    item.add(new AttributeModifier("class", new Model<String>("selected")));
+                            TabConfig tab = item.getModelObject();
+                            BrowserPageLink<String> link = new BrowserPageLink<String>("link", Model.of(tab.getId())) {
+
+                                @Override
+                                public void onClick(AjaxRequestTarget target) {
+                                    getStatus().setCurrentTabId(getModelObject());
+                                    sendEvent(EventTabSelected.EVENT);
+                                }
+
+                            };
+
+                            link.add(new Label("label", tab.getTitle()));
+                            item.add(link);
+
+                            if (isCurrentTab(tab.getId())) {
+                                item.add(new AttributeModifier("class", new Model<String>("active")));
+                            }
+
+                        }
+                    });
+                    item.add(submenu);
+
+                } else {
+
+                    TabConfig tab = tabGroup.getTabConfigs().get(0);
+                    BrowserPageLink<String> link = new BrowserPageLink<String>("link", Model.of(tab.getId())) {
+
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            getStatus().setCurrentTabId(getModelObject());
+                            sendEvent(EventTabSelected.EVENT);
+                        }
+
+                    };
+
+                    link.add(new Label("label", tab.getTitle()));
+                    item.add(link);
+
+                    if (isCurrentTab(tab.getId())) {
+                        item.add(new AttributeModifier("class", new Model<String>("selected")));
+                    }
+
+                    item.add(new WebMarkupContainer("submenu").setVisible(false));
+
                 }
 
             }
@@ -122,16 +176,16 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             }
         }
 
-        List<TabConfig> tabs = visibleTabs.getObject();
+        List<TabGroup> tabs = visibleTabs.getObject();
         boolean hiddenTab = true;
-        for (TabConfig tab : tabs) {
-            if (tab.getId().equals(currentTabId)) {
+        for (TabGroup tab : tabs) {
+            if (tab.containsTab(currentTabId)) {
                 hiddenTab = false;
             }
         }
 
         if (hiddenTab && !tabs.isEmpty()) {
-            TabConfig firstTab = tabs.get(0);
+            TabConfig firstTab = tabs.get(0).getTabConfigs().get(0);
             getStatus().setCurrentTabId(firstTab.getId());
         }
 
@@ -197,10 +251,10 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super.onBeforeRender();
     }
 
-    private class VisibleTabs extends AbstractReadOnlyModel<List<TabConfig>> {
+    private class VisibleTabs extends AbstractReadOnlyModel<List<TabGroup>> {
 
         @Override
-        public List<TabConfig> getObject() {
+        public List<TabGroup> getObject() {
 
             List<TabConfig> allTabs = getConfig().getTabs();
 
@@ -210,9 +264,72 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();
             CollectionUtils.select(allTabs, filter, tabs);
-            return tabs;
+
+            // Tab groups
+            List<TabGroup> tabGroups = new ArrayList<TabGroup>();
+            Map<String, TabGroup> subMenus = new HashMap<String, TabGroup>();
+
+            for (TabConfig tab : tabs) {
+                if (tab.getGroup() == null) {
+                    tabGroups.add(new TabGroup(tab));
+                } else {
+                    TabGroup group;
+                    if (!subMenus.containsKey(tab.getGroup())) {
+                        group = new TabGroup(tab.getGroup());
+                        subMenus.put(tab.getGroup(), group);
+                        tabGroups.add(group);
+                    } else {
+                        group = subMenus.get(tab.getGroup());
+                    }
+                    group.add(tab);
+                }
+            }
+
+            return tabGroups;
         }
 
+    }
+
+    private static class TabGroup implements Serializable {
+
+        private String groupLabel;
+        private List<TabConfig> tabConfigs = new ArrayList<TabConfig>();
+
+        public TabGroup(String groupLabel) {
+            super();
+            this.groupLabel = groupLabel;
+        }
+
+        public TabGroup(TabConfig tab) {
+            super();
+            this.groupLabel = null;
+            this.tabConfigs.add(tab);
+        }
+
+        public boolean hasSubMenu() {
+            return (groupLabel != null);
+        }
+
+        public void add(TabConfig tabConfig) {
+            tabConfigs.add(tabConfig);
+        }
+
+        public boolean containsTab(String tabId) {
+            for (TabConfig tab : tabConfigs) {
+                if (tab.getId().equals(tabId)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public String getGroupLabel() {
+            return groupLabel;
+        }
+
+        public List<TabConfig> getTabConfigs() {
+            return tabConfigs;
+        }
     }
 
     @Override

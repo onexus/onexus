@@ -31,6 +31,7 @@ public class TabConfig implements Serializable, IVisible {
     private String id;
     private String title;
     private String visible;
+    private String group;
 
     @XStreamImplicit(itemFieldName="view")
     private List<ViewConfig> views = new ArrayList<ViewConfig>();
@@ -80,5 +81,13 @@ public class TabConfig implements Serializable, IVisible {
 
     public void setViews(List<ViewConfig> views) {
         this.views = views;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }
