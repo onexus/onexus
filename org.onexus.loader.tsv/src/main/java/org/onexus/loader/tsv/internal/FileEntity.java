@@ -160,7 +160,7 @@ public class FileEntity implements IEntity {
 
         String result = str.substring(start + 1, end);
 
-        if (result != null && result.equals(NULL_CHAR)) {
+        if (result != null && result.equalsIgnoreCase(NULL_CHAR)) {
             return null;
         }
 
