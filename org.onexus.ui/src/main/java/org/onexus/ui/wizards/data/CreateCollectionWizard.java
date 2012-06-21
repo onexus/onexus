@@ -201,7 +201,7 @@ public class CreateCollectionWizard extends AbstractWizard {
             Loader loader = new Loader();
             loader.setPlugin("tsv-loader");
             List<Parameter> parameters = new ArrayList<Parameter>();
-            parameters.add(new Parameter("SOURCE_URI", ResourceUtils.getResourceName(sourceURI)));
+            parameters.add(new Parameter("SOURCE_URI", Resource.SEPARATOR + ResourceUtils.getResourcePath(sourceURI)));
 
             if (nullEmpty > nullDash && nullEmpty > nullString && nullEmpty > nullNA) {
                 parameters.add(new Parameter("NULL_VALUE", ""));
