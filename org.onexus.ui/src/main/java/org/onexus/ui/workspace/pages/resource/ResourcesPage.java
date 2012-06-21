@@ -88,11 +88,21 @@ public class ResourcesPage extends BaseResourcePage {
             Resource resource = ResourcesPage.this.getModelObject();
 
             if (resource != null) {
-                String projectUri = ResourceUtils.getProjectURI(resource.getURI());
-                resourceManager.syncProject(projectUri);
+                String resourceUri = resource.getURI();
+                resourceManager.syncProject(ResourceUtils.getProjectURI(resourceUri));
+
+                Resource newVersion = resourceManager.load(Resource.class, resourceUri);
+                if (newVersion == null) {
+                    resourceUri = ResourceUtils.getParentURI(resourceUri);
+
+                    newVersion = resourceManager.load(Resource.class, resourceUri);
+                    if (newVersion == null) {
+                        resourceUri = ResourceUtils.getProjectURI(resourceUri);
+                    }
+                }
 
                 PageParameters parameters = new PageParameters();
-                parameters.set(ResourcesPage.PARAMETER_RESOURCE, projectUri);
+                parameters.set(ResourcesPage.PARAMETER_RESOURCE, resourceUri);
 
                 setResponsePage(ResourcesPage.class, parameters);
             }
