@@ -83,7 +83,7 @@ Follow this steps to install MySQL_ as default data store.
    
 #. Create a user::
 
-	mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON onexus.*
+	mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,INDEX ON onexus.*
 	       TO 'onexus'@'localhost' IDENTIFIED BY 'onexus';
 
 #. Stop Onexus with Ctrl + D on Karaf_ console
