@@ -17,19 +17,23 @@
  */
 package org.onexus.loader.tsv.internal;
 
+import org.apache.commons.compress.archivers.ArchiveException;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.onexus.core.IDataManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntitySet;
-import org.onexus.core.IDataManager;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.loader.tsv.internal.tools.BufferedFileChannel;
 import org.onexus.loader.tsv.internal.tools.Token;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -38,6 +42,7 @@ import java.util.regex.Pattern;
 
 public class FileEntitySet extends FileEntity implements IEntitySet {
 
+    private ArchiveStreamFactory archiveFactory = new ArchiveStreamFactory();
     private IDataManager dataManager;
     private long currentPosition;
     private String currentLine;
@@ -130,14 +135,38 @@ public class FileEntitySet extends FileEntity implements IEntitySet {
             // Load next file
             URL url = urls.poll();
 
-            if ("file".equals(url.getProtocol())) {
+            String fileName = url.getFile();
+
+            if ("file".equals(url.getProtocol()) && !fileName.endsWith(".tar.gz")) {
                 this.file = new File(url.toURI());
                 this.fc = new BufferedFileChannel(file);
                 this.fr = null;
             } else {
                 this.file = null;
                 this.fc = null;
-                this.fr = new BufferedReader(new InputStreamReader(url.openStream()));
+
+                InputStream in = url.openStream();
+
+                try {
+
+                    CompressorInputStream cin = null;
+                    if (fileName.endsWith(".tar.gz")) {
+                        cin = new GzipCompressorInputStream(in);
+                    }
+
+                    if (cin != null) {
+                        TarArchiveInputStream tin = new TarArchiveInputStream(cin);
+                        tin.getNextEntry();
+                        this.fr = new BufferedReader(new InputStreamReader(tin));
+                    }
+
+                } catch (IOException e) {
+                }
+
+                if (this.fr == null) {
+                    this.fr = new BufferedReader(new InputStreamReader(in));
+                }
+
             }
 
         } catch (java.io.FileNotFoundException e) {
