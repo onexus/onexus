@@ -17,7 +17,9 @@
  */
 package org.onexus.ui.website;
 
-import org.apache.wicket.*;
+import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -32,29 +34,24 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.request.resource.ResourceStreamResource;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.core.IDataManager;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
+import org.onexus.ui.website.theme.DefaultTheme;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 public class Website extends WebPage {
 
-    public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {};
+    public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {
+    };
 
     // Parameters
     public final static String PARAMETER_WEBSITE = "uri";
@@ -62,19 +59,20 @@ public class Website extends WebPage {
 
     public final static ResourceReference CSS = new CssResourceReference(Website.class, "Website.css");
 
-    private transient ResourceReference WEBSITE_CSS;
-
     @Inject
     public IPageManager pageManager;
-
-    @Inject
-    public IDataManager dataManager;
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
 
+        add(new DefaultTheme());
+
         final WebsiteStatus status = getStatus();
         final WebsiteConfig config = getConfig();
+
+        String parentUri = ResourceUtils.getParentURI(config.getURI());
+        String cssUri = ResourceUtils.getAbsoluteURI(parentUri, config.getCss());
+        add(new CustomCssBehavior(cssUri));
 
         // Init currentPage
         if (status.getCurrentPage() == null) {
@@ -85,15 +83,7 @@ public class Website extends WebPage {
 
         add(new ProgressBar("progressbar", false));
 
-        boolean showHeader = (config.getShowHeader() == null) ? true : config.getShowHeader();
         WebMarkupContainer header = new WebMarkupContainer("header");
-        header.add( new AttributeModifier("class", (showHeader?"max":"min")) );
-        WebMarkupContainer top = new WebMarkupContainer("top");
-        top.add(new Label("title", config.getTitle()));
-        top.setVisible(showHeader);
-        header.add(top);
-        add(header);
-
         header.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "config.pages")) {
 
             @Override
@@ -117,11 +107,12 @@ public class Website extends WebPage {
                 item.add(link);
 
                 if (currentPage.equals(pageConfig.getId())) {
-                    link.getParent().add(new AttributeModifier("class", "current"));
+                    link.getParent().add(new AttributeModifier("class", "active"));
                 }
 
             }
         });
+        add(header);
 
         String currentPage = status.getCurrentPage();
 
@@ -138,11 +129,12 @@ public class Website extends WebPage {
         }
 
         String bottom = config.getBottom();
-
         Label bottomLabel = new Label("bottom", bottom);
         bottomLabel.setVisible(bottom != null);
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);
+
+
 
     }
 
@@ -156,52 +148,6 @@ public class Website extends WebPage {
         get("bottom").setVisible(visible);
 
         super.onBeforeRender();
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-
-        if (WEBSITE_CSS == null) {
-
-            WebsiteConfig config = getConfig();
-            String css = config.getCss();
-
-            if (css != null) {
-                String parentUri = ResourceUtils.getParentURI(config.getURI());
-                String fileUri = ResourceUtils.getAbsoluteURI(parentUri, css);
-
-                List<URL> urls = dataManager.retrieve(fileUri);
-
-                if (urls.isEmpty()) {
-                    WEBSITE_CSS = CSS;
-                } else {
-
-                    ResourceReference fileResource = null;
-                    try {
-                        URI uri = urls.get(0).toURI();
-                        IResource resource = new ResourceStreamResource(new FileResourceStream(new File(uri)));
-                        String resourceName = "css-" + Integer.toHexString(uri.toString().hashCode());
-                        Application.get().getSharedResources().add(Website.class, resourceName, null, null, null, resource);
-                        fileResource = Application.get().getSharedResources().get(Website.class, resourceName, null, null, null, true);
-                    } catch (URISyntaxException e) {
-
-                    }
-
-                    if (fileResource != null) {
-                       WEBSITE_CSS = fileResource;
-                    } else {
-                       WEBSITE_CSS = CSS;
-                    }
-                }
-
-            } else {
-               WEBSITE_CSS = CSS;
-            }
-        }
-
-
-        response.render(CssHeaderItem.forReference(WEBSITE_CSS));
     }
 
     public WebsiteStatus getStatus() {

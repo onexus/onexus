@@ -44,6 +44,7 @@ import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
 import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.pages.browser.layouts.topmain.TopmainLayout;
+import org.onexus.ui.website.theme.DefaultTheme;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
@@ -62,7 +63,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super(componentId, statusModel);
         onEventFireUpdate(EventTabSelected.class);
 
-        add(new FiltersPanel("position", statusModel));
+        add(new FiltersPanel("filters", statusModel));
 
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
@@ -102,7 +103,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                     item.add(link);
 
                     if (tabGroup.containsTab(getStatus().getCurrentTabId())) {
-                        item.add(new AttributeModifier("class", "dropdown active selected"));
+                        item.add(new AttributeModifier("class", "dropdown active"));
                     } else {
                         item.add(new AttributeModifier("class", "dropdown"));
                     }
@@ -152,7 +153,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                     item.add(link);
 
                     if (isCurrentTab(tab.getId())) {
-                        item.add(new AttributeModifier("class", new Model<String>("selected")));
+                        item.add(new AttributeModifier("class", new Model<String>("active")));
                     }
 
                     item.add(new WebMarkupContainer("submenu").setVisible(false));
@@ -197,27 +198,11 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             }
         }
 
-        WebMarkupContainer viewSelector = new WebMarkupContainer("viewselector");
+
 
         if (getStatus().getCurrentView() == null && views.size() > 0) {
             getStatus().setCurrentView(views.get(0));
         }
-
-        DropDownChoice<String> selector = new DropDownChoice<String>("select", new PropertyModel<String>(getModel(), "currentView"), views);
-        selector.setNullValid(false);
-        viewSelector.add(selector);
-
-        selector.add(new OnChangeAjaxBehavior() {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                sendEvent(EventViewChange.EVENT);
-            }
-        });
-
-
-        addOrReplace(viewSelector);
-
 
         ViewConfig viewConfig = null;
         if (getCurrentTab().getViews() != null) {
@@ -244,9 +229,9 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         }
 
         boolean visible = !isEmbed();
-        get("position").setVisible(visible);
+        get("filters").setVisible(visible);
         get("tabs").setVisible(visible);
-        viewSelector.setVisible(visible && views.size() > 1);
+        //TODO viewSelector.setVisible(visible && views.size() > 1);
 
         super.onBeforeRender();
     }

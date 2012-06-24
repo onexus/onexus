@@ -35,9 +35,5 @@ public class RScript implements IQueryScript {
         return "R";
     }
 
-    @Override
-    public String getPlugin() {
-        return "r";
-    }
 
 }

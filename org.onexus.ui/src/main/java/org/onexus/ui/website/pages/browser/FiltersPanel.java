@@ -61,7 +61,7 @@ public class FiltersPanel extends EventPanel {
     protected void onBeforeRender() {
         super.onBeforeRender();
 
-        RepeatingView filterRules = new RepeatingView("fixedEntities");
+        RepeatingView filterRules = new RepeatingView("filter");
 
         List<IFilter> filters = getBrowserPage().getFilters();
 
@@ -76,11 +76,12 @@ public class FiltersPanel extends EventPanel {
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
                 // Add new fixed entity
-                container.add(new Label("collectionLabel", filter.getLabel(query)));
-                Label labelComponent = new Label("entityLabel", filter.getTitle(query));
+                //TODO container.add(new Label("collectionLabel", filter.getLabel(query)));
+                Label labelComponent = new Label("title", filter.getTitle(query));
                 labelComponent.setEscapeModelStrings(false);
                 container.add(labelComponent);
-                container.add(filter.getTooltip("box", query));
+
+                //TODO container.add(filter.getTooltip("box", query));
 
                 BrowserPageLink<Integer> removeLink = new BrowserPageLink<Integer>("remove", Model.of(i)) {
 
@@ -96,9 +97,9 @@ public class FiltersPanel extends EventPanel {
                 removeLink.setVisible(filter.isDeletable());
 
                 if (filter.isEnable()) {
-                    container.add(new AttributeModifier("class", "large awesome blue"));
+                    container.add(new AttributeModifier("class", "btn btn-large"));
                 } else {
-                    container.add(new AttributeModifier("class", "large awesome gray"));
+                    container.add(new AttributeModifier("class", "btn btn-large disabled"));
                 }
 
                 container.add(removeLink);

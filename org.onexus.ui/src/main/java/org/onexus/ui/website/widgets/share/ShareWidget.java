@@ -63,7 +63,6 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add( ShareWidget.this.get("embed"));
-                target.add( ShareWidget.this.get("preview"));
             }
         });
         form.add(width);
@@ -73,7 +72,6 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add( ShareWidget.this.get("embed") );
-                target.add( ShareWidget.this.get("preview"));
             }
         });
         form.add(height);
@@ -114,8 +112,6 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
         IModel<String> embedModel = new PropertyModel<String>(this, "embedCode");
         embed.add(new AttributeModifier("value", embedModel));
         addOrReplace(embed);
-
-        addOrReplace(new Label("preview", embedModel).setEscapeModelStrings(false).setOutputMarkupId(true));
 
         super.onBeforeRender();
 

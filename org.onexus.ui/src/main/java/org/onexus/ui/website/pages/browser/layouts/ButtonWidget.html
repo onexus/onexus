@@ -1,10 +1,15 @@
 <html xmlns:wicket>
 <wicket:panel>
-    <button wicket:id="button"></button>
-    <div class="button-panel" wicket:id="widgetContainer">
-        <div class="overlay"></div>
-        <img wicket:id="close" class="close-modal" src="images/cross.png" />
-        <div wicket:id="widget" class="modal"></div>
+    <a class="btn" href="#" wicket:id="button"></a>
+    <div class="modal fade hide" wicket:id="widgetModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 wicket:id="modalHeader"></h3>
+        </div>
+        <div wicket:id="widget" class="modal-body"></div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
     </div>
 </wicket:panel>
 </html>

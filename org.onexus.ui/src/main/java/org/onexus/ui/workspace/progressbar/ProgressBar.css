@@ -12,7 +12,7 @@
      filter: alpha(opacity=75);
 }
 
-.modal {
+.progress-modal {
      display: block;
      overflow: auto;
      position: absolute;
@@ -27,13 +27,13 @@
      overflow: auto;
 }
 
-.modal div.icon {
+.progress-modal div.icon {
     float: left;
     margin: 4px 8px;
 
 }
 
-.modal div.task {
+.progress-modal div.task {
     clear: both;
     margin-top: 7px;
 }

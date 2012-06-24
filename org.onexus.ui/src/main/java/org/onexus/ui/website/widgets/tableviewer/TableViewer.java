@@ -19,12 +19,18 @@ package org.onexus.ui.website.widgets.tableviewer;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IEntityTable;
@@ -44,7 +50,7 @@ import org.onexus.ui.workspace.progressbar.ProgressBar.ActiveTasks;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
+public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> implements IAjaxIndicatorAware {
 
     public static final CssResourceReference TABLE_VIEWER_CSS = new CssResourceReference(TableViewer.class,
             "TableViewer.css");
@@ -55,8 +61,15 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     // Model objects
     private EntitiesRowProvider dataProvider;
 
+    private final WebMarkupContainer indicatorAppender;
+
     public TableViewer(String componentId, IModel<TableViewerStatus> status) {
         super(componentId, status);
+
+        indicatorAppender = new WebMarkupContainer("progress");
+        indicatorAppender.setOutputMarkupId(true);
+        indicatorAppender.add(new Image("image", AbstractDefaultAjaxBehavior.INDICATOR));
+        add(indicatorAppender);
 
         onEventFireUpdate(EventQueryUpdate.class, EventFixEntity.class, EventUnfixEntity.class);
 
@@ -68,7 +81,10 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
 
         this.getVariation();
 
-        this.dataProvider = new EntitiesRowProvider(config, status) {
+        Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
+        rowsPerPage = (rowsPerPage == null ? 40 : rowsPerPage);
+
+        this.dataProvider = new EntitiesRowProvider(config, status, rowsPerPage) {
 
             @Override
             protected Query getQuery() {
@@ -89,7 +105,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
             }
 
         };
-        Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
+
 
         // Create the columns from the config
         int ccs = getStatus().getCurrentColumnSet();
@@ -102,13 +118,12 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
             columnConfig.addColumns(columns, parentURI );
         }
 
-        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider,
-                (rowsPerPage == null ? 45 : rowsPerPage));
+        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, rowsPerPage);
         resultTable.setOutputMarkupId(true);
         resultTable.setVersioned(false);
         resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
-        resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
-        resultTable.addBottomToolbar(new AjaxNavigationToolbar(resultTable));
+        //TODO resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
+        //TODO resultTable.addBottomToolbar(new AjaxNavigationToolbar(resultTable));
         add(resultTable);
 
     }
@@ -117,6 +132,14 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(TABLE_VIEWER_CSS));
+    }
+
+    /**
+     * @see org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
+     */
+    public String getAjaxIndicatorMarkupId()
+    {
+        return indicatorAppender.getMarkupId();
     }
 
 }

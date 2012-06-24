@@ -29,8 +29,6 @@ import org.onexus.ui.website.pages.browser.layouts.HorizontalWidgetBar;
 
 public class TopmainLayout extends AbstractLayout {
 
-    public static final CssResourceReference CSS = new CssResourceReference(TopmainLayout.class, "TopmainLayout.css");
-
     public TopmainLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
         super(panelId, statusModel);
 
@@ -61,7 +59,6 @@ public class TopmainLayout extends AbstractLayout {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forReference(CSS));
 
         if (isEmbed()) {
             response.render(CssHeaderItem.forCSS("div.gridbar { display: none; }", "embed-layout"));

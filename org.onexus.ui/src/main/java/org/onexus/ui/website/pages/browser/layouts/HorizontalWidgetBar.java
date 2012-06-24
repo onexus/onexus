@@ -17,12 +17,10 @@
  */
 package org.onexus.ui.website.pages.browser.layouts;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.widgets.IWidgetManager;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.WidgetConfig;
@@ -38,23 +36,20 @@ public class HorizontalWidgetBar extends Panel {
 
     public HorizontalWidgetBar(String componentId, Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {
         super(componentId);
-
-        RepeatingView widgetsContainer = new RepeatingView("widgetsContainer");
+        this.setRenderBodyOnly(true);
+        RepeatingView widgetsContainer = new RepeatingView("widgets");
 
         // Add all the widgets
         if (widgets != null) {
             for (WidgetConfig widget : widgets) {
-                WebMarkupContainer item = new WebMarkupContainer(widgetsContainer.newChildId());
-                widgetsContainer.add(item);
 
                 String button = widget.getButton();
 
-                Widget<?,?> widgetPanel = widgetManager.create("widget", new WidgetModel(widget.getId(), pageModel));
-
                 if (button == null) {
-                    item.add(widgetPanel);
+                    Widget<?, ?> widgetPanel = widgetManager.create(widgetsContainer.newChildId(), new WidgetModel(widget.getId(), pageModel));
+                    widgetsContainer.add(widgetPanel);
                 } else {
-                    item.add(new ButtonWidget("widget", button, widgetPanel));
+                    widgetsContainer.add(new ButtonWidget(widgetsContainer.newChildId(), widget, pageModel));
                 }
             }
         }

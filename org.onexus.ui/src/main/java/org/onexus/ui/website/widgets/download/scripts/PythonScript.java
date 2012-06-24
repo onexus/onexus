@@ -35,9 +35,6 @@ public class PythonScript implements IQueryScript {
         return "python";
     }
 
-    @Override
-    public String getPlugin() {
-        return "python";
-    }
+
 
 }

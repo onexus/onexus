@@ -269,8 +269,22 @@ public class SqlQuery {
             return;
         }
 
-        for (OrderBy order : ordersOql) {
-            this.orderBy.add("`" + order.getCollectionRef() + "`.`" + order.getFieldId() + "`" + (order.isAscendent() ? " ASC" : "DESC"));
+        StringBuilder filterNulls = new StringBuilder();
+        Iterator<OrderBy> orderIt = ordersOql.iterator();
+        while (orderIt.hasNext()) {
+            OrderBy order = orderIt.next();
+            String field = "`" + order.getCollectionRef() + "`.`" + order.getFieldId() + "`";
+            this.orderBy.add(field + (order.isAscendent() ? " ASC" : "DESC"));
+            filterNulls.append(field).append(" IS NOT NULL");
+            if (orderIt.hasNext()) {
+                filterNulls.append(" AND ");
+            }
+        }
+
+        if (this.where == null) {
+            this.where = filterNulls.toString();
+        } else {
+            this.where = this.where + " AND " + filterNulls.toString();
         }
 
     }
@@ -334,11 +348,6 @@ public class SqlQuery {
         }
 
         return sqlCount.toString();
-    }
-
-    @Override
-    public String toString() {
-        return toSelectSQL();
     }
 
     private static void flatCollection(StringBuilder builder, java.util.Collection<?> collection, String separator) {

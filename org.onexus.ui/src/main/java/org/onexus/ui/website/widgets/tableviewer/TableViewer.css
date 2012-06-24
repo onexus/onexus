@@ -146,3 +146,33 @@ table.table-viewer td.gp a {
 table.table-viewer td.gp img {
        margin-top: 0px;       
 }
+
+.ajax-overlay {
+     display: block;
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: #FFF;
+     z-index:1001;
+     opacity:.5;
+     -moz-opacity: 0.75;
+     filter: alpha(opacity=5);
+}
+
+.ajax-modal {
+     display: block;
+     overflow: auto;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     margin-top: -10px;
+     margin-left: -10px;
+     width: 20px;
+     height: 20px;
+     padding: 16px;
+     color: #333;
+     z-index:1002;
+     overflow: auto;
+}

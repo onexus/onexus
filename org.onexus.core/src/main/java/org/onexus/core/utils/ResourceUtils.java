@@ -52,11 +52,13 @@ public class ResourceUtils {
             return parentURI;
         }
 
-        if (!resourceURI.startsWith(parentURI + Resource.SEPARATOR)) {
+        char sep = (parentURI.indexOf('?') < 0 ? '?' : Resource.SEPARATOR );
+
+        if (!resourceURI.startsWith(parentURI + sep)) {
             return resourceURI;
         }
 
-        return resourceURI.replace(parentURI + Resource.SEPARATOR, "");
+        return resourceURI.replace(parentURI + sep, "");
     }
 
     public static String getParentURI(String resourceURI) {
@@ -103,7 +105,7 @@ public class ResourceUtils {
         collectionURI = formatURL(collectionURI);
 
         // Already absolute URI
-        if (collectionURI.contains(":/") || parentURI == null
+        if (collectionURI==null || collectionURI.contains(":/") || parentURI == null
                 || parentURI.isEmpty()) {
             return collectionURI;
         }

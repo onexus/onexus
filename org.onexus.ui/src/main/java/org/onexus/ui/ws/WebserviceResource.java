@@ -17,17 +17,10 @@
  */
 package org.onexus.ui.ws;
 
-import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.Response;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.caching.IStaticCacheableResource;
-import org.apache.wicket.util.time.Duration;
-import org.onexus.ui.OnexusWebApplication;
+import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.ws.response.DataResourceResponse;
 import org.onexus.ui.ws.response.ListResourceResponse;
 import org.onexus.ui.ws.response.QueryResponse;
 import org.onexus.ui.ws.response.SingleResourceResponse;
@@ -83,6 +76,7 @@ public class WebserviceResource extends AbstractResource {
         Boolean prettyPrint = parameters.get("prettyPrint").toOptionalBoolean();
         String format = parameters.get("format").toOptionalString();
         String filename = parameters.get("filename").toOptionalString();
+        String data = parameters.get("data").toOptionalString();
 
         // Multiple collection query
         if (query != null) {
@@ -97,6 +91,11 @@ public class WebserviceResource extends AbstractResource {
         // Get children
         if (children != null) {
             return new ListResourceResponse(url, children, where, recursive, format, prettyPrint);
+        }
+
+        // Get data
+        if (data != null && filename!=null) {
+            return new DataResourceResponse(ResourceUtils.concatURIs(data,filename));
         }
 
         // Get resource

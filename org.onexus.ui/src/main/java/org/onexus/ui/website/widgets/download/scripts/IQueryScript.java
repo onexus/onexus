@@ -27,5 +27,4 @@ public interface IQueryScript extends Serializable {
 
     String getLabel();
 
-    String getPlugin();
 }

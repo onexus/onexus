@@ -95,6 +95,9 @@
 
     <!-- Default widget resource -->
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.views.ViewsWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.tableviewer.TableViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">

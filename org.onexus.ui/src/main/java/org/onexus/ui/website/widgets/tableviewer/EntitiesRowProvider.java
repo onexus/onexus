@@ -47,12 +47,14 @@ public abstract class EntitiesRowProvider implements
     private IModel<TableViewerStatus> statusModel;
     private transient Iterator<IEntityTable> rows;
     private SortState sortState = new SortState();
+    private int rowsPerPage;
 
     public EntitiesRowProvider(TableViewerConfig config,
-                               IModel<TableViewerStatus> status) {
+                               IModel<TableViewerStatus> status, int rowsPerPage) {
         OnexusWebApplication.inject(this);
         this.statusModel = status;
         this.config = config;
+        this.rowsPerPage = rowsPerPage;
     }
 
     protected TableViewerStatus getTableViewerStatus() {
@@ -64,13 +66,16 @@ public abstract class EntitiesRowProvider implements
 
         Query query = getQuery();
         query.setOffset(first);
-        query.setCount(total);
+        query.setCount(total - 1);
         return loadIterator(query);
     }
 
     @Override
     public long size() {
-        Query query = getQuery();
+
+        return rowsPerPage + 1;
+
+        /*Query query = getQuery();
         IEntityTable entityTable = collectionManager.load(query);
 
         TaskStatus task = entityTable.getTaskStatus();
@@ -78,7 +83,7 @@ public abstract class EntitiesRowProvider implements
             addTaskStatus(entityTable.getTaskStatus());
         }
 
-        return (int) entityTable.size();
+        return (int) entityTable.size();*/
     }
 
     protected abstract Query getQuery();

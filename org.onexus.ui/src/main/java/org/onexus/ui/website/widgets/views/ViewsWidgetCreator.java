@@ -15,24 +15,21 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.download.scripts;
+package org.onexus.ui.website.widgets.views;
 
-public class BashScript implements IQueryScript {
-    @Override
-    public String getContent(String query, CharSequence url) {
-        return
-                "#!/bin/bash\n" +
-                "\n" +
-                "query=\"" + query + "\"\n" +
-                "\n" +
-                "echo $query | curl -X POST -d @- " + url;
+import org.apache.wicket.model.IModel;
+import org.onexus.ui.website.widgets.AbstractWidgetCreator;
+import org.onexus.ui.website.widgets.Widget;
+
+public class ViewsWidgetCreator extends AbstractWidgetCreator<ViewsWidgetConfig, ViewsWidgetStatus> {
+
+    public ViewsWidgetCreator() {
+        super(ViewsWidgetConfig.class, "widget-views", "");
     }
 
     @Override
-    public String getLabel() {
-        return "bash";
+    protected Widget<?, ?> build(String componentId, IModel<ViewsWidgetStatus> statusModel) {
+        return new ViewsWidget(componentId, statusModel);
     }
-
-
 
 }

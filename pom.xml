@@ -385,6 +385,11 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
+                <artifactId>com.springsource.org.apache.commons.compress</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.1</version>
             </dependency>

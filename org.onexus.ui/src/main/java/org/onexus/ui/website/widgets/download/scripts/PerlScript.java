@@ -43,9 +43,6 @@ public class PerlScript implements IQueryScript {
         return "perl";
     }
 
-    @Override
-    public String getPlugin() {
-        return "perl";
-    }
+
 
 }

@@ -1,15 +1,24 @@
 <html xmlns:wicket>
 <wicket:panel>
-    <div class="topmainlayout">
-        <div class="gridtable">
-            <div class="gridbar">
-                <div style="float:left;" wicket:id="topwidgets"></div>
-                <div style="float:right;" wicket:id="toprightwidgets"></div>
+
+    <section id="toolbar">
+        <div class="row-fluid">
+            <div class="btn-toolbar pull-left">
+                <div wicket:id="topwidgets"></div>
             </div>
-            <div class="griddata" wicket:id="main">
+            <div class="btn-toolbar pull-right">
+                <div wicket:id="toprightwidgets"></div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section id="content">
+        <div class="row-fluid">
+            <div class="minh500" wicket:id="main">
+            </div>
+        </div>
+    </section>
+
 </wicket:panel>
 </html>
   
