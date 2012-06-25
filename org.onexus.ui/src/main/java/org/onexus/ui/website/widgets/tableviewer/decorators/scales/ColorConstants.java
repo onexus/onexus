@@ -15,30 +15,20 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators.color;
+package org.onexus.ui.website.widgets.tableviewer.decorators.scales;
 
 import java.awt.*;
-import java.io.Serializable;
 
-public class UniformColorScale implements IColorScale, Serializable {
+public class ColorConstants {
 
-    protected Color color;
+    public static final Color notANumberColor = Color.WHITE;
+    public static final Color posInfinityColor = Color.GREEN;
+    public static final Color negInfinityColor = Color.CYAN;
+    public static final Color undefinedColor = Color.BLACK;
+    public static final Color emptyColor = Color.WHITE;
 
-    public UniformColorScale(Color color) {
-        this.color = color;
-    }
+    public static final Color nonSignificantColor = new Color(187, 187, 187);
 
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    @Override
-    public Color valueColor(double value) {
-        return color;
-    }
-
+    public static final Color pvalueMinColor = new Color(255, 0, 0);
+    public static final Color pvalueMaxColor = new Color(255, 255, 0);
 }

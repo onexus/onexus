@@ -230,7 +230,7 @@ public class CollectionManager implements ICollectionManager {
                         + "' not found in any ResourceManager. Unregistering it.");
             }
             if (collection == null) {
-                collectionStore.unregisterCollection(collectionURI);
+                //TODO collectionStore.unregisterCollection(collectionURI);
             }
         }
 

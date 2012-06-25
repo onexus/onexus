@@ -15,24 +15,24 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators.color;
+package org.onexus.ui.website.widgets.tableviewer.decorators.scales;
 
 import java.awt.*;
 
-public class LinearColorScale extends AbstractColorScale {
+public class BinaryColorScale extends AbstractColorScale {
 
-    public LinearColorScale(double minPoint, double maxPoint, Color minColor,
-                            Color maxColor) {
+    private double cutoff = 1.0;
+    private CutoffCmp cutoffCmp = CutoffCmp.EQ;
+
+    public BinaryColorScale(double minPoint, double maxPoint, double cutoff,
+                            Color minColor, Color maxColor, Color nonSignificantColor) {
         super(minPoint, maxPoint);
+        this.cutoff = cutoff;
         this.minColor = minColor;
         this.maxColor = maxColor;
     }
 
-    public LinearColorScale(double minPoint, double maxPoint) {
-        super(minPoint, maxPoint);
-    }
-
-    public LinearColorScale() {
+    public BinaryColorScale() {
         super(0.0, 1.0);
     }
 
@@ -45,12 +45,24 @@ public class LinearColorScale extends AbstractColorScale {
         else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
             return negInfinityColor;
 
-        double range = maxPoint - minPoint;
+        boolean isSig = cutoffCmp.compare(value, cutoff);
+        return isSig ? maxColor : minColor;
+    }
 
-        double f = value / range;
+    public double getCutoff() {
+        return cutoff;
+    }
 
-        return f <= 0 ? ColorUtils.mix(minColor, maxColor, -f) : ColorUtils
-                .mix(maxColor, minColor, f);
+    public void setCutoff(double cutoff) {
+        this.cutoff = cutoff;
+    }
+
+    public CutoffCmp getCutoffCmp() {
+        return cutoffCmp;
+    }
+
+    public void setCutoffCmp(CutoffCmp cutoffCmp) {
+        this.cutoffCmp = cutoffCmp;
     }
 
 }

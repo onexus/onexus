@@ -17,6 +17,9 @@
  */
 package org.onexus.ui.wizards.data;
 
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.CompressorInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
@@ -37,6 +40,7 @@ import org.onexus.ui.workspace.pages.resource.ResourcesPage;
 import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
@@ -99,19 +103,40 @@ public class CreateCollectionWizard extends AbstractWizard {
         }
 
         URL url = urls.get(0);
+        String fileName = url.getFile();
 
+        InputStream in = url.openStream();
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(urls.get(0).openStream()));
+        BufferedReader fr = null;
+        try {
+
+            CompressorInputStream cin = null;
+            if (fileName.endsWith(".tar.gz")) {
+                cin = new GzipCompressorInputStream(in);
+            }
+
+            if (cin != null) {
+                TarArchiveInputStream tin = new TarArchiveInputStream(cin);
+                tin.getNextEntry();
+                fr = new BufferedReader(new InputStreamReader(tin));
+            }
+
+        } catch (IOException e) {
+        }
+
+        if (fr == null) {
+            fr = new BufferedReader(new InputStreamReader(in));
+        }
 
         // Get headers
-        headers = in.readLine().split(separator);
+        headers = fr.readLine().split(separator);
 
         // Build values map
         sampleData = new HashMap<String, Set<String>>();
         for (String header : headers) {
             sampleData.put(header, new HashSet<String>());
         }
-        String line = in.readLine();
+        String line = fr.readLine();
 
         for (int i = 0; i < MAXIMUM_LINES && line != null; i++) {
             String values[] = line.split(separator);
@@ -132,9 +157,9 @@ public class CreateCollectionWizard extends AbstractWizard {
                     sampleData.get(headers[h]).add(values[h]);
                 }
             }
-            line = in.readLine();
+            line = fr.readLine();
         }
-        in.close();
+        fr.close();
 
     }
 

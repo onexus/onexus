@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators.color;
+package org.onexus.ui.website.widgets.tableviewer.decorators.scales;
 
 import java.io.Serializable;
 import java.util.HashMap;

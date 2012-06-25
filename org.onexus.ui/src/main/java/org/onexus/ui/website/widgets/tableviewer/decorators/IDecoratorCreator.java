@@ -29,6 +29,8 @@ import java.io.Serializable;
  */
 public interface IDecoratorCreator extends Serializable {
 
-    IDecorator createDecorator(Collection collection, Field field);
+    String getDecoratorId();
+
+    IDecorator createDecorator(Collection collection, Field columnField, String[] parameters);
 
 }

@@ -27,16 +27,15 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.widgets.tableviewer.decorators.DecoratorFactory;
+import org.onexus.ui.website.widgets.tableviewer.decorators.DefaultDecoratorManager;
+import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorManager;
 import org.onexus.ui.website.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -51,7 +50,10 @@ public class ColumnConfig implements IColumnConfig {
     private String decorator;
 
     @Inject
-    public transient IResourceManager resourceManager;
+    public IResourceManager resourceManager;
+
+    @Inject
+    public IDecoratorManager decoratorManager;
 
     public ColumnConfig(String collectionId) {
         this(collectionId, null, null);
@@ -104,7 +106,7 @@ public class ColumnConfig implements IColumnConfig {
             for (String fieldId : fields) {
                 Field field = collection.getField(fieldId);
                 columns.add(new CollectionTrack(collectionURI, new FieldHeader(collection, field, new CollectionHeader(
-                        collection)), DecoratorFactory.getDecorator(decorator, collection, field)));
+                        collection)), decoratorManager.getDecorator(decorator, collection, field)));
             }
         }
     }

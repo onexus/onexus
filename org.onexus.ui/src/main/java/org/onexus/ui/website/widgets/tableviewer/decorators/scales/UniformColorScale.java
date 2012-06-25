@@ -15,11 +15,30 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators.color;
+package org.onexus.ui.website.widgets.tableviewer.decorators.scales;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public interface IColorScale {
+public class UniformColorScale implements IColorScale, Serializable {
 
-    public Color valueColor(double value);
+    protected Color color;
+
+    public UniformColorScale(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
+    public Color valueColor(double value) {
+        return color;
+    }
+
 }

@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators;
+package org.onexus.ui.website.widgets.tableviewer.decorators.basic.decorators;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,6 +29,8 @@ import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.FixedEntity;
+import org.onexus.ui.website.widgets.tableviewer.decorators.FieldDecorator;
+import org.onexus.ui.website.widgets.tableviewer.decorators.LinkPanel;
 
 public class LinkDecorator extends FieldDecorator {
 

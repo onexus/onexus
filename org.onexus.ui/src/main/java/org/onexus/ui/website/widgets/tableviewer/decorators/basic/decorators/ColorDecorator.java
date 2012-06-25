@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators;
+package org.onexus.ui.website.widgets.tableviewer.decorators.basic.decorators;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -24,8 +24,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Field;
-import org.onexus.ui.website.widgets.tableviewer.decorators.color.ColorUtils;
-import org.onexus.ui.website.widgets.tableviewer.decorators.color.IColorScaleHtml;
+import org.onexus.ui.website.widgets.tableviewer.decorators.FieldDecorator;
+import org.onexus.ui.website.widgets.tableviewer.decorators.scales.ColorUtils;
+import org.onexus.ui.website.widgets.tableviewer.decorators.scales.IColorScaleHtml;
 import org.onexus.ui.website.widgets.tableviewer.formaters.ITextFormater;
 
 import java.awt.*;
