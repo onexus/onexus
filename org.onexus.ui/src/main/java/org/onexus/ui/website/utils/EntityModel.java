@@ -22,7 +22,6 @@ import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.pages.browser.FixedEntity;
 
 import javax.inject.Inject;
 

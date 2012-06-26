@@ -151,21 +151,18 @@ public abstract class EntitiesRowProvider implements
             String collectionId = values[0];
             String fieldName = values[1];
 
-            getTableViewerStatus().setOrder(
-                    new OrderBy(collectionId, fieldName, order == SortOrder.ASCENDING));
+            getTableViewerStatus().setOrder(new OrderBy(collectionId, fieldName, order == SortOrder.ASCENDING));
 
         }
 
         @Override
         public SortOrder getPropertySortOrder(String property) {
-            String[] values = property
-                    .split(FieldHeader.SORT_PROPERTY_SEPARATOR);
+            String[] values = property.split(FieldHeader.SORT_PROPERTY_SEPARATOR);
             String collectionId = values[0];
             String fieldId = values[1];
 
             OrderBy order = getTableViewerStatus().getOrder();
-            if (order != null && order.getCollectionRef().equals(collectionId)
-                    && order.getFieldId().equals(fieldId)) {
+            if (order != null && order.getCollectionRef().equals(collectionId) && order.getFieldId().equals(fieldId)) {
                 return (order.isAscendent() ? SortOrder.ASCENDING : SortOrder.DESCENDING);
             }
 

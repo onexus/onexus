@@ -123,7 +123,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
         if (filters != null) {
             for (IFilter fe : filters) {
-                if (getCollectionManager().isLinkable(query, fe.getFilteredCollection())) {
+                if (getCollectionManager().isLinkable(query, QueryUtils.getAbsoluteCollectionUri(query, fe.getFilteredCollection()))) {
                     Filter filter = fe.buildFilter(query);
                     QueryUtils.and(query, filter);
                     fe.setEnable(true);
@@ -184,7 +184,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         if (!values.isEmpty()) {
             this.filters = new ArrayList<IFilter>(values.size());
             for (StringValue value : values) {
-                FixedEntity fe = new FixedEntity();
+                FilterEntity fe = new FilterEntity();
                 fe.loadUrlPrameter(value.toString());
                 this.filters.add(fe);
             }

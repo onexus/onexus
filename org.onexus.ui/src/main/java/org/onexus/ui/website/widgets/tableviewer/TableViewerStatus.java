@@ -22,6 +22,9 @@ import org.apache.wicket.util.string.*;
 import org.onexus.core.query.OrderBy;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
+import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.website.Website;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.WidgetStatus;
@@ -98,6 +101,10 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
     @Override
     public void encodeParameters(PageParameters parameters, String keyPrefix) {
 
+        PageConfig pageConfig = getConfig().getPageConfig();
+        WebsiteConfig websiteConfig = (pageConfig == null ? null : pageConfig.getWebsiteConfig());
+        String projectUri = (websiteConfig == null ? null : ResourceUtils.getProjectURI(websiteConfig.getURI()));
+
         TableViewerStatus defaultStatus = getConfig().getDefaultStatus();
         if (defaultStatus == null) {
             defaultStatus = getConfig().createEmptyStatus();
@@ -108,7 +115,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
         }
 
         if (order != null && !order.equals(defaultStatus.getOrder())) {
-            parameters.add(keyPrefix + "o", order.getCollectionRef() + "::" + order.getFieldId() + "::" + (order.isAscendent()?"a":"d"));
+            parameters.add(keyPrefix + "o", ResourceUtils.getRelativeURI(projectUri, order.getCollectionRef()) + "::" + order.getFieldId() + "::" + (order.isAscendent()?"a":"d"));
         }
 
         super.encodeParameters(parameters, keyPrefix);
@@ -116,6 +123,10 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
     @Override
     public void decodeParameters(PageParameters parameters, String keyPrefix) {
+
+        PageConfig pageConfig = getConfig().getPageConfig();
+        WebsiteConfig websiteConfig = (pageConfig == null ? null : pageConfig.getWebsiteConfig());
+        String projectUri = (websiteConfig == null ? null : ResourceUtils.getProjectURI(websiteConfig.getURI()));
 
         StringValue cs = parameters.get(keyPrefix + "cs");
 
@@ -127,7 +138,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
         if (!o.isEmpty()) {
             String[] values = o.toString().split("::");
-            order = new OrderBy(values[0], values[1], (values[2].contains("a")));
+            order = new OrderBy(ResourceUtils.getAbsoluteURI(projectUri, values[0]), values[1], (values[2].contains("a")));
         }
 
         super.decodeParameters(parameters, keyPrefix);

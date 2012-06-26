@@ -39,7 +39,7 @@ import org.onexus.ui.website.utils.visible.VisibleRule;
 import javax.inject.Inject;
 import java.util.regex.Pattern;
 
-public class FixedEntity implements IFilter {
+public class FilterEntity implements IFilter {
 
     private String filteredCollection;
     private String entityId;
@@ -52,24 +52,24 @@ public class FixedEntity implements IFilter {
     @Inject
     private ICollectionManager collectionManager;
 
-    public FixedEntity() {
+    public FilterEntity() {
         super();
         OnexusWebApplication.inject(this);
     }
 
-    public FixedEntity(IEntity entity) {
+    public FilterEntity(IEntity entity) {
         this(entity, true);
     }
 
-    public FixedEntity(IEntity entity, boolean deletable) {
+    public FilterEntity(IEntity entity, boolean deletable) {
         this(entity.getCollection().getURI(), entity.getId(), deletable);
     }
 
-    public FixedEntity(String filteredCollection, String entityId) {
+    public FilterEntity(String filteredCollection, String entityId) {
         this(filteredCollection, entityId, true);
     }
 
-    public FixedEntity(String filteredCollection, String entityId, boolean deletable) {
+    public FilterEntity(String filteredCollection, String entityId, boolean deletable) {
         super();
         OnexusWebApplication.inject(this);
 
@@ -262,7 +262,7 @@ public class FixedEntity implements IFilter {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        FixedEntity other = (FixedEntity) obj;
+        FilterEntity other = (FilterEntity) obj;
         if (filteredCollection == null) {
             if (other.filteredCollection != null)
                 return false;

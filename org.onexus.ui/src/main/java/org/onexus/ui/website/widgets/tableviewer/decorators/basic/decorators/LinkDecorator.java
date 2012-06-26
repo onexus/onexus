@@ -24,11 +24,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Field;
+import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.website.Website;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.AbstractEvent;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.pages.browser.FixedEntity;
+import org.onexus.ui.website.pages.browser.FilterEntity;
 import org.onexus.ui.website.widgets.tableviewer.decorators.FieldDecorator;
 import org.onexus.ui.website.widgets.tableviewer.decorators.LinkPanel;
 
@@ -63,12 +66,20 @@ public class LinkDecorator extends FieldDecorator {
             entityId = String.valueOf(entity.get(getValueProperty().getId()));
         }
 
-        return new BrowserPageLink<FixedEntity>(LinkPanel.LINK_ID, Model.of(new FixedEntity(collectionId, entityId))) {
+        return new BrowserPageLink<FilterEntity>(LinkPanel.LINK_ID, Model.of(new FilterEntity(collectionId, entityId))) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 BrowserPageStatus status = getBrowserPageStatus();
-                FixedEntity rowEntity = getModelObject();
+                FilterEntity rowEntity = getModelObject();
+
+                // Try to make the link relative to the current website project
+                Website website = findParent(Website.class);
+                if (website != null) {
+                    String projectUri = ResourceUtils.getProjectURI(website.getConfig().getURI());
+                    String relativeUri = ResourceUtils.getRelativeURI(projectUri, rowEntity.getFilteredCollection());
+                    rowEntity.setFilteredCollection(relativeUri);
+                }
 
                 AbstractEvent[] events = LinkDecorator.this.onClick(rowEntity, status);
                 for (AbstractEvent event : events) {
@@ -79,7 +90,7 @@ public class LinkDecorator extends FieldDecorator {
         };
     }
 
-    protected AbstractEvent[] onClick(FixedEntity rowEntity, BrowserPageStatus status)  {
+    protected AbstractEvent[] onClick(FilterEntity rowEntity, BrowserPageStatus status)  {
 
         // Fix current row entity
         status.getFilters().add(rowEntity);

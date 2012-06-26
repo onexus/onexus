@@ -156,6 +156,7 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
         if (widgetStatuses != null) {
 
             for (WidgetStatus status : widgetStatuses) {
+                status.getConfig().setPageConfig(getConfig());
                 status.encodeParameters(parameters, keyPrefix + "w" + status.getId());
             }
         }

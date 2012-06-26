@@ -26,45 +26,45 @@ public class FieldHeader extends ElementHeader {
     private final static int DEFAULT_MAX_LENGTH = 25;
     public final static String SORT_PROPERTY_SEPARATOR = "::::";
 
-    private Collection dataType;
-    private Field attribute;
+    private Collection collection;
+    private Field field;
 
     public FieldHeader(Collection collection, Field field, IHeader parentHeader) {
         super(field, parentHeader, new StringFormater(getMaxLength(field),
                 false));
-        this.attribute = field;
-        this.dataType = collection;
+        this.field = field;
+        this.collection = collection;
     }
 
-    public FieldHeader(Collection dataType, Field attribute) {
-        this(dataType, attribute, new CollectionHeader(dataType));
+    public FieldHeader(Collection collection, Field field) {
+        this(collection, field, new CollectionHeader(collection));
     }
 
     @Override
     public String getSortProperty() {
         StringBuilder sortProperty = new StringBuilder();
 
-        sortProperty.append(dataType.getURI()).append(SORT_PROPERTY_SEPARATOR);
-        sortProperty.append(attribute.getId());
+        sortProperty.append(collection.getURI()).append(SORT_PROPERTY_SEPARATOR);
+        sortProperty.append(field.getId());
 
         return sortProperty.toString();
     }
 
     @Override
     public String getLabel() {
-        String label = attribute.getLabel();
-        return (label == null ? attribute.getId() : label);
+        String label = field.getLabel();
+        return (label == null ? field.getId() : label);
     }
 
     @Override
     public String getTitle() {
-        String title = attribute.getTitle();
-        return (title == null ? attribute.getId() : title);
+        String title = field.getTitle();
+        return (title == null ? field.getId() : title);
     }
 
     @Override
     public boolean isSortable() {
-        String annotation = attribute.getProperty("SORTABLE");
+        String annotation = field.getProperty("SORTABLE");
         return (annotation == null ? true : annotation.equalsIgnoreCase("TRUE"));
     }
 
@@ -82,8 +82,8 @@ public class FieldHeader extends ElementHeader {
 
     }
 
-    public Collection getDataType() {
-        return dataType;
+    public Collection getCollection() {
+        return collection;
     }
 
 }

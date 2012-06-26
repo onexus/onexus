@@ -297,7 +297,7 @@ public class HeadersToolbar extends AbstractToolbar {
 
             FieldHeader fieldHeader = (FieldHeader) entityTrack
                     .getHeaderDecorator();
-            String helpText = fieldHeader.getDataType().getProperty(
+            String helpText = fieldHeader.getCollection().getProperty(
                     "HELP_DESCRIPTION");
             headerComponent.addOrReplace(new HelpMark("help", secondHeader
                     .getTitle(), helpText));
