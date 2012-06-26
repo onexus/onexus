@@ -27,7 +27,7 @@ import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.widgets.tableviewer.decorators.DefaultDecoratorManager;
+import org.onexus.ui.website.utils.visible.IVisible;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorManager;
 import org.onexus.ui.website.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
@@ -48,6 +48,8 @@ public class ColumnConfig implements IColumnConfig {
     private String fields;
 
     private String decorator;
+
+    private String visible;
 
     @Inject
     public IResourceManager resourceManager;
@@ -105,7 +107,7 @@ public class ColumnConfig implements IColumnConfig {
             List<String> fields = getFields(collection);
             for (String fieldId : fields) {
                 Field field = collection.getField(fieldId);
-                columns.add(new CollectionTrack(collectionURI, new FieldHeader(collection, field, new CollectionHeader(
+                columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(
                         collection)), decoratorManager.getDecorator(decorator, collection, field)));
             }
         }
@@ -182,4 +184,12 @@ public class ColumnConfig implements IColumnConfig {
         return resourceManager;
     }
 
+    @Override
+    public String getVisible() {
+        return visible;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
 }

@@ -17,27 +17,43 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.columns;
 
-public class AbstractTrack implements Track {
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.onexus.core.IEntityTable;
+
+public abstract class AbstractColumn implements IColumn<IEntityTable, String> {
 
     private String collectionId;
 
-    public AbstractTrack() {
+    public AbstractColumn() {
         super();
         this.collectionId = null;
     }
 
-    public AbstractTrack(String collectionId) {
+    public AbstractColumn(String collectionId) {
         super();
         this.collectionId = collectionId;
     }
 
-    @Override
     public String getCollectionId() {
         return collectionId;
     }
 
     public void setCollectionId(String collectionId) {
         this.collectionId = collectionId;
+    }
+
+    @Override
+    public void detach() {
+    }
+
+    @Override
+    public String getSortProperty() {
+        return null;
+    }
+
+    @Override
+    public boolean isSortable() {
+        return false;
     }
 
 }

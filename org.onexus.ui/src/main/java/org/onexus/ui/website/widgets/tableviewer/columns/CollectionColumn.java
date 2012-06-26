@@ -17,25 +17,65 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.columns;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IEntity;
 import org.onexus.core.IEntityTable;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
 
-public class ViewTrack extends MatrixTrack {
+public class CollectionColumn extends AbstractColumn {
 
-    private String collectionURI;
 
-    public ViewTrack(String collectionURI, IHeader headerDecorator, IDecorator cellDecorator) {
-        super(headerDecorator, cellDecorator);
+    private IHeader headerDecorator;
+    private IDecorator cellDecorator;
 
-        this.collectionURI = collectionURI;
+    public CollectionColumn(String collectionId, IHeader headerDecorator, IDecorator cellDecorator) {
+        super(collectionId);
+
+        this.headerDecorator = headerDecorator;
+        this.cellDecorator = cellDecorator;
+
+    }
+
+    public CollectionColumn(IHeader headerDecorator, IDecorator cellDecorator) {
+        super();
+    }
+
+    protected IModel<IEntity> getModelAdapter(IModel<IEntityTable> rowModel) {
+        return new ModelAdapter(rowModel);
     }
 
     @Override
-    protected IModel<IEntity> getModelAdapter(IModel<IEntityTable> rowModel) {
-        return new ModelAdapter(rowModel);
+    public void populateItem(Item<ICellPopulator<IEntityTable>> cellItem,
+                             String componentId, IModel<IEntityTable> rowModel) {
+        cellDecorator.populateCell(cellItem, componentId,
+                getModelAdapter(rowModel));
+    }
+
+    public IDecorator getCellDecorator() {
+        return cellDecorator;
+    }
+
+    @Override
+    public Component getHeader(String componentId) {
+        return headerDecorator.getHeader(componentId);
+    }
+
+    public IHeader getHeaderDecorator() {
+        return headerDecorator;
+    }
+
+    @Override
+    public String getSortProperty() {
+        return headerDecorator.getSortProperty();
+    }
+
+    @Override
+    public boolean isSortable() {
+        return headerDecorator.isSortable();
     }
 
     public class ModelAdapter implements IModel<IEntity> {
@@ -47,7 +87,7 @@ public class ViewTrack extends MatrixTrack {
 
         @Override
         public IEntity getObject() {
-            return rowModel.getObject().getEntity(collectionURI);
+            return rowModel.getObject().getEntity(CollectionColumn.this.getCollectionId());
         }
 
         @Override

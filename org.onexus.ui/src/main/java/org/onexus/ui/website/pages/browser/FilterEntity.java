@@ -134,8 +134,10 @@ public class FilterEntity implements IFilter {
 
         boolean negated = rule.isNegated();
 
+        boolean validCollection = (filteredCollection.endsWith(rule.getFilteredCollection()) ? !negated : negated);
+
         if (rule.getOperator() == null) {
-            return (StringUtils.equals(entityId, rule.getField()) ? !negated : negated);
+            return validCollection;
         }
 
         String collectionUri = ResourceUtils.getAbsoluteURI(rule.getParentURI(), filteredCollection);

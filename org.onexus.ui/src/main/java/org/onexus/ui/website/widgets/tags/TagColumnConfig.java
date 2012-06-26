@@ -30,6 +30,8 @@ public class TagColumnConfig implements IColumnConfig {
 
     private String collection;
 
+    private String visible;
+
     public TagColumnConfig() {
         super();
     }
@@ -45,6 +47,15 @@ public class TagColumnConfig implements IColumnConfig {
 
     public void setCollection(String collection) {
         this.collection = collection;
+    }
+
+    @Override
+    public String getVisible() {
+        return visible;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
     }
 
     @Override

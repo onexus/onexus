@@ -19,14 +19,13 @@ package org.onexus.ui.website.widgets.tags;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.core.IEntityTable;
-import org.onexus.ui.website.widgets.tableviewer.columns.TableTrack;
+import org.onexus.ui.website.widgets.tableviewer.columns.AbstractColumn;
 
-public class TagColumn extends TableTrack implements IColumn<IEntityTable, String> {
+public class TagColumn extends AbstractColumn {
 
     private String collectionURI;
 

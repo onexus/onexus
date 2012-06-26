@@ -17,6 +17,8 @@
  */
 package org.onexus.ui.website.widgets.tableviewer;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -41,8 +43,12 @@ import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventUnfixEntity;
+import org.onexus.ui.website.pages.PageStatus;
+import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 import org.onexus.ui.workspace.progressbar.ProgressBar.ActiveTasks;
@@ -114,7 +120,17 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
 
         String parentURI = getQuery().getOn();
 
-        for (IColumnConfig columnConfig : columnsConfig) {
+        List<IColumnConfig> visibleColumnsConfig = new ArrayList<IColumnConfig>(columnsConfig.size());
+        BrowserPageStatus pageStatus = findParentStatus(status, BrowserPageStatus.class);
+
+        if (pageStatus!=null) {
+            Predicate filter = new VisiblePredicate(pageStatus.getBase(), pageStatus.getFilters());
+            CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
+        } else {
+            visibleColumnsConfig = columnsConfig;
+        }
+
+        for (IColumnConfig columnConfig : visibleColumnsConfig) {
             columnConfig.addColumns(columns, parentURI );
         }
 

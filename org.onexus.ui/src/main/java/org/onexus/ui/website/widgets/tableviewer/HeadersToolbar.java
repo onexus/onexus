@@ -32,8 +32,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.onexus.ui.website.events.EventSortUpdate;
 import org.onexus.ui.website.utils.panels.HelpMark;
-import org.onexus.ui.website.widgets.tableviewer.columns.MatrixTrack;
-import org.onexus.ui.website.widgets.tableviewer.columns.Track;
+import org.onexus.ui.website.widgets.tableviewer.columns.AbstractColumn;
+import org.onexus.ui.website.widgets.tableviewer.columns.CollectionColumn;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
 
@@ -77,12 +77,12 @@ public class HeadersToolbar extends AbstractToolbar {
         for (final IColumn<T, S> c : columns) {
 
             // Process only Track columns
-            MatrixTrack column = null;
-            if (c instanceof MatrixTrack) {
-                column = (MatrixTrack) c;
+            CollectionColumn column = null;
+            if (c instanceof CollectionColumn) {
+                column = (CollectionColumn) c;
             } else {
 
-                if (c instanceof Track) {
+                if (c instanceof AbstractColumn) {
                     WebMarkupContainer item = new WebMarkupContainer(
                             headers.newChildId());
                     item.setRenderBodyOnly(true);
@@ -284,7 +284,7 @@ public class HeadersToolbar extends AbstractToolbar {
 
     private void decorateSecondParentHeader(
             final WebMarkupContainer headerComponent, IHeader secondHeader,
-            MatrixTrack entityTrack) {
+            CollectionColumn collectionColumn) {
         // Ini Label
         if (secondHeader != null) {
             headerComponent.add(secondHeader.getHeader("label"));
@@ -292,10 +292,10 @@ public class HeadersToolbar extends AbstractToolbar {
             headerComponent.add(new EmptyPanel("label"));
         }
 
-        if (entityTrack != null && entityTrack.getHeaderDecorator() != null
-                && entityTrack.getHeaderDecorator() instanceof FieldHeader) {
+        if (collectionColumn != null && collectionColumn.getHeaderDecorator() != null
+                && collectionColumn.getHeaderDecorator() instanceof FieldHeader) {
 
-            FieldHeader fieldHeader = (FieldHeader) entityTrack
+            FieldHeader fieldHeader = (FieldHeader) collectionColumn
                     .getHeaderDecorator();
             String helpText = fieldHeader.getCollection().getProperty(
                     "HELP_DESCRIPTION");
