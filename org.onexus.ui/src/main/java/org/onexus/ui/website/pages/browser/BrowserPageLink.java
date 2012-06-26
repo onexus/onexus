@@ -19,6 +19,8 @@ package org.onexus.ui.website.pages.browser;
 
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.events.AbstractEvent;
 

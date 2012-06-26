@@ -53,6 +53,10 @@ ul.breadcrumb {
     background-image:none;
 }
 
+#filters .btn-large {
+    margin-right: 5px;
+}
+
 #filters .btn a {
     color: white;
 }
@@ -96,9 +100,13 @@ input[type="text"] {
     height: 24px;
 }
 
-#tabs ul.nav li.active > a {
+#tabs ul.nav > li.active > a {
    background-color: #F2F6F8;
    font-weight: bold;
+}
+
+#tabs ul.nav > li.open > a {
+   color: black;
 }
 
 #tabs .dropdown-menu .active > a:hover {

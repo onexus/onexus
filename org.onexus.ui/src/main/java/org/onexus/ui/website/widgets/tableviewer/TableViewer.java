@@ -26,6 +26,7 @@ import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
@@ -37,6 +38,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
+import org.onexus.core.query.OrderBy;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.WebsiteStatus;
@@ -50,6 +52,7 @@ import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
+import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 import org.onexus.ui.workspace.progressbar.ProgressBar.ActiveTasks;
 
@@ -111,7 +114,6 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
             }
 
         };
-
 
         // Create the columns from the config
         int ccs = getStatus().getCurrentColumnSet();
