@@ -269,23 +269,20 @@ public class SqlQuery {
             return;
         }
 
-        StringBuilder filterNulls = new StringBuilder();
         Iterator<OrderBy> orderIt = ordersOql.iterator();
         while (orderIt.hasNext()) {
             OrderBy order = orderIt.next();
             String field = "`" + order.getCollectionRef() + "`.`" + order.getFieldId() + "`";
-            this.orderBy.add(field + (order.isAscendent() ? " ASC" : "DESC"));
-            filterNulls.append(field).append(" IS NOT NULL");
-            if (orderIt.hasNext()) {
-                filterNulls.append(" AND ");
+            if (order.isAscendent()) {
+                this.orderBy.add("ISNULL(" + field + "), " + field + " ASC");
+            } else {
+                this.orderBy.add(field + " DESC");
             }
+
+
         }
 
-        if (this.where == null) {
-            this.where = filterNulls.toString();
-        } else {
-            this.where = this.where + " AND " + filterNulls.toString();
-        }
+
 
     }
 
