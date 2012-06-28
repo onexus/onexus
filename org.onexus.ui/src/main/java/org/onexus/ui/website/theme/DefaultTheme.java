@@ -31,6 +31,10 @@ public class DefaultTheme extends Behavior {
         return  "$(\"[rel=tooltip]\").tooltip({ placement: 'bottom'});";
     }
 
+    private static String getTooltipHideJavascript() {
+        return "$(\"[rel=tooltip]\").tooltip('hide');";
+    }
+
     private static String getModalJavascript() {
         return "$(\"div.modal\").modal({ show: false });";
     }
@@ -44,7 +48,7 @@ public class DefaultTheme extends Behavior {
 
         if (event.getPayload() instanceof AjaxRequestTarget) {
             AjaxRequestTarget target = (AjaxRequestTarget) event.getPayload();
-
+            target.prependJavaScript(getTooltipHideJavascript());
             target.appendJavaScript(getTooltipJavascript());
         }
 

@@ -21,8 +21,8 @@ import org.onexus.core.IEntity;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
 import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.resources.Collection;
+import org.onexus.core.utils.QueryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +55,7 @@ public class SqlEntityTable implements IEntityTable {
         this.query = query;
         this.mysqlQuery = store.newSqlQuery(query);
         this.dataConn = conn;
+
     }
 
     private void initDataRS() {
@@ -82,6 +83,7 @@ public class SqlEntityTable implements IEntityTable {
 
             if (!hasNext) {
                 close();
+                return hasNext;
             }
 
             return hasNext;

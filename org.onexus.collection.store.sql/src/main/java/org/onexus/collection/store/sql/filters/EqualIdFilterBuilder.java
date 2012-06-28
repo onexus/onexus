@@ -50,9 +50,7 @@ public class EqualIdFilterBuilder extends AbstractFilterBuilder<EqualId> {
         }
 
         Object id = filter.getId();
-
-        //TODO check composed identifiers
-        Object[] ids = new Object[] { id };
+        Object[] ids = String.valueOf(id).split("\t");
 
         if (primaryKey.size() != ids.length) {
             throw new RuntimeException("Error on filter: " + filter);

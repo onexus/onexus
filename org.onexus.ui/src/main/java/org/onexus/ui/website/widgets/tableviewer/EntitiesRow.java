@@ -56,4 +56,10 @@ public class EntitiesRow implements Iterator<IEntityTable>, Serializable {
         throw new RuntimeException("Read only iterator");
     }
 
+    public void close() {
+        if (dataMatrix!=null) {
+            dataMatrix.close();
+        }
+    }
+
 }

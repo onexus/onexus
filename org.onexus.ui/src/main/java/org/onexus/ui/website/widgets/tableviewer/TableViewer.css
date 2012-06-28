@@ -21,19 +21,13 @@ table.table-viewer a {
 	font-size: 12px;
 }
 
-table.table-viewer a {
-	text-decoration: none;
-	color: #400576;
-	font-size: 12px;
+table.table-viewer a.label {
+   color: #fff;
 }
 
 table.table-viewer tr {
 	margin: 0px;
 	padding: 0px;
-}
-
-table.table-viewer tr:hover {
-	opacity: 0.9;
 }
 
 table.table-viewer tr.headers {
@@ -124,6 +118,10 @@ table.table-viewer td.st {
 	border-left: 1px dotted #CCC;
 	background-color: white;
 	text-align: center;
+}
+
+table.table-viewer dd {
+    text-align: left;
 }
 
 table.table-viewer td.gp {

@@ -39,6 +39,10 @@ public class EntityModel implements IModel<IEntity> {
         this(null, null);
     }
 
+    public EntityModel(IEntity entity) {
+        this(entity.getCollection().getURI(), entity.getId());
+    }
+
     public EntityModel(String collectionId, String entityId) {
         super();
         OnexusWebApplication.inject(this);

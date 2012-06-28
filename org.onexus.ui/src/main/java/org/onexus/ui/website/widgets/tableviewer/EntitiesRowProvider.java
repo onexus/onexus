@@ -27,10 +27,7 @@ import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
 import org.onexus.core.query.OrderBy;
 import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
 import org.onexus.ui.OnexusWebApplication;
-import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 
@@ -45,9 +42,11 @@ public abstract class EntitiesRowProvider implements
 
     private TableViewerConfig config;
     private IModel<TableViewerStatus> statusModel;
-    private transient Iterator<IEntityTable> rows;
+    private transient EntitiesRow rows;
     private SortState sortState = new SortState();
     private int rowsPerPage;
+    private long knownSize;
+    private long realSize;
 
     public EntitiesRowProvider(TableViewerConfig config,
                                IModel<TableViewerStatus> status, int rowsPerPage) {
@@ -55,10 +54,18 @@ public abstract class EntitiesRowProvider implements
         this.statusModel = status;
         this.config = config;
         this.rowsPerPage = rowsPerPage;
+        this.knownSize = rowsPerPage + 2;
+        this.realSize = -1;
     }
 
     protected TableViewerStatus getTableViewerStatus() {
         return statusModel.getObject();
+    }
+
+    public void close() {
+        if (rows != null) {
+            rows.close();
+        }
     }
 
     @Override
@@ -66,30 +73,90 @@ public abstract class EntitiesRowProvider implements
 
         Query query = getQuery();
         query.setOffset(first);
-        query.setCount(total - 1);
-        return loadIterator(query);
+        query.setCount(total);
+        return new SpyIterator<IEntityTable>(first, total, loadIterator(query));
+    }
+
+    public class SpyIterator<T> implements Iterator<T> {
+
+        private long first, total;
+        private Iterator<T> it;
+
+        private long currentPos;
+
+        public SpyIterator(long first, long total, Iterator<T> it) {
+            this.first = first;
+            this.it = it;
+            this.total = total;
+            this.currentPos = first - 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            boolean hasNext = it.hasNext();
+            if (!hasNext && (currentPos - first < total)) {
+                EntitiesRowProvider.this.knownSize = currentPos + 1;
+                EntitiesRowProvider.this.realSize = currentPos + 1;
+            }
+            return hasNext;
+        }
+
+        @Override
+        public T next() {
+            currentPos++;
+            return it.next();
+        }
+
+        @Override
+        public void remove() {
+            it.remove();
+        }
     }
 
     @Override
     public long size() {
-
-        return rowsPerPage + 1;
-
-        /*Query query = getQuery();
-        IEntityTable entityTable = collectionManager.load(query);
-
-        TaskStatus task = entityTable.getTaskStatus();
-        if (task != null && !task.isDone()) {
-            addTaskStatus(entityTable.getTaskStatus());
+        if (realSize != -1) {
+            return realSize;
         }
 
-        return (int) entityTable.size();*/
+        return knownSize;
+    }
+
+    public void forceCount() {
+
+        if (realSize == -1) {
+            Query query = getQuery();
+            IEntityTable entityTable = collectionManager.load(query);
+
+            TaskStatus task = entityTable.getTaskStatus();
+            if (task != null && !task.isDone()) {
+                addTaskStatus(entityTable.getTaskStatus());
+            }
+
+            this.realSize = entityTable.size();
+            this.knownSize = this.realSize;
+        }
+    }
+
+    public long getRealSize() {
+        return realSize;
+    }
+
+    public void setRealSize(long realSize) {
+        this.realSize = realSize;
+    }
+
+    public long getKnownSize() {
+        return knownSize;
+    }
+
+    public void setKnownSize(long knownSize) {
+        this.knownSize = knownSize;
     }
 
     protected abstract Query getQuery();
 
     protected abstract void addTaskStatus(TaskStatus taskStatus);
-
 
     private Iterator<IEntityTable> loadIterator(Query query) {
         if (rows == null) {
@@ -109,7 +176,6 @@ public abstract class EntitiesRowProvider implements
     public IModel<IEntityTable> model(IEntityTable object) {
         return new EntityMatrixModel(object);
     }
-
 
     @Deprecated
     public class EntityMatrixModel extends

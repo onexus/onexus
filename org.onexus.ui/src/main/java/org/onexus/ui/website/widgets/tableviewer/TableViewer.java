@@ -23,10 +23,6 @@ import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
@@ -38,21 +34,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
-import org.onexus.core.query.OrderBy;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.Website;
-import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventUnfixEntity;
-import org.onexus.ui.website.pages.PageStatus;
-import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
-import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.workspace.progressbar.ProgressBar;
 import org.onexus.ui.workspace.progressbar.ProgressBar.ActiveTasks;
 
@@ -91,7 +80,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         this.getVariation();
 
         Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
-        rowsPerPage = (rowsPerPage == null ? 40 : rowsPerPage);
+        rowsPerPage = (rowsPerPage == null ? 30 : rowsPerPage);
 
         this.dataProvider = new EntitiesRowProvider(config, status, rowsPerPage) {
 
@@ -140,8 +129,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         resultTable.setOutputMarkupId(true);
         resultTable.setVersioned(false);
         resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
-        //TODO resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
-        //TODO resultTable.addBottomToolbar(new AjaxNavigationToolbar(resultTable));
+        resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
+        resultTable.addBottomToolbar(new NavigationToolbar(resultTable));
         add(resultTable);
 
     }
@@ -160,4 +149,9 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         return indicatorAppender.getMarkupId();
     }
 
+    @Override
+    protected void onAfterRender() {
+        super.onAfterRender();
+        dataProvider.close();
+    }
 }
