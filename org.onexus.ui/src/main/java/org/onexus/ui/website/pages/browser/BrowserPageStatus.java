@@ -164,6 +164,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             parameters.add(keyPrefix + "tab", currentTabId);
         }
 
+        if (!StringUtils.equals(currentView, defaultStatus.getCurrentView())) {
+            parameters.add(keyPrefix + "view", currentView);
+        }
+
+
         for (IFilter filter : filters) {
             parameters.add(keyPrefix + "f", filter.toUrlParameter());
         }
@@ -178,6 +183,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         StringValue currentTabId = parameters.get(keyPrefix + "tab");
         if (!currentTabId.isEmpty()) {
             this.currentTabId = currentTabId.toString();
+        }
+
+        StringValue currentView = parameters.get(keyPrefix + "view");
+        if (!currentView.isEmpty()) {
+            this.currentView = currentView.toString();
         }
 
         List<StringValue> values = parameters.getValues(keyPrefix + "f");
