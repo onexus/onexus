@@ -217,6 +217,9 @@ public abstract class EntitiesRowProvider implements
             String collectionId = values[0];
             String fieldName = values[1];
 
+            EntitiesRowProvider.this.realSize = -1;
+            EntitiesRowProvider.this.knownSize = EntitiesRowProvider.this.rowsPerPage + 2;
+
             getTableViewerStatus().setOrder(new OrderBy(collectionId, fieldName, order == SortOrder.ASCENDING));
 
         }
