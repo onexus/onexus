@@ -21,12 +21,16 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.io.Streams;
 import org.apache.wicket.util.resource.FileResourceStream;
+import org.onexus.core.ICollectionManager;
 import org.onexus.core.IDataManager;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
+import org.onexus.core.resources.Project;
 import org.onexus.core.resources.Resource;
+import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,45 +44,61 @@ import java.util.List;
 public class DataResourceResponse extends AbstractResponse {
 
     private static final Logger log = LoggerFactory.getLogger(DataResourceResponse.class);
+
     @Inject
     public IDataManager dataManager;
 
+    @Inject
+    public IResourceManager resourceManager;
+
+    private String data;
+    private String filename;
     private String resourceUri;
 
-    public DataResourceResponse(String resourceUri) {
+    public DataResourceResponse(String data, String url) {
         super();
-        this.resourceUri = resourceUri;
 
+        this.data = data;
+        int pos = url.indexOf(data) + data.length() + 1;
+        this.filename = UrlDecoder.PATH_INSTANCE.decode(url.substring(pos), "UTF-8");
+        this.resourceUri = null;
     }
 
     @Override
     protected void writeData(final Response response) {
 
 
-
-
-        OutputStream s = new OutputStream()
-        {
+        OutputStream s = new OutputStream() {
             @Override
-            public void write(int b) throws IOException
-            {
-                response.write(new byte[] { (byte)b });
+            public void write(int b) throws IOException {
+                response.write(new byte[]{(byte) b});
             }
 
             @Override
-            public void write(byte[] b) throws IOException
-            {
+            public void write(byte[] b) throws IOException {
                 response.write(b);
             }
 
             @Override
-            public void write(byte[] b, int off, int len) throws IOException
-            {
+            public void write(byte[] b, int off, int len) throws IOException {
                 response.write(b, off, len);
             }
         };
-        try
-        {
+        try {
+
+            if (resourceUri == null) {
+
+                this.resourceUri = ResourceUtils.concatURIs(data, filename);
+
+                for (Project project : resourceManager.getProjects()) {
+                    String projectHash = Integer.toHexString(project.getURI().hashCode());
+                    if (data.equals(projectHash)) {
+                        this.resourceUri = ResourceUtils.concatURIs(project.getURI(), filename);
+                        break;
+                    }
+                }
+            }
+
             List<URL> urls = dataManager.retrieve(resourceUri);
 
             if (!urls.isEmpty()) {
@@ -92,9 +112,7 @@ public class DataResourceResponse extends AbstractResponse {
                     log.error("Malformed URI", e);
                 }
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }
 

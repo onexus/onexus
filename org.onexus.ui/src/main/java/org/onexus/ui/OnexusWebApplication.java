@@ -44,8 +44,9 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
 
         getDebugSettings().setAjaxDebugModeEnabled(false);
         getSharedResources().add("webservice", new WebserviceResource());
+        getSharedResources().add("dataservice", new WebserviceResource());
         mountResource("/onx", getSharedResources().get(Application.class, "webservice", null, null, null, true));
-        mountResource("/data/${data}/${filename}", getSharedResources().get(Application.class, "webservice", null, null, null, true));
+        mountResource("/data/${data}", getSharedResources().get(Application.class, "dataservice", null, null, null, true));
 
         getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
         getComponentInstantiationListeners().add(getInjector());
@@ -92,5 +93,9 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
 
     public ResourceReference getWebService() {
         return getSharedResources().get(Application.class, "webservice", null, null, null, true);
+    }
+
+    public ResourceReference getDataService() {
+        return getSharedResources().get(Application.class, "dataservice", null, null, null, true);
     }
 }

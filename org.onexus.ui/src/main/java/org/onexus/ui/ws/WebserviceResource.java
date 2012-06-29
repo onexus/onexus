@@ -94,8 +94,8 @@ public class WebserviceResource extends AbstractResource {
         }
 
         // Get data
-        if (data != null && filename!=null) {
-            return new DataResourceResponse(ResourceUtils.concatURIs(data,filename));
+        if (data != null) {
+            return new DataResourceResponse(data, url);
         }
 
         // Get resource
