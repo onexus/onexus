@@ -18,6 +18,7 @@
 package org.onexus.ui;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.atmosphere.EventBus;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
@@ -40,6 +41,7 @@ public abstract class OnexusWebApplication extends AuthenticatedWebApplication {
     @Override
     protected void init() {
         super.init();
+
         mountPage("/login", getSignInPageClass());
 
         getDebugSettings().setAjaxDebugModeEnabled(false);
