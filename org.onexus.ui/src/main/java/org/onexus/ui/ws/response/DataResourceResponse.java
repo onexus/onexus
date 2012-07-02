@@ -19,17 +19,11 @@ package org.onexus.ui.ws.response;
 
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.io.Streams;
-import org.apache.wicket.util.resource.FileResourceStream;
-import org.onexus.core.ICollectionManager;
 import org.onexus.core.IDataManager;
 import org.onexus.core.IResourceManager;
-import org.onexus.core.IResourceSerializer;
 import org.onexus.core.resources.Project;
-import org.onexus.core.resources.Resource;
 import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -19,7 +19,6 @@ package org.onexus.ui.ws;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
-import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.ws.response.DataResourceResponse;
 import org.onexus.ui.ws.response.ListResourceResponse;
 import org.onexus.ui.ws.response.QueryResponse;
