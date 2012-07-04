@@ -68,7 +68,7 @@
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-atmosphere</artifactId>
+            <artifactId>wicket-native-websocket-jetty</artifactId>
         </dependency>
 
         <dependency>

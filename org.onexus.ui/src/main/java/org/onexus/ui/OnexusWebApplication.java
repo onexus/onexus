@@ -18,7 +18,6 @@
 package org.onexus.ui;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.atmosphere.EventBus;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
@@ -26,7 +25,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.ui.ws.WebserviceResource;
-import org.wicketstuff.osgi.*;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
 
