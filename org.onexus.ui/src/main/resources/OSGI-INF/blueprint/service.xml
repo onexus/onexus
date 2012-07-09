@@ -128,6 +128,7 @@
         <bean class="org.onexus.ui.website.widgets.columnsets.ColumnsetsWidgetCreator"/>
     </service>
 
+
     <!-- Default widget manager -->
     <reference-list id="widgetCreatorsRef" interface="org.onexus.ui.website.widgets.IWidgetCreator"
                     availability="optional">
@@ -148,6 +149,10 @@
 
     <service interface="org.onexus.ui.website.pages.IPageCreator">
         <bean class="org.onexus.ui.website.pages.html.HtmlPageCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.pages.IPageCreator">
+        <bean class="org.onexus.ui.website.pages.search.SearchPageCreator"/>
     </service>
 
     <!-- PageManager -->

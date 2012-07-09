@@ -107,6 +107,11 @@ public class ResourcesPage extends BaseResourcePage {
                 setResponsePage(ResourcesPage.class, parameters);
             }
         }
+
+        @Override
+        public boolean isVisible() {
+            return ResourcesPage.this.getModelObject() != null;
+        }
     }
 
     public static class ToolCopyUri extends ExternalLink {
@@ -116,13 +121,20 @@ public class ResourcesPage extends BaseResourcePage {
 
             add(new AjaxUpdateOnEvent(EventResourceSelect.EVENT));
         }
+
+        @Override
+        public boolean isVisible() {
+            return getDefaultModelObject() != null;
+        }
+
+
     }
 
     public static class ToolUriBreadCrumb extends WebMarkupContainer {
 
 
         public ToolUriBreadCrumb(String id, IModel<Resource> resource) {
-            super(id);
+            super(id, resource);
 
             add(new AjaxUpdateOnEvent(EventResourceSelect.EVENT));
 
@@ -185,6 +197,11 @@ public class ResourcesPage extends BaseResourcePage {
                 }
             });
 
+        }
+
+        @Override
+        public boolean isVisible() {
+            return getDefaultModelObject() != null;
         }
 
     }

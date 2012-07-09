@@ -67,11 +67,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-native-websocket-jetty</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-osgi</artifactId>
         </dependency>
