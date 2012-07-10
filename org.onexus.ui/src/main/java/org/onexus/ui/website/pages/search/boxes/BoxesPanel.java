@@ -1,6 +1,7 @@
 package org.onexus.ui.website.pages.search.boxes;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.onexus.core.ICollectionManager;
@@ -32,10 +33,14 @@ public class BoxesPanel extends Panel {
 
         RepeatingView boxes = new RepeatingView("boxes");
 
-        int position = 0;
+        int count = 0;
         while (table.next()) {
-            boxes.add(new EntitySelectBox(boxes.newChildId(), position, status, table.getEntity(collectionUri)));
-            position++;
+            boxes.add(new EntitySelectBox(boxes.newChildId(), count, status, table.getEntity(collectionUri)));
+            count++;
+        }
+
+        if (count == 0) {
+            boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
         }
 
         add(boxes);
