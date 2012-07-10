@@ -2,6 +2,8 @@ package org.onexus.ui.website.pages.search;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
@@ -21,6 +23,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.util.time.Duration;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.IResourceManager;
@@ -32,6 +35,7 @@ import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.search.boxes.BoxesPanel;
+import org.onexus.ui.workspace.events.AjaxUpdateOnEvent;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -71,13 +75,20 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         search.setOutputMarkupId(true);
 
         search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
-
             @Override
             protected Iterator<IEntity> getChoices(String input) {
                 return getAutocompleteChoices(input);
             }
-
         });
+        search.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
+                target.add(SearchPage.this.get("boxes"));
+            }
+        });
+
         form.add(search);
 
         DropDownChoice<SearchType> typeSelect = new DropDownChoice<SearchType>("type", types, new SearchTypeRenderer());
