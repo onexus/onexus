@@ -65,20 +65,22 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         add(new FiltersPanel("filters", statusModel));
 
-        add(new Label("maps", "&nbsp;").setEscapeModelStrings(false));
+        add(new Label("maps", new PropertyModel<String>(this, "mappingMessage")).setEscapeModelStrings(false));
 
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
 
-
     protected boolean isCurrentTab(String tabId) {
         return tabId.equals(getStatus().getCurrentTabId());
-
     }
 
     protected TabConfig getCurrentTab() {
         String currentTabId = getStatus().getCurrentTabId();
         return getConfig().getTab(currentTabId);
+    }
+
+    public String getMappingMessage() {
+        return "&nbsp;";
     }
 
     @Override
@@ -199,7 +201,6 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                 views.add(view.getTitle());
             }
         }
-
 
 
         if (getStatus().getCurrentView() == null && views.size() > 0) {
