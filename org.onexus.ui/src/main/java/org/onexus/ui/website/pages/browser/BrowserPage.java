@@ -65,6 +65,8 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         add(new FiltersPanel("filters", statusModel));
 
+        add(new Label("maps", "&nbsp;").setEscapeModelStrings(false));
+
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
 

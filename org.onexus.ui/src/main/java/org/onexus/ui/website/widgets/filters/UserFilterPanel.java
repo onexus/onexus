@@ -39,13 +39,13 @@ import java.util.List;
  *
  * @author armand
  */
-public abstract class ListItemsFilterPanel extends Panel {
+public abstract class UserFilterPanel extends Panel {
 
     private IModel<String> filterNameModel;
     private FieldSelection fieldSelected;
     private List<FieldSelection> fieldSelectionList;
 
-    public ListItemsFilterPanel(String id, List<FieldSelection> filterableProps) {
+    public UserFilterPanel(String id, List<FieldSelection> filterableProps) {
         super(id);
 
         this.filterNameModel = new Model<String>("");

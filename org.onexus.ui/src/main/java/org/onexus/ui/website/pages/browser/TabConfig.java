@@ -33,8 +33,11 @@ public class TabConfig implements Serializable, IVisible {
     private String visible;
     private String group;
 
-    @XStreamImplicit(itemFieldName="view")
+    @XStreamImplicit(itemFieldName = "view")
     private List<ViewConfig> views = new ArrayList<ViewConfig>();
+
+    @XStreamImplicit(itemFieldName = "map")
+    private List<String> maps = new ArrayList<String>();
 
     public String getId() {
         return id;
@@ -59,16 +62,16 @@ public class TabConfig implements Serializable, IVisible {
     public void setVisible(String visible) {
         this.visible = visible;
     }
-    
+
     public ViewConfig getView(String viewId) {
 
         if (viewId == null) {
             return null;
         }
-        
+
         for (ViewConfig view : getViews()) {
             if (viewId.equals(view.getTitle())) {
-                return  view;
+                return view;
             }
         }
 
@@ -81,6 +84,14 @@ public class TabConfig implements Serializable, IVisible {
 
     public void setViews(List<ViewConfig> views) {
         this.views = views;
+    }
+
+    public List<String> getMaps() {
+        return maps;
+    }
+
+    public void setMaps(List<String> maps) {
+        this.maps = maps;
     }
 
     public String getGroup() {

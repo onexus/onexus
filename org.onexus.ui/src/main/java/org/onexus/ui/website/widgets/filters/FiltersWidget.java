@@ -101,7 +101,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         });
 
         final ModalWindow modal = new ModalWindow("modalWindowAddFilter");
-        modal.setContent(new ListItemsFilterPanel(ModalWindow.CONTENT_ID, getConfig().getFieldSelection()) {
+        modal.setContent(new UserFilterPanel(ModalWindow.CONTENT_ID, getConfig().getFieldSelection()) {
 
             @Override
             public void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection field,
