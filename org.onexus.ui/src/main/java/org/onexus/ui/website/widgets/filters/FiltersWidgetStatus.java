@@ -60,7 +60,7 @@ public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
         List<Filter> rules = new ArrayList<Filter>();
 
         for (FilterConfig filter : filters) {
-            if (filter.getActive()) {
+            if (filter.getActive() != null && filter.getActive()) {
                 createFilter(rules, filter, query);
             }
         }
@@ -84,17 +84,24 @@ public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
 
         if (oqlDefine != null && oqlWhere != null) {
             Map<String, String> define = getQueryParser().parseDefine(oqlDefine);
-            Filter where = getQueryParser().parseWhere(oqlWhere);
 
-            if (define == null || where == null) {
-                log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n WHERE: " + filter.getWhere() + "\n");
 
+            if (define == null) {
+                log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n");
             } else {
+
                 for (Map.Entry<String, String> entry : define.entrySet()) {
-                    query.addDefine(entry.getKey(), entry.getValue());
+                    String collectionAlias = QueryUtils.newCollectionAlias(query, entry.getValue());
+                    oqlWhere = oqlWhere.replaceAll(entry.getKey() + ".", collectionAlias + ".");
                 }
 
-                filters.add(where);
+                Filter where = getQueryParser().parseWhere(oqlWhere);
+
+                if (where == null) {
+                    log.error("Malformed filter WHERE: " + oqlWhere + "\n");
+                } else {
+                    filters.add(where);
+                }
             }
         }
     }

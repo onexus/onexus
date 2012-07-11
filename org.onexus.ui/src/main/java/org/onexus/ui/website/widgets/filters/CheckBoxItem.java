@@ -52,7 +52,7 @@ public abstract class CheckBoxItem extends Panel {
 
         // Add
         add(new Label("name", new TextFormaterPropertyModel(item.getModel(),
-                "name", 18, true)));
+                "name", 65, true)));
         add(new AttributeModifier("title", new PropertyModel<String>(
                 item.getModel(), "name")));
 
@@ -65,7 +65,8 @@ public abstract class CheckBoxItem extends Panel {
 
         };
         add(removeImg);
-        if (item.getModelObject().getDeletable()) {
+        Boolean deletable = item.getModelObject().getDeletable();
+        if (deletable != null && deletable) {
             removeImg.add(new AjaxEventBehavior("onclick") {
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {

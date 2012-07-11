@@ -49,9 +49,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
         onEventFireUpdate(EventQueryUpdate.class);
 
-        String title = getConfig().getTitle();
-        add(new Label("title", (title != null ? title : "Filters")));
-
         Form<String> form = new Form<String>("form");
         add(form);
 
@@ -65,7 +62,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters());
 
-                if (!filter.getHidden() && fixedPredicate.evaluate(filter)) {
+                if ((filter.getHidden()==null || !filter.getHidden()) && fixedPredicate.evaluate(filter)) {
 
                     item.add(new CheckBoxItem("checkboxItem", item) {
 
@@ -86,7 +83,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                     });
 
-                    // Help?
                     if (filter.getHtmlHelp() != null) {
                         item.add(new HelpMark("helpFilterPanel", "", filter.getHtmlHelp()));
                     } else {

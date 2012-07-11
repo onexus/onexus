@@ -65,7 +65,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         add(new FiltersPanel("filters", statusModel));
 
-        add(new Label("maps", new PropertyModel<String>(this, "mappingMessage")).setEscapeModelStrings(false));
+        add(new EmptyPanel("maps").setVisible(false));
 
         onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
     }
@@ -77,10 +77,6 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
     protected TabConfig getCurrentTab() {
         String currentTabId = getStatus().getCurrentTabId();
         return getConfig().getTab(currentTabId);
-    }
-
-    public String getMappingMessage() {
-        return "&nbsp;";
     }
 
     @Override
