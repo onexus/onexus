@@ -61,6 +61,10 @@ ul.breadcrumb {
     color: white;
 }
 
+#filters .btn i {
+    margin-left: 5px;
+}
+
 .navbar .navbar-inner {
     background-color: #FF7634;
     background-image: none;
@@ -127,4 +131,8 @@ ul.breadcrumb {
 
 #content div.row-fluid {
     margin-top: 20px;
+}
+
+.btn {
+    text-shadow: none;
 }
