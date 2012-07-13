@@ -1,6 +1,6 @@
 #logo {
      margin: 50px auto;
-     width: 400px;
+     width: 360px;
 }
 
 #logo img {
@@ -16,10 +16,27 @@
     margin: 15px; padding: 10px 15px 2px 15px;
 }
 
+div.types input {
+    float: left;
+}
+
+div.types label {
+    float: left;
+    margin-right: 10px;
+}
+
+div.types br {
+    display: none;
+}
+
 .examples {
     font-size: 11px;
     margin: 0px 0 0 120px;
     padding: 0;
+}
+
+input.search {
+    width: 280px;
 }
 
 #search select {

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
@@ -11,10 +12,7 @@ import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSe
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -91,14 +89,14 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         form.add(search);
 
-        DropDownChoice<SearchType> typeSelect = new DropDownChoice<SearchType>("type", types, new SearchTypeRenderer());
-        typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        RadioChoice<SearchType> typeSelect = new RadioChoice<SearchType>("type", types, new SearchTypeRenderer());
+        typeSelect.add(new AjaxFormChoiceComponentUpdatingBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 SearchPage.this.addOrReplace(new EmptyPanel("boxes"));
                 getStatus().setSearch("");
                 target.add(search);
-                target.add(SearchPage.this.get("examplesContainer"));
+                target.add(SearchPage.this.get("form").get("examplesContainer"));
                 target.add(SearchPage.this.get("boxes"));
             }
         });
@@ -134,7 +132,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             }
         });
 
-        add(examples);
+        form.add(examples);
 
         add(new EmptyPanel("boxes").setMarkupId("boxes"));
 
