@@ -34,6 +34,7 @@ import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
+import org.onexus.ui.website.pages.browser.IFilter;
 import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
@@ -62,29 +63,30 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters());
 
-                if ((filter.getHidden()==null || !filter.getHidden()) && fixedPredicate.evaluate(filter)) {
+                if (fixedPredicate.evaluate(filter)) {
 
                     item.add(new CheckBoxItem("checkboxItem", item) {
 
                         @Override
                         public void onItemSelected(AjaxRequestTarget target, FilterConfig filter) {
 
+                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+
+                            filters.add(new BrowserFilter(filter));
+
                             send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
                         }
 
                         @Override
                         protected void onItemDeleted(AjaxRequestTarget target, FilterConfig filter) {
-
-                            getStatus().getFilters().remove(filter);
-
                             sendEvent(EventFiltersUpdate.EVENT);
 
                         }
 
                     });
 
-                    if (filter.getHtmlHelp() != null) {
-                        item.add(new HelpMark("helpFilterPanel", "", filter.getHtmlHelp()));
+                    if (filter.getHelp() != null) {
+                        item.add(new HelpMark("helpFilterPanel", "", filter.getHelp()));
                     } else {
                         item.add(new EmptyPanel("helpFilterPanel"));
                     }
@@ -105,10 +107,9 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 List<FilterConfig> filters = getStatus().getFilters();
 
-                FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(filters.size() + 1), filterName, true);
+                FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(filters.size() + 1), filterName);
 
                 String collectionAlias = filterName;
-
                 filter.setDefine(collectionAlias + '=' + field.getCollection());
 
                 In where = new In(collectionAlias, field.getFieldName());
@@ -116,7 +117,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                     where.addValue(value);
                 }
                 filter.setWhere(where.toString());
-                filter.setDeletable(true);
                 filters.add(filter);
 
                 modal.close(target);

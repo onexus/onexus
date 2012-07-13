@@ -33,9 +33,6 @@ public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
 
     private static final Logger log = LoggerFactory.getLogger(FiltersWidgetStatus.class);
 
-    @Inject
-    private IQueryParser queryParser;
-
     private List<FilterConfig> filters = new ArrayList<FilterConfig>();
 
     public FiltersWidgetStatus() {
@@ -52,70 +49,6 @@ public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
 
     public void setFilters(List<FilterConfig> filters) {
         this.filters = filters;
-    }
-
-    @Override
-    public void onQueryBuild(Query query) {
-
-        List<Filter> rules = new ArrayList<Filter>();
-
-        for (FilterConfig filter : filters) {
-            if (filter.getActive() != null && filter.getActive()) {
-                createFilter(rules, filter, query);
-            }
-        }
-
-        if (!rules.isEmpty()) {
-            boolean union = (getConfig().getUnion() != null && getConfig().getUnion().booleanValue());
-            if (!union) {
-                QueryUtils.and(query, QueryUtils.joinAnd(rules));
-            } else {
-                QueryUtils.and(query, QueryUtils.joinOr(rules));
-            }
-        }
-
-
-    }
-
-    private void createFilter(List<Filter> filters, FilterConfig filter, Query query) {
-
-        String oqlDefine = filter.getDefine();
-        String oqlWhere = filter.getWhere();
-
-        if (oqlDefine != null && oqlWhere != null) {
-            Map<String, String> define = getQueryParser().parseDefine(oqlDefine);
-
-
-            if (define == null) {
-                log.error("Malformed filter definition\n DEFINE: " + filter.getDefine() + "\n");
-            } else {
-
-                for (Map.Entry<String, String> entry : define.entrySet()) {
-                    String collectionAlias = QueryUtils.newCollectionAlias(query, entry.getValue());
-                    oqlWhere = oqlWhere.replaceAll(entry.getKey() + ".", collectionAlias + ".");
-                }
-
-                Filter where = getQueryParser().parseWhere(oqlWhere);
-
-                if (where == null) {
-                    log.error("Malformed filter WHERE: " + oqlWhere + "\n");
-                } else {
-                    filters.add(where);
-                }
-            }
-        }
-    }
-
-    private IQueryParser getQueryParser() {
-
-        if (queryParser == null) {
-            OnexusWebApplication app = OnexusWebApplication.get();
-            if (app != null) {
-                app.getInjector().inject(this);
-            }
-        }
-
-        return queryParser;
     }
 
 }

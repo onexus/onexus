@@ -31,34 +31,27 @@ public class FilterConfig implements Serializable, IVisible {
 
     private String id;
 
-    private Boolean active;
-
-    private Boolean deletable;
-
-    private Boolean hidden;
-
     private String name;
 
     private String visible;
+
+    private String collection;
 
     private String define;
 
     private String where;
 
-    private String htmlHelp;
+    private String help;
 
     public FilterConfig() {
         super();
     }
 
-    public FilterConfig(String id, String name, Boolean active) {
+    public FilterConfig(String id, String name) {
         super();
         this.id = id;
         this.name = name;
-        this.active = active;
         this.visible = "";
-        this.deletable = false;
-        this.hidden = false;
     }
 
     public String getId() {
@@ -77,28 +70,12 @@ public class FilterConfig implements Serializable, IVisible {
         this.name = name;
     }
 
-    public Boolean getActive() {
-        return active;
+    public String getCollection() {
+        return collection;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Boolean getDeletable() {
-        return deletable;
-    }
-
-    public void setDeletable(Boolean deletable) {
-        this.deletable = deletable;
-    }
-
-    public Boolean getHidden() {
-        return hidden;
-    }
-
-    public void setHidden(Boolean hidden) {
-        this.hidden = hidden;
+    public void setCollection(String collection) {
+        this.collection = collection;
     }
 
     public String getVisible() {
@@ -125,12 +102,12 @@ public class FilterConfig implements Serializable, IVisible {
         this.where = where;
     }
 
-    public String getHtmlHelp() {
-        return htmlHelp;
+    public String getHelp() {
+        return help;
     }
 
-    public void setHtmlHelp(String htmlHelp) {
-        this.htmlHelp = htmlHelp;
+    public void setHelp(String help) {
+        this.help = help;
     }
 
     @Override

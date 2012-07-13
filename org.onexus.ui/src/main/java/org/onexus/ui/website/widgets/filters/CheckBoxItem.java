@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.onexus.ui.website.utils.panels.icons.Icons;
 
@@ -41,8 +42,7 @@ public abstract class CheckBoxItem extends Panel {
         super(id);
 
         // Add check box
-        add(new AjaxCheckBox("active", new PropertyModel<Boolean>(
-                item.getModel(), "active")) {
+        add(new AjaxCheckBox("active", Model.of(Boolean.FALSE)) {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -56,6 +56,7 @@ public abstract class CheckBoxItem extends Panel {
         add(new AttributeModifier("title", new PropertyModel<String>(
                 item.getModel(), "name")));
 
+        //TODO remove this option
         Image removeImg = new Image("removeImg", Icons.THIN_DELETE) {
 
             @Override
@@ -65,18 +66,7 @@ public abstract class CheckBoxItem extends Panel {
 
         };
         add(removeImg);
-        Boolean deletable = item.getModelObject().getDeletable();
-        if (deletable != null && deletable) {
-            removeImg.add(new AjaxEventBehavior("onclick") {
-                @Override
-                protected void onEvent(AjaxRequestTarget target) {
-                    onItemDeleted(target, item.getModelObject());
-                }
-            });
-
-        } else {
-            removeImg.setVisible(false);
-        }
+        removeImg.setVisible(false);
 
     }
 

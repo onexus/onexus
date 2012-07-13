@@ -31,7 +31,6 @@ public class FiltersWidgetConfig extends WidgetConfig {
     private FiltersWidgetStatus defaultStatus;
     private String title;
     private Boolean userFilters;
-    private Boolean union;
     private List<FieldSelection> fieldSelection;
     private List<FilterConfig> filters;
 
@@ -91,14 +90,6 @@ public class FiltersWidgetConfig extends WidgetConfig {
 
     public void setFieldSelection(List<FieldSelection> fieldSelection) {
         this.fieldSelection = fieldSelection;
-    }
-
-    public Boolean getUnion() {
-        return union;
-    }
-
-    public void setUnion(Boolean union) {
-        this.union = union;
     }
 
     @Override
