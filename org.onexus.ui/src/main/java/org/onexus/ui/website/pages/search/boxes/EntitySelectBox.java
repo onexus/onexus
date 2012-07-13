@@ -101,7 +101,7 @@ public class EntitySelectBox extends Panel {
                 WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
                 WebMarkupContainer link = new WebMarkupContainer("link");
                 link.add(new AttributeModifier("href", createLink(searchLink.getUrl(), searchType.getCollection(), entityId)));
-                link.add(new Label("label", searchLink.getTitle()));
+                link.add(new Label("label", searchLink.getTitle()).setEscapeModelStrings(false));
                 item.add(link);
                 links.add(item);
             }
