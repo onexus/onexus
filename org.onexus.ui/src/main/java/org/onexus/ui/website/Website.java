@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -81,7 +82,8 @@ public class Website extends WebPage {
 
         add(new Label("windowTitle", config.getTitle()));
 
-        add(new ProgressBar("progressbar", false));
+        add(new EmptyPanel("progressbar"));
+        //add(new ProgressBar("progressbar", false));
 
         WebMarkupContainer header = new WebMarkupContainer("header");
         header.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "config.pages")) {

@@ -52,7 +52,7 @@ public class ProgressBar extends Panel {
         this.usePrecondition = usePrecondition;
 
         setOutputMarkupId(true);
-        add(new Refresh());
+        // add(new Refresh());
 
         final WebMarkupContainer modal = new WebMarkupContainer("modal") {
             @Override
