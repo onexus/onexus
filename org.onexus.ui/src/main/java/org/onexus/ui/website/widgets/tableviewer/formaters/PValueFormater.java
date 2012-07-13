@@ -36,7 +36,7 @@ public class PValueFormater implements ITextFormater {
 
         if (obj instanceof Double) {
             double value = (Double) obj;
-            if (value == 0) {
+            if (value < 1e-16) {
                 return "< 1E-16";
             }
 
