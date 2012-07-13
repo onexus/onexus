@@ -66,7 +66,7 @@ public class NavigationToolbar extends AbstractToolbar {
         long realSize = getDataProvider().getRealSize();
 
         if (realSize == -1) {
-            return "?";
+            return "(click to count)";
         }
 
         return Long.toString(realSize);
