@@ -19,15 +19,12 @@ package org.onexus.ui.website.widgets.download;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.ResourceLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -61,6 +58,8 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
             new RScript()
     });
 
+    private String webserviceUrl;
+
     public DownloadWidget(String componentId, IModel<DownloadWidgetStatus> statusModel) {
         super(componentId, statusModel);
         onEventFireUpdate(EventQueryUpdate.class);
@@ -70,12 +69,17 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         Query query = getQuery();
         query.toString(oql, false);
 
-        // Get absolute webservice URL
+        // Webservice URL
         ResourceReference webservice = OnexusWebApplication.get().getWebService();
-        CharSequence wsPath = urlFor(webservice, null);
-        HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
-        String rootUrl = request.getRequestURL().toString();
-        final String url = RequestUtils.toAbsolutePath(rootUrl, wsPath.toString());
+        webserviceUrl = getConfig().getWebservice();
+
+        // Try to deduce
+        if (webserviceUrl == null) {
+            CharSequence wsPath = urlFor(webservice, null);
+            HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
+            String rootUrl = request.getRequestURL().toString();
+            webserviceUrl = RequestUtils.toAbsolutePath(rootUrl, wsPath.toString());
+        }
 
         // Download as file
         String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
@@ -97,10 +101,10 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
                 WebMarkupContainer body = new WebMarkupContainer("body");
                 body.setMarkupId(item.getMarkupId() + "-body");
                 item.add(body);
-                body.add(new Label("code", script.getContent(oql.toString(), url)).setEscapeModelStrings(false));
+                body.add(new Label("code", script.getContent(oql.toString(), webserviceUrl)).setEscapeModelStrings(false));
 
                 // Code toggle
-                Label toggle = new Label("toggle", "Use in a " + script.getLabel() + " script");
+                Label toggle = new Label("toggle", "Use in " + script.getLabel() + " script");
                 toggle.add(new AttributeModifier("href", "#" + body.getMarkupId()));
                 item.add(toggle);
 
