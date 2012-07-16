@@ -74,10 +74,10 @@ public class DefaultDecoratorManager implements IDecoratorManager {
     private IDecorator getDefaultDecorator(Field field) {
 
         if (field.getType().equals(Double.class)) {
-            return new FieldDecorator(field, new DoubleFormater(3), "st");
+            return new FieldDecorator(field, new DoubleFormater(3));
         }
 
-        return new FieldDecorator(field, "st");
+        return new FieldDecorator(field);
     }
 
     private IDecoratorCreator getCreator(String decoratorId) {

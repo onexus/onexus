@@ -21,6 +21,6 @@ public class RankDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, String[] parameters) {
-        return new ColorDecorator(columnField, rankScale, "st", true);
+        return new ColorDecorator(columnField, rankScale, null, true);
     }
 }

@@ -39,6 +39,10 @@ public class ColorDecorator extends FieldDecorator {
     private IColorScaleHtml colorScale;
     private String cssClass;
 
+    public ColorDecorator(Field valueField, IColorScaleHtml colorScale) {
+        this(valueField, colorScale, null);
+    }
+
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass) {
         this(valueField, valueField, colorScale, cssClass, false, null);

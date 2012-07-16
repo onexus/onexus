@@ -20,6 +20,6 @@ public class PValue2DecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, String[] parameters) {
-        return new ColorDecorator(columnField, columnField, pvalueScale, "st", true, PValueFormater.INSTANCE);
+        return new ColorDecorator(columnField, columnField, pvalueScale, null, true, PValueFormater.INSTANCE);
     }
 }

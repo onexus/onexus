@@ -15,6 +15,6 @@ public class CtDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, String[] parameters) {
-        return new CTDecorator(columnField, "st");
+        return new CTDecorator(columnField, null);
     }
 }

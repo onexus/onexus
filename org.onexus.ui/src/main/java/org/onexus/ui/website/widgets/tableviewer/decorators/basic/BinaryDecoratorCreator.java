@@ -21,6 +21,6 @@ public class BinaryDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, String[] parameters) {
-        return new ColorDecorator(columnField, binaryScale, "st");
+        return new ColorDecorator(columnField, binaryScale);
     }
 }

@@ -27,7 +27,7 @@ table.table-viewer tr.headers th.wicket_orderUp a {
       padding-left: 8px;
 }
 
-table.table-viewer td.st {
+table.table-viewer td, table.table-viewer th {
 	min-width: 40px;
 	text-align: center;
 }
