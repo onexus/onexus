@@ -72,6 +72,7 @@ ul.breadcrumb {
     font-size: 16px;
     min-height: 35px;
     box-shadow: none;
+    filter: none;
 }
 
 .navbar .nav>li>a{
