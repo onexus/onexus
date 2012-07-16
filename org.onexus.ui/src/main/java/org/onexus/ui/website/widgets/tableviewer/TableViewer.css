@@ -1,56 +1,6 @@
 
 table.table-viewer {
-	font-size: 12px;
-	margin: 0px;
-	padding: 0px;
-	border: 0px;
-   border-collapse:separate;
-   border-spacing: 0px;
-   background-color: white;
    white-space: nowrap;
-
-}
-
-table.table-viewer tbody {
-	background-color: black;	
-}
-
-table.table-viewer a {
-	text-decoration: none;
-	color: #400576;
-	font-size: 12px;
-}
-
-table.table-viewer a.label {
-   color: #fff;
-}
-
-table.table-viewer tr {
-	margin: 0px;
-	padding: 0px;
-}
-
-table.table-viewer tr.headers {
-	margin: 0px;
-	padding: 0px;
-	opacity: 1.0;
-}
-
-table.table-viewer tr.headers th {
-	padding: 0px 0px;
-	border-bottom: 1px solid black;
-	border-left: 5px solid white;
-	border-right: 5px solid white;
-	background-color: white;
-	font-size: 12px;
-	min-width:20px;
-	vertical-align: bottom;
-	text-align: center;
-}
-
-table.table-viewer tr.headers th.empty {
-	border-bottom: 0px solid white;	
-	min-width:0px;
 }
 
 table.table-viewer tr.headers th.wicket_orderDown a {
@@ -77,72 +27,9 @@ table.table-viewer tr.headers th.wicket_orderUp a {
       padding-left: 8px;
 }
 
-table.table-viewer th {
-	padding: 0px 2px;
-	border-bottom: 1px solid black;
-	border-left: 10px solid white;
-	border-right: 10px solid white;
-	background-color: white;
-}
-
-table.table-viewer th img {
-        margin: 2px;
-}
-
-table.table-viewer img {
-	float: right;
-	margin: 5px 0px 2px 2px;
-	padding: 0px;
-	border: 0px;
-}
-
-table.table-viewer td {
-	margin: 0px;
-	padding: 3px;
-	background-color: white;
-}
-
-table.table-viewer td.key {
-	padding: 0px 2px;
-	background-color: white;
-}
-
-table.table-viewer td.name {
-	padding: 0px 2px;
-	background-color: white;
-}
-
 table.table-viewer td.st {
 	min-width: 40px;
-	border-bottom: 1px dotted #DDD;
-	border-left: 1px dotted #CCC;
-	background-color: white;
 	text-align: center;
-}
-
-table.table-viewer dd {
-    text-align: left;
-}
-
-table.table-viewer td.gp {
-	width: 16px;
-	background-color: white;
-    margin: 0px;
-    padding: 0px;
-}
-
-table.table-viewer td.gp span {
-       margin:0px;
-       padding:0px;
-}
-
-table.table-viewer td.gp a {
-       margin:0px;
-       padding:0px;
-}
-
-table.table-viewer td.gp img {
-       margin-top: 0px;       
 }
 
 .ajax-overlay {
