@@ -23,6 +23,8 @@ import org.onexus.ui.ws.response.DataResourceResponse;
 import org.onexus.ui.ws.response.ListResourceResponse;
 import org.onexus.ui.ws.response.QueryResponse;
 import org.onexus.ui.ws.response.SingleResourceResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -30,6 +32,8 @@ import java.io.IOException;
 
 
 public class WebserviceResource extends AbstractResource {
+
+    private static final Logger log = LoggerFactory.getLogger(WebserviceResource.class);
 
     @Override
     protected ResourceResponse newResourceResponse(Attributes attributes) {
@@ -110,6 +114,10 @@ public class WebserviceResource extends AbstractResource {
         // set response header
         setResponseHeaders(data, attributes);
 
-        data.getWriteCallback().writeData(attributes);
+        try {
+            data.getWriteCallback().writeData(attributes);
+        } catch (IOException e) {
+            log.error("Webservice response", e);
+        }
     }
 }
