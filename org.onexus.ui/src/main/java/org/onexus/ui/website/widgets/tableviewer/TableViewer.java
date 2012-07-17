@@ -23,6 +23,7 @@ import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
@@ -35,9 +36,9 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.core.IEntityTable;
 import org.onexus.core.TaskStatus;
 import org.onexus.core.query.Query;
-import org.onexus.ui.website.events.EventFixEntity;
+import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.events.EventUnfixEntity;
+import org.onexus.ui.website.events.EventRemoveFilter;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
@@ -69,7 +70,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         indicatorAppender.add(new Image("image", AbstractDefaultAjaxBehavior.INDICATOR));
         add(indicatorAppender);
 
-        onEventFireUpdate(EventQueryUpdate.class, EventFixEntity.class, EventUnfixEntity.class);
+        onEventFireUpdate(EventQueryUpdate.class, EventAddFilter.class, EventRemoveFilter.class);
 
         if (status.getObject() == null) {
             status.setObject(getStatus());
@@ -133,6 +134,15 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         resultTable.addBottomToolbar(new NavigationToolbar(resultTable));
         add(resultTable);
 
+    }
+
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+
+        if (event.getPayload() instanceof EventQueryUpdate) {
+            this.dataProvider.clearCount();
+        }
     }
 
     @Override

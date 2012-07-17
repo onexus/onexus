@@ -122,6 +122,11 @@ public abstract class EntitiesRowProvider implements
         return knownSize;
     }
 
+    public void clearCount() {
+        this.realSize = -1;
+        this.knownSize = rowsPerPage + 2;
+    }
+
     public void forceCount() {
 
         if (realSize == -1) {

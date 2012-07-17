@@ -20,9 +20,9 @@ package org.onexus.ui.website.widgets.heatmap;
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.IModel;
 import org.onexus.core.IResourceManager;
-import org.onexus.ui.website.events.EventFixEntity;
+import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
-import org.onexus.ui.website.events.EventUnfixEntity;
+import org.onexus.ui.website.events.EventRemoveFilter;
 import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
@@ -38,7 +38,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
     public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {
         super(componentId, status);
 
-        onEventFireUpdate(EventQueryUpdate.class, EventFixEntity.class, EventUnfixEntity.class);
+        onEventFireUpdate(EventQueryUpdate.class, EventAddFilter.class, EventRemoveFilter.class);
     }
 
     @Override

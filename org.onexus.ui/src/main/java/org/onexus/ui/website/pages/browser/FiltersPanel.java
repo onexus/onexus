@@ -30,16 +30,15 @@ import org.onexus.core.IResourceManager;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteStatus;
+import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventFiltersUpdate;
-import org.onexus.ui.website.events.EventFixEntity;
 import org.onexus.ui.website.events.EventPanel;
-import org.onexus.ui.website.events.EventUnfixEntity;
+import org.onexus.ui.website.events.EventRemoveFilter;
 import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.widgets.Widget;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Map;
 
 public class FiltersPanel extends EventPanel {
 
@@ -54,7 +53,7 @@ public class FiltersPanel extends EventPanel {
         super(id, pageModel);
 
         // Update this component if this events are fired.
-        onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventFiltersUpdate.class);
+        onEventFireUpdate(EventAddFilter.class, EventRemoveFilter.class, EventFiltersUpdate.class);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class FiltersPanel extends EventPanel {
                     public void onClick(AjaxRequestTarget target) {
                         Integer pos = getModelObject();
                         getBrowserPageStatus().getFilters().remove(pos.intValue());
-                        sendEvent(EventUnfixEntity.EVENT);
+                        sendEvent(EventRemoveFilter.EVENT);
                     }
 
                 };

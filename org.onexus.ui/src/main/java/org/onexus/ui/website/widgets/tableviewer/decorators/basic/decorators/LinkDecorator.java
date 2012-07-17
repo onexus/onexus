@@ -26,9 +26,8 @@ import org.onexus.core.IEntity;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.Website;
-import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.AbstractEvent;
-import org.onexus.ui.website.events.EventFixEntity;
+import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.FilterEntity;
@@ -95,7 +94,7 @@ public class LinkDecorator extends FieldDecorator {
         // Fix current row entity
         status.getFilters().add(rowEntity);
 
-        return new AbstractEvent[] { EventFixEntity.EVENT };
+        return new AbstractEvent[] { EventAddFilter.EVENT };
     }
 
 

@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.core.IResourceManager;
 import org.onexus.core.IResourceSerializer;
+import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.OnexusWebApplication;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageStatus;
@@ -79,7 +80,16 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
         if (websiteConfig == null) {
 
             // Attach website config
-            websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+            try {
+                websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+            } catch (ClassCastException e) {
+
+                // Force project reload
+                resourceManager.syncProject(ResourceUtils.getProjectURI(websiteUri));
+
+                // Try again
+                websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+            }
 
         }
 

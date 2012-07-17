@@ -21,30 +21,26 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.onexus.core.IResourceManager;
-import org.onexus.ui.website.events.EventFixEntity;
+import org.onexus.ui.website.events.EventAddFilter;
+import org.onexus.ui.website.events.EventRemoveFilter;
 import org.onexus.ui.website.events.EventTabSelected;
-import org.onexus.ui.website.events.EventUnfixEntity;
 import org.onexus.ui.website.events.EventViewChange;
 import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
 import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
 import org.onexus.ui.website.pages.browser.layouts.topleft.TopleftLayout;
 import org.onexus.ui.website.pages.browser.layouts.topmain.TopmainLayout;
-import org.onexus.ui.website.theme.DefaultTheme;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
@@ -67,7 +63,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         add(new EmptyPanel("maps").setVisible(false));
 
-        onEventFireUpdate(EventFixEntity.class, EventUnfixEntity.class, EventViewChange.class);
+        onEventFireUpdate(EventViewChange.class);
     }
 
     protected boolean isCurrentTab(String tabId) {

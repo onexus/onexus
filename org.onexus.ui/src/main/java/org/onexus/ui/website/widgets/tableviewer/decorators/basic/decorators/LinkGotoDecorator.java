@@ -26,7 +26,7 @@ import org.onexus.core.IEntity;
 import org.onexus.core.resources.Field;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.Website;
-import org.onexus.ui.website.events.EventFixEntity;
+import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.pages.browser.BrowserPageLink;
 import org.onexus.ui.website.pages.browser.FilterEntity;
 import org.onexus.ui.website.widgets.tableviewer.decorators.FieldDecorator;
@@ -75,7 +75,7 @@ public class LinkGotoDecorator extends FieldDecorator {
 
                 getBrowserPageStatus().getFilters().add(fe);
 
-                sendEvent(EventFixEntity.EVENT);
+                sendEvent(EventAddFilter.EVENT);
 
             }
 

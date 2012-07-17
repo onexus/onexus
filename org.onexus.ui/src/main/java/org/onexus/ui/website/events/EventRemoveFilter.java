@@ -18,11 +18,11 @@
 package org.onexus.ui.website.events;
 
 
-public class EventUnfixEntity extends EventQueryUpdate {
+public class EventRemoveFilter extends EventQueryUpdate {
 
-    public final static EventUnfixEntity EVENT = new EventUnfixEntity();
+    public final static EventRemoveFilter EVENT = new EventRemoveFilter();
 
-    protected EventUnfixEntity() {
+    protected EventRemoveFilter() {
         super();
     }
 

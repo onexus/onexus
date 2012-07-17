@@ -30,8 +30,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.onexus.core.query.In;
+import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.events.EventQueryUpdate;
+import org.onexus.ui.website.events.EventRemoveFilter;
 import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.IFilter;
@@ -74,7 +76,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                             List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
                             filters.add(new BrowserFilter(filterConfig));
-                            send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
+                            send(getPage(), Broadcast.BREADTH, EventAddFilter.EVENT);
 
                         }
 
@@ -84,7 +86,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                             List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
 
                             for (IFilter filter : filters) {
-                                if (filter.equals(filter.getFilterConfig())) {
+                                if (filterConfig.equals(filter.getFilterConfig())) {
                                     return false;
                                 }
                             }
@@ -113,7 +115,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                                 filters.remove(removeMe);
                             }
 
-                            send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
+                            send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
 
                         }
 
