@@ -33,6 +33,11 @@ public class BrowserFilter implements IFilter {
     }
 
     @Override
+    public FilterConfig getFilterConfig() {
+        return config;
+    }
+
+    @Override
     public String getFilteredCollection() {
         return config.getCollection();
     }

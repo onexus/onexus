@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.widgets.filters;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
@@ -26,7 +27,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.onexus.core.query.In;
@@ -35,7 +35,6 @@ import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.pages.browser.IFilter;
-import org.onexus.ui.website.utils.panels.HelpMark;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 
@@ -58,37 +57,88 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             @Override
             protected void populateItem(final ListItem<FilterConfig> item) {
 
-                FilterConfig filter = item.getModelObject();
+                final FilterConfig filterConfig = item.getModelObject();
                 BrowserPageStatus browserStatus = getPageStatus();
 
                 VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters());
 
-                if (fixedPredicate.evaluate(filter)) {
+                if (fixedPredicate.evaluate(filterConfig)) {
 
-                    item.add(new CheckBoxItem("checkboxItem", item) {
+                    item.setOutputMarkupId(true);
+
+                    // Add button
+                    item.add(new AjaxLink<String>("add") {
 
                         @Override
-                        public void onItemSelected(AjaxRequestTarget target, FilterConfig filter) {
+                        public void onClick(AjaxRequestTarget target) {
+
+                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+                            filters.add(new BrowserFilter(filterConfig));
+                            send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
+
+                        }
+
+                        @Override
+                        public boolean isVisible() {
 
                             List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
 
-                            filters.add(new BrowserFilter(filter));
+                            for (IFilter filter : filters) {
+                                if (filter.equals(filter.getFilterConfig())) {
+                                    return false;
+                                }
+                            }
+                            return true;
+
+                        }
+                    });
+
+                    // Remove button
+                    item.add(new AjaxLink<String>("remove") {
+
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+
+                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+
+                            IFilter removeMe = null;
+                            for (IFilter filter : filters) {
+                                if (filterConfig.equals(filter.getFilterConfig())) {
+                                    removeMe = filter;
+                                    break;
+                                }
+                            }
+
+                            if (removeMe != null) {
+                                filters.remove(removeMe);
+                            }
 
                             send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
+
                         }
 
                         @Override
-                        protected void onItemDeleted(AjaxRequestTarget target, FilterConfig filter) {
-                            sendEvent(EventFiltersUpdate.EVENT);
+                        public boolean isVisible() {
+
+                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+
+                            for (IFilter filter : filters) {
+                                if (filterConfig.equals(filter.getFilterConfig())) {
+                                    return true;
+                                }
+                            }
+                            return false;
 
                         }
-
                     });
 
-                    if (filter.getHelp() != null) {
-                        item.add(new HelpMark("helpFilterPanel", "", filter.getHelp()));
-                    } else {
-                        item.add(new EmptyPanel("helpFilterPanel"));
+                    // Title
+                    item.add(new Label("name", new TextFormaterPropertyModel(item.getModel(), "name", 65, true)));
+
+                    if (item.getModelObject().getHelp()!=null) {
+                        add(new AttributeModifier("title", new PropertyModel<String>(item.getModel(), "help")));
+                        add(new AttributeModifier("rel", "tooltip"));
+                        add(new AttributeModifier("data-placement", "right"));
                     }
 
                 } else {

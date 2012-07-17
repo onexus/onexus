@@ -35,6 +35,7 @@ import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.SingleEntityQuery;
 import org.onexus.ui.website.utils.visible.VisibleRule;
+import org.onexus.ui.website.widgets.filters.FilterConfig;
 
 import javax.inject.Inject;
 import java.util.regex.Pattern;
@@ -82,6 +83,12 @@ public class FilterEntity implements IFilter {
     @Override
     public String getFilteredCollection() {
         return filteredCollection;
+    }
+
+    @Override
+    public FilterConfig getFilterConfig() {
+        //TODO
+        return null;
     }
 
     public void setFilteredCollection(String filteredCollection) {

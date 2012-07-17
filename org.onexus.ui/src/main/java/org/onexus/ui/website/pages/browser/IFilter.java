@@ -23,12 +23,15 @@ import org.onexus.core.query.Filter;
 import org.onexus.core.query.Query;
 import org.onexus.ui.website.utils.visible.IVisible;
 import org.onexus.ui.website.utils.visible.VisibleRule;
+import org.onexus.ui.website.widgets.filters.FilterConfig;
 
 import java.io.Serializable;
 
 public interface IFilter extends Serializable, IVisible {
 
     String getFilteredCollection();
+
+    FilterConfig getFilterConfig();
 
     boolean isEnable();
 
