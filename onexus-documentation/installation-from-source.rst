@@ -35,7 +35,7 @@ Compile and package Onexus
 
 #. Clone Onexus git repository::
 
-   # git clone https://github.com/onexus/onexus.git
+   # git clone git://github.com/onexus/onexus.git
 
 #. Compile and package Onexus::
 
@@ -47,14 +47,18 @@ Compile and package Onexus
    # cd ..
    # mkdir server
    # cd server
-   # tar xvzf ~/.m2/repository/org/onexus/onexus-server/[current version]-SNAPSHOT/onexus-server-[current version]-SNAPSHOT.tar.gz
+   # tar xvzf ~/.m2/repository/org/onexus/onexus-server/0.3.0-SNAPSHOT/onexus-server-0.3.0-SNAPSHOT.tar.gz
 
-Run on debug mode
+#. Run Onexus
+
+   # ./onexus-server-0.3.0-SNAPSHOT/bin/onexus
+
+Run in debug mode
 *****************
 
 #. Run it in debug mode and attach remote debuging to port 5005::
 
-   # ./onexus-server-[current version]-SNAPSHOT/bin/onexus debug
+   # ./onexus-server-0.3.0-SNAPSHOT/bin/onexus debug
    Browse: http://localhost:8181/onexus
 
 
