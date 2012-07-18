@@ -39,6 +39,7 @@
 	</build>
 
 	<dependencies>
+
 		<!-- Tools -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -152,8 +153,18 @@
 
 		<dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.ui</artifactId>
+			<artifactId>org.onexus.ui.workspace</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.ui.core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.ui.website</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.onexus</groupId>

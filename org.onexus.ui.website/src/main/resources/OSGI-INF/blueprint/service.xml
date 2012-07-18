@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+    <cm:property-placeholder persistent-id="org.onexus.ui.workspace" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="database" value="onexus-h2-tags"/>
+            <cm:property name="username" value="sa"/>
+            <cm:property name="password" value=""/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!-- ITagStoreManager -->
+    <service interface="org.onexus.ui.website.widgets.tags.tagstore.ITagStoreManager"
+             ref="org.onexus.ui.workspace.website.widgets.tags.tagstore"/>
+    <bean id="org.onexus.ui.workspace.website.widgets.tags.tagstore"
+          class="org.onexus.ui.website.widgets.tags.tagstore.TagStoreManager" init-method="init">
+        <property name="database" value="${database}"></property>
+        <property name="username" value="${username}"></property>
+        <property name="password" value="${password}"></property>
+    </bean>
+
+    <!-- ResourceRegister -->
+    <reference id="org.onexus.ui.resourceregister" interface="org.onexus.ui.core.IResourceRegister"/>
+
+    <!-- Default ViewersCreators -->
+    <service interface="org.onexus.ui.core.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.website.workspace.PreviewBrowserViewerTab"/>
+    </service>
+    <service interface="org.onexus.ui.core.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.website.workspace.CollectionViewerTab"/>
+    </service>
+
+    <!-- Default wizards -->
+    <service interface="org.onexus.ui.core.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.website.wizards.NewWebsiteWizardCreator"/>
+    </service>
+
+    <!-- Website module -->
+
+    <!-- Default widget resource -->
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.views.ViewsWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.TableViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.heatmap.HeatmapViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.share.ShareWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.download.DownloadWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.filters.FiltersWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.search.SearchWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.tags.TagWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.text.TextWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.columnsets.ColumnsetsWidgetCreator"/>
+    </service>
+
+    <!-- Default widget manager -->
+    <reference-list id="widgetCreatorsRef" interface="org.onexus.ui.website.widgets.IWidgetCreator"
+                    availability="optional">
+        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators"
+                            ref="org.onexus.ui.workspace.website.widgets.widgetmanager"/>
+    </reference-list>
+    <service interface="org.onexus.ui.website.widgets.IWidgetManager"
+             ref="org.onexus.ui.workspace.website.widgets.widgetmanager"/>
+    <bean id="org.onexus.ui.workspace.website.widgets.widgetmanager" class="org.onexus.ui.website.widgets.DefaultWidgetManager">
+        <property name="resourceRegister" ref="org.onexus.ui.resourceregister"/>
+        <property name="creators" ref="widgetCreatorsRef"/>
+    </bean>
+
+    <!-- Pages -->
+    <service interface="org.onexus.ui.website.pages.IPageCreator">
+        <bean class="org.onexus.ui.website.pages.browser.BrowserPageCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.pages.IPageCreator">
+        <bean class="org.onexus.ui.website.pages.html.HtmlPageCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.pages.IPageCreator">
+        <bean class="org.onexus.ui.website.pages.search.SearchPageCreator"/>
+    </service>
+
+    <!-- PageManager -->
+    <reference-list id="pageCreatorsRef" interface="org.onexus.ui.website.pages.IPageCreator" availability="optional">
+        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators"
+                            ref="org.onexus.ui.workspace.website.pages.pagemanager"/>
+    </reference-list>
+    <service interface="org.onexus.ui.website.pages.IPageManager" ref="org.onexus.ui.workspace.website.pages.pagemanager"/>
+    <bean id="org.onexus.ui.workspace.website.pages.pagemanager" class="org.onexus.ui.website.pages.DefaultPageManager">
+        <property name="resourceRegister" ref="org.onexus.ui.resourceregister"/>
+        <property name="creators" ref="pageCreatorsRef"/>
+    </bean>
+
+    <!--  Website activator -->
+    <service interface="org.onexus.ui.core.IResourceActivator">
+        <bean class="org.onexus.ui.website.WebsiteActivator"/>
+    </service>
+
+    <!-- Default decorator manager -->
+    <reference-list id="decoratorCreatorsRef" interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator" availability="optional"/>
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorManager">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.DefaultDecoratorManager">
+            <property name="creators" ref="decoratorCreatorsRef"/>
+        </bean>
+    </service>
+
+    <!-- Default decorators -->
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.BinaryDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.CtDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.LinkDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.LinkGotoDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.PValue2DecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.PValueDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.RankDecoratorCreator"/>
+    </service>
+
+</blueprint>

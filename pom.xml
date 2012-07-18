@@ -41,9 +41,7 @@
     </scm>
 
     <modules>
-        <module>poms</module>
-        <module>provision</module>
-        <module>onexus-server</module>
+
         <module>org.onexus.core</module>
         <module>org.onexus.query.parser</module>
         <module>org.onexus.collection.store.sql</module>
@@ -53,34 +51,34 @@
         <module>org.onexus.loader.tsv</module>
         <module>org.onexus.resource.manager</module>
         <module>org.onexus.resource.serializer.xstream</module>
-        <module>org.onexus.ui</module>
         <module>org.onexus.loader.biomart</module>
         <module>org.onexus.loader.anduril</module>
         <module>org.onexus.collection.store.h2sql</module>
-        <module>onexus-resources</module>
         <module>org.onexus.data.manager</module>
+
+        <module>org.onexus.ui.core</module>
+        <module>org.onexus.ui.workspace</module>
+        <module>org.onexus.ui.website</module>
+
+        <module>provision</module>
+        <module>onexus-resources</module>
+        <module>onexus-server</module>
         <module>onexus-archetypes/widget</module>
+
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit</groupId>
+            <artifactId>com.springsource.org.junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.2</version>
-            </plugin>
-            <plugin>
-                <groupId>org.ops4j</groupId>
-                <artifactId>maven-pax-plugin</artifactId>
-                <version>1.5</version>
-                <configuration>
-                    <provision>
-                        <param>--log=debug</param>
-                        <param>--platform=felix</param>
-                    </provision>
-                </configuration>
-            </plugin>
 
+            <!-- Use JAVA 6 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -112,6 +110,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
@@ -125,6 +124,7 @@
                     </includes>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -158,6 +158,24 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>1.4.3</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${pom.version}</Bundle-Version>
+
+                        <Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${pom.version}"
+                        </Export-Package>
+                        <Private-Package>${bundle.namespace}.internal.*</Private-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+
         </plugins>
 
         <pluginManagement>
@@ -174,6 +192,24 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- OSGi framework -->
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>4.2.0</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.compendium</artifactId>
+                <version>4.2.0</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
+
             <!-- XStream dependencies -->
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
@@ -239,7 +275,19 @@
 
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.ui</artifactId>
+                <artifactId>org.onexus.ui.core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.ui.workspace</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.ui.website</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

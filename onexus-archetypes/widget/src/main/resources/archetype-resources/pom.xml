@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.ui</artifactId>
+            <artifactId>org.onexus.ui.workspace</artifactId>
             <version>${onexus.version}</version>
         </dependency>
 

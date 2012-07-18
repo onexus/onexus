@@ -19,7 +19,9 @@
 	</feature>	
 
 	<feature name='onexus-server-ui' version='${project.version}'>
-		<feature version='${project.version}'>org.onexus.ui</feature>
+		<feature version='${project.version}'>org.onexus.ui.core</feature>
+        <feature version='${project.version}'>org.onexus.ui.workspace</feature>
+        <feature version='${project.version}'>org.onexus.ui.website</feature>
 		<feature version='${karaf.version}'>war</feature>
         <feature version='2.2.0'>com.springsource.net.sf.cglib</feature>
 	</feature>

@@ -123,7 +123,8 @@
 								<feature>org.onexus.resource.serializer.xstream</feature>
 								<feature>org.onexus.collection.store.mysql</feature>
 								<feature>org.onexus.collection.store.h2sql</feature>
-								<feature>org.onexus.ui</feature>
+								<feature>org.onexus.ui.core</feature>
+                                <feature>org.onexus.ui.workspace</feature>
 								<feature>war</feature>
 							</features>
 							<repository>target/local-repo</repository>
