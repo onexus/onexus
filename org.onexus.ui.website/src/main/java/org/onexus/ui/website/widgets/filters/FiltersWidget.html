@@ -1,18 +1,29 @@
 <html xmlns:wicket="">
 <wicket:panel>
-    <form wicket:id="form">
-        <a style="text-align: right; margin-left: 60px;" wicket:id="addFilter" href="#"> Add Filter.. </a>
+    <form style="width:100%;" wicket:id="form">
+
 
         <ul class="unstyled">
             <li wicket:id="filters">
-                <div class="btn-group">
+                <div style="width: 96%; margin-bottom: 5px;" class="btn-group btn">
                     <a class="btn btn-primary" wicket:id="add"><i class="icon-plus icon-white"></i></a>
                     <a class="btn btn-primary" wicket:id="remove"><i class="icon-minus icon-white"></i></a>
                     <strong class="btn" wicket:id="name">Filter label</strong>
                 </div>
             </li>
         </ul>
+
     </form>
-    <span wicket:id="modalWindowAddFilter"></span>
+
+    <div>&nbsp;</div>
+
+    <div id="cf-container" class="accordion-group">
+        <div class="accordion-heading">
+            <a data-parent="#cf-container" data-toggle="collapse" class="accordion-toggle" href="#cf-body"><span>Create custom filter</span></a>
+        </div>
+        <div class="accordion-body collapse" id="cf-body" wicket:id="customFilter">
+        </div>
+    </div>
+
 </wicket:panel>
 </html>

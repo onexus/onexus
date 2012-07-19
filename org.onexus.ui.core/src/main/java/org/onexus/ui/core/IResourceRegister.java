@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.core;
 
-import org.apache.wicket.protocol.http.WebApplication;
-
 import java.util.List;
 import java.util.Map;
 

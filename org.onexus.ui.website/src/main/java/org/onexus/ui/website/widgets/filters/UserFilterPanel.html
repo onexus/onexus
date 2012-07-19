@@ -1,26 +1,51 @@
 <html xmlns:wicket>
 <wicket:panel>
     <div style="margin: 5% 5%;">
-        <form wicket:id="simpleUpload">
+        <form class="form-horizontal" wicket:id="simpleUpload">
             <fieldset>
-                <!--<legend>Upload a list of <span wicket:id="type">modules</span></legend>-->
-                <p>Filter Name : <input wicket:id="filterName"/></p>
 
-                <p wicket:id="properties">Select type of ID: <select wicket:id="select"></select></p>
+                <div class="control-group">
+                    <label class="control-label" for="input01">Filter name</label>
 
-                <p>Write values separated by a comma or one per line<br/><textarea wicket:id="textarea" cols="60"
-                                                                                   rows="8"></textarea></p>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="input01" wicket:id="filterName">
+                    </div>
+                </div>
 
-                <p>or upload a file<br/><input wicket:id="fileInput" id="upload" type="file"/></p>
+                <div class="control-group">
+                    <label class="control-label" for="input02">Select column</label>
+
+                    <div class="controls">
+                        <select wicket:id="select" id="input02"></select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="input03">Values</label>
+
+                    <div class="controls">
+                        <textarea id="input03" wicket:id="textarea" cols="70" rows="8"></textarea>
+
+                        <p class="help-block">Write values separated by a comma or one per line</p>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="upload">or upload a file</label>
+
+                    <div class="controls">
+                        <input wicket:id="fileInput" id="upload" type="file"/>
+                    </div>
+                </div>
+
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" wicket:id="okButton">Create filter</button>
+                    <button class="btn" wicket:id="cancelButton">Cancel</button>
+                </div>
+
             </fieldset>
 
-		<span style="width: 50%">
-		<input type="button" wicket:id="okButton" value="Create the negatedFilter"/>
-		</span>
-		<span style="width: 50%; text-align: right;">
-		<input type="button" wicket:id="cancelButton" value="Cancel"/>
-		</span>
-            <!--<input style="margin-left:250px;"  type="submit" value="Create the negatedFilter" />-->
             <span wicket:id="p-feedback"/>
         </form>
 

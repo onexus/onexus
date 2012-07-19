@@ -65,8 +65,7 @@ public abstract class UserFilterPanel extends Panel {
     }
 
     // Methods to send result of user interaction
-    public abstract void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection property,
-                                              Collection<String> values);
+    public abstract void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection property, Collection<String> values);
 
     public abstract void cancel(AjaxRequestTarget target);
 
@@ -114,20 +113,14 @@ public abstract class UserFilterPanel extends Panel {
             // set this form to multipart mode (allways needed for uploads!)
             setMultiPart(true);
 
-            /* add(new Label("type", entityCollection.getName())); */
-
             TextField<String> filterName = new TextField<String>("filterName", getFilterNameModel());
             add(filterName);
 
-            WebMarkupContainer properties = new WebMarkupContainer("properties");
-            add(properties);
-
             PropertyModel propModel = new PropertyModel();
-            fieldSelected = (getFieldSelectionList() == null || getFieldSelectionList().isEmpty()) ? null
-                    : getFieldSelectionList().get(0);
+            fieldSelected = (getFieldSelectionList() == null || getFieldSelectionList().isEmpty()) ? null : getFieldSelectionList().get(0);
             propModel.setObject(fieldSelected);
-            properties.add(new DropDownChoice<FieldSelection>("select", propModel, getFieldSelectionList(),
-                    new ChoiceRenderer<FieldSelection>("title")));
+
+            add(new DropDownChoice<FieldSelection>("select", propModel, getFieldSelectionList(), new ChoiceRenderer<FieldSelection>("title")));
 
             add(new TextArea<String>("textarea", textArea));
 
@@ -201,13 +194,6 @@ public abstract class UserFilterPanel extends Panel {
             }
         }
 
-        /**
-         * Get Values From Form.
-         *
-         * @param upload
-         * @return
-         * @throws IOException
-         */
         private Collection<String> getValuesFromForm() throws IOException {
 
             BufferedReader reader = null;

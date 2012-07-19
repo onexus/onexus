@@ -48,12 +48,11 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     public FiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
-
         onEventFireUpdate(EventQueryUpdate.class);
 
-        Form<String> form = new Form<String>("form");
-        add(form);
-
+        // Filters list
+        final Form<String> form = new Form<String>("form");
+        form.setOutputMarkupId(true);
         form.add(new ListView<FilterConfig>("filters", new PropertyModel<List<? extends FilterConfig>>(statusModel, "filters")) {
 
             @Override
@@ -150,54 +149,35 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             }
         });
 
-        final ModalWindow modal = new ModalWindow("modalWindowAddFilter");
-        modal.setContent(new UserFilterPanel(ModalWindow.CONTENT_ID, getConfig().getFieldSelection()) {
+        // Custom filter accordion
+        UserFilterPanel customFilter = new UserFilterPanel("customFilter", getConfig().getFieldSelection()) {
 
             @Override
-            public void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection field,
-                                             Collection<String> values) {
+            public void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection field, Collection<String> values) {
 
                 List<FilterConfig> filters = getStatus().getFilters();
-
                 FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(filters.size() + 1), filterName);
-
-                String collectionAlias = filterName;
-                filter.setDefine(collectionAlias + '=' + field.getCollection());
-
-                In where = new In(collectionAlias, field.getFieldName());
-                for (Object value : values) {
-                    where.addValue(value);
-                }
+                filter.setCollection(field.getCollection());
+                filter.setDefine("fc='" + field.getCollection() + "'");
+                In where = new In("fc", field.getFieldName());
+                for (Object value : values) { where.addValue(value); }
                 filter.setWhere(where.toString());
                 filters.add(filter);
-
-                modal.close(target);
-
+                target.add(form);
                 sendEvent(EventFiltersUpdate.EVENT);
 
             }
 
             @Override
             public void cancel(AjaxRequestTarget target) {
-                modal.close(target);
-            }
-
-        });
-        add(modal);
-
-        // Add Filter link - Only visible if there is fields to be viewed
-        WebMarkupContainer addLink = new AjaxLink<String>("addFilter") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                modal.show(target);
             }
 
         };
-        addLink.setOutputMarkupPlaceholderTag(true);
-        form.add(addLink);
-        addLink.setVisible(Boolean.TRUE.equals(getConfig().getUserFilters()));
+        customFilter.setVisible(Boolean.TRUE.equals(getConfig().getUserFilters()));
 
+        // Add components
+        add(form);
+        add(customFilter);
     }
 
     private BrowserPageStatus getPageStatus() {
