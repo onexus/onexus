@@ -17,6 +17,8 @@
  */
 package org.onexus.ui.core;
 
+import org.apache.wicket.protocol.http.WebApplication;
+
 public interface IResourceActivator {
 
     public void bind(IResourceRegister resourceRegister);

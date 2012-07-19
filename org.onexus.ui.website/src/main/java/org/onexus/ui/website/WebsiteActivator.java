@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website;
 
+import org.apache.wicket.protocol.http.WebApplication;
 import org.onexus.ui.core.IResourceActivator;
 import org.onexus.ui.core.IResourceRegister;
 
@@ -35,5 +36,4 @@ public class WebsiteActivator implements IResourceActivator {
     @Override
     public void unbind(IResourceRegister resourceRegister) {
     }
-
 }

@@ -156,4 +156,15 @@ public class Website extends WebPage {
         return getStatus().getConfig();
     }
 
+    private static boolean mounted = false;
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        if (!mounted) {
+            OnexusWebApplication.get().mountPage("website/${"+Website.PARAMETER_PAGE+"}/${ptab}", Website.class);
+            mounted = true;
+        }
+    }
 }

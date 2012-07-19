@@ -31,6 +31,8 @@ import org.onexus.ui.core.ws.WebserviceResource;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
 
+import javax.inject.Inject;
+
 public class OnexusWebApplication extends AuthenticatedWebApplication {
 
     // Force to import the package
@@ -38,11 +40,6 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
     public final static OsgiServiceProxyTargetLocator targetLocator = null;
 
     private OsgiComponentInjector injector;
-
-    private void mountPages() {
-        mountPage("admin", ResourcesPage.class);
-        //TODO mountPage("website/${"+Website.PARAMETER_PAGE+"}/${ptab}", Website.class);
-    }
 
     public Class<? extends Page> getHomePage() {
         return ResourcesPage.class;
@@ -73,7 +70,8 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
 
         // Mount pages
         mountPage("/login", getSignInPageClass());
-        mountPages();
+        mountPage("admin", ResourcesPage.class);
+
     }
 
     public OsgiComponentInjector getInjector() {

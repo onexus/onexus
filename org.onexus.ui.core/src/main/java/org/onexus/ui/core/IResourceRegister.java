@@ -17,6 +17,8 @@
  */
 package org.onexus.ui.core;
 
+import org.apache.wicket.protocol.http.WebApplication;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +31,5 @@ public interface IResourceRegister {
     public void addAutoComplete(Class<?> resourceType, String parentTag, String hint);
     
     public Map<String, List<String>> getAutocompleteMap(Class<?> resourceType);
+
 }
