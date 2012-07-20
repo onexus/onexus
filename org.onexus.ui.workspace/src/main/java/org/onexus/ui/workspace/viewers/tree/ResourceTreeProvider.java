@@ -2,11 +2,11 @@ package org.onexus.ui.workspace.viewers.tree;
 
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Folder;
-import org.onexus.core.resources.Project;
-import org.onexus.core.resources.Resource;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.resources.Folder;
+import org.onexus.resource.api.resources.Project;
+import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.core.OnexusWebApplication;
 import org.onexus.ui.core.pages.resource.ResourceModel;
 

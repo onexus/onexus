@@ -19,8 +19,8 @@ package org.onexus.ui.website.widgets.tags;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.onexus.core.IEntityTable;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.IEntityTable;
+import org.onexus.resource.api.query.Query;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.List;

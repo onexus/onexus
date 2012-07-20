@@ -2,9 +2,9 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         >
 
-    <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
+    <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service interface="org.onexus.core.IDataManager">
+    <service interface="org.onexus.resource.api.IDataManager">
         <bean class="org.onexus.data.manager.internal.DataManager">
             <property name="resourceManager" ref="resourceManagerRef"/>
         </bean>

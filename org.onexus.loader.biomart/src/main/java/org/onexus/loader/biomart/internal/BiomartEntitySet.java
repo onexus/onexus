@@ -17,10 +17,10 @@
  */
 package org.onexus.loader.biomart.internal;
 
-import org.onexus.core.IEntity;
-import org.onexus.core.IEntitySet;
-import org.onexus.core.TaskStatus;
-import org.onexus.core.utils.EntityIterator;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.IEntitySet;
+import org.onexus.resource.api.TaskStatus;
+import org.onexus.resource.api.utils.EntityIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

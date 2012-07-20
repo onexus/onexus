@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.onexus.core.IResourceManager;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.ui.core.pages.resource.ResourcesPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

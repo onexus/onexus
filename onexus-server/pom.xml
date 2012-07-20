@@ -113,7 +113,7 @@
 								<descriptor>mvn:org.onexus.build/provision/${project.version}/xml/features</descriptor>
 							</descriptors>
 							<features>
-								<feature>org.onexus.core</feature>
+								<feature>org.onexus.resource.api</feature>
 								<feature>org.onexus.collection.manager</feature>
 								<feature>org.onexus.task.manager</feature>
 								<feature>org.onexus.loader.tsv</feature>

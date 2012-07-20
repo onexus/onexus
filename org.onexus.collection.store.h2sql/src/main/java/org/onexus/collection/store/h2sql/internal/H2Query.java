@@ -2,8 +2,8 @@ package org.onexus.collection.store.h2sql.internal;
 
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlQuery;
-import org.onexus.core.query.OrderBy;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.query.OrderBy;
+import org.onexus.resource.api.query.Query;
 
 import java.util.List;
 

@@ -11,7 +11,7 @@
     </cm:property-placeholder>
 
     <!-- IResourceRegister -->
-    <reference id="serializerRef" interface="org.onexus.core.IResourceSerializer"/>
+    <reference id="serializerRef" interface="org.onexus.resource.api.IResourceSerializer"/>
     <reference-list id="resourceActivatorsRef" interface="org.onexus.ui.core.IResourceActivator" availability="optional">
         <reference-listener bind-method="bindActivators" unbind-method="unbindActivators"
                             ref="org.onexus.ui.resourceregister"/>

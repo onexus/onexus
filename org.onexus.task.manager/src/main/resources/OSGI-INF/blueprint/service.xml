@@ -10,7 +10,7 @@
     </cm:property-placeholder>
 
 
-    <service id="org.onexus.task.manager" interface="org.onexus.core.ITaskManager">
+    <service id="org.onexus.task.manager" interface="org.onexus.resource.api.ITaskManager">
         <bean class="org.onexus.task.manager.internal.TaskManager" init-method="init">
             <property name="timeout" value="${timeout}"/>
             <property name="maxThreads" value="${maxThreads}"/>

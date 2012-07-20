@@ -21,10 +21,10 @@ import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.io.Streams;
-import org.onexus.core.IDataManager;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Project;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.IDataManager;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.resources.Project;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

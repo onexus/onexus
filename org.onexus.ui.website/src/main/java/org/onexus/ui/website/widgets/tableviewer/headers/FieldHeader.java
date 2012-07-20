@@ -17,8 +17,8 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.headers;
 
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Field;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.resources.Field;
 import org.onexus.ui.website.widgets.tableviewer.formaters.StringFormater;
 
 public class FieldHeader extends ElementHeader {

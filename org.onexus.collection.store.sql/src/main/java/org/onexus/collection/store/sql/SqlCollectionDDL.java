@@ -18,11 +18,10 @@
 package org.onexus.collection.store.sql;
 
 import org.onexus.collection.store.sql.adapters.*;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Field;
-import org.onexus.core.resources.Link;
-import org.onexus.core.utils.LinkUtils;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.resources.Field;
+import org.onexus.resource.api.resources.Link;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

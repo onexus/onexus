@@ -18,8 +18,8 @@
 package org.onexus.ui.website.pages.browser;
 
 import org.apache.wicket.markup.html.panel.Panel;
-import org.onexus.core.query.Filter;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.query.Filter;
+import org.onexus.resource.api.query.Query;
 import org.onexus.ui.website.utils.visible.IVisible;
 import org.onexus.ui.website.utils.visible.VisibleRule;
 import org.onexus.ui.website.widgets.filters.FilterConfig;

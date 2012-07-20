@@ -13,9 +13,9 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
+    <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service id="org.onexus.collection.store.mysql" interface="org.onexus.core.ICollectionStore">
+    <service id="org.onexus.collection.store.mysql" interface="org.onexus.resource.api.ICollectionStore">
         <service-properties>
             <entry key="status" value="${status}"/>
         </service-properties>

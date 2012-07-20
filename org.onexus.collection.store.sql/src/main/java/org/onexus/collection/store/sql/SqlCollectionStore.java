@@ -17,9 +17,9 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.core.*;
-import org.onexus.core.query.Query;
-import org.onexus.core.resources.Collection;
+import org.onexus.resource.api.*;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.resources.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

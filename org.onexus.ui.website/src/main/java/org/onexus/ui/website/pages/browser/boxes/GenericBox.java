@@ -22,8 +22,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.IEntity;
-import org.onexus.core.resources.Field;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.resources.Field;
 
 /**
  * Base class to instantiate (creates) new concrete panel.

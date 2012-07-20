@@ -25,8 +25,8 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.onexus.core.IDataManager;
-import org.onexus.core.resources.Resource;
+import org.onexus.resource.api.IDataManager;
+import org.onexus.resource.api.resources.Resource;
 import org.onexus.ui.workspace.viewers.editor.XmlEditorTab;
 
 import javax.inject.Inject;

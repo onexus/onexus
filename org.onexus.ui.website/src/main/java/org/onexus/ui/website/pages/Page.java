@@ -19,7 +19,7 @@ package org.onexus.ui.website.pages;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.StringValue;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.CustomCssBehavior;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.events.EventPanel;

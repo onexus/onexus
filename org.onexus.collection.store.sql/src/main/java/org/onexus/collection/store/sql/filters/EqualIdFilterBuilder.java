@@ -20,10 +20,10 @@ package org.onexus.collection.store.sql.filters;
 import org.onexus.collection.store.sql.SqlCollectionDDL;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
-import org.onexus.core.query.EqualId;
-import org.onexus.core.query.Query;
-import org.onexus.core.resources.Field;
-import org.onexus.core.utils.QueryUtils;
+import org.onexus.resource.api.query.EqualId;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.resources.Field;
+import org.onexus.resource.api.utils.QueryUtils;
 
 import java.util.ArrayList;
 import java.util.List;

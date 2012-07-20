@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.core</artifactId>
+            <artifactId>org.onexus.resource.api</artifactId>
         </dependency>
 
         <dependency>

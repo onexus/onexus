@@ -24,7 +24,7 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.core.IResourceManager;
+import org.onexus.resource.api.IResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

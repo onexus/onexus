@@ -36,7 +36,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.query.Query;
 import org.onexus.ui.core.OnexusWebApplication;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.widgets.Widget;

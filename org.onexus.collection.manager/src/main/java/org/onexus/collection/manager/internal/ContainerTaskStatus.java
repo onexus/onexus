@@ -17,7 +17,7 @@
  */
 package org.onexus.collection.manager.internal;
 
-import org.onexus.core.TaskStatus;
+import org.onexus.resource.api.TaskStatus;
 
 public class ContainerTaskStatus extends TaskStatus {
 

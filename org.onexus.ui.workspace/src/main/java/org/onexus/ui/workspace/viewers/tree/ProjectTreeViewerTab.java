@@ -19,8 +19,7 @@ package org.onexus.ui.workspace.viewers.tree;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.resources.Resource;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.resource.api.resources.Resource;
 import org.onexus.ui.core.viewers.IViewerCreator;
 
 public class ProjectTreeViewerTab implements IViewerCreator {

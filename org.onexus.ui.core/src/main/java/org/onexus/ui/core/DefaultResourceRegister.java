@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.core;
 
-import org.apache.wicket.protocol.http.WebApplication;
-import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.*;
-import org.onexus.core.resources.Collection;
+import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.resources.Data;
+import org.onexus.resource.api.resources.Project;
+import org.onexus.resource.api.resources.Collection;
 import org.osgi.framework.ServiceReference;
 
 import java.util.*;

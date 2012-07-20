@@ -9,8 +9,8 @@
     </parent>
 
     <properties>
-        <bundle.symbolicName>org.onexus.core</bundle.symbolicName>
-        <bundle.namespace>org.onexus.core</bundle.namespace>
+        <bundle.symbolicName>org.onexus.resource</bundle.symbolicName>
+        <bundle.namespace>org.onexus.resource</bundle.namespace>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>

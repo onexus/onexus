@@ -17,8 +17,8 @@
  */
 package org.onexus.ui.website.utils;
 
-import org.onexus.core.query.EqualId;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.query.EqualId;
+import org.onexus.resource.api.query.Query;
 
 public class SingleEntityQuery extends Query {
 

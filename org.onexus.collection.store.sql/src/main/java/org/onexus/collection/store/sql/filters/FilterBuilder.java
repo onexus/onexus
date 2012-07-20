@@ -18,8 +18,8 @@
 package org.onexus.collection.store.sql.filters;
 
 import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.core.query.Filter;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.query.Filter;
+import org.onexus.resource.api.query.Query;
 
 public interface FilterBuilder {
 

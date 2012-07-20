@@ -17,19 +17,16 @@
  */
 package org.onexus.loader.tsv.internal;
 
-import org.apache.commons.compress.archivers.ArchiveException;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.CompressorInputStream;
-import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import org.onexus.core.IDataManager;
-import org.onexus.core.IEntity;
-import org.onexus.core.IEntitySet;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.utils.EntityIterator;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.IDataManager;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.IEntitySet;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.utils.EntityIterator;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.loader.tsv.internal.tools.BufferedFileChannel;
 import org.onexus.loader.tsv.internal.tools.Token;
 

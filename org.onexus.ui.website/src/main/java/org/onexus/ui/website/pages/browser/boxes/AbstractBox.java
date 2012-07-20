@@ -19,9 +19,9 @@ package org.onexus.ui.website.pages.browser.boxes;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.IEntity;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Collection;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.resources.Collection;
 
 import javax.inject.Inject;
 

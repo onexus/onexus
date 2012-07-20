@@ -17,9 +17,9 @@
  */
 package org.onexus.loader.biomart.internal;
 
-import org.onexus.core.IEntitySet;
-import org.onexus.core.ITask;
-import org.onexus.core.TaskStatus;
+import org.onexus.resource.api.IEntitySet;
+import org.onexus.resource.api.ITask;
+import org.onexus.resource.api.TaskStatus;
 
 public class TaskCallable implements ITask {
 

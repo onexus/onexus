@@ -28,8 +28,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
-import org.onexus.core.IEntityTable;
-import org.onexus.core.TaskStatus;
+import org.onexus.resource.api.IEntityTable;
+import org.onexus.resource.api.TaskStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;

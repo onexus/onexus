@@ -28,12 +28,12 @@ import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.IDataManager;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.*;
-import org.onexus.core.types.Text;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.IDataManager;
+import org.onexus.resource.api.resources.*;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.types.Text;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.core.wizards.AbstractWizard;
 import org.onexus.ui.core.pages.resource.ResourcesPage;
 

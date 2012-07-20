@@ -18,8 +18,8 @@
 package org.onexus.query.parser.internal;
 
 import org.junit.Test;
-import org.onexus.core.IQueryParser;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.IQueryParser;
+import org.onexus.resource.api.query.Query;
 
 import static org.junit.Assert.assertEquals;
 

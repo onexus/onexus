@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.website.widgets.tableviewer;
 
-import org.onexus.core.IEntityTable;
+import org.onexus.resource.api.IEntityTable;
 
 import java.io.Serializable;
 import java.util.Iterator;

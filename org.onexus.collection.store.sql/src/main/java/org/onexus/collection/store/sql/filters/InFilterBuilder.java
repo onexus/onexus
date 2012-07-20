@@ -20,9 +20,9 @@ package org.onexus.collection.store.sql.filters;
 import org.onexus.collection.store.sql.SqlCollectionDDL;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
-import org.onexus.core.query.In;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
+import org.onexus.resource.api.query.In;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.utils.QueryUtils;
 
 import java.util.Iterator;
 

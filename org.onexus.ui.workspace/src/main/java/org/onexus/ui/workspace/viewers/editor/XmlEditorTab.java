@@ -33,8 +33,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Resource;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.resources.Resource;
 import org.onexus.ui.core.IResourceRegister;
 
 import javax.inject.Inject;

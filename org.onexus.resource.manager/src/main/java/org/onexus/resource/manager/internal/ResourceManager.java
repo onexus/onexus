@@ -17,11 +17,11 @@
  */
 package org.onexus.resource.manager.internal;
 
-import org.onexus.core.IResourceManager;
-import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.Project;
-import org.onexus.core.resources.Resource;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.resources.Project;
+import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.osgi.framework.BundleContext;
 
 import java.io.File;

@@ -22,11 +22,11 @@ import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.core.ICollectionManager;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.query.Query;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Resource;
+import org.onexus.resource.api.ICollectionManager;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.resources.Resource;
 import org.onexus.ui.core.wizards.AbstractWizard;
 import org.onexus.ui.core.progressbar.ProgressBar;
 

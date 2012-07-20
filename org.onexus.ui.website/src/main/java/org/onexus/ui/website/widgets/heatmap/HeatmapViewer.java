@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets.heatmap;
 
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.IModel;
-import org.onexus.core.IResourceManager;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventRemoveFilter;

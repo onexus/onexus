@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.widgets.tags;
 
-import org.onexus.core.query.EqualId;
-import org.onexus.core.query.Filter;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
+import org.onexus.resource.api.query.EqualId;
+import org.onexus.resource.api.query.Filter;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.utils.QueryUtils;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.util.ArrayList;

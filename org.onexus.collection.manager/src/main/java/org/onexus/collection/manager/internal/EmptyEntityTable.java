@@ -17,10 +17,10 @@
  */
 package org.onexus.collection.manager.internal;
 
-import org.onexus.core.IEntity;
-import org.onexus.core.IEntityTable;
-import org.onexus.core.TaskStatus;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.IEntityTable;
+import org.onexus.resource.api.TaskStatus;
+import org.onexus.resource.api.query.Query;
 
 /**
  * <p>

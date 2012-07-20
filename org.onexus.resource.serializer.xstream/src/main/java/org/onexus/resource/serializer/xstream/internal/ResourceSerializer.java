@@ -20,9 +20,9 @@ package org.onexus.resource.serializer.xstream.internal;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
-import org.onexus.core.IResourceSerializer;
-import org.onexus.core.exceptions.UnserializeException;
-import org.onexus.core.resources.*;
+import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.exceptions.UnserializeException;
+import org.onexus.resource.api.resources.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

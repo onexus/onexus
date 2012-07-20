@@ -23,7 +23,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.IResource;
-import org.onexus.core.query.Query;
+import org.onexus.resource.api.query.Query;
 
 public class HeatmapPage extends WebPage implements IResourceListener {
     

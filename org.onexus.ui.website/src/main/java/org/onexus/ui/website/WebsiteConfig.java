@@ -19,7 +19,7 @@ package org.onexus.ui.website;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.SerializationUtils;
-import org.onexus.core.resources.Resource;
+import org.onexus.resource.api.resources.Resource;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageStatus;
 

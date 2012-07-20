@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.core.TaskStatus;
+import org.onexus.resource.api.TaskStatus;
 import org.onexus.ui.core.utils.panels.icons.Icons;
 
 import java.util.List;

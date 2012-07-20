@@ -1,6 +1,5 @@
 package org.onexus.resource.manager.internal;
 
-import org.onexus.core.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

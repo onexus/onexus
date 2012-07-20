@@ -8,11 +8,11 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
-    <reference id="collectionStoreRef" interface="org.onexus.core.ICollectionStore" filter="(status=enabled)"/>
-    <reference id="taskManagerRef" interface="org.onexus.core.ITaskManager"/>
+    <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="collectionStoreRef" interface="org.onexus.resource.api.ICollectionStore" filter="(status=enabled)"/>
+    <reference id="taskManagerRef" interface="org.onexus.resource.api.ITaskManager"/>
 
-    <service id="org.onexus.collection.manager" interface="org.onexus.core.ICollectionManager">
+    <service id="org.onexus.collection.manager" interface="org.onexus.resource.api.ICollectionManager">
         <bean class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
             <property name="maxThreads" value="${maxThreads}"/>
             <property name="resourceManager" ref="resourceManagerRef"/>

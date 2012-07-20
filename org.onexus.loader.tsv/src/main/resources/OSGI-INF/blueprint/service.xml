@@ -2,9 +2,9 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         >
 
-    <reference id="sourceManagerRef" interface="org.onexus.core.IDataManager"/>
+    <reference id="sourceManagerRef" interface="org.onexus.resource.api.IDataManager"/>
 
-    <service id="org.onexus.loader.tsv" interface="org.onexus.core.ILoader">
+    <service id="org.onexus.loader.tsv" interface="org.onexus.resource.api.ILoader">
         <bean class="org.onexus.loader.tsv.internal.TaskExecutor">
             <property name="dataManager" ref="sourceManagerRef"/>
         </bean>

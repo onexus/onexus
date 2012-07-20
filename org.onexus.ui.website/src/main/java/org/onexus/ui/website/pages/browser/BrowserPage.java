@@ -31,7 +31,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.core.IResourceManager;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.ui.website.events.EventTabSelected;
 import org.onexus.ui.website.events.EventViewChange;
 import org.onexus.ui.website.pages.Page;

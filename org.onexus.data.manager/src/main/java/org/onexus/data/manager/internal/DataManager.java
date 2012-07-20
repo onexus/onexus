@@ -22,12 +22,12 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.onexus.core.IDataManager;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.resources.Data;
-import org.onexus.core.resources.Project;
-import org.onexus.core.resources.Repository;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.IDataManager;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.resources.Data;
+import org.onexus.resource.api.resources.Project;
+import org.onexus.resource.api.resources.Repository;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -4,12 +4,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.onexus.core.ICollectionManager;
-import org.onexus.core.IEntityTable;
-import org.onexus.core.query.Contains;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.ICollectionManager;
+import org.onexus.resource.api.IEntityTable;
+import org.onexus.resource.api.query.Contains;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.pages.search.SearchPageStatus;
 import org.onexus.ui.website.pages.search.SearchType;
 

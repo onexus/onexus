@@ -18,7 +18,7 @@
 package org.onexus.resource.serializer.xstream.internal;
 
 import com.thoughtworks.xstream.converters.SingleValueConverter;
-import org.onexus.core.types.Text;
+import org.onexus.resource.api.types.Text;
 
 import java.util.HashMap;
 import java.util.Map;

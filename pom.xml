@@ -42,7 +42,7 @@
 
     <modules>
 
-        <module>org.onexus.core</module>
+
         <module>org.onexus.query.parser</module>
         <module>org.onexus.collection.store.sql</module>
         <module>org.onexus.collection.store.mysql</module>
@@ -64,6 +64,7 @@
         <module>onexus-resources</module>
         <module>onexus-server</module>
         <module>onexus-archetypes/widget</module>
+        <module>org.onexus.resource.api</module>
 
     </modules>
 
@@ -257,7 +258,7 @@
             <!-- ONEXUS -->
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.core</artifactId>
+                <artifactId>org.onexus.resource.api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

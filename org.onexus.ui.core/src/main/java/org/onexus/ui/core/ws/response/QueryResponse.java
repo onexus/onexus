@@ -18,13 +18,13 @@
 package org.onexus.ui.core.ws.response;
 
 import org.apache.wicket.request.Response;
-import org.onexus.core.ICollectionManager;
-import org.onexus.core.IEntity;
-import org.onexus.core.IEntityTable;
-import org.onexus.core.IQueryParser;
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
-import org.onexus.core.utils.ResourceUtils;
+import org.onexus.resource.api.ICollectionManager;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.IEntityTable;
+import org.onexus.resource.api.IQueryParser;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.resource.api.utils.ResourceUtils;
 
 import javax.inject.Inject;
 import java.util.Arrays;

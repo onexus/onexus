@@ -17,11 +17,10 @@
  */
 package org.onexus.loader.biomart.internal;
 
-import org.onexus.core.ILoader;
-import org.onexus.core.ITask;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Loader;
-import org.onexus.core.resources.Project;
+import org.onexus.resource.api.ILoader;
+import org.onexus.resource.api.ITask;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.resources.Project;
 
 public class TaskExecutor implements ILoader {
 

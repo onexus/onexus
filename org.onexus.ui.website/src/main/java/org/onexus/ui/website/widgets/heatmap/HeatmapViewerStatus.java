@@ -17,8 +17,8 @@
  */
 package org.onexus.ui.website.widgets.heatmap;
 
-import org.onexus.core.query.Query;
-import org.onexus.core.utils.QueryUtils;
+import org.onexus.resource.api.query.Query;
+import org.onexus.resource.api.utils.QueryUtils;
 import org.onexus.ui.website.widgets.WidgetStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 

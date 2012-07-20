@@ -20,7 +20,7 @@ package org.onexus.ui.core.wizards;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.io.IClusterable;
-import org.onexus.core.resources.Resource;
+import org.onexus.resource.api.resources.Resource;
 
 public interface IWizardCreator extends IClusterable {
 

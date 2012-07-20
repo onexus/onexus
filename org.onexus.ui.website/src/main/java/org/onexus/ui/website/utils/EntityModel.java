@@ -18,9 +18,9 @@
 package org.onexus.ui.website.utils;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.core.ICollectionManager;
-import org.onexus.core.IEntity;
-import org.onexus.core.utils.EntityIterator;
+import org.onexus.resource.api.ICollectionManager;
+import org.onexus.resource.api.IEntity;
+import org.onexus.resource.api.utils.EntityIterator;
 import org.onexus.ui.core.OnexusWebApplication;
 
 import javax.inject.Inject;

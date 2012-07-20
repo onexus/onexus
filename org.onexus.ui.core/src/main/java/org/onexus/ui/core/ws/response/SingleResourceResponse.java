@@ -18,9 +18,9 @@
 package org.onexus.ui.core.ws.response;
 
 import org.apache.wicket.request.Response;
-import org.onexus.core.IResourceManager;
-import org.onexus.core.IResourceSerializer;
-import org.onexus.core.resources.Resource;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.resources.Resource;
 
 import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;

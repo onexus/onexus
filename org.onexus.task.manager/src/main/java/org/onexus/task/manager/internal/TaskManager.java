@@ -17,18 +17,17 @@
  */
 package org.onexus.task.manager.internal;
 
-import org.onexus.core.*;
-import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Loader;
-import org.onexus.core.resources.Plugin;
-import org.onexus.core.resources.Project;
+import org.onexus.resource.api.*;
+import org.onexus.resource.api.resources.Collection;
+import org.onexus.resource.api.resources.Loader;
+import org.onexus.resource.api.resources.Plugin;
+import org.onexus.resource.api.resources.Project;
 import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 

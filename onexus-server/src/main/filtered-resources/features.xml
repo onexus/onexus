@@ -4,7 +4,7 @@
 	</repository>
 
 	<feature name='onexus-server' version='${project.version}'>
-		<feature version='${project.version}'>org.onexus.core</feature>
+		<feature version='${project.version}'>org.onexus.resource.api</feature>
         <feature version='${project.version}'>org.onexus.query.parser</feature>
 		<feature version='${project.version}'>org.onexus.collection.manager</feature>
 		<feature version='${project.version}'>org.onexus.task.manager</feature>
