@@ -19,7 +19,6 @@ package org.onexus.ui.website.widgets.filters;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -39,17 +38,17 @@ import java.util.List;
  *
  * @author armand
  */
-public abstract class UserFilterPanel extends Panel {
+public abstract class CustomFilterPanel extends Panel {
 
     private IModel<String> filterNameModel;
-    private FieldSelection fieldSelected;
-    private List<FieldSelection> fieldSelectionList;
+    private CustomFilter fieldSelected;
+    private List<CustomFilter> customFilterList;
 
-    public UserFilterPanel(String id, List<FieldSelection> filterableProps) {
+    public CustomFilterPanel(String id, List<CustomFilter> filterableProps) {
         super(id);
 
         this.filterNameModel = new Model<String>("");
-        this.fieldSelectionList = filterableProps;
+        this.customFilterList = filterableProps;
 
         // Create feedback panels
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
@@ -65,7 +64,7 @@ public abstract class UserFilterPanel extends Panel {
     }
 
     // Methods to send result of user interaction
-    public abstract void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection property, Collection<String> values);
+    public abstract void recuperateFormValues(AjaxRequestTarget target, String filterName, CustomFilter property, Collection<String> values);
 
     public abstract void cancel(AjaxRequestTarget target);
 
@@ -81,19 +80,19 @@ public abstract class UserFilterPanel extends Panel {
         this.filterNameModel.setObject(filterName);
     }
 
-    public List<FieldSelection> getFieldSelectionList() {
-        return fieldSelectionList;
+    public List<CustomFilter> getCustomFilterList() {
+        return customFilterList;
     }
 
-    public void setFieldSelectionList(List<FieldSelection> fieldSelectionList) {
-        this.fieldSelectionList = fieldSelectionList;
+    public void setCustomFilterList(List<CustomFilter> customFilterList) {
+        this.customFilterList = customFilterList;
     }
 
-    public FieldSelection getFieldSelected() {
+    public CustomFilter getFieldSelected() {
         return fieldSelected;
     }
 
-    public void setFieldSelected(FieldSelection fieldSelectedModel) {
+    public void setFieldSelected(CustomFilter fieldSelectedModel) {
         this.fieldSelected = fieldSelectedModel;
     }
 
@@ -117,10 +116,10 @@ public abstract class UserFilterPanel extends Panel {
             add(filterName);
 
             PropertyModel propModel = new PropertyModel();
-            fieldSelected = (getFieldSelectionList() == null || getFieldSelectionList().isEmpty()) ? null : getFieldSelectionList().get(0);
+            fieldSelected = (getCustomFilterList() == null || getCustomFilterList().isEmpty()) ? null : getCustomFilterList().get(0);
             propModel.setObject(fieldSelected);
 
-            add(new DropDownChoice<FieldSelection>("select", propModel, getFieldSelectionList(), new ChoiceRenderer<FieldSelection>("title")));
+            add(new DropDownChoice<CustomFilter>("select", propModel, getCustomFilterList(), new ChoiceRenderer<CustomFilter>("title")));
 
             add(new TextArea<String>("textarea", textArea));
 
@@ -246,15 +245,15 @@ public abstract class UserFilterPanel extends Panel {
     /*
      * Class to interact with property.
      */
-    private class PropertyModel implements IModel<FieldSelection> {
+    private class PropertyModel implements IModel<CustomFilter> {
 
         @Override
-        public FieldSelection getObject() {
+        public CustomFilter getObject() {
             return getFieldSelected();
         }
 
         @Override
-        public void setObject(FieldSelection object) {
+        public void setObject(CustomFilter object) {
             setFieldSelected(object);
         }
 

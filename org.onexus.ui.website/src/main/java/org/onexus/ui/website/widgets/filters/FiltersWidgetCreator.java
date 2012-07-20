@@ -36,7 +36,7 @@ public class FiltersWidgetCreator extends AbstractWidgetCreator<FiltersWidgetCon
     @Override
     public void register(IResourceRegister resourceRegister) {
         resourceRegister.register(FiltersWidgetConfig.class);
-        resourceRegister.register(FieldSelection.class);
+        resourceRegister.register(CustomFilter.class);
         resourceRegister.register(FilterConfig.class);
 
         //resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<id>[tab-id]</id>");

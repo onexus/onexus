@@ -18,6 +18,7 @@
 package org.onexus.ui.website.widgets.filters;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
@@ -30,8 +31,11 @@ public class FiltersWidgetConfig extends WidgetConfig {
 
     private FiltersWidgetStatus defaultStatus;
     private String title;
-    private Boolean userFilters;
-    private List<FieldSelection> fieldSelection;
+
+    @XStreamImplicit(itemFieldName = "custom-filter")
+    private List<CustomFilter> customFilters;
+
+    @XStreamImplicit(itemFieldName = "filter")
     private List<FilterConfig> filters;
 
     public FiltersWidgetConfig() {
@@ -42,16 +46,14 @@ public class FiltersWidgetConfig extends WidgetConfig {
         this(id, null, filters);
     }
 
-    public FiltersWidgetConfig(String id, FieldSelection[] userFields, FilterConfig... filters) {
+    public FiltersWidgetConfig(String id, CustomFilter[] customFilters, FilterConfig... filters) {
         super(id);
 
-        if (userFields == null || userFields.length == 0) {
-            this.userFilters = false;
-            this.fieldSelection = new ArrayList<FieldSelection>(0);
+        if (customFilters == null || customFilters.length == 0) {
+            this.customFilters = new ArrayList<CustomFilter>(0);
         } else {
-            this.userFilters = true;
-            this.fieldSelection = new ArrayList<FieldSelection>(
-                    Arrays.asList(userFields));
+            this.customFilters = new ArrayList<CustomFilter>(
+                    Arrays.asList(customFilters));
         }
         this.filters = new ArrayList<FilterConfig>(Arrays.asList(filters));
     }
@@ -76,20 +78,12 @@ public class FiltersWidgetConfig extends WidgetConfig {
         this.filters.add(filter);
     }
 
-    public Boolean getUserFilters() {
-        return userFilters;
+    public List<CustomFilter> getCustomFilters() {
+        return customFilters;
     }
 
-    public void setUserFilters(Boolean userFilters) {
-        this.userFilters = userFilters;
-    }
-
-    public List<FieldSelection> getFieldSelection() {
-        return fieldSelection;
-    }
-
-    public void setFieldSelection(List<FieldSelection> fieldSelection) {
-        this.fieldSelection = fieldSelection;
+    public void setCustomFilters(List<CustomFilter> customFilters) {
+        this.customFilters = customFilters;
     }
 
     @Override

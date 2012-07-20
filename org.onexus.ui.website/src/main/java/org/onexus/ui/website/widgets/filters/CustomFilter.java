@@ -21,22 +21,22 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import java.io.Serializable;
 
-@XStreamAlias("field-selection")
-public class FieldSelection implements Serializable {
+@XStreamAlias("custom-filter")
+public class CustomFilter implements Serializable {
 
     private String title;
     private String collection;
-    private String fieldName;
+    private String field;
 
-    public FieldSelection() {
+    public CustomFilter() {
         super();
     }
 
-    public FieldSelection(String title, String collectionURI, String fieldName) {
+    public CustomFilter(String title, String collectionURI, String field) {
         super();
         this.title = title;
         this.collection = collectionURI;
-        this.fieldName = fieldName;
+        this.field = field;
     }
 
     public String getTitle() {
@@ -55,12 +55,12 @@ public class FieldSelection implements Serializable {
         this.collection = collectionURI;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public String getField() {
+        return field;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setField(String field) {
+        this.field = field;
     }
 
 }

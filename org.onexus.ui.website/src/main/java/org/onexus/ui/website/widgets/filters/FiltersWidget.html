@@ -6,8 +6,9 @@
         <ul class="unstyled">
             <li wicket:id="filters">
                 <div style="width: 96%; margin-bottom: 5px;" class="btn-group btn">
-                    <a class="btn btn-primary" wicket:id="add"><i class="icon-plus icon-white"></i></a>
-                    <a class="btn btn-primary" wicket:id="remove"><i class="icon-minus icon-white"></i></a>
+                    <button class="close" type="button" wicket:id="remove">&times;</button>
+                    <a class="btn btn-primary" wicket:id="apply"><i class="icon-plus icon-white"></i></a>
+                    <a class="btn btn-primary" wicket:id="unapply"><i class="icon-minus icon-white"></i></a>
                     <strong class="btn" wicket:id="name">Filter label</strong>
                 </div>
             </li>

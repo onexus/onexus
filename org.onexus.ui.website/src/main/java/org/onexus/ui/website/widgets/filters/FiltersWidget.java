@@ -21,8 +21,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -67,69 +65,47 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                     item.setOutputMarkupId(true);
 
-                    // Add button
-                    item.add(new AjaxLink<String>("add") {
-
-                        @Override
-                        public void onClick(AjaxRequestTarget target) {
-
-                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
-                            filters.add(new BrowserFilter(filterConfig));
-                            send(getPage(), Broadcast.BREADTH, EventAddFilter.EVENT);
-
-                        }
-
-                        @Override
-                        public boolean isVisible() {
-
-                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
-
-                            for (IFilter filter : filters) {
-                                if (filterConfig.equals(filter.getFilterConfig())) {
-                                    return false;
-                                }
-                            }
-                            return true;
-
-                        }
-                    });
-
-                    // Remove button
                     item.add(new AjaxLink<String>("remove") {
 
                         @Override
                         public void onClick(AjaxRequestTarget target) {
-
-                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
-
-                            IFilter removeMe = null;
-                            for (IFilter filter : filters) {
-                                if (filterConfig.equals(filter.getFilterConfig())) {
-                                    removeMe = filter;
-                                    break;
-                                }
-                            }
-
-                            if (removeMe != null) {
-                                filters.remove(removeMe);
-                            }
-
-                            send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
-
+                            FiltersWidget.this.getStatus().getFilters().remove(filterConfig);
+                            unapplyFilter(filterConfig);
+                            target.add(form);
                         }
 
                         @Override
                         public boolean isVisible() {
+                            return filterConfig.isDeletable();
+                        }
+                    });
 
-                            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+                    // Add button
+                    item.add(new AjaxLink<String>("apply") {
 
-                            for (IFilter filter : filters) {
-                                if (filterConfig.equals(filter.getFilterConfig())) {
-                                    return true;
-                                }
-                            }
-                            return false;
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            applyFilter(filterConfig);
+                        }
 
+                        @Override
+                        public boolean isVisible() {
+                            return !isFilterApplyed(filterConfig);
+                        }
+
+                    });
+
+                    // Remove button
+                    item.add(new AjaxLink<String>("unapply") {
+
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            unapplyFilter(filterConfig);
+                        }
+
+                        @Override
+                        public boolean isVisible() {
+                            return isFilterApplyed(filterConfig);
                         }
                     });
 
@@ -150,21 +126,23 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         });
 
         // Custom filter accordion
-        UserFilterPanel customFilter = new UserFilterPanel("customFilter", getConfig().getFieldSelection()) {
+        CustomFilterPanel customFilter = new CustomFilterPanel("customFilter", getConfig().getCustomFilters()) {
 
             @Override
-            public void recuperateFormValues(AjaxRequestTarget target, String filterName, FieldSelection field, Collection<String> values) {
+            public void recuperateFormValues(AjaxRequestTarget target, String filterName, CustomFilter field, Collection<String> values) {
 
                 List<FilterConfig> filters = getStatus().getFilters();
                 FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(filters.size() + 1), filterName);
+                filter.setDeletable(true);
                 filter.setCollection(field.getCollection());
                 filter.setDefine("fc='" + field.getCollection() + "'");
-                In where = new In("fc", field.getFieldName());
+                In where = new In("fc", field.getField());
                 for (Object value : values) { where.addValue(value); }
                 filter.setWhere(where.toString());
                 filters.add(filter);
                 target.add(form);
-                sendEvent(EventFiltersUpdate.EVENT);
+
+                applyFilter(filter);
 
             }
 
@@ -173,11 +151,47 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             }
 
         };
-        customFilter.setVisible(Boolean.TRUE.equals(getConfig().getUserFilters()));
+
+        customFilter.setVisible(getConfig().getCustomFilters() != null && !getConfig().getCustomFilters().isEmpty());
 
         // Add components
         add(form);
         add(customFilter);
+    }
+
+    private boolean isFilterApplyed(FilterConfig filterConfig) {
+        List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+
+        for (IFilter filter : filters) {
+            if (filterConfig.equals(filter.getFilterConfig())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void unapplyFilter(FilterConfig filterConfig) {
+
+            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+
+        IFilter removeMe = null;
+        for (IFilter filter : filters) {
+            if (filterConfig.equals(filter.getFilterConfig())) {
+                removeMe = filter;
+                break;
+            }
+        }
+
+        if (removeMe != null) {
+            filters.remove(removeMe);
+            send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
+        }
+    }
+
+    private void applyFilter(FilterConfig filterConfig) {
+        List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+        filters.add(new BrowserFilter(filterConfig));
+        send(getPage(), Broadcast.BREADTH, EventAddFilter.EVENT);
     }
 
     private BrowserPageStatus getPageStatus() {

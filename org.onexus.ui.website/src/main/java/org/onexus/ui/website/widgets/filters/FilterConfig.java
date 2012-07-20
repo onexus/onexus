@@ -29,6 +29,8 @@ public class FilterConfig implements Serializable, IVisible {
 
     private String name;
 
+    private boolean deletable = false;
+
     private String visible;
 
     private String collection;
@@ -100,6 +102,14 @@ public class FilterConfig implements Serializable, IVisible {
 
     public String getHelp() {
         return help;
+    }
+
+    public boolean isDeletable() {
+        return deletable;
+    }
+
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
     }
 
     public void setHelp(String help) {
