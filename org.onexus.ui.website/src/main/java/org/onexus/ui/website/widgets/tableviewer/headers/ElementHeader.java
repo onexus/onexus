@@ -20,7 +20,7 @@ package org.onexus.ui.website.widgets.tableviewer.headers;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.onexus.resource.api.resources.IMetadata;
+import org.onexus.resource.api.utils.IMetadata;
 import org.onexus.ui.website.widgets.tableviewer.formaters.ITextFormater;
 
 public class ElementHeader implements IHeader {

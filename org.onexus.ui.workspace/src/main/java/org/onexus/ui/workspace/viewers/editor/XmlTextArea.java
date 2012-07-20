@@ -25,7 +25,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.io.ByteArrayOutputStream;
 import org.apache.wicket.validation.IValidationError;
 import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;

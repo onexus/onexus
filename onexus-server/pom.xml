@@ -114,6 +114,8 @@
 							</descriptors>
 							<features>
 								<feature>org.onexus.resource.api</feature>
+                                <feature>org.onexus.data.api</feature>
+                                <feature>org.onexus.collection.api</feature>
 								<feature>org.onexus.collection.manager</feature>
 								<feature>org.onexus.task.manager</feature>
 								<feature>org.onexus.loader.tsv</feature>

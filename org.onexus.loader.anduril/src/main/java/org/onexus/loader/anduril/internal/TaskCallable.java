@@ -21,10 +21,10 @@ import fi.helsinki.ltdk.csbl.anduril.core.engine.DynamicError;
 import fi.helsinki.ltdk.csbl.anduril.core.engine.NetworkEvaluator;
 import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
 import fi.helsinki.ltdk.csbl.anduril.core.network.componentInstance.OutputComponentInstance;
-import org.onexus.resource.api.IEntitySet;
-import org.onexus.resource.api.ITask;
-import org.onexus.resource.api.TaskStatus;
-import org.onexus.resource.api.resources.Collection;
+import org.onexus.collection.api.IEntitySet;
+import org.onexus.collection.api.ITask;
+import org.onexus.collection.api.TaskStatus;
+import org.onexus.collection.api.Collection;
 import org.onexus.loader.tsv.internal.FileEntitySet;
 
 import java.io.File;

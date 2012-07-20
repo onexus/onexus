@@ -17,8 +17,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.onexus.resource.api.resources.Project;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 import org.onexus.ui.core.events.EventResourceSelect;
 
 import java.util.Set;

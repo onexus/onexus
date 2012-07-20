@@ -17,11 +17,11 @@
  */
 package org.onexus.loader.tsv.internal;
 
-import org.onexus.resource.api.IDataManager;
-import org.onexus.resource.api.IEntitySet;
-import org.onexus.resource.api.ITask;
-import org.onexus.resource.api.TaskStatus;
-import org.onexus.resource.api.resources.Collection;
+import org.onexus.data.api.IDataManager;
+import org.onexus.collection.api.IEntitySet;
+import org.onexus.collection.api.ITask;
+import org.onexus.collection.api.TaskStatus;
+import org.onexus.collection.api.Collection;
 
 public class TsvTaskCallable implements ITask {
 

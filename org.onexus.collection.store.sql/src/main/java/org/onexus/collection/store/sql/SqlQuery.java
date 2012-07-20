@@ -19,12 +19,12 @@ package org.onexus.collection.store.sql;
 
 import org.onexus.collection.store.sql.adapters.SqlAdapter;
 import org.onexus.collection.store.sql.filters.FilterBuilder;
-import org.onexus.resource.api.query.*;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Link;
-import org.onexus.resource.api.utils.FieldLink;
-import org.onexus.resource.api.utils.LinkUtils;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.query.*;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Link;
+import org.onexus.collection.api.utils.FieldLink;
+import org.onexus.collection.api.utils.LinkUtils;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

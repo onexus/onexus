@@ -25,9 +25,9 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 import org.h2.Driver;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlQuery;
-import org.onexus.resource.api.ICollectionStore;
+import org.onexus.collection.api.ICollectionStore;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.query.Query;
+import org.onexus.collection.api.query.Query;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

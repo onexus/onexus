@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.io.IClusterable;
-import org.onexus.resource.api.IEntity;
+import org.onexus.collection.api.IEntity;
 
 /**
  * A IDecorator creates the panel for a given Field and a IEntity instance.

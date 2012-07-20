@@ -33,6 +33,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>fi.helsinki.ltdk.csbl</groupId>
             <artifactId>anduril</artifactId>
         </dependency>

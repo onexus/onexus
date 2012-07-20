@@ -2,7 +2,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
            xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
 
-    <service id="org.onexus.query.parser" interface="org.onexus.resource.api.IQueryParser">
+    <service id="org.onexus.query.parser" interface="org.onexus.collection.api.query.IQueryParser">
         <bean class="org.onexus.query.parser.internal.QueryParser" />
     </service>
 </blueprint>

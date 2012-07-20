@@ -5,7 +5,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 public class CustomCssBehavior extends Behavior {

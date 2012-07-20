@@ -17,7 +17,7 @@
  */
 package org.onexus.resource.api.utils;
 
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 
 import java.util.HashMap;
 import java.util.Map;

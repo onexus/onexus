@@ -4,7 +4,7 @@
 
     <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service interface="org.onexus.resource.api.IDataManager">
+    <service interface="org.onexus.data.api.IDataManager">
         <bean class="org.onexus.data.manager.internal.DataManager">
             <property name="resourceManager" ref="resourceManagerRef"/>
         </bean>

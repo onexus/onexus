@@ -17,13 +17,13 @@
  */
 package org.onexus.loader.tsv.internal;
 
-import org.onexus.resource.api.IDataManager;
-import org.onexus.resource.api.ILoader;
-import org.onexus.resource.api.ITask;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Field;
-import org.onexus.resource.api.resources.Loader;
-import org.onexus.resource.api.resources.Project;
+import org.onexus.data.api.IDataManager;
+import org.onexus.collection.api.ILoader;
+import org.onexus.collection.api.ITask;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.Loader;
+import org.onexus.resource.api.Project;
 
 import java.util.ArrayList;
 import java.util.List;

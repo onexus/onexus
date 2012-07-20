@@ -19,7 +19,7 @@ package org.onexus.ui.core.wizards;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 
 import java.io.Serializable;
 import java.util.ArrayList;

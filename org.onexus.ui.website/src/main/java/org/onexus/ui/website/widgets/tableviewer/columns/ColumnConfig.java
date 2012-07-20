@@ -19,12 +19,12 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.onexus.resource.api.IEntityTable;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.utils.QueryUtils;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Field;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.core.OnexusWebApplication;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorManager;

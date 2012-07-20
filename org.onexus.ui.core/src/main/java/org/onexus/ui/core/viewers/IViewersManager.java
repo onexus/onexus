@@ -17,7 +17,7 @@
  */
 package org.onexus.ui.core.viewers;
 
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 
 import java.util.List;
 

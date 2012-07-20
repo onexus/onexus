@@ -19,7 +19,7 @@ package org.onexus.ui.core.pages.resource;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 import org.onexus.ui.core.OnexusWebApplication;
 
 import javax.inject.Inject;

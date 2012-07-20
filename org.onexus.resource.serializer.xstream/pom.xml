@@ -29,13 +29,23 @@
         </dependency>
 
         <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.resource.api</artifactId>
+            <artifactId>org.onexus.collection.api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.data.api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
         </dependency>
 
     </dependencies>

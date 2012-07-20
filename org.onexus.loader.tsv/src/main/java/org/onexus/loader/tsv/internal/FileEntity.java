@@ -17,9 +17,9 @@
  */
 package org.onexus.loader.tsv.internal;
 
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Field;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

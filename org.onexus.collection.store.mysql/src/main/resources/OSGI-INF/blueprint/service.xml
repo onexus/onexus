@@ -15,7 +15,7 @@
 
     <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service id="org.onexus.collection.store.mysql" interface="org.onexus.resource.api.ICollectionStore">
+    <service id="org.onexus.collection.store.mysql" interface="org.onexus.collection.api.ICollectionStore">
         <service-properties>
             <entry key="status" value="${status}"/>
         </service-properties>

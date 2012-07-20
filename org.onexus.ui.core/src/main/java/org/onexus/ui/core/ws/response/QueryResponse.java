@@ -18,12 +18,12 @@
 package org.onexus.ui.core.ws.response;
 
 import org.apache.wicket.request.Response;
-import org.onexus.resource.api.ICollectionManager;
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.IEntityTable;
-import org.onexus.resource.api.IQueryParser;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.query.IQueryParser;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import javax.inject.Inject;

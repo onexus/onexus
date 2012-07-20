@@ -17,13 +17,14 @@
  */
 package org.onexus.collection.manager.internal;
 
+import org.onexus.collection.api.*;
+import org.onexus.collection.api.Collection;
 import org.onexus.resource.api.*;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Project;
-import org.onexus.resource.api.utils.FieldLink;
-import org.onexus.resource.api.utils.LinkUtils;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.Project;
+import org.onexus.collection.api.utils.FieldLink;
+import org.onexus.collection.api.utils.LinkUtils;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

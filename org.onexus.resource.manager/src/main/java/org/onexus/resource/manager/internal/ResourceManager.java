@@ -19,8 +19,8 @@ package org.onexus.resource.manager.internal;
 
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.resource.api.resources.Project;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.osgi.framework.BundleContext;
 

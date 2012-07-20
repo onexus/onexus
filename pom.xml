@@ -65,6 +65,8 @@
         <module>onexus-server</module>
         <module>onexus-archetypes/widget</module>
         <module>org.onexus.resource.api</module>
+        <module>org.onexus.collection.api</module>
+        <module>org.onexus.data.api</module>
 
     </modules>
 
@@ -259,6 +261,18 @@
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.resource.api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.collection.api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.data.api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

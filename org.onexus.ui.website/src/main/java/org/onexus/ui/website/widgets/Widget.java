@@ -19,7 +19,7 @@ package org.onexus.ui.website.widgets;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
-import org.onexus.resource.api.query.Query;
+import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventPanel;

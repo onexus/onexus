@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.resource.api.query.In;
+import org.onexus.collection.api.query.In;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventRemoveFilter;

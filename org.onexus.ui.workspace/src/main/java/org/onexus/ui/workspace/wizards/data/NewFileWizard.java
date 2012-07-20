@@ -29,9 +29,9 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.onexus.resource.api.IDataManager;
-import org.onexus.resource.api.resources.Data;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.data.api.IDataManager;
+import org.onexus.data.api.Data;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.core.wizards.AbstractNewResourceWizard;
 

@@ -18,9 +18,9 @@
 package org.onexus.ui.core;
 
 import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.resource.api.resources.Data;
-import org.onexus.resource.api.resources.Project;
-import org.onexus.resource.api.resources.Collection;
+import org.onexus.data.api.Data;
+import org.onexus.resource.api.Project;
+import org.onexus.collection.api.Collection;
 import org.osgi.framework.ServiceReference;
 
 import java.util.*;

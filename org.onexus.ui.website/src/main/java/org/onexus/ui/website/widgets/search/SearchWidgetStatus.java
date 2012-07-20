@@ -17,10 +17,10 @@
  */
 package org.onexus.ui.website.widgets.search;
 
-import org.onexus.resource.api.query.Contains;
-import org.onexus.resource.api.query.Filter;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.query.Contains;
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.util.ArrayList;

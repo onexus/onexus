@@ -17,11 +17,9 @@
  */
 package org.onexus.task.manager.internal;
 
-import org.onexus.resource.api.*;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Loader;
-import org.onexus.resource.api.resources.Plugin;
-import org.onexus.resource.api.resources.Project;
+import org.onexus.collection.api.*;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Project;
 import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

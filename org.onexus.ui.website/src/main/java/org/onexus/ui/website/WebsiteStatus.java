@@ -19,7 +19,7 @@ package org.onexus.ui.website;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import org.onexus.resource.api.query.Query;
+import org.onexus.collection.api.query.Query;
 import org.onexus.ui.website.pages.PageStatus;
 
 import java.io.Serializable;

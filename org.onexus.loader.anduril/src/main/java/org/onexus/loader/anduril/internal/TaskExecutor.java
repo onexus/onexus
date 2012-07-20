@@ -19,10 +19,10 @@ package org.onexus.loader.anduril.internal;
 
 import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
 import fi.helsinki.ltdk.csbl.anduril.core.network.launcher.JavaLauncher;
-import org.onexus.resource.api.ILoader;
-import org.onexus.resource.api.ITask;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Project;
+import org.onexus.collection.api.ILoader;
+import org.onexus.collection.api.ITask;
+import org.onexus.collection.api.Collection;
+import org.onexus.resource.api.Project;
 
 import java.io.File;
 import java.io.IOException;

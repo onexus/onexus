@@ -13,7 +13,7 @@
 
     <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service interface="org.onexus.resource.api.ICollectionStore" ref="org.onexus.collection.store.h2sql">
+    <service interface="org.onexus.collection.api.ICollectionStore" ref="org.onexus.collection.store.h2sql">
         <service-properties>
             <entry key="status" value="${status}"/>
         </service-properties>

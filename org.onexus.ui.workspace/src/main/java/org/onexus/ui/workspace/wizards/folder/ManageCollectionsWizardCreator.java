@@ -19,8 +19,8 @@ package org.onexus.ui.workspace.wizards.folder;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.resources.Folder;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.Resource;
 import org.onexus.ui.core.wizards.IWizardCreator;
 
 public class ManageCollectionsWizardCreator implements IWizardCreator {

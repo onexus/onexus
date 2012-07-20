@@ -17,9 +17,6 @@
  */
 package org.onexus.resource.api;
 
-import org.onexus.resource.api.resources.Project;
-import org.onexus.resource.api.resources.Resource;
-
 import java.util.List;
 
 public interface IResourceManager {

@@ -20,8 +20,8 @@ package org.onexus.ui.workspace.wizards.folder;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.resources.Folder;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.Resource;
 import org.onexus.ui.core.wizards.AbstractNewResourceWizard;
 
 public class NewFolderWizard extends AbstractNewResourceWizard<Folder> {

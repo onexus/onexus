@@ -21,7 +21,7 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 import org.onexus.ui.website.Website;
 
 public class PreviewBrowserViewer extends Panel {

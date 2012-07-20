@@ -20,11 +20,11 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.store.sql.SqlCollectionDDL.ColumnInfo;
 import org.onexus.collection.store.sql.adapters.*;
 import org.onexus.collection.store.sql.filters.*;
-import org.onexus.resource.api.types.Text;
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.query.Filter;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.types.Text;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,9 +1,9 @@
 package org.onexus.resource.manager.internal;
 
 import org.apache.commons.io.FilenameUtils;
-import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.data.api.Data;
+import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.UnserializeException;
-import org.onexus.resource.api.resources.*;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

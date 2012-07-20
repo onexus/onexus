@@ -18,8 +18,8 @@
 package org.onexus.ui.website.utils;
 
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.resources.Field;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.Field;
 
 public class EntityRenderer implements IChoiceRenderer<IEntity> {
 

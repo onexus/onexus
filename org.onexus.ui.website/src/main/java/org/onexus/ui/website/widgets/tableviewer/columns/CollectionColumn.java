@@ -21,8 +21,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.IEntityTable;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
 

@@ -18,10 +18,10 @@
 package org.onexus.query.parser.internal;
 
 import org.antlr.runtime.*;
-import org.onexus.resource.api.IQueryParser;
-import org.onexus.resource.api.query.Filter;
-import org.onexus.resource.api.query.OrderBy;
-import org.onexus.resource.api.query.Query;
+import org.onexus.collection.api.query.IQueryParser;
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.OrderBy;
+import org.onexus.collection.api.query.Query;
 
 import java.util.List;
 import java.util.Map;

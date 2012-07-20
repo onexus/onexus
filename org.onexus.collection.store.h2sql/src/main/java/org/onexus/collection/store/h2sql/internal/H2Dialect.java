@@ -18,7 +18,7 @@
 package org.onexus.collection.store.h2sql.internal;
 
 import org.onexus.collection.store.sql.SqlDialect;
-import org.onexus.resource.api.types.Text;
+import org.onexus.collection.api.types.Text;
 
 import java.util.Date;
 import java.util.HashMap;

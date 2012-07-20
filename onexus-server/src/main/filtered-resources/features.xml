@@ -5,6 +5,8 @@
 
 	<feature name='onexus-server' version='${project.version}'>
 		<feature version='${project.version}'>org.onexus.resource.api</feature>
+        <feature version='${project.version}'>org.onexus.data.api</feature>
+        <feature version='${project.version}'>org.onexus.collection.api</feature>
         <feature version='${project.version}'>org.onexus.query.parser</feature>
 		<feature version='${project.version}'>org.onexus.collection.manager</feature>
 		<feature version='${project.version}'>org.onexus.task.manager</feature>

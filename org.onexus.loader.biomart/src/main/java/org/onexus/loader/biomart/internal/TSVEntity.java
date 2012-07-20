@@ -17,9 +17,9 @@
  */
 package org.onexus.loader.biomart.internal;
 
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Field;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
 
 import java.lang.reflect.Constructor;
 import java.util.List;

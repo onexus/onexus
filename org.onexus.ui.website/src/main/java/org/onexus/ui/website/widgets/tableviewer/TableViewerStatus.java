@@ -19,9 +19,9 @@ package org.onexus.ui.website.widgets.tableviewer;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.*;
-import org.onexus.resource.api.query.OrderBy;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.query.OrderBy;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.PageConfig;

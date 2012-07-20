@@ -1,7 +1,7 @@
 package org.onexus.resource.manager.internal;
 
-import org.onexus.resource.api.resources.Plugin;
-import org.onexus.resource.api.resources.Project;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Project;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;

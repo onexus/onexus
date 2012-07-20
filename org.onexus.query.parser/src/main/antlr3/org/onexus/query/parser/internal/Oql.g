@@ -7,13 +7,13 @@ options {
 @lexer::header {
   package org.onexus.query.parser.internal;
 
-  import org.onexus.resource.api.query.*;
+  import org.onexus.collection.api.query.*;
 }
 
 @parser::header {
   package org.onexus.query.parser.internal;
 
-  import org.onexus.resource.api.query.*;
+  import org.onexus.collection.api.query.*;
 }
 
 @members {

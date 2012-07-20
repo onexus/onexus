@@ -2,10 +2,10 @@ package org.onexus.ui.website.widgets.filters;
 
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.onexus.resource.api.IQueryParser;
-import org.onexus.resource.api.query.Filter;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.query.IQueryParser;
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.ui.core.OnexusWebApplication;
 import org.onexus.ui.website.pages.browser.IFilter;
 import org.onexus.ui.website.utils.visible.VisibleRule;

@@ -17,8 +17,8 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.decorators;
 
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.resources.Field;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
 import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
 
 import java.util.List;

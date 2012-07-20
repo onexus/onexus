@@ -17,7 +17,7 @@
  */
 package org.onexus.loader.tsv.internal;
 
-import org.onexus.resource.api.resources.Loader;
+import org.onexus.collection.api.Loader;
 
 public class FileTask extends Loader {
 

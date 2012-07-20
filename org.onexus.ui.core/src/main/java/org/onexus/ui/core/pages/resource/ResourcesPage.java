@@ -33,7 +33,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.resources.Resource;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.core.viewers.IViewerCreator;
 import org.onexus.ui.core.viewers.EmptyPanelViewerCreator;

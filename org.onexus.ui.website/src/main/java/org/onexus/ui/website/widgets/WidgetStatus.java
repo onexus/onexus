@@ -18,7 +18,7 @@
 package org.onexus.ui.website.widgets;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.onexus.resource.api.query.Query;
+import org.onexus.collection.api.query.Query;
 
 import java.io.Serializable;
 

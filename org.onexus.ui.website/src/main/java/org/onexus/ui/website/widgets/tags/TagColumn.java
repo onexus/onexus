@@ -22,7 +22,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.resource.api.IEntityTable;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.ui.website.widgets.tableviewer.columns.AbstractColumn;
 
 public class TagColumn extends AbstractColumn {

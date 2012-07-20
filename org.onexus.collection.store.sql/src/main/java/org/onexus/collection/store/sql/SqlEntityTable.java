@@ -17,12 +17,12 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.resource.api.IEntity;
-import org.onexus.resource.api.IEntityTable;
-import org.onexus.resource.api.TaskStatus;
-import org.onexus.resource.api.query.Query;
-import org.onexus.resource.api.resources.Collection;
-import org.onexus.resource.api.utils.QueryUtils;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.TaskStatus;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

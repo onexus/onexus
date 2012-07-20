@@ -27,6 +27,16 @@
             <artifactId>org.onexus.resource.api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.data.api</artifactId>
+        </dependency>
+
         <!-- Wicket dependencies -->
         <dependency>
             <groupId>org.apache.wicket</groupId>

@@ -18,8 +18,8 @@
 package org.onexus.collection.store.sql.filters;
 
 import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.resource.api.query.Filter;
-import org.onexus.resource.api.query.Query;
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.Query;
 
 public class UnknownFilterBuilder implements FilterBuilder {
 

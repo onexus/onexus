@@ -23,13 +23,18 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.resource.api</artifactId>
+            <artifactId>org.onexus.collection.api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
         </dependency>
 
     </dependencies>
