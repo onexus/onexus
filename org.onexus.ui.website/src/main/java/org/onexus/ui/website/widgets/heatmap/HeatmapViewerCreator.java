@@ -37,23 +37,6 @@ public class HeatmapViewerCreator extends AbstractWidgetCreator<HeatmapViewerCon
     @Override
     public void register(IResourceRegister resourceRegister) {
         resourceRegister.register(HeatmapViewerConfig.class);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets", "<viewer-heatmap>\n" +
-                "          <id>heatmap</id>\n" +
-                "          <collection>[main collection]</collection>\n" +
-                "          <init></init>\n" +
-                "          <column>\n" +
-                "            <collection>[column collection]</collection>\n" +
-                "            <fields>[field names]</fields>\n" +
-                "          </column>\n" +
-                "          <row>\n" +
-                "            <collection>[row collection]</collection>\n" +
-                "            <fields>[field names]</fields>\n" +
-                "          </row>\n" +
-                "          <cell>\n" +
-                "            <collection>[cell collection]</collection>\n" +
-                "            <fields>[field names]</fields>\n" +
-                "          </cell>\n" +
-                "        </viewer-heatmap>");
     }
 
 

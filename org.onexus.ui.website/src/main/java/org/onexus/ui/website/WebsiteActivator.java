@@ -25,11 +25,6 @@ public class WebsiteActivator implements IResourceActivator {
     @Override
     public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(WebsiteConfig.class);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<default><currentPage>[page-id]</currentPage></default>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<title>[title]</title>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<pages></pages>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<description>[description]</description>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "website", "<property><key>[key]</key><value>[value]</value></property>");
     }
 
     @Override

@@ -34,10 +34,4 @@ public class ShareWidgetCreator extends AbstractWidgetCreator<ShareWidgetConfig,
         return new ShareWidget(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-share><id>share</id></widget-share>");
-    }
-
 }

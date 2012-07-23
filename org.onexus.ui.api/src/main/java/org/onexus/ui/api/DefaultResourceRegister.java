@@ -18,12 +18,11 @@
 package org.onexus.ui.api;
 
 import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.data.api.Data;
-import org.onexus.resource.api.Project;
-import org.onexus.collection.api.Collection;
 import org.osgi.framework.ServiceReference;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class DefaultResourceRegister implements IResourceRegister {
 
@@ -32,50 +31,10 @@ public class DefaultResourceRegister implements IResourceRegister {
 
     private IResourceSerializer serializer;
     private List<IResourceActivator> resourceActivators;
-    
-    private Map<Class<?>, Map<String, List<String>>> autocompleteMaps = new HashMap<Class<?>, Map<String, List<String>>>();
-    
+
     public DefaultResourceRegister() {
-
-        // Project
-        addAutoComplete(Project.class, "project", "<title>[title]</title>");
-        addAutoComplete(Project.class, "project", "<description>[description]</description>");
-        addAutoComplete(Project.class, "project", "<property><key>[key]</key><value>[value]</value></property>");
-
-        // Source
-        addAutoComplete(Data.class, "data", "<title>[title]</title>");
-        addAutoComplete(Data.class, "data", "<description>[description]</description>");
-        addAutoComplete(Data.class, "data", "<content-type>[title]</content-type>");
-        addAutoComplete(Data.class, "data", "<repository>[repository]</repository>");
-        addAutoComplete(Data.class, "data", "<path>[path]</path>");
-        addAutoComplete(Data.class, "data", "<property><key>[key]</key><value>[value]</value></property>");
-
-        // Collection
-        addAutoComplete(Collection.class, "collection", "<title>[title]</title>");
-        addAutoComplete(Collection.class, "collection", "<description>[description]</description>");
-        addAutoComplete(Collection.class, "collection", "<task><tool>[tool URL]</tool></task>");
-        addAutoComplete(Collection.class, "collection", "<fields></fields>");
-        addAutoComplete(Collection.class, "collection", "<links></links>");
-        addAutoComplete(Collection.class, "task", "<tool>[tool URL]</tool>");
-        addAutoComplete(Collection.class, "task", "<parameter><key>[parameter key]</key><value>[parameter value]</value></parameter>");
-        addAutoComplete(Collection.class, "fields", "<field><id>[identifier]</id><label>[short label]</label><type>[data type]</type></field>");
-        addAutoComplete(Collection.class, "field", "<name>[name]</name>");
-        addAutoComplete(Collection.class, "field", "<label>[label]</label>");
-        addAutoComplete(Collection.class, "field", "<title>[title]</title>");
-        addAutoComplete(Collection.class, "field", "<description>[description]</description>");
-        addAutoComplete(Collection.class, "field", "<type>[type]</type>");
-        addAutoComplete(Collection.class, "field", "<primary-key>true</primary-key>");
-        addAutoComplete(Collection.class, "field", "<property><key>[key]</key><value>[value]</value></property>");
-        addAutoComplete(Collection.class, "type", "string");
-        addAutoComplete(Collection.class, "type", "double");
-        addAutoComplete(Collection.class, "type", "integer");
-        addAutoComplete(Collection.class, "links", "<link><collection>[collection uri]</collection><field>[field-src-name] == [field-dst-name]</field></link>");
-        addAutoComplete(Collection.class, "link", "<collection>[collection uri]</collection>");
-        addAutoComplete(Collection.class, "link", "<field>[field-src-name//field-dst-name]</field>");
-
         registeredLoaders.add(getClass().getClassLoader());
-
-    };
+    }
 
     @Override
     public void register(Class<?> resourceType) {
@@ -86,32 +45,6 @@ public class DefaultResourceRegister implements IResourceRegister {
     @Override
     public ClassLoader getResourcesClassLoader() {
         return classLoader;
-    }
-
-    @Override
-    public void addAutoComplete(Class<?> resourceType, String parentTag, String hint) {
-        
-        if (!autocompleteMaps.containsKey(resourceType)) {
-            autocompleteMaps.put(resourceType, new HashMap<String, List<String>>());
-        }
-        
-        Map<String, List<String>> autocompleteMap = autocompleteMaps.get(resourceType);
-
-        if (!autocompleteMap.containsKey(parentTag)) {
-            autocompleteMap.put(parentTag, new ArrayList<String>());
-        }
-
-        List<String> hints = autocompleteMap.get(parentTag);
-
-        if (!hints.contains(hint)) {
-            hints.add(hint);
-        }
-
-    }
-
-    @Override
-    public Map<String, List<String>> getAutocompleteMap(Class<?> resourceType) {
-        return autocompleteMaps.get(resourceType);
     }
 
     public IResourceSerializer getSerializer() {

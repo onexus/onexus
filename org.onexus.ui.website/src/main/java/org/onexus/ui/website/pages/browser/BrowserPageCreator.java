@@ -34,36 +34,4 @@ public class BrowserPageCreator extends AbstractPageCreator<BrowserPageConfig, B
         return new BrowserPage(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "pages",
-                "<browser>" +
-                        "<id>[page-id]</id>" +
-                        "<label>[page-name]</label>" +
-                        "<base>[base-uri]</base>" +
-                        "<tabs></tabs>" +
-                        "<widgets></widgets>" +
-                        "</browser>");
-
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "tabs",
-                "<tab>" +
-                        "<id>[tab-id]</id>" +
-                        "<title>[tab-title]</title>" +
-                        "<view>" +
-                        "<title>[view-title]</title>" +
-                        "</view></tab>");
-
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "tab",  "<id>[tab-id]</id>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "tab",  "<title>[tab-title]</title>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "tab",  "<view><title>[view-title]</title></view>");
-
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<main>[widget-ids]</main>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<left>[widget-ids]</left>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<top>[widget-ids]</top>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<top-right>[widget-ids]</top-right>");
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "view", "<title>[view-title]</title>");
-
-    }
 }

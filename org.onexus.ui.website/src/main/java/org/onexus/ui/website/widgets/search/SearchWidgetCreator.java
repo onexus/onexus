@@ -34,16 +34,4 @@ public class SearchWidgetCreator extends AbstractWidgetCreator<SearchWidgetConfi
         return new SearchWidget(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-search>\n" +
-                "          <id>search</id>\n" +
-                "          <column>\n" +
-                "            <collection>[collection]</collection>\n" +
-                "            <fields>[field names]</fields>\n" +
-                "          </column>\n" +
-                "        </widget-search>");
-    }
-
 }

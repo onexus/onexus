@@ -34,14 +34,4 @@ public class TextWidgetCreator extends AbstractWidgetCreator<TextWidgetConfig, T
         return new TextWidget(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-text>\n" +
-                "          <id>text</id>\n" +
-                "          <title>Details</title>\n" +
-                "          <text>[box text]</text>\n" +
-                "          <details>[details text]</details>\n" +
-                "        </widget-text>");
-    }
 }

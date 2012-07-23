@@ -38,6 +38,5 @@ public class TagWidgetCreator extends AbstractWidgetCreator<TagWidgetConfig, Tag
     public void register(IResourceRegister resourceRegister) {
         resourceRegister.register(TagWidgetConfig.class);
         resourceRegister.register(TagColumnConfig.class);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-tags><id>tags</id><tag>[default-tag1]</tag><tag>[default-tag2]</tag></widget-tags>");
     }
 }

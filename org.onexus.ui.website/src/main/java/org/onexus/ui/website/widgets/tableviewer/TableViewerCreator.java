@@ -40,19 +40,6 @@ public class TableViewerCreator extends AbstractWidgetCreator<TableViewerConfig,
         resourceRegister.register(TableViewerConfig.class);
         resourceRegister.register(ColumnConfig.class);
         resourceRegister.register(ColumnSet.class);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets", "<viewer-table>\n" +
-                "          <id>table</id>\n" +
-                "          <collection>[main collection]</collection>\n" +
-                "          <columnset>\n" +
-                "            <columns>\n" +
-                "              <column>\n" +
-                "                <collection>[collection]</collection>\n" +
-                "                <fields>[field names]</fields>\n" +
-                "                <decorator>[decorator name]</decorator>\n" +
-                "              </column>\n" +
-                "            </columns>\n" +
-                "          </columnset>\n" +
-                "        </viewer-table>");
     }
 
 }

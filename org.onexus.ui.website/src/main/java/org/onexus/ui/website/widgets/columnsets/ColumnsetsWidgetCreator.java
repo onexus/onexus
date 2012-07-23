@@ -34,10 +34,4 @@ public class ColumnsetsWidgetCreator extends AbstractWidgetCreator<ColumnsetsWid
         return new ColumnsetsWidget(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-columnsets><id>columnsets</id></widget-columnsets>");
-    }
-
 }

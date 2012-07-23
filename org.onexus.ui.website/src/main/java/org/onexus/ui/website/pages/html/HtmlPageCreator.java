@@ -34,18 +34,4 @@ public class HtmlPageCreator extends AbstractPageCreator<HtmlPageConfig, HtmlPag
         return new HtmlPage(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "pages",
-                "<html>" +
-                        "<id>[page-id]</id>" +
-                        "<label>[page-name]</label>" +
-                        "<content></content>" +
-                        "<css></css>" +
-                        "</html>");
-    }
-
-
 }

@@ -114,45 +114,9 @@ public class XmlEditorTab extends Panel {
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_FOLDCODE_JS));
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_XML_JS));
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_HINT_JS));
-
-        String autocomplete = createAutocompleteJS(resourceRegister.getAutocompleteMap(getModelObject().getClass()));
-        response.render(JavaScriptHeaderItem.forScript(autocomplete, Integer.toString(autocomplete.hashCode())));
         response.render(JavaScriptHeaderItem.forReference(CODEMIRROR_XML_HINT_JS));
         response.render(JavaScriptHeaderItem.forReference(LOAD_JS));
         response.render(OnDomReadyHeaderItem.forScript("initCodeMirror('" + textArea.getMarkupId() + "');"));
-    }
-
-    private static String createAutocompleteJS(Map<String, List<String>> autocompleteMap) {
-        StringBuilder js = new StringBuilder();
-
-        if (autocompleteMap != null && !autocompleteMap.isEmpty()) {
-            js.append("var tagMap = {};\n");
-
-            for (String keyTag : autocompleteMap.keySet()) {
-
-                Iterator<String> subTags = autocompleteMap.get(keyTag).iterator();
-
-                if (subTags.hasNext()) {
-                    js.append("tagMap['").append(keyTag).append("'] = [");
-
-                    while (subTags.hasNext()) {
-                        String subTag = subTags.next();
-
-                        js.append("'").append(StringEscapeUtils.escapeEcmaScript(XmlUtils.formatXml(subTag))).append("'");
-
-                        if (subTags.hasNext()) {
-                            js.append(",");
-                        }
-                    }
-
-                    js.append("];\n");
-                }
-
-
-            }
-        }
-
-        return js.toString();
     }
 
     @SuppressWarnings("unchecked")

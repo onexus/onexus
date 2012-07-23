@@ -33,11 +33,4 @@ public class DownloadWidgetCreator extends AbstractWidgetCreator<DownloadWidgetC
     protected Widget<?, ?> build(String componentId, IModel<DownloadWidgetStatus> statusModel) {
         return new DownloadWidget(componentId, statusModel);
     }
-
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "widgets",  "<widget-download><id>download</id></widget-download>");
-    }
-
 }
