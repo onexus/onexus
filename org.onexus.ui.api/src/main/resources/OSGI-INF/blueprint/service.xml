@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+    <cm:property-placeholder persistent-id="org.onexus.ui.workspace" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="database" value="onexus-h2-tags"/>
+            <cm:property name="username" value="sa"/>
+            <cm:property name="password" value=""/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!-- IResourceRegister -->
+    <reference id="serializerRef" interface="org.onexus.resource.api.IResourceSerializer"/>
+    <reference-list id="resourceActivatorsRef" interface="org.onexus.ui.api.IResourceActivator" availability="optional">
+        <reference-listener bind-method="bindActivators" unbind-method="unbindActivators"
+                            ref="org.onexus.ui.resourceregister"/>
+    </reference-list>
+    <service interface="org.onexus.ui.api.IResourceRegister" ref="org.onexus.ui.resourceregister"/>
+    <bean id="org.onexus.ui.resourceregister" class="org.onexus.ui.api.DefaultResourceRegister">
+        <property name="resourceActivators" ref="resourceActivatorsRef"/>
+        <property name="serializer" ref="serializerRef"/>
+    </bean>
+
+    <!-- Default Viewers manager -->
+    <reference-list id="viewerCreatorsRef" interface="org.onexus.ui.api.viewers.IViewerCreator" availability="optional"/>
+    <service interface="org.onexus.ui.api.viewers.IViewersManager">
+        <bean class="org.onexus.ui.api.viewers.DefaultViewersManager">
+            <property name="viewerCreators" ref="viewerCreatorsRef"/>
+        </bean>
+    </service>
+
+    <!-- Default wizard manager -->
+    <reference-list id="wizardCreatorsRef" interface="org.onexus.ui.api.wizards.IWizardCreator" availability="optional"/>
+    <service interface="org.onexus.ui.api.wizards.IWizardsManager">
+        <bean class="org.onexus.ui.api.wizards.DefaultWizardsManager">
+            <property name="wizardCreators" ref="wizardCreatorsRef"/>
+        </bean>
+    </service>
+
+</blueprint>
