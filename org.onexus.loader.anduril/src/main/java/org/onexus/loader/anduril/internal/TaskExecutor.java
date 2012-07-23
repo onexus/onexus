@@ -19,7 +19,7 @@ package org.onexus.loader.anduril.internal;
 
 import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
 import fi.helsinki.ltdk.csbl.anduril.core.network.launcher.JavaLauncher;
-import org.onexus.collection.api.ILoader;
+import org.onexus.collection.api.IDataLoader;
 import org.onexus.collection.api.ITask;
 import org.onexus.collection.api.Collection;
 import org.onexus.resource.api.Project;
@@ -27,7 +27,7 @@ import org.onexus.resource.api.Project;
 import java.io.File;
 import java.io.IOException;
 
-public class TaskExecutor implements ILoader {
+public class TaskExecutor implements IDataLoader {
 
     private String andurilHome;
 
@@ -58,11 +58,6 @@ public class TaskExecutor implements ILoader {
     @Override
     public ITask createCallable(Project project, Collection collection) {
         return new TaskCallable(repository, executionDir, collection);
-    }
-
-    @Override
-    public boolean preprocessCollection(Project project, Collection collection) {
-        return false;
     }
 
     public String getAndurilHome() {

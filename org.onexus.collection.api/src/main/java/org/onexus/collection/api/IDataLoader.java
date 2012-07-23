@@ -19,9 +19,8 @@ package org.onexus.collection.api;
 
 import org.onexus.resource.api.Project;
 
-public interface ILoader {
+public interface IDataLoader {
 
     public ITask createCallable(Project project, Collection collection);
 
-    public boolean preprocessCollection(Project project, Collection collection);
 }

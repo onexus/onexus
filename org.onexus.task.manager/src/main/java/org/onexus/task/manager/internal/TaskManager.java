@@ -64,7 +64,7 @@ public class TaskManager implements ITaskManager {
 
         Loader loader = collection.getLoader();
 
-        ILoader executor = getLoader(project, loader);
+        IDataLoader executor = getLoader(project, loader);
         ITask taskCall = executor.createCallable(project, collection);
         FutureTask<IEntitySet> taskFuture = new FutureTask<IEntitySet>(taskCall);
         executorService.submit(taskFuture);
@@ -74,15 +74,6 @@ public class TaskManager implements ITaskManager {
         taskFutures.put(taskId, taskFuture);
 
         return taskCall.getStatus();
-    }
-
-    @Override
-    public boolean preprocessCollection(Project project, Collection collection) {
-
-        Loader loader = collection.getLoader();
-        ILoader executor = getLoader(project, loader);
-
-        return executor.preprocessCollection(project, collection);
     }
 
     @Override
@@ -117,7 +108,7 @@ public class TaskManager implements ITaskManager {
         }
     }
 
-    private ILoader getLoader(Project project, Loader loader) {
+    private IDataLoader getLoader(Project project, Loader loader) {
 
         Plugin plugin = project.getPlugin(loader.getPlugin());
 
@@ -130,7 +121,7 @@ public class TaskManager implements ITaskManager {
         String pluginLocation = plugin.getLocation();
 
         try {
-            for (ServiceReference service : context.getServiceReferences(ILoader.class.getName(), null)) {
+            for (ServiceReference service : context.getServiceReferences(IDataLoader.class.getName(), null)) {
 
                 Bundle bundle = service.getBundle();
 
@@ -140,7 +131,7 @@ public class TaskManager implements ITaskManager {
 
                 if (pluginLocation.equals(bundle.getLocation())) {
                     LOGGER.info("Using bundle " + bundle.getBundleId() + " to execute " + loader.getPlugin());
-                    return (ILoader) context.getService(service);
+                    return (IDataLoader) context.getService(service);
                 }
 
             }

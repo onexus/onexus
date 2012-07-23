@@ -27,6 +27,4 @@ public interface ITaskManager {
 
     public IEntitySet getTaskOutput(String taskId);
 
-    public boolean preprocessCollection(Project project, Collection collection);
-
 }

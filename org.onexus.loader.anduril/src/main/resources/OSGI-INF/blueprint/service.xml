@@ -10,7 +10,7 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <service id="org.onexus.loader.anduril" interface="org.onexus.collection.api.ILoader">
+    <service id="org.onexus.loader.anduril" interface="org.onexus.collection.api.IDataLoader">
         <bean class="org.onexus.loader.anduril.internal.TaskExecutor" init-method="init">
             <property name="andurilHome" value="${andurilHome}"></property>
             <property name="executionDir" value="${executionDir}"></property>

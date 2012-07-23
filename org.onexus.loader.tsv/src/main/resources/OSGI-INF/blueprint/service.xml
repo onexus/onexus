@@ -4,7 +4,7 @@
 
     <reference id="sourceManagerRef" interface="org.onexus.data.api.IDataManager"/>
 
-    <service id="org.onexus.loader.tsv" interface="org.onexus.collection.api.ILoader">
+    <service id="org.onexus.loader.tsv" interface="org.onexus.collection.api.IDataLoader">
         <bean class="org.onexus.loader.tsv.internal.TaskExecutor">
             <property name="dataManager" ref="sourceManagerRef"/>
         </bean>

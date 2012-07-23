@@ -17,12 +17,12 @@
  */
 package org.onexus.loader.biomart.internal;
 
-import org.onexus.collection.api.ILoader;
+import org.onexus.collection.api.IDataLoader;
 import org.onexus.collection.api.ITask;
 import org.onexus.collection.api.Collection;
 import org.onexus.resource.api.Project;
 
-public class TaskExecutor implements ILoader {
+public class TaskExecutor implements IDataLoader {
 
     private String defaultMartService;
 
@@ -38,11 +38,6 @@ public class TaskExecutor implements ILoader {
     @Override
     public ITask createCallable(Project project, Collection collection) {
         return new TaskCallable(new BiomartRequest(collection, defaultMartService, defaultVirtualSchema));
-    }
-
-    @Override
-    public boolean preprocessCollection(Project project, Collection collection) {
-        return false;
     }
 
     public String getDefaultMartService() {
