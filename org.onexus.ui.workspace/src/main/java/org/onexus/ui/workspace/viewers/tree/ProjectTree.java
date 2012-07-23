@@ -19,7 +19,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.events.EventResourceSelect;
+import org.onexus.ui.api.events.EventResourceSelect;
 
 import java.util.Set;
 

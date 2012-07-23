@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.data.api.Data;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.viewers.IViewerCreator;
+import org.onexus.ui.api.viewers.IViewerCreator;
 
 public class FilePreviewViewerTab implements IViewerCreator {
 

@@ -1,7 +1,7 @@
 package org.onexus.ui.website.pages.search;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.core.IResourceRegister;
+import org.onexus.ui.api.IResourceRegister;
 import org.onexus.ui.website.pages.AbstractPageCreator;
 import org.onexus.ui.website.pages.Page;
 

@@ -36,7 +36,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;

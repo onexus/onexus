@@ -55,8 +55,7 @@
         <module>org.onexus.loader.anduril</module>
         <module>org.onexus.collection.store.h2sql</module>
         <module>org.onexus.data.manager</module>
-
-        <module>org.onexus.ui.core</module>
+        <module>org.onexus.ui.api</module>
         <module>org.onexus.ui.workspace</module>
         <module>org.onexus.ui.website</module>
 
@@ -290,7 +289,7 @@
 
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.ui.core</artifactId>
+                <artifactId>org.onexus.ui.api</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

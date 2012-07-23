@@ -17,9 +17,8 @@
  */
 package org.onexus.ui.website;
 
-import org.apache.wicket.protocol.http.WebApplication;
-import org.onexus.ui.core.IResourceActivator;
-import org.onexus.ui.core.IResourceRegister;
+import org.onexus.ui.api.IResourceActivator;
+import org.onexus.ui.api.IResourceRegister;
 
 public class WebsiteActivator implements IResourceActivator {
 

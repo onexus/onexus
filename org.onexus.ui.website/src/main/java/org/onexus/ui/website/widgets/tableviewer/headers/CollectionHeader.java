@@ -21,7 +21,7 @@ import org.apache.wicket.Component;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.ui.website.widgets.tableviewer.formaters.StringFormater;
-import org.onexus.ui.core.utils.panels.HelpMark;
+import org.onexus.ui.api.utils.panels.HelpMark;
 
 public class CollectionHeader extends ElementHeader {
 

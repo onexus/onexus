@@ -18,7 +18,7 @@
 package org.onexus.ui.website.widgets;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.core.IResourceRegister;
+import org.onexus.ui.api.IResourceRegister;
 
 public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends WidgetStatus> implements IWidgetCreator {
 

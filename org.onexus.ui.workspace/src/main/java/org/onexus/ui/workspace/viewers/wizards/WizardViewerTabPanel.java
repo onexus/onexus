@@ -29,9 +29,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.wizards.IWizardCreator;
-import org.onexus.ui.core.utils.panels.HelpMark;
-import org.onexus.ui.core.wizards.IWizardsManager;
+import org.onexus.ui.api.wizards.IWizardCreator;
+import org.onexus.ui.api.utils.panels.HelpMark;
+import org.onexus.ui.api.wizards.IWizardsManager;
 
 import javax.inject.Inject;
 import java.util.List;

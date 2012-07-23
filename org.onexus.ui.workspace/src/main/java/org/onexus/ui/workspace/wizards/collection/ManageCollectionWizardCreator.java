@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.Collection;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.wizards.IWizardCreator;
+import org.onexus.ui.api.wizards.IWizardCreator;
 
 public class ManageCollectionWizardCreator implements IWizardCreator {
 

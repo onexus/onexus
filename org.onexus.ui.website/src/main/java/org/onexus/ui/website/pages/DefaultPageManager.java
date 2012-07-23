@@ -19,7 +19,7 @@ package org.onexus.ui.website.pages;
 
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.core.IResourceRegister;
+import org.onexus.ui.api.IResourceRegister;
 import org.osgi.framework.ServiceReference;
 
 import java.util.List;

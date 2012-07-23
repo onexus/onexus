@@ -27,9 +27,9 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.TaskStatus;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
-import org.onexus.ui.core.progressbar.ProgressBar;
+import org.onexus.ui.api.progressbar.ProgressBar;
 
 import javax.inject.Inject;
 import java.util.Iterator;

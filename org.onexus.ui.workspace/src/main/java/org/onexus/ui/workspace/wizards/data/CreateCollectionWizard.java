@@ -34,8 +34,8 @@ import org.onexus.resource.api.*;
 import org.onexus.data.api.IDataManager;
 import org.onexus.collection.api.types.Text;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.wizards.AbstractWizard;
-import org.onexus.ui.core.pages.resource.ResourcesPage;
+import org.onexus.ui.api.wizards.AbstractWizard;
+import org.onexus.ui.api.pages.resource.ResourcesPage;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;

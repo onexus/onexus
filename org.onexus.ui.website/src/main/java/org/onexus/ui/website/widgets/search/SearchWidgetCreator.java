@@ -18,7 +18,7 @@
 package org.onexus.ui.website.widgets.search;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.core.IResourceRegister;
+import org.onexus.ui.api.IResourceRegister;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.Widget;

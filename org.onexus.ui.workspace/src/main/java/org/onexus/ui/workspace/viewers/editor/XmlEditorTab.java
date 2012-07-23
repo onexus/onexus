@@ -35,7 +35,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.IResourceRegister;
+import org.onexus.ui.api.IResourceRegister;
 
 import javax.inject.Inject;
 import java.util.Iterator;

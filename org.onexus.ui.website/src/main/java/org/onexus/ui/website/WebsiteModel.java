@@ -25,7 +25,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.IResourceSerializer;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageStatus;
 import org.onexus.ui.website.widgets.WidgetConfig;

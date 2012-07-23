@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.ui.core</artifactId>
+            <artifactId>org.onexus.ui.api</artifactId>
         </dependency>
 
         <dependency>

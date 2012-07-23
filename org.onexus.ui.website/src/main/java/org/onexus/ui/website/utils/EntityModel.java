@@ -21,7 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.utils.EntityIterator;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 
 import javax.inject.Inject;
 

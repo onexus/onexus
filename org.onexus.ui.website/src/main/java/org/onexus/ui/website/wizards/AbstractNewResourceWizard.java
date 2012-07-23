@@ -33,7 +33,7 @@ import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 
 import javax.inject.Inject;
 

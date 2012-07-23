@@ -25,8 +25,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.wizards.AbstractWizard;
-import org.onexus.ui.core.progressbar.ProgressBar;
+import org.onexus.ui.api.wizards.AbstractWizard;
+import org.onexus.ui.api.progressbar.ProgressBar;
 
 import javax.inject.Inject;
 import java.util.Arrays;

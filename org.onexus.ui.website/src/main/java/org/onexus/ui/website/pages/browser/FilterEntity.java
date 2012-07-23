@@ -30,7 +30,7 @@ import org.onexus.collection.api.Field;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.SingleEntityQuery;

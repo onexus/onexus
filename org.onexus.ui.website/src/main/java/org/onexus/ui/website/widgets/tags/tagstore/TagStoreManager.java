@@ -23,7 +23,7 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.h2.Driver;
-import org.onexus.ui.core.OnexusWebSession;
+import org.onexus.ui.api.OnexusWebSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

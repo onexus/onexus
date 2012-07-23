@@ -22,7 +22,7 @@ import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.Collection;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.wizards.AbstractNewResourceWizard;
+import org.onexus.ui.api.wizards.AbstractNewResourceWizard;
 
 public class NewCollectionWizard extends AbstractNewResourceWizard<Collection> {
 

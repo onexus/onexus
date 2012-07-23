@@ -7,8 +7,8 @@ import org.onexus.resource.api.Folder;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.OnexusWebApplication;
-import org.onexus.ui.core.pages.resource.ResourceModel;
+import org.onexus.ui.api.OnexusWebApplication;
+import org.onexus.ui.api.pages.resource.ResourceModel;
 
 import javax.inject.Inject;
 import java.util.*;

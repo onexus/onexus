@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.core.utils.panels.icons.Icons;
+import org.onexus.ui.api.utils.panels.icons.Icons;
 import org.onexus.ui.website.widgets.IWidgetManager;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.WidgetModel;

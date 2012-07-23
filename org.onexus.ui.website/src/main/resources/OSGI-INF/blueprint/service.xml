@@ -21,18 +21,18 @@
     </bean>
 
     <!-- ResourceRegister -->
-    <reference id="org.onexus.ui.resourceregister" interface="org.onexus.ui.core.IResourceRegister"/>
+    <reference id="org.onexus.ui.resourceregister" interface="org.onexus.ui.api.IResourceRegister"/>
 
     <!-- Default ViewersCreators -->
-    <service interface="org.onexus.ui.core.viewers.IViewerCreator">
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
         <bean class="org.onexus.ui.website.workspace.PreviewBrowserViewerTab"/>
     </service>
-    <service interface="org.onexus.ui.core.viewers.IViewerCreator">
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
         <bean class="org.onexus.ui.website.workspace.CollectionViewerTab"/>
     </service>
 
     <!-- Default wizards -->
-    <service interface="org.onexus.ui.core.wizards.IWizardCreator">
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
         <bean class="org.onexus.ui.website.wizards.NewWebsiteWizardCreator"/>
     </service>
 
@@ -108,7 +108,7 @@
     </bean>
 
     <!--  Website activator -->
-    <service interface="org.onexus.ui.core.IResourceActivator">
+    <service interface="org.onexus.ui.api.IResourceActivator">
         <bean class="org.onexus.ui.website.WebsiteActivator"/>
     </service>
 

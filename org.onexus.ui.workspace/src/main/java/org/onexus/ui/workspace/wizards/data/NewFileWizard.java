@@ -33,7 +33,7 @@ import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.Data;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.core.wizards.AbstractNewResourceWizard;
+import org.onexus.ui.api.wizards.AbstractNewResourceWizard;
 
 import javax.inject.Inject;
 import java.io.File;

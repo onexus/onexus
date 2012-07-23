@@ -31,7 +31,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.onexus.ui.website.events.EventSortUpdate;
-import org.onexus.ui.core.utils.panels.HelpMark;
+import org.onexus.ui.api.utils.panels.HelpMark;
 import org.onexus.ui.website.widgets.tableviewer.columns.AbstractColumn;
 import org.onexus.ui.website.widgets.tableviewer.columns.CollectionColumn;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;

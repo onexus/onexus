@@ -43,8 +43,8 @@ import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
-import org.onexus.ui.core.progressbar.ProgressBar;
-import org.onexus.ui.core.progressbar.ProgressBar.ActiveTasks;
+import org.onexus.ui.api.progressbar.ProgressBar;
+import org.onexus.ui.api.progressbar.ProgressBar.ActiveTasks;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,7 +6,7 @@ import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.ui.core.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.browser.IFilter;
 import org.onexus.ui.website.utils.visible.VisibleRule;
 import org.slf4j.Logger;

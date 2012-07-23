@@ -21,7 +21,7 @@
 	</feature>	
 
 	<feature name='onexus-server-ui' version='${project.version}'>
-		<feature version='${project.version}'>org.onexus.ui.core</feature>
+		<feature version='${project.version}'>org.onexus.ui.api</feature>
         <feature version='${project.version}'>org.onexus.ui.workspace</feature>
         <feature version='${project.version}'>org.onexus.ui.website</feature>
 		<feature version='${karaf.version}'>war</feature>

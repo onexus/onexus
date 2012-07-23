@@ -20,7 +20,7 @@ package org.onexus.ui.workspace.viewers.editor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.core.viewers.IViewerCreator;
+import org.onexus.ui.api.viewers.IViewerCreator;
 
 public class EditorViewerTab implements IViewerCreator {
 

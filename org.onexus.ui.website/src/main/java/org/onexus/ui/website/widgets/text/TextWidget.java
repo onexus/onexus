@@ -20,7 +20,7 @@ package org.onexus.ui.website.widgets.text;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.core.utils.panels.HelpMark;
+import org.onexus.ui.api.utils.panels.HelpMark;
 import org.onexus.ui.website.widgets.Widget;
 
 public class TextWidget extends Widget<TextWidgetConfig, TextWidgetStatus> {
