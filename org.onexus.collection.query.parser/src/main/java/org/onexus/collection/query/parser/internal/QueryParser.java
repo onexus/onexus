@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.query.parser.internal;
+package org.onexus.collection.query.parser.internal;
 
 import org.antlr.runtime.*;
 import org.onexus.collection.api.query.IQueryParser;

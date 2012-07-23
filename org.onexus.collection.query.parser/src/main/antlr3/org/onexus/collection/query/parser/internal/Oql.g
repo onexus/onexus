@@ -5,13 +5,13 @@ options {
 }
 
 @lexer::header {
-  package org.onexus.query.parser.internal;
+  package org.onexus.collection.query.parser.internal;
 
   import org.onexus.collection.api.query.*;
 }
 
 @parser::header {
-  package org.onexus.query.parser.internal;
+  package org.onexus.collection.query.parser.internal;
 
   import org.onexus.collection.api.query.*;
 }

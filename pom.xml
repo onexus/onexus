@@ -43,7 +43,7 @@
     <modules>
 
 
-        <module>org.onexus.query.parser</module>
+        <module>org.onexus.collection.query.parser</module>
         <module>org.onexus.collection.store.sql</module>
         <module>org.onexus.collection.store.mysql</module>
         <module>org.onexus.collection.manager</module>
@@ -277,7 +277,7 @@
 
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.query.parser</artifactId>
+                <artifactId>org.onexus.collection.query.parser</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

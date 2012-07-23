@@ -23,7 +23,7 @@ public class PythonScript implements IQueryScript {
         return
                 "import urllib2\n" +
                 "\n" +
-                "query=\"" + query + "\"\n" +
+                "query=\"\"\"\n" + query + "\"\"\"\n" +
                 "\n" +
                 "req = urllib2.Request(\"" + url + "\")\n" +
                 "res = urllib2.urlopen(req, query)\n" +

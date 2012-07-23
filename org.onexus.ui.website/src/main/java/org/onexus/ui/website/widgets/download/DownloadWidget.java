@@ -67,7 +67,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         // Get query
         final StringBuilder oql = new StringBuilder();
         Query query = getQuery();
-        query.toString(oql, false);
+        query.toString(oql, true);
 
         // Webservice URL
         ResourceReference webservice = OnexusWebApplication.get().getWebService();

@@ -158,7 +158,7 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.query.parser</artifactId>
+            <artifactId>org.onexus.collection.query.parser</artifactId>
         </dependency>
 
 		<dependency>

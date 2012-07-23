@@ -9,13 +9,13 @@
     </parent>
 
     <properties>
-        <bundle.symbolicName>org.onexus.query.parser</bundle.symbolicName>
-        <bundle.namespace>org.onexus.query.parser</bundle.namespace>
+        <bundle.symbolicName>org.onexus.collection.query.parser</bundle.symbolicName>
+        <bundle.namespace>org.onexus.collection.query.parser</bundle.namespace>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.onexus</groupId>
-    <artifactId>org.onexus.query.parser</artifactId>
+    <artifactId>org.onexus.collection.query.parser</artifactId>
     <name>${bundle.symbolicName}</name>
 
     <packaging>bundle</packaging>
