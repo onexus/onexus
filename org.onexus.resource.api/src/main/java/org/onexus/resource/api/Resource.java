@@ -29,11 +29,11 @@ public abstract class Resource implements IMetadata, Serializable {
 
     private String uri;
     private String name;
-
     private String label;
     private String title;
     private String description;
     private List<Property> properties;
+    private Loader loader;
 
     public Resource() {
         super();
@@ -61,6 +61,14 @@ public abstract class Resource implements IMetadata, Serializable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Loader getLoader() {
+        return loader;
+    }
+
+    public void setLoader(Loader loader) {
+        this.loader = loader;
     }
 
     public String getTitle() {

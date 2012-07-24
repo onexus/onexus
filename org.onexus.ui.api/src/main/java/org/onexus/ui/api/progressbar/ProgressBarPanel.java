@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.collection.api.TaskStatus;
+import org.onexus.data.api.Task;
 import org.onexus.ui.api.utils.panels.icons.Icons;
 
 import java.util.List;
@@ -40,9 +40,9 @@ public class ProgressBarPanel extends Panel {
     public ProgressBarPanel(String id) {
         super(id);
 
-        ListView<TaskStatus> listTaskStatus = new ListView<TaskStatus>("tasklist", new ListActiveTasksModel()) {
+        ListView<Task> listTaskStatus = new ListView<Task>("tasklist", new ListActiveTasksModel()) {
             @Override
-            protected void populateItem(ListItem<TaskStatus> item) {
+            protected void populateItem(ListItem<Task> item) {
                 if (item.getModelObject() != null) {
                     item.add(new Label("title", new PropertyModel<String>( item.getModel(), "title")));
                     item.add(new Image("progress", Icons.LOADING));
@@ -53,12 +53,12 @@ public class ProgressBarPanel extends Panel {
 
     }
 
-    private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<TaskStatus>> {
+    private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<Task>> {
 
-        private transient List<TaskStatus> activeTasks;
+        private transient List<Task> activeTasks;
 
         @Override
-        public List<TaskStatus> getObject() {
+        public List<Task> getObject() {
             if (activeTasks == null) {
                 activeTasks = ProgressBar.getActiveTasks().getActiveTasks();
             }

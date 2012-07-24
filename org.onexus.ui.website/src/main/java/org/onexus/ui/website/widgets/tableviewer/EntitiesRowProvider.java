@@ -24,9 +24,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
-import org.onexus.collection.api.TaskStatus;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
+import org.onexus.data.api.Task;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
 import org.onexus.ui.api.progressbar.ProgressBar;
@@ -133,9 +133,9 @@ public abstract class EntitiesRowProvider implements
             Query query = getQuery();
             IEntityTable entityTable = collectionManager.load(query);
 
-            TaskStatus task = entityTable.getTaskStatus();
+            Task task = entityTable.getTask();
             if (task != null && !task.isDone()) {
-                addTaskStatus(entityTable.getTaskStatus());
+                addTaskStatus(entityTable.getTask());
             }
 
             this.realSize = entityTable.size();
@@ -161,15 +161,15 @@ public abstract class EntitiesRowProvider implements
 
     protected abstract Query getQuery();
 
-    protected abstract void addTaskStatus(TaskStatus taskStatus);
+    protected abstract void addTaskStatus(Task taskStatus);
 
     private Iterator<IEntityTable> loadIterator(Query query) {
         if (rows == null) {
             IEntityTable entityTable = ProgressBar.show(collectionManager.load(query));
 
-            TaskStatus task = entityTable.getTaskStatus();
+            Task task = entityTable.getTask();
             if (task != null && !task.isDone()) {
-                addTaskStatus(entityTable.getTaskStatus());
+                addTaskStatus(entityTable.getTask());
             }
 
             rows = new EntitiesRow(entityTable);

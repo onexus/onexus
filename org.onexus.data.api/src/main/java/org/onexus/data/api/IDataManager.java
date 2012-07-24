@@ -17,11 +17,9 @@
  */
 package org.onexus.data.api;
 
-import java.net.URL;
-import java.util.List;
 
 public interface IDataManager {
 
-    public List<URL> retrieve(String sourceURI);
+    public IDataStreams load(String dataUri);
 
 }

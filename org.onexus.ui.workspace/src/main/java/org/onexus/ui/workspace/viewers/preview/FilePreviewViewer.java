@@ -26,14 +26,17 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.data.api.IDataManager;
+import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.workspace.viewers.editor.XmlEditorTab;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 public class FilePreviewViewer extends Panel {
@@ -75,14 +78,14 @@ public class FilePreviewViewer extends Panel {
                 return null;                
             }
             
-            List<URL> urls = dataManager.retrieve(resource.getURI());
+            Iterator<InputStream> inIterator = dataManager.load(resource.getURI()).iterator();
             
-            if (urls == null && urls.isEmpty()) {
+            if (!inIterator.hasNext()) {
                 return null;
             }
 
             try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(urls.get(0).openStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(inIterator.next()));
 
                 String line = in.readLine();
                 StringBuilder str = new StringBuilder();

@@ -18,10 +18,11 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
+import org.onexus.data.api.Task;
 
 /**
  * <p>A ICollectionManager manage the life-cycle of a collection. We can have a non-blocking
- * ICollectionManager, so it will return partial {@link IEntityTable} result with a {@link TaskStatus}
+ * ICollectionManager, so it will return partial {@link IEntityTable} result with a {@link Task}
  * in process. It is the user that have to keep calling getTaskStatus() method until the task
  * is done and then call again the load() method with the same query to get all the results.</p>
  * <p/>
@@ -39,26 +40,12 @@ import org.onexus.collection.api.query.Query;
  */
 public interface ICollectionManager {
 
-
-    /**
-     * @param taskId The identifier of the {@link TaskStatus} that we want to refresh.
-     * @return The current status of the taskId task.
-     */
-    public TaskStatus getTaskStatus(String taskId);
-
-
     /**
      * @param query The query
      * @return The result of the query. If it's not a blocking ICollectionManager
-     *         it can return a partial result but with a {@link TaskStatus} under process.
+     *         it can return a partial result but with a {@link Task} under process.
      */
     public IEntityTable load(Query query);
-
-
-    /**
-     * Starts a background synchronization of the CollectionStores and the ResourceManagers
-     */
-    public void sync();
 
     /**
      * Unload the collection from origin store.

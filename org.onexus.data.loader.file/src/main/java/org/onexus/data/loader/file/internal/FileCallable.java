@@ -1,0 +1,115 @@
+package org.onexus.data.loader.file.internal;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.onexus.data.api.Data;
+import org.onexus.data.api.IDataStreams;
+import org.onexus.data.api.Task;
+import org.onexus.data.api.utils.UrlDataStreams;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.utils.ResourceUtils;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.regex.Pattern;
+
+public class FileCallable implements Callable<IDataStreams> {
+
+    private Task task;
+    private Plugin plugin;
+    private Data data;
+
+    public FileCallable(Task task, Plugin plugin, Data data) {
+        this.task = task;
+        this.plugin = plugin;
+        this.data = data;
+    }
+
+    @Override
+    public IDataStreams call() throws Exception {
+        return new UrlDataStreams(task, getUrls(plugin, data));
+    }
+
+    private String replaceProperties(String strUrl, Map<String, String> properties) {
+
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
+            strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
+        }
+
+        return strUrl;
+    }
+
+    private List<URL> getUrls(Plugin plugin, Data data) {
+
+        String location = plugin.getParameter("location");
+        String mirror = plugin.getParameter("mirror");
+
+        List<String> paths = data.getLoader().getParameterList("path");
+
+        List<URL> urls = new ArrayList<URL>();
+
+        for (String templatePath : paths) {
+            String path = replaceProperties(templatePath, ResourceUtils.getProperties(data.getURI()));
+            String fileName = FilenameUtils.getName(path);
+
+            // Check if it is a wildcard filter
+            if (fileName.contains("*") || fileName.contains("?")) {
+
+                // Is recursive?
+                IOFileFilter dirFilter = null;
+                if (path.contains("**/")) {
+                    dirFilter = TrueFileFilter.INSTANCE;
+                    path = path.replace("**/", "");
+                }
+
+                String sourceContainer = location + File.separator + FilenameUtils.getFullPathNoEndSeparator(path);
+                File sourceFile = new File(sourceContainer);
+
+                for (File file : (Collection<File>) FileUtils.listFiles(sourceFile, new WildcardFileFilter(fileName), dirFilter)) {
+                    try {
+                        urls.add(file.toURI().toURL());
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            } else {
+                String sourcePath = location + File.separator + path;
+                File sourceFile = new File(sourcePath);
+
+                if (sourceFile.exists()) {
+                    try {
+                        urls.add(sourceFile.toURI().toURL());
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+
+                    // Try mirror
+                    if (mirror != null) {
+
+                        String remoteFile = mirror + '/' + path;
+
+                        try {
+                            URL url = new URL(remoteFile);
+                            urls.add(url);
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        }
+
+        return urls;
+    }
+}

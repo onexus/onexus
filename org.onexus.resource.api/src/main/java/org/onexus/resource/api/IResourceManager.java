@@ -35,4 +35,6 @@ public interface IResourceManager {
 
     public void save(Resource resource);
 
+    <T> T getLoader(Class<T> serviceClass, Plugin plugin, Loader loader);
+
 }

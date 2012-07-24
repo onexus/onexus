@@ -17,12 +17,12 @@
  */
 package org.onexus.collection.store.sql;
 
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
-import org.onexus.collection.api.TaskStatus;
 import org.onexus.collection.api.query.Query;
-import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.data.api.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class SqlEntityTable implements IEntityTable {
             .getLogger(SqlEntityTable.class);
 
     private Query query;
-    private TaskStatus taskStatus;
+    private Task task;
 
     private SqlQuery mysqlQuery;
 
@@ -149,13 +149,13 @@ public class SqlEntityTable implements IEntityTable {
     }
 
     @Override
-    public TaskStatus getTaskStatus() {
-        return taskStatus;
+    public Task getTask() {
+        return task;
     }
 
     @Override
-    public void setTaskStatus(TaskStatus taskStatus) {
-        this.taskStatus = taskStatus;
+    public void setTask(Task taskStatus) {
+        this.task = taskStatus;
     }
 
 }

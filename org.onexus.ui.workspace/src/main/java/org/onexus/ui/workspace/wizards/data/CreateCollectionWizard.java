@@ -30,6 +30,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.collection.api.*;
 import org.onexus.collection.api.Collection;
+import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.*;
 import org.onexus.data.api.IDataManager;
 import org.onexus.collection.api.types.Text;
@@ -96,37 +97,13 @@ public class CreateCollectionWizard extends AbstractWizard {
             separator = "\t";
         }
 
-        List<URL> urls = dataManager.retrieve(sourceURI);
+        Iterator<InputStream> streams = dataManager.load(sourceURI).iterator();
 
-        if (urls == null && urls.isEmpty()) {
+        if (!streams.hasNext()) {
             return;
         }
 
-        URL url = urls.get(0);
-        String fileName = url.getFile();
-
-        InputStream in = url.openStream();
-
-        BufferedReader fr = null;
-        try {
-
-            CompressorInputStream cin = null;
-            if (fileName.endsWith(".tar.gz")) {
-                cin = new GzipCompressorInputStream(in);
-            }
-
-            if (cin != null) {
-                TarArchiveInputStream tin = new TarArchiveInputStream(cin);
-                tin.getNextEntry();
-                fr = new BufferedReader(new InputStreamReader(tin));
-            }
-
-        } catch (IOException e) {
-        }
-
-        if (fr == null) {
-            fr = new BufferedReader(new InputStreamReader(in));
-        }
+        BufferedReader fr = new BufferedReader(new InputStreamReader(streams.next()));
 
         // Get headers
         headers = fr.readLine().split(separator);

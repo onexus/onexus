@@ -29,9 +29,6 @@
         <bean class="org.onexus.ui.workspace.wizards.folder.NewFolderWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
-        <bean class="org.onexus.ui.workspace.wizards.data.NewFileWizardCreator"/>
-    </service>
-    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
         <bean class="org.onexus.ui.workspace.wizards.data.CreateCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">

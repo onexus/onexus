@@ -17,25 +17,22 @@
  */
 package org.onexus.data.manager.internal;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.onexus.data.api.IDataManager;
+import org.onexus.data.api.*;
+import org.onexus.data.api.utils.EmptyDataStreams;
+import org.onexus.data.api.utils.UrlDataStreams;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.data.api.Data;
+import org.onexus.resource.api.Loader;
+import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Project;
-import org.onexus.resource.api.Repository;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 
 public class DataManager implements IDataManager {
 
@@ -43,109 +40,61 @@ public class DataManager implements IDataManager {
 
     private IResourceManager resourceManager;
 
+
     public DataManager() {
         super();
     }
 
     @Override
-    public List<URL> retrieve(String dataURI) {
+    public IDataStreams load(String dataURI) {
 
+        Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
         Data data = resourceManager.load(Data.class, dataURI);
 
-        if (data.getPaths() == null) {
-            data.setPaths(new ArrayList<String>());
-        }
+        Task task = new Task(dataURI);
+        Loader loader = data.getLoader();
+        Plugin plugin = project.getPlugin(loader.getPlugin());
 
-        String projectURI = ResourceUtils.getProjectURI(dataURI);
-        Project project = resourceManager.load(Project.class, projectURI);
-        Repository repository = null;
-        if (data.getRepository() == null) {
-            if (!project.getRepositories().isEmpty()) {
-                repository = project.getRepositories().get(0);
-            }
-        } else {
-            for (Repository r : project.getRepositories()) {
-                if (data.getRepository().equals(r.getId())) {
-                    repository = r;
-                    break;
-                }
-            }
-        }
-
-
-        if (repository == null) {
-            throw new UnsupportedOperationException("Repository '" + data.getRepository() + "' not defined in project " + projectURI);
-        }
-
-        List<URL> urls = new ArrayList<URL>();
-
-        for (String templatePath : data.getPaths()) {
-            String path = replaceProperties(templatePath, ResourceUtils.getProperties(dataURI));
-            String fileName = FilenameUtils.getName(path);
-
-            // Check if it is a wildcard filter
-            if (fileName.contains("*") || fileName.contains("?")) {
-
-                // Is recursive?
-                IOFileFilter dirFilter = null;
-                if (path.contains("**/")) {
-                    dirFilter = TrueFileFilter.INSTANCE;
-                    path = path.replace("**/", "");
-                }
-
-                String sourceContainer = repository.getLocation() + File.separator + FilenameUtils.getFullPathNoEndSeparator(path);
-                File sourceFile = new File(sourceContainer);
-
-                for (File file : (Collection<File>) FileUtils.listFiles(sourceFile, new WildcardFileFilter(fileName), dirFilter)) {
-                    try {
-                        urls.add(file.toURI().toURL());
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-            } else {
-                String sourcePath = repository.getLocation() + File.separator + path;
-                File sourceFile = new File(sourcePath);
-
-                if (sourceFile.exists()) {
-                    try {
-                        urls.add(sourceFile.toURI().toURL());
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-
-                    // Try mirrors
-                    Random rand = new Random();
-                    if (repository.getMirrors() != null && !repository.getMirrors().isEmpty()) {
-                        int randomMirror = rand.nextInt(repository.getMirrors().size());
-
-                        String mirror = repository.getMirrors().get(randomMirror);
-                        String remoteFile = mirror + '/' + path;
-
-                        try {
-                            URL url = new URL(remoteFile);
-                            urls.add(url);
-                        } catch (MalformedURLException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
+        // If there is no plugin to load the data
+        // check for the 'data-url' parameters directly
+        if (plugin == null) {
+            List<String> dataUrls = loader.getParameterList("data-url");
+            List<URL> urls = new ArrayList<URL>(dataUrls.size());
+            for (String  dataUrl : dataUrls) {
+                try {
+                    URL url = new URL(dataUrl);
+                    urls.add(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
                 }
             }
 
+            return new UrlDataStreams(task, urls);
         }
 
-        return urls;
-    }
 
-    private String replaceProperties(String strUrl, Map<String, String> properties) {
 
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
+        IDataLoader dataLoader = resourceManager.getLoader(IDataLoader.class, plugin, data.getLoader());
+
+        //TODO use a IDataStore as a cache
+        //TODO run loaders asynchronously
+
+        Callable<IDataStreams> callable = dataLoader.newCallable(task, plugin, data);
+
+        IDataStreams dataStreams = null;
+        try {
+            dataStreams = callable.call();
+        } catch (Exception e) {
+
+            task.getLogger().error(e.getMessage());
+            task.setCancelled(true);
+            dataStreams = new EmptyDataStreams(task);
+
+        } finally {
+            dataStreams.getTask().setDone(true);
         }
 
-        return strUrl;
+        return dataStreams;
     }
 
     public IResourceManager getResourceManager() {
@@ -155,4 +104,6 @@ public class DataManager implements IDataManager {
     public void setResourceManager(IResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }
+
+
 }

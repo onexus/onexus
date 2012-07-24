@@ -114,19 +114,20 @@
 							</descriptors>
 							<features>
 								<feature>org.onexus.resource.api</feature>
+                                <feature>org.onexus.resource.manager</feature>
+                                <feature>org.onexus.resource.serializer.xstream</feature>
+
                                 <feature>org.onexus.data.api</feature>
-                                <feature>org.onexus.collection.api</feature>
-								<feature>org.onexus.collection.manager</feature>
-								<feature>org.onexus.task.manager</feature>
-								<feature>org.onexus.loader.tsv</feature>
-								<feature>org.onexus.loader.biomart</feature>
-								<feature>org.onexus.resource.manager</feature>
                                 <feature>org.onexus.data.manager</feature>
-								<feature>org.onexus.resource.serializer.xstream</feature>
-								<feature>org.onexus.collection.store.mysql</feature>
+
+                                <feature>org.onexus.collection.api</feature>
+                                <feature>org.onexus.collection.manager</feature>
+                                <feature>org.onexus.collection.store.mysql</feature>
 								<feature>org.onexus.collection.store.h2sql</feature>
+
 								<feature>org.onexus.ui.api</feature>
                                 <feature>org.onexus.ui.workspace</feature>
+
 								<feature>war</feature>
 							</features>
 							<repository>target/local-repo</repository>

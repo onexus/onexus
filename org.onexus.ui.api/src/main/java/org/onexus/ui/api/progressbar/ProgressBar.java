@@ -29,7 +29,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.onexus.collection.api.IEntityTable;
-import org.onexus.collection.api.TaskStatus;
+import org.onexus.data.api.Task;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class ProgressBar extends Panel {
 
     public static IEntityTable show(IEntityTable entityTable) {
 
-        TaskStatus status = entityTable.getTaskStatus();
+        Task status = entityTable.getTask();
         if (status != null) {
             getActiveTasks().getTasks().addAll(status.getSubTasks());
         }
@@ -134,15 +134,15 @@ public class ProgressBar extends Panel {
 
     public static class ActiveTasks implements Serializable {
 
-        private List<TaskStatus> tasks = new ArrayList<TaskStatus>();
+        private List<Task> tasks = new ArrayList<Task>();
 
-        public void addTask(TaskStatus task) {
+        public void addTask(Task task) {
             tasks.add(task);
         }
 
         public boolean isActive() {
             boolean res = false;
-            for (TaskStatus task : tasks) {
+            for (Task task : tasks) {
                 if (!task.isDone()) {
                     res = true;
                     break;
@@ -151,9 +151,9 @@ public class ProgressBar extends Panel {
             return res;
         }
 
-        public List<TaskStatus> getTasks() {
-            List<TaskStatus> activeTasks = new ArrayList<TaskStatus>();
-            for (TaskStatus task : tasks) {
+        public List<Task> getTasks() {
+            List<Task> activeTasks = new ArrayList<Task>();
+            for (Task task : tasks) {
                 activeTasks.add(task);
             }
 
@@ -161,9 +161,9 @@ public class ProgressBar extends Panel {
             return this.tasks;
         }
 
-        public List<TaskStatus> getActiveTasks() {
-            List<TaskStatus> activeTasks = new ArrayList<TaskStatus>();
-            for (TaskStatus task : tasks) {
+        public List<Task> getActiveTasks() {
+            List<Task> activeTasks = new ArrayList<Task>();
+            for (Task task : tasks) {
                 if (!task.isDone()) {
                     activeTasks.add(task);
                 }

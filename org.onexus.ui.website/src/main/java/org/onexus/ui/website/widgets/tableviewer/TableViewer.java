@@ -34,8 +34,8 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.collection.api.IEntityTable;
-import org.onexus.collection.api.TaskStatus;
 import org.onexus.collection.api.query.Query;
+import org.onexus.data.api.Task;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventRemoveFilter;
@@ -91,14 +91,14 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
             }
 
             @Override
-            protected void addTaskStatus(TaskStatus taskStatus) {
+            protected void addTaskStatus(Task taskStatus) {
 
                 ActiveTasks activeTasks = Session.get().getMetaData(ProgressBar.TASKS);
                 if (activeTasks == null) {
                     activeTasks = new ActiveTasks();
                     Session.get().setMetaData(ProgressBar.TASKS, activeTasks);
                 }
-                for (TaskStatus task : taskStatus.getSubTasks()) {
+                for (Task task : taskStatus.getSubTasks()) {
                     activeTasks.addTask(task);
                 }
             }

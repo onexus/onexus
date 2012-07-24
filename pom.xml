@@ -43,18 +43,24 @@
     <modules>
 
 
-        <module>org.onexus.collection.query.parser</module>
+        <module>org.onexus.collection.api</module>
+        <module>org.onexus.collection.manager</module>
         <module>org.onexus.collection.store.sql</module>
         <module>org.onexus.collection.store.mysql</module>
-        <module>org.onexus.collection.manager</module>
-        <module>org.onexus.task.manager</module>
-        <module>org.onexus.loader.tsv</module>
+        <module>org.onexus.collection.store.h2sql</module>
+        <module>org.onexus.collection.query.parser</module>
+        <module>org.onexus.collection.loader.tsv</module>
+
+        <module>org.onexus.resource.api</module>
         <module>org.onexus.resource.manager</module>
         <module>org.onexus.resource.serializer.xstream</module>
-        <module>org.onexus.loader.biomart</module>
-        <module>org.onexus.loader.anduril</module>
-        <module>org.onexus.collection.store.h2sql</module>
+
+        <module>org.onexus.data.api</module>
         <module>org.onexus.data.manager</module>
+        <module>org.onexus.data.loader.file</module>
+        <module>org.onexus.data.loader.biomart</module>
+        <module>org.onexus.data.loader.anduril</module>
+
         <module>org.onexus.ui.api</module>
         <module>org.onexus.ui.workspace</module>
         <module>org.onexus.ui.website</module>
@@ -63,9 +69,6 @@
         <module>onexus-resources</module>
         <module>onexus-server</module>
         <module>onexus-archetypes/widget</module>
-        <module>org.onexus.resource.api</module>
-        <module>org.onexus.collection.api</module>
-        <module>org.onexus.data.api</module>
 
     </modules>
 
@@ -328,11 +331,6 @@
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.task.manager</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.resource.manager</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -346,18 +344,18 @@
             <!-- ONEXUS TaskExecutors -->
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.loader.tsv</artifactId>
+                <artifactId>org.onexus.collection.loader.tsv</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.loader.biomart</artifactId>
+                <artifactId>org.onexus.data.loader.biomart</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.loader.anduril</artifactId>
+                <artifactId>org.onexus.data.loader.anduril</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

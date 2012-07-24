@@ -18,12 +18,13 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
+import org.onexus.data.api.Task;
 
 public interface IEntityTable {
 
-    public TaskStatus getTaskStatus();
+    public Task getTask();
 
-    public void setTaskStatus(TaskStatus taskStatus);
+    public void setTask(Task task);
 
     public Query getQuery();
 

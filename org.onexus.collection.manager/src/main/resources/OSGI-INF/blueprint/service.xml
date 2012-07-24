@@ -10,14 +10,12 @@
 
     <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
     <reference id="collectionStoreRef" interface="org.onexus.collection.api.ICollectionStore" filter="(status=enabled)"/>
-    <reference id="taskManagerRef" interface="org.onexus.collection.api.ITaskManager"/>
 
     <service id="org.onexus.collection.manager" interface="org.onexus.collection.api.ICollectionManager">
         <bean class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
             <property name="maxThreads" value="${maxThreads}"/>
             <property name="resourceManager" ref="resourceManagerRef"/>
             <property name="collectionStore" ref="collectionStoreRef"/>
-            <property name="taskManager" ref="taskManagerRef"/>
         </bean>
     </service>
 </blueprint>

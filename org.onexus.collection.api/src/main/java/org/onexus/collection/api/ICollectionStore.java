@@ -49,20 +49,20 @@ public interface ICollectionStore {
      *
      * @param collectionURI The Collection URI
      */
-    public void registerCollection(String collectionURI);
+    public void register(String collectionURI);
 
     /**
      * Remove the collection from the store.
      *
      * @param collectionURI
      */
-    public void unregisterCollection(String collectionURI);
+    public void deregister(String collectionURI);
 
 
     /**
      * @return A list with all the registered collections URIs
      */
-    public List<String> getRegisteredCollections();
+    public List<String> getRegistered();
 
     /**
      * Insert one entity.

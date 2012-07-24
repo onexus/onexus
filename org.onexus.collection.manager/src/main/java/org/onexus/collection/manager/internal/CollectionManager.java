@@ -17,14 +17,17 @@
  */
 package org.onexus.collection.manager.internal;
 
-import org.onexus.collection.api.*;
 import org.onexus.collection.api.Collection;
-import org.onexus.resource.api.*;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.Project;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.data.api.Task;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.Loader;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,16 +45,16 @@ public class CollectionManager implements ICollectionManager {
 
     private ICollectionStore collectionStore;
 
-    private ITaskManager taskManager;
-
     private int maxThreads = 1;
 
     private ExecutorService executorService;
-    private Map<String, TaskStatus> runningTasks;
+    private Map<String, Task> runningTasks;
+    private Map<String, Task> runningCollections;
 
     public CollectionManager() {
         super();
-        this.runningTasks = Collections.synchronizedMap(new HashMap<String, TaskStatus>());
+        this.runningTasks = Collections.synchronizedMap(new HashMap<String, Task>());
+        this.runningCollections = Collections.synchronizedMap(new HashMap<String, Task>());
         this.executorService = Executors.newFixedThreadPool(maxThreads);
     }
 
@@ -59,8 +62,6 @@ public class CollectionManager implements ICollectionManager {
         if (executorService instanceof ThreadPoolExecutor) {
             ((ThreadPoolExecutor) executorService).setMaximumPoolSize(maxThreads);
         }
-
-        sync();
     }
 
     @Override
@@ -95,94 +96,56 @@ public class CollectionManager implements ICollectionManager {
             }
         }
 
-        if (notRegisteredCollections.isEmpty()) {
-            return collectionStore.load(query);
-        }
-
         String taskId = Integer.toHexString(query.hashCode());
+        Task task = getTask(taskId);
 
-        TaskStatus taskStatus = getTaskStatus(taskId);
-
-        if (taskStatus == null) {
-            taskStatus = new ContainerTaskStatus(taskId, "Storing all query collections (" + query + ")");
+        if (task == null && !notRegisteredCollections.isEmpty()) {
+            task = new Task(taskId);
+            task.getLogger().info("Registering dependent collections");
 
             LOGGER.info("Starting task {}", taskId);
             for (String collectionURI : notRegisteredCollections) {
 
+                Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(collectionURI));
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
-                Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(collectionURI));
-
                 if (collection == null) {
-                    throw new UnsupportedOperationException("Unknown collection '" + collectionURI +"'");
+                    task.getLogger().error("Unknown collection '" + collectionURI + "'");
+                    task.setCancelled(true);
+                    task.setDone(true);
+                } else {
+
+                    if (!runningCollections.containsKey(collectionURI)) {
+
+                        runningCollections.put(collectionURI, new Task(collectionURI));
+
+                        LOGGER.info("Registering collection {}", collectionURI);
+                        collectionStore.register(collectionURI);
+
+                        LOGGER.info("Submiting store collection '{}'", collectionURI);
+
+                        Loader loader = collection.getLoader();
+                        Plugin plugin = project.getPlugin(loader.getPlugin());
+                        ICollectionLoader collectionLoader = resourceManager.getLoader(ICollectionLoader.class, plugin, loader);
+
+                        Runnable command = new InsertCollectionRunnable(runningCollections, plugin, collection, collectionLoader, collectionStore);
+                        executorService.submit(command);
+
+                    }
+
+                    task.addSubTask(runningCollections.get(collectionURI));
                 }
 
-                taskId = Integer.toHexString(collectionURI.hashCode());
-                TaskStatus storeCollection = new TaskStatus(taskId, "Running '" + collection.getName() + "'");
-
-                LOGGER.info("Registering collection {}", collectionURI);
-                collectionStore.registerCollection(collectionURI);
-
-                LOGGER.info("Submiting store collection '{}'", collectionURI);
-                executorService.submit(new StoreCollection(storeCollection, collectionURI));
-
-                taskStatus.addSubTask(storeCollection);
             }
         }
 
         IEntityTable partialResults = collectionStore.load(query);
-        partialResults.setTaskStatus(taskStatus);
+
+        if (task != null) {
+            partialResults.setTask(task);
+        }
 
         return partialResults;
-    }
-
-    private class StoreCollection implements Runnable {
-
-        private TaskStatus parentTask;
-        private String collectionURI;
-
-        public StoreCollection(TaskStatus parentTask, String collectionURI) {
-            super();
-            this.parentTask = parentTask;
-            this.collectionURI = collectionURI;
-        }
-
-        @Override
-        public void run() {
-
-            try {
-                Collection collection = resourceManager.load(Collection.class, collectionURI);
-                Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(collectionURI));
-
-                TaskStatus task = taskManager.submitCollection(project, collection);
-
-                // Wait until task finish.
-                while (!task.isDone()) {
-                    parentTask.setLogs(task.getLogs());
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        LOGGER.error("While waiting for task.", e);
-                        parentTask.addLog("ERROR while waiting for task. " + e.getMessage());
-                    }
-                    task = taskManager.getTaskStatus(task.getId());
-                }
-
-                IEntitySet entitySet = taskManager.getTaskOutput(task.getId());
-
-                LOGGER.info("Task '" + parentTask.getId() + "': Inserting collection {}", collectionURI);
-                parentTask.addLog("Inserting collection '" + collectionURI + "'");
-                collectionStore.insert(entitySet);
-                parentTask.addLog("Collection '" + collectionURI + "' inserted.");
-                parentTask.setDone(true);
-                LOGGER.info("Task '" + parentTask.getId() + "': Done.");
-
-            } catch (Exception e) {
-                LOGGER.error("Task '" + parentTask.getId() + "': Error. " + e.getMessage());
-                collectionStore.unregisterCollection(collectionURI);
-            }
-        }
-
     }
 
     private Set<String> getQueryCollections(Query query) {
@@ -197,9 +160,8 @@ public class CollectionManager implements ICollectionManager {
         return queryCollections;
     }
 
-    @Override
-    public TaskStatus getTaskStatus(String taskId) {
-        TaskStatus task = runningTasks.get(taskId);
+    public Task getTask(String taskId) {
+        Task task = runningTasks.get(taskId);
 
         if (task == null) {
             return null;
@@ -213,31 +175,12 @@ public class CollectionManager implements ICollectionManager {
     }
 
     @Override
-    public void sync() {
-
-        // Check that all the registered collections still exists
-        for (String collectionURI : collectionStore.getRegisteredCollections()) {
-            Collection collection = null;
-            try {
-                collection = resourceManager.load(Collection.class, collectionURI);
-            } catch (RuntimeException e) {
-                LOGGER.info("Registered collection '" + collectionURI
-                        + "' not found in any ResourceManager. Unregistering it.");
-            }
-            if (collection == null) {
-                //TODO collectionStore.unregisterCollection(collectionURI);
-            }
-        }
-
-    }
-
-    @Override
     public void unload(String collectionURI) {
 
         if (collectionStore.isRegistered(collectionURI)) {
             // If in future exist multiple collectionStores this action makes
             // not sense!
-            collectionStore.unregisterCollection(collectionURI);
+            collectionStore.deregister(collectionURI);
         }
     }
 
@@ -263,14 +206,6 @@ public class CollectionManager implements ICollectionManager {
 
     public void setCollectionStore(ICollectionStore collectionStore) {
         this.collectionStore = collectionStore;
-    }
-
-    public ITaskManager getTaskManager() {
-        return taskManager;
-    }
-
-    public void setTaskManager(ITaskManager taskManager) {
-        this.taskManager = taskManager;
     }
 
 }

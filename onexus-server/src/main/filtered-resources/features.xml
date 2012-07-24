@@ -5,19 +5,20 @@
 
 	<feature name='onexus-server' version='${project.version}'>
 		<feature version='${project.version}'>org.onexus.resource.api</feature>
+        <feature version='${project.version}'>org.onexus.resource.manager</feature>
+        <feature version='${project.version}'>org.onexus.resource.serializer.xstream</feature>
+
         <feature version='${project.version}'>org.onexus.data.api</feature>
+        <feature version='${project.version}'>org.onexus.data.manager</feature>
+
         <feature version='${project.version}'>org.onexus.collection.api</feature>
         <feature version='${project.version}'>org.onexus.collection.query.parser</feature>
 		<feature version='${project.version}'>org.onexus.collection.manager</feature>
-		<feature version='${project.version}'>org.onexus.task.manager</feature>
-		<feature version='${project.version}'>org.onexus.resource.manager</feature>
-		<feature version='${project.version}'>org.onexus.data.manager</feature>
-		<feature version='${project.version}'>org.onexus.resource.serializer.xstream</feature>
-        <feature version='${project.version}'>org.onexus.loader.tsv</feature>
-        <feature version='${project.version}'>org.onexus.collection.store.sql</feature>
+		<feature version='${project.version}'>org.onexus.collection.store.sql</feature>
 		<feature version='${project.version}'>org.onexus.collection.store.mysql</feature>
 		<feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>
-		<feature version='${project.version}'>onexus-server-ui</feature>
+
+        <feature version='${project.version}'>onexus-server-ui</feature>
 	</feature>	
 
 	<feature name='onexus-server-ui' version='${project.version}'>

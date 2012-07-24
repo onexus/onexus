@@ -115,20 +115,6 @@ public class ProjectManager {
         }
 
         this.project = (Project) loadResource(projectOnx);
-
-        if (project.getRepositories() == null) {
-            project.setRepositories(new ArrayList<Repository>());
-        }
-
-        for (Repository repository : project.getRepositories()) {
-            if (repository.getId().equals("resource")) {
-                repository.setLocation(projectFolder.getAbsolutePath());
-                return;
-            }
-        }
-
-        project.getRepositories().add(new Repository("resource", projectFolder.getAbsolutePath()));
-
     }
 
     private Resource loadResource(File resourceFile) {
@@ -197,8 +183,12 @@ public class ProjectManager {
     }
 
     private Resource createDataResource(File resourceFile) {
-        String repositoryPath = resourceFile.getPath().replaceFirst(Pattern.quote(projectFolder.getPath() + File.separator), "");
-        return new Data("resource", repositoryPath);
+        Data data = new Data();
+        Loader loader = new Loader();
+        loader.setParameters(new ArrayList<Parameter>());
+        loader.getParameters().add(new Parameter("data-url", resourceFile.toURI().toString()));
+        data.setLoader(loader);
+        return data;
     }
 
     private static boolean isChild(String parentURI, String resourceURI) {

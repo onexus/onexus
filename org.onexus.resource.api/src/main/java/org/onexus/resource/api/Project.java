@@ -22,36 +22,10 @@ import java.util.List;
 
 public class Project extends Resource {
 
-    private List<Repository> repositories;
-
     private List<Plugin> plugins;
 
     public Project() {
         super();
-    }
-
-    public Repository getRepository(String repositoryId) {
-
-        if (repositories == null || repositoryId == null) {
-            return null;
-        }
-
-        for (Repository repository : repositories ) {
-            if (repositoryId.equals(repository.getId())) {
-                return repository;
-            }
-        }
-
-        return null;
-
-    }
-
-    public List<Repository> getRepositories() {
-        return repositories;
-    }
-
-    public void setRepositories(List<Repository> repositories) {
-        this.repositories = repositories;
     }
 
     public Plugin getPlugin(String pluginId) {
@@ -80,7 +54,7 @@ public class Project extends Resource {
     @Override
     public String toString() {
         return "Project{" +
-                "repositories=" + repositories +
+                "plugins=" + plugins +
                 '}';
     }
 }

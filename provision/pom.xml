@@ -194,29 +194,30 @@
 			<groupId>org.onexus</groupId>
 			<artifactId>org.onexus.collection.manager</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.task.manager</artifactId>
-		</dependency>
-		<dependency>
+
+        <dependency>
 			<groupId>org.onexus</groupId>
 			<artifactId>org.onexus.resource.manager</artifactId>
 		</dependency>
-		<dependency>
+
+        <dependency>
 			<groupId>org.onexus</groupId>
 			<artifactId>org.onexus.data.manager</artifactId>
 		</dependency>
-		<dependency>
+
+        <dependency>
 			<groupId>org.onexus</groupId>
 			<artifactId>org.onexus.resource.serializer.xstream</artifactId>
 		</dependency>
-		<dependency>
+
+        <dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.loader.biomart</artifactId>
+			<artifactId>org.onexus.data.loader.biomart</artifactId>
 		</dependency>
-		<dependency>
+
+        <dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.loader.tsv</artifactId>
+			<artifactId>org.onexus.collection.loader.tsv</artifactId>
 		</dependency>
 	</dependencies>
 

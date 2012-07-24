@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.onexus</groupId>
+        <artifactId>onexus</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <bundle.symbolicName>org.onexus.data.loader.biomart</bundle.symbolicName>
+        <bundle.namespace>org.onexus.data.loader.biomart</bundle.namespace>
+    </properties>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.onexus</groupId>
+    <artifactId>org.onexus.data.loader.biomart</artifactId>
+
+    <name>${bundle.symbolicName}</name>
+
+    <packaging>bundle</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.data.api</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

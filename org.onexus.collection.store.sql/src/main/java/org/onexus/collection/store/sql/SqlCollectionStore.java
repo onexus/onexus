@@ -105,7 +105,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     @Override
-    public void registerCollection(String collectionURI) {
+    public void register(String collectionURI) {
         LOGGER.debug("Registering collection {}", collectionURI);
 
         // Rebuild always the DDL before registering
@@ -159,7 +159,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     @Override
-    public void unregisterCollection(String collectionURI) {
+    public void deregister(String collectionURI) {
         LOGGER.debug("Unregistering collection {}", collectionURI);
 
         Connection conn = null;
@@ -191,13 +191,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<String> getRegisteredCollections() {
+    public List<String> getRegistered() {
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
             return sqlDialect.loadPropertyKeys(conn);
         } catch (Exception e) {
-            LOGGER.error("Error getRegisteredCollections()", e);
+            LOGGER.error("Error getRegistered()", e);
             return Collections.EMPTY_LIST;
         } finally {
             if (conn != null)

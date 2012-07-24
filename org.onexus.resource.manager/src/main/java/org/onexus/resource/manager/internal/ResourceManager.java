@@ -17,12 +17,14 @@
  */
 package org.onexus.resource.manager.internal;
 
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.resource.api.Project;
-import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.*;
 import org.onexus.resource.api.utils.ResourceUtils;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.security.InvalidParameterException;
@@ -32,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ResourceManager implements IResourceManager {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
 
     // Injected OSGi services
     private IResourceSerializer serializer;
@@ -131,6 +135,40 @@ public class ResourceManager implements IResourceManager {
 
         ProjectManager projectManager = getProjectManager(resource.getURI());
         projectManager.save(resource);
+    }
+
+    @Override
+    public <T> T getLoader(Class<T> serviceClass, Plugin plugin, Loader loader) {
+
+        if (plugin == null || plugin.getLocation() == null) {
+            String msg = "Plugin '" + loader.getPlugin() + "' not defined in project. ";
+            throw new RuntimeException(msg);
+        }
+
+        String pluginLocation = plugin.getLocation();
+
+        try {
+            for (ServiceReference service : context.getServiceReferences(serviceClass.getName(), null)) {
+
+                Bundle bundle = service.getBundle();
+
+                if (bundle == null) {
+                    continue;
+                }
+
+                if (pluginLocation.equals(bundle.getLocation())) {
+                    return (T) context.getService(service);
+                }
+
+            }
+        } catch (InvalidSyntaxException e) {
+            LOGGER.error("On context.getServiceReferences()", e);
+        }
+
+        // TODO Auto-install tool
+        String msg = "Plugin for '" + loader + "' not found.";
+        LOGGER.error(msg);
+        throw new RuntimeException(msg);
     }
 
     @Override

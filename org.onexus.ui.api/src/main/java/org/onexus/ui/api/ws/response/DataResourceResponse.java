@@ -22,6 +22,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.io.Streams;
 import org.onexus.data.api.IDataManager;
+import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
@@ -33,6 +34,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 
 public class DataResourceResponse extends AbstractResponse {
@@ -93,19 +95,12 @@ public class DataResourceResponse extends AbstractResponse {
                 }
             }
 
-            List<URL> urls = dataManager.retrieve(resourceUri);
+            IDataStreams dataStreams = dataManager.load(resourceUri);
 
-            if (!urls.isEmpty()) {
-
-                URI uri = null;
-                try {
-                    uri = urls.get(0).toURI();
-                    InputStream stream = new FileInputStream(new File(uri));
-                    Streams.copy(stream, s);
-                } catch (URISyntaxException e) {
-                    log.error("Malformed URI", e);
-                }
+            for (InputStream stream : dataStreams) {
+                Streams.copy(stream, s);
             }
+
         } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }

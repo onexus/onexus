@@ -17,42 +17,12 @@
  */
 package org.onexus.data.api;
 
-
 import org.onexus.resource.api.Resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class Data extends Resource {
-
-    private String repository;
-
-    private List<String> paths;
 
     public Data() {
         super();
     }
 
-    public Data(String repository, String... paths) {
-        super();
-        this.repository = repository;
-        this.paths = new ArrayList<String>(Arrays.asList(paths));
-    }
-
-    public String getRepository() {
-        return repository;
-    }
-
-    public void setRepository(String repository) {
-        this.repository = repository;
-    }
-
-    public List<String> getPaths() {
-        return paths;
-    }
-
-    public void setPaths(List<String> paths) {
-        this.paths = paths;
-    }
 }
