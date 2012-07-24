@@ -5,7 +5,7 @@
     <reference id="dataManagerRef" interface="org.onexus.data.api.IDataManager"/>
 
     <service id="org.onexus.loader.tsv" interface="org.onexus.collection.api.ICollectionLoader">
-        <bean class="org.onexus.loader.tsv.internal.TsvLoader">
+        <bean class="org.onexus.collection.loader.tsv.internal.TsvLoader">
             <property name="dataManager" ref="dataManagerRef"/>
         </bean>
     </service>
