@@ -72,34 +72,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
         List<Resource> children = resourceManager.loadChildren(Resource.class, node.getURI());
 
-        Collections.sort(children, new Comparator<Resource>() {
-            @Override
-            public int compare(Resource o1, Resource o2) {
-
-                if (o1 == null) {
-                    return 1;
-                }
-
-                if (o2 == null) {
-                    return 0;
-                }
-
-                // First folders
-                boolean f1 = (o1 instanceof Folder);
-                boolean f2 = (o2 instanceof Folder);
-
-                if (f1 && !f2) {
-                    return 0;
-                }
-
-                if (f2 && !f1) {
-                    return 1;
-                }
-
-                return o1.getName().compareTo(o2.getName());
-
-            }
-        });
+        Collections.sort(children, RESOURCE_COMPARATOR);
 
         if (children == null) {
             return EMPTY_ITERATOR;
@@ -116,5 +89,42 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
     @Override
     public void detach() {
+    }
+
+    private final static ResourceComparator RESOURCE_COMPARATOR = new ResourceComparator();
+
+    private static class ResourceComparator implements Comparator<Resource> {
+
+        @Override
+        public int compare(Resource o1, Resource o2) {
+
+            if (o1 == null) {
+                return 1;
+            }
+
+            if (o2 == null) {
+                return -1;
+            }
+
+            // First folders
+            boolean f1 = (o1 instanceof Folder);
+            boolean f2 = (o2 instanceof Folder);
+
+            if (f1 && !f2) {
+                return -1;
+            }
+
+            if (f2 && !f1) {
+                return 1;
+            }
+
+            return o1.getName().compareTo(o2.getName());
+
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return (obj instanceof ResourceComparator);
+        }
     }
 }
