@@ -19,6 +19,7 @@ package org.onexus.ui.website;
 
 import org.onexus.ui.api.IResourceActivator;
 import org.onexus.ui.api.IResourceRegister;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
 public class WebsiteActivator implements IResourceActivator {
 

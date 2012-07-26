@@ -69,6 +69,8 @@ public class DataManager implements IDataManager {
                 }
             }
 
+            task.setDone(true);
+
             return new UrlDataStreams(task, urls);
         }
 

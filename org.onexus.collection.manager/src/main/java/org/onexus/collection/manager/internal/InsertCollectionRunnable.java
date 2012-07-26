@@ -6,12 +6,15 @@ import org.onexus.collection.api.ICollectionStore;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.data.api.Task;
 import org.onexus.resource.api.Plugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 class InsertCollectionRunnable implements Runnable {
 
+    private static final Logger log = LoggerFactory.getLogger(InsertCollectionRunnable.class);
     private Map<String, Task> tasks;
     private Plugin plugin;
     private Collection collection;
@@ -37,16 +40,21 @@ class InsertCollectionRunnable implements Runnable {
             Callable<IEntitySet> callable = loader.newCallable(task, plugin, collection);
             IEntitySet entitySet = callable.call();
 
-            task.getLogger().info("Inserting collection '" + collection.getURI() + "'");
+            String msg = "Inserting collection '" + collection.getURI() + "'";
+            task.getLogger().info(msg);
+            log.info(msg);
 
             store.insert(entitySet);
 
-            task.getLogger().info("Collection '" + collection.getURI() + "' inserted.");
-
+            msg = "Collection '" + collection.getURI() + "' inserted.";
+            task.getLogger().info(msg);
+            log.info(msg);
 
         } catch (Exception e) {
 
             task.getLogger().error(e.getMessage());
+            log.error(e.getMessage(), e);
+
             task.setCancelled(true);
             store.deregister(collection.getURI());
 

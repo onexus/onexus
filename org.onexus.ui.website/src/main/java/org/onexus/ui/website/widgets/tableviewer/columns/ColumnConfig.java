@@ -50,11 +50,9 @@ public class ColumnConfig implements IColumnConfig {
 
     private String visible;
 
-    @Inject
-    public IResourceManager resourceManager;
-
-    @Inject
-    public IDecoratorManager decoratorManager;
+    public ColumnConfig() {
+        super();
+    }
 
     public ColumnConfig(String collectionId) {
         this(collectionId, null, null);
@@ -107,7 +105,7 @@ public class ColumnConfig implements IColumnConfig {
             for (String fieldId : fields) {
                 Field field = collection.getField(fieldId);
                 columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(
-                        collection)), decoratorManager.getDecorator(decorator, collection, field)));
+                        collection)), getDecoratorManager().getDecorator(decorator, collection, field)));
             }
         }
     }
@@ -175,13 +173,27 @@ public class ColumnConfig implements IColumnConfig {
 
     }
 
+    @Inject
+    public transient IResourceManager resourceManager;
+
+    @Inject
+    public transient IDecoratorManager decoratorManager;
+
     private IResourceManager getResourceManager() {
         if (resourceManager == null) {
             OnexusWebApplication.inject(this);
         }
-
         return resourceManager;
     }
+
+    private IDecoratorManager getDecoratorManager() {
+        if (decoratorManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+        return decoratorManager;
+    }
+
+
 
     @Override
     public String getVisible() {

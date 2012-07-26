@@ -18,7 +18,6 @@
 package org.onexus.ui.website.widgets.tableviewer;
 
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.io.Serializable;

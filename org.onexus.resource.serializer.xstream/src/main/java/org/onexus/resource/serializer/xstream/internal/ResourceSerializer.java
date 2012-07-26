@@ -87,6 +87,7 @@ public class ResourceSerializer implements IResourceSerializer {
         xstream.addImplicitCollection(Field.class, "properties", "property", Property.class);
         xstream.aliasField("primary-key", Field.class, "primaryKey");
         xstream.registerConverter(new ClassConverter());
+
         alias("link", Link.class);
         xstream.addImplicitCollection(Link.class, "fields", "field", String.class);
         alias("property", Property.class);
