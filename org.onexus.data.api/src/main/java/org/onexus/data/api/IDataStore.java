@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IDataStore {
 
-    public void cancel(Task task);
+    public void cancel(Progress progress);
 
     public boolean isRegistered(String dataUri);
 

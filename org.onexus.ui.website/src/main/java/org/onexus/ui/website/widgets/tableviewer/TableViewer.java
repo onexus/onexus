@@ -35,7 +35,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventRemoveFilter;
@@ -44,7 +44,7 @@ import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 import org.onexus.ui.api.progressbar.ProgressBar;
-import org.onexus.ui.api.progressbar.ProgressBar.ActiveTasks;
+import org.onexus.ui.api.progressbar.ProgressBar.ActiveProgress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,15 +91,15 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
             }
 
             @Override
-            protected void addTaskStatus(Task taskStatus) {
+            protected void addTaskStatus(Progress progressStatus) {
 
-                ActiveTasks activeTasks = Session.get().getMetaData(ProgressBar.TASKS);
-                if (activeTasks == null) {
-                    activeTasks = new ActiveTasks();
-                    Session.get().setMetaData(ProgressBar.TASKS, activeTasks);
+                ActiveProgress activeProgress = Session.get().getMetaData(ProgressBar.TASKS);
+                if (activeProgress == null) {
+                    activeProgress = new ActiveProgress();
+                    Session.get().setMetaData(ProgressBar.TASKS, activeProgress);
                 }
-                for (Task task : taskStatus.getSubTasks()) {
-                    activeTasks.addTask(task);
+                for (Progress progress : progressStatus.getSubProgresses()) {
+                    activeProgress.addTask(progress);
                 }
             }
 

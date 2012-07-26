@@ -21,7 +21,7 @@ import org.onexus.data.api.IDataManager;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.Collection;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.concurrent.Callable;
@@ -31,14 +31,14 @@ public class TsvCallable implements Callable<IEntitySet> {
     private final static String PARAMETER_DATA_URI = "data";
 
     private IDataManager dataManager;
-    private Task task;
+    private Progress progress;
     private Collection collection;
 
-    public TsvCallable(Task task, IDataManager dataManager, Collection collection) {
+    public TsvCallable(Progress progress, IDataManager dataManager, Collection collection) {
         super();
 
         this.dataManager = dataManager;
-        this.task = task;
+        this.progress = progress;
         this.collection = collection;
     }
 
@@ -51,12 +51,12 @@ public class TsvCallable implements Callable<IEntitySet> {
 
             IDataStreams dataStreams = dataManager.load(absDataUri);
 
-            if (dataStreams.getTask() != null) {
-                Task subTask = dataStreams.getTask();
-                task.addSubTask( subTask );
+            if (dataStreams.getProgress() != null) {
+                Progress subProgress = dataStreams.getProgress();
+                progress.addSubTask(subProgress);
 
                 // Wait sub task finish
-                while (!subTask.isDone()) {
+                while (!subProgress.isDone()) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -64,9 +64,9 @@ public class TsvCallable implements Callable<IEntitySet> {
                     }
                 }
 
-                if (subTask.isCanceled()) {
-                    task.setCancelled(true);
-                    task.setDone(true);
+                if (subProgress.isCanceled()) {
+                    progress.setCancelled(true);
+                    progress.setDone(true);
                 } else {
                     dataStreams = dataManager.load(absDataUri);
                 }
@@ -75,7 +75,7 @@ public class TsvCallable implements Callable<IEntitySet> {
             return new TsvEntitySet(dataStreams, collection);
 
         } finally {
-            this.task.setDone(true);
+            this.progress.setDone(true);
         }
     }
 

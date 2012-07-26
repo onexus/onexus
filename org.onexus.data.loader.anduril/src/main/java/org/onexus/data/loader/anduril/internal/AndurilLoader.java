@@ -21,8 +21,6 @@ import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
 import fi.helsinki.ltdk.csbl.anduril.core.network.launcher.JavaLauncher;
 import org.onexus.data.api.*;
 import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Project;
-import org.onexus.resource.api.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +80,7 @@ public class AndurilLoader implements IDataLoader {
 
 
     @Override
-    public Callable<IDataStreams> newCallable(Task task, Plugin plugin, Data data) {
-        return new AndurilCallable(task, repository, executionDir, data);
+    public Callable<IDataStreams> newCallable(Progress progress, Plugin plugin, Data data) {
+        return new AndurilCallable(progress, repository, executionDir, data);
     }
 }

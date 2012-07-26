@@ -1,7 +1,7 @@
 package org.onexus.data.api.utils;
 
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,15 +10,15 @@ import java.util.Iterator;
 
 public class EmptyDataStreams implements IDataStreams {
 
-    private Task task;
+    private Progress progress;
 
-    public EmptyDataStreams(Task task) {
-        this.task = task;
+    public EmptyDataStreams(Progress progress) {
+        this.progress = progress;
     }
 
     @Override
-    public Task getTask() {
-        return task;
+    public Progress getProgress() {
+        return progress;
     }
 
     @Override

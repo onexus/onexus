@@ -4,20 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Task implements Serializable {
+public class Progress implements Serializable {
 
     private String id;
     private Logger logger;
     private boolean canceled;
     private boolean done;
 
-    private List<Task> subTasks = new ArrayList<Task>();
+    private List<Progress> subProgresses = new ArrayList<Progress>();
 
-    public Task(String id) {
+    public Progress(String id) {
         this(id, new Logger());
     }
 
-    public Task(String id, Logger logger) {
+    public Progress(String id, Logger logger) {
         this.id = id;
         this.logger = logger;
     }
@@ -39,8 +39,8 @@ public class Task implements Serializable {
     }
 
     private boolean areSubTasksDone() {
-        for (Task subTask : subTasks) {
-            if (!subTask.isDone()) {
+        for (Progress subProgress : subProgresses) {
+            if (!subProgress.isDone()) {
                 return false;
             }
         }
@@ -55,11 +55,11 @@ public class Task implements Serializable {
         this.done = done;
     }
 
-    public void addSubTask(Task task) {
-        this.subTasks.add(task);
+    public void addSubTask(Progress progress) {
+        this.subProgresses.add(progress);
     }
 
-    public List<Task> getSubTasks() {
-        return subTasks;
+    public List<Progress> getSubProgresses() {
+        return subProgresses;
     }
 }

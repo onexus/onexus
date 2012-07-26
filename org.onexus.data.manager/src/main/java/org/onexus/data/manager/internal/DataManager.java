@@ -51,7 +51,7 @@ public class DataManager implements IDataManager {
         Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
         Data data = resourceManager.load(Data.class, dataURI);
 
-        Task task = new Task(dataURI);
+        Progress progress = new Progress(dataURI);
         Loader loader = data.getLoader();
         Plugin plugin = project.getPlugin(loader.getPlugin());
 
@@ -69,9 +69,9 @@ public class DataManager implements IDataManager {
                 }
             }
 
-            task.setDone(true);
+            progress.setDone(true);
 
-            return new UrlDataStreams(task, urls);
+            return new UrlDataStreams(progress, urls);
         }
 
 
@@ -81,19 +81,19 @@ public class DataManager implements IDataManager {
         //TODO use a IDataStore as a cache
         //TODO run loaders asynchronously
 
-        Callable<IDataStreams> callable = dataLoader.newCallable(task, plugin, data);
+        Callable<IDataStreams> callable = dataLoader.newCallable(progress, plugin, data);
 
         IDataStreams dataStreams = null;
         try {
             dataStreams = callable.call();
         } catch (Exception e) {
 
-            task.getLogger().error(e.getMessage());
-            task.setCancelled(true);
-            dataStreams = new EmptyDataStreams(task);
+            progress.getLogger().error(e.getMessage());
+            progress.setCancelled(true);
+            dataStreams = new EmptyDataStreams(progress);
 
         } finally {
-            dataStreams.getTask().setDone(true);
+            dataStreams.getProgress().setDone(true);
         }
 
         return dataStreams;

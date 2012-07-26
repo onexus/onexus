@@ -23,7 +23,7 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Loader;
 import org.onexus.resource.api.Plugin;
@@ -48,13 +48,13 @@ public class CollectionManager implements ICollectionManager {
     private int maxThreads = 1;
 
     private ExecutorService executorService;
-    private Map<String, Task> runningTasks;
-    private Map<String, Task> runningCollections;
+    private Map<String, Progress> runningTasks;
+    private Map<String, Progress> runningCollections;
 
     public CollectionManager() {
         super();
-        this.runningTasks = Collections.synchronizedMap(new HashMap<String, Task>());
-        this.runningCollections = Collections.synchronizedMap(new HashMap<String, Task>());
+        this.runningTasks = Collections.synchronizedMap(new HashMap<String, Progress>());
+        this.runningCollections = Collections.synchronizedMap(new HashMap<String, Progress>());
         this.executorService = Executors.newFixedThreadPool(maxThreads);
     }
 
@@ -97,11 +97,11 @@ public class CollectionManager implements ICollectionManager {
         }
 
         String taskId = Integer.toHexString(query.hashCode());
-        Task task = getTask(taskId);
+        Progress progress = getTask(taskId);
 
-        if (task == null && !notRegisteredCollections.isEmpty()) {
-            task = new Task(taskId);
-            task.getLogger().info("Registering dependent collections");
+        if (progress == null && !notRegisteredCollections.isEmpty()) {
+            progress = new Progress(taskId);
+            progress.getLogger().info("Registering dependent collections");
 
             LOGGER.info("Starting task {}", taskId);
             for (String collectionURI : notRegisteredCollections) {
@@ -110,14 +110,14 @@ public class CollectionManager implements ICollectionManager {
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
                 if (collection == null) {
-                    task.getLogger().error("Unknown collection '" + collectionURI + "'");
-                    task.setCancelled(true);
-                    task.setDone(true);
+                    progress.getLogger().error("Unknown collection '" + collectionURI + "'");
+                    progress.setCancelled(true);
+                    progress.setDone(true);
                 } else {
 
                     if (!runningCollections.containsKey(collectionURI)) {
 
-                        runningCollections.put(collectionURI, new Task(collectionURI));
+                        runningCollections.put(collectionURI, new Progress(collectionURI));
 
                         LOGGER.info("Registering collection {}", collectionURI);
                         collectionStore.register(collectionURI);
@@ -133,7 +133,7 @@ public class CollectionManager implements ICollectionManager {
 
                     }
 
-                    task.addSubTask(runningCollections.get(collectionURI));
+                    progress.addSubTask(runningCollections.get(collectionURI));
                 }
 
             }
@@ -141,8 +141,8 @@ public class CollectionManager implements ICollectionManager {
 
         IEntityTable partialResults = collectionStore.load(query);
 
-        if (task != null) {
-            partialResults.setTask(task);
+        if (progress != null) {
+            partialResults = new ProgressEntityTable(progress, partialResults);
         }
 
         return partialResults;
@@ -160,18 +160,18 @@ public class CollectionManager implements ICollectionManager {
         return queryCollections;
     }
 
-    public Task getTask(String taskId) {
-        Task task = runningTasks.get(taskId);
+    public Progress getTask(String taskId) {
+        Progress progress = runningTasks.get(taskId);
 
-        if (task == null) {
+        if (progress == null) {
             return null;
         }
 
-        if (task.isDone()) {
+        if (progress.isDone()) {
             runningTasks.remove(taskId);
         }
 
-        return task;
+        return progress;
     }
 
     @Override

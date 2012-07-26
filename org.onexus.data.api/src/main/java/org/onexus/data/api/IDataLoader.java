@@ -23,6 +23,6 @@ import java.util.concurrent.Callable;
 
 public interface IDataLoader {
 
-    public Callable<IDataStreams> newCallable(Task task, Plugin plugin, Data data);
+    public Callable<IDataStreams> newCallable(Progress progress, Plugin plugin, Data data);
 
 }

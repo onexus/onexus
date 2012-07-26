@@ -22,7 +22,7 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class SqlEntityTable implements IEntityTable {
             .getLogger(SqlEntityTable.class);
 
     private Query query;
-    private Task task;
+    private Progress progress;
 
     private SqlQuery mysqlQuery;
 
@@ -149,13 +149,8 @@ public class SqlEntityTable implements IEntityTable {
     }
 
     @Override
-    public Task getTask() {
-        return task;
-    }
-
-    @Override
-    public void setTask(Task taskStatus) {
-        this.task = taskStatus;
+    public Progress getProgress() {
+        return progress;
     }
 
 }

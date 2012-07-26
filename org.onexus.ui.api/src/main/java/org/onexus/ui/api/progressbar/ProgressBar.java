@@ -28,8 +28,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
-import org.onexus.collection.api.IEntityTable;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.IProgressable;
+import org.onexus.data.api.Progress;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,17 +37,13 @@ import java.util.List;
 
 public class ProgressBar extends Panel {
     public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
-    public final static MetaDataKey<ActiveTasks> TASKS = new MetaDataKey<ActiveTasks>() {
+    public final static MetaDataKey<ActiveProgress> TASKS = new MetaDataKey<ActiveProgress>() {
     };
 
     private boolean open = false;
 
-    private boolean usePrecondition = false;
-
-    public ProgressBar(String id, boolean usePrecondition) {
+    public ProgressBar(String id) {
         super(id);
-
-        this.usePrecondition = usePrecondition;
 
         setOutputMarkupId(true);
         // add(new Refresh());
@@ -55,7 +51,7 @@ public class ProgressBar extends Panel {
         final WebMarkupContainer modal = new WebMarkupContainer("modal") {
             @Override
             public boolean isVisible() {
-                return (open = getActiveTasks().isActive());
+                return (open = getActiveProgress().isActive());
             }
         };
         modal.setMarkupId("progressbar-modal");
@@ -77,12 +73,12 @@ public class ProgressBar extends Panel {
         if (event.getPayload() instanceof AjaxRequestTarget) {
             AjaxRequestTarget target = ((AjaxRequestTarget) event.getPayload());
 
-            if (open || getActiveTasks().isActive()) {
+            if (open || getActiveProgress().isActive()) {
                 open = true;
                 target.add(this);
             }
 
-            if (open && !getActiveTasks().isActive()) {
+            if (open && !getActiveProgress().isActive()) {
                 open = false;
                 //TODO send(getPage(), Broadcast.BREADTH, EventViewChange.EVENT);
             }
@@ -99,51 +95,39 @@ public class ProgressBar extends Panel {
         protected void onTimer(AjaxRequestTarget target) {
             // Nothing adding throw onEvent
         }
-
-
-        @Override
-        protected CharSequence getPreconditionScript() {
-            if (usePrecondition) {
-                String componentId = "progressbar-modal";
-                return "var c = Wicket.$('" + componentId + "'); return typeof(c) != 'undefined' && c != null";
-            } else {
-                return super.getPreconditionScript();
-            }
-        }
-
     }
 
-    public static ActiveTasks getActiveTasks() {
-        ActiveTasks tasks = Session.get().getMetaData(TASKS);
-        if (tasks == null) {
-            tasks = new ActiveTasks();
-            Session.get().setMetaData(TASKS, tasks);
+    public static ActiveProgress getActiveProgress() {
+        ActiveProgress progress = Session.get().getMetaData(TASKS);
+        if (progress == null) {
+            progress = new ActiveProgress();
+            Session.get().setMetaData(TASKS, progress);
         }
-        return tasks;
+        return progress;
     }
 
-    public static IEntityTable show(IEntityTable entityTable) {
+    public static <T extends IProgressable> T show(T progressable) {
 
-        Task status = entityTable.getTask();
-        if (status != null) {
-            getActiveTasks().getTasks().addAll(status.getSubTasks());
+        Progress progress = progressable.getProgress();
+        if (progress != null) {
+            getActiveProgress().getProgresses().add(progress);
         }
 
-        return entityTable;
+        return progressable;
     }
 
-    public static class ActiveTasks implements Serializable {
+    public static class ActiveProgress implements Serializable {
 
-        private List<Task> tasks = new ArrayList<Task>();
+        private List<Progress> progresses = new ArrayList<Progress>();
 
-        public void addTask(Task task) {
-            tasks.add(task);
+        public void addTask(Progress progress) {
+            progresses.add(progress);
         }
 
         public boolean isActive() {
             boolean res = false;
-            for (Task task : tasks) {
-                if (!task.isDone()) {
+            for (Progress progress : progresses) {
+                if (!progress.isDone()) {
                     res = true;
                     break;
                 }
@@ -151,26 +135,26 @@ public class ProgressBar extends Panel {
             return res;
         }
 
-        public List<Task> getTasks() {
-            List<Task> activeTasks = new ArrayList<Task>();
-            for (Task task : tasks) {
-                activeTasks.add(task);
+        public List<Progress> getProgresses() {
+            List<Progress> activeProgresses = new ArrayList<Progress>();
+            for (Progress progress : progresses) {
+                activeProgresses.add(progress);
             }
 
-            this.tasks = activeTasks;
-            return this.tasks;
+            this.progresses = activeProgresses;
+            return this.progresses;
         }
 
-        public List<Task> getActiveTasks() {
-            List<Task> activeTasks = new ArrayList<Task>();
-            for (Task task : tasks) {
-                if (!task.isDone()) {
-                    activeTasks.add(task);
+        public List<Progress> getActiveTasks() {
+            List<Progress> activeProgresses = new ArrayList<Progress>();
+            for (Progress progress : progresses) {
+                if (!progress.isDone()) {
+                    activeProgresses.add(progress);
                 }
             }
 
-            this.tasks = activeTasks;
-            return this.tasks;
+            this.progresses = activeProgresses;
+            return this.progresses;
         }
 
         @Override

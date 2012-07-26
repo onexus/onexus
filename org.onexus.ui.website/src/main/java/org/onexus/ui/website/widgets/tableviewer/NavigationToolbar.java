@@ -47,6 +47,11 @@ public class NavigationToolbar extends AbstractToolbar {
     }
 
     public long getFrom() {
+
+        if (getDataProvider().getRealSize() == 0) {
+            return 0;
+        }
+
         long itemsPerPage = getTable().getItemsPerPage();
         long currentPage = getTable().getCurrentPage();
         return (currentPage * itemsPerPage) + 1;

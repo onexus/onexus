@@ -17,8 +17,6 @@
  */
 package org.onexus.collection.api;
 
-import org.onexus.data.api.Task;
-
 /**
  * <p>
  * A set of {@link IEntity}.

@@ -7,7 +7,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
 import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.utils.ResourceUtils;
@@ -24,19 +24,19 @@ import java.util.regex.Pattern;
 
 public class FileCallable implements Callable<IDataStreams> {
 
-    private Task task;
+    private Progress progress;
     private Plugin plugin;
     private Data data;
 
-    public FileCallable(Task task, Plugin plugin, Data data) {
-        this.task = task;
+    public FileCallable(Progress progress, Plugin plugin, Data data) {
+        this.progress = progress;
         this.plugin = plugin;
         this.data = data;
     }
 
     @Override
     public IDataStreams call() throws Exception {
-        return new UrlDataStreams(task, getUrls(plugin, data));
+        return new UrlDataStreams(progress, getUrls(plugin, data));
     }
 
     private String replaceProperties(String strUrl, Map<String, String> properties) {

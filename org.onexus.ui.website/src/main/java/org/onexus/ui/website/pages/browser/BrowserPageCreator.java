@@ -18,8 +18,6 @@
 package org.onexus.ui.website.pages.browser;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.api.IResourceRegister;
-import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.AbstractPageCreator;
 import org.onexus.ui.website.pages.Page;
 

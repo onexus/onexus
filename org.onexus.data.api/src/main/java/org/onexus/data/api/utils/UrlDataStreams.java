@@ -1,7 +1,7 @@
 package org.onexus.data.api.utils;
 
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -11,17 +11,17 @@ import java.util.List;
 
 public class UrlDataStreams implements IDataStreams {
 
-    private Task task;
+    private Progress progress;
     private List<URL> urls;
 
-    public UrlDataStreams(Task task, List<URL> urls) {
-        this.task = task;
+    public UrlDataStreams(Progress progress, List<URL> urls) {
+        this.progress = progress;
         this.urls = urls;
     }
 
     @Override
-    public Task getTask() {
-        return task;
+    public Progress getProgress() {
+        return progress;
     }
 
     @Override

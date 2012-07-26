@@ -24,7 +24,7 @@ import fi.helsinki.ltdk.csbl.anduril.core.network.componentInstance.OutputCompon
 import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Logger;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
 
 import java.io.File;
@@ -35,19 +35,19 @@ import java.util.concurrent.Callable;
 
 public class AndurilCallable implements Callable<IDataStreams> {
 
-    private Task task;
+    private Progress progress;
     private Logger logger;
     private NetworkEvaluator evaluator;
     private String executionDir;
 
-    public AndurilCallable(Task task, Repository repository, String baseExecutionDir, Data data) {
+    public AndurilCallable(Progress progress, Repository repository, String baseExecutionDir, Data data) {
         super();
 
         String collectionURI = data.getURI();
         String collectionHash = Long.toHexString(collectionURI.hashCode());
 
-        this.task = task;
-        this.logger = task.getLogger();
+        this.progress = progress;
+        this.logger = progress.getLogger();
 
         logger.info("Preparing ANDURIL execution of '" + collectionURI + "'");
 
@@ -77,13 +77,13 @@ public class AndurilCallable implements Callable<IDataStreams> {
             for (DynamicError error : evaluator.getEngineErrors()) {
                 logger.error(error.format());
             }
-            task.setCancelled(true);
-            task.setDone(true);
+            progress.setCancelled(true);
+            progress.setDone(true);
 
-            return new UrlDataStreams(task, null);
+            return new UrlDataStreams(progress, null);
         }
 
-        task.setDone(true);
+        progress.setDone(true);
 
         String outputDirectory = "file:" + executionDir + File.separator + OutputComponentInstance.OUTPUT_DIRECTORY;
         File outFolder = new File(outputDirectory);
@@ -92,7 +92,7 @@ public class AndurilCallable implements Callable<IDataStreams> {
         for (File file : outFolder.listFiles()) {
             urls.add(file.toURI().toURL());
         }
-        return new UrlDataStreams(task, urls);
+        return new UrlDataStreams(progress, urls);
     }
 
 }

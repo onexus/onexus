@@ -19,7 +19,7 @@ package org.onexus.data.loader.biomart.internal;
 
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Logger;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.SingleDataStreams;
 
 import java.io.DataOutputStream;
@@ -30,16 +30,16 @@ import java.util.concurrent.Callable;
 
 public class BiomartCallable implements Callable<IDataStreams> {
 
-    private Task task;
+    private Progress progress;
     private Logger logger;
     private BiomartRequest request;
 
-    public BiomartCallable(Task task, BiomartRequest request) {
+    public BiomartCallable(Progress progress, BiomartRequest request) {
         this.request = request;
 
         String collectionURI = request.getData().getURI();
-        this.task = task;
-        this.logger = task.getLogger();
+        this.progress = progress;
+        this.logger = progress.getLogger();
 
         logger.info("Preparing BIOMART collection '" + collectionURI + "'");
     }
@@ -76,9 +76,9 @@ public class BiomartCallable implements Callable<IDataStreams> {
 
             // Get Response
             InputStream is = conn.getInputStream();
-            task.setDone(true);
+            progress.setDone(true);
 
-            return new SingleDataStreams(task, is);
+            return new SingleDataStreams(progress, is);
 
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.Progress;
 import org.onexus.ui.api.utils.panels.icons.Icons;
 
 import java.util.List;
@@ -40,9 +40,9 @@ public class ProgressBarPanel extends Panel {
     public ProgressBarPanel(String id) {
         super(id);
 
-        ListView<Task> listTaskStatus = new ListView<Task>("tasklist", new ListActiveTasksModel()) {
+        ListView<Progress> listTaskStatus = new ListView<Progress>("tasklist", new ListActiveTasksModel()) {
             @Override
-            protected void populateItem(ListItem<Task> item) {
+            protected void populateItem(ListItem<Progress> item) {
                 if (item.getModelObject() != null) {
                     item.add(new Label("title", new PropertyModel<String>( item.getModel(), "title")));
                     item.add(new Image("progress", Icons.LOADING));
@@ -53,21 +53,21 @@ public class ProgressBarPanel extends Panel {
 
     }
 
-    private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<Task>> {
+    private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<Progress>> {
 
-        private transient List<Task> activeTasks;
+        private transient List<Progress> activeProgresses;
 
         @Override
-        public List<Task> getObject() {
-            if (activeTasks == null) {
-                activeTasks = ProgressBar.getActiveTasks().getActiveTasks();
+        public List<Progress> getObject() {
+            if (activeProgresses == null) {
+                activeProgresses = ProgressBar.getActiveProgress().getActiveTasks();
             }
-            return activeTasks;
+            return activeProgresses;
         }
 
         @Override
         public void detach() {
-            activeTasks = null;
+            activeProgresses = null;
         }
     }
 

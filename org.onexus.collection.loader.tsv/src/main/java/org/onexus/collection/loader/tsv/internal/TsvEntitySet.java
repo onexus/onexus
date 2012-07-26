@@ -22,7 +22,6 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Task;
 
 import java.io.*;
 import java.util.HashMap;

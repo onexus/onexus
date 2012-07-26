@@ -18,13 +18,10 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
-import org.onexus.data.api.Task;
+import org.onexus.data.api.IProgressable;
+import org.onexus.data.api.Progress;
 
-public interface IEntityTable {
-
-    public Task getTask();
-
-    public void setTask(Task task);
+public interface IEntityTable extends IProgressable {
 
     public Query getQuery();
 
