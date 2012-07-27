@@ -149,4 +149,8 @@
         <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.RankDecoratorCreator"/>
     </service>
 
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.TooltipDecoratorCreator"/>
+    </service>
+
 </blueprint>
