@@ -47,8 +47,16 @@ public class TsvCallable implements Callable<IEntitySet> {
         try {
 
             String dataUri = collection.getLoader().getParameter(PARAMETER_DATA_URI);
-            String absDataUri = ResourceUtils.getAbsoluteURI( ResourceUtils.getParentURI(collection.getURI()), dataUri);
 
+            if (dataUri == null) {
+                String errMsg = "Required parameter '" + PARAMETER_DATA_URI +"' not found in '" + collection.getURI() + "'.";
+                progress.getLogger().error(errMsg);
+                progress.setCancelled(true);
+
+                throw new UnsupportedOperationException(errMsg);
+            }
+
+            String absDataUri = ResourceUtils.getAbsoluteURI( ResourceUtils.getParentURI(collection.getURI()), dataUri);
             IDataStreams dataStreams = dataManager.load(absDataUri);
 
             if (dataStreams.getProgress() != null) {
