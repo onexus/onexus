@@ -17,9 +17,6 @@
  */
 package org.onexus.ui.workspace.wizards.data;
 
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.compress.compressors.CompressorInputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.extensions.wizard.WizardModel;
 import org.apache.wicket.extensions.wizard.WizardStep;
@@ -28,22 +25,21 @@ import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.onexus.collection.api.*;
 import org.onexus.collection.api.Collection;
-import org.onexus.data.api.IDataStreams;
-import org.onexus.resource.api.*;
-import org.onexus.data.api.IDataManager;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.Link;
 import org.onexus.collection.api.types.Text;
+import org.onexus.data.api.IDataManager;
+import org.onexus.resource.api.*;
 import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.api.wizards.AbstractWizard;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
+import org.onexus.ui.api.wizards.AbstractWizard;
 
 import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.*;
 
 public class CreateCollectionWizard extends AbstractWizard {
@@ -220,7 +216,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         Loader loader = new Loader();
         loader.setPlugin("tsv-loader");
         List<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter("SOURCE_URI", Resource.SEPARATOR + ResourceUtils.getResourcePath(sourceURI)));
+        parameters.add(new Parameter("data", Resource.SEPARATOR + ResourceUtils.getResourcePath(sourceURI)));
 
         if (nullEmpty > nullDash && nullEmpty > nullString && nullEmpty > nullNA) {
             parameters.add(new Parameter("NULL_VALUE", ""));
