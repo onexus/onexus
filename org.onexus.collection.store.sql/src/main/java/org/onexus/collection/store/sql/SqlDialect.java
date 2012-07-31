@@ -322,7 +322,7 @@ public class SqlDialect {
         buff.append('\'');
         for (int i = 0; i < length; i++) {
             char c = s.charAt(i);
-            if (c == '\'') {
+            if (c == '\'' || c == '\\') {
                 buff.append(c);
             }
             buff.append(c);
