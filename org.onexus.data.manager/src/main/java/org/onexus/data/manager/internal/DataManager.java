@@ -51,7 +51,7 @@ public class DataManager implements IDataManager {
         Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
         Data data = resourceManager.load(Data.class, dataURI);
 
-        Progress progress = new Progress(dataURI);
+        Progress progress = new Progress(dataURI, "Loading data '" + ResourceUtils.getResourcePath(dataURI) + "'");
         Loader loader = data.getLoader();
         Plugin plugin = project.getPlugin(loader.getPlugin());
 
@@ -88,7 +88,7 @@ public class DataManager implements IDataManager {
             dataStreams = callable.call();
         } catch (Exception e) {
 
-            progress.getLogger().error(e.getMessage());
+            progress.error(e.getMessage());
             progress.setCancelled(true);
             dataStreams = new EmptyDataStreams(progress);
 

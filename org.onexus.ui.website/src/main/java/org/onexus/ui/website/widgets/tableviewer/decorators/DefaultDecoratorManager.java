@@ -19,12 +19,20 @@ package org.onexus.ui.website.widgets.tableviewer.decorators;
 
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
+import org.onexus.resource.api.ParameterKey;
+import org.onexus.ui.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class DefaultDecoratorManager implements IDecoratorManager {
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultDecoratorManager.class);
     private final static String annotationKey = "BROWSER_DECORATOR";
 
     private List<IDecoratorCreator> creators;
@@ -38,29 +46,57 @@ public class DefaultDecoratorManager implements IDecoratorManager {
         }
 
         IDecoratorCreator creator = null;
-        String[] parameters = null;
+        Map<ParameterKey, String> parameters = new HashMap<ParameterKey, String>();
 
         // Look for a decorator creator
         if (decorator != null) {
             String decoratorId = decorator;
 
+
             // Parse parameters
             int parSep = decoratorId.indexOf('(');
             if (parSep > 0) {
-                decoratorId = decorator.substring(0, parSep);
-                int parEnd = decorator.indexOf(')');
-                String[] parametersNonTrim = decorator.substring(parSep + 1, parEnd).split(",");
-                parameters = new String[parametersNonTrim.length];
-                for (int i = 0; i < parametersNonTrim.length; i++) {
-                    parameters[i] = parametersNonTrim[i].trim();
+
+                try {
+                    decoratorId = decorator.substring(0, parSep);
+                    int parEnd = decorator.indexOf(')');
+                    String[] parametersNonTrim = decorator.substring(parSep + 1, parEnd).split(",");
+
+                    // Get creator
+                    creator = getCreator(decoratorId);
+
+                    if (creator == null) {
+                        log.warn("Unknown decorator '" + decorator + "'");
+                    } else {
+                        for (int i = 0; i < parametersNonTrim.length; i++) {
+                            String keyAndValue[] = parametersNonTrim[i].split(Pattern.quote("=\""));
+
+                            ParameterKey key = null;
+                            for (ParameterKey k : creator.getParameterKeys()) {
+                                if (k.getKey().equalsIgnoreCase(keyAndValue[0])) {
+                                    key = k;
+                                    break;
+                                }
+                            }
+
+                            if (key == null) {
+                                throw new UnsupportedOperationException("Unknown parameter '" + keyAndValue[0] + "' on decorator '" + decorator + "'");
+                            }
+
+                            String value = keyAndValue[1].trim();
+                            value = value.substring(0, value.length()-1);
+                            parameters.put(key, value);
+                        }
+                    }
+                } catch (UnsupportedOperationException e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw new UnsupportedOperationException("Malformed decorator parameters on '" + decorator + "'");
                 }
             } else {
-                parameters = new String[0];
+                // Get creator
+                creator = getCreator(decoratorId);
             }
-
-            // Get creator
-            creator = getCreator(decoratorId);
-
         }
 
         if (creator == null) {

@@ -50,6 +50,14 @@ public class VisiblePredicate implements Predicate {
             return true;
         }
 
+        if (visibleQuery.equalsIgnoreCase("true")) {
+            return true;
+        }
+
+        if (visibleQuery.equalsIgnoreCase("false")) {
+            return false;
+        }
+
         String visibleRules[] = visibleQuery.split(",");
 
         for (VisibleRule rule : VisibleRule.parseRules(parentURI, visible.getVisible())) {

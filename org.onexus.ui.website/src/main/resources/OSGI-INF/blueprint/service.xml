@@ -122,35 +122,31 @@
 
     <!-- Default decorators -->
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.BinaryDecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.scale.BinaryDecoratorCreator"/>
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.CtDecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.ct.CtDecoratorCreator"/>
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.LinkDecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.filter.FilterDecoratorCreator"/>
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.LinkGotoDecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.link.LinkDecoratorCreator"/>
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.PValue2DecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.scale.PValueDecoratorCreator"/>
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.PValueDecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.scale.RankDecoratorCreator"/>
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.RankDecoratorCreator"/>
-    </service>
-
-    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.basic.TooltipDecoratorCreator"/>
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.tooltip.TooltipDecoratorCreator"/>
     </service>
 
 </blueprint>

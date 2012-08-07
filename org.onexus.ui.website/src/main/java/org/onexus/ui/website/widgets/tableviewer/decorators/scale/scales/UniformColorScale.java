@@ -15,26 +15,30 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators;
+package org.onexus.ui.website.widgets.tableviewer.decorators.scale.scales;
 
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.resource.api.ParameterKey;
-
+import java.awt.*;
 import java.io.Serializable;
-import java.util.Map;
 
-/**
- * Creates a IDecorator for a specific Collection and Field.
- *
- * @author Jordi Deu-Pons
- */
-public interface IDecoratorCreator extends Serializable {
+public class UniformColorScale implements IColorScale, Serializable {
 
-    String getDecoratorId();
+    protected Color color;
 
-    ParameterKey[] getParameterKeys();
+    public UniformColorScale(Color color) {
+        this.color = color;
+    }
 
-    IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters);
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    @Override
+    public Color valueColor(double value) {
+        return color;
+    }
 
 }

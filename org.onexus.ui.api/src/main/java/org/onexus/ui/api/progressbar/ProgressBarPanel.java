@@ -44,7 +44,7 @@ public class ProgressBarPanel extends Panel {
             @Override
             protected void populateItem(ListItem<Progress> item) {
                 if (item.getModelObject() != null) {
-                    item.add(new Label("title", new PropertyModel<String>( item.getModel(), "title")));
+                    item.add(new Label("title", new PropertyModel<String>( item.getModel(), "name")));
                     item.add(new Image("progress", Icons.LOADING));
                 }
             }

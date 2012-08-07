@@ -100,8 +100,7 @@ public class CollectionManager implements ICollectionManager {
         Progress progress = getTask(taskId);
 
         if (progress == null && !notRegisteredCollections.isEmpty()) {
-            progress = new Progress(taskId);
-            progress.getLogger().info("Registering dependent collections");
+            progress = new Progress(taskId, "Registering dependent collections");
 
             LOGGER.info("Starting task {}", taskId);
             for (String collectionURI : notRegisteredCollections) {
@@ -110,14 +109,14 @@ public class CollectionManager implements ICollectionManager {
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
                 if (collection == null) {
-                    progress.getLogger().error("Unknown collection '" + collectionURI + "'");
+                    progress.error("Unknown collection '" + collectionURI + "'");
                     progress.setCancelled(true);
                     progress.setDone(true);
                 } else {
 
                     if (!runningCollections.containsKey(collectionURI)) {
 
-                        runningCollections.put(collectionURI, new Progress(collectionURI));
+                        runningCollections.put(collectionURI, new Progress(collectionURI, "Registering collection '" + ResourceUtils.getResourcePath(collectionURI) + "'"));
 
                         LOGGER.info("Registering collection {}", collectionURI);
                         collectionStore.register(collectionURI);
@@ -137,6 +136,7 @@ public class CollectionManager implements ICollectionManager {
                 }
 
             }
+            progress.setDone(true);
         }
 
         IEntityTable partialResults = collectionStore.load(query);

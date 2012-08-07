@@ -76,7 +76,7 @@ public class SqlQuery {
             List<String> fields = selectCollection.getValue();
             if (fields == null) {
                 fields = new ArrayList<String>();
-                for (SqlCollectionDDL.ColumnInfo column :collectionDDL.getColumnInfos()) {
+                for (SqlCollectionDDL.ColumnInfo column : collectionDDL.getColumnInfos()) {
                     fields.add(column.getField().getId());
                 }
             }
@@ -128,39 +128,41 @@ public class SqlQuery {
             // Fixed entities
             List<String> collectionsFixed = new ArrayList<String>();
             for (EqualId se : equalIds) {
-                for (Link colLink : joinCollection.getLinks()) {
+                if (joinCollection.getLinks() != null) {
+                    for (Link colLink : joinCollection.getLinks()) {
 
-                    String fixedCollection = QueryUtils.getCollectionUri(query, se.getCollectionAlias());
-                    String linkCollection = QueryUtils.getAbsoluteCollectionUri(query, colLink.getCollection());
+                        String fixedCollection = QueryUtils.getCollectionUri(query, se.getCollectionAlias());
+                        String linkCollection = QueryUtils.getAbsoluteCollectionUri(query, colLink.getCollection());
 
-                    if (fixedCollection.equals(linkCollection)) {
-                        collectionsFixed.add(fixedCollection);
+                        if (fixedCollection.equals(linkCollection)) {
+                            collectionsFixed.add(fixedCollection);
 
-                        List<String> fields = colLink.getFields();
+                            List<String> fields = colLink.getFields();
 
-                        Object id = se.getId();
-                        //TODO manage composed keys
-                        Object[] ids = new Object[] { id };
+                            Object id = se.getId();
+                            //TODO manage composed keys
+                            Object[] ids = new Object[]{id};
 
-                        if (fields.size() != ids.length) {
-                            throw new RuntimeException("Bad entity id: " + se);
-                        }
-                        for (int i = 0; i < ids.length; i++) {
-
-                            leftJoin.append("`").append(collectionAlias).append("`.`")
-                                    .append(Link.getToFieldName(fields.get(i)))
-                                    .append("` = ");
-
-                            SqlAdapter adapter = manager.getSqlDialect().getAdapter(joinCollection.getField(fields.get(i)).getType());
-                            try {
-                                adapter.append(leftJoin, ids[i]);
-                            } catch (Exception e) {
-                                //TODO
-                                log.error("Appending join value " + ids[i], e);
+                            if (fields.size() != ids.length) {
+                                throw new RuntimeException("Bad entity id: " + se);
                             }
+                            for (int i = 0; i < ids.length; i++) {
 
-                            leftJoin.append(
-                                    " AND ");
+                                leftJoin.append("`").append(collectionAlias).append("`.`")
+                                        .append(Link.getToFieldName(fields.get(i)))
+                                        .append("` = ");
+
+                                SqlAdapter adapter = manager.getSqlDialect().getAdapter(joinCollection.getField(fields.get(i)).getType());
+                                try {
+                                    adapter.append(leftJoin, ids[i]);
+                                } catch (Exception e) {
+                                    //TODO
+                                    log.error("Appending join value " + ids[i], e);
+                                }
+
+                                leftJoin.append(
+                                        " AND ");
+                            }
                         }
                     }
                 }
@@ -293,7 +295,7 @@ public class SqlQuery {
 
         if (query.getCount() != null) {
             Long offset = query.getOffset();
-            this.limit = (offset==null? "0" : offset) + ", " + query.getCount();
+            this.limit = (offset == null ? "0" : offset) + ", " + query.getCount();
         }
     }
 

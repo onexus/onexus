@@ -93,6 +93,10 @@ public class ProjectManager {
             loadResources();
         }
 
+        if (!resources.containsKey(resourceUri)) {
+            throw new UnsupportedOperationException("Resource '" + resourceUri + "' is not defined in any project.");
+        }
+
         return resources.get(resourceUri);
 
     }

@@ -104,8 +104,7 @@ public class ColumnConfig implements IColumnConfig {
             List<String> fields = getFields(collection);
             for (String fieldId : fields) {
                 Field field = collection.getField(fieldId);
-                columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(
-                        collection)), getDecoratorManager().getDecorator(decorator, collection, field)));
+                columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(collection)), getDecoratorManager().getDecorator(decorator, collection, field)));
             }
         }
     }

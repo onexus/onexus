@@ -36,6 +36,7 @@ import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebSession;
 import org.onexus.ui.api.pages.resource.modals.ImportProjectModal;
 import org.onexus.ui.api.pages.theme.DefaultTheme;
+import org.onexus.ui.api.progressbar.ProgressBar;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -51,6 +52,8 @@ public class BaseResourcePage extends WebPage {
         super(resourceModel);
 
         add( new DefaultTheme() );
+
+        add( new ProgressBar("progressbar"));
 
         // Select the first project if there is no selection
         if (getModelObject() == null) {

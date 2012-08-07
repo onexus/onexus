@@ -23,7 +23,6 @@ import fi.helsinki.ltdk.csbl.anduril.core.network.Repository;
 import fi.helsinki.ltdk.csbl.anduril.core.network.componentInstance.OutputComponentInstance;
 import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Logger;
 import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
 
@@ -36,7 +35,6 @@ import java.util.concurrent.Callable;
 public class AndurilCallable implements Callable<IDataStreams> {
 
     private Progress progress;
-    private Logger logger;
     private NetworkEvaluator evaluator;
     private String executionDir;
 
@@ -47,9 +45,8 @@ public class AndurilCallable implements Callable<IDataStreams> {
         String collectionHash = Long.toHexString(collectionURI.hashCode());
 
         this.progress = progress;
-        this.logger = progress.getLogger();
 
-        logger.info("Preparing ANDURIL execution of '" + collectionURI + "'");
+        progress.info("Preparing ANDURIL execution of '" + collectionURI + "'");
 
         this.executionDir = baseExecutionDir + File.separator + collectionHash;
         final File executionDirFile = new File(executionDir);
@@ -69,13 +66,13 @@ public class AndurilCallable implements Callable<IDataStreams> {
     public IDataStreams call() throws Exception {
 
         if (!evaluator.hasErrors()) {
-            logger.info("Starting Anduril execution");
+            progress.info("Starting Anduril execution");
             evaluator.execute();
         }
 
         if (evaluator.hasErrors()) {
             for (DynamicError error : evaluator.getEngineErrors()) {
-                logger.error(error.format());
+                progress.error(error.format());
             }
             progress.setCancelled(true);
             progress.setDone(true);

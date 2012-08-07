@@ -15,26 +15,31 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.tableviewer.decorators;
+package org.onexus.ui.website.widgets.tableviewer.decorators.link;
 
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
+import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator;
 
-import java.io.Serializable;
 import java.util.Map;
 
-/**
- * Creates a IDecorator for a specific Collection and Field.
- *
- * @author Jordi Deu-Pons
- */
-public interface IDecoratorCreator extends Serializable {
+public class LinkDecoratorCreator implements IDecoratorCreator {
 
-    String getDecoratorId();
 
-    ParameterKey[] getParameterKeys();
+    @Override
+    public String getDecoratorId() {
+        return "LINK";
+    }
 
-    IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters);
+    @Override
+    public ParameterKey[] getParameterKeys() {
+        return LinkDecoratorParameters.values();
+    }
 
+    @Override
+    public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
+        return new LinkDecorator(collection.getURI(), columnField, parameters);
+    }
 }

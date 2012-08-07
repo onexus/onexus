@@ -46,7 +46,6 @@ public class ProgressBar extends Panel {
         super(id);
 
         setOutputMarkupId(true);
-        // add(new Refresh());
 
         final WebMarkupContainer modal = new WebMarkupContainer("modal") {
             @Override
@@ -54,8 +53,9 @@ public class ProgressBar extends Panel {
                 return (open = getActiveProgress().isActive());
             }
         };
+
         modal.setMarkupId("progressbar-modal");
-        modal.add(new ProgressBarPanel("progressDetails"));
+        modal.add(new ProgressBarPanel("progressDetails").add(new Refresh()));
         add(modal);
 
     }

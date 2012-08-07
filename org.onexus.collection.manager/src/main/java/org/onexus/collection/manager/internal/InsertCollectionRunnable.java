@@ -58,18 +58,18 @@ class InsertCollectionRunnable implements Runnable {
             IEntitySet entitySet = callable.call();
 
             String msg = "Inserting collection '" + collection.getURI() + "'";
-            progress.getLogger().info(msg);
+            progress.info(msg);
             log.info(msg);
 
             store.insert(entitySet);
 
             msg = "Collection '" + collection.getURI() + "' inserted.";
-            progress.getLogger().info(msg);
+            progress.info(msg);
             log.info(msg);
 
         } catch (Exception e) {
 
-            progress.getLogger().error(e.getMessage());
+            progress.error(e.getMessage());
             log.error(e.getMessage(), e);
 
             progress.setCancelled(true);

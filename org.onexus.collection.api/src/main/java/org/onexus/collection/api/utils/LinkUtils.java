@@ -23,6 +23,7 @@ import org.onexus.collection.api.Link;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LinkUtils {
@@ -46,8 +47,15 @@ public class LinkUtils {
         List<Link> linksA = a.getLinks();
         List<Link> linksB = b.getLinks();
 
-        // Case 1: A has a direct link to B
+        if (linksA == null) {
+            linksA = Collections.EMPTY_LIST;
+        }
 
+        if (linksB == null) {
+            linksB = Collections.EMPTY_LIST;
+        }
+
+        // Case 1: A has a direct link to B
         for (Link link : linksA) {
             if (ResourceUtils.getAbsoluteURI(parentURI, link.getCollection()).equals(b.getURI())) {
                 for (String field : link.getFields()) {
@@ -58,6 +66,7 @@ public class LinkUtils {
                 return fieldLinks;
             }
         }
+
 
         // Case 2: All the primary fields of A has a link to collections linked
         // by B

@@ -50,7 +50,7 @@ public class TsvCallable implements Callable<IEntitySet> {
 
             if (dataUri == null) {
                 String errMsg = "Required parameter '" + PARAMETER_DATA_URI +"' not found in '" + collection.getURI() + "'.";
-                progress.getLogger().error(errMsg);
+                progress.error(errMsg);
                 progress.setCancelled(true);
 
                 throw new UnsupportedOperationException(errMsg);

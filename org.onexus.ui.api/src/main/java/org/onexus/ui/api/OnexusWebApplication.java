@@ -21,10 +21,16 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WicketFilter;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.ws.WebserviceResource;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
@@ -59,6 +65,15 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
         // Authentication
         getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
 
+        // In case of unhandled exception redirect it to a custom page
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+            @Override
+            public IRequestHandler onException(RequestCycle cycle, Exception e) {
+                return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e)));
+            }
+        });
+
+
         // Injection
         getComponentInstantiationListeners().add(getInjector());
 
@@ -68,6 +83,9 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
         // Mount pages
         mountPage("/login", getSignInPageClass());
         mountPage("admin", ResourcesPage.class);
+
+
+
 
     }
 

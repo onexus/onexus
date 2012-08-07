@@ -36,10 +36,6 @@ public class FieldHeader extends ElementHeader {
         this.collection = collection;
     }
 
-    public FieldHeader(Collection collection, Field field) {
-        this(collection, field, new CollectionHeader(collection));
-    }
-
     @Override
     public String getSortProperty() {
         StringBuilder sortProperty = new StringBuilder();

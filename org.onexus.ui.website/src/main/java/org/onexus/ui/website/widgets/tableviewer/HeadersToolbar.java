@@ -51,7 +51,7 @@ public class HeadersToolbar extends AbstractToolbar {
      *                     headers
      */
     public <T, S> HeadersToolbar(final DataTable<T, S> table,
-                              final ISortStateLocator stateLocator) {
+                                 final ISortStateLocator stateLocator) {
         super(table);
 
         table.setOutputMarkupId(true);
@@ -60,6 +60,11 @@ public class HeadersToolbar extends AbstractToolbar {
                 "headersGrandParents");
         RepeatingView headersParents = new RepeatingView("headersParents");
         RepeatingView headers = new RepeatingView("headers");
+
+        //TODO Show optionally headers
+        headersGrandParents.setVisible(false);
+        headersParents.setVisible(false);
+
         add(headersGrandParents);
         add(headersParents);
         add(headers);
@@ -202,7 +207,7 @@ public class HeadersToolbar extends AbstractToolbar {
                             new Model<String>("empty")));
                 }
 
-                if (secondHeader.getLabel() != null) {
+                if (secondHeader != null && secondHeader.getLabel() != null) {
                     secondHeaderContainer.add(new AttributeModifier("title",
                             new Model<String>(secondHeader.getTitle())));
                 }
@@ -231,15 +236,21 @@ public class HeadersToolbar extends AbstractToolbar {
                         headersGrandParents.newChildId());
                 headersGrandParents.add(grandParentItem);
                 thirdHeaderContainer = new WebMarkupContainer("header");
-                thirdHeaderContainer.add(thirdHeader.getHeader("label"));
+
                 if (thirdTitle == null) {
                     thirdHeaderContainer.add(new AttributeModifier("class",
                             new Model<String>("empty")));
                 }
 
-                if (thirdHeader.getLabel() != null) {
-                    thirdHeaderContainer.add(new AttributeModifier("title",
-                            new Model<String>(thirdHeader.getTitle())));
+                if (thirdHeader != null) {
+                    thirdHeaderContainer.add(thirdHeader.getHeader("label"));
+
+                    if (thirdHeader.getLabel() != null) {
+                        thirdHeaderContainer.add(new AttributeModifier("title",
+                                new Model<String>(thirdHeader.getTitle())));
+                    }
+                } else {
+                    thirdHeaderContainer.add(new EmptyPanel("label"));
                 }
 
                 thirdHeaderContainer.add(new AttributeModifier("style",
@@ -299,8 +310,11 @@ public class HeadersToolbar extends AbstractToolbar {
                     .getHeaderDecorator();
             String helpText = fieldHeader.getCollection().getProperty(
                     "HELP_DESCRIPTION");
-            headerComponent.addOrReplace(new HelpMark("help", secondHeader
-                    .getTitle(), helpText));
+            if (helpText == null) {
+                headerComponent.addOrReplace(new EmptyPanel("help").setVisible(false));
+            } else {
+                headerComponent.addOrReplace(new HelpMark("help", secondHeader.getTitle(), helpText));
+            }
 
         } else {
             headerComponent.addOrReplace(new EmptyPanel("help"));

@@ -18,20 +18,20 @@
 package org.onexus.data.loader.biomart.internal;
 
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Logger;
 import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.SingleDataStreams;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
 public class BiomartCallable implements Callable<IDataStreams> {
 
     private Progress progress;
-    private Logger logger;
     private BiomartRequest request;
 
     public BiomartCallable(Progress progress, BiomartRequest request) {
@@ -39,21 +39,19 @@ public class BiomartCallable implements Callable<IDataStreams> {
 
         String collectionURI = request.getData().getURI();
         this.progress = progress;
-        this.logger = progress.getLogger();
 
-        logger.info("Preparing BIOMART collection '" + collectionURI + "'");
+        progress.info("Preparing BIOMART collection '" + collectionURI + "'");
     }
 
     @Override
     public IDataStreams call() throws Exception {
 
-        this.logger.info("Downloading and parsing the collection");
-
         // Open input stream
         try {
             URL martService = new URL(request.getMartService());
 
-            logger.info("Connecting to '" + request.getMartService() + "'");
+
+            progress.info("Connecting to '" + request.getMartService() + "'");
 
             HttpURLConnection conn = (HttpURLConnection) martService.openConnection();
 
@@ -80,10 +78,23 @@ public class BiomartCallable implements Callable<IDataStreams> {
 
             return new SingleDataStreams(progress, is);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        } catch (MalformedURLException e) {
 
+            String errMsg = "Malformed mart service url '" + request.getMartService() + "'";
+            progress.error(errMsg);
+            progress.setCancelled(true);
+            throw new RuntimeException(errMsg);
+
+        } catch (IOException e) {
+
+            String errMsg = "Unable to connect to '" + request.getMartService() + "'";
+            progress.error(errMsg);
+            progress.setCancelled(true);
+            throw new RuntimeException(errMsg);
+
+        } finally {
+            progress.setDone(true);
+        }
 
     }
 

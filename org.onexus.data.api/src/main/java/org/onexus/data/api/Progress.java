@@ -23,28 +23,63 @@ import java.util.List;
 
 public class Progress implements Serializable {
 
+    public final static int DEBUG = 1;
+    public final static int WARNING = 2;
+    public final static int INFO = 3;
+    public final static int ERROR = 4;
+
     private String id;
-    private Logger logger;
+    private String name;
+    private String status;
+    private int statusType;
     private boolean canceled;
     private boolean done;
 
     private List<Progress> subProgresses = new ArrayList<Progress>();
 
-    public Progress(String id) {
-        this(id, new Logger());
-    }
-
-    public Progress(String id, Logger logger) {
+    public Progress(String id, String name) {
         this.id = id;
-        this.logger = logger;
+        this.name = name;
     }
 
     public String getId() {
         return id;
     }
 
-    public Logger getLogger() {
-        return logger;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public int getStatusType() {
+        return statusType;
+    }
+
+    public void error(String msg) {
+        this.status = msg;
+        this.statusType = ERROR;
+    }
+
+    public void info(String msg) {
+        this.status = msg;
+        this.statusType = INFO;
+    }
+
+    public void warning(String msg) {
+        this.status = msg;
+        this.statusType = WARNING;
+    }
+
+    public void debug(String msg) {
+        this.status = msg;
+        this.statusType = DEBUG;
     }
 
     public boolean isCanceled() {
@@ -79,4 +114,5 @@ public class Progress implements Serializable {
     public List<Progress> getSubProgresses() {
         return subProgresses;
     }
+
 }
