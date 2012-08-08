@@ -19,14 +19,49 @@ package org.onexus.ui.website.pages.html;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.util.io.IOUtils;
+import org.onexus.data.api.IDataManager;
+import org.onexus.data.api.IDataStreams;
+import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.Page;
+
+import javax.inject.Inject;
+import java.io.IOException;
 
 public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
 
+    @Inject
+    public IDataManager dataManager;
+
     public HtmlPage(String componentId, IModel<HtmlPageStatus> statusModel) {
         super(componentId, statusModel);
-        
-        add(new Label("content", getConfig().getContent()).setEscapeModelStrings(false));
+
+        add(new Label("content", new ContentModel()).setEscapeModelStrings(false));
+    }
+
+    public class ContentModel extends LoadableDetachableModel<String> {
+
+        @Override
+        protected String load() {
+
+            HtmlPageConfig config = getConfig();
+            String content = config.getContent();
+
+
+            WebsiteConfig websiteConfig = config.getWebsiteConfig();
+            String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
+            String contentUri = ResourceUtils.getAbsoluteURI(parentUri, content);
+
+            IDataStreams stream = dataManager.load(contentUri);
+
+            try {
+                return IOUtils.toString(stream.iterator().next());
+            } catch (IOException e) {
+                return "";
+            }
+        }
     }
 
 }
