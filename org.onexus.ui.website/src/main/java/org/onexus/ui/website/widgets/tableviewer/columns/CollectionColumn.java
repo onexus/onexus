@@ -26,17 +26,21 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
 
+import java.util.List;
+
 public class CollectionColumn extends AbstractColumn {
 
 
     private IHeader headerDecorator;
     private IDecorator cellDecorator;
+    private List<IDecorator> cellActions;
 
-    public CollectionColumn(String collectionId, IHeader headerDecorator, IDecorator cellDecorator) {
+    public CollectionColumn(String collectionId, IHeader headerDecorator, IDecorator cellDecorator, List<IDecorator> cellActions) {
         super(collectionId);
 
         this.headerDecorator = headerDecorator;
         this.cellDecorator = cellDecorator;
+        this.cellActions = cellActions;
 
     }
 
@@ -51,8 +55,12 @@ public class CollectionColumn extends AbstractColumn {
     @Override
     public void populateItem(Item<ICellPopulator<IEntityTable>> cellItem,
                              String componentId, IModel<IEntityTable> rowModel) {
-        cellDecorator.populateCell(cellItem, componentId,
-                getModelAdapter(rowModel));
+
+        if (cellActions == null || cellActions.isEmpty()) {
+            cellDecorator.populateCell(cellItem, componentId, getModelAdapter(rowModel));
+        } else {
+            cellItem.add(new ActionPanel(componentId, cellDecorator, cellActions, getModelAdapter(rowModel)));
+        }
     }
 
     public IDecorator getCellDecorator() {

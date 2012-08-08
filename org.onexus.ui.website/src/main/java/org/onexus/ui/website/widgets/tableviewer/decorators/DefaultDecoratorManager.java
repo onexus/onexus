@@ -72,8 +72,9 @@ public class DefaultDecoratorManager implements IDecoratorManager {
                             String keyAndValue[] = parametersNonTrim[i].split(Pattern.quote("=\""));
 
                             ParameterKey key = null;
+                            String strKey = keyAndValue[0].trim();
                             for (ParameterKey k : creator.getParameterKeys()) {
-                                if (k.getKey().equalsIgnoreCase(keyAndValue[0])) {
+                                if (k.getKey().equalsIgnoreCase(strKey)) {
                                     key = k;
                                     break;
                                 }

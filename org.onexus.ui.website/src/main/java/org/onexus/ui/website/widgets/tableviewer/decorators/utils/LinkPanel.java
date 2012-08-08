@@ -24,10 +24,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 public class LinkPanel extends Panel {
     public static final String LINK_ID = "select";
 
-    public LinkPanel(String id, WebMarkupContainer link) {
-        this(id, null, link);
-    }
-
     public LinkPanel(String id, String label, WebMarkupContainer link) {
         super(id);
 

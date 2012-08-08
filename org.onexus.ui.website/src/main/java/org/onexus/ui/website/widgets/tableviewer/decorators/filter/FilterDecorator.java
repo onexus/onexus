@@ -52,11 +52,10 @@ public class FilterDecorator extends FieldDecorator {
         String label = "<i class=\"icon-filter\"></i>";
         String tooltip = "Filter results by " + getField().getLabel() + " = " + String.valueOf(value);
 
-        cellContainer.add(new LinkPanel(componentId, label, getLink(collectionId, data)));
-        cellContainer.add(new AttributeModifier("title", new Model<String>(tooltip)));
+        cellContainer.add(new LinkPanel(componentId, label, getLink(collectionId, data, tooltip)));
     }
 
-    protected WebMarkupContainer getLink(String collectionId, IModel<IEntity> data) {
+    protected WebMarkupContainer getLink(String collectionId, IModel<IEntity> data, String tooltip) {
 
         String entityId = null;
         IEntity entity = data.getObject();
@@ -67,7 +66,7 @@ public class FilterDecorator extends FieldDecorator {
             entityId = String.valueOf(entity.get(getField().getId()));
         }
 
-        return new BrowserPageLink<FilterEntity>(LinkPanel.LINK_ID, Model.of(new FilterEntity(collectionId, entityId))) {
+        WebMarkupContainer link = new BrowserPageLink<FilterEntity>(LinkPanel.LINK_ID, Model.of(new FilterEntity(collectionId, entityId))) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -89,6 +88,11 @@ public class FilterDecorator extends FieldDecorator {
             }
 
         };
+
+        link.add(new AttributeModifier("rel", "tooltip"));
+        link.add(new AttributeModifier("title", tooltip));
+        link.add(new AttributeModifier("data-placement", "right"));
+        return link;
     }
 
     protected AbstractEvent[] onClick(FilterEntity rowEntity, BrowserPageStatus status) {

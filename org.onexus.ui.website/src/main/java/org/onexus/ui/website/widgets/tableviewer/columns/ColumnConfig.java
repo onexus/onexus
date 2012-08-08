@@ -27,6 +27,7 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
+import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorManager;
 import org.onexus.ui.website.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.ui.website.widgets.tableviewer.headers.FieldHeader;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -47,6 +49,8 @@ public class ColumnConfig implements IColumnConfig {
     private String fields;
 
     private String decorator;
+
+    private String actions;
 
     private String visible;
 
@@ -94,6 +98,14 @@ public class ColumnConfig implements IColumnConfig {
         this.decorator = decorator;
     }
 
+    public String getActions() {
+        return actions;
+    }
+
+    public void setActions(String actions) {
+        this.actions = actions;
+    }
+
     @Override
     public void addColumns(List<IColumn<IEntityTable, String>> columns, String parentURI) {
 
@@ -102,11 +114,35 @@ public class ColumnConfig implements IColumnConfig {
 
         if (collection != null) {
             List<String> fields = getFields(collection);
+
+
             for (String fieldId : fields) {
                 Field field = collection.getField(fieldId);
-                columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(collection)), getDecoratorManager().getDecorator(decorator, collection, field)));
+
+                IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
+                List<IDecorator> actionsImpl = createActions(collection, field);
+
+                columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
             }
         }
+    }
+
+    private List<IDecorator> createActions(Collection collection, Field field) {
+
+        if (actions == null) {
+            return Collections.emptyList();
+        }
+
+        List<IDecorator> actionsImpl = new ArrayList<IDecorator>();
+        for (String action : actions.split(",")) {
+            IDecorator actionImpl = getDecoratorManager().getDecorator(action.trim(), collection, field);
+            if (actionImpl != null) {
+                actionsImpl.add(actionImpl);
+            }
+        }
+
+        return actionsImpl;
+
     }
 
     private List<String> getFields(Collection collection) {

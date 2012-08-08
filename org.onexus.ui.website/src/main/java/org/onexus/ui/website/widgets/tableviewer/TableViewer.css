@@ -29,7 +29,13 @@ table.table-viewer tr.headers th.wicket_orderUp a {
 
 table.table-viewer td, table.table-viewer th {
 	min-width: 40px;
-	text-align: center;
+}
+
+table.table-viewer td div.cell {
+    float: left;
+    margin-left: 4px;
+    padding-left: 5px;
+    border-left: 1px dotted #DDD;
 }
 
 .ajax-overlay {
