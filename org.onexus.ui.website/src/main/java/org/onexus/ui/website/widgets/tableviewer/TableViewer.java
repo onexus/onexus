@@ -116,7 +116,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         BrowserPageStatus pageStatus = findParentStatus(status, BrowserPageStatus.class);
 
         if (pageStatus!=null) {
-            Predicate filter = new VisiblePredicate(pageStatus.getBase(), pageStatus.getFilters());
+            Predicate filter = new VisiblePredicate(getReleaseUri(), pageStatus.getFilters());
             CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
         } else {
             visibleColumnsConfig = columnsConfig;

@@ -96,6 +96,10 @@ public class ResourceUtils {
 
         char sep = (parentURI.indexOf('?') < 0 ? '?' : Resource.SEPARATOR );
 
+        if (resourceName == null) {
+            return parentURI;
+        }
+
         return parentURI + sep + resourceName;
     }
 

@@ -23,6 +23,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.*;
@@ -32,6 +33,8 @@ import org.onexus.resource.api.ParameterKey;
 import org.onexus.ui.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.ui.website.widgets.tableviewer.decorators.utils.LinkPanel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -51,47 +54,68 @@ public class LinkDecorator extends FieldDecorator {
         Object description = getValue(entity);
 
         if (description != null) {
-            String href = parameters.get(LinkDecoratorParameters.URL);
-            for (Field field : entity.getCollection().getFields()) {
-                Object value = entity.get(field.getId());
 
-                String fieldPattern = "${" + field.getId() + "}";
-                if (href.contains(fieldPattern)) {
-                    href = href.replaceAll(Pattern.quote(fieldPattern), String.valueOf(value));
+            RepeatingView links = new RepeatingView(componentId);
+
+            String currentColumnValue = String.valueOf(entity.get(getField().getId()));
+
+            List<String> columnValues = new ArrayList<String>();
+            if (parameters.containsKey(LinkDecoratorParameters.SEPARATOR)) {
+                for (String value: currentColumnValue.split(",")) {
+                    columnValues.add(value.trim());
                 }
+            } else {
+                columnValues.add(currentColumnValue);
             }
 
-            String label = getFormatValue(entity);
+            for (String columnValue : columnValues) {
+                String href = parameters.get(LinkDecoratorParameters.URL);
 
-            final String url = href;
+                for (Field field : entity.getCollection().getFields()) {
+                    String value = String.valueOf(entity.get(field.getId()));
 
-            WebMarkupContainer link = new WebMarkupContainer(LinkPanel.LINK_ID) {
-
-                @Override
-                public void onComponentTag(ComponentTag tag) {
-                    super.onComponentTag(tag);
-
-                    String href = url;
-
-                    // Add website URI
-                    if (!href.startsWith("http://")) {
-                        StringValue uri = getPage().getPageParameters().get("uri");
-                        if (!uri.isEmpty()) {
-                            href = href + "&uri=" + uri.toString();
-                        }
+                    if (field.equals(getField())) {
+                         value = columnValue;
                     }
 
-                    tag.getAttributes().put("href", href);
+                    String fieldPattern = "${" + field.getId() + "}";
+                    if (href.contains(fieldPattern)) {
+                        href = href.replaceAll(Pattern.quote(fieldPattern), value);
+                    }
                 }
-            };
+
+                final String url = href;
+
+                WebMarkupContainer link = new WebMarkupContainer(LinkPanel.LINK_ID) {
+
+                    @Override
+                    public void onComponentTag(ComponentTag tag) {
+                        super.onComponentTag(tag);
+
+                        String href = url;
+
+                        // Add website URI
+                        if (!href.startsWith("http://")) {
+                            StringValue uri = getPage().getPageParameters().get("uri");
+                            if (!uri.isEmpty()) {
+                                href = href + "&uri=" + uri.toString();
+                            }
+                        }
+
+                        tag.getAttributes().put("href", href);
+                    }
+                };
 
 
-            if (parameters.containsKey(LinkDecoratorParameters.TARGET)) {
-                link.add(new AttributeModifier("target", parameters.get(LinkDecoratorParameters.TARGET)));
+                if (parameters.containsKey(LinkDecoratorParameters.TARGET)) {
+                    link.add(new AttributeModifier("target", parameters.get(LinkDecoratorParameters.TARGET)));
+                }
+
+                LinkPanel linkPanel = new LinkPanel(links.newChildId(), columnValue, link);
+                links.add(linkPanel);
             }
 
-            LinkPanel linkPanel = new LinkPanel(componentId, label, link);
-            cellContainer.add(linkPanel);
+            cellContainer.add(links);
 
         } else {
             cellContainer.add(new EmptyPanel(componentId));

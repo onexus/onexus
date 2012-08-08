@@ -25,6 +25,7 @@ import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,8 @@ public class DefaultDecoratorManager implements IDecoratorManager {
                 try {
                     decoratorId = decorator.substring(0, parSep);
                     int parEnd = decorator.indexOf(')');
-                    String[] parametersNonTrim = decorator.substring(parSep + 1, parEnd).split(",");
+                    String allParameters = decorator.substring(parSep + 1, parEnd);
+                    String[] parametersNonTrim = splitParameters(allParameters);
 
                     // Get creator
                     creator = getCreator(decoratorId);
@@ -137,5 +139,29 @@ public class DefaultDecoratorManager implements IDecoratorManager {
 
     public void setCreators(List<IDecoratorCreator> creators) {
         this.creators = creators;
+    }
+
+    private static String[] splitParameters(String allParameters) {
+
+        List<String> parameters = new ArrayList<String>();
+
+        boolean inQuote = false;
+        int last = 0;
+        for (int i=0; i < allParameters.length(); i++) {
+            char c = allParameters.charAt(i);
+
+            if (c == '"') {
+                inQuote = !inQuote;
+            }
+
+            if (c == ',' && !inQuote) {
+                parameters.add(allParameters.substring(last, i).trim());
+                last = i + 1;
+            }
+        }
+
+        parameters.add(allParameters.substring(last, allParameters.length()).trim());
+
+        return parameters.toArray(new String[parameters.size()]);
     }
 }
