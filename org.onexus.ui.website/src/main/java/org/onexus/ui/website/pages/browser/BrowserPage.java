@@ -32,8 +32,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.ui.website.events.EventTabSelected;
-import org.onexus.ui.website.events.EventViewChange;
+import org.onexus.ui.website.events.*;
 import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
 import org.onexus.ui.website.pages.browser.layouts.single.SingleLayout;
@@ -50,12 +49,9 @@ import java.util.Map;
 
 public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
-    @Inject
-    public IResourceManager resourceManager;
-
     public BrowserPage(String componentId, IModel<BrowserPageStatus> statusModel) {
         super(componentId, statusModel);
-        onEventFireUpdate(EventTabSelected.class);
+        onEventFireUpdate(EventTabSelected.class, EventAddFilter.class, EventRemoveFilter.class);
 
         add(new FiltersPanel("filters", statusModel));
 

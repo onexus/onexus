@@ -126,7 +126,7 @@ public class BrowserFilter implements IFilter {
     }
 
     @Override
-    public boolean isVisible(VisibleRule rule) {
+    public boolean match(VisibleRule rule) {
         return true;
     }
 

@@ -48,7 +48,7 @@ public interface IFilter extends Serializable, IVisible {
 
     Panel getTooltip(String componentId, Query query);
 
-    boolean isVisible(VisibleRule rule);
+    boolean match(VisibleRule rule);
 
     String toUrlParameter();
 

@@ -58,14 +58,24 @@ public class VisiblePredicate implements Predicate {
             return false;
         }
 
-        String visibleRules[] = visibleQuery.split(",");
-
         for (VisibleRule rule : VisibleRule.parseRules(parentURI, visible.getVisible())) {
+
+            boolean matchAnyFilter = false;
             for (IFilter filter : filters) {
-                if (!filter.isVisible(rule)) {
-                    return false;
+                if (filter.match(rule)) {
+                    matchAnyFilter = true;
+                    break;
                 }
             }
+
+            if (rule.isNegated() && matchAnyFilter) {
+                return false;
+            }
+
+            if (!rule.isNegated() && !matchAnyFilter) {
+                return false;
+            }
+
         }
 
         return true;

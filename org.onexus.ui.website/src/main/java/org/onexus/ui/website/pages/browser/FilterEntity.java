@@ -137,11 +137,9 @@ public class FilterEntity implements IFilter {
     }
 
     @Override
-    public boolean isVisible(VisibleRule rule) {
+    public boolean match(VisibleRule rule) {
 
-        boolean negated = rule.isNegated();
-
-        boolean validCollection = (filteredCollection.endsWith(rule.getFilteredCollection()) ? !negated : negated);
+        boolean validCollection = filteredCollection.endsWith(rule.getFilteredCollection());
 
         if (rule.getOperator() == null) {
             return validCollection;
@@ -152,7 +150,7 @@ public class FilterEntity implements IFilter {
 
         String fieldValue = String.valueOf(entity.get(rule.getField()));
 
-        return (StringUtils.equals(fieldValue , rule.getValue()) ? !negated : negated);
+        return StringUtils.equals(fieldValue , rule.getValue());
     }
 
     @Override
