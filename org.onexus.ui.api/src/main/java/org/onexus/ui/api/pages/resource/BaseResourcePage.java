@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
@@ -53,7 +54,8 @@ public class BaseResourcePage extends WebPage {
 
         add( new DefaultTheme() );
 
-        add( new ProgressBar("progressbar"));
+        //TODO add( new ProgressBar("progressbar"));
+        add(new EmptyPanel("progressbar"));
 
         // Select the first project if there is no selection
         if (getModelObject() == null) {

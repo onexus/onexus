@@ -32,16 +32,25 @@ import java.util.Map;
 public class TooltipDecorator implements IDecorator {
 
     private Field field;
+    private Map<ParameterKey, String> parameters;
 
     public TooltipDecorator(Collection collection, Field field, Map<ParameterKey, String> parameters) {
         super();
         this.field = field;
+        this.parameters = parameters;
     }
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> entity) {
         String value = getFormatValue(entity.getObject());
-        String tooltip = StringUtils.abbreviate(value, 15) + "<i class=\"icon-plus\" rel=\"tooltip\" title=\"" + value + "\"></i>";
+
+
+        int length = 15;
+        if (parameters.containsKey(TooltipDecoratorParameters.LENGTH)) {
+            length = Integer.valueOf(parameters.get(TooltipDecoratorParameters.LENGTH));
+        }
+
+        String tooltip = StringUtils.abbreviate(value, length) + "<i class=\"icon-plus\" rel=\"tooltip\" title=\"" + value + "\"></i>";
         cellContainer.add(new Label(componentId, tooltip).setEscapeModelStrings(false).setVisible(value != null));
     }
 
