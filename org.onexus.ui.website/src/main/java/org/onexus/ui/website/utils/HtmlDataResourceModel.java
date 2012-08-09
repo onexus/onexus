@@ -7,6 +7,8 @@ import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.regex.Pattern;
 
 public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
+    private static final Logger log = LoggerFactory.getLogger(HtmlDataResourceModel.class);
     @Inject
     private transient IDataManager dataManager;
 
@@ -27,11 +30,15 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     @Override
     protected String load() {
 
-        IDataStreams stream = getDataManager().load(contentUri);
+        if (contentUri == null) {
+            return "";
+        }
 
         try {
+            IDataStreams stream = getDataManager().load(contentUri);
             return filterRelativeUrls(IOUtils.toString(stream.iterator().next()), contentUri);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            log.error("Error loading HTML source '" + contentUri + "'", e);
             return "";
         }
     }
