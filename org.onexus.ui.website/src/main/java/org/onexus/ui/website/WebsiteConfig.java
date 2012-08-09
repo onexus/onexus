@@ -35,7 +35,7 @@ public class WebsiteConfig extends Resource {
 
     private List<PageConfig> pages;
 
-    private Boolean showHeader;
+    private String header;
 
     private String css;
 
@@ -53,12 +53,12 @@ public class WebsiteConfig extends Resource {
         this.authorization = authorization;
     }
 
-    public Boolean getShowHeader() {
-        return showHeader;
+    public String getHeader() {
+        return header;
     }
 
-    public void setShowHeader(Boolean showHeader) {
-        this.showHeader = showHeader;
+    public void setHeader(String header) {
+        this.header = header;
     }
 
     public String getCss() {

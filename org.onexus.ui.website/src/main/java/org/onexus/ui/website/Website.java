@@ -41,6 +41,7 @@ import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
 import org.onexus.ui.website.theme.DefaultTheme;
+import org.onexus.ui.website.utils.HtmlDataResourceModel;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -79,10 +80,17 @@ public class Website extends WebPage {
         add(new Label("windowTitle", config.getTitle()));
 
         add(new EmptyPanel("progressbar"));
-        //add(new ProgressBar("progressbar", false));
+        //TODO add(new ProgressBar("progressbar", false));
 
-        WebMarkupContainer header = new WebMarkupContainer("header");
-        header.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "config.pages")) {
+        String header = config.getHeader();
+        String headerUri = ResourceUtils.getAbsoluteURI(parentUri, header);
+        Label headerLabel = new Label("header", new HtmlDataResourceModel(headerUri));
+        headerLabel.setVisible(header != null && !header.isEmpty());
+        headerLabel.setEscapeModelStrings(false);
+        add(headerLabel);
+
+        WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
+        menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "config.pages")) {
 
             @Override
             protected void populateItem(ListItem<PageConfig> item) {
@@ -110,7 +118,7 @@ public class Website extends WebPage {
 
             }
         });
-        add(header);
+        add(menuSection);
 
         String currentPage = status.getCurrentPage();
 
@@ -127,8 +135,10 @@ public class Website extends WebPage {
         }
 
         String bottom = config.getBottom();
-        Label bottomLabel = new Label("bottom", bottom);
-        bottomLabel.setVisible(bottom != null);
+        String bottomUri = ResourceUtils.getAbsoluteURI(parentUri, bottom);
+
+        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri));
+        bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);
 
