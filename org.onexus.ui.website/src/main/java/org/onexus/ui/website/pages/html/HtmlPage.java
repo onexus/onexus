@@ -17,8 +17,15 @@
  */
 package org.onexus.ui.website.pages.html;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteConfig;
@@ -47,4 +54,12 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
     }
 
 
+    private final static HeaderItem JS_COLORBOX = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HtmlPage.class, "jquery.colorbox-min.js"));
+    private final static HeaderItem CSS_COLORBOX = CssHeaderItem.forReference(new CssResourceReference(HtmlPage.class, "colorbox.css"));
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(CSS_COLORBOX);
+        response.render(JS_COLORBOX);
+    }
 }
