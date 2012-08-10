@@ -48,16 +48,22 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
 
     private static String filterRelativeUrls(String html, String contentUri) {
-        String projectUrl = "../../data" + Resource.SEPARATOR + Integer.toHexString(ResourceUtils.getProjectURI(contentUri).hashCode()) + Resource.SEPARATOR + ResourceUtils.getResourcePath(contentUri);
-        projectUrl = projectUrl.substring(0, projectUrl.lastIndexOf('/')) + '/';
+        String projectUrl = "../../data" + Resource.SEPARATOR + Integer.toHexString(ResourceUtils.getProjectURI(contentUri).hashCode());
+
+        String resourcePath = ResourceUtils.getResourcePath(contentUri);
+        resourcePath = resourcePath.substring(0, resourcePath.lastIndexOf('/'));
 
         Matcher mHref = PATTERN_HREF.matcher(html);
         StringBuffer sbHref = new StringBuffer();
         while (mHref.find()) {
             String link = mHref.group(2).trim();
 
-            if (!link.contains("://")) {
-                link = projectUrl + link;
+            if (!link.contains("://") && !link.startsWith("#")) {
+                if (!link.startsWith("/")) {
+                    link = projectUrl + '/' + resourcePath + '/' + link;
+                } else {
+                    link = projectUrl + '/' + link;
+                }
                 mHref.appendReplacement(sbHref, mHref.group(1) + link + mHref.group(3));
             }
         }
@@ -69,7 +75,13 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
             String link = mSrc.group(2).trim();
 
             if (!link.contains("://")) {
-                link = projectUrl + link;
+                if (!link.startsWith("/")) {
+                    link = projectUrl + '/' + resourcePath + '/' + link;
+                } else {
+                    link = projectUrl + '/' + link;
+                }
+
+                link = projectUrl + '/' + link;
                 mSrc.appendReplacement(sbSrc, mSrc.group(1) + link + mSrc.group(3));
             }
         }
