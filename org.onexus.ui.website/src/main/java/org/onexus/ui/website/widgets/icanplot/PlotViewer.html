@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xml:lang="en"
+      lang="en">
+<body>
+<wicket:panel>
+    <div id="canvas-container">
+        <canvas id="plot-area" width="700" height="500">
+            <div class="error">
+                <p>This application requires a browser which supports
+                    the HTML5 Canvas element. Here are a few recommendations:
+                <ul>
+                    <li><a href="http://www.mozilla.com">Firefox 4+</a></li>
+                    <li><a href="http://www.apple.com/safari/">Safari 5+</a></li>
+                    <li><a href="http://www.google.com/chrome/">Chrome 11+</a></li>
+                    <li><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">Internet
+                        Explorer 9+</a></li>
+                </ul>
+                </p>
+            </div>
+        </canvas>
+    </div>
+
+    <div id="control">
+        <div id="params">
+            <div id="param-head">
+                <h3 style="padding-right:1.5em">Select data to display</h3>
+            </div>
+            <div id="param-columns">
+                <table>
+                    <tbody>
+                    <tr>
+                        <th>X axis</th>
+                        <td>
+                            <select id="x-select" onchange="redrawFig()">
+                                <option value="0"># diseases</option>
+                                <option value="1" selected="selected"># genes</option>
+                                <option value="2"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Y axis</th>
+                        <td>
+                            <select id="y-select" onchange="redrawFig()">
+                                <option value="0" selected="selected"># diseases</option>
+                                <option value="1"># genes</option>
+                                <option value="2"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Color by</th>
+                        <td>
+                            <select id="color-select" onchange="redrawFig()">
+                                <option value="-1">None</option>
+                                <option value="0"># diseases</option>
+                                <option value="1"># genes</option>
+                                <option value="2"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Size by</th>
+                        <td>
+                            <select id="size-select" onchange="redrawFig()">
+                                <option value="-1">None</option>
+                                <option value="0"># diseases</option>
+                                <option value="1"># genes</option>
+                                <option value="2"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</wicket:panel>
+</body>
+</html>

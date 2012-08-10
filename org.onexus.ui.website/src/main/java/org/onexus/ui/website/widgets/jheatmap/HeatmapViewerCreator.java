@@ -15,11 +15,10 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.heatmap;
+package org.onexus.ui.website.widgets.jheatmap;
 
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.api.IResourceRegister;
-import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.Widget;
 
@@ -33,11 +32,5 @@ public class HeatmapViewerCreator extends AbstractWidgetCreator<HeatmapViewerCon
     protected Widget<?, ?> build(String componentId, IModel<HeatmapViewerStatus> statusModel) {
         return new HeatmapViewer(componentId, statusModel);
     }
-
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        resourceRegister.register(HeatmapViewerConfig.class);
-    }
-
 
 }

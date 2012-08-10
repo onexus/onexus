@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.heatmap;
+package org.onexus.ui.website.widgets.jheatmap;
 
 import org.apache.wicket.IResourceListener;
 import org.apache.wicket.markup.head.IHeaderResponse;

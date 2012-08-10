@@ -46,7 +46,10 @@
         <bean class="org.onexus.ui.website.widgets.tableviewer.TableViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
-        <bean class="org.onexus.ui.website.widgets.heatmap.HeatmapViewerCreator"/>
+        <bean class="org.onexus.ui.website.widgets.jheatmap.HeatmapViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.icanplot.PlotViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.share.ShareWidgetCreator"/>

@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.heatmap;
+package org.onexus.ui.website.widgets.jheatmap;
 
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;

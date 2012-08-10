@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.heatmap;
+package org.onexus.ui.website.widgets.jheatmap;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;

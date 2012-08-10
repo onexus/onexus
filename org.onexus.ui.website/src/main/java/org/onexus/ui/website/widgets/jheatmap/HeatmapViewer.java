@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.website.widgets.heatmap;
+package org.onexus.ui.website.widgets.jheatmap;
 
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.IModel;
