@@ -27,17 +27,23 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 public class DefaultTheme extends Behavior {
 
-    public static final CssResourceReference BOOTSTRAP_CSS = new CssResourceReference(DefaultTheme.class, "css/bootstrap.min.css");
-    public static final JQueryPluginResourceReference BOOTSTRAP_JS = new JQueryPluginResourceReference(DefaultTheme.class, "js/bootstrap.min.js");
-    public static final CssResourceReference STYLE_CSS = new CssResourceReference(DefaultTheme.class, "css/style.css");
+    private final static HeaderItem BOOTSTRAP_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "css/bootstrap.min.css"));
+    private final static HeaderItem BOOTSTRAP_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "js/bootstrap.min.js"));
+    private final static HeaderItem STYLE_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "css/style.css"));
+
+    private final static HeaderItem COLORBOX_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "colorbox/jquery.colorbox-min.js"));
+    private final static HeaderItem COLORBOX_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "colorbox/colorbox.css"));
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
 
-        response.render(CssHeaderItem.forReference(BOOTSTRAP_CSS));
-        response.render(CssHeaderItem.forReference(STYLE_CSS));
+        response.render(BOOTSTRAP_CSS);
+        response.render(STYLE_CSS);
+        response.render(COLORBOX_CSS);
 
-        response.render(JavaScriptHeaderItem.forReference(BOOTSTRAP_JS));
+        response.render(BOOTSTRAP_JS);
+        response.render(COLORBOX_JS);
+
         response.render(OnLoadHeaderItem.forScript(
                getTooltipJavascript() +
                getModalJavascript() +

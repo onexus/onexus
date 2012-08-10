@@ -52,14 +52,4 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
 
         add(new Label("content", new HtmlDataResourceModel(contentUri)).setEscapeModelStrings(false));
     }
-
-
-    private final static HeaderItem JS_COLORBOX = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HtmlPage.class, "jquery.colorbox-min.js"));
-    private final static HeaderItem CSS_COLORBOX = CssHeaderItem.forReference(new CssResourceReference(HtmlPage.class, "colorbox.css"));
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.render(CSS_COLORBOX);
-        response.render(JS_COLORBOX);
-    }
 }
