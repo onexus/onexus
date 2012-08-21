@@ -1,3 +1,14 @@
+
+Array.prototype.clean = function() {
+  for (var i = 0; i < this.length; i++) {
+    if (isNaN(this[i])) {
+      this[i] = null;
+      i--;
+    }
+  }
+  return this;
+};
+
 //Array.max = function(array){
 //	return Math.max.apply(Math, array);
 //};
@@ -149,6 +160,12 @@ viz = {
 		//this.maxColor = this.dataColor.max();
 		//this.minSize = this.dataSize.min();
 		//this.maxSize = this.dataSize.max();
+
+		// Clean NaN
+        this.dataX.clean();
+        this.dataY.clean();
+        this.dataColor.clean();
+        this.dataSize.clean();
 
 		this.minX = Math.min.apply(null, this.dataX);
 		this.maxX = Math.max.apply(null, this.dataX);
@@ -316,10 +333,16 @@ viz = {
 
 	// functions to convert data values to coordinate and inverse
 	warpX: function(x) {
+	    if (x==null) {
+	        return null;
+	    }
 		return (x * this.scaleX + this.transX);
 	},
 
 	warpY: function(y) {
+	    if (y==null) {
+        	return null;
+        }
 		return -(y * this.scaleY + this.transY);
 	},
 
@@ -795,10 +818,14 @@ viz = {
 
 	// draw a filled circle
 	circle: function(x, y, r) {
-		this.ctx.beginPath();
-		this.ctx.arc(x, y, r, 0, Math.PI*2, true);
-		this.ctx.fill();
-		this.ctx.closePath();
+
+	    // Skip null values
+	    if (x!=null && y!=null) {
+	        this.ctx.beginPath();
+            this.ctx.arc(x, y, r, 0, Math.PI*2, true);
+            this.ctx.fill();
+            this.ctx.closePath();
+	    }
 	},
 
 	// draw a empty circle

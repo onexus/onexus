@@ -22,20 +22,21 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.collection.api.query.Query;
+import org.onexus.ui.api.OnexusWebApplication;
 
 public class HeatmapPage extends WebPage implements IResourceListener {
-    
+
     private HeatmapViewerConfig config;
-    private IResource resource;
-    private int lastColumnFields;
-    private int lastRowFields;
+    private Query query;
 
     public HeatmapPage(HeatmapViewerConfig config, Query query) {
         super();
         this.config = config;
-        //TODO this.resource = new StatefulExportResource(query);
+        this.query = query;
     }
 
     @Override
@@ -58,6 +59,7 @@ public class HeatmapPage extends WebPage implements IResourceListener {
                         "\t\t\t\tvalues : '" + urlFor(IResourceListener.INTERFACE, null) + "&antiCache=" + System.currentTimeMillis() + "', \n");
 
         // Column annotations
+        /*TODO
         code.append("\t\t\t\tcols_annotations : [");
         for (int i=0; i < lastColumnFields; i++) {
             if (i!=0) {
@@ -82,15 +84,24 @@ public class HeatmapPage extends WebPage implements IResourceListener {
         code.append(    "\t\t\t}\n" +
                         "\t\t});\n" +
                         "\t});");
+                        */
 
         return code.toString();
     }
 
     @Override
     public void onResourceRequested() {
-        IResource.Attributes a = new IResource.Attributes(RequestCycle.get().getRequest(), RequestCycle.get()
-                .getResponse(), null);
-        this.resource.respond(a);
+
+        String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
+        PageParameters params = new PageParameters();
+        params.add("query", query);
+        params.add("filename", fileName);
+
+        ResourceReference webservice = OnexusWebApplication.get().getWebService();
+        IResource resource = webservice.getResource();
+        IResource.Attributes a = new IResource.Attributes(RequestCycle.get().getRequest(), RequestCycle.get().getResponse(), params);
+        resource.respond(a);
+
     }
 
 }

@@ -18,12 +18,11 @@
 package org.onexus.ui.api.ws.response;
 
 import org.apache.wicket.request.Response;
-import org.onexus.collection.api.ICollectionManager;
-import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import javax.inject.Inject;
@@ -39,6 +38,9 @@ public class QueryResponse extends AbstractResponse {
 
     @Inject
     public ICollectionManager collectionManager;
+
+    @Inject
+    public IResourceManager resourceManager;
 
     private String query;
     private boolean count;
@@ -89,17 +91,46 @@ public class QueryResponse extends AbstractResponse {
 
     }
 
-    private static void writeHeader(Response response, IEntityTable table) {
+    private void writeHeader(Response response, IEntityTable table) {
 
-        for (Map.Entry<String, List<String>> select : table.getQuery().getSelect().entrySet()) {
+        if (prettyPrint) {
+            Iterator<Map.Entry<String, List<String>>> selectIt = table.getQuery().getSelect().entrySet().iterator();
+            while (selectIt.hasNext()){
+                Map.Entry<String, List<String>> select = selectIt.next();
 
-            for (String field : select.getValue()) {
-                response.write(select.getKey());
-                response.write(".");
-                response.write(field);
-                response.write("\t");
+                String collectionUri = QueryUtils.getCollectionUri(table.getQuery(), select.getKey());
+                Collection collection = resourceManager.load(Collection.class, collectionUri);
+
+                Iterator<String> fieldId = select.getValue().iterator();
+                while (fieldId.hasNext()) {
+                    Field field = collection.getField(fieldId.next());
+                    if (field == null) {
+                        continue;
+                    }
+                    response.write(field.getLabel());
+                    if (fieldId.hasNext() || selectIt.hasNext()) {
+                        response.write("\t");
+                    }
+                }
+
             }
 
+        } else {
+            Iterator<Map.Entry<String, List<String>>> selectIt = table.getQuery().getSelect().entrySet().iterator();
+            while (selectIt.hasNext()){
+                Map.Entry<String, List<String>> select = selectIt.next();
+
+                Iterator<String> fieldId = select.getValue().iterator();
+                while (fieldId.hasNext()){
+                    response.write(select.getKey());
+                    response.write(".");
+                    response.write(fieldId.next());
+                    if (fieldId.hasNext() || selectIt.hasNext()) {
+                        response.write("\t");
+                    }
+                }
+
+            }
         }
 
         response.write("\n");
@@ -107,14 +138,19 @@ public class QueryResponse extends AbstractResponse {
 
     private static void writeRow(Response response, IEntityTable table) {
 
-        for (Map.Entry<String, List<String>> select : table.getQuery().getSelect().entrySet()) {
+        Iterator<Map.Entry<String, List<String>>> selectIt = table.getQuery().getSelect().entrySet().iterator();
+        while (selectIt.hasNext()){
+            Map.Entry<String, List<String>> select = selectIt.next();
 
             String collection = QueryUtils.getCollectionUri(table.getQuery(), select.getKey());
             IEntity entity = table.getEntity(collection);
 
-            for (String field : select.getValue()) {
-                response.write(String.valueOf(entity.get(field)));
-                response.write("\t");
+            Iterator<String> fieldId = select.getValue().iterator();
+            while (fieldId.hasNext()){
+                response.write(String.valueOf(entity.get(fieldId.next())));
+                if (fieldId.hasNext() || selectIt.hasNext()) {
+                    response.write("\t");
+                }
             }
         }
 

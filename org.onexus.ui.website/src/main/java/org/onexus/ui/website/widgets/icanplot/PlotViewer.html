@@ -5,6 +5,14 @@
       lang="en">
 <body>
 <wicket:panel>
+
+    <div id="control" class="pull-right alert">
+        <div id="params">
+            <div id="param-columns">
+            </div>
+        </div>
+    </div>
+
     <div id="canvas-container">
         <canvas id="plot-area" width="700" height="500">
             <div class="error">
@@ -22,61 +30,7 @@
         </canvas>
     </div>
 
-    <div id="control">
-        <div id="params">
-            <div id="param-head">
-                <h3 style="padding-right:1.5em">Select data to display</h3>
-            </div>
-            <div id="param-columns">
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>X axis</th>
-                        <td>
-                            <select id="x-select" onchange="redrawFig()">
-                                <option value="0"># diseases</option>
-                                <option value="1" selected="selected"># genes</option>
-                                <option value="2"></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Y axis</th>
-                        <td>
-                            <select id="y-select" onchange="redrawFig()">
-                                <option value="0" selected="selected"># diseases</option>
-                                <option value="1"># genes</option>
-                                <option value="2"></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Color by</th>
-                        <td>
-                            <select id="color-select" onchange="redrawFig()">
-                                <option value="-1">None</option>
-                                <option value="0"># diseases</option>
-                                <option value="1"># genes</option>
-                                <option value="2"></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Size by</th>
-                        <td>
-                            <select id="size-select" onchange="redrawFig()">
-                                <option value="-1">None</option>
-                                <option value="0"># diseases</option>
-                                <option value="1"># genes</option>
-                                <option value="2"></option>
-                            </select>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+
 </wicket:panel>
 </body>
 </html>

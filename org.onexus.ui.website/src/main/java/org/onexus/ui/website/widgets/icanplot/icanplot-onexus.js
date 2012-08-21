@@ -24,6 +24,7 @@ function icanplot_init(url, default_cols) {
     });
 
     if (data.success) {
+        createDropdowns(default_cols);
         drawFig(default_cols[0], default_cols[1], default_cols[2], default_cols[3]);
     }
 }
@@ -61,6 +62,54 @@ function redrawFig() {
 
 function processSelectedData(col1, col2, col3) {
     alert("Name: " + col1 + "\n X: " + col2 + "\n Y: " + col3 );
+}
+
+// create dropdowns on the basis of name of columns
+function createDropdowns(default_cols) {
+	var str = "";
+	var selected = "";
+
+	str += "<table>";
+
+	// x-axis drop down
+	str += "<tr><th>X axis</th>";
+	str += "<td><select id='x-select' onchange=\"redrawFig()\">";
+	str += dropdownOptions(data.colNames, default_cols[0]);
+	str += "</select></td></tr>";
+
+	// y-axis drop down
+	str += "<tr><th>Y axis</th>";
+	str += "<td><select id='y-select' onchange=\"redrawFig()\">";
+	str += dropdownOptions(data.colNames, default_cols[1]);
+	str += "</select></td></tr>";
+
+	// color drop down
+	str += "<tr><th>Color by</th>";
+	str += "<td><select id='color-select' onchange=\"redrawFig()\">";
+	str += "<option value='-1'>None";
+	str += dropdownOptions(data.colNames, default_cols[2]);
+	str += "</select></td></tr>";
+
+	// size drop down
+	str += "<tr><th>Size by</th>";
+	str += "<td><select id='size-select' onchange=\"redrawFig()\">";
+	str += "<option value='-1'>None";
+	str += dropdownOptions(data.colNames, default_cols[3]);
+	str += "</select></td></tr>";
+
+	str += "</table>";
+
+	$('#param-columns').html(str);
+}
+
+function dropdownOptions(myArray, defaultVal) {
+	var str = "";
+	for(var i = 0; i < myArray.length; i++) {
+		var selected = (i == defaultVal ? " selected" : "");
+		str += "<option value='" + i + "'" + selected + ">" + myArray[i];
+	}
+
+	return str;
 }
 
 
