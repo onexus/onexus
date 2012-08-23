@@ -222,23 +222,6 @@ public class SqlDialect {
     public void addValues(StringBuilder sql, SqlCollectionDDL ddl,
                           IEntity entity) {
 
-        // Skip if the primary key is null
-        boolean allPrimaryKeysNotNull = true;
-        for (ColumnInfo columnInfo : ddl.getColumnInfos()) {
-            Field field = columnInfo.getField();
-            if(field.isPrimaryKey() != null && field.isPrimaryKey()) {
-                if (entity.get(field.getId())== null) {
-                    allPrimaryKeysNotNull = false;
-                    break;
-                }
-            }
-        }
-
-        if (!allPrimaryKeysNotNull) {
-            LOGGER.warn("Primary key value is NULL. Skipping row " + entity.toString());
-            return;
-        }
-
         sql.append("(");
         Iterator<ColumnInfo> itColumns = ddl.getColumnInfos().iterator();
         while (itColumns.hasNext()) {

@@ -247,6 +247,24 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             int batch = 0;
             conn = dataSource.getConnection();
             while (entitySet.next()) {
+
+                // Skip if the primary key is null
+                boolean allPrimaryKeysNotNull = true;
+                for (SqlCollectionDDL.ColumnInfo columnInfo : ddl.getColumnInfos()) {
+                    Field field = columnInfo.getField();
+                    if(field.isPrimaryKey() != null && field.isPrimaryKey()) {
+                        if (entitySet.get(field.getId())== null) {
+                            allPrimaryKeysNotNull = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (!allPrimaryKeysNotNull) {
+                    LOGGER.warn("Primary key value is NULL. Skipping row " + entitySet.toString());
+                    continue;
+                }
+
                 if (batch > 0) {
                     sql.append(",");
                 }
