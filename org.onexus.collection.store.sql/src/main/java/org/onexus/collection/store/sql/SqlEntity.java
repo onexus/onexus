@@ -80,4 +80,11 @@ public class SqlEntity implements IEntity {
                 this.values));
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "collection=" + collection +
+                ", values=" + values +
+                '}';
+    }
 }

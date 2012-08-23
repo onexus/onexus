@@ -168,4 +168,11 @@ public class TsvEntity implements IEntity {
 
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "collection=" + collection +
+                ", values='" + line + '\'' +
+                '}';
+    }
 }
