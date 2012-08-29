@@ -18,6 +18,8 @@ public class PlotViewerConfig extends WidgetConfig {
 
     private List<IColumnConfig> columns = new ArrayList<IColumnConfig>();
 
+    private PlotFields fields;
+
     @Override
     public WidgetStatus getDefaultStatus() {
         return defaultStatus;
@@ -25,7 +27,7 @@ public class PlotViewerConfig extends WidgetConfig {
 
     @Override
     public WidgetStatus createEmptyStatus() {
-        return new PlotViewerStatus(getId());
+        return new PlotViewerStatus(getId(), fields);
     }
 
     public String getCollection() {
@@ -42,5 +44,13 @@ public class PlotViewerConfig extends WidgetConfig {
 
     public void setColumns(List<IColumnConfig> columns) {
         this.columns = columns;
+    }
+
+    public PlotFields getFields() {
+        return fields;
+    }
+
+    public void setFields(PlotFields fields) {
+        this.fields = fields;
     }
 }

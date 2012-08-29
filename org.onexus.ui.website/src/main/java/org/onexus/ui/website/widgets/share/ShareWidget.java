@@ -86,7 +86,8 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
             // If the website URI is not defined at Application level then add it as a parameter.
             if (Application.get().getMetaData(Website.WEBSITE_CONFIG) == null) {
-                params.add(Website.PARAMETER_WEBSITE, website.getConfig().getURI());
+                String uri = getPage().getPageParameters().get("uri").toString();
+                params.add(Website.PARAMETER_WEBSITE, uri);
             }
 
         }

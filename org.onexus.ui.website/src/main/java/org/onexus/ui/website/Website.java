@@ -17,7 +17,6 @@
  */
 package org.onexus.ui.website;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -35,6 +34,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.IPageManager;
@@ -48,8 +49,7 @@ import java.util.List;
 
 public class Website extends WebPage {
 
-    public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {
-    };
+    public final static MetaDataKey<WebsiteConfig> WEBSITE_CONFIG = new MetaDataKey<WebsiteConfig>() {};
 
     // Parameters
     public final static String PARAMETER_WEBSITE = "uri";
@@ -59,6 +59,9 @@ public class Website extends WebPage {
 
     @Inject
     public IPageManager pageManager;
+
+    @Inject
+    private IResourceManager resourceManager;
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
@@ -71,6 +74,9 @@ public class Website extends WebPage {
         String parentUri = ResourceUtils.getParentURI(config.getURI());
         String cssUri = ResourceUtils.getAbsoluteURI(parentUri, config.getCss());
         add(new CustomCssBehavior(cssUri));
+
+        Project project = resourceManager.getProject(ResourceUtils.getProjectURI(config.getURI()));
+        final String projectName = project.getName();
 
         // Init currentPage
         if (status.getCurrentPage() == null) {
@@ -99,11 +105,7 @@ public class Website extends WebPage {
 
                 PageParameters parameters = new PageParameters();
                 parameters.add(PARAMETER_PAGE, pageConfig.getId());
-
-                // If the website URI is not defined at Application level then add it as a parameter.
-                if (Application.get().getMetaData(Website.WEBSITE_CONFIG) == null) {
-                    parameters.add(PARAMETER_WEBSITE, config.getURI());
-                }
+                parameters.add(PARAMETER_WEBSITE, projectName);
 
                 Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
                 link.add(new Label("name", pageConfig.getLabel()));
@@ -173,7 +175,7 @@ public class Website extends WebPage {
         super.onInitialize();
 
         if (!mounted) {
-            OnexusWebApplication.get().mountPage("website/${"+Website.PARAMETER_PAGE+"}/${ptab}", Website.class);
+            OnexusWebApplication.get().mountPage("web/${"+Website.PARAMETER_WEBSITE+"}/#{"+Website.PARAMETER_PAGE+"}/#{ptab}", Website.class);
             mounted = true;
         }
     }

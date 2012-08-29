@@ -128,14 +128,14 @@ public class EntitySelectBox extends Panel {
 
     private String createLink(String url, String collection, String entityId) {
 
-        String link = "../" + url;
+        String link = url;
         link = link.replace("$collection", collection);
         link = link.replace("$entity", entityId);
 
-        StringValue uri = getPage().getPageParameters().get("uri");
+        /*StringValue uri = getPage().getPageParameters().get("uri");
         if (!uri.isEmpty()) {
             link = link + "&uri=" + uri.toString();
-        }
+        } */
 
         return link;
     }

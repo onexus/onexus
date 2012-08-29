@@ -7,11 +7,26 @@ import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 public class PlotViewerStatus extends WidgetStatus<PlotViewerConfig> {
 
+    private PlotFields fields;
+
     public PlotViewerStatus() {
     }
 
     public PlotViewerStatus(String widgetId) {
         super(widgetId);
+    }
+
+    public PlotViewerStatus(String widgetId, PlotFields fields) {
+        super(widgetId);
+        this.fields = fields;
+    }
+
+    public PlotFields getFields() {
+        return fields;
+    }
+
+    public void setFields(PlotFields fields) {
+        this.fields = fields;
     }
 
     @Override

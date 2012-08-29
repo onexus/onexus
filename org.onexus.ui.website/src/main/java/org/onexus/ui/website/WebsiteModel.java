@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.PageConfig;
@@ -32,6 +33,7 @@ import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class WebsiteModel implements IModel<WebsiteStatus> {
 
@@ -42,10 +44,6 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
 
     @Inject
     public IResourceManager resourceManager;
-
-    @Inject
-    public IResourceSerializer serializer;
-
 
     public WebsiteModel(PageParameters pageParameters) {
         super();
@@ -149,7 +147,16 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
                 }
             }
         } else {
-            this.websiteUri = websiteParameter.toString();
+            String projectName = websiteParameter.toString();
+
+            for (Project project : resourceManager.getProjects()) {
+                if (project.getName().equals(projectName)) {
+                    WebsiteConfig website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI()).get(0);
+                    this.websiteUri = website.getURI();
+                    break;
+                }
+            }
+
         }
 
         // Force load default config and status

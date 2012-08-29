@@ -17,9 +17,21 @@
  */
 package org.onexus.ui.website.widgets.jheatmap;
 
+import org.apache.wicket.IResourceListener;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.JQueryPluginResourceReference;
+import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventRemoveFilter;
@@ -27,41 +39,94 @@ import org.onexus.ui.website.pages.browser.BrowserPage;
 import org.onexus.ui.website.pages.browser.BrowserPageConfig;
 import org.onexus.ui.website.pages.browser.BrowserPageStatus;
 import org.onexus.ui.website.widgets.Widget;
+import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> {
+public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> implements IResourceListener {
 
-    @Inject
-    public IResourceManager resourceManager;
+    private final static HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
+    private final static HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
+
 
     public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {
         super(componentId, status);
-
-        onEventFireUpdate(EventQueryUpdate.class, EventAddFilter.class, EventRemoveFilter.class);
     }
 
     @Override
-    protected void onBeforeRender() {
+    public void renderHead(IHeaderResponse response) {
+        response.render(CSS);
+        response.render(JS_JHEATMAP);
+        response.render(OnLoadHeaderItem.forScript(newJavaScriptHeatmap()));
+    }
 
-        addOrReplace(new InlineFrame("heatmap", new HeatmapPage(getConfig(), getQuery())));
+    private String newJavaScriptHeatmap() {
+        StringBuilder code = new StringBuilder();
 
-        super.onBeforeRender();
+        HeatmapViewerConfig config = getConfig();
+
+        List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
+
+        String parentUri = getReleaseUri();
+        for (ColumnConfig column : getConfig().getColumns()) {
+            column.addColumns(columns, parentUri);
+        }
+        int lastColumnFields = columns.size();
+        columns.clear();
+
+        for (ColumnConfig row : getConfig().getRows()) {
+            row.addColumns(columns, parentUri);
+        }
+        int lastRowFields = lastColumnFields + columns.size();
+        columns.clear();
+
+        code.append(
+                "$('#heatmap').heatmap({\n" +
+                        "       data : {\n" +
+                        "                 type : \"tdm\",\n" +
+                        "                 values : '" + urlFor(IResourceListener.INTERFACE, new PageParameters().set("ac", Integer.toHexString((int)System.currentTimeMillis()))) + "', \n");
+
+        code.append("\t\t\t\tcols_annotations : [");
+        for (int i = 0; i < lastColumnFields; i++) {
+            if (i != 0) {
+                code.append(",");
+            }
+            code.append(i);
+        }
+        code.append("], \n");
+        code.append("\t\t\t\trows_annotations : [");
+        for (int i = lastColumnFields; i < lastRowFields; i++) {
+            if (i != lastColumnFields) {
+                code.append(",");
+            }
+            code.append(i);
+        }
+        code.append("]\n" +
+        "              },\n" +
+        "       init : function(heatmap) {\n");
+        code.append(config.getInit());
+        code.append("}});");
+
+        return code.toString();
+    }
+
+    @Override
+    public void onResourceRequested() {
+
+        Query query = getQuery();
+        String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
+        PageParameters params = new PageParameters();
+        params.add("query", query);
+        params.add("prettyPrint", true);
+        params.add("filename", fileName);
+
+        ResourceReference webservice = OnexusWebApplication.get().getWebService();
+        IResource resource = webservice.getResource();
+        IResource.Attributes a = new IResource.Attributes(RequestCycle.get().getRequest(), RequestCycle.get().getResponse(), params);
+        resource.respond(a);
 
     }
 
-
-    private String getReleaseURI() {
-
-        BrowserPageStatus browserStatus = getPageStatus();
-        return (browserStatus != null ? browserStatus.getBase() : null);
-    }
-
-    private BrowserPageStatus getPageStatus() {
-        return findParent(BrowserPage.class).getStatus();
-    }
-
-    private BrowserPageConfig getPageConfig() {
-        return (BrowserPageConfig) getPageStatus().getConfig();
-    }
 }

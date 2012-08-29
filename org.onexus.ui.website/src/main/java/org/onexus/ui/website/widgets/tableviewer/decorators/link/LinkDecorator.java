@@ -93,15 +93,6 @@ public class LinkDecorator extends FieldDecorator {
                         super.onComponentTag(tag);
 
                         String href = url;
-
-                        // Add website URI
-                        if (!href.startsWith("http://")) {
-                            StringValue uri = getPage().getPageParameters().get("uri");
-                            if (!uri.isEmpty()) {
-                                href = href + "&uri=" + uri.toString();
-                            }
-                        }
-
                         tag.getAttributes().put("href", href);
                     }
                 };

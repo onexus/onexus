@@ -11,9 +11,14 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.widgets.Widget;
+
+import javax.inject.Inject;
 
 public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> implements IResourceListener {
 
@@ -32,11 +37,23 @@ public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> imple
         response.render(JS_ICANPLOT);
         response.render(JS_ICANPLOT_DATA);
         response.render(JS_ICANPLOT_ONEXUS);
-        response.render(OnDomReadyHeaderItem.forScript(newJavaScriptPlot()));
+        response.render(OnLoadHeaderItem.forScript(newJavaScriptPlot()));
     }
 
     private String newJavaScriptPlot() {
-        return "icanplot_init('" + urlFor(IResourceListener.INTERFACE, null) + "', [0, 1, -1, -1]);";
+
+        PlotFields fields = getStatus().getFields();
+
+        String defaultCols = "[0, 0, -1, -1]";
+        if (fields != null) {
+            defaultCols = "[";
+            defaultCols = defaultCols + (fields.getX()==null ? "0" : fields.getX()) + ", ";
+            defaultCols = defaultCols + (fields.getY()==null ? "0" : fields.getY()) + ", ";
+            defaultCols = defaultCols + (fields.getColor()==null ? "-1" : fields.getColor()) + ", ";
+            defaultCols = defaultCols + (fields.getSize()==null ? "-1" : fields.getSize()) + "]";
+        }
+
+        return "icanplot_init('" + urlFor(IResourceListener.INTERFACE, new PageParameters().set("ac", Integer.toHexString((int)System.currentTimeMillis()))) + "', "+defaultCols+", 'ilinear', 'ilinear');";
     }
 
     @Override

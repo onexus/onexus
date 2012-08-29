@@ -164,7 +164,8 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             parameters.add(keyPrefix + "tab", currentTabId);
         }
 
-        if (!StringUtils.equals(currentView, defaultStatus.getCurrentView())) {
+        if (!StringUtils.equals(currentView, defaultStatus.getCurrentView()) &&
+                getConfig().getTab(currentTabId).getViews().size() > 1) {
             parameters.add(keyPrefix + "view", currentView);
         }
 

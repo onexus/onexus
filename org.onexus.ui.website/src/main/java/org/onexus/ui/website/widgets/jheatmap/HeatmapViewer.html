@@ -3,9 +3,64 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
       xml:lang="en"
       lang="en">
+<head>
+    <!-- meta name="viewport" content="width=device-width, initial-scale=1" / -->
+
+    <!-- link href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" rel="stylesheet" type="text/css" / -->
+    <link rel="stylesheet" type="text/css" href="../../theme/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/jheatmap-1.0.0-alpha.css" />
+
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <!-- script type="text/javascript" src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script -->
+
+    <script src="../../theme/js/bootstrap.min.js"></script>
+    <script src="js/jheatmap-1.0.0-alpha.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            $('#heatmap').heatmap({
+
+                   data : {
+                                 type : "tdm",
+                                 values : 'sample-data.tsv',
+
+                                 rows_annotations : [1, 0],
+                                 cols_annotations : [2, 3]
+                   },
+
+                   init : function(heatmap) {
+
+                                var top = $('#heatmap').offset().top;
+                                var wHeight = $(window).height();
+
+                                // Size
+                                heatmap.size.width = $('#heatmap').width() - 290;
+                                heatmap.size.height = wHeight - top - 230;
+
+                                // Default cell value
+                                heatmap.cells.selectedValue = 4;
+
+                                // Configure decorators and aggregators
+                                heatmap.cells.decorators[4] = new jheatmap.decorators.PValue( { cutoff: 0.8 } );
+                                heatmap.cells.aggregators[4] = new jheatmap.aggregators.PValue( { cutoff: 0.8 } );
+                                heatmap.cells.decorators[7] = new jheatmap.decorators.PValue( { cutoff: 0.8 } );
+                                heatmap.cells.aggregators[7] = new jheatmap.aggregators.PValue( { cutoff: 0.8 } );
+                                heatmap.cells.decorators[8] = new jheatmap.decorators.PValue( { cutoff: 0.8 } );
+                                heatmap.cells.aggregators[8] = new jheatmap.aggregators.PValue( { cutoff: 0.8 } );
+
+                                // Setup default zoom
+                                heatmap.cols.zoom = 6;
+                                heatmap.rows.zoom = 6;
+                   }
+
+            });
+        };
+    </script>
+</head>
 <body>
 <wicket:panel>
-    <iframe style="width: 740px; height: 840px; border:0px; background:#fff url('http://bg.upf.edu/jheatmap/images/loading.gif') no-repeat 50% 50% !important;" scrolling="no" wicket:id="heatmap"></iframe>
+    <div class="heatmap-loader"><div class="background"></div><div class="progress"><img src="images/loading.gif"><h1>LOADING...</h1></div></div>
+    <div id="heatmap">
+    </div>
 </wicket:panel>
 </body>
 </html>

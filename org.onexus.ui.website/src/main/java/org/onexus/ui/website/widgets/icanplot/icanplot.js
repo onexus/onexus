@@ -80,7 +80,16 @@ viz = {
 	xAxisLabel: 'X',
 	yAxisLabel: 'Y',
 	colorLabel: 'Color',
+	colorScale: 'linear',
 	sizeLabel: 'Size',
+	sizeScale: 'linear',
+
+	scales: {
+	    'linear' : function(v, min, max) { return (v - min) / (max - min); },
+	    'ilinear' : function(v, min, max) { return (max - v) / (max - min); },
+	    'log' : function(v, min, max) { return Math.log((v - min) / (max - min)); },
+        'ilog' : function(v, min, max) { return (max - v) / (max - min); }
+	 },
 
 	// vars for dealing with selection of image
 	selectionType: 'none',	// other values, polygon, rectangle
@@ -172,12 +181,12 @@ viz = {
 		this.minY = Math.min.apply(null, this.dataY);
 		this.maxY = Math.max.apply(null, this.dataY);
 
-		this.minColor = Math.min.apply(null, this.dataColor);
+        this.minColor = Math.min.apply(null, this.dataColor);
 		this.maxColor = Math.max.apply(null, this.dataColor);
 
 		//alert(this.maxColor);
 
-		this.minSize = Math.min.apply(null, this.dataSize);
+        this.minSize = Math.min.apply(null, this.dataSize);
 		this.maxSize = Math.max.apply(null, this.dataSize);
 
 		// leave a buffer between bounding box and points
@@ -255,19 +264,27 @@ viz = {
 			this.plotY.push(this.warpY(this.dataY[i]));
 
 			if(this.dataColor.length > 0) {
-				var colorFrac = (this.dataColor[i] - this.minColor) / rangeColor;
-				//aColor = this.getColor(colorFrac, 31, 191);	// sober
-				aColor = this.getColor(colorFrac, 64, 239);	// bright
+			    if (this.dataColor[i] == null) {
+			        this.plotColor.push("rgba(0,0,0,0.1)");
+			    } else {
+			        var colorFrac = this.scales[this.colorScale](this.dataColor[i], this.minColor, this.maxColor);
+				    //aColor = this.getColor(colorFrac, 31, 191);	// sober
+				    aColor = this.getColor(colorFrac, 64, 239);	// bright
 
-				this.plotColor.push(this.formRGBcolor(aColor["red"], aColor["green"], aColor["blue"], 0.7));
+				    this.plotColor.push(this.formRGBcolor(aColor["red"], aColor["green"], aColor["blue"], 0.7));
+				}
 			} else {
 				this.plotColor.push(this.defaultColor);
 			}
 
 			if(this.dataSize.length > 0) {
-				var sizeFrac = (this.dataSize[i] - this.minSize) / rangeSize;
-				sizep = sizeFrac * (this.maxPointSize - this.minPointSize) + this.minPointSize;
-				this.plotSize.push(sizep);
+			    if (this.dataSize[i] == null) {
+			        this.plotSize.push(1);
+			    } else {
+			        var sizeFrac = this.scales[this.sizeScale](this.dataSize[i], this.minSize, this.maxSize);
+				    sizep = sizeFrac * (this.maxPointSize - this.minPointSize) + this.minPointSize;
+				    this.plotSize.push(sizep);
+				}
 			} else {
 				this.plotSize.push(this.defaultPointSize);
 			}
@@ -563,10 +580,11 @@ viz = {
 		// draw color bar
 		var aColor;
 		var rgbColor;
-		var stops = [0, 0.25, 0.5, 0.75, 1];
+		var stops = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 		var gradient = this.ctx.createLinearGradient(drawX, drawY, drawX + this.colorBarWidth, drawY + this.colorBarHeight);
 		for(var i = 0; i < stops.length; i++) {
-			var aColor = this.getColor(stops[i], 64, 239);	// bright
+		    var colorFrac = this.scales[this.colorScale](stops[i], 0, 1);
+			var aColor = this.getColor(colorFrac, 64, 239);	// bright
 			var rgbColor = this.formRGBcolor(aColor["red"], aColor["green"], aColor["blue"], 0.7);
 			gradient.addColorStop(stops[i], rgbColor);
 		}
@@ -627,7 +645,9 @@ viz = {
 		var sizeStep = (this.maxPointSize - this.minPointSize) / 2;
 		for(var i = 0; i < 3; i++) {
 			var xp = drawX + i * this.sizeBarWidth / 2;
-			var radius = this.minPointSize + i * sizeStep;
+
+			var sizeFrac = this.scales[this.sizeScale](i, 0, 2);
+            var radius = sizep = sizeFrac * (this.maxPointSize - this.minPointSize) + this.minPointSize;
 
 			var yp = drawY + this.sizeBarHeight/2;
 			this.ctx.fillStyle = this.defaultColor;
@@ -991,8 +1011,8 @@ viz = {
 		// alert(this.selectionType);
 
 		viz.redraw();
-		var x = e.pageX - e.target.offsetLeft;
-		var y = e.pageY - e.target.offsetTop;
+		var x = e.pageX - $(e.target).offset().left;
+        var y = e.pageY - $(e.target).offset().top;
 
 		if(viz.selectionType == 'rectangle') {
 			viz.selX = [x];
@@ -1013,8 +1033,8 @@ viz = {
 	},
 
 	mousemove: function(e) {
-		var x = e.pageX - e.target.offsetLeft;
-		var y = e.pageY - e.target.offsetTop;
+		var x = e.pageX - $(e.target).offset().left;
+		var y = e.pageY - $(e.target).offset().top;
 	
 		if(viz.selectionType == 'rectangle') {
 			if(viz.selectionActive) {
@@ -1030,8 +1050,8 @@ viz = {
 	},
 
 	mouseup: function(e) {
-		var x = e.pageX - e.target.offsetLeft;
-		var y = e.pageY - e.target.offsetTop;
+		var x = e.pageX - $(e.target).offset().left;
+        var y = e.pageY - $(e.target).offset().top;
 
 		if(viz.selectionType == 'rectangle') {
 			if(viz.selectionActive) {
@@ -1049,8 +1069,8 @@ viz = {
 	},
 
 	dblclick: function(e) {
-		var x = e.pageX - e.target.offsetLeft;
-		var y = e.pageY - e.target.offsetTop;
+		var x = e.pageX - $(e.target).offset().left;
+        var y = e.pageY - $(e.target).offset().top;
 
 		if(viz.selectionType == 'rectangle') {
 		} else if(viz.selectionType == 'polygon') {
