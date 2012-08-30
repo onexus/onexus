@@ -91,7 +91,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
 
         // Mount pages
         mountPage("/login", getSignInPageClass());
-        mountPage("admin", ResourcesPage.class);
+        mountPage("/admin", ResourcesPage.class);
 
     }
 
