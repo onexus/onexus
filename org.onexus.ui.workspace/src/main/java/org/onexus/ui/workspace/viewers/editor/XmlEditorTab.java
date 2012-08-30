@@ -17,7 +17,6 @@
  */
 package org.onexus.ui.workspace.viewers.editor;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -35,12 +34,9 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.api.IResourceRegister;
+import org.onexus.resource.api.IResourceRegister;
 
 import javax.inject.Inject;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 
 public class XmlEditorTab extends Panel {

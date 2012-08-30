@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.api;
+package org.onexus.resource.api;
 
 public interface IResourceActivator {
 

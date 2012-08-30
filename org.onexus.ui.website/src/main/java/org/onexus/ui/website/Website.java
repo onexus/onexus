@@ -76,7 +76,9 @@ public class Website extends WebPage {
         add(new CustomCssBehavior(cssUri));
 
         Project project = resourceManager.getProject(ResourceUtils.getProjectURI(config.getURI()));
-        final String projectName = project.getName();
+        String urlMount = project.getProperty("URL_MOUNT");
+
+        final String projectName = (urlMount!=null?urlMount.split(",")[1] : project.getName());
 
         // Init currentPage
         if (status.getCurrentPage() == null) {
@@ -166,17 +168,5 @@ public class Website extends WebPage {
 
     public WebsiteConfig getConfig() {
         return getStatus().getConfig();
-    }
-
-    private static boolean mounted = false;
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-
-        if (!mounted) {
-            OnexusWebApplication.get().mountPage("web/${"+Website.PARAMETER_WEBSITE+"}/#{"+Website.PARAMETER_PAGE+"}/#{ptab}", Website.class);
-            mounted = true;
-        }
     }
 }

@@ -30,19 +30,26 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.onexus.resource.api.IResourceRegister;
+import org.onexus.resource.api.IResourceService;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.ws.WebserviceResource;
 import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
 
-public class OnexusWebApplication extends AuthenticatedWebApplication {
+import javax.inject.Inject;
+
+public class OnexusWebApplication extends AuthenticatedWebApplication implements IResourceService {
 
     // Force to import the package
     public final static WicketFilter wicketFilter = null;
     public final static OsgiServiceProxyTargetLocator targetLocator = null;
 
     private OsgiComponentInjector injector;
+
+    @Inject
+    private IResourceRegister resourceRegister;
 
     public Class<? extends Page> getHomePage() {
         return ResourcesPage.class;
@@ -76,6 +83,8 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
 
         // Injection
         getComponentInstantiationListeners().add(getInjector());
+        inject(this);
+        resourceRegister.addResourceService(this);
 
         // OSGi
         getResourceSettings().setResourceStreamLocator(new OsgiResourceStreamLocator());
@@ -83,9 +92,6 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
         // Mount pages
         mountPage("/login", getSignInPageClass());
         mountPage("admin", ResourcesPage.class);
-
-
-
 
     }
 

@@ -15,11 +15,11 @@
  *
  *
  */
-package org.onexus.ui.api;
+package org.onexus.resource.api;
 
-import org.onexus.resource.api.IResourceSerializer;
 import org.osgi.framework.ServiceReference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +31,8 @@ public class DefaultResourceRegister implements IResourceRegister {
 
     private IResourceSerializer serializer;
     private List<IResourceActivator> resourceActivators;
+
+    private List<IResourceService> resourceServices = new ArrayList<IResourceService>();
 
     public DefaultResourceRegister() {
         registeredLoaders.add(getClass().getClassLoader());
@@ -45,6 +47,16 @@ public class DefaultResourceRegister implements IResourceRegister {
     @Override
     public ClassLoader getResourcesClassLoader() {
         return classLoader;
+    }
+
+    @Override
+    public void addResourceService(IResourceService service) {
+        resourceServices.add(service);
+    }
+
+    @Override
+    public List<IResourceService> getResourceServices() {
+        return resourceServices;
     }
 
     public IResourceSerializer getSerializer() {

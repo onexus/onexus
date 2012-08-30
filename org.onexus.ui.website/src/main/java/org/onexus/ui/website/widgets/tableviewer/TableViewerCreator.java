@@ -18,7 +18,7 @@
 package org.onexus.ui.website.widgets.tableviewer;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.api.IResourceRegister;
+import org.onexus.resource.api.IResourceRegister;
 import org.onexus.ui.website.widgets.AbstractWidgetCreator;
 import org.onexus.ui.website.widgets.Widget;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;

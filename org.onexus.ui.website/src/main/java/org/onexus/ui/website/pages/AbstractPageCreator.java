@@ -18,7 +18,7 @@
 package org.onexus.ui.website.pages;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.api.IResourceRegister;
+import org.onexus.resource.api.IResourceRegister;
 
 public abstract class AbstractPageCreator<C extends PageConfig, S extends PageStatus> implements IPageCreator {
     

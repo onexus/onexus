@@ -21,7 +21,7 @@
     </bean>
 
     <!-- ResourceRegister -->
-    <reference id="org.onexus.ui.resourceregister" interface="org.onexus.ui.api.IResourceRegister"/>
+    <reference id="org.onexus.ui.resourceregister" interface="org.onexus.resource.api.IResourceRegister"/>
 
     <!-- Default ViewersCreators -->
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
@@ -111,7 +111,7 @@
     </bean>
 
     <!--  Website activator -->
-    <service interface="org.onexus.ui.api.IResourceActivator">
+    <service interface="org.onexus.resource.api.IResourceActivator">
         <bean class="org.onexus.ui.website.WebsiteActivator"/>
     </service>
 

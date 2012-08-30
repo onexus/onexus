@@ -10,18 +10,6 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <!-- IResourceRegister -->
-    <reference id="serializerRef" interface="org.onexus.resource.api.IResourceSerializer"/>
-    <reference-list id="resourceActivatorsRef" interface="org.onexus.ui.api.IResourceActivator" availability="optional">
-        <reference-listener bind-method="bindActivators" unbind-method="unbindActivators"
-                            ref="org.onexus.ui.resourceregister"/>
-    </reference-list>
-    <service interface="org.onexus.ui.api.IResourceRegister" ref="org.onexus.ui.resourceregister"/>
-    <bean id="org.onexus.ui.resourceregister" class="org.onexus.ui.api.DefaultResourceRegister">
-        <property name="resourceActivators" ref="resourceActivatorsRef"/>
-        <property name="serializer" ref="serializerRef"/>
-    </bean>
-
     <!-- Default Viewers manager -->
     <reference-list id="viewerCreatorsRef" interface="org.onexus.ui.api.viewers.IViewerCreator" availability="optional"/>
     <service interface="org.onexus.ui.api.viewers.IViewersManager">

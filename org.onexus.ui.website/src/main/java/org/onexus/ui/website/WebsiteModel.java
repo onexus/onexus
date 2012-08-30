@@ -147,13 +147,27 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
                 }
             }
         } else {
-            String projectName = websiteParameter.toString();
+            String urlName = websiteParameter.toString();
 
+            this.websiteUri = null;
             for (Project project : resourceManager.getProjects()) {
-                if (project.getName().equals(projectName)) {
-                    WebsiteConfig website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI()).get(0);
-                    this.websiteUri = website.getURI();
-                    break;
+                String urlMount = project.getProperty("URL_MOUNT");
+                if (urlMount != null) {
+                    String[] urlMounts = urlMount.split(",");
+                    if (urlName.equals(urlMounts[1])) {
+                        this.websiteUri = ResourceUtils.concatURIs(project.getURI(), urlMounts[0]);
+                        break;
+                    }
+                }
+            }
+
+            if (this.websiteUri == null) {
+                for (Project project : resourceManager.getProjects()) {
+                    if (project.getName().equals(urlName)) {
+                        WebsiteConfig website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI()).get(0);
+                        this.websiteUri = website.getURI();
+                        break;
+                    }
                 }
             }
 

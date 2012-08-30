@@ -17,15 +17,25 @@
  */
 package org.onexus.ui.website;
 
-import org.onexus.ui.api.IResourceActivator;
-import org.onexus.ui.api.IResourceRegister;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.onexus.resource.api.IResourceActivator;
+import org.onexus.resource.api.IResourceRegister;
+import org.onexus.resource.api.IResourceService;
+import org.onexus.ui.api.OnexusWebApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WebsiteActivator implements IResourceActivator {
 
     @Override
     public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(WebsiteConfig.class);
+
+        for (IResourceService service : resourceRegister.getResourceServices()) {
+            if (service instanceof WebApplication) {
+                ((WebApplication)service).mountPage("web/${"+Website.PARAMETER_WEBSITE+"}/#{"+Website.PARAMETER_PAGE+"}/#{ptab}", Website.class);
+            }
+        }
     }
 
     @Override
