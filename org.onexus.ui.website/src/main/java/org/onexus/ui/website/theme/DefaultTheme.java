@@ -34,6 +34,8 @@ public class DefaultTheme extends Behavior {
     private final static HeaderItem COLORBOX_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "colorbox/jquery.colorbox-min.js"));
     private final static HeaderItem COLORBOX_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "colorbox/colorbox.css"));
 
+    private final static HeaderItem THEME_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "defaulttheme.js"));
+
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
 
@@ -44,10 +46,13 @@ public class DefaultTheme extends Behavior {
         response.render(BOOTSTRAP_JS);
         response.render(COLORBOX_JS);
 
+        response.render(THEME_JS);
+
         response.render(OnLoadHeaderItem.forScript(
                getTooltipJavascript() +
                getModalJavascript() +
-               getPopoverJavascript()));
+               getPopoverJavascript() +
+               getMoveFooter()));
     }
 
     private static String getTooltipJavascript() {
@@ -66,6 +71,10 @@ public class DefaultTheme extends Behavior {
         return  "$(\"[rel=popover]\").popover({ placement: 'bottom'});";
     }
 
+    private static String getMoveFooter() {
+        return "moveFooter();";
+    }
+
     @Override
     public void onEvent(Component component, IEvent<?> event) {
 
@@ -73,6 +82,7 @@ public class DefaultTheme extends Behavior {
             AjaxRequestTarget target = (AjaxRequestTarget) event.getPayload();
             target.prependJavaScript(getTooltipHideJavascript());
             target.appendJavaScript(getTooltipJavascript());
+            target.appendJavaScript(getMoveFooter());
         }
 
     }

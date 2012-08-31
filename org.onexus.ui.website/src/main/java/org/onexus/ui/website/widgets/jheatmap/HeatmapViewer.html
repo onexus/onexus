@@ -36,6 +36,18 @@
                                 heatmap.size.width = $('#heatmap').width() - 290;
                                 heatmap.size.height = wHeight - top - 230;
 
+                                if (heatmap.size.width < 200) {
+                                    heatmap.size.width = 200;
+                                }
+
+                                if (heatmap.size.height < 200) {
+                                    if (wHeight > 250) {
+                                        heatmap.size.height = wHeight - 50;
+                                    } else {
+                                        heatmap.size.height = 200;
+                                    }
+                                }
+
                                 // Default cell value
                                 heatmap.cells.selectedValue = 4;
 
