@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.decorators.scale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
@@ -44,7 +45,15 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        Boolean showValue = Boolean.valueOf(parameters.get(PValueDecoratorParameters.SHOW_VALUE));
+
+        Boolean showValue = true;
+
+        String parameterValue = parameters.get(PValueDecoratorParameters.SHOW_VALUE);
+
+        if (!StringUtils.isEmpty(parameterValue)) {
+            showValue = Boolean.valueOf(parameterValue);
+        }
+
         return new ColorDecorator(columnField, columnField, pvalueScale, null, showValue, PValueFormater.INSTANCE);
     }
 }
