@@ -580,14 +580,6 @@ jheatmap.Heatmap = function () {
     this.sync = false;
 
     /**
-     * Show the indication "click to jump here" when the
-     * mouse is hovering the scrollbars.
-     *
-     * @private
-     */
-    this.showScrollBarTooltip = true;
-
-    /**
      * User defined filters
      */
     this.filters = {};
@@ -1170,9 +1162,8 @@ jheatmap.Heatmap = function () {
         var endCol = Math.min(this.offset.left + maxCols, this.cols.order.length);
 
         // Loader
-        //obj.html('<div class="heatmap-loader"><div class="background"></div><div class="progress"><img src="'
-        //    + basePath + '/images/loading.gif"></div></div>');
-        obj.html('');
+        obj.html('<div class="heatmap-loader"><div class="background"></div><div class="progress"><img src="'
+            + basePath + '/images/loading.gif"></div></div>');
 
         var table = $("<table>", {
             "class":"heatmap"
@@ -1190,8 +1181,10 @@ jheatmap.Heatmap = function () {
 
         var textSpacing = 5;
 
+
         var topToolbar = $("<td>", { colspan: (heatmap.rows.annotations.length > 0 ? 3 : 2) });
 
+        /*
         // Order columns by label
         topToolbar.append($('<img>', {
             'src':chooseOrderImage.call(this, "cols_by_label"),
@@ -1364,13 +1357,16 @@ jheatmap.Heatmap = function () {
         });
 
         topToolbar.append(searchField);
+        */
 
         borderTop.append(topToolbar);
         borderTop.append("<th class='border'></th>");
         borderTop.append($("<th class='border'>").append($('<img>', {
             'src':basePath + "/images/sep.png"
         })));
+
         table.append(borderTop);
+
 
         var firstRow = $("<tr>");
         table.append(firstRow);
@@ -1379,6 +1375,7 @@ jheatmap.Heatmap = function () {
          * LEFT TOOLBAR
          */
 
+
         var leftToolbar = $('<th>', {
             'class':'border',
             'rowspan':2 + (heatmap.cols.annotations.length > 0 ? 1 : 0),
@@ -1386,6 +1383,7 @@ jheatmap.Heatmap = function () {
         });
         firstRow.append(leftToolbar);
 
+        /*
         // Sort rows by label
         leftToolbar.append($('<img>', {
             'src':chooseOrderImage.call(this, "rows_by_label"),
@@ -1536,6 +1534,7 @@ jheatmap.Heatmap = function () {
                 heatmap.paint(obj);
             }));
         leftToolbar.append($('<br>'));
+        */
 
 
         /*
@@ -1621,6 +1620,9 @@ jheatmap.Heatmap = function () {
         topleftPanel.append($("<br>"));
 
         for (o = 0; o < this.cells.header.length; o++) {
+            if (this.cells.header[o] == undefined ) {
+                continue;
+            }
             selectCell.append(new Option(this.cells.header[o], o, o == this.cells.selectedValue));
         }
         selectCell.val(this.cells.selectedValue);
@@ -1633,7 +1635,7 @@ jheatmap.Heatmap = function () {
         var colHeader = $("<th>");
         firstRow.append(colHeader);
 
-        var colCanvas = $("<canvas id='colCanvas' width='" + heatmap.size.width + "' height='150'></canvas>");
+        var colCanvas = $("<canvas class='header' id='colCanvas' width='" + heatmap.size.width + "' height='150'></canvas>");
         colCanvas.click(function (e) {
             var col = heatmap.cols.order[Math.floor((e.pageX - $(e.target).offset().left) / cz) + heatmap.offset.left];
 
@@ -1653,7 +1655,7 @@ jheatmap.Heatmap = function () {
         colCtx.fillStyle = "black";
         colCtx.textAlign = "right";
         colCtx.textBaseline = "middle";
-        colCtx.font = (cz > 12 ? 12 : cz) + "px Verdana";
+        colCtx.font = (cz > 12 ? 12 : cz) + "px Helvetica Neue,Helvetica,Arial,sans-serif";
 
         for (var c = startCol; c < endCol; c++) {
             var value = heatmap.getColValueSelected(c);
@@ -1690,14 +1692,14 @@ jheatmap.Heatmap = function () {
             });
             firstRow.append(annRowHead);
 
-            var annRowHeadCanvas = $("<canvas width='" + 10 * heatmap.rows.annotations.length
+            var annRowHeadCanvas = $("<canvas class='header' width='" + 10 * heatmap.rows.annotations.length
                 + "' height='150'></canvas>");
             annRowHead.append(annRowHeadCanvas);
             var annRowHeadCtx = annRowHeadCanvas.get()[0].getContext('2d');
             annRowHeadCtx.fillStyle =  "rgb(51,51,51)"; /* = #333 , like the borders */
             annRowHeadCtx.textAlign = "right";
             annRowHeadCtx.textBaseline = "middle";
-            annRowHeadCtx.font = "bold 11px Verdana";
+            annRowHeadCtx.font = "bold 11px Helvetica Neue,Helvetica,Arial,sans-serif";
 
             for (var i = 0; i < heatmap.rows.annotations.length; i++) {
 
@@ -1747,7 +1749,7 @@ jheatmap.Heatmap = function () {
             var colAnnHeaderCell = $("<th>", {
                 "class":"border-cols-ann"
             });
-            var colAnnHeaderCanvas = $("<canvas style='float:right;' width='200' height='" + 10
+            var colAnnHeaderCanvas = $("<canvas class='header' style='float:right;' width='200' height='" + 10
                 * heatmap.cols.annotations.length + "'></canvas>");
             colAnnHeaderCell.append(colAnnHeaderCanvas);
             firstRow.append(colAnnHeaderCell);
@@ -1756,7 +1758,7 @@ jheatmap.Heatmap = function () {
             colAnnHeaderCtx.fillStyle = "rgb(51,51,51)"; /* = #333 , like the borders */
             colAnnHeaderCtx.textAlign = "right";
             colAnnHeaderCtx.textBaseline = "middle";
-            colAnnHeaderCtx.font = "bold 11px Verdana";
+            colAnnHeaderCtx.font = "bold 11px Helvetica Neue,Helvetica,Arial,sans-serif";
 
             for (i = 0; i < heatmap.cols.annotations.length; i++) {
                 var value = heatmap.cols.header[heatmap.cols.annotations[i]];
@@ -1816,7 +1818,7 @@ jheatmap.Heatmap = function () {
             "class":"row"
         });
 
-        var rowsCanvas = $("<canvas width='230' height='" + heatmap.size.height + "'></canvas>");
+        var rowsCanvas = $("<canvas class='header' width='230' height='" + heatmap.size.height + "'></canvas>");
 
         rowsCanvas.click(function (e) {
             var row = heatmap.rows.order[Math.floor((e.pageY - $(e.target).offset().top) / rz) + heatmap.offset.top];
@@ -1837,7 +1839,7 @@ jheatmap.Heatmap = function () {
         rowCtx.fillStyle = "black";
         rowCtx.textAlign = "right";
         rowCtx.textBaseline = "middle";
-        rowCtx.font = (rz > 12 ? 12 : rz) + "px Verdana";
+        rowCtx.font = (rz > 12 ? 12 : rz) + "px Helvetica Neue,Helvetica,Arial,sans-serif";
 
         for (var row = startRow; row < endRow; row++) {
             var value = heatmap.getRowValueSelected(row);
@@ -1964,13 +1966,12 @@ jheatmap.Heatmap = function () {
             var row = Math.round(startRow + ((endRow - startRow) / 2));
             var zoomin = e.originalEvent.scale > 1;
 
-            console.log("zoomin=" + zoomin + " col=" + col + " row=" + row + " startRow=" + startRow + " endRow="
-                + endRow);
             zoomHeatmap(zoomin, col, row);
         });
 
         var downX = null;
         var downY = null;
+        var mouseDown = false;
 
         // Show details box
         heatmapCanvas.bind('mousedown', function (e) {
@@ -1979,6 +1980,29 @@ jheatmap.Heatmap = function () {
             var position = $(e.target).offset();
             downX = e.pageX - position.left;
             downY = e.pageY - position.top;
+
+        });
+
+        heatmapCanvas.bind('mousemove' , function(e) {
+            e.preventDefault();
+
+            if (downX != null) {
+                var position = $(e.target).offset();
+                var pX = e.pageX - position.left - downX;
+                var pY = e.pageY - position.top - downY;
+
+                var c = Math.round(pX / cz);
+                var r = Math.round(pY / rz);
+
+                heatmap.offset.top -= r;
+                heatmap.offset.left -= c;
+
+                if (!(r == 0 && c == 0)) {
+                    heatmap.paint(obj);
+                    downX = e.pageX - position.left;
+                    downY = e.pageY - position.top;
+                }
+            }
 
         });
 
@@ -1996,12 +2020,10 @@ jheatmap.Heatmap = function () {
             var c = Math.round(pX / cz);
             var r = Math.round(pY / rz);
 
-            heatmap.offset.top -= r;
-            heatmap.offset.left -= c;
+            downX = null;
+            downY = null;
 
-            if (!(r == 0 && c == 0)) {
-                heatmap.paint(obj);
-            } else {
+            if (r == 0 && c == 0) {
 
                 var col = Math.floor((e.originalEvent.pageX - position.left) / cz) + heatmap.offset.left;
                 var row = Math.floor((e.originalEvent.pageY - position.top) / rz) + heatmap.offset.top;
@@ -2024,6 +2046,9 @@ jheatmap.Heatmap = function () {
                     boxHtml += "<dt>Row</dt><dd>" + heatmap.getRowValueSelected(row) + "</dd>";
                     boxHtml += "<hr />";
                     for (var i = 0; i < heatmap.cells.header.length; i++) {
+                        if (heatmap.cells.header[i] == undefined ) {
+                            continue;
+                        }
                         boxHtml += "<dt>" + heatmap.cells.header[i] + ":</dt><dd>";
                         boxHtml += value[i];
                         boxHtml += "</dd>";
@@ -2106,12 +2131,12 @@ jheatmap.Heatmap = function () {
         tableRow.append(scrollVert);
 
         var maxHeight = (endRow - startRow) * rz;
-        var scrollVertCanvas = $("<canvas title='Click to jump to this position' width='10' height='" + heatmap.size.height + "'></canvas>");
+        var scrollVertCanvas = $("<canvas class='header' width='10' height='" + heatmap.size.height + "'></canvas>");
         scrollVert.append(scrollVertCanvas);
 
         var scrollVertCtx = scrollVertCanvas.get()[0].getContext('2d');
 
-        scrollVertCtx.fillStyle = "rgba(0,0,0,0.4)";
+        scrollVertCtx.fillStyle = "rgba(0,136,204,1)";
         var iniY = Math.round(maxHeight * (startRow / heatmap.rows.order.length));
         var endY = Math.round(maxHeight * (endRow / heatmap.rows.order.length));
         scrollVertCtx.fillRect(0, iniY, 10, endY - iniY);
@@ -2155,12 +2180,12 @@ jheatmap.Heatmap = function () {
         scrollRow.append("<td class='border'></td>");
 
         var maxWidth = (endCol - startCol) * cz;
-        var scrollHorCanvas = $("<canvas title='Click to jump to this position' width='" + heatmap.size.width + "' height='10'></canvas>");
+        var scrollHorCanvas = $("<canvas class='header' width='" + heatmap.size.width + "' height='10'></canvas>");
         scrollHor.append(scrollHorCanvas);
 
         var scrollHorCtx = scrollHorCanvas.get()[0].getContext('2d');
 
-        scrollHorCtx.fillStyle = "rgba(0,0,0,0.4)";
+        scrollHorCtx.fillStyle = "rgba(0,136,204,1)";
         var iniX = Math.round(maxWidth * (startCol / heatmap.cols.order.length));
         var endX = Math.round(maxWidth * (endCol / heatmap.cols.order.length));
         scrollHorCtx.fillRect(iniX, 0, endX - iniX, 10);
@@ -2171,17 +2196,6 @@ jheatmap.Heatmap = function () {
             heatmap.offset.left = Math.round((pX / maxWidth) * heatmap.cols.order.length);
             heatmap.paint(obj);
         });
-
-        if (this.showScrollBarTooltip == true) {
-            $(scrollHorCanvas).tooltip({
-                delay: 0,
-                top: -40,
-                left: 0,
-                track: true,
-                fade: true,
-                blocked: true
-            });
-        }
 
         table.append(scrollRow);
 
@@ -2321,6 +2335,7 @@ var console = console || {"log":function () {
 
                                     for (var i = 0; i < rowAnn.length; i++) {
                                         data.rows.header.push(data.cells.header[rowAnn[i]]);
+                                        data.cells.header[rowAnn[i]] = undefined;
                                     }
                                 } else {
                                     valuesRowKey = 1;
@@ -2332,6 +2347,7 @@ var console = console || {"log":function () {
                             // key.
                             var colKey;
                             var valuesColKey;
+
                             if (options.data.cols != undefined) {
                                 for (var i = 0; i < data.cols.header.length; i++) {
                                     if ((valuesColKey = $.inArray(data.cols.header[i], data.cells.header)) > -1) {
@@ -2352,7 +2368,9 @@ var console = console || {"log":function () {
 
                                     for (var i = 0; i < colAnn.length; i++) {
                                         data.cols.header.push(data.cells.header[colAnn[i]]);
+                                        data.cells.header[colAnn[i]] = undefined;
                                     }
+
                                 } else {
                                     valuesColKey = 0;
                                     data.cols.header = [ data.cells.header[ valuesColKey ]];
