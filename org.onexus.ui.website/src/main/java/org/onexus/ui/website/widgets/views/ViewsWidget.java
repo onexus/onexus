@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.widgets.views;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -28,13 +29,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.events.EventViewChange;
-import org.onexus.ui.website.pages.browser.BrowserPage;
-import org.onexus.ui.website.pages.browser.BrowserPageConfig;
-import org.onexus.ui.website.pages.browser.BrowserPageStatus;
-import org.onexus.ui.website.pages.browser.ViewConfig;
+import org.onexus.ui.website.pages.browser.*;
+import org.onexus.ui.website.pages.search.SearchLink;
+import org.onexus.ui.website.utils.visible.VisiblePredicate;
 import org.onexus.ui.website.widgets.Widget;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
@@ -57,9 +60,15 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
         setVisible(false);
         if (browserStatus != null) {
             BrowserPageConfig browserConfig = browserStatus.getConfig();
+
             List<ViewConfig> views = browserConfig.getTab(browserStatus.getCurrentTabId()).getViews();
-            if (views != null && !views.isEmpty()) {
-                for (ViewConfig view : views) {
+
+            List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
+            VisiblePredicate predicate = new VisiblePredicate(ResourceUtils.getParentURI(getReleaseUri()), getPageStatus().getFilters());
+            CollectionUtils.select(views, predicate, filteredViews);
+
+            if (filteredViews != null && !filteredViews.isEmpty()) {
+                for (ViewConfig view : filteredViews) {
 
                     WebMarkupContainer item = new WebMarkupContainer(viewsContainer.newChildId());
                     viewsContainer.add(item);

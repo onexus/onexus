@@ -20,6 +20,7 @@ package org.onexus.ui.website.pages.browser;
 
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageStatus;
+import org.onexus.ui.website.utils.visible.IVisible;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
@@ -27,7 +28,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewConfig implements Serializable {
+public class ViewConfig implements Serializable, IVisible {
 
     private String title;
 
@@ -36,7 +37,18 @@ public class ViewConfig implements Serializable {
     private String top;
     private String topRight;
 
+    private String visible;
+
     public ViewConfig() {
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
+
+    @Override
+    public String getVisible() {
+        return visible;
     }
 
     public String getTitle() {
@@ -123,4 +135,6 @@ public class ViewConfig implements Serializable {
     public String toString() {
         return title;
     }
+
+
 }
