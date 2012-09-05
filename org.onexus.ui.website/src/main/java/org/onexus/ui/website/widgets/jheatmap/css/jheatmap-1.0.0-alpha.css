@@ -130,6 +130,7 @@ table.heatmap div.detailsbox {
     overflow: auto;
     font-size: 12px;
     padding-left: 10px;
+    color: #000;
 }
 
 /* Loader */
