@@ -140,7 +140,24 @@ jheatmap.utils.RGBColor.prototype.toHex = function() {
 jheatmap.utils.RGBColor.prototype.toRGB = function() {
         return 'rgb(' + this.r + ', ' + this.g + ', ' + this.b + ')';
 };
-/**
+
+jheatmap.utils.drawOrderSymbol = function(ctx, asc) {
+    ctx.fillStyle = "rgba(130,2,2,1)";
+    ctx.beginPath();
+    if (asc) {
+        ctx.moveTo(-2, -2);
+        ctx.lineTo(-2, 2);
+        ctx.lineTo(2, -2);
+        ctx.lineTo(-2, -2);
+    } else {
+        ctx.moveTo(2, 2);
+        ctx.lineTo(-2, 2);
+        ctx.lineTo(2, -2);
+        ctx.lineTo(2, 2);
+    }
+    ctx.fill();
+    ctx.closePath();
+};/**
  * Cell decorators
  * @namespace jheatmap.decorators
  */
@@ -1000,6 +1017,14 @@ jheatmap.Heatmap = function () {
                 var v_a = (value_a == null ? null : parseFloat(value_a[heatmap.rows.sort.field]));
                 var v_b = (value_b == null ? null : parseFloat(value_b[heatmap.rows.sort.field]));
 
+                if (v_a == null) {
+                    return 1;
+                }
+
+                if (v_b == null) {
+                    return 0;
+                }
+
                 var val = (heatmap.rows.sort.asc ? 1 : -1);
                 return (v_a == v_b) ? 0 : ((v_a > v_b) ? val : -val);
             });
@@ -1061,6 +1086,15 @@ jheatmap.Heatmap = function () {
                 var value_b = heatmap.cells.values[pos + o_b];
                 var v_a = (value_a == null ? null : parseFloat(value_a[heatmap.cols.sort.field]));
                 var v_b = (value_b == null ? null : parseFloat(value_b[heatmap.cols.sort.field]));
+
+                if (v_a == null) {
+                    return 1;
+                };
+
+                if (v_b == null) {
+                    return 0;
+                };
+
                 var val = (heatmap.cols.sort.asc ? 1 : -1);
                 return (v_a == v_b) ? 0 : ((v_a > v_b) ? val : -val);
             });
@@ -1157,13 +1191,29 @@ jheatmap.Heatmap = function () {
         for (var c = this.startCol; c < this.endCol; c++) {
             var value = this.getColValueSelected(c);
             colCtx.save();
-            colCtx.translate((c - this.startCol) * cz + (cz / 2), 150);
+            colCtx.translate((c - this.startCol) * cz + (cz / 2), 145);
             colCtx.rotate(Math.PI / 2);
             colCtx.fillText(value, -this.textSpacing, 0);
             colCtx.restore();
 
+            // Order mark
+            colCtx.save();
+            colCtx.translate(Math.round(((c - this.startCol) * cz) + (cz/2)), 146)
+            colCtx.rotate(Math.PI / 4);
+            if (this.rows.sort.type == "single" && this.rows.sort.item == this.cols.order[c]) {
+                jheatmap.utils.drawOrderSymbol(colCtx, this.rows.sort.asc);
+            } else {
+                if (this.cols.zoom < 6) {
+                    colCtx.fillRect(-1, -1, 2, 2);
+                } else {
+                    colCtx.fillRect(-2, -2, 4, 4);
+                }
+            }
+            colCtx.fillStyle = "black";
+            colCtx.restore();
+
             if ($.inArray(this.cols.order[c], this.cols.selected) > -1) {
-                colCtx.fillStyle = "rgba(0,0,0,0.2)";
+                colCtx.fillStyle = "rgba(0,0,0,0.1)";
                 colCtx.fillRect((c - this.startCol) * cz, 0, cz, 150);
                 colCtx.fillStyle = "black";
             }
@@ -1185,10 +1235,27 @@ jheatmap.Heatmap = function () {
 
         for (var row = this.startRow; row < this.endRow; row++) {
             var value = this.getRowValueSelected(row);
-            rowCtx.fillText(value, 230 - this.textSpacing, ((row - this.startRow) * rz) + (rz / 2));
+            rowCtx.fillText(value, 225 - this.textSpacing, ((row - this.startRow) * rz) + (rz / 2));
+
+            // Order mark
+            rowCtx.save();
+            rowCtx.translate(226, ((row - this.startRow) * rz) + (rz / 2));
+            rowCtx.rotate( -Math.PI / 4);
+            if (this.cols.sort.type == "single" && this.cols.sort.item == this.rows.order[row]) {
+                jheatmap.utils.drawOrderSymbol(rowCtx, this.cols.sort.asc);
+            } else {
+                if (this.rows.zoom < 6) {
+                    rowCtx.fillRect(-1, -1, 2, 2);
+                } else {
+                    rowCtx.fillRect(-2, -2, 4, 4);
+                }
+            }
+            rowCtx.fillStyle = "black";
+            rowCtx.restore();
+
 
             if ($.inArray(this.rows.order[row], this.rows.selected) > -1) {
-                rowCtx.fillStyle = "rgba(0,0,0,0.3)";
+                rowCtx.fillStyle = "rgba(0,0,0,0.1)";
                 rowCtx.fillRect(0, ((row - this.startRow) * rz), 230, rz);
                 rowCtx.fillStyle = "black";
             }
@@ -1236,7 +1303,7 @@ jheatmap.Heatmap = function () {
                 }
 
                 if ($.inArray(this.rows.order[row], this.rows.selected) > -1) {
-                    rowsAnnValuesCtx.fillStyle = "rgba(0,0,0,0.2)";
+                    rowsAnnValuesCtx.fillStyle = "rgba(0,0,0,0.1)";
                     rowsAnnValuesCtx.fillRect(0, (row - this.startRow) * rz, this.rows.annotations.length * 10, rz);
                     rowsAnnValuesCtx.fillStyle = "white";
                 }
@@ -1275,7 +1342,7 @@ jheatmap.Heatmap = function () {
 
             for (var col = this.startCol; col < this.endCol; col++) {
                 if ($.inArray(this.cols.order[col], this.cols.selected) > -1) {
-                    colAnnValuesCtx.fillStyle = "rgba(0,0,0,0.2)";
+                    colAnnValuesCtx.fillStyle = "rgba(0,0,0,0.1)";
                     colAnnValuesCtx.fillRect((col - this.startCol) * cz, 0, cz, this.cols.annotations.length * 10);
                     colAnnValuesCtx.fillStyle = "white";
                 }
@@ -1300,7 +1367,7 @@ jheatmap.Heatmap = function () {
             }
 
             if ($.inArray(this.rows.order[row], this.rows.selected) > -1) {
-                cellCtx.fillStyle = "rgba(0,0,0,0.2)";
+                cellCtx.fillStyle = "rgba(0,0,0,0.1)";
                 cellCtx.fillRect(0, (row - this.startRow) * rz, (this.endCol - this.startCol) * cz, rz);
                 cellCtx.fillStyle = "white";
             }
@@ -1309,7 +1376,7 @@ jheatmap.Heatmap = function () {
         // Selected columns
         for (var col = this.startCol; col < this.endCol; col++) {
             if ($.inArray(this.cols.order[col], this.cols.selected) > -1) {
-                cellCtx.fillStyle = "rgba(0,0,0,0.2)";
+                cellCtx.fillStyle = "rgba(0,0,0,0.1)";
                 cellCtx.fillRect((col - this.startCol) * cz, 0, cz, (this.endRow - this.startRow) * rz);
                 cellCtx.fillStyle = "white";
             }
@@ -1455,7 +1522,9 @@ jheatmap.Heatmap = function () {
         firstRow.append(colHeader);
 
         this.canvasCols = $("<canvas class='header' id='colCanvas' width='" + heatmap.size.width + "' height='150'></canvas>");
-        this.canvasCols.bind('click', function (e) { heatmap.onColsClick(e); });
+        this.canvasCols.bind('mousedown', function (e) { heatmap.onColsMouseDown(e); });
+        this.canvasCols.bind('mousemove', function (e) { heatmap.onColsMouseMove(e); });
+        this.canvasCols.bind('mouseup', function (e) { heatmap.onColsMouseUp(e); });
         colHeader.append(this.canvasCols);
 
         /*******************************************************************
@@ -1539,7 +1608,10 @@ jheatmap.Heatmap = function () {
             "class":"row"
         });
         this.canvasRows = $("<canvas class='header' width='230' height='" + heatmap.size.height + "'></canvas>");
-        this.canvasRows.bind('click', function (e) { heatmap.onRowsClick(e); });
+        this.canvasRows.bind('mousedown', function (e) { heatmap.onRowsMouseDown(e); });
+        this.canvasRows.bind('mousemove', function (e) { heatmap.onRowsMouseMove(e); });
+        this.canvasRows.bind('mouseup', function (e) { heatmap.onRowsMouseUp(e); });
+
         rowsCell.append(this.canvasRows);
         tableRow.append(rowsCell);
 
@@ -1905,29 +1977,237 @@ jheatmap.Heatmap = function () {
         this.zoomHeatmap(zoomin, col, row);
     };
 
-    this.onRowsClick = function (e) {
-        var row = this.rows.order[Math.floor((e.pageY - $(e.target).offset().top) / this.rows.zoom) + this.offset.top];
 
-        var index = $.inArray(row, this.rows.selected);
+
+
+    var rowsMouseDown = false;
+    var rowsSelecting = true;
+    var rowsDownColumn = null;
+    var rowsShiftColumn = null;
+
+    this.onRowsMouseDown = function (e) {
+        rowsMouseDown = true;
+
+        rowsShiftColumn = Math.floor((e.pageY - $(e.target).offset().top) / this.rows.zoom) + this.offset.top;
+        rowsDownColumn = rowsShiftColumn;
+
+        var index = $.inArray(this.rows.order[rowsDownColumn], this.rows.selected);
         if (index > -1) {
-            this.rows.selected.splice(index, 1);
+            rowsSelecting = false;
         } else {
-            this.rows.selected[this.rows.selected.length] = row;
+            rowsSelecting = true;
         }
+    }
+
+    this.onRowsMouseUp = function(e) {
+        rowsMouseDown = false;
+
+        var row = Math.floor((e.pageY - $(e.target).offset().top) / this.rows.zoom) + this.offset.top;
+
+        if (row == rowsDownColumn) {
+            var index = $.inArray(this.rows.order[row], this.rows.selected);
+            if (rowsSelecting) {
+                if (index == -1) {
+                    var x = e.pageX - $(e.target).offset().left;
+                    if (x > 220) {
+                        this.cols.sort.type = "single";
+                        this.cols.sort.field = this.cells.selectedValue;
+                        this.cols.sort.item = this.rows.order[row];
+                        this.cols.sort.asc = !(this.cols.sort.asc);
+                        this.applyColsSort();
+                    } else {
+                        this.rows.selected[this.rows.selected.length] = this.rows.order[row];
+                    }
+                }
+            } else {
+                var unselectRows = [ row ];
+
+                for (var i = row + 1; i < this.rows.order.length ; i++) {
+                    var index = $.inArray(this.rows.order[i], this.rows.selected);
+                    if (index > -1) {
+                        unselectRows[unselectRows.length] = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                for (var i = row - 1; i > 0 ; i--) {
+                    var index = $.inArray(this.rows.order[i], this.rows.selected);
+                    if (index > -1) {
+                        unselectRows[unselectRows.length] = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                for (var i = 0; i < unselectRows.length; i++) {
+                    var index = $.inArray(this.rows.order[unselectRows[i]], this.rows.selected);
+                    this.rows.selected.splice(index, 1);
+                }
+            }
+        }
+
         this.paint();
+    }
+
+    this.onRowsMouseMove = function (e) {
+
+        if (rowsMouseDown) {
+            var row = Math.floor((e.pageY - $(e.target).offset().top) / this.rows.zoom) + this.offset.top;
+
+            if (rowsSelecting) {
+                var index = $.inArray(this.rows.order[row], this.rows.selected);
+                if (index == -1) {
+                    this.rows.selected[this.rows.selected.length] = this.rows.order[row];
+                }
+            } else {
+                var diff = row - rowsShiftColumn;
+                if (diff != 0) {
+                    if (diff > 0) {
+                        if ($.inArray(this.rows.order[this.rows.order.length - 1], this.rows.selected) == -1) {
+                            for (var i = this.rows.order.length - 2; i >= 0; i--) {
+                                var index = $.inArray(this.rows.order[i], this.rows.selected);
+                                if (index != -1) {
+                                    var nextRow = this.rows.order[i + 1];
+                                    this.rows.order[i + 1] = this.rows.order[i];
+                                    this.rows.order[i] = nextRow;
+                                }
+                            }
+                        }
+                    } else {
+                        if ($.inArray(this.rows.order[0], this.rows.selected) == -1) {
+                            for (var i = 1; i < this.rows.order.length; i++) {
+                                var index = $.inArray(this.rows.order[i], this.rows.selected);
+                                if (index != -1) {
+                                    var prevRow = this.rows.order[i - 1];
+                                    this.rows.order[i - 1] = this.rows.order[i];
+                                    this.rows.order[i] = prevRow;
+                                }
+                            }
+                        }
+                    }
+                    rowsShiftColumn = row;
+                }
+            }
+
+            this.paint();
+        }
     };
 
-    this.onColsClick = function (e) {
-        var col = this.cols.order[Math.floor((e.pageX - $(e.target).offset().left) / this.cols.zoom) + this.offset.left];
 
-        var index = $.inArray(col, this.cols.selected);
+    var colsMouseDown = false;
+    var colsSelecting = true;
+    var colsDownColumn = null;
+    var colsShiftColumn = null;
+
+    this.onColsMouseDown = function (e) {
+        colsMouseDown = true;
+
+        colsShiftColumn = Math.floor((e.pageX - $(e.target).offset().left) / this.cols.zoom) + this.offset.left;
+        colsDownColumn = colsShiftColumn;
+
+
+        var index = $.inArray(this.cols.order[colsDownColumn], this.cols.selected);
         if (index > -1) {
-            this.cols.selected.splice(index, 1);
+            colsSelecting = false;
         } else {
-            this.cols.selected[this.cols.selected.length] = col;
+            colsSelecting = true;
         }
-        this.paint();
+    }
 
+    this.onColsMouseUp = function(e) {
+        colsMouseDown = false;
+
+        var col = Math.floor((e.pageX - $(e.target).offset().left) / this.cols.zoom) + this.offset.left;
+
+        if (col == colsDownColumn) {
+            var index = $.inArray(this.cols.order[col], this.cols.selected);
+            if (colsSelecting) {
+                if (index == -1) {
+                    var y = e.pageY - $(e.target).offset().top;
+                    if (y > 140) {
+                        this.rows.sort.type = "single";
+                        this.rows.sort.field = this.cells.selectedValue;
+                        this.rows.sort.item = this.cols.order[col];
+                        this.rows.sort.asc = !(this.rows.sort.asc);
+                        this.applyRowsSort();
+                    } else {
+                        this.cols.selected[this.cols.selected.length] = this.cols.order[col];
+                    }
+                }
+            } else {
+                var unselectCols = [ col ];
+
+                for (var i = col + 1; i < this.cols.order.length ; i++) {
+                    var index = $.inArray(this.cols.order[i], this.cols.selected);
+                    if (index > -1) {
+                        unselectCols[unselectCols.length] = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                for (var i = col - 1; i > 0 ; i--) {
+                    var index = $.inArray(this.cols.order[i], this.cols.selected);
+                    if (index > -1) {
+                        unselectCols[unselectCols.length] = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                for (var i = 0; i < unselectCols.length; i++) {
+                   var index = $.inArray(this.cols.order[unselectCols[i]], this.cols.selected);
+                   this.cols.selected.splice(index, 1);
+                }
+            }
+        }
+
+        this.paint();
+    }
+
+    this.onColsMouseMove = function (e) {
+
+        if (colsMouseDown) {
+            var col = Math.floor((e.pageX - $(e.target).offset().left) / this.cols.zoom) + this.offset.left;
+
+            if (colsSelecting) {
+                var index = $.inArray(this.cols.order[col], this.cols.selected);
+                if (index == -1) {
+                    this.cols.selected[this.cols.selected.length] = this.cols.order[col];
+                }
+            } else {
+                var diff = col - colsShiftColumn;
+                if (diff != 0) {
+                    if (diff > 0) {
+                        if ($.inArray(this.cols.order[this.cols.order.length - 1], this.cols.selected) == -1) {
+                            for (var i = this.cols.order.length - 2; i >= 0; i--) {
+                                var index = $.inArray(this.cols.order[i], this.cols.selected);
+                                if (index != -1) {
+                                    var nextCol = this.cols.order[i + 1];
+                                    this.cols.order[i + 1] = this.cols.order[i];
+                                    this.cols.order[i] = nextCol;
+                                }
+                            }
+                        }
+                    } else {
+                        if ($.inArray(this.cols.order[0], this.cols.selected) == -1) {
+                            for (var i = 1; i < this.cols.order.length; i++) {
+                                var index = $.inArray(this.cols.order[i], this.cols.selected);
+                                if (index != -1) {
+                                    var prevCol = this.cols.order[i - 1];
+                                    this.cols.order[i - 1] = this.cols.order[i];
+                                    this.cols.order[i] = prevCol;
+                                }
+                            }
+                        }
+                    }
+                    colsShiftColumn = col;
+                }
+            }
+
+            this.paint();
+        }
     };
 
 };
