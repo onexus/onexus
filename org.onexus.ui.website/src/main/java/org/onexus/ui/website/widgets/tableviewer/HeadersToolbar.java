@@ -69,7 +69,7 @@ public class HeadersToolbar extends AbstractToolbar {
         add(headersParents);
         add(headers);
 
-        final List<IColumn<T, S>> columns = table.getColumns();
+        final List<? extends IColumn<T, S>> columns = table.getColumns();
 
         WebMarkupContainer secondHeaderContainer = null;
         String lastSecondHeaderTitle = null;
