@@ -21,15 +21,23 @@ import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.onexus.data.api.IProgressable;
 import org.onexus.data.api.Progress;
+import org.onexus.ui.api.utils.panels.icons.Icons;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,9 +45,7 @@ import java.util.List;
 
 public class ProgressBar extends Panel {
     public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
-    public final static MetaDataKey<ActiveProgress> TASKS = new MetaDataKey<ActiveProgress>() {
-    };
-
+    public final static MetaDataKey<ActiveProgress> TASKS = new MetaDataKey<ActiveProgress>() {};
     private boolean open = false;
 
     public ProgressBar(String id) {
@@ -54,8 +60,26 @@ public class ProgressBar extends Panel {
             }
         };
 
+        modal.add(new AjaxLink<String>("refresh") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                target.add(ProgressBar.this);
+            }
+        });
+
+        ListView<Progress> listTaskStatus = new ListView<Progress>("tasklist", new ListActiveTasksModel()) {
+            @Override
+            protected void populateItem(ListItem<Progress> item) {
+                if (item.getModelObject() != null) {
+                    item.add(new Label("title", new PropertyModel<String>( item.getModel(), "name")));
+                    item.add(new Image("progress", Icons.LOADING));
+                }
+            }
+        };
+        modal.add(listTaskStatus);
         modal.setMarkupId("progressbar-modal");
-        modal.add(new ProgressBarPanel("progressDetails").add(new Refresh()));
+
         add(modal);
 
     }
@@ -67,6 +91,7 @@ public class ProgressBar extends Panel {
         response.render(CssHeaderItem.forReference(CSS));
     }
 
+    /*
     @Override
     public void onEvent(IEvent<?> event) {
 
@@ -84,18 +109,7 @@ public class ProgressBar extends Panel {
             }
         }
     }
-
-    private class Refresh extends AbstractAjaxTimerBehavior {
-
-        public Refresh() {
-            super(Duration.seconds(3));
-        }
-
-        @Override
-        protected void onTimer(AjaxRequestTarget target) {
-            // Nothing adding throw onEvent
-        }
-    }
+    */
 
     public static ActiveProgress getActiveProgress() {
         ActiveProgress progress = Session.get().getMetaData(TASKS);
@@ -163,5 +177,24 @@ public class ProgressBar extends Panel {
         }
 
     }
+
+    private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<Progress>> {
+
+        private transient List<Progress> activeProgresses;
+
+        @Override
+        public List<Progress> getObject() {
+            if (activeProgresses == null) {
+                activeProgresses = ProgressBar.getActiveProgress().getActiveTasks();
+            }
+            return activeProgresses;
+        }
+
+        @Override
+        public void detach() {
+            activeProgresses = null;
+        }
+    }
+
 
 }

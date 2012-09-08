@@ -30,10 +30,16 @@ public class UrlDataStreams implements IDataStreams {
 
     private Progress progress;
     private List<URL> urls;
+    private boolean uncompress;
 
     public UrlDataStreams(Progress progress, List<URL> urls) {
+        this(progress, urls, true);
+    }
+
+    public UrlDataStreams(Progress progress, List<URL> urls, boolean uncompress) {
         this.progress = progress;
         this.urls = urls;
+        this.uncompress = uncompress;
     }
 
     @Override
@@ -53,7 +59,7 @@ public class UrlDataStreams implements IDataStreams {
             return Collections.EMPTY_LIST.iterator();
         }
 
-        return new UrlInputStreamIterator(urls);
+        return new UrlInputStreamIterator(urls, uncompress);
     }
 
 

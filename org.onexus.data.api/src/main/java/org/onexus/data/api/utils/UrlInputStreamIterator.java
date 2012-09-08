@@ -21,13 +21,17 @@ import java.io.*;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipInputStream;
 
 public class UrlInputStreamIterator implements Iterator<InputStream> {
 
     private Iterator<URL> urls;
+    private boolean uncompress;
 
-    public UrlInputStreamIterator(List<URL> urls) {
+    public UrlInputStreamIterator(List<URL> urls, boolean uncompress) {
         this.urls = urls.iterator();
+        this.uncompress = uncompress;
     }
 
     @Override
@@ -39,6 +43,17 @@ public class UrlInputStreamIterator implements Iterator<InputStream> {
     public InputStream next() {
         try {
             URL url = urls.next();
+
+            if (uncompress) {
+                if (url.getFile().endsWith(".gz")) {
+                    return new GZIPInputStream(url.openStream());
+                }
+
+                if (url.getFile().endsWith(".zip")) {
+                    return new ZipInputStream(url.openStream());
+                }
+            }
+
             return url.openStream();
         } catch (IOException e) {
             throw new RuntimeException(e);

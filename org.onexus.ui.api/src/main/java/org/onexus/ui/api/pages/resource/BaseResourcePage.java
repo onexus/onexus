@@ -54,8 +54,7 @@ public class BaseResourcePage extends WebPage {
 
         add( new DefaultTheme() );
 
-        //TODO add( new ProgressBar("progressbar"));
-        add(new EmptyPanel("progressbar"));
+        add( new ProgressBar("progressbar"));
 
         // Select the first project if there is no selection
         if (getModelObject() == null) {

@@ -45,6 +45,8 @@ public class FileCallable implements Callable<IDataStreams> {
     private Plugin plugin;
     private Data data;
 
+    private boolean compressed;
+
     public FileCallable(Progress progress, Plugin plugin, Data data) {
         this.progress = progress;
         this.plugin = plugin;
@@ -53,7 +55,7 @@ public class FileCallable implements Callable<IDataStreams> {
 
     @Override
     public IDataStreams call() throws Exception {
-        return new UrlDataStreams(progress, getUrls(plugin, data));
+         return new UrlDataStreams(progress, getUrls(plugin, data));
     }
 
     private String replaceProperties(String strUrl, Map<String, String> properties) {

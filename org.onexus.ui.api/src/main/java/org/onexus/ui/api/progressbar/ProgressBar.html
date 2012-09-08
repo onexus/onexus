@@ -7,7 +7,15 @@
 
     <div wicket:id="modal">
         <div id="progress_modal_fade" class="overlay"></div>
-        <div wicket:id="progressDetails" class="progress-modal"/>
+        <div class="progress-modal">
+            <a wicket:id="refresh"><i class="icon-refresh" /></a>
+            <div wicket:id="tasklist" class="task-container">
+                <div class="task">
+                    <div class="icon"><img src="" wicket:id="progress"/></div>
+                    <div class="title"><span wicket:id="title"></span></div>
+                </div>
+            </div>
+        </div>
     </div>
 </wicket:panel>
 </body>
