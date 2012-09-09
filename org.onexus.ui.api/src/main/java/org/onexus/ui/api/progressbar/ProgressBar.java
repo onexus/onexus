@@ -59,12 +59,13 @@ public class ProgressBar extends Panel {
                 return (open = getActiveProgress().isActive());
             }
         };
+        modal.setOutputMarkupPlaceholderTag(true);
 
         modal.add(new AjaxLink<String>("refresh") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.add(ProgressBar.this);
+                target.add(modal);
             }
         });
 
