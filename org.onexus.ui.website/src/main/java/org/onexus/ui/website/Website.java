@@ -45,6 +45,7 @@ import org.onexus.ui.website.theme.DefaultTheme;
 import org.onexus.ui.website.utils.HtmlDataResourceModel;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Website extends WebPage {
@@ -98,7 +99,7 @@ public class Website extends WebPage {
         add(headerLabel);
 
         WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
-        menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "config.pages")) {
+        menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList")) {
 
             @Override
             protected void populateItem(ListItem<PageConfig> item) {
@@ -168,5 +169,28 @@ public class Website extends WebPage {
 
     public WebsiteConfig getConfig() {
         return getStatus().getConfig();
+    }
+
+    public List<PageConfig> getPageConfigList() {
+       List<PageConfig> pages = new ArrayList<PageConfig>();
+
+       for (PageConfig page : getConfig().getPages()) {
+
+           String role = page.getAuthorization();
+
+           if (role!=null && !role.isEmpty()) {
+               if (role.equalsIgnoreCase("anonymous")) {
+                   if(!AuthenticatedWebSession.get().getRoles().isEmpty()) {
+                        continue;
+                   }
+               } else if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
+                    continue;
+               }
+           }
+
+           pages.add(page);
+       }
+
+        return pages;
     }
 }

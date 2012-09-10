@@ -32,6 +32,7 @@ public abstract class PageConfig implements Serializable {
     private String label;
     private String title;
     private String description;
+    private String authorization;
 
     private String css;
 
@@ -79,6 +80,14 @@ public abstract class PageConfig implements Serializable {
 
     public void setCss(String css) {
         this.css = css;
+    }
+
+    public String getAuthorization() {
+        return authorization;
+    }
+
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
     public WebsiteConfig getWebsiteConfig() {
