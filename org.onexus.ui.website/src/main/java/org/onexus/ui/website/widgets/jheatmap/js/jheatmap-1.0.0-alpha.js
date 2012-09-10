@@ -493,7 +493,9 @@ jheatmap.aggregators.PValue.prototype.acumulate = function (values) {
     var sum = 0;
     for (var i = 0; i < values.length; i++) {
         if (values[i] && !isNaN(values[i])) {
-            sum += ((values[i] >= this.cutoff) ? 0 : ((this.cutoff - values[i]) / this.cutoff));
+            var value = parseFloat(values[i]);
+            sum += ((value >= this.cutoff) ? 0 : ((this.cutoff - value) / this.cutoff));
+
         }
     }
     return sum;
@@ -987,10 +989,13 @@ jheatmap.Heatmap = function () {
             var aggregation = [];
 
             var cl = this.cols.values.length;
+            if (this.rows.sort.item == undefined) {
+                this.rows.sort.item = this.cols.order;
+            }
             for (var r = 0; r < this.rows.order.length; r++) {
                 var values = [];
-                for (var c = 0; c < this.cols.order.length; c++) {
-                    var pos = this.rows.order[r] * cl + this.cols.order[c];
+                for (var i = 0; i < this.rows.sort.item.length; i++) {
+                    var pos = this.rows.order[r] * cl + this.cols.order[this.rows.sort.item[i]];
                     var value = this.cells.values[pos];
                     if (value != null) {
                         values.push(value[this.rows.sort.field]);
@@ -1059,10 +1064,13 @@ jheatmap.Heatmap = function () {
             var cols = this.cols.order;
             var rows = this.rows.order;
 
+            if (this.cols.sort.item == undefined) {
+                this.cols.sort.item = this.rows.order;
+            }
             for (var c = 0; c < cols.length; c++) {
                 var values = [];
-                for (var r = 0; r < rows.length; r++) {
-                    var pos = rows[r] * cl + cols[c];
+                for (var i = 0; i < this.cols.sort.item.length; i++) {
+                    var pos = rows[this.cols.sort.item[i]] * cl + cols[c];
                     var value = this.cells.values[pos];
                     if (value != null) {
                         values.push(value[this.cols.sort.field]);
@@ -1200,7 +1208,8 @@ jheatmap.Heatmap = function () {
             colCtx.save();
             colCtx.translate(Math.round(((c - this.startCol) * cz) + (cz/2)), 146)
             colCtx.rotate(Math.PI / 4);
-            if (this.rows.sort.type == "single" && this.rows.sort.item == this.cols.order[c]) {
+            if ((this.rows.sort.type == "single" && this.rows.sort.item == this.cols.order[c]) ||
+                (this.rows.sort.type == "value" && $.inArray(this.cols.order[c], this.rows.sort.item) > -1)) {
                 jheatmap.utils.drawOrderSymbol(colCtx, this.rows.sort.asc);
             } else {
                 if (this.cols.zoom < 6) {
@@ -1241,7 +1250,8 @@ jheatmap.Heatmap = function () {
             rowCtx.save();
             rowCtx.translate(226, ((row - this.startRow) * rz) + (rz / 2));
             rowCtx.rotate( -Math.PI / 4);
-            if (this.cols.sort.type == "single" && this.cols.sort.item == this.rows.order[row]) {
+            if ((this.cols.sort.type == "single" && this.cols.sort.item == this.rows.order[row]) ||
+                (this.cols.sort.type == "value" && $.inArray(this.rows.order[row], this.cols.sort.item) > -1)) {
                 jheatmap.utils.drawOrderSymbol(rowCtx, this.cols.sort.asc);
             } else {
                 if (this.rows.zoom < 6) {
@@ -1521,10 +1531,13 @@ jheatmap.Heatmap = function () {
         var colHeader = $("<th>");
         firstRow.append(colHeader);
 
-        this.canvasCols = $("<canvas class='header' id='colCanvas' width='" + heatmap.size.width + "' height='150'></canvas>");
+        this.canvasCols = $("<canvas class='header' id='colCanvas' width='" + heatmap.size.width + "' height='150' tabindex='3'></canvas>");
         this.canvasCols.bind('mousedown', function (e) { heatmap.onColsMouseDown(e); });
         this.canvasCols.bind('mousemove', function (e) { heatmap.onColsMouseMove(e); });
         this.canvasCols.bind('mouseup', function (e) { heatmap.onColsMouseUp(e); });
+        this.canvasCols.bind('mouseover', heatmap.handleFocus );
+        this.canvasCols.bind('mouseout', heatmap.handleFocus );
+        this.canvasCols.bind('keypress', function (e) { heatmap.onColsKeyPress(e); });
         colHeader.append(this.canvasCols);
 
         /*******************************************************************
@@ -1607,10 +1620,13 @@ jheatmap.Heatmap = function () {
         var rowsCell = $("<td>", {
             "class":"row"
         });
-        this.canvasRows = $("<canvas class='header' width='230' height='" + heatmap.size.height + "'></canvas>");
+        this.canvasRows = $("<canvas class='header' width='230' height='" + heatmap.size.height + "' tabindex='1'></canvas>");
         this.canvasRows.bind('mousedown', function (e) { heatmap.onRowsMouseDown(e); });
         this.canvasRows.bind('mousemove', function (e) { heatmap.onRowsMouseMove(e); });
         this.canvasRows.bind('mouseup', function (e) { heatmap.onRowsMouseUp(e); });
+        this.canvasRows.bind('mouseover', heatmap.handleFocus );
+        this.canvasRows.bind('mouseout', heatmap.handleFocus );
+        this.canvasRows.bind('keypress', function (e) { heatmap.onRowsKeyPress(e); });
 
         rowsCell.append(this.canvasRows);
         tableRow.append(rowsCell);
@@ -1620,7 +1636,7 @@ jheatmap.Heatmap = function () {
          ******************************************************************/
         var heatmapCell = $('<td>');
         tableRow.append(heatmapCell);
-        this.canvasCells = $("<canvas width='" + heatmap.size.width + "' height='" + heatmap.size.height + "'></canvas>");
+        this.canvasCells = $("<canvas width='" + heatmap.size.width + "' height='" + heatmap.size.height + "' tabindex='2'></canvas>");
         this.canvasCells.bind('mousewheel', function (e, delta, deltaX, deltaY) { heatmap.onCellsMouseWheel(e, delta, deltaX, deltaY); });
         this.canvasCells.bind('gesturechange', function (e) { heatmap.onCellsGestureChange(e); });
         this.canvasCells.bind('gestureend', function (e) { heatmap.onCellsGestureEnd(e); });
@@ -1659,7 +1675,23 @@ jheatmap.Heatmap = function () {
          * Horizontal scroll
          ******************************************************************/
         var scrollRow = $("<tr class='horizontalScroll'>");
-        scrollRow.append("<td class='border'></td>");
+        scrollRow.append("<td class='border' style='font-size: 10px; vertical-align: middle; padding-left: 10px;'>" +
+            "<a href='#helpModal' data-toggle='modal'>keys help</a>" +
+            "<div class='modal hide' id='helpModal' tabindex='-1' role='dialog'>" +
+            "<div class='modal-header'><button type='button' class='close' data-dismiss='modal'>&times;</button>" +
+            "<h3>Keys help</h3></div>" +
+            "<div class='modal-body'>" +
+            "<dl class='dl-horizontal'>" +
+            "<dt>Supr</dt><dd>Hide selected rows/columns</dd>" +
+            "<dt>Insert</dt><dd>Show hidden rows/columns</dd>" +
+            "</dl>" +
+            "</div>" +
+            "<div class='modal-footer'>" +
+            "<button class='btn' data-dismiss='modal'>Close</button>" +
+            "</div>" +
+            "</div>" +
+            "</td>");
+
         var scrollHor = $("<td class='borderT'>");
         scrollRow.append(scrollHor);
         scrollRow.append("<td class='border'></td>");
@@ -1698,6 +1730,7 @@ jheatmap.Heatmap = function () {
         table.append(lastRow);
         obj.append(table);
         $('div.heatmap-loader').hide();
+        $('#helpModal').modal({ show: false });
 
     };
 
@@ -2011,38 +2044,48 @@ jheatmap.Heatmap = function () {
                     var x = e.pageX - $(e.target).offset().left;
                     if (x > 220) {
                         this.cols.sort.type = "single";
-                        this.cols.sort.field = this.cells.selectedValue;
                         this.cols.sort.item = this.rows.order[row];
                         this.cols.sort.asc = !(this.cols.sort.asc);
+                        this.cols.sort.field = this.cells.selectedValue;
                         this.applyColsSort();
                     } else {
                         this.rows.selected[this.rows.selected.length] = this.rows.order[row];
                     }
                 }
             } else {
-                var unselectRows = [ row ];
 
-                for (var i = row + 1; i < this.rows.order.length ; i++) {
-                    var index = $.inArray(this.rows.order[i], this.rows.selected);
-                    if (index > -1) {
-                        unselectRows[unselectRows.length] = i;
-                    } else {
-                        break;
+                var x = e.pageX - $(e.target).offset().left;
+                if (x > 220) {
+                    this.cols.sort.type = "value";
+                    this.cols.sort.item = this.rows.selected.slice(0);
+                    this.cols.sort.asc = !(this.cols.sort.asc);
+                    this.cols.sort.field = this.cells.selectedValue;
+                    this.applyColsSort();
+                } else {
+                    var unselectRows = [ row ];
+
+                    for (var i = row + 1; i < this.rows.order.length ; i++) {
+                        var index = $.inArray(this.rows.order[i], this.rows.selected);
+                        if (index > -1) {
+                            unselectRows[unselectRows.length] = i;
+                        } else {
+                            break;
+                        }
                     }
-                }
 
-                for (var i = row - 1; i > 0 ; i--) {
-                    var index = $.inArray(this.rows.order[i], this.rows.selected);
-                    if (index > -1) {
-                        unselectRows[unselectRows.length] = i;
-                    } else {
-                        break;
+                    for (var i = row - 1; i > 0 ; i--) {
+                        var index = $.inArray(this.rows.order[i], this.rows.selected);
+                        if (index > -1) {
+                            unselectRows[unselectRows.length] = i;
+                        } else {
+                            break;
+                        }
                     }
-                }
 
-                for (var i = 0; i < unselectRows.length; i++) {
-                    var index = $.inArray(this.rows.order[unselectRows[i]], this.rows.selected);
-                    this.rows.selected.splice(index, 1);
+                    for (var i = 0; i < unselectRows.length; i++) {
+                        var index = $.inArray(this.rows.order[unselectRows[i]], this.rows.selected);
+                        this.rows.selected.splice(index, 1);
+                    }
                 }
             }
         }
@@ -2094,6 +2137,32 @@ jheatmap.Heatmap = function () {
         }
     };
 
+    this.onRowsKeyPress = function(e) {
+
+        // Supr
+        if (e.keyCode == 46) {
+            var heatmap = this;
+            if (heatmap.rows.selected.length > 0) {
+                heatmap.rows.order = $.grep(heatmap.rows.order, function (value) {
+                    return heatmap.rows.selected.indexOf(value) == -1;
+                });
+                heatmap.paint();
+            }
+        }
+
+        // Insert
+        if (e.keyCode == 45) {
+            var heatmap = this;
+            heatmap.rows.order = [];
+            for (var c = 0; c < heatmap.rows.values.length; c++) {
+                heatmap.rows.order[heatmap.rows.order.length] = c;
+            }
+            heatmap.applyRowsSort();
+            heatmap.paint();
+        }
+
+    }
+
 
     var colsMouseDown = false;
     var colsSelecting = true;
@@ -2136,29 +2205,38 @@ jheatmap.Heatmap = function () {
                     }
                 }
             } else {
-                var unselectCols = [ col ];
+                var y = e.pageY - $(e.target).offset().top;
+                if (y > 140) {
+                    this.rows.sort.type = "value";
+                    this.rows.sort.item = this.cols.selected.slice(0);
+                    this.rows.sort.asc = !(this.rows.sort.asc);
+                    this.rows.sort.field = this.cells.selectedValue;
+                    this.applyRowsSort();
+                } else {
+                    var unselectCols = [ col ];
 
-                for (var i = col + 1; i < this.cols.order.length ; i++) {
-                    var index = $.inArray(this.cols.order[i], this.cols.selected);
-                    if (index > -1) {
-                        unselectCols[unselectCols.length] = i;
-                    } else {
-                        break;
+                    for (var i = col + 1; i < this.cols.order.length ; i++) {
+                        var index = $.inArray(this.cols.order[i], this.cols.selected);
+                        if (index > -1) {
+                            unselectCols[unselectCols.length] = i;
+                        } else {
+                            break;
+                        }
                     }
-                }
 
-                for (var i = col - 1; i > 0 ; i--) {
-                    var index = $.inArray(this.cols.order[i], this.cols.selected);
-                    if (index > -1) {
-                        unselectCols[unselectCols.length] = i;
-                    } else {
-                        break;
+                    for (var i = col - 1; i > 0 ; i--) {
+                        var index = $.inArray(this.cols.order[i], this.cols.selected);
+                        if (index > -1) {
+                            unselectCols[unselectCols.length] = i;
+                        } else {
+                            break;
+                        }
                     }
-                }
 
-                for (var i = 0; i < unselectCols.length; i++) {
-                   var index = $.inArray(this.cols.order[unselectCols[i]], this.cols.selected);
-                   this.cols.selected.splice(index, 1);
+                    for (var i = 0; i < unselectCols.length; i++) {
+                       var index = $.inArray(this.cols.order[unselectCols[i]], this.cols.selected);
+                       this.cols.selected.splice(index, 1);
+                    }
                 }
             }
         }
@@ -2208,6 +2286,45 @@ jheatmap.Heatmap = function () {
 
             this.paint();
         }
+    };
+
+    this.onColsKeyPress = function(e) {
+
+        // Supr
+        if (e.keyCode == 46) {
+            var heatmap = this;
+            if (heatmap.cols.selected.length > 0) {
+                heatmap.cols.order = $.grep(heatmap.cols.order, function (value) {
+                    return heatmap.cols.selected.indexOf(value) == -1;
+                });
+                heatmap.paint();
+            }
+        }
+
+        // Insert
+        if (e.keyCode == 45) {
+            var heatmap = this;
+            heatmap.cols.order = [];
+            for (var c = 0; c < heatmap.cols.values.length; c++) {
+                heatmap.cols.order[heatmap.cols.order.length] = c;
+            }
+            heatmap.applyColsSort();
+            heatmap.paint();
+        }
+
+    }
+
+    this.handleFocus= function(e) {
+
+        if(e.type=='mouseover'){
+            e.target.focus();
+            return false;
+        } else if(e.type=='mouseout'){
+            e.target.blur();
+            return false;
+        }
+
+        return true;
     };
 
 };
