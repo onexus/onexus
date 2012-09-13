@@ -52,7 +52,7 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
         String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
         String contentUri = ResourceUtils.getAbsoluteURI(parentUri, content);
 
-        ResourceReference webservice = OnexusWebApplication.get().getWebService();
+        ResourceReference webservice = OnexusWebApplication.get().getDataService();
         String webserviceUrl = urlFor(webservice, null).toString();
 
         add(new Label("content", new HtmlDataResourceModel(contentUri, webserviceUrl)).setEscapeModelStrings(false));
