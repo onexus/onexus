@@ -168,7 +168,7 @@ public class Query implements Serializable {
                     if (fields.hasNext()) {
                         oql.append(" (");
                         while (fields.hasNext()) {
-                            oql.append(escapeString(fields.next()));
+                            oql.append(fields.next());
                             if (fields.hasNext()) {
                                 oql.append(", ");
                             }
@@ -248,6 +248,7 @@ public class Query implements Serializable {
         return value;
 
     }
+
 
     public static String escapeString(String value) {
         if (value == null) {

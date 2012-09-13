@@ -32,7 +32,7 @@ public class QueryParserTest {
     @Test
     public void testUriWithPort() {
 
-        String inOql = "DEFINE c='http://localhost:8181/onexus/onx/test' SELECT c ('field') FROM c";
+        String inOql = "DEFINE c='http://localhost:8181/onexus/onx/test' SELECT c (field) FROM c";
 
         Query query = queryParser.parseQuery(inOql);
 
@@ -45,14 +45,13 @@ public class QueryParserTest {
     @Test
     public void testCasesensitive() throws Exception {
 
-        String inOql = "define c='http://www.onexus.org/onx/select' SELECT c ('define') from c";
-
+        String inOql = "DEFINE c='http://www.onexus.org/onx/select' SELECT c (define, diseaseId) FROM c";
 
         Query query = queryParser.parseQuery(inOql);
 
         String outOql = query.toString(new StringBuilder(), false).toString();
 
-        assertEquals("DEFINE c='http://www.onexus.org/onx/select' SELECT c ('define') FROM c", outOql);
+        assertEquals("DEFINE c='http://www.onexus.org/onx/select' SELECT c (define, diseaseId) FROM c", outOql);
 
     }
 }

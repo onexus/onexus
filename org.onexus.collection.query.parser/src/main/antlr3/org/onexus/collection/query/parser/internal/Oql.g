@@ -2,6 +2,7 @@ grammar Oql;
 
 options {
   backtrack=true;
+  memoize=true;
 }
 
 @lexer::header {
@@ -30,7 +31,7 @@ oql
 
 /* DEFINE clause */
 defineClause 
-	:	DEFINE defineItem ( ',' defineItem )*
+	:	'DEFINE' defineItem ( ',' defineItem )*
 ;
 
 defineItem 
@@ -40,13 +41,13 @@ defineItem
 
 /* ON clause */
 onClause 
-	:	ON uri=string
+	:	'ON' uri=string
 		{ query.setOn($uri.v); }
 ;
 
 /* SELECT clause */
 selectClause 
-	:	SELECT selectItem ( ',' selectItem )*
+	:	'SELECT' selectItem ( ',' selectItem )*
 ;
 
 selectItem 
@@ -56,26 +57,26 @@ selectItem
 
 selectFields returns [List<String> l = new ArrayList<String>();] 
 	:
-		first=string { $l.add($first.v); }
-	    ( ',' other=string { $l.add($other.v); })*
+		first=varname { $l.add($first.v); }
+	    ( ',' other=varname { $l.add($other.v); })*
 	;
 
 /* FROM clause */
 fromClause :
-    FROM alias=varname { query.setFrom($alias.text); }
+    'FROM' alias=varname { query.setFrom($alias.text); }
 ;
 
 /* WHERE clause */
 whereClause :
-    WHERE filter=filterClause { query.setWhere($filter.f); }
+    'WHERE' filter=filterClause { query.setWhere($filter.f); }
 ;
 
 filterClause returns [Filter f]
 	:	left=filterItem {$f=$left.f;} 
 		(
-		(AND and=filterItem {$f=new And($left.f, $and.f);})
+		('AND' and=filterItem {$f=new And($left.f, $and.f);})
 		|
-		(OR or=filterItem {$f=new Or($left.f, $or.f);})
+		('OR' or=filterItem {$f=new Or($left.f, $or.f);})
 		)?
 ;
 
@@ -225,13 +226,19 @@ time :
 
 /* Literals */
 
-varname :
-     	LETTER (LETTER | DIGIT | MARK)*
-;
+varname returns [String v]:
+	value=IDENTIFIER { $v = $value.text; }
+	;
+
+IDENTIFIER 
+    : 
+        LETTER (LETTER | DIGIT | '_' | '-' )*
+    ;
 	
 STRING :
     	'\'' (~'\'' | '\\\'')* '\''
 ;
+
 
 fragment EXPONENT
 :
@@ -242,52 +249,22 @@ WS :
     	(' ' | '\t' | '\n' | '\r')+  { $channel=HIDDEN;}
 ;
 
-LETTER :
-    	'a'..'z' | 'A'..'Z'
+fragment LETTER :
+    	 'a'..'z' | 'A'..'Z' 
 ;
 
-DIGIT :
+
+fragment DIGIT :
     	'0'..'9'
 ;
+
+
 
 MARK:
     '-' | '_' | '!' | '~' | '*'
 ;
 
-HEX:
-    	'%' (DIGIT | HEX_LETTER) (DIGIT | HEX_LETTER)
-;
-
-fragment HEX_LETTER:
-    	'a'..'f' | 'A'..'F'
-;
 
 LPAREN : '(' ;
 
 RPAREN : ')' ;
-
-OR : 'OR' | 'or';
-
-DEFINE
-	:	'DEFINE' | 'define'
-	;
-
-ON
-	:	'ON' | 'on'
-	;
-
-SELECT
-	:	'SELECT' | 'select'
-	;
-
-FROM
-	:	'FROM' | 'from'
-	;
-
-WHERE
-	:	'WHERE' | 'where'
-	;
-
-AND
-	:	'AND' | 'and'
-	;
