@@ -93,7 +93,11 @@ public class Website extends WebPage {
 
         String header = config.getHeader();
         String headerUri = ResourceUtils.getAbsoluteURI(parentUri, header);
-        Label headerLabel = new Label("header", new HtmlDataResourceModel(headerUri));
+
+        ResourceReference webservice = OnexusWebApplication.get().getDataService();
+        String webserviceUrl = urlFor(webservice, null).toString();
+
+        Label headerLabel = new Label("header", new HtmlDataResourceModel(headerUri, webserviceUrl));
         headerLabel.setVisible(header != null && !header.isEmpty());
         headerLabel.setEscapeModelStrings(false);
         add(headerLabel);
@@ -142,7 +146,7 @@ public class Website extends WebPage {
         String bottom = config.getBottom();
         String bottomUri = ResourceUtils.getAbsoluteURI(parentUri, bottom);
 
-        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri));
+        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri, webserviceUrl));
         bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);

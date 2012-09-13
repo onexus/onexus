@@ -22,9 +22,11 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     private transient IDataManager dataManager;
 
     private String contentUri;
+    private String webserviceUrl;
 
-    public HtmlDataResourceModel(String contentUri) {
+    public HtmlDataResourceModel(String contentUri, String webserviceUrl) {
         this.contentUri = contentUri;
+        this.webserviceUrl = webserviceUrl;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
         try {
             IDataStreams stream = getDataManager().load(contentUri);
-            return filterRelativeUrls(IOUtils.toString(stream.iterator().next()), contentUri);
+            return filterRelativeUrls(IOUtils.toString(stream.iterator().next()));
         } catch (Exception e) {
             log.error("Error loading HTML source '" + contentUri + "'", e);
             return "";
@@ -47,8 +49,8 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     private final static Pattern PATTERN_SRC = Pattern.compile("(src\\s*=\\s*\"?)(.*?)(\")", Pattern.CASE_INSENSITIVE);
 
 
-    private static String filterRelativeUrls(String html, String contentUri) {
-        String projectUrl = "../../data" + Resource.SEPARATOR + Integer.toHexString(ResourceUtils.getProjectURI(contentUri).hashCode());
+    private String filterRelativeUrls(String html) {
+        String projectUrl = webserviceUrl + Integer.toHexString(ResourceUtils.getProjectURI(contentUri).hashCode());
 
         String resourcePath = ResourceUtils.getResourcePath(contentUri);
         resourcePath = resourcePath.substring(0, resourcePath.lastIndexOf('/'));
@@ -81,7 +83,6 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
                     link = projectUrl + '/' + link;
                 }
 
-                link = projectUrl + '/' + link;
                 mSrc.appendReplacement(sbSrc, mSrc.group(1) + link + mSrc.group(3));
             }
         }

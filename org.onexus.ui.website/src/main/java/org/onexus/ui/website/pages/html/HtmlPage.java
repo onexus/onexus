@@ -25,9 +25,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.utils.HtmlDataResourceModel;
@@ -50,6 +52,9 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
         String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
         String contentUri = ResourceUtils.getAbsoluteURI(parentUri, content);
 
-        add(new Label("content", new HtmlDataResourceModel(contentUri)).setEscapeModelStrings(false));
+        ResourceReference webservice = OnexusWebApplication.get().getWebService();
+        String webserviceUrl = urlFor(webservice, null).toString();
+
+        add(new Label("content", new HtmlDataResourceModel(contentUri, webserviceUrl)).setEscapeModelStrings(false));
     }
 }
