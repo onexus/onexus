@@ -105,6 +105,8 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                         protected void populateItem(ListItem<TabConfig> item) {
 
                             TabConfig tab = item.getModelObject();
+
+
                             BrowserPageLink<String> link = new BrowserPageLink<String>("link", Model.of(tab.getId())) {
 
                                 @Override

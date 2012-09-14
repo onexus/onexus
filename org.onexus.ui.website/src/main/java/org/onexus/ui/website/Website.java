@@ -19,6 +19,7 @@ package org.onexus.ui.website;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -38,6 +39,7 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
+import org.onexus.ui.api.OnexusWebSession;
 import org.onexus.ui.website.pages.IPageManager;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.pages.PageModel;
@@ -127,6 +129,38 @@ public class Website extends WebPage {
 
             }
         });
+
+        // Login section
+        final boolean isAnonymous = AuthenticatedWebSession.get().getRoles().isEmpty();
+
+        Link<String> link = new Link<String>("account-details") {
+            @Override
+            public void onClick() {
+
+                if (isAnonymous) {
+                    OnexusWebSession.get().signOut();
+                    setResponsePage(Website.this);
+                    OnexusWebApplication.get().restartResponseAtSignInPage();
+                }
+
+            }
+        };
+        link.add(new AttributeModifier("title", (isAnonymous?"Sign in":"Account Details")));
+        link.add(new Label("username", (isAnonymous?"Sign in" : OnexusWebSession.get().getUserToken())));
+
+        Link<String> signOut = new Link<String>("signout") {
+            @Override
+            public void onClick() {
+                OnexusWebSession.get().invalidate();
+            }
+        };
+
+        link.setVisible(!isAnonymous);
+        signOut.setVisible(!isAnonymous);
+
+        menuSection.add(signOut);
+        menuSection.add(link);
+
         add(menuSection);
 
         String currentPage = status.getCurrentPage();
@@ -197,4 +231,5 @@ public class Website extends WebPage {
 
         return pages;
     }
+
 }

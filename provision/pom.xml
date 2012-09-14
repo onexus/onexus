@@ -76,6 +76,11 @@
             <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+        </dependency>
+
         <!-- XStream dependencies -->
 
 		<dependency>

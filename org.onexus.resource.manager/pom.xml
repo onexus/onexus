@@ -48,6 +48,11 @@
             <artifactId>com.springsource.org.apache.commons.io</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

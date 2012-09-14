@@ -19,6 +19,10 @@
 		<feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>
 
         <feature version='${project.version}'>onexus-server-ui</feature>
+
+        <!-- Dependencies -->
+        <bundle>mvn:org.openengsb.wrapped/com.jcraft.jsch-all/0.1.42.w1</bundle>
+
 	</feature>	
 
 	<feature name='onexus-server-ui' version='${project.version}'>

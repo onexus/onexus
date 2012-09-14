@@ -17,6 +17,12 @@
  */
 package org.onexus.resource.manager.internal;
 
+import org.eclipse.jgit.api.CheckoutCommand;
+import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +85,48 @@ public class ProjectsContainer {
     }
 
     public File projectImport(String projectUri) {
+        assert projectUri != null;
+        assert !projectUri.isEmpty();
+
+        if (projectUri.startsWith("git://")) {
+            return projectImportGit(projectUri);
+        }
+
+        return projectImportZipOrFolder(projectUri);
+    }
+
+    private File projectImportGit(String projectUri) {
+
+        try {
+
+            File projectFolder = new File(projectsFolder, Integer.toHexString(projectUri.hashCode()));
+            if (projectFolder.exists()) {
+                throw new InvalidParameterException("This project is already imported");
+            }
+            projectFolder.mkdir();
+
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            Repository repository = builder.setGitDir(projectFolder).readEnvironment().findGitDir().build();
+            Git git = new Git(repository);
+            CloneCommand clone = git.cloneRepository();
+            clone.setBare(false);
+            clone.setCloneAllBranches(true);
+            clone.setDirectory(projectFolder).setURI(projectUri);
+            clone.call();
+
+            properties.setProperty(projectUri, projectFolder.getAbsolutePath());
+            properties.store(new FileWriter(propertiesFile), "Onexus Projects");
+
+            return projectFolder;
+
+        } catch (Exception e) {
+            log.error("Importing project '" + projectUri +"'", e);
+            throw new InvalidParameterException("Invalid Onexus URL project");
+        }
+
+    }
+
+    private File projectImportZipOrFolder(String projectUri) {
         assert projectUri != null;
         assert !projectUri.isEmpty();
 
