@@ -81,25 +81,12 @@ public class EntitySelectBox extends Panel {
         );
         accordionToggle.add(new Label("label", label));
 
-        // Fields values
-        RepeatingView fields = new RepeatingView("fields");
-        for (Field field : collection.getFields()) {
-
-            if (labelField != null && labelField.equals(field.getId())) {
-                continue;
-            }
-
-            Object value = entity.get(field.getId());
-            if (value != null && !StringUtils.isEmpty(value.toString())) {
-
-                WebMarkupContainer fc = new WebMarkupContainer(fields.newChildId());
-                fc.setRenderBodyOnly(true);
-                fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
-                fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
-                fields.add(fc);
-            }
+        // Fields value
+        if (status.getType().getTemplate() == null || status.getType().getTemplate().isEmpty()) {
+            accordionBody.add(new FieldsPanel("fields", labelField, entity));
+        } else {
+            accordionBody.add(new Label("fields", replaceEntityValues(status.getType().getTemplate(), entity)).setEscapeModelStrings(false));
         }
-        accordionBody.add(fields);
 
         // Prepare links variables
         SearchType searchType = status.getType();
@@ -138,5 +125,16 @@ public class EntitySelectBox extends Panel {
         } */
 
         return link;
+    }
+
+    private static String replaceEntityValues(String template, IEntity entity) {
+
+        Collection collection = entity.getCollection();
+
+        for (Field field : collection.getFields()) {
+            template = template.replaceAll("\\$"+field.getId(), String.valueOf(entity.get(field.getId())));
+        }
+
+        return template;
     }
 }
