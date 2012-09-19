@@ -83,4 +83,9 @@ public class AndurilLoader implements IDataLoader {
     public Callable<IDataStreams> newCallable(Progress progress, Plugin plugin, Data data) {
         return new AndurilCallable(progress, repository, executionDir, data);
     }
+
+    @Override
+    public long size() {
+        return -1;
+    }
 }

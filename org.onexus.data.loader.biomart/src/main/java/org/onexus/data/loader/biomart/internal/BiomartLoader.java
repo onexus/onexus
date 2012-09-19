@@ -49,4 +49,9 @@ public class BiomartLoader implements IDataLoader {
         return new BiomartCallable(progress, new BiomartRequest(data, defaultMartService));
     }
 
+    @Override
+    public long size() {
+        return -1;
+    }
+
 }
