@@ -38,6 +38,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.query.OrderBy;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Query;
@@ -166,6 +167,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         for (String field : fieldList) {
             QueryUtils.or(query, new Contains(collectionAlias, field, input));
         }
+        query.addOrderBy(new OrderBy(collectionAlias, fieldList.get(0)));
 
         query.setCount(10);
 

@@ -24,6 +24,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Contains;
+import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.utils.ResourceUtils;
@@ -78,6 +79,7 @@ public class BoxesPanel extends Panel {
             QueryUtils.or(query, new Contains(collectionAlias, field, search));
         }
 
+        query.addOrderBy(new OrderBy(collectionAlias, fieldList.get(0)));
         query.setCount(20);
 
         return collectionManager.load(query);
