@@ -25,4 +25,6 @@ public interface IDataLoader {
 
     public Callable<IDataStreams> newCallable(Progress progress, Plugin plugin, Data data);
 
+    public long size();
+
 }

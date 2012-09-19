@@ -109,6 +109,8 @@ public class WebserviceResource extends AbstractResource {
 
     @Override
     public void respond(Attributes attributes) {
+
+
         ResourceResponse data = newResourceResponse(attributes);
 
         // set response header

@@ -26,6 +26,7 @@ import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,22 +48,31 @@ public class DataResourceResponse extends AbstractResponse {
     @Inject
     public IResourceManager resourceManager;
 
-    private String data;
-    private String filename;
     private String resourceUri;
 
     public DataResourceResponse(String data, String url) {
         super();
 
-        this.data = data;
         int pos = url.indexOf(data) + data.length() + 1;
-        this.filename = UrlDecoder.PATH_INSTANCE.decode(url.substring(pos), "UTF-8");
-        this.resourceUri = null;
+        String filename = UrlDecoder.PATH_INSTANCE.decode(url.substring(pos), "UTF-8");
+        this.resourceUri = ResourceUtils.concatURIs(data, filename);
+
+        OnexusWebApplication.inject(this);
+        for (Project project : resourceManager.getProjects()) {
+            String projectHash = Integer.toHexString(project.getURI().hashCode());
+            if (data.equals(projectHash)) {
+                this.resourceUri = ResourceUtils.concatURIs(project.getURI(), filename);
+                break;
+            }
+        }
+
+        // Content length
+        setContentLength(dataManager.size(resourceUri));
+
     }
 
     @Override
     protected void writeData(final Response response) {
-
 
         OutputStream s = new OutputStream() {
             @Override
@@ -82,19 +92,6 @@ public class DataResourceResponse extends AbstractResponse {
         };
         try {
 
-            if (resourceUri == null) {
-
-                this.resourceUri = ResourceUtils.concatURIs(data, filename);
-
-                for (Project project : resourceManager.getProjects()) {
-                    String projectHash = Integer.toHexString(project.getURI().hashCode());
-                    if (data.equals(projectHash)) {
-                        this.resourceUri = ResourceUtils.concatURIs(project.getURI(), filename);
-                        break;
-                    }
-                }
-            }
-
             IDataStreams dataStreams = dataManager.load(resourceUri);
 
             for (InputStream stream : dataStreams) {
@@ -106,4 +103,5 @@ public class DataResourceResponse extends AbstractResponse {
         }
 
     }
+
 }

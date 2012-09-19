@@ -32,4 +32,9 @@ public class FileDataLoader implements IDataLoader {
         return new FileCallable(progress, plugin, data);
     }
 
+    @Override
+    public long size() {
+        return -1;
+    }
+
 }

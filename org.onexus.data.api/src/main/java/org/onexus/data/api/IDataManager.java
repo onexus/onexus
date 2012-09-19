@@ -22,4 +22,6 @@ public interface IDataManager {
 
     public IDataStreams load(String dataUri);
 
+    public long size(String dataUri);
+
 }

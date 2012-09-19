@@ -28,7 +28,11 @@ import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +55,9 @@ public class DataManager implements IDataManager {
         Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
         Data data = resourceManager.load(Data.class, dataURI);
 
-        Progress progress = new Progress(dataURI, "Loading data '" + ResourceUtils.getResourcePath(dataURI) + "'");
         Loader loader = data.getLoader();
+        Progress progress = new Progress(dataURI, "Loading data '" + ResourceUtils.getResourcePath(dataURI) + "'");
+
         Plugin plugin = project.getPlugin(loader.getPlugin());
 
         // If there is no plugin to load the data
@@ -99,6 +104,7 @@ public class DataManager implements IDataManager {
         return dataStreams;
     }
 
+
     public IResourceManager getResourceManager() {
         return resourceManager;
     }
@@ -107,5 +113,63 @@ public class DataManager implements IDataManager {
         this.resourceManager = resourceManager;
     }
 
+    @Override
+    public long size(String dataURI) {
+
+        Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
+        Data data = resourceManager.load(Data.class, dataURI);
+
+        Loader loader = data.getLoader();
+        Progress progress = new Progress(dataURI, "Loading data '" + ResourceUtils.getResourcePath(dataURI) + "'");
+
+        Plugin plugin = project.getPlugin(loader.getPlugin());
+
+        // If there is no plugin to load the data
+        // check for the 'data-url' parameters directly
+        if (plugin == null) {
+            List<String> dataUrls = loader.getParameterList("data-url");
+            List<URL> urls = new ArrayList<URL>(dataUrls.size());
+            for (String  dataUrl : dataUrls) {
+                try {
+                    URL url = new URL(dataUrl);
+                    urls.add(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            progress.setDone(true);
+
+            long size = 0;
+
+            for (URL url : urls) {
+
+                long oneSize = getContentLength(url);
+                if (oneSize == -1) {
+                    return -1;
+                }
+
+                size += oneSize;
+            }
+
+            return size;
+        }
+
+
+
+        IDataLoader dataLoader = resourceManager.getLoader(IDataLoader.class, plugin, data.getLoader());
+
+        return dataLoader.size();
+    }
+
+    private long getContentLength(URL url) {
+        File file = null;
+        try {
+            file = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            return -1;
+        }
+        return file.length();
+    }
 
 }
