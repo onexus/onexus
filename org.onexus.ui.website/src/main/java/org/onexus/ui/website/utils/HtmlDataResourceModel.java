@@ -27,6 +27,11 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     public HtmlDataResourceModel(String contentUri, String webserviceUrl) {
         this.contentUri = contentUri;
         this.webserviceUrl = webserviceUrl;
+
+        int jsessionid = webserviceUrl.indexOf(";jsessionid");
+        if (jsessionid > -1) {
+            this.webserviceUrl = webserviceUrl.substring(0, jsessionid);
+        }
     }
 
     @Override
