@@ -1682,8 +1682,8 @@ jheatmap.Heatmap = function () {
             "<h3>Keys help</h3></div>" +
             "<div class='modal-body'>" +
             "<dl class='dl-horizontal'>" +
-            "<dt>Supr</dt><dd>Hide selected rows/columns</dd>" +
-            "<dt>Insert</dt><dd>Show hidden rows/columns</dd>" +
+            "<dt>H</dt><dd>Hide selected rows/columns</dd>" +
+            "<dt>S</dt><dd>Show hidden rows/columns</dd>" +
             "</dl>" +
             "</div>" +
             "<div class='modal-footer'>" +
@@ -2139,8 +2139,8 @@ jheatmap.Heatmap = function () {
 
     this.onRowsKeyPress = function(e) {
 
-        // Supr
-        if (e.keyCode == 46) {
+        // 'H' or 'h'
+        if (e.charCode == 72 || e.charCode == 104) {
             var heatmap = this;
             if (heatmap.rows.selected.length > 0) {
                 heatmap.rows.order = $.grep(heatmap.rows.order, function (value) {
@@ -2150,8 +2150,8 @@ jheatmap.Heatmap = function () {
             }
         }
 
-        // Insert
-        if (e.keyCode == 45) {
+        // 'S' or 's'
+        if (e.keyCode == 83 || e.charCode == 115) {
             var heatmap = this;
             heatmap.rows.order = [];
             for (var c = 0; c < heatmap.rows.values.length; c++) {
@@ -2290,8 +2290,8 @@ jheatmap.Heatmap = function () {
 
     this.onColsKeyPress = function(e) {
 
-        // Supr
-        if (e.keyCode == 46) {
+        // 'H' or 'h'
+        if (e.charCode == 72 || e.charCode == 104) {
             var heatmap = this;
             if (heatmap.cols.selected.length > 0) {
                 heatmap.cols.order = $.grep(heatmap.cols.order, function (value) {
@@ -2301,8 +2301,8 @@ jheatmap.Heatmap = function () {
             }
         }
 
-        // Insert
-        if (e.keyCode == 45) {
+        // 'S' or 's'
+        if (e.keyCode == 83 || e.charCode == 115) {
             var heatmap = this;
             heatmap.cols.order = [];
             for (var c = 0; c < heatmap.cols.values.length; c++) {
@@ -2385,7 +2385,7 @@ var console = console || {"log":function () {
                         }
                     });
                     if (options != undefined) {
-                        
+
                         data.loading(function () {
 
                             // Two columns matrix format
