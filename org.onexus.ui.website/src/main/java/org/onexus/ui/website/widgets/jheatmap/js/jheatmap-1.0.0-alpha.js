@@ -995,7 +995,7 @@ jheatmap.Heatmap = function () {
             for (var r = 0; r < this.rows.order.length; r++) {
                 var values = [];
                 for (var i = 0; i < this.rows.sort.item.length; i++) {
-                    var pos = this.rows.order[r] * cl + this.cols.order[this.rows.sort.item[i]];
+                    var pos = this.rows.order[r] * cl + this.rows.sort.item[i];
                     var value = this.cells.values[pos];
                     if (value != null) {
                         values.push(value[this.rows.sort.field]);
@@ -1022,12 +1022,20 @@ jheatmap.Heatmap = function () {
                 var v_a = (value_a == null ? null : parseFloat(value_a[heatmap.rows.sort.field]));
                 var v_b = (value_b == null ? null : parseFloat(value_b[heatmap.rows.sort.field]));
 
-                if (v_a == null) {
+                if (isNaN(v_a) && v_b == null) {
+                    return -1;
+                }
+
+                if (isNaN(v_b) && v_a == null) {
                     return 1;
                 }
 
-                if (v_b == null) {
-                    return 0;
+                if (v_a == null || isNaN(v_a)) {
+                    return 1;
+                }
+
+                if (v_b == null || isNaN(v_b)) {
+                    return -1;
                 }
 
                 var val = (heatmap.rows.sort.asc ? 1 : -1);
@@ -1062,7 +1070,6 @@ jheatmap.Heatmap = function () {
             var cl = this.cols.values.length;
 
             var cols = this.cols.order;
-            var rows = this.rows.order;
 
             if (this.cols.sort.item == undefined) {
                 this.cols.sort.item = this.rows.order;
@@ -1070,7 +1077,7 @@ jheatmap.Heatmap = function () {
             for (var c = 0; c < cols.length; c++) {
                 var values = [];
                 for (var i = 0; i < this.cols.sort.item.length; i++) {
-                    var pos = rows[this.cols.sort.item[i]] * cl + cols[c];
+                    var pos = this.cols.sort.item[i] * cl + cols[c];
                     var value = this.cells.values[pos];
                     if (value != null) {
                         values.push(value[this.cols.sort.field]);
@@ -1095,15 +1102,25 @@ jheatmap.Heatmap = function () {
                 var v_a = (value_a == null ? null : parseFloat(value_a[heatmap.cols.sort.field]));
                 var v_b = (value_b == null ? null : parseFloat(value_b[heatmap.cols.sort.field]));
 
-                if (v_a == null) {
-                    return 1;
-                };
 
-                if (v_b == null) {
-                    return 0;
-                };
+                if (isNaN(v_a) && v_b == null) {
+                    return -1;
+                }
+
+                if (isNaN(v_b) && v_a == null) {
+                    return 1;
+                }
+
+                if (v_a == null || isNaN(v_a)) {
+                    return 1;
+                }
+
+                if (v_b == null || isNaN(v_b)) {
+                    return -1;
+                }
 
                 var val = (heatmap.cols.sort.asc ? 1 : -1);
+
                 return (v_a == v_b) ? 0 : ((v_a > v_b) ? val : -val);
             });
         }
@@ -1208,8 +1225,9 @@ jheatmap.Heatmap = function () {
             colCtx.save();
             colCtx.translate(Math.round(((c - this.startCol) * cz) + (cz/2)), 146)
             colCtx.rotate(Math.PI / 4);
-            if ((this.rows.sort.type == "single" && this.rows.sort.item == this.cols.order[c]) ||
-                (this.rows.sort.type == "value" && $.inArray(this.cols.order[c], this.rows.sort.item) > -1)) {
+            if ((this.rows.sort.field == this.cells.selectedValue) &&
+                ((this.rows.sort.type == "single" && this.rows.sort.item == this.cols.order[c]) ||
+                (this.rows.sort.type == "value" && $.inArray(this.cols.order[c], this.rows.sort.item) > -1))) {
                 jheatmap.utils.drawOrderSymbol(colCtx, this.rows.sort.asc);
             } else {
                 if (this.cols.zoom < 6) {
@@ -1250,8 +1268,9 @@ jheatmap.Heatmap = function () {
             rowCtx.save();
             rowCtx.translate(226, ((row - this.startRow) * rz) + (rz / 2));
             rowCtx.rotate( -Math.PI / 4);
-            if ((this.cols.sort.type == "single" && this.cols.sort.item == this.rows.order[row]) ||
-                (this.cols.sort.type == "value" && $.inArray(this.rows.order[row], this.cols.sort.item) > -1)) {
+            if ((this.cols.sort.field == this.cells.selectedValue) &&
+                ((this.cols.sort.type == "single" && this.cols.sort.item == this.rows.order[row]) ||
+                (this.cols.sort.type == "value" && $.inArray(this.rows.order[row], this.cols.sort.item) > -1))) {
                 jheatmap.utils.drawOrderSymbol(rowCtx, this.cols.sort.asc);
             } else {
                 if (this.rows.zoom < 6) {
@@ -2090,9 +2109,12 @@ jheatmap.Heatmap = function () {
             }
         }
 
+        lastRowSelected = null;
+
         this.paint();
     }
 
+    var lastRowSelected = null;
     this.onRowsMouseMove = function (e) {
 
         if (rowsMouseDown) {
@@ -2102,6 +2124,17 @@ jheatmap.Heatmap = function () {
                 var index = $.inArray(this.rows.order[row], this.rows.selected);
                 if (index == -1) {
                     this.rows.selected[this.rows.selected.length] = this.rows.order[row];
+
+                    // Select the gap
+                    if (lastRowSelected != null && Math.abs(lastRowSelected - row) > 1) {
+                        var upRow = (lastRowSelected < row ? lastRowSelected : row );
+                        var downRow = (lastRowSelected < row ? row : lastRowSelected );
+                        for (var i = upRow + 1; i < downRow; i++) {
+                            this.rows.selected[this.rows.selected.length] = this.rows.order[i];
+                        }
+                    }
+                    lastRowSelected = row;
+
                 }
             } else {
                 var diff = row - rowsShiftColumn;
@@ -2241,8 +2274,12 @@ jheatmap.Heatmap = function () {
             }
         }
 
+        lastColSelected = null;
+
         this.paint();
     }
+
+    var lastColSelected = null;
 
     this.onColsMouseMove = function (e) {
 
@@ -2253,6 +2290,16 @@ jheatmap.Heatmap = function () {
                 var index = $.inArray(this.cols.order[col], this.cols.selected);
                 if (index == -1) {
                     this.cols.selected[this.cols.selected.length] = this.cols.order[col];
+
+                    // Select the gap
+                    if (lastColSelected != null && Math.abs(lastColSelected - col) > 1) {
+                        var upCol = (lastColSelected < col ? lastColSelected : col );
+                        var downCol = (lastColSelected < col ? col : lastColSelected );
+                        for (var i = upCol + 1; i < downCol; i++) {
+                            this.cols.selected[this.cols.selected.length] = this.cols.order[i];
+                        }
+                    }
+                    lastColSelected = col;
                 }
             } else {
                 var diff = col - colsShiftColumn;

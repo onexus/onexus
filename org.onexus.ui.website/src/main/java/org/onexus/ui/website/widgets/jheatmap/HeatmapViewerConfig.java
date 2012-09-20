@@ -34,6 +34,10 @@ public class HeatmapViewerConfig extends WidgetConfig {
    
     private String init;
 
+    private String colAnnotations;
+
+    private String rowAnnotations;
+
     @XStreamImplicit(itemFieldName="column")
     private List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 
@@ -90,6 +94,26 @@ public class HeatmapViewerConfig extends WidgetConfig {
 
     public void setCells(List<ColumnConfig> cells) {
         this.cells = cells;
+    }
+
+    @Deprecated
+    public String getColAnnotations() {
+        return colAnnotations;
+    }
+
+    @Deprecated
+    public void setColAnnotations(String colAnnotations) {
+        this.colAnnotations = colAnnotations;
+    }
+
+    @Deprecated
+    public String getRowAnnotations() {
+        return rowAnnotations;
+    }
+
+    @Deprecated
+    public void setRowAnnotations(String rowAnnotations) {
+        this.rowAnnotations = rowAnnotations;
     }
 
     @Override

@@ -86,26 +86,34 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
                 "$('#heatmap').heatmap({\n" +
                         "       data : {\n" +
                         "                 type : \"tdm\",\n" +
-                        "                 values : '" + urlFor(IResourceListener.INTERFACE, new PageParameters().set("ac", Integer.toHexString((int)System.currentTimeMillis()))) + "', \n");
+                        "                 values : '" + urlFor(IResourceListener.INTERFACE, new PageParameters().set("ac", Integer.toHexString((int) System.currentTimeMillis()))) + "', \n");
 
         code.append("\t\t\t\tcols_annotations : [");
-        for (int i = 0; i < lastColumnFields; i++) {
-            if (i != 0) {
-                code.append(",");
+        if (config.getColAnnotations() == null) {
+            for (int i = 0; i < lastColumnFields; i++) {
+                if (i != 0) {
+                    code.append(",");
+                }
+                code.append(i);
             }
-            code.append(i);
+        } else {
+            code.append(config.getColAnnotations());
         }
         code.append("], \n");
         code.append("\t\t\t\trows_annotations : [");
-        for (int i = lastColumnFields; i < lastRowFields; i++) {
-            if (i != lastColumnFields) {
-                code.append(",");
+        if (config.getRowAnnotations() == null) {
+            for (int i = lastColumnFields; i < lastRowFields; i++) {
+                if (i != lastColumnFields) {
+                    code.append(",");
+                }
+                code.append(i);
             }
-            code.append(i);
+        } else {
+            code.append(config.getRowAnnotations());
         }
         code.append("]\n" +
-        "              },\n" +
-        "       init : function(heatmap) {\n");
+                "              },\n" +
+                "       init : function(heatmap) {\n");
         code.append(config.getInit());
         code.append("}});");
 
