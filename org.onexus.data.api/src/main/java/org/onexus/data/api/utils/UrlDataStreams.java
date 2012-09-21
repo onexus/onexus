@@ -33,7 +33,7 @@ public class UrlDataStreams implements IDataStreams {
     private boolean uncompress;
 
     public UrlDataStreams(Progress progress, List<URL> urls) {
-        this(progress, urls, true);
+        this(progress, urls, false);
     }
 
     public UrlDataStreams(Progress progress, List<URL> urls, boolean uncompress) {
