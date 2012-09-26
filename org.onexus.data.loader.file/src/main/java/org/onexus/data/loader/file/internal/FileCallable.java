@@ -51,11 +51,19 @@ public class FileCallable implements Callable<IDataStreams> {
         this.progress = progress;
         this.plugin = plugin;
         this.data = data;
+
+        String format = plugin.getParameter("format");
+
+        if (format != null && format.equals("gz")) {
+            compressed = true;
+        } else {
+            compressed = false;
+        }
     }
 
     @Override
     public IDataStreams call() throws Exception {
-         return new UrlDataStreams(progress, getUrls(plugin, data));
+        return new UrlDataStreams(progress, getUrls(plugin, data), compressed);
     }
 
     private String replaceProperties(String strUrl, Map<String, String> properties) {
