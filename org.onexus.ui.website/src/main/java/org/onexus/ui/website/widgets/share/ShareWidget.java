@@ -134,7 +134,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
     }
 
     public final static String toAbsolutePath(final CharSequence relativePagePath) {
-        String serverUrl = OnexusWebApplication.get().getServerUrl();
+        String serverUrl = OnexusWebApplication.get().getRequestUrl();
         return RequestUtils.toAbsolutePath(serverUrl, relativePagePath.toString());
     }
 

@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -140,14 +141,17 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
         return getSharedResources().get(Application.class, "webservice", null, null, null, true);
     }
 
-    public String getServerUrl() {
-
-        if (SERVER_URL != null) {
-            return SERVER_URL;
-        }
+    public String getRequestUrl() {
 
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
-        return request.getRequestURL().toString();
+        String requestUrl = request.getRequestURL().toString();
+
+        if (SERVER_URL != null) {
+            String baseUrl = RequestCycle.get().getUrlRenderer().getBaseUrl().toString();
+            return SERVER_URL + '/' + baseUrl;
+        }
+
+        return requestUrl;
     }
 
 
