@@ -25,7 +25,7 @@ public class PerlScript implements IQueryScript {
                         "use HTTP::Request;\n" +
                         "\n" +
                         "my $url = \"" + url + "\";\n" +
-                        "my $query = \"" + query + "\"\n" +
+                        "my $query = \"" + query + "\";\n" +
                         "\n" +
                         "my $ua = LWP::UserAgent->new;\n" +
                         "my $req = HTTP::Request->new(POST => $url);\n" +
