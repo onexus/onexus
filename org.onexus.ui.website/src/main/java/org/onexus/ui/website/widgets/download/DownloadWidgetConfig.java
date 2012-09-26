@@ -25,22 +25,12 @@ public class DownloadWidgetConfig extends WidgetConfig {
 
     private DownloadWidgetStatus defaultStatus;
 
-    private String webservice;
-
     public DownloadWidgetConfig(String id) {
         super(id);
     }
 
     public DownloadWidgetConfig() {
         super();
-    }
-
-    public String getWebservice() {
-        return webservice;
-    }
-
-    public void setWebservice(String webservice) {
-        this.webservice = webservice;
     }
 
     @Override

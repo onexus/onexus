@@ -30,6 +30,7 @@ import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventQueryUpdate;
@@ -133,8 +134,8 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
     }
 
     public final static String toAbsolutePath(final CharSequence relativePagePath) {
-        HttpServletRequest req = (HttpServletRequest)((WebRequest)RequestCycle.get().getRequest()).getContainerRequest();
-        return RequestUtils.toAbsolutePath(req.getRequestURL().toString(), relativePagePath.toString());
+        String serverUrl = OnexusWebApplication.get().getServerUrl();
+        return RequestUtils.toAbsolutePath(serverUrl, relativePagePath.toString());
     }
 
     private final static String getEmbedHTML(String embedURL, String browseURL, String width, String height) {

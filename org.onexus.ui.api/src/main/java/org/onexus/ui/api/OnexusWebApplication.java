@@ -21,11 +21,11 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
@@ -40,12 +40,15 @@ import org.wicketstuff.osgi.inject.OsgiComponentInjector;
 import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 public class OnexusWebApplication extends AuthenticatedWebApplication implements IResourceService {
 
     // Force to import the package
     public final static WicketFilter wicketFilter = null;
     public final static OsgiServiceProxyTargetLocator targetLocator = null;
+
+    private final static String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
 
     private OsgiComponentInjector injector;
 
@@ -137,8 +140,21 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
         return getSharedResources().get(Application.class, "webservice", null, null, null, true);
     }
 
+    public String getServerUrl() {
+
+        if (SERVER_URL != null) {
+            return SERVER_URL;
+        }
+
+        HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
+        return request.getRequestURL().toString();
+    }
+
+
+
     public ResourceReference getDataService() {
         return getSharedResources().get(Application.class, "dataservice", null, null, null, true);
     }
+
 
 }
