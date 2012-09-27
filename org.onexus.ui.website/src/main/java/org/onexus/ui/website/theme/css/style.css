@@ -138,9 +138,11 @@ ul.breadcrumb {
     text-shadow: none;
 }
 
-/*
-@media (min-width: 1300px) {
-    .container-fluid {
-    width: 1200px;
-    margin: 0px auto;
-} */
+ul.feedbackPanel {
+   color: red;
+   padding: 5px 20px;
+   border: 1px solid red;
+  list-style: none;
+  margin: 0px;
+  background-color: #fdd;
+}

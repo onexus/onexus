@@ -184,13 +184,14 @@ public abstract class CustomFilterPanel extends Panel {
                 error("Filter name must be specified");
                 return false;
 
-            } else {
-                return getFieldSelected() != null
-                        && getFilterName() != null
-                        && !"".equals(getFilterName())
-                        && (fileUploadField.getFileUpload() != null || (textArea.getObject() != null && textArea
-                        .getObject().length() > 0));
             }
+
+            if ((fileUploadField.getFileUpload() == null && (textArea.getObject() == null || textArea.getObject().length() == 0)) ) {
+                error("You must enter some values or upload a file");
+                return false;
+            }
+
+            return true;
         }
 
         private Collection<String> getValuesFromForm() throws IOException {
