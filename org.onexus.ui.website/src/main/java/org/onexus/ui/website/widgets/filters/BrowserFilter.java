@@ -19,12 +19,16 @@ package org.onexus.ui.website.widgets.filters;
 
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.h2.util.StringUtils;
+import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.browser.IFilter;
+import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.visible.VisibleRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,7 +131,16 @@ public class BrowserFilter implements IFilter {
 
     @Override
     public boolean match(VisibleRule rule) {
-        return true;
+
+            String filteredCollection = getFilteredCollection();
+
+            boolean validCollection = filteredCollection.endsWith(rule.getFilteredCollection());
+
+            if (rule.getOperator() == null) {
+                return validCollection;
+            } else {
+                return false;
+            }
     }
 
     @Override
