@@ -63,7 +63,10 @@ public abstract class AbstractFilterBuilder<T extends Filter> implements FilterB
         try {
             adapter.append(oql, value);
         } catch (Exception e) {
-            log.error("Error encoding value", e);
+            String msg = "Error encoding value '" + value + "' as " + type.getSimpleName() + "";
+            log.error(msg);
+            log.error(e.getMessage());
+            throw new RuntimeException(msg);
         }
 
     }

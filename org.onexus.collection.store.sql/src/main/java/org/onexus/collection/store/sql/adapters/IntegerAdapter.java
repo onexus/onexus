@@ -27,7 +27,14 @@ public class IntegerAdapter extends SqlAdapter {
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-        container.append(String.valueOf(object));
+
+        Integer value;
+        if (object instanceof Integer) {
+            value = (Integer) object;
+        } else {
+            value = Integer.valueOf(object.toString());
+        }
+        container.append(String.valueOf(value));
     }
 
     @Override
