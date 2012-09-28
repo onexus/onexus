@@ -138,6 +138,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 In where = new In("fc", field.getField());
                 for (Object value : values) { where.addValue(value); }
                 filter.setWhere(where.toString());
+                filter.setVisibleCollection(field.getVisibleCollection());
                 filters.add(filter);
                 target.add(form);
 

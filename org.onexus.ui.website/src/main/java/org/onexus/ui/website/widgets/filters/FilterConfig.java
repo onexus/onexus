@@ -33,6 +33,9 @@ public class FilterConfig implements Serializable, IVisible {
 
     private String visible;
 
+    @XStreamAlias("visible-collection")
+    private String visibleCollection;
+
     private String collection;
 
     private String define;
@@ -74,6 +77,14 @@ public class FilterConfig implements Serializable, IVisible {
 
     public void setCollection(String collection) {
         this.collection = collection;
+    }
+
+    public String getVisibleCollection() {
+        return visibleCollection;
+    }
+
+    public void setVisibleCollection(String visibleCollection) {
+        this.visibleCollection = visibleCollection;
     }
 
     public String getVisible() {

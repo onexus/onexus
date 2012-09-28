@@ -26,6 +26,10 @@ public class CustomFilter implements Serializable {
 
     private String title;
     private String collection;
+
+    @XStreamAlias("visible-collection")
+    private String visibleCollection;
+
     private String field;
 
     public CustomFilter() {
@@ -53,6 +57,14 @@ public class CustomFilter implements Serializable {
 
     public void setCollection(String collectionURI) {
         this.collection = collectionURI;
+    }
+
+    public String getVisibleCollection() {
+        return visibleCollection;
+    }
+
+    public void setVisibleCollection(String visibleCollection) {
+        this.visibleCollection = visibleCollection;
     }
 
     public String getField() {

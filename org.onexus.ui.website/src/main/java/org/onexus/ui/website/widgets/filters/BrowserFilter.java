@@ -50,6 +50,7 @@ public class BrowserFilter implements IFilter {
         this.config = config;
         this.enable = true;
         this.deletable = true;
+
     }
 
     @Override
@@ -132,9 +133,12 @@ public class BrowserFilter implements IFilter {
     @Override
     public boolean match(VisibleRule rule) {
 
-            String filteredCollection = getFilteredCollection();
+            String visibleCollection = config.getVisibleCollection();
+            if (visibleCollection == null) {
+                visibleCollection = config.getCollection();
+            }
 
-            boolean validCollection = filteredCollection.endsWith(rule.getFilteredCollection());
+            boolean validCollection = visibleCollection.endsWith(rule.getFilteredCollection());
 
             if (rule.getOperator() == null) {
                 return validCollection;
