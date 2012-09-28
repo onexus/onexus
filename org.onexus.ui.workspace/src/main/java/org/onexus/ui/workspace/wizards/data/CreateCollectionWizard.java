@@ -249,12 +249,14 @@ public class CreateCollectionWizard extends AbstractWizard {
         addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI));
 
         for (Collection collection : collections) {
-            for (Link link : collection.getLinks()) {
+            if (collection.getLinks() != null) {
+                for (Link link : collection.getLinks()) {
 
-                // Only simple links (not composed)
-                if (link.getFields().size() == 1) {
-                    String field = Link.getFromFieldName(link.getFields().get(0));
-                    links.put(field, link);
+                    // Only simple links (not composed)
+                    if (link.getFields().size() == 1) {
+                        String field = Link.getFromFieldName(link.getFields().get(0));
+                        links.put(field, link);
+                    }
                 }
             }
         }
