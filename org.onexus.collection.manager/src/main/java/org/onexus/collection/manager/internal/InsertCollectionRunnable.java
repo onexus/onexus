@@ -23,6 +23,7 @@ import org.onexus.collection.api.ICollectionStore;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.data.api.Progress;
 import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,21 +51,27 @@ class InsertCollectionRunnable implements Runnable {
     @Override
     public void run() {
 
-        Progress progress = tasks.get(collection.getURI());
+        String taskId = Integer.toHexString(collection.getURI().hashCode());
+
+        Progress progress = tasks.get(taskId);
 
         try {
 
             Callable<IEntitySet> callable = loader.newCallable(progress, plugin, collection);
             IEntitySet entitySet = callable.call();
 
-            String msg = "Inserting collection '" + collection.getURI() + "'";
+            String msg = "Inserting '" + ResourceUtils.getResourcePath(collection.getURI()) + "'";
+
+            progress.run();
             progress.info(msg);
             log.info(msg);
 
             store.insert(entitySet);
 
-            msg = "Collection '" + collection.getURI() + "' inserted.";
+            msg = "Collection '" + ResourceUtils.getResourcePath(collection.getURI()) + "' inserted.";
             progress.info(msg);
+            progress.done();
+
             log.info(msg);
 
         } catch (Exception e) {
@@ -72,13 +79,12 @@ class InsertCollectionRunnable implements Runnable {
             progress.error(e.getMessage());
             log.error(e.getMessage(), e);
 
-            progress.setCancelled(true);
+            progress.fail();
             store.deregister(collection.getURI());
 
         } finally {
 
-            progress.setDone(true);
-            tasks.remove(collection.getURI());
+            tasks.remove(taskId);
         }
     }
 

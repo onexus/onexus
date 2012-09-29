@@ -56,7 +56,8 @@ public class DataManager implements IDataManager {
         Data data = resourceManager.load(Data.class, dataURI);
 
         Loader loader = data.getLoader();
-        Progress progress = new Progress(dataURI, "Loading data '" + ResourceUtils.getResourcePath(dataURI) + "'");
+        Progress progress = new Progress(Integer.toHexString(dataURI.hashCode()), "Retrive '" + ResourceUtils.getResourcePath(dataURI) + "'");
+        progress.run();
 
         Plugin plugin = project.getPlugin(loader.getPlugin());
 
@@ -65,20 +66,20 @@ public class DataManager implements IDataManager {
         if (plugin == null) {
             List<String> dataUrls = loader.getParameterList("data-url");
             List<URL> urls = new ArrayList<URL>(dataUrls.size());
-            for (String  dataUrl : dataUrls) {
+            for (String dataUrl : dataUrls) {
                 try {
                     URL url = new URL(dataUrl);
                     urls.add(url);
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    progress.error("Malformed URL " + dataUrl);
+                    progress.fail();
+                    return new EmptyDataStreams(progress);
                 }
             }
 
-            progress.setDone(true);
-
+            progress.done();
             return new UrlDataStreams(progress, urls);
         }
-
 
 
         IDataLoader dataLoader = resourceManager.getLoader(IDataLoader.class, plugin, data.getLoader());
@@ -94,11 +95,9 @@ public class DataManager implements IDataManager {
         } catch (Exception e) {
 
             progress.error(e.getMessage());
-            progress.setCancelled(true);
-            dataStreams = new EmptyDataStreams(progress);
+            progress.fail();
+            return new EmptyDataStreams(progress);
 
-        } finally {
-            dataStreams.getProgress().setDone(true);
         }
 
         return dataStreams;
@@ -120,7 +119,6 @@ public class DataManager implements IDataManager {
         Data data = resourceManager.load(Data.class, dataURI);
 
         Loader loader = data.getLoader();
-        Progress progress = new Progress(dataURI, "Loading data '" + ResourceUtils.getResourcePath(dataURI) + "'");
 
         Plugin plugin = project.getPlugin(loader.getPlugin());
 
@@ -129,7 +127,7 @@ public class DataManager implements IDataManager {
         if (plugin == null) {
             List<String> dataUrls = loader.getParameterList("data-url");
             List<URL> urls = new ArrayList<URL>(dataUrls.size());
-            for (String  dataUrl : dataUrls) {
+            for (String dataUrl : dataUrls) {
                 try {
                     URL url = new URL(dataUrl);
                     urls.add(url);
@@ -137,8 +135,6 @@ public class DataManager implements IDataManager {
                     e.printStackTrace();
                 }
             }
-
-            progress.setDone(true);
 
             long size = 0;
 
@@ -154,8 +150,6 @@ public class DataManager implements IDataManager {
 
             return size;
         }
-
-
 
         IDataLoader dataLoader = resourceManager.getLoader(IDataLoader.class, plugin, data.getLoader());
 

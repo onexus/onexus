@@ -19,6 +19,7 @@ package org.onexus.data.loader.biomart.internal;
 
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
+import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.data.api.utils.SingleDataStreams;
 
 import java.io.DataOutputStream;
@@ -74,26 +75,26 @@ public class BiomartCallable implements Callable<IDataStreams> {
 
             // Get Response
             InputStream is = conn.getInputStream();
-            progress.setDone(true);
+            progress.done();
 
             return new SingleDataStreams(progress, is);
 
         } catch (MalformedURLException e) {
 
             String errMsg = "Malformed mart service url '" + request.getMartService() + "'";
+            progress.debug(e.getMessage());
             progress.error(errMsg);
-            progress.setCancelled(true);
-            throw new RuntimeException(errMsg);
+            progress.fail();
+            return new EmptyDataStreams(progress);
 
         } catch (IOException e) {
 
             String errMsg = "Unable to connect to '" + request.getMartService() + "'";
+            progress.debug(e.getMessage());
             progress.error(errMsg);
-            progress.setCancelled(true);
-            throw new RuntimeException(errMsg);
+            progress.fail();
+            return new EmptyDataStreams(progress);
 
-        } finally {
-            progress.setDone(true);
         }
 
     }

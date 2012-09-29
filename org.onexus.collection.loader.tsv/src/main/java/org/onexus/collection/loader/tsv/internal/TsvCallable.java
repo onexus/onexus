@@ -17,6 +17,7 @@
  */
 package org.onexus.collection.loader.tsv.internal;
 
+import org.onexus.collection.api.utils.EmptyEntitySet;
 import org.onexus.data.api.IDataManager;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.Collection;
@@ -44,47 +45,41 @@ public class TsvCallable implements Callable<IEntitySet> {
 
     @Override
     public IEntitySet call() throws Exception {
-        try {
 
-            String dataUri = collection.getLoader().getParameter(PARAMETER_DATA_URI);
+        String dataUri = collection.getLoader().getParameter(PARAMETER_DATA_URI);
 
-            if (dataUri == null) {
-                String errMsg = "Required parameter '" + PARAMETER_DATA_URI +"' not found in '" + collection.getURI() + "'.";
-                progress.error(errMsg);
-                progress.setCancelled(true);
-
-                throw new UnsupportedOperationException(errMsg);
-            }
-
-            String absDataUri = ResourceUtils.getAbsoluteURI( ResourceUtils.getParentURI(collection.getURI()), dataUri);
-            IDataStreams dataStreams = dataManager.load(absDataUri);
-
-            if (dataStreams.getProgress() != null) {
-                Progress subProgress = dataStreams.getProgress();
-                progress.addSubTask(subProgress);
-
-                // Wait sub task finish
-                while (!subProgress.isDone()) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-                if (subProgress.isCanceled()) {
-                    progress.setCancelled(true);
-                    progress.setDone(true);
-                } else {
-                    dataStreams = dataManager.load(absDataUri);
-                }
-            }
-
-            return new TsvEntitySet(dataStreams, collection);
-
-        } finally {
-            this.progress.setDone(true);
+        if (dataUri == null) {
+            String errMsg = "Required parameter '" + PARAMETER_DATA_URI +"' not found in '" + collection.getURI() + "'.";
+            progress.error(errMsg);
+            progress.fail();
+            return new EmptyEntitySet();
         }
+
+        String absDataUri = ResourceUtils.getAbsoluteURI( ResourceUtils.getParentURI(collection.getURI()), dataUri);
+        IDataStreams dataStreams = dataManager.load(absDataUri);
+
+        if (dataStreams.getProgress() != null) {
+            Progress subProgress = dataStreams.getProgress();
+            progress.addSubTask(subProgress);
+
+            // Wait sub task finish
+            while (!subProgress.isDone()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                }
+            }
+
+            if (subProgress.isAborted()) {
+                progress.setStatus(subProgress.getStatus());
+            } else {
+                dataStreams = dataManager.load(absDataUri);
+            }
+        }
+
+        return new TsvEntitySet(dataStreams, collection);
+
+
     }
 
 }

@@ -19,72 +19,120 @@ package org.onexus.ui.api.progressbar;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.event.IEvent;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.tree.DefaultTableTree;
+import org.apache.wicket.extensions.markup.html.repeater.tree.ISortableTreeProvider;
+import org.apache.wicket.extensions.markup.html.repeater.tree.table.TreeColumn;
+import org.apache.wicket.extensions.markup.html.repeater.util.SingleSortState;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.util.time.Duration;
 import org.onexus.data.api.IProgressable;
 import org.onexus.data.api.Progress;
-import org.onexus.ui.api.utils.panels.icons.Icons;
+import org.onexus.ui.api.progressbar.columns.LogsColumn;
+import org.onexus.ui.api.progressbar.columns.StatusColumn;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ProgressBar extends Panel {
     public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
     public final static MetaDataKey<ActiveProgress> TASKS = new MetaDataKey<ActiveProgress>() {};
-    private boolean open = false;
+
+    private List<IColumn<Progress, String>> columns;
+    private ProgressTreeProvider provider;
+    private ProgressExpansionModel treeState;
 
     public ProgressBar(String id) {
         super(id);
 
+        provider =  new ProgressTreeProvider();
+        treeState = new ProgressExpansionModel();
+
         setOutputMarkupId(true);
 
         final WebMarkupContainer modal = new WebMarkupContainer("modal") {
+
             @Override
-            public boolean isVisible() {
-                return (open = getActiveProgress().isActive());
+            protected void onBeforeRender() {
+                addOrReplace(new DefaultTableTree<Progress, String>("tree", columns, provider, Integer.MAX_VALUE, treeState).setOutputMarkupId(true));
+                super.onBeforeRender();
             }
         };
-        modal.setOutputMarkupPlaceholderTag(true);
+
+        final WebMarkupContainer minimized = new WebMarkupContainer("minimized");
+        minimized.setOutputMarkupId(true);
+        add(minimized);
+
+        final WebMarkupContainer logDetails = new WebMarkupContainer("log-details");
+        logDetails.setOutputMarkupId(true);
+        logDetails.add(new EmptyPanel("logs"));
+        modal.add(logDetails);
 
         modal.add(new AjaxLink<String>("refresh") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.add(modal);
+                target.add(modal.get("tree"));
             }
         });
 
-        ListView<Progress> listTaskStatus = new ListView<Progress>("tasklist", new ListActiveTasksModel()) {
-            @Override
-            protected void populateItem(ListItem<Progress> item) {
-                if (item.getModelObject() != null) {
-                    item.add(new Label("title", new PropertyModel<String>( item.getModel(), "name")));
-                    item.add(new Image("progress", Icons.LOADING));
-                }
-            }
-        };
-        modal.add(listTaskStatus);
-        modal.setMarkupId("progressbar-modal");
-
+        modal.setOutputMarkupId(true);
         add(modal);
+
+
+        minimized.add(new AjaxLink<String>("show") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                target.add(modal);
+                target.add(minimized);
+                target.appendJavaScript("$('#" + modal.getMarkupId() + "').modal('show')");
+            }
+        });
+
+        this.columns = new ArrayList<IColumn<Progress, String>>();
+        columns.add(new TreeColumn<Progress, String>(Model.of("task")));
+        columns.add(new PropertyColumn<Progress, String>(Model.of("title"), "title"));
+        columns.add(new StatusColumn());
+        columns.add(new LogsColumn() {
+
+            @Override
+            protected void showLogs(Progress progress, AjaxRequestTarget target) {
+                logDetails.addOrReplace(new Label("logs", toLogsString(progress)));
+                target.add(logDetails);
+            }
+        });
 
     }
 
+    private static SimpleDateFormat formatter= new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
+
+    private static String toLogsString(Progress progress) {
+
+        StringBuilder str = new StringBuilder();
+
+        for (Progress.LogMsg msg : progress.getLogs()) {
+            str.append(" [").append(msg.getType()).append("] ");
+            str.append(formatter.format(msg.getTime())).append(" - ");
+            str.append(msg.getMessage());
+            str.append('\n');
+        }
+
+        return str.toString();
+    }
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -92,25 +140,81 @@ public class ProgressBar extends Panel {
         response.render(CssHeaderItem.forReference(CSS));
     }
 
-    /*
-    @Override
-    public void onEvent(IEvent<?> event) {
+    private class ProgressTreeProvider implements ISortableTreeProvider<Progress, String> {
 
-        if (event.getPayload() instanceof AjaxRequestTarget) {
-            AjaxRequestTarget target = ((AjaxRequestTarget) event.getPayload());
+        @Override
+        public Iterator<? extends Progress> getRoots() {
+            Collection<Progress> progresses = getActiveProgress().getProgresses();
+            List<Progress> orderProgresses = new ArrayList<Progress>(progresses);
 
-            if (open || getActiveProgress().isActive()) {
-                open = true;
-                target.add(this);
-            }
+            Collections.sort(orderProgresses, new Comparator<Progress>() {
 
-            if (open && !getActiveProgress().isActive()) {
-                open = false;
-                //TODO send(getPage(), Broadcast.BREADTH, EventViewChange.EVENT);
-            }
+                @Override
+                public int compare(Progress o1, Progress o2) {
+
+                    boolean d1 = o1.isDone();
+                    boolean d2 = o2.isDone();
+
+                    if (d1 && !d2) {
+                        return 1;
+                    }
+
+                    if (!d1 && d2) {
+                        return -1;
+                    }
+
+                    if (!d1 && !d2) {
+                        if (o1.getStatus() == Progress.Status.RUNNING) {
+                            return -1;
+                        }
+
+                        if (o2.getStatus() == Progress.Status.RUNNING) {
+                            return 1;
+                        }
+                    }
+
+                    return 0;
+                }
+            });
+
+            return orderProgresses.iterator();
+        }
+
+        @Override
+        public boolean hasChildren(Progress node) {
+            return !node.getSubProgresses().isEmpty();
+        }
+
+        @Override
+        public Iterator<? extends Progress> getChildren(Progress node) {
+            return node.getSubProgresses().iterator();
+        }
+
+        @Override
+        public IModel<Progress> model(Progress object) {
+            return new Model<Progress>(object);
+        }
+
+        @Override
+        public void detach() {
+
+        }
+
+        @Override
+        public ISortState<String> getSortState() {
+            return new SingleSortState<String>();
+        }
+
+    }
+
+    private class ProgressExpansionModel extends AbstractReadOnlyModel<Set<Progress>>
+    {
+        @Override
+        public Set<Progress> getObject()
+        {
+            return ProgressExpansion.get();
         }
     }
-    */
 
     public static ActiveProgress getActiveProgress() {
         ActiveProgress progress = Session.get().getMetaData(TASKS);
@@ -125,7 +229,13 @@ public class ProgressBar extends Panel {
 
         Progress progress = progressable.getProgress();
         if (progress != null) {
-            getActiveProgress().getProgresses().add(progress);
+            if (!progress.getSubProgresses().isEmpty()) {
+                for (Progress subprogress : progress.getSubProgresses()) {
+                    getActiveProgress().addTask(subprogress);
+                }
+            } else {
+                getActiveProgress().addTask(progress);
+            }
         }
 
         return progressable;
@@ -133,15 +243,15 @@ public class ProgressBar extends Panel {
 
     public static class ActiveProgress implements Serializable {
 
-        private List<Progress> progresses = new ArrayList<Progress>();
+        private Map<String, Progress> progresses = new HashMap<String, Progress>();
 
         public void addTask(Progress progress) {
-            progresses.add(progress);
+            progresses.put(progress.getId(), progress);
         }
 
         public boolean isActive() {
             boolean res = false;
-            for (Progress progress : progresses) {
+            for (Progress progress : getProgresses()) {
                 if (!progress.isDone()) {
                     res = true;
                     break;
@@ -150,52 +260,10 @@ public class ProgressBar extends Panel {
             return res;
         }
 
-        public List<Progress> getProgresses() {
-            List<Progress> activeProgresses = new ArrayList<Progress>();
-            for (Progress progress : progresses) {
-                activeProgresses.add(progress);
-            }
-
-            this.progresses = activeProgresses;
-            return this.progresses;
-        }
-
-        public List<Progress> getActiveTasks() {
-            List<Progress> activeProgresses = new ArrayList<Progress>();
-            for (Progress progress : progresses) {
-                if (!progress.isDone()) {
-                    activeProgresses.add(progress);
-                }
-            }
-
-            this.progresses = activeProgresses;
-            return this.progresses;
-        }
-
-        @Override
-        public String toString() {
-            return getActiveTasks().toString();
+        public Collection<Progress> getProgresses() {
+            return progresses.values();
         }
 
     }
-
-    private static class ListActiveTasksModel extends AbstractReadOnlyModel<List<Progress>> {
-
-        private transient List<Progress> activeProgresses;
-
-        @Override
-        public List<Progress> getObject() {
-            if (activeProgresses == null) {
-                activeProgresses = ProgressBar.getActiveProgress().getActiveTasks();
-            }
-            return activeProgresses;
-        }
-
-        @Override
-        public void detach() {
-            activeProgresses = null;
-        }
-    }
-
 
 }

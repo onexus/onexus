@@ -45,7 +45,7 @@ public class CollectionManager implements ICollectionManager {
 
     private ICollectionStore collectionStore;
 
-    private int maxThreads = 1;
+    private int maxThreads = 4;
 
     private ExecutorService executorService;
     private Map<String, Progress> runningTasks;
@@ -59,9 +59,11 @@ public class CollectionManager implements ICollectionManager {
     }
 
     public void init() {
+        /* TODO
         if (executorService instanceof ThreadPoolExecutor) {
             ((ThreadPoolExecutor) executorService).setMaximumPoolSize(maxThreads);
         }
+        */
     }
 
     @Override
@@ -100,7 +102,7 @@ public class CollectionManager implements ICollectionManager {
         Progress progress = getTask(taskId);
 
         if (progress == null && !notRegisteredCollections.isEmpty()) {
-            progress = new Progress(taskId, "Registering dependent collections");
+            progress = new Progress(taskId, "Loading collections");
 
             LOGGER.info("Starting task {}", taskId);
             for (String collectionURI : notRegisteredCollections) {
@@ -110,15 +112,17 @@ public class CollectionManager implements ICollectionManager {
 
                 if (collection == null) {
                     progress.error("Unknown collection '" + collectionURI + "'");
-                    progress.setCancelled(true);
-                    progress.setDone(true);
+                    progress.fail();
                 } else {
 
-                    if (!runningCollections.containsKey(collectionURI)) {
+                    String subTaskId = Integer.toHexString(collectionURI.hashCode());
 
-                        runningCollections.put(collectionURI, new Progress(collectionURI, "Registering collection '" + ResourceUtils.getResourcePath(collectionURI) + "'"));
+                    if (!runningCollections.containsKey(subTaskId)) {
 
-                        LOGGER.info("Registering collection {}", collectionURI);
+                        Progress subProgress = new Progress(subTaskId, "Load '" + ResourceUtils.getResourcePath(collectionURI) + "'");
+                        runningCollections.put(subTaskId, subProgress);
+
+                        LOGGER.info("Registering {}", collectionURI);
                         collectionStore.register(collectionURI);
 
                         LOGGER.info("Submiting store collection '{}'", collectionURI);
@@ -132,11 +136,10 @@ public class CollectionManager implements ICollectionManager {
 
                     }
 
-                    progress.addSubTask(runningCollections.get(collectionURI));
+                    progress.addSubTask(runningCollections.get(subTaskId));
                 }
 
             }
-            progress.setDone(true);
         }
 
         IEntityTable partialResults = collectionStore.load(query);

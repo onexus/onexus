@@ -24,6 +24,7 @@ import fi.helsinki.ltdk.csbl.anduril.core.network.componentInstance.OutputCompon
 import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
+import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.data.api.utils.UrlDataStreams;
 
 import java.io.File;
@@ -65,6 +66,7 @@ public class AndurilCallable implements Callable<IDataStreams> {
     @Override
     public IDataStreams call() throws Exception {
 
+
         if (!evaluator.hasErrors()) {
             progress.info("Starting Anduril execution");
             evaluator.execute();
@@ -74,13 +76,12 @@ public class AndurilCallable implements Callable<IDataStreams> {
             for (DynamicError error : evaluator.getEngineErrors()) {
                 progress.error(error.format());
             }
-            progress.setCancelled(true);
-            progress.setDone(true);
+            progress.fail();
+            return new EmptyDataStreams(progress);
 
-            return new UrlDataStreams(progress, null);
         }
 
-        progress.setDone(true);
+        progress.done();
 
         String outputDirectory = "file:" + executionDir + File.separator + OutputComponentInstance.OUTPUT_DIRECTORY;
         File outFolder = new File(outputDirectory);

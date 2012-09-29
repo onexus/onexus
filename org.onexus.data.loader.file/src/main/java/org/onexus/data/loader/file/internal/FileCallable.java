@@ -63,6 +63,7 @@ public class FileCallable implements Callable<IDataStreams> {
 
     @Override
     public IDataStreams call() throws Exception {
+        progress.done();
         return new UrlDataStreams(progress, getUrls(plugin, data), compressed);
     }
 

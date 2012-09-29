@@ -77,13 +77,13 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
         // Authentication
         getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
 
-        // In case of unhandled exception redirect it to a custom page
+        /* In case of unhandled exception redirect it to a custom page
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
             @Override
             public IRequestHandler onException(RequestCycle cycle, Exception e) {
                 return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e)));
             }
-        });
+        });*/
 
 
         // Injection

@@ -5,17 +5,33 @@
 <body>
 <wicket:panel>
 
-    <div wicket:id="modal">
-        <div id="progress_modal_fade" class="overlay"></div>
-        <div class="progress-modal">
-            <a wicket:id="refresh"><i class="icon-refresh" /></a>
-            <div wicket:id="tasklist" class="task-container">
-                <div class="task">
-                    <div class="icon"><img src="" wicket:id="progress"/></div>
-                    <div class="title"><span wicket:id="title"></span></div>
-                </div>
+    <div class="modal hide" wicket:id="modal">
+
+        <div class="modal-header">
+            <h3>Task manager</h3>
+        </div>
+
+        <div class="modal-body">
+
+            <h4>Tasks tree</h4>
+            <div wicket:id="tree" class="tree"></div>
+
+            <br />
+            <div wicket:id="log-details">
+                <h4>Log details</h4>
+                <textarea wicket:id="logs" class="logs"></textarea>
             </div>
         </div>
+
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" wicket:id="refresh">Refresh</a>
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+
+    </div>
+
+    <div class="progress-bar" wicket:id="minimized">
+        <a href="#" wicket:id="show">Task manager</a>
     </div>
 </wicket:panel>
 </body>
