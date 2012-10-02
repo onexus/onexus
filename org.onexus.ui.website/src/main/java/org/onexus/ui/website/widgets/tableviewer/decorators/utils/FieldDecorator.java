@@ -132,7 +132,15 @@ public class FieldDecorator implements IDecorator {
         }
 
         if (field.getType().equals(Text.class)) {
-            return new StringFormater(50, true);
+            int maxLength;
+            String value = field.getProperty("MAX_LENGTH");
+
+            try {
+                maxLength = Integer.valueOf(value);
+            } catch (Exception e) {
+                maxLength = 50;
+            }
+            return new StringFormater(maxLength, true);
         }
 
         if (field.getType().equals(Double.class)
