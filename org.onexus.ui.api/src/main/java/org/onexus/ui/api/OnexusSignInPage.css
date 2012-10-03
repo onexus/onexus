@@ -23,3 +23,8 @@ div.signInPanel {
 	border: 1px solid black;
 	background-color: white;
 }
+
+div.signInPanel input[type=text], div.signInPanel input[type=password] {
+        width: 150px;
+}
+

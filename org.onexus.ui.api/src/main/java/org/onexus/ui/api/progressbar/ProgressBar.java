@@ -37,6 +37,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.onexus.data.api.IProgressable;
 import org.onexus.data.api.Progress;
@@ -89,7 +91,7 @@ public class ProgressBar extends Panel {
             }
         });
 
-        modal.setOutputMarkupId(true);
+        modal.setMarkupId("taskmanagerModal");
         add(modal);
 
 
@@ -99,7 +101,7 @@ public class ProgressBar extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 target.add(modal);
                 target.add(minimized);
-                target.appendJavaScript("$('#" + modal.getMarkupId() + "').modal('show')");
+                target.appendJavaScript("$('#taskmanagerModal').modal('show')");
             }
         });
 
@@ -235,6 +237,11 @@ public class ProgressBar extends Panel {
                 }
             } else {
                 getActiveProgress().addTask(progress);
+            }
+
+            AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
+            if (target != null) {
+                target.appendJavaScript("$('#taskmanagerModal').modal('show')");
             }
         }
 

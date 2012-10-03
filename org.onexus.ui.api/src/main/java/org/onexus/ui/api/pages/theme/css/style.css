@@ -99,6 +99,11 @@ ul.wizard-list li {
    border-bottom: 1px dotted #AAA;
 }
 
+ul.wizard-list li div img {
+   padding: 0px;
+   margin-top: -25px;
+}
+
 ul.wizard-list a {
    color: #444;
    font-weight: bold;
