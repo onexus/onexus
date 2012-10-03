@@ -86,6 +86,9 @@ public class Website extends WebPage {
         // Init currentPage
         if (status.getCurrentPage() == null) {
             status.setCurrentPage(config.getPages().get(0).getId());
+            pageParameters.add(Website.PARAMETER_PAGE, status.getCurrentPage());
+            setResponsePage(Website.class, pageParameters);
+
         }
 
         add(new Label("windowTitle", config.getTitle()));
@@ -131,7 +134,8 @@ public class Website extends WebPage {
         });
 
         // Login section
-        final boolean isAnonymous = AuthenticatedWebSession.get().getRoles().isEmpty();
+        //TODO final boolean isAnonymous = AuthenticatedWebSession.get().getRoles().isEmpty();
+        final boolean isAnonymous = true;
 
         Link<String> link = new Link<String>("account-details") {
             @Override
