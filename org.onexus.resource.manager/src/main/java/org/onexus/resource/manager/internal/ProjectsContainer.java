@@ -88,7 +88,7 @@ public class ProjectsContainer {
         assert projectUri != null;
         assert !projectUri.isEmpty();
 
-        if (projectUri.startsWith("git://")) {
+        if (projectUri.startsWith("git://") || projectUri.endsWith(".git")) {
             return projectImportGit(projectUri);
         }
 
