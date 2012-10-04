@@ -20,6 +20,7 @@ package org.onexus.ui.website;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -73,6 +74,10 @@ public class Website extends WebPage {
 
         final WebsiteStatus status = getStatus();
         final WebsiteConfig config = getConfig();
+
+        if (Session.get().getMetaData(WEBSITE_CONFIG) == null) {
+            Session.get().setMetaData(WEBSITE_CONFIG, config);
+        }
 
         String parentUri = ResourceUtils.getParentURI(config.getURI());
         String cssUri = ResourceUtils.getAbsoluteURI(parentUri, config.getCss());
