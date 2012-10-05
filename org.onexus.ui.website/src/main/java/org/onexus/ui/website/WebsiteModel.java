@@ -143,7 +143,10 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
                 if (this.websiteConfig != null) {
                     this.websiteUri = websiteConfig.getURI();
                 } else {
-                    throw new RuntimeException("Unable to find website definition URI");
+                    for (Project project : resourceManager.getProjects()) {
+                        WebsiteConfig website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI()).get(0);
+                        this.websiteUri = website.getURI();
+                    }
                 }
             }
         } else {
