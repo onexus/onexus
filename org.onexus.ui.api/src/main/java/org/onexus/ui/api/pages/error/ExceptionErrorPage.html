@@ -9,14 +9,23 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <h3>Unexpected error</h3>
+            <h3>Error</h3>
 	        <div class="alert alert-error" wicket:id="exception">message</div>
             <input type="button" onclick="window.history.back();" value="Go back" class="btn btn-primary">
         </div>
 
-        <div class="row-fluid">
-            <h3>Error details</h3>
-            <div class="alert alert-info" wicket:id="stacktrace">stacktrace goes here</div>
+        <div class="accordion" id="accordion">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                        details
+                    </a>
+                </div>
+                <div id="collapseOne" class="accordion-body collapse in">
+                    <div class="accordion-inner" wicket:id="stacktrace">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
