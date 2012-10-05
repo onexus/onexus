@@ -71,10 +71,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
 
         // Webservice URL
         ResourceReference webservice = OnexusWebApplication.get().getWebService();
-        String serverUrl = OnexusWebApplication.get().getRequestUrl();
-        CharSequence wsPath = urlFor(webservice, null);
-        webserviceUrl = RequestUtils.toAbsolutePath(serverUrl, wsPath.toString());
-
+        webserviceUrl = OnexusWebApplication.get().getWebserviceUrl();
 
         // Download as file
         String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";

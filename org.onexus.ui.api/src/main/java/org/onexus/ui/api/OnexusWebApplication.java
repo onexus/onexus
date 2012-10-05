@@ -50,6 +50,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
     public final static OsgiServiceProxyTargetLocator targetLocator = null;
 
     private final static String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
+    private final static String WEBSERVICE_MOUNT = "/onx";
 
     private OsgiComponentInjector injector;
 
@@ -71,7 +72,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
         // Webservices
         getSharedResources().add("webservice", new WebserviceResource());
         getSharedResources().add("dataservice", new WebserviceResource());
-        mountResource("/onx", getSharedResources().get(Application.class, "webservice", null, null, null, true));
+        mountResource(WEBSERVICE_MOUNT, getSharedResources().get(Application.class, "webservice", null, null, null, true));
         mountResource("/data/${data}", getSharedResources().get(Application.class, "dataservice", null, null, null, true));
 
         // Authentication
@@ -141,6 +142,19 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
         return getSharedResources().get(Application.class, "webservice", null, null, null, true);
     }
 
+    public String getWebserviceUrl() {
+
+        if (SERVER_URL != null) {
+            return SERVER_URL + WEBSERVICE_MOUNT;
+        }
+
+        ResourceReference webservice = OnexusWebApplication.get().getWebService();
+        String serverUrl = OnexusWebApplication.get().getRequestUrl();
+        CharSequence wsPath = RequestCycle.get().urlFor(webservice, null);
+        return RequestUtils.toAbsolutePath(serverUrl, wsPath.toString());
+
+    }
+
     public String getRequestUrl() {
 
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
@@ -159,6 +173,8 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
     public ResourceReference getDataService() {
         return getSharedResources().get(Application.class, "dataservice", null, null, null, true);
     }
+
+
 
 
 }
