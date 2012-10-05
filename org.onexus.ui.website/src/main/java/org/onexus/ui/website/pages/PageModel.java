@@ -19,6 +19,8 @@ package org.onexus.ui.website.pages;
 
 import org.apache.wicket.model.AbstractWrapModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.onexus.ui.website.WebsiteStatus;
 
 
@@ -59,6 +61,10 @@ public class PageModel<S extends PageStatus> extends AbstractWrapModel<S> {
     private PageConfig getConfig() {
 
         PageConfig config = getWebsiteStatus().getConfig().getPage(pageId);
+
+        if (config == null) {
+            throw new AbortWithHttpErrorCodeException(404);
+        }
 
         // Check pageConfig is set
         if (config.getWebsiteConfig() == null) {
