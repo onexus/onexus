@@ -31,7 +31,11 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.ui.website.Website;
+import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.*;
 import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.browser.layouts.leftmain.LeftMainLayout;
@@ -166,7 +170,14 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             if (tabs != null && !tabs.isEmpty()) {
                 currentTabId = tabs.get(0).getId();
                 getStatus().setCurrentTabId(currentTabId);
+
+                // Init currentPage
+                //TODO This is not a good solution
+                PageParameters pageParameters = getPage().getPageParameters();
+                pageParameters.add("ptab", currentTabId);
+                setResponsePage(Website.class, pageParameters);
             }
+
         }
 
         List<TabGroup> tabs = visibleTabs.getObject();
