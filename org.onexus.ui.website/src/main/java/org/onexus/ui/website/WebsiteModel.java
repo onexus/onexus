@@ -167,9 +167,12 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
             if (this.websiteUri == null) {
                 for (Project project : resourceManager.getProjects()) {
                     if (project.getName().equals(urlName)) {
-                        WebsiteConfig website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI()).get(0);
-                        this.websiteUri = website.getURI();
-                        break;
+                        List<WebsiteConfig> website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI());
+
+                        if (!website.isEmpty()) {
+                            this.websiteUri = website.get(0).getURI();
+                            break;
+                        }
                     }
                 }
             }
