@@ -28,7 +28,8 @@ public class TextWidget extends Widget<TextWidgetConfig, TextWidgetStatus> {
     public TextWidget(String componentId, IModel<TextWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
-        add(new Label("title", getConfig().getTitle()));
+        String button = getConfig().getButton();
+        add(new Label("title", getConfig().getTitle()).setVisible(button == null || button.isEmpty()));
         add(new Label("text", getConfig().getText()).setEscapeModelStrings(false));
         
         if (getConfig().getDetails() != null) {
