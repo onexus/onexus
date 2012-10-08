@@ -79,7 +79,10 @@ public class HeadersToolbar extends AbstractToolbar {
         String lastThirdHeaderTitle = null;
         int lastThirdHeaderColspan = 0;
 
+        int col = 0;
         for (final IColumn<T, S> c : columns) {
+
+            String placement = (col == 0 ? "right" : (col+1 == columns.size() ? "left" : "top"));
 
             // Process only Track columns
             CollectionColumn column = null;
@@ -117,8 +120,6 @@ public class HeadersToolbar extends AbstractToolbar {
                     item.add(firstHeaderContainer);
 
                     secondHeaderContainer = new WebMarkupContainer("header");
-                    // secondHeaderContainer.add( new EmptyPanel("label"));
-                    // secondHeaderContainer.add(new EmptyPanel("help"));
                     decorateSecondParentHeader(secondHeaderContainer, null,
                             column);
 
@@ -170,6 +171,8 @@ public class HeadersToolbar extends AbstractToolbar {
 
             firstHeaderContainer.add(new AttributeModifier("title",
                     new Model<String>(firstHeader.getTitle())));
+            firstHeaderContainer.add(new AttributeModifier("rel", Model.of("tooltip")));
+            firstHeaderContainer.add(new AttributeModifier("data-placement", Model.of(placement)));
             firstHeaderContainer
                     .add(new AttributeModifier("style", new Model<String>(
                             "font-size:12px; font-family:sans-serif;")));
@@ -210,6 +213,8 @@ public class HeadersToolbar extends AbstractToolbar {
                 if (secondHeader != null && secondHeader.getLabel() != null) {
                     secondHeaderContainer.add(new AttributeModifier("title",
                             new Model<String>(secondHeader.getTitle())));
+                    secondHeaderContainer.add(new AttributeModifier("rel", Model.of("tooltip")));
+                    secondHeaderContainer.add(new AttributeModifier("data-placement", Model.of(placement)));
                 }
 
                 secondHeaderContainer.add(new AttributeModifier("style",
@@ -248,6 +253,9 @@ public class HeadersToolbar extends AbstractToolbar {
                     if (thirdHeader.getLabel() != null) {
                         thirdHeaderContainer.add(new AttributeModifier("title",
                                 new Model<String>(thirdHeader.getTitle())));
+                        thirdHeaderContainer.add(new AttributeModifier("rel", Model.of("tooltip")));
+                        thirdHeaderContainer.add(new AttributeModifier("data-placement", Model.of(placement)));
+
                     }
                 } else {
                     thirdHeaderContainer.add(new EmptyPanel("label"));
@@ -262,6 +270,8 @@ public class HeadersToolbar extends AbstractToolbar {
                 lastThirdHeaderColspan = 1;
 
             }
+
+            col++;
 
         }
     }

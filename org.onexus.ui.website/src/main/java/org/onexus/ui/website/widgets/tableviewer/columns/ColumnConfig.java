@@ -44,6 +44,10 @@ import java.util.regex.Pattern;
 public class ColumnConfig implements IColumnConfig {
     private final static Logger LOGGER = LoggerFactory.getLogger(ColumnConfig.class);
 
+    private String label;
+
+    private String title;
+
     private String collection;
 
     private String fields;
@@ -72,6 +76,22 @@ public class ColumnConfig implements IColumnConfig {
         this.collection = collectionURI;
         this.fields = fields;
         this.decorator = decorator;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getCollection() {
@@ -122,7 +142,7 @@ public class ColumnConfig implements IColumnConfig {
                 IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                 List<IDecorator> actionsImpl = createActions(collection, field);
 
-                columns.add(new CollectionColumn(collectionURI, new FieldHeader(collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
+                columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
             }
         }
     }

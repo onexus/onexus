@@ -26,12 +26,16 @@ public class FieldHeader extends ElementHeader {
     private final static int DEFAULT_MAX_LENGTH = 25;
     public final static String SORT_PROPERTY_SEPARATOR = "::::";
 
+    private String defaultLabel;
+    private String defaultTitle;
     private Collection collection;
     private Field field;
 
-    public FieldHeader(Collection collection, Field field, IHeader parentHeader) {
+    public FieldHeader(String defaultLabel, String defaultTitle, Collection collection, Field field, IHeader parentHeader) {
         super(field, parentHeader, new StringFormater(getMaxLength(field),
                 false));
+        this.defaultLabel = defaultLabel;
+        this.defaultTitle = defaultTitle;
         this.field = field;
         this.collection = collection;
     }
@@ -48,12 +52,20 @@ public class FieldHeader extends ElementHeader {
 
     @Override
     public String getLabel() {
+        if (defaultLabel != null) {
+            return defaultLabel;
+        }
         String label = field.getLabel();
         return (label == null ? field.getId() : label);
     }
 
     @Override
     public String getTitle() {
+
+        if (defaultTitle!= null) {
+            return defaultTitle;
+        }
+
         String title = field.getTitle();
         return (title == null ? field.getId() : title);
     }
