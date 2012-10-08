@@ -34,6 +34,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.*;
@@ -204,6 +205,24 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         if (getStatus().getCurrentView() == null && views.size() > 0) {
             getStatus().setCurrentView(views.get(0));
+        }
+
+        // Check that the current view is visible
+        List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
+        VisiblePredicate predicate = new VisiblePredicate(getStatus().getBase(), getStatus().getFilters());
+        CollectionUtils.select(getCurrentTab().getViews(), predicate, filteredViews);
+
+        boolean visibleView = false;
+        String currentView = getStatus().getCurrentView();
+        for (ViewConfig view : filteredViews) {
+            if (view.getTitle().equals(currentView)) {
+                visibleView = true;
+                break;
+            }
+        }
+
+        if (!visibleView) {
+            getStatus().setCurrentView(filteredViews.get(0).getTitle());
         }
 
         ViewConfig viewConfig = null;
