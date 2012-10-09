@@ -52,10 +52,10 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
     public final static ResourceReference JS = new JavaScriptResourceReference(DownloadWidget.class, "prettify/prettify.js");
 
     public final static List<IQueryScript> scripts = Arrays.asList(new IQueryScript[]{
-            new BashScript(),
+            new RScript(),
             new PythonScript(),
             new PerlScript(),
-            new RScript()
+            new BashScript()
     });
 
     private String webserviceUrl;
