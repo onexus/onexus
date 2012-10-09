@@ -56,7 +56,7 @@ public class LinkDecorator extends FieldDecorator {
 
             List<String> columnValues = new ArrayList<String>();
             if (parameters.containsKey(LinkDecoratorParameters.SEPARATOR)) {
-                for (String value: currentColumnValue.split(",")) {
+                for (String value: currentColumnValue.split(parameters.get(LinkDecoratorParameters.SEPARATOR).trim())) {
                     columnValues.add(value.trim());
                 }
             } else {
