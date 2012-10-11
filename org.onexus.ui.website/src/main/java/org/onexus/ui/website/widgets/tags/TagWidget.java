@@ -202,7 +202,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
         add(form);
     }
 
-    private List<String> getSelectedTags() {
+    public List<String> getSelectedTags() {
         return getStatus().getSelectedTags();
     }
 
