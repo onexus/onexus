@@ -70,6 +70,11 @@ public class LinkDecorator extends FieldDecorator {
 
                 String href = parameters.get(LinkDecoratorParameters.URL);
 
+                String columnPattern = "#{column.id}";
+                if (href.contains(columnPattern)) {
+                    href = href.replaceAll(Pattern.quote(columnPattern), getField().getId());
+                }
+
                 for (Field field : entity.getCollection().getFields()) {
                     String value = String.valueOf(entity.get(field.getId()));
 
