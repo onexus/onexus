@@ -20,12 +20,14 @@ package org.onexus.ui.website.widgets.jheatmap;
 import org.apache.wicket.IResourceListener;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.collection.api.IEntityTable;
@@ -50,9 +52,13 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
     private final static HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
     private final static HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
 
+    private final static ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
+
 
     public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {
         super(componentId, status);
+
+        add(new Image("loading", LOADING_IMG));
     }
 
     @Override
