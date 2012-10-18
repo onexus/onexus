@@ -53,7 +53,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 
         Form<TagWidgetStatus> form = new Form<TagWidgetStatus>("form", new CompoundPropertyModel<TagWidgetStatus>(statusModel));
 
-        form.add(new HiddenField<String>("selection").setMarkupId("rows-selection-container"));
+        form.add(new HiddenField<String>("selection").setMarkupId("modal-selection-container"));
 
         form.add(new AjaxSubmitLink("apply") {
 
@@ -155,18 +155,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
         });
 
         form.add(new CheckBoxMultipleChoice<String>("tags", new PropertyModel<List<String>>(this, "selectedTags"),
-                new TagsModel()) {
-
-            @Override
-            protected String getSuffix(int index, String choice) {
-
-                TagStore tagStore = getTagStore();
-                int count = tagStore.getTagValues(choice).size();
-
-                return " [" + Integer.toString(count) + "] " + super.getSuffix(index, choice);
-            }
-
-        });
+                new TagsModel()).setPrefix(""));
 
         final TagsDownload download = new TagsDownload() {
 
@@ -204,6 +193,10 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 
     public List<String> getSelectedTags() {
         return getStatus().getSelectedTags();
+    }
+
+    public void setSelectedTags(List<String> selectedTags) {
+        getStatus().setSelectedTags(selectedTags);
     }
 
     @SuppressWarnings("unchecked")

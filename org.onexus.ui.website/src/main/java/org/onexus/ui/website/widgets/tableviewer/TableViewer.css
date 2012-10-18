@@ -67,3 +67,8 @@ table.table-viewer td div.cell {
      z-index:1002;
      overflow: auto;
 }
+
+table.tagcontainer td {
+    border-top: 0px;
+    padding: 0px;
+}
