@@ -23,6 +23,7 @@ import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.onexus.collection.api.ICollectionStore;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.resource.api.IResourceManager;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 
-public class MysqlCollectionStore extends SqlCollectionStore {
+public class MysqlCollectionStore extends SqlCollectionStore implements ICollectionStore {
 
     private static final Logger log = LoggerFactory.getLogger(MysqlCollectionStore.class);
 
