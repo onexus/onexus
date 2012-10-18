@@ -12,7 +12,7 @@
     <description>Onexus</description>
 
     <properties>
-        <wicket.version>6.0.0</wicket.version>
+        <wicket.version>6.1.1</wicket.version>
         <karaf.version>2.2.9</karaf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
