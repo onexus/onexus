@@ -75,6 +75,6 @@ public class HeatDecoratorCreator implements IDecoratorCreator {
             maxValue = Double.valueOf(parameterValue);
         }
 
-        return new ColorDecorator(columnField, columnField, new HeatColorScale(minValue, midValue, maxValue), null, showValue, PValueFormater.INSTANCE);
+        return new ColorDecorator(columnField, columnField, new HeatColorScale(minValue, midValue, maxValue), null, showValue, PValueFormater.INSTANCE, parameters.get(HeatDecoratorParameters.URL));
     }
 }

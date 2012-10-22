@@ -5,7 +5,7 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum LinkDecoratorParameters implements ParameterKey {
 
-    URL("url", "The URL where do you want to link, with fiels values as ${[field_id]}", false),
+    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false),
     TARGET("target", "The link target", true),
     SEPARATOR("separator", "The character separator of a list.", true),
     LENGTH("length", "Maximum number of characters", true);

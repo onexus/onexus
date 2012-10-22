@@ -4,7 +4,8 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum PValueDecoratorParameters implements ParameterKey {
 
-    SHOW_VALUE("show-value", "Print the value inside the cell. Valid values: true, false", true);
+    SHOW_VALUE("show-value", "Print the value inside the cell. Valid values: true, false", true),
+    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false);
 
     private final String key;
     private final String description;

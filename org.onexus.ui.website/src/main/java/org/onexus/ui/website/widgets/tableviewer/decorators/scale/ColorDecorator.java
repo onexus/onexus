@@ -18,18 +18,21 @@
 package org.onexus.ui.website.widgets.tableviewer.decorators.scale;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Field;
-import org.onexus.ui.website.widgets.tableviewer.decorators.utils.FieldDecorator;
+import org.onexus.collection.api.IEntity;
+import org.onexus.ui.website.widgets.tableviewer.decorators.link.LinkDecorator;
 import org.onexus.ui.website.widgets.tableviewer.decorators.scale.scales.ColorUtils;
 import org.onexus.ui.website.widgets.tableviewer.decorators.scale.scales.IColorScaleHtml;
+import org.onexus.ui.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.ui.website.widgets.tableviewer.formaters.ITextFormater;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class ColorDecorator extends FieldDecorator {
     private static final Color emptyColor = new Color(255, 255, 255);
@@ -38,6 +41,7 @@ public class ColorDecorator extends FieldDecorator {
     private Field tooltipField;
     private IColorScaleHtml colorScale;
     private String cssClass;
+    private String linkUrl;
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale) {
         this(valueField, colorScale, null);
@@ -45,27 +49,28 @@ public class ColorDecorator extends FieldDecorator {
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass) {
-        this(valueField, valueField, colorScale, cssClass, false, null);
+        this(valueField, valueField, colorScale, cssClass, false, null, null);
     }
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass, ITextFormater textFormater) {
-        this(valueField, valueField, colorScale, cssClass, false, textFormater);
+        this(valueField, valueField, colorScale, cssClass, false, textFormater, null);
     }
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass, boolean showValue) {
-        this(valueField, valueField, colorScale, cssClass, showValue, null);
+        this(valueField, valueField, colorScale, cssClass, showValue, null, null);
     }
 
     public ColorDecorator(Field valueField, Field tooltipField,
                           IColorScaleHtml colorScale, String cssClass, boolean showValue,
-                          ITextFormater textFormater) {
+                          ITextFormater textFormater, String linkUrl) {
         super(valueField, textFormater);
         this.tooltipField = tooltipField;
         this.colorScale = colorScale;
         this.cssClass = cssClass;
         this.showValue = showValue;
+        this.linkUrl = linkUrl;
     }
 
     protected String getTooltip(IEntity entity) {
@@ -116,16 +121,26 @@ public class ColorDecorator extends FieldDecorator {
     public void populateCell(WebMarkupContainer cellContainer,
                              String componentId, IModel<IEntity> entityModel) {
 
-        Color bkgColor = getRealColor(entityModel.getObject());
+        IEntity rowEntity = entityModel.getObject();
+        Color bkgColor = getRealColor(rowEntity);
 
         if (!showValue) {
             WebMarkupContainer empty = new WebMarkupContainer(componentId);
             empty.setVisible(false);
             cellContainer.add(empty);
         } else {
-            Label textValue = new Label(componentId, getFormatValue(entityModel.getObject()));
-            String textColor = (lum(bkgColor) >= 128 ? "color: #000;" : "color: #FFF;");
-            textValue.add(new AttributeModifier("style", new Model<String>(textColor)));
+            Component textValue;
+            String value = getFormatValue(rowEntity);
+            String styleCss = (lum(bkgColor) >= 128 ? "color: #000;" : "color: #FFF;");
+            if (linkUrl == null) {
+                textValue = new Label(componentId, value);
+            } else {
+                String url = LinkDecorator.replaceUrlParameters(getField(), value, rowEntity, linkUrl);
+                textValue = new ExternalLink(componentId, url, value);
+                styleCss = styleCss + " cursor: hand; cursor: pointer;";
+            }
+
+            textValue.add(new AttributeModifier("style", new Model<String>(styleCss)));
             cellContainer.add(textValue);
         }
 
@@ -133,7 +148,7 @@ public class ColorDecorator extends FieldDecorator {
                 .add(new AttributeModifier("style", new Model<String>(
                         "background-color: " + ColorUtils.colorToHexHtml(bkgColor) + ";")));
         cellContainer.add(new AttributeModifier("title", new Model<String>(
-                getTooltip(entityModel.getObject()))));
+                getTooltip(rowEntity))));
         if (cssClass != null) {
             cellContainer.add(new AttributeModifier("class", new Model<String>(
                     cssClass)));

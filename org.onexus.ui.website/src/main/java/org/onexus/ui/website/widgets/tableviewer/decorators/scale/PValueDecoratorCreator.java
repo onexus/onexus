@@ -49,11 +49,10 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
         Boolean showValue = true;
 
         String parameterValue = parameters.get(PValueDecoratorParameters.SHOW_VALUE);
-
         if (!StringUtils.isEmpty(parameterValue)) {
             showValue = Boolean.valueOf(parameterValue);
         }
 
-        return new ColorDecorator(columnField, columnField, pvalueScale, null, showValue, PValueFormater.INSTANCE);
+        return new ColorDecorator(columnField, columnField, pvalueScale, null, showValue, PValueFormater.INSTANCE, parameters.get(PValueDecoratorParameters.URL));
     }
 }
