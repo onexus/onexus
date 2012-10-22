@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.widgets.tableviewer.decorators.scale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -129,17 +130,16 @@ public class ColorDecorator extends FieldDecorator {
             empty.setVisible(false);
             cellContainer.add(empty);
         } else {
-            Component textValue;
             String value = getFormatValue(rowEntity);
-            String styleCss = (lum(bkgColor) >= 128 ? "color: #000;" : "color: #FFF;");
-            if (linkUrl == null) {
-                textValue = new Label(componentId, value);
-            } else {
+            boolean black = lum(bkgColor) >= 128;
+            String styleCss = (black ? "color: #000;" : "color: #FFF;");
+            if (linkUrl != null && !StringUtils.isEmpty(value)) {
                 String url = LinkDecorator.replaceUrlParameters(getField(), value, rowEntity, linkUrl);
-                textValue = new ExternalLink(componentId, url, value);
-                styleCss = styleCss + " cursor: hand; cursor: pointer;";
+                String link = "<a href=\"" + url + "\" rel=\"tooltip\" title=\"Click to see more details about this value\"><i class=\"icon-zoom-in" + (black?"":" icon-white") + "\"></i></a>&nbsp;";
+                value = link + value;
             }
-
+            Label textValue = new Label(componentId, value);
+            textValue.setEscapeModelStrings(false);
             textValue.add(new AttributeModifier("style", new Model<String>(styleCss)));
             cellContainer.add(textValue);
         }
