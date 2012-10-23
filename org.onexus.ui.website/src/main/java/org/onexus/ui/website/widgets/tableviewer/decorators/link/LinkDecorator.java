@@ -80,10 +80,22 @@ public class LinkDecorator extends FieldDecorator {
                 if (parameters.containsKey(LinkDecoratorParameters.LENGTH)) {
                     columnValue = StringUtils.abbreviate(columnValue, Integer.valueOf(parameters.get(LinkDecoratorParameters.LENGTH)));
                 }
-                content.append("\">").append(columnValue).append("</a>");
+
+                if (parameters.containsKey(LinkDecoratorParameters.ICON)) {
+
+                    String iconTitle = parameters.get(LinkDecoratorParameters.ICON_TITLE);
+                    if (iconTitle == null) {
+                        iconTitle = "Click to see more details about this value";
+                    }
+                    content.append(" rel=\"tooltip\" title=\"").append(iconTitle).append("\"><i class=\"");
+                    content.append(parameters.get(LinkDecoratorParameters.ICON)).append("\"></i></a>&nbsp;");
+                    content.append(columnValue);
+                } else {
+                    content.append(">").append(columnValue).append("</a>");
+                }
 
                 if (columnValueIt.hasNext()) {
-                        content.append(", ");
+                    content.append(", ");
                 }
             }
 

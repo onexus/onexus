@@ -8,7 +8,8 @@ public enum HeatDecoratorParameters implements ParameterKey {
     MID_VALUE("mid-value", "Medium scale value", true),
     MAX_VALUE("max-value", "Maximum scale value", true),
     SHOW_VALUE("show-value", "Print the value inside the cell. Valid values: true, false", true),
-    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false);
+    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false),
+    URL_TITLE("url-title", "The tooltip title to show over URL link button", false);
 
     private final String key;
     private final String description;

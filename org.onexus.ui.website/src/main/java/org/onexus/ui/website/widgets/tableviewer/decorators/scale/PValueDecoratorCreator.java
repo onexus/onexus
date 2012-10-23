@@ -53,6 +53,6 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
             showValue = Boolean.valueOf(parameterValue);
         }
 
-        return new ColorDecorator(columnField, columnField, pvalueScale, null, showValue, PValueFormater.INSTANCE, parameters.get(PValueDecoratorParameters.URL));
+        return new ColorDecorator(columnField, columnField, pvalueScale, null, showValue, PValueFormater.INSTANCE, parameters.get(PValueDecoratorParameters.URL), parameters.get(PValueDecoratorParameters.URL_TITLE));
     }
 }

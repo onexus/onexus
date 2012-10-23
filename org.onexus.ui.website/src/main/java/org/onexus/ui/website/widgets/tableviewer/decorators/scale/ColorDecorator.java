@@ -19,10 +19,8 @@ package org.onexus.ui.website.widgets.tableviewer.decorators.scale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.Field;
@@ -37,12 +35,15 @@ import java.awt.Color;
 
 public class ColorDecorator extends FieldDecorator {
     private static final Color emptyColor = new Color(255, 255, 255);
+    private static final String DEFAULT_URL_TITLE = "Click to see more details about this value";
 
     private boolean showValue = false;
     private Field tooltipField;
     private IColorScaleHtml colorScale;
     private String cssClass;
-    private String linkUrl;
+    private String urlLink;
+    private String urlTitle;
+
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale) {
         this(valueField, colorScale, null);
@@ -50,28 +51,29 @@ public class ColorDecorator extends FieldDecorator {
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass) {
-        this(valueField, valueField, colorScale, cssClass, false, null, null);
+        this(valueField, valueField, colorScale, cssClass, false, null, null, DEFAULT_URL_TITLE);
     }
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass, ITextFormater textFormater) {
-        this(valueField, valueField, colorScale, cssClass, false, textFormater, null);
+        this(valueField, valueField, colorScale, cssClass, false, textFormater, null, DEFAULT_URL_TITLE);
     }
 
     public ColorDecorator(Field valueField, IColorScaleHtml colorScale,
                           String cssClass, boolean showValue) {
-        this(valueField, valueField, colorScale, cssClass, showValue, null, null);
+        this(valueField, valueField, colorScale, cssClass, showValue, null, null, DEFAULT_URL_TITLE);
     }
 
     public ColorDecorator(Field valueField, Field tooltipField,
                           IColorScaleHtml colorScale, String cssClass, boolean showValue,
-                          ITextFormater textFormater, String linkUrl) {
+                          ITextFormater textFormater, String urlLink, String urlTitle) {
         super(valueField, textFormater);
         this.tooltipField = tooltipField;
         this.colorScale = colorScale;
         this.cssClass = cssClass;
         this.showValue = showValue;
-        this.linkUrl = linkUrl;
+        this.urlLink = urlLink;
+        this.urlTitle = urlTitle;
     }
 
     protected String getTooltip(IEntity entity) {
@@ -133,9 +135,9 @@ public class ColorDecorator extends FieldDecorator {
             String value = getFormatValue(rowEntity);
             boolean black = lum(bkgColor) >= 128;
             String styleCss = (black ? "color: #000;" : "color: #FFF;");
-            if (linkUrl != null && !StringUtils.isEmpty(value)) {
-                String url = LinkDecorator.replaceUrlParameters(getField(), value, rowEntity, linkUrl);
-                String link = "<a href=\"" + url + "\" rel=\"tooltip\" title=\"Click to see more details about this value\"><i class=\"icon-zoom-in" + (black?"":" icon-white") + "\"></i></a>&nbsp;";
+            if (urlLink != null && !StringUtils.isEmpty(value)) {
+                String url = LinkDecorator.replaceUrlParameters(getField(), value, rowEntity, urlLink);
+                String link = "<a href=\"" + url + "\" rel=\"tooltip\" title=\""+urlTitle+"\"><i class=\"icon-zoom-in" + (black?"":" icon-white") + "\"></i></a>&nbsp;";
                 value = link + value;
             }
             Label textValue = new Label(componentId, value);
