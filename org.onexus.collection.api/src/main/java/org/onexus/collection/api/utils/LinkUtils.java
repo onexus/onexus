@@ -31,11 +31,6 @@ public class LinkUtils {
     public static List<FieldLink> getLinkFields(String parentURI,
                                          Collection a, Collection b) {
         List<FieldLink> fieldLinks = getLeftLinkFields(parentURI, a, b);
-
-        if (fieldLinks.isEmpty()) {
-            fieldLinks = getLeftLinkFields(parentURI, b, a);
-        }
-
         return fieldLinks;
     }
 
@@ -61,6 +56,18 @@ public class LinkUtils {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(a.getURI(), Link
                             .getFromFieldName(field), b.getURI(), Link
+                            .getToFieldName(field)));
+                }
+                return fieldLinks;
+            }
+        }
+
+        // Case 1b: B has a direct link to A
+        for (Link link : linksB) {
+            if (ResourceUtils.getAbsoluteURI(parentURI, link.getCollection()).equals(a.getURI())) {
+                for (String field : link.getFields()) {
+                    fieldLinks.add(new FieldLink(b.getURI(), Link
+                            .getFromFieldName(field), a.getURI(), Link
                             .getToFieldName(field)));
                 }
                 return fieldLinks;
