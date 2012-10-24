@@ -62,10 +62,10 @@ public class Website extends WebPage {
     public final static ResourceReference CSS = new CssResourceReference(Website.class, "Website.css");
 
     @Inject
-    public IPageManager pageManager;
+    public transient IPageManager pageManager;
 
     @Inject
-    private IResourceManager resourceManager;
+    private transient IResourceManager resourceManager;
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));

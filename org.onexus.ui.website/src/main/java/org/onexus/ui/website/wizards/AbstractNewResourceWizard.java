@@ -40,7 +40,7 @@ import javax.inject.Inject;
 public abstract class AbstractNewResourceWizard<T extends Resource> extends AbstractWizard {
 
     @Inject
-    private IResourceManager resourceManager;
+    private transient IResourceManager resourceManager;
 
     private T resource;
     private String parentUri;

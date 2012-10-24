@@ -49,6 +49,10 @@ public abstract class WidgetStatus<C extends WidgetConfig> implements Serializab
         return config;
     }
 
+    public String getButton() {
+        return config.getButton();
+    }
+
     public void setConfig(C config) {
         this.config = config;
     }

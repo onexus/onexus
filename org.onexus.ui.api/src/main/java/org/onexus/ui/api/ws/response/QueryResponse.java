@@ -34,13 +34,13 @@ import java.util.Map;
 public class QueryResponse extends AbstractResponse {
 
     @Inject
-    public IQueryParser queryParser;
+    public transient IQueryParser queryParser;
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     private String query;
     private boolean count;

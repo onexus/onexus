@@ -32,7 +32,7 @@ import java.util.Collection;
 public class HorizontalWidgetBar extends Panel {
 
     @Inject
-    public IWidgetManager widgetManager;
+    public transient IWidgetManager widgetManager;
 
     public HorizontalWidgetBar(String componentId, Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {
         super(componentId);

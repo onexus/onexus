@@ -35,7 +35,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
     private IModel<? extends Resource> currentResource;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     private final static Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
 

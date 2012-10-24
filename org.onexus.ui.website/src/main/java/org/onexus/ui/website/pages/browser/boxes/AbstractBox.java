@@ -30,7 +30,7 @@ public abstract class AbstractBox extends Panel {
     public static final String COMPONENT_ID = "box";
 
     @Inject
-    private IResourceManager resourceManager;
+    private transient IResourceManager resourceManager;
     private String collectionId;
 
     public AbstractBox(String collectionId, IModel<IEntity> entityModel) {

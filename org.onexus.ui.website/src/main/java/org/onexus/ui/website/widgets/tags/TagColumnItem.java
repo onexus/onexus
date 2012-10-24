@@ -41,7 +41,7 @@ import java.util.List;
 public class TagColumnItem extends Panel {
 
     @Inject
-    public ITagStoreManager tagStoreManager;
+    public transient ITagStoreManager tagStoreManager;
 
     private WebMarkupContainer checkbox;
 

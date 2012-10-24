@@ -58,10 +58,10 @@ import java.util.List;
 public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
         super(componentId, statusModel);

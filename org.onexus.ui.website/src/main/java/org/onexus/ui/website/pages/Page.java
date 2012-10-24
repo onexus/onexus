@@ -34,7 +34,7 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
 
 
     @Inject
-    private IWidgetManager widgetManager;
+    private transient IWidgetManager widgetManager;
 
     public Page(String componentId, IModel<S> pageModel) {
         super(componentId, pageModel);

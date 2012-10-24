@@ -48,10 +48,10 @@ public class FilterEntity implements IFilter {
     private boolean enable;
 
     @Inject
-    private IResourceManager resourceManager;
+    private transient IResourceManager resourceManager;
 
     @Inject
-    private ICollectionManager collectionManager;
+    private transient ICollectionManager collectionManager;
 
     public FilterEntity() {
         super();

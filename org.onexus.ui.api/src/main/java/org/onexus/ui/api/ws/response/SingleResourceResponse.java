@@ -28,10 +28,10 @@ import java.io.ByteArrayOutputStream;
 public class SingleResourceResponse extends AbstractResponse {
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     @Inject
-    public IResourceSerializer resourceSerializer;
+    public transient IResourceSerializer resourceSerializer;
 
     private String resourceUri;
     private String format;

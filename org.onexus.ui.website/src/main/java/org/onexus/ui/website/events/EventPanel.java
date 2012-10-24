@@ -60,12 +60,16 @@ public class EventPanel extends Panel {
                 Class<?> currentEventClass = event.getPayload().getClass();
                 for (Class<?> eventClass : registeredEvents) {
                     if (eventClass.isAssignableFrom(currentEventClass)) {
-                        target.add(this);
+                        onRegisteredEvent(target, (AbstractEvent) event.getPayload());
                         event.dontBroadcastDeeper();
                         return;
                     }
                 }
             }
         }
+    }
+
+    protected void onRegisteredEvent(AjaxRequestTarget target, AbstractEvent event) {
+        target.add(this);
     }
 }

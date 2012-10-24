@@ -33,7 +33,7 @@ public class EntityModel implements IModel<IEntity> {
     private transient IEntity entity;
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     public EntityModel() {
         this(null, null);

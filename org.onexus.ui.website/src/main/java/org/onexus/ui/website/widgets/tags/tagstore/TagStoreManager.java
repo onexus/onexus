@@ -129,5 +129,21 @@ public class TagStoreManager implements ITagStoreManager {
         this.password = password;
     }
 
+    public void stop(ITagStoreManager store, @SuppressWarnings("rawtypes") Map properties) {
+        try {
+            if (dataSource != null) {
+                Connection conn = dataSource.getConnection();
+                Statement stat = conn.createStatement();
+
+                stat.execute("SHUTDOWN");
+                stat.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

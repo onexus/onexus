@@ -44,7 +44,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     private List<IFilter> filters = new ArrayList<IFilter>();
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     public BrowserPageStatus() {
     }

@@ -29,7 +29,7 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
     private String resourceURI;
 
     @Inject
-    private IResourceManager resourceManager;
+    private transient IResourceManager resourceManager;
 
     public ResourceModel() {
         super();

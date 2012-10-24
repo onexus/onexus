@@ -45,7 +45,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
     public static final CssResourceReference CSS = new CssResourceReference(TagWidget.class, "TagWidget.css");
 
     @Inject
-    public ITagStoreManager tagStoreManager;
+    public transient ITagStoreManager tagStoreManager;
 
 
     public TagWidget(String componentId, IModel<TagWidgetStatus> statusModel) {

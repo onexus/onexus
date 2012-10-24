@@ -43,7 +43,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
     private transient WebsiteConfig websiteConfig;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     public WebsiteModel(PageParameters pageParameters) {
         super();

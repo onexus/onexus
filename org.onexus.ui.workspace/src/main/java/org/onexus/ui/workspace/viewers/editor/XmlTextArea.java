@@ -34,7 +34,7 @@ import java.util.Locale;
 public class XmlTextArea extends TextArea<Resource> {
 
     @Inject
-    private IResourceSerializer resourceSerializer;
+    private transient IResourceSerializer resourceSerializer;
 
     private IConverter<Resource> converter;
     private String resourceUri;

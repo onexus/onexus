@@ -72,3 +72,16 @@ table.tagcontainer td {
     border-top: 0px;
     padding: 0px;
 }
+
+div.tag {
+     background-color: #DDD;
+     border-radius: 2px 2px 2px 2px;
+     color: #400576;
+     float: left;
+     margin: 2px;
+     padding: 1px 1px 1px 6px;
+}
+
+div.tag > a {
+     padding: 4px;
+}

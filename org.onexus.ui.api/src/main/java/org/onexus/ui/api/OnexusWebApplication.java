@@ -55,7 +55,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
     private OsgiComponentInjector injector;
 
     @Inject
-    private IResourceRegister resourceRegister;
+    private transient IResourceRegister resourceRegister;
 
     public Class<? extends Page> getHomePage() {
         return ResourcesPage.class;
@@ -89,6 +89,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
 
         // Injection
         getComponentInstantiationListeners().add(getInjector());
+
         inject(this);
         resourceRegister.addResourceService(this);
 
@@ -104,7 +105,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
     public OsgiComponentInjector getInjector() {
 
         if (injector == null) {
-            injector = new OsgiComponentInjector();
+            injector = new OsgiComponentInjector(false);
         }
 
         return injector;

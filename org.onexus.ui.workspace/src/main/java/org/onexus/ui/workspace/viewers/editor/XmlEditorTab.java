@@ -42,10 +42,10 @@ import javax.inject.Inject;
 public class XmlEditorTab extends Panel {
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     @Inject
-    public IResourceRegister resourceRegister;
+    public transient IResourceRegister resourceRegister;
 
     public static final PackageResourceReference CODEMIRROR_JS = new PackageResourceReference(XmlEditorTab.class, "codemirror.js");
     public static final PackageResourceReference CODEMIRROR_FOLDCODE_JS = new PackageResourceReference(XmlEditorTab.class, "foldcode.js");

@@ -38,7 +38,7 @@ public abstract class EntitiesRowProvider implements
         ISortableDataProvider<IEntityTable, String> {
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     private TableViewerConfig config;
     private IModel<TableViewerStatus> statusModel;

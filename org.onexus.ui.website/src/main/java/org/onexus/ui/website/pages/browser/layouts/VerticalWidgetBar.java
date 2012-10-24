@@ -36,7 +36,7 @@ public class VerticalWidgetBar extends Panel {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    public IWidgetManager widgetManager;
+    public transient IWidgetManager widgetManager;
 
     private RepeatingView boxesView;
     private WebMarkupContainer boxesshowContainer;

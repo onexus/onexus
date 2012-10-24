@@ -39,7 +39,7 @@ import java.util.List;
 public class WizardViewerTabPanel extends Panel {
 
     @Inject
-    private IWizardsManager wizardsManager;
+    private transient IWizardsManager wizardsManager;
 
     private IModel<? extends Resource> resourceModel;
     private WebMarkupContainer wizardContainer;

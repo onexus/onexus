@@ -38,7 +38,7 @@ public class SingleLayout extends Panel {
     public static final CssResourceReference CSS = new CssResourceReference(SingleLayout.class, "SingleLayout.css");
 
     @Inject
-    public IWidgetManager widgetManager;
+    public transient IWidgetManager widgetManager;
 
     public SingleLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
         super(panelId);

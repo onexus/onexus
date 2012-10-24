@@ -45,10 +45,10 @@ public class ManageCollectionsWizard extends AbstractWizard {
     private String resourceURI;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     public ManageCollectionsWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id);

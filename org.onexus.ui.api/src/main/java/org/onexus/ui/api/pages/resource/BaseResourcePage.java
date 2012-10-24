@@ -47,7 +47,7 @@ public class BaseResourcePage extends WebPage {
 
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     public BaseResourcePage(IModel<Resource> resourceModel) {
         super(resourceModel);

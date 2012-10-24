@@ -43,10 +43,10 @@ import java.util.List;
 public class FiltersPanel extends EventPanel {
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
 
     public FiltersPanel(String id, IModel<BrowserPageStatus> pageModel) {

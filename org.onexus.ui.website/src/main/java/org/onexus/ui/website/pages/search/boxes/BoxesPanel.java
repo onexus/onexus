@@ -37,7 +37,7 @@ import java.util.List;
 public class BoxesPanel extends Panel {
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     public BoxesPanel(String id, SearchPageStatus status, String baseUri) {
         super(id);

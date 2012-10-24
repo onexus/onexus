@@ -53,10 +53,10 @@ public class ResourcesPage extends BaseResourcePage {
     public final static String PARAMETER_RESOURCE = "uri";
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     @Inject
-    public IViewersManager viewersManager;
+    public transient IViewersManager viewersManager;
 
     public ResourcesPage(PageParameters parameters) {
         super(new ResourceModel(parameters.get(PARAMETER_RESOURCE).toOptionalString()));

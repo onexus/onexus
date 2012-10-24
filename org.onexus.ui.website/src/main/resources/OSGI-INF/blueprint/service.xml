@@ -12,7 +12,10 @@
 
     <!-- ITagStoreManager -->
     <service interface="org.onexus.ui.website.widgets.tags.tagstore.ITagStoreManager"
-             ref="org.onexus.ui.workspace.website.widgets.tags.tagstore"/>
+             ref="org.onexus.ui.workspace.website.widgets.tags.tagstore">
+        <registration-listener unregistration-method="stop"
+                               ref="org.onexus.ui.workspace.website.widgets.tags.tagstore"/>
+    </service>
     <bean id="org.onexus.ui.workspace.website.widgets.tags.tagstore"
           class="org.onexus.ui.website.widgets.tags.tagstore.TagStoreManager" init-method="init">
         <property name="database" value="${database}"></property>
@@ -61,6 +64,9 @@
         <bean class="org.onexus.ui.website.widgets.filters.FiltersWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.filters.SelectorFiltersWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.search.SearchWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
@@ -81,7 +87,8 @@
     </reference-list>
     <service interface="org.onexus.ui.website.widgets.IWidgetManager"
              ref="org.onexus.ui.workspace.website.widgets.widgetmanager"/>
-    <bean id="org.onexus.ui.workspace.website.widgets.widgetmanager" class="org.onexus.ui.website.widgets.DefaultWidgetManager">
+    <bean id="org.onexus.ui.workspace.website.widgets.widgetmanager"
+          class="org.onexus.ui.website.widgets.DefaultWidgetManager">
         <property name="resourceRegister" ref="org.onexus.ui.resourceregister"/>
         <property name="creators" ref="widgetCreatorsRef"/>
     </bean>
@@ -104,7 +111,8 @@
         <reference-listener bind-method="bindCreators" unbind-method="unbindCreators"
                             ref="org.onexus.ui.workspace.website.pages.pagemanager"/>
     </reference-list>
-    <service interface="org.onexus.ui.website.pages.IPageManager" ref="org.onexus.ui.workspace.website.pages.pagemanager"/>
+    <service interface="org.onexus.ui.website.pages.IPageManager"
+             ref="org.onexus.ui.workspace.website.pages.pagemanager"/>
     <bean id="org.onexus.ui.workspace.website.pages.pagemanager" class="org.onexus.ui.website.pages.DefaultPageManager">
         <property name="resourceRegister" ref="org.onexus.ui.resourceregister"/>
         <property name="creators" ref="pageCreatorsRef"/>
@@ -116,7 +124,9 @@
     </service>
 
     <!-- Default decorator manager -->
-    <reference-list id="decoratorCreatorsRef" interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator" availability="optional"/>
+    <reference-list id="decoratorCreatorsRef"
+                    interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator"
+                    availability="optional"/>
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorManager">
         <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.DefaultDecoratorManager">
             <property name="creators" ref="decoratorCreatorsRef"/>

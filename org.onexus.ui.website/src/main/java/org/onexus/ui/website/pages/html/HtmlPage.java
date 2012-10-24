@@ -39,7 +39,7 @@ import javax.inject.Inject;
 public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
 
     @Inject
-    public IDataManager dataManager;
+    public transient IDataManager dataManager;
 
     public HtmlPage(String componentId, IModel<HtmlPageStatus> statusModel) {
         super(componentId, statusModel);

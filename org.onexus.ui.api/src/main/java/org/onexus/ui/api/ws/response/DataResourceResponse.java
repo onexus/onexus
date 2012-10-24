@@ -43,10 +43,10 @@ public class DataResourceResponse extends AbstractResponse {
     private static final Logger log = LoggerFactory.getLogger(DataResourceResponse.class);
 
     @Inject
-    public IDataManager dataManager;
+    public transient IDataManager dataManager;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     private String resourceUri;
 

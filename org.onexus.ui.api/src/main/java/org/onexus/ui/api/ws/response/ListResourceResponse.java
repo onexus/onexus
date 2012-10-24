@@ -28,7 +28,7 @@ import java.util.List;
 public class ListResourceResponse extends AbstractResponse {
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     private String url;
     private String children;

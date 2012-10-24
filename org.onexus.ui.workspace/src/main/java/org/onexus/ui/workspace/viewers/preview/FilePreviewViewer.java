@@ -42,7 +42,7 @@ import java.util.List;
 public class FilePreviewViewer extends Panel {
 
     @Inject
-    public IDataManager dataManager;
+    public transient IDataManager dataManager;
     
     public final static int MAXIMUM_LINES = 100;
 

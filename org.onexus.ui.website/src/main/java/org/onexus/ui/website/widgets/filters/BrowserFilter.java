@@ -44,7 +44,7 @@ public class BrowserFilter implements IFilter {
     private boolean deletable;
 
     @Inject
-    private IQueryParser queryParser;
+    private transient IQueryParser queryParser;
 
     public BrowserFilter(FilterConfig config) {
         this.config = config;

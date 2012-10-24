@@ -34,7 +34,7 @@ public class ImportProjectModal extends Panel {
     private static final Logger log = LoggerFactory.getLogger(ImportProjectModal.class);
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     private String projectURL;
 

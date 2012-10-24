@@ -118,6 +118,8 @@ ul.breadcrumb {
     margin-top: -18px;
     height: 44px;
     border-bottom: 1px dotted #cccccc;
+    border-left: 1px dotted #cccccc;
+    border-right: 1px dotted #cccccc;
     background-color: #F2F6F8;
 }
 
@@ -126,7 +128,7 @@ ul.breadcrumb {
     padding: 0px;
 }
 #toolbar .btn-toolbar {
-    margin: 10px 10px 0px 0px;
+    margin: 10px 9px 0px 9px;
     padding: 0px;
 }
 

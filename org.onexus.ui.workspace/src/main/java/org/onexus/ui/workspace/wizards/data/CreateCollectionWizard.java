@@ -45,10 +45,10 @@ import java.util.*;
 public class CreateCollectionWizard extends AbstractWizard {
 
     @Inject
-    public IDataManager dataManager;
+    public transient IDataManager dataManager;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     // Formats
     private static String CSV = "Comma separated values";

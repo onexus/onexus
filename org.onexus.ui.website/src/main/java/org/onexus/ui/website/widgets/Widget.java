@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.website.widgets;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.onexus.collection.api.query.Query;
@@ -73,6 +74,10 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
         }
 
         return null;
+    }
+
+    public void onClose(AjaxRequestTarget target) {
+
     }
 
 

@@ -62,7 +62,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
     private TabConfig currentTab;
 
     @Inject
-    public IResourceManager resourceManager;
+    public transient IResourceManager resourceManager;
 
     public NewWebsiteWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id, resourceModel);
