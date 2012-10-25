@@ -33,12 +33,10 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     public ResourceModel() {
         super();
-        OnexusWebApplication.inject(this);
     }
 
     public ResourceModel(String resourceURI) {
         super();
-        OnexusWebApplication.inject(this);
         this.resourceURI = resourceURI;
     }
 
@@ -58,10 +56,18 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
     protected Resource load() {
 
         if (resourceURI != null) {
-            return resourceManager.load(Resource.class, resourceURI);
+            return getResourceManager().load(Resource.class, resourceURI);
         }
 
         return null;
+    }
+
+    private IResourceManager getResourceManager() {
+        if (resourceManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return resourceManager;
     }
 
     @Override
