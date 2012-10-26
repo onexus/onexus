@@ -17,21 +17,18 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.collection.store.sql.adapters.SqlAdapter;
-import org.onexus.collection.store.sql.filters.FilterBuilder;
-import org.onexus.collection.api.query.*;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Link;
+import org.onexus.collection.api.query.*;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.collection.store.sql.adapters.SqlAdapter;
+import org.onexus.collection.store.sql.filters.FilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlQuery {
 
@@ -106,6 +103,10 @@ public class SqlQuery {
         // Fixed entities
         List<EqualId> equalIds = new ArrayList<EqualId>();
         addEqualIdFilters(equalIds, query.getWhere());
+
+        Map<String, List<String>> networkFixedCollection = new HashMap<String, List<String>>();
+        Map<String, StringBuilder> networkFixedJoins = new HashMap<String, StringBuilder>();
+        Map<String, List<FieldLink>> networkLinks = new HashMap<String, List<FieldLink>>();
 
         for (Map.Entry<String, String> define : query.getDefine().entrySet()) {
 
@@ -202,7 +203,26 @@ public class SqlQuery {
                 throw new UnsupportedOperationException("Impossible to link collection '" + collectionUri + "'.");
             }
 
-            for (FieldLink fieldLink : linkFields) {
+            networkFixedJoins.put(collectionUri, leftJoin);
+            networkFixedCollection.put(collectionUri, collectionsFixed);
+            networkLinks.put(collectionUri, linkFields);
+
+
+        }
+
+        // Sort the network to include JOINS in the correct order
+
+        List<String> keys = new ArrayList<String>(networkLinks.keySet());
+        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getURI()));
+
+        //TODO remove loops
+
+        for (String collectionUri : keys) {
+
+            StringBuilder leftJoin = networkFixedJoins.get(collectionUri);
+            List<String> collectionsFixed = networkFixedCollection.get(collectionUri);
+
+            for (FieldLink fieldLink : networkLinks.get(collectionUri)) {
 
                 String linkCollection = QueryUtils.getAbsoluteCollectionUri(query, fieldLink.getToCollection());
                 if (!collectionsFixed.contains(linkCollection)) {
@@ -228,10 +248,35 @@ public class SqlQuery {
 
             // Remove last ' AND '
             leftJoin.delete(leftJoin.length() - 5, leftJoin.length() - 1);
-            leftJoins.add(leftJoin.toString());
+            this.leftJoins.add(leftJoin.toString());
 
         }
 
+    }
+
+    private static List<String> sort(List<String> keys, LinksNetworkComparator comparator) {
+
+        List<String> sortedKeys = new ArrayList<String>(keys);
+
+        int l = keys.size();
+        boolean swaped = true;
+        while (swaped) {
+            swaped = false;
+            for (int i = 0; i < l - 1; i++) {
+                for (int f = i + 1; f < l; f++) {
+                    int value = comparator.compare(sortedKeys.get(i), sortedKeys.get(f));
+                    if (value > 0) {
+                        String vI = sortedKeys.get(f);
+                        String vF = sortedKeys.get(i);
+                        sortedKeys.set(i, vI);
+                        sortedKeys.set(f, vF);
+                        swaped = true;
+                    }
+                }
+            }
+        }
+
+        return sortedKeys;
     }
 
     protected void addEqualIdFilters(List<EqualId> equalIds, Filter filter) {
