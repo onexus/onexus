@@ -86,6 +86,10 @@ public class FieldDecorator implements IDecorator {
             return getFormatValue(entity, field.getId());
         }
 
+        if (getValue(entity) == null) {
+            return "";
+        }
+
         return replaceParameters(entity, template);
 
     }
