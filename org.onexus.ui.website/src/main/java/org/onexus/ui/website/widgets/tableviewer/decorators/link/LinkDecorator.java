@@ -60,7 +60,7 @@ public class LinkDecorator extends FieldDecorator {
                     columnValues.add(value.trim());
                 }
             } else {
-                columnValues.add(currentColumnValue);
+                columnValues.add(getFormatValue(entity));
             }
 
             StringBuilder content = new StringBuilder();
@@ -70,7 +70,7 @@ public class LinkDecorator extends FieldDecorator {
 
                 String href = parameters.get(LinkDecoratorParameters.URL);
 
-                href = replaceUrlParameters(getField(), columnValue, entity, href);
+                href = replaceParameters(getField(), columnValue, entity, href, false);
 
                 content.append("<a href=\"").append(href).append("\"");
                 if (parameters.containsKey(LinkDecoratorParameters.TARGET)) {
@@ -108,25 +108,6 @@ public class LinkDecorator extends FieldDecorator {
         cellContainer.add(new AttributeModifier("title", new Model<String>((description == null ? "No data" : description.toString()))));
     }
 
-    public static String replaceUrlParameters(Field columnField, String columnValue, IEntity rowEntity, String href) {
-        String columnPattern = "#{column.id}";
-        if (href.contains(columnPattern)) {
-            href = href.replaceAll(Pattern.quote(columnPattern), columnField.getId());
-        }
 
-        for (Field field : rowEntity.getCollection().getFields()) {
-            String value = String.valueOf(rowEntity.get(field.getId()));
-
-            if (field.equals(columnField)) {
-                 value = columnValue;
-            }
-
-            String fieldPattern = "${" + field.getId() + "}";
-            if (href.contains(fieldPattern)) {
-                href = href.replaceAll(Pattern.quote(fieldPattern), value);
-            }
-        }
-        return href;
-    }
 
 }

@@ -114,6 +114,16 @@ public class CtDecorator extends FieldDecorator {
     }
 
     @Override
+    public String getTemplate() {
+        return null;
+    }
+
+    @Override
+    public void setTemplate(String template) {
+
+    }
+
+    @Override
     public void populateCell(WebMarkupContainer cellContainer,
                              String componentId, IModel<IEntity> data) {
         IEntity entity = data.getObject();

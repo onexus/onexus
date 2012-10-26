@@ -19,6 +19,7 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntityTable;
@@ -51,6 +52,8 @@ public class ColumnConfig implements IColumnConfig {
     private String collection;
 
     private String fields;
+
+    private String template;
 
     private String decorator;
 
@@ -110,6 +113,14 @@ public class ColumnConfig implements IColumnConfig {
         this.fields = fields;
     }
 
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
     public String getDecorator() {
         return decorator;
     }
@@ -135,12 +146,21 @@ public class ColumnConfig implements IColumnConfig {
         if (collection != null) {
             List<String> fields = getFields(collection);
 
+            if (Strings.isEmpty(template)) {
+                for (String fieldId : fields) {
+                    Field field = collection.getField(fieldId);
 
-            for (String fieldId : fields) {
-                Field field = collection.getField(fieldId);
+                    IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
+                    List<IDecorator> actionsImpl = createActions(collection, field);
+
+                    columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
+                }
+            } else {
+                Field field = collection.getField(fields.get(0));
 
                 IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                 List<IDecorator> actionsImpl = createActions(collection, field);
+                decoratorImpl.setTemplate(template);
 
                 columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
             }
@@ -247,7 +267,6 @@ public class ColumnConfig implements IColumnConfig {
         }
         return decoratorManager;
     }
-
 
 
     @Override

@@ -68,9 +68,21 @@ public class TooltipDecorator implements IDecorator {
         return String.valueOf(value);
     }
 
+
+
     @Override
     public String getColor(IEntity entity) {
         return "#000000";
+    }
+
+    @Override
+    public String getTemplate() {
+        return null;
+    }
+
+    @Override
+    public void setTemplate(String template) {
+
     }
 
     @Override

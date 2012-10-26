@@ -37,4 +37,10 @@ public interface IDecorator extends IClusterable, IDetachable {
 
     String getColor(IEntity entity);
 
+    String getTemplate();
+
+    void setTemplate(String template);
+
+
+
 }

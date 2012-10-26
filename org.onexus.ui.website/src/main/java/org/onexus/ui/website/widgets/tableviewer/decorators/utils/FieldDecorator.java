@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.types.Text;
@@ -29,6 +30,8 @@ import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
 import org.onexus.ui.website.widgets.tableviewer.formaters.ITextFormater;
 import org.onexus.ui.website.widgets.tableviewer.formaters.StringFormater;
+
+import java.util.regex.Pattern;
 
 /**
  * Simple field decorator using a ITextFormater.
@@ -40,6 +43,7 @@ public class FieldDecorator implements IDecorator {
     private Field field;
     private ITextFormater textFormater;
     private String cssClass;
+    private String template;
 
     /**
      * @param field The field to use to show the value.
@@ -69,12 +73,26 @@ public class FieldDecorator implements IDecorator {
     }
 
     protected Object getValue(IEntity data) {
-        return (data == null ? null : data.get(field.getId()));
+        return getValue(data, field.getId());
+    }
+
+    protected Object getValue(IEntity data, String fieldId) {
+        return (data == null ? null : data.get(fieldId));
     }
 
     public String getFormatValue(final IEntity entity) {
 
-        Object value = getValue(entity);
+        if (Strings.isEmpty(template)) {
+            return getFormatValue(entity, field.getId());
+        }
+
+        return replaceParameters(entity, template);
+
+    }
+
+    private String getFormatValue(final IEntity entity, String fieldId) {
+
+        Object value = getValue(entity, fieldId);
 
         if (textFormater != null) {
             return textFormater.format(value);
@@ -88,9 +106,20 @@ public class FieldDecorator implements IDecorator {
 
     }
 
+
     @Override
     public String getColor(final IEntity data) {
         return "#000000";
+    }
+
+    @Override
+    public String getTemplate() {
+        return template;
+    }
+
+    @Override
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     @Override
@@ -150,6 +179,40 @@ public class FieldDecorator implements IDecorator {
         }
 
         return null;
+    }
+
+    protected String replaceParameters(IEntity entity, String template) {
+        return replaceParameters(null, null, entity, template, true);
+    }
+
+    protected String replaceParameters(Field columnField, String columnValue, IEntity entity, String template, boolean format) {
+
+        String columnPattern = "#{column.id}";
+        if (template.contains(columnPattern)) {
+            template = template.replaceAll(Pattern.quote(columnPattern), columnField.getId());
+        }
+
+        for (Field field : entity.getCollection().getFields()) {
+            String value;
+
+            if (format) {
+                value = getFormatValue(entity, field.getId());
+            } else {
+                value = String.valueOf(getValue(entity, field.getId()));
+            }
+
+            if (columnField != null) {
+                if (field.equals(columnField)) {
+                    value = columnValue;
+                }
+            }
+
+            String fieldPattern = "${" + field.getId() + "}";
+            if (template.contains(fieldPattern)) {
+                template = template.replaceAll(Pattern.quote(fieldPattern), value);
+            }
+        }
+        return template;
     }
 
 }

@@ -136,7 +136,7 @@ public class ColorDecorator extends FieldDecorator {
             boolean black = lum(bkgColor) >= 128;
             String styleCss = (black ? "color: #000;" : "color: #FFF;");
             if (urlLink != null && !StringUtils.isEmpty(value)) {
-                String url = LinkDecorator.replaceUrlParameters(getField(), value, rowEntity, urlLink);
+                String url = replaceParameters(getField(), value, rowEntity, urlLink, false);
                 String link = "<a href=\"" + url + "\" rel=\"tooltip\" title=\""+urlTitle+"\"><i class=\"icon-zoom-in" + (black?"":" icon-white") + "\"></i></a>&nbsp;";
                 value = link + value;
             }
