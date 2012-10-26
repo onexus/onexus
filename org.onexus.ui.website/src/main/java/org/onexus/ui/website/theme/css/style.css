@@ -148,3 +148,7 @@ ul.feedbackPanel {
   margin: 0px;
   background-color: #fdd;
 }
+
+#toolbar div.horizontal-tool {
+	float:left; margin-right: 5px;
+}

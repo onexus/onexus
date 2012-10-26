@@ -70,6 +70,9 @@
         <bean class="org.onexus.ui.website.widgets.search.SearchWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
+        <bean class="org.onexus.ui.website.widgets.selector.SelectorWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
         <bean class="org.onexus.ui.website.widgets.tags.TagWidgetCreator"/>
     </service>
     <service interface="org.onexus.ui.website.widgets.IWidgetCreator">
