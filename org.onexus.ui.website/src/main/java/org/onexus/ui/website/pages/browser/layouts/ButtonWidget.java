@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.ui.website.events.AbstractEvent;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.events.EventQueryUpdate;
@@ -66,6 +67,12 @@ public class ButtonWidget extends EventPanel {
                 target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
             }
         });
+
+        if (!Strings.isEmpty(widgetConfig.getWidth())) {
+            int width = Integer.valueOf(widgetConfig.getWidth());
+            int marginLeft = width / 2;
+            widgetModal.add(new AttributeModifier("style", "width: "+ width +"px; margin-left: -"+ marginLeft +"px;"));
+        }
 
         add(widgetModal);
 
