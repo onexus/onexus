@@ -79,14 +79,14 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
 
             // Attach website config
             try {
-                websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+                websiteConfig = getResourceManager().load(WebsiteConfig.class, websiteUri);
             } catch (ClassCastException e) {
 
                 // Force project reload
-                resourceManager.syncProject(ResourceUtils.getProjectURI(websiteUri));
+                getResourceManager().syncProject(ResourceUtils.getProjectURI(websiteUri));
 
                 // Try again
-                websiteConfig = resourceManager.load(WebsiteConfig.class, websiteUri);
+                websiteConfig = getResourceManager().load(WebsiteConfig.class, websiteUri);
             }
 
         }
@@ -143,8 +143,8 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
                 if (this.websiteConfig != null) {
                     this.websiteUri = websiteConfig.getURI();
                 } else {
-                    for (Project project : resourceManager.getProjects()) {
-                        List<WebsiteConfig> website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI());
+                    for (Project project : getResourceManager().getProjects()) {
+                        List<WebsiteConfig> website = getResourceManager().loadChildren(WebsiteConfig.class, project.getURI());
 
                         if (!website.isEmpty()) {
                             this.websiteUri = website.get(0).getURI();
@@ -156,7 +156,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
             String urlName = websiteParameter.toString();
 
             this.websiteUri = null;
-            for (Project project : resourceManager.getProjects()) {
+            for (Project project : getResourceManager().getProjects()) {
                 String urlMount = project.getProperty("URL_MOUNT");
                 if (urlMount != null) {
                     String[] urlMounts = urlMount.split(",");
@@ -168,9 +168,9 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
             }
 
             if (this.websiteUri == null) {
-                for (Project project : resourceManager.getProjects()) {
+                for (Project project : getResourceManager().getProjects()) {
                     if (project.getName().equals(urlName)) {
-                        List<WebsiteConfig> website = resourceManager.loadChildren(WebsiteConfig.class, project.getURI());
+                        List<WebsiteConfig> website = getResourceManager().loadChildren(WebsiteConfig.class, project.getURI());
 
                         if (!website.isEmpty()) {
                             this.websiteUri = website.get(0).getURI();
@@ -188,6 +188,14 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
         // Update status
         status.decodeParameters(pageParameters);
 
+    }
+
+    private IResourceManager getResourceManager() {
+        if (resourceManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return resourceManager;
     }
 
 }

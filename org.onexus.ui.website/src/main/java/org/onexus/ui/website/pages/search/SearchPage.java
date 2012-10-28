@@ -46,6 +46,7 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.Page;
 import org.onexus.ui.website.pages.search.boxes.BoxesPanel;
 
@@ -179,6 +180,14 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         return ResourceUtils.getAbsoluteURI(baseUri, partialUri);
     }
 
+    private IResourceManager getResourceManager() {
+        if (resourceManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return resourceManager;
+    }
+
 
     private class SearchTypeRenderer implements IChoiceRenderer<SearchType> {
 
@@ -187,7 +196,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
             String collectionUri = type.getCollection();
 
-            Collection collection = resourceManager.load(Collection.class, getAbsoluteUri(collectionUri));
+            Collection collection = getResourceManager().load(Collection.class, getAbsoluteUri(collectionUri));
 
             if (collection == null) {
                 return collectionUri;

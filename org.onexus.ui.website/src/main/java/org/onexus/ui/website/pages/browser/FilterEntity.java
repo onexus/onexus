@@ -175,7 +175,7 @@ public class FilterEntity implements IFilter {
 
         // Make collection URI absolute
         String filteredCollection = QueryUtils.getAbsoluteCollectionUri(query, getFilteredCollection());
-        Collection collection = resourceManager.load(Collection.class, filteredCollection);
+        Collection collection = getResourceManager().load(Collection.class, filteredCollection);
 
         String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
         if (collectionLabel == null) {
@@ -191,12 +191,12 @@ public class FilterEntity implements IFilter {
 
         // Make collection URI absolute
         String filteredCollection = QueryUtils.getAbsoluteCollectionUri(query, getFilteredCollection());
-        Collection collection = resourceManager.load(Collection.class, filteredCollection);
+        Collection collection = getResourceManager().load(Collection.class, filteredCollection);
 
         String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
         String entityLabel = getEntityId();
         if (entityField != null) {
-            IEntity entity = new EntityIterator(collectionManager.load(new SingleEntityQuery(filteredCollection, getEntityId())), filteredCollection).next();
+            IEntity entity = new EntityIterator(getCollectionManager().load(new SingleEntityQuery(filteredCollection, getEntityId())), filteredCollection).next();
 
             entityLabel = String.valueOf(entity.get(entityField));
 
@@ -208,7 +208,7 @@ public class FilterEntity implements IFilter {
 
         String entityPattern = collection.getProperty("FIXED_ENTITY_PATTERN");
         if (entityPattern != null) {
-            IEntity entity = new EntityIterator(collectionManager.load(new SingleEntityQuery(filteredCollection, getEntityId())), filteredCollection).next();
+            IEntity entity = new EntityIterator(getCollectionManager().load(new SingleEntityQuery(filteredCollection, getEntityId())), filteredCollection).next();
 
             if (entity != null) {
                 entityLabel = parseTemplate(entityPattern, entity);
@@ -216,6 +216,22 @@ public class FilterEntity implements IFilter {
         }
 
         return entityLabel;
+    }
+
+    private IResourceManager getResourceManager() {
+        if (resourceManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return resourceManager;
+    }
+
+    private ICollectionManager getCollectionManager() {
+        if (collectionManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return collectionManager;
     }
 
     @Override
