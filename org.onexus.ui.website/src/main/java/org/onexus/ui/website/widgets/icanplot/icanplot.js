@@ -50,7 +50,7 @@ viz = {
 
 	showLegend: true,
 
-	threshColor: true,
+	threshColor: false,
 	threshSize: false,
 
 	colorBarWidth: 100,
