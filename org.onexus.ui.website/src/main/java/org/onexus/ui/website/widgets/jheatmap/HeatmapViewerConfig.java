@@ -19,6 +19,7 @@ package org.onexus.ui.website.widgets.jheatmap;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.WidgetConfig;
 import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
 
@@ -30,7 +31,7 @@ public class HeatmapViewerConfig extends WidgetConfig {
 
     private HeatmapViewerStatus defaultStatus;
     
-    private String collection;
+    private ORI collection;
    
     private String init;
 
@@ -56,11 +57,11 @@ public class HeatmapViewerConfig extends WidgetConfig {
         super(id);
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 

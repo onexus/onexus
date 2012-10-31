@@ -20,12 +20,13 @@ package org.onexus.collection.api;
 import org.onexus.collection.api.query.Query;
 import org.onexus.data.api.IProgressable;
 import org.onexus.data.api.Progress;
+import org.onexus.resource.api.ORI;
 
 public interface IEntityTable extends IProgressable {
 
     public Query getQuery();
 
-    public IEntity getEntity(String collectionURI);
+    public IEntity getEntity(ORI collectionOri);
 
     public boolean next();
 

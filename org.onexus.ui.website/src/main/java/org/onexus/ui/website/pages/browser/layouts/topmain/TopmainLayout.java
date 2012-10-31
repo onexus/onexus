@@ -60,7 +60,7 @@ public class TopmainLayout extends AbstractLayout {
         super.renderHead(response);
 
         if (isEmbed()) {
-            response.render(CssHeaderItem.forCSS("div.gridbar { display: none; }", "embed-layout"));
+            response.render(CssHeaderItem.forCSS("#toolbar { display: none; }", "embed-layout"));
         }
     }
 }

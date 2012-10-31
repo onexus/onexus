@@ -1,24 +1,25 @@
 package org.onexus.collection.store.sql;
 
 import org.onexus.collection.api.utils.FieldLink;
+import org.onexus.resource.api.ORI;
 
 import java.util.*;
 
-public class LinksNetworkComparator implements Comparator<String> {
+public class LinksNetworkComparator implements Comparator<ORI> {
 
-    private String fromCollection;
-    private Map<String, List<FieldLink>> networkLinks;
+    private ORI fromCollection;
+    private Map<ORI, List<FieldLink>> networkLinks;
 
-    public LinksNetworkComparator(Map<String, List<FieldLink>> networkLinks, String fromCollection) {
+    public LinksNetworkComparator(Map<ORI, List<FieldLink>> networkLinks, ORI fromCollection) {
         this.networkLinks = networkLinks;
         this.fromCollection = fromCollection;
     }
 
     @Override
-    public int compare(String a, String b) {
+    public int compare(ORI a, ORI b) {
 
-        int a_b = depend(a, b, 0, new HashSet<String>());
-        int b_a = depend(b, a, 0, new HashSet<String>());
+        int a_b = depend(a, b, 0, new HashSet<ORI>());
+        int b_a = depend(b, a, 0, new HashSet<ORI>());
 
         if (a_b != -1 && b_a != -1) {
             if (a_b == 0 && b_a == 0) {
@@ -65,7 +66,7 @@ public class LinksNetworkComparator implements Comparator<String> {
         Returns -1 if not depends, 0 if there is a direct dependency. Otherwise the depth of the dependency.
 
      */
-    private int depend(String a, String b, int depth, Set<String> visitedNodes) {
+    private int depend(ORI a, ORI b, int depth, Set<ORI> visitedNodes) {
 
         // End of the path, no dependency if we reach the fromCollection.
         if (b.equals(fromCollection)) {
@@ -99,7 +100,7 @@ public class LinksNetworkComparator implements Comparator<String> {
         // Check derived dependencies
         int minDerived = -1;
         for (FieldLink link : links) {
-            String nextCollection = (link.getToCollection().equals(a) ? link.getFromCollection() : link.getToCollection());
+            ORI nextCollection = (link.getToCollection().equals(a) ? link.getFromCollection() : link.getToCollection());
             int derived = depend(nextCollection, b, depth+1, visitedNodes);
             if (derived != -1 && (minDerived==-1 || derived < minDerived)) {
                 minDerived = derived;

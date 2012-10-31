@@ -21,6 +21,7 @@ import org.onexus.collection.api.query.And;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Or;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.Iterator;
@@ -28,35 +29,43 @@ import java.util.Map;
 
 public class QueryUtils {
 
-    public static String getAbsoluteCollectionUri(Query query, String collectionUri) {
-        return ResourceUtils.getAbsoluteURI(query.getOn(), collectionUri);
-    }
+    public static String newCollectionAlias(Query query, ORI collectionUri) {
 
-    public static String getCollectionUri(Query query, String collectionAlias) {
-        String collectionUri = query.getDefine().get(collectionAlias);
-        return (collectionUri == null ? null : getAbsoluteCollectionUri(query, collectionUri));
+         if (!collectionUri.isAbsolute()) {
+             collectionUri = collectionUri.toAbsolute(query.getOn());
+         }
 
-    }
+        String collectionAlias = null;
+        for (Map.Entry<String, ORI> define : query.getDefine().entrySet()) {
 
-    public static String getCollectionAlias(Query query, String collectionUri) {
+            ORI defineUri = define.getValue().toAbsolute(query.getOn());
 
-        String sourceUri = getAbsoluteCollectionUri(query, collectionUri);
-
-        if (sourceUri == null) {
-            return null;
+            if (collectionUri.equals(defineUri)) {
+                collectionAlias = define.getKey();
+                break;
+            }
         }
 
-        for (Map.Entry<String, String> define : query.getDefine().entrySet()) {
+        if (collectionAlias == null) {
+            int size = query.getDefine().size();
 
-            String defineUri = getAbsoluteCollectionUri(query, define.getValue());
-
-            if (sourceUri.equals(defineUri)) {
-                return define.getKey();
+            while ( getCollectionOri(query, "c" + size) != null) {
+                size++;
             }
 
+            collectionAlias = "c" + size;
+            query.addDefine(collectionAlias, collectionUri);
         }
 
-        return null;
+
+        return collectionAlias;
+
+    }
+
+    public static ORI getCollectionOri(Query query, String collectionAlias) {
+        ORI collectionUri = query.getDefine().get(collectionAlias);
+        return (collectionUri == null ? null : collectionUri.toAbsolute(query.getOn()));
+
     }
 
     public static void and(Query query, Filter newFilter) {
@@ -123,23 +132,6 @@ public class QueryUtils {
         return (filters == null? null : joinOr(filters.iterator()));
     }
 
-    public static String newCollectionAlias(Query query, String collectionUri) {
 
-        String collectionAlias = getCollectionAlias(query, collectionUri);
-
-        if (collectionAlias == null) {
-            int size = query.getDefine().size();
-
-            while ( getCollectionUri( query, "c" + size) != null) {
-                size++;
-            }
-
-            collectionAlias = "c" + size;
-            query.addDefine(collectionAlias, ResourceUtils.getRelativeURI(query.getOn(), collectionUri));
-        }
-
-        return collectionAlias;
-
-    }
 
 }

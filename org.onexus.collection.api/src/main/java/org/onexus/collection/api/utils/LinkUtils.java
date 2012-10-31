@@ -20,6 +20,7 @@ package org.onexus.collection.api.utils;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.ArrayList;
@@ -28,14 +29,8 @@ import java.util.List;
 
 public class LinkUtils {
 
-    public static List<FieldLink> getLinkFields(String parentURI,
-                                         Collection a, Collection b) {
-        List<FieldLink> fieldLinks = getLeftLinkFields(parentURI, a, b);
-        return fieldLinks;
-    }
-
-    private static List<FieldLink> getLeftLinkFields(String parentURI,
-                                                    Collection a, Collection b) {
+    public static List<FieldLink> getLinkFields(ORI parentURI,
+                                                     Collection a, Collection b) {
 
         List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
 
@@ -52,7 +47,7 @@ public class LinkUtils {
 
         // Case 1: A has a direct link to B
         for (Link link : linksA) {
-            if (ResourceUtils.getAbsoluteURI(parentURI, link.getCollection()).equals(b.getURI())) {
+            if (link.getCollection().toAbsolute(parentURI).equals(b.getURI())) {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(a.getURI(), Link
                             .getFromFieldName(field), b.getURI(), Link
@@ -64,7 +59,7 @@ public class LinkUtils {
 
         // Case 1b: B has a direct link to A
         for (Link link : linksB) {
-            if (ResourceUtils.getAbsoluteURI(parentURI, link.getCollection()).equals(a.getURI())) {
+            if (link.getCollection().toAbsolute(parentURI).equals(a.getURI())) {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(b.getURI(), Link
                             .getFromFieldName(field), a.getURI(), Link
@@ -94,10 +89,8 @@ public class LinkUtils {
                 // Look if there is any match with B links
                 for (Link linkB : linksB) {
                     for (Link linkA : keyLinks) {
-                        String linkBCollection = ResourceUtils.getAbsoluteURI(
-                                parentURI, linkB.getCollection());
-                        String linkACollection = ResourceUtils.getAbsoluteURI(
-                                parentURI, linkA.getCollection());
+                        ORI linkBCollection = linkB.getCollection().toAbsolute(parentURI);
+                        ORI linkACollection = linkA.getCollection().toAbsolute(parentURI);
 
                         if (linkBCollection.equals(linkACollection)) {
 

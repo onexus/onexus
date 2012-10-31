@@ -17,6 +17,8 @@
  */
 package org.onexus.collection.api;
 
+import org.onexus.resource.api.ORI;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,24 +27,24 @@ public class Link implements Serializable {
 
     public final static String FIELDS_SEPARATOR = "==";
 
-    private String collection;
+    private ORI collection;
     private List<String> fields = new ArrayList<String>();
 
     public Link() {
         super();
     }
 
-    public Link(String collection, List<String> fields) {
+    public Link(ORI collection, List<String> fields) {
         super();
         this.collection = collection;
         this.fields = fields;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 

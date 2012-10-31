@@ -21,13 +21,14 @@ import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.utils.EntityIterator;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.api.OnexusWebApplication;
 
 import javax.inject.Inject;
 
 public class EntityModel implements IModel<IEntity> {
 
-    private String collectionURI;
+    private ORI collectionURI;
     private String entityId;
 
     private transient IEntity entity;
@@ -43,7 +44,7 @@ public class EntityModel implements IModel<IEntity> {
         this(entity.getCollection().getURI(), entity.getId());
     }
 
-    public EntityModel(String collectionId, String entityId) {
+    public EntityModel(ORI collectionId, String entityId) {
         super();
         OnexusWebApplication.inject(this);
 

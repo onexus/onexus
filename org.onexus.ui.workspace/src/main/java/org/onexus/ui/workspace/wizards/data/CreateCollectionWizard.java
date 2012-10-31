@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.*;
 
 public class CreateCollectionWizard extends AbstractWizard {
@@ -61,7 +62,7 @@ public class CreateCollectionWizard extends AbstractWizard {
 
     private String selected = TSV;
     private List<String> primaryKeys = new ArrayList<String>();
-    private String sourceURI;
+    private ORI sourceURI;
 
     // Data information
     private String headers[];
@@ -181,7 +182,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         List<Link> links = new ArrayList<Link>();
 
         List<Collection> allProjectCollections = new ArrayList<Collection>();
-        addAllCollections(allProjectCollections, ResourceUtils.getProjectURI(sourceURI));
+        addAllCollections(allProjectCollections, resourceManager.getProject(sourceURI.getProjectUrl()).getURI());
 
         for (String header : headers) {
             if (otherLinks.containsKey(header)) {
@@ -200,7 +201,7 @@ public class CreateCollectionWizard extends AbstractWizard {
                         // Only link to collections without any link
                         if (col.getLinks() == null || col.getLinks().isEmpty()) {
                             Link link = new Link();
-                            link.setCollection(Resource.SEPARATOR + ResourceUtils.getResourcePath(col.getURI()));
+                            link.setCollection(new ORI((String)null, col.getURI().getPath()));
                             link.getFields().add(header);
                             links.add(link);
                         }
@@ -216,7 +217,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         Loader loader = new Loader();
         loader.setPlugin("tsv-loader");
         List<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(new Parameter("data", Resource.SEPARATOR + ResourceUtils.getResourcePath(sourceURI)));
+        parameters.add(new Parameter("data", sourceURI.getPath()));
 
         if (nullEmpty > nullDash && nullEmpty > nullString && nullEmpty > nullNA) {
             parameters.add(new Parameter("NULL_VALUE", ""));
@@ -246,7 +247,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         Map<String, Link> links = new HashMap<String, Link>();
 
         List<Collection> collections = new ArrayList<Collection>();
-        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI));
+        addAllCollections(collections, sourceURI.getParent());
 
         for (Collection collection : collections) {
             if (collection.getLinks() != null) {
@@ -268,7 +269,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         Map<String, Field> fields = new HashMap<String, Field>();
 
         List<Collection> collections = new ArrayList<Collection>();
-        addAllCollections(collections, ResourceUtils.getProjectURI(sourceURI));
+        addAllCollections(collections, sourceURI.getParent());
 
         for (Collection collection : collections) {
             for (Field field : collection.getFields()) {
@@ -281,7 +282,7 @@ public class CreateCollectionWizard extends AbstractWizard {
 
     private Collection newCollection() {
 
-        String sourceName = ResourceUtils.getResourceName(sourceURI);
+        String sourceName = sourceURI.getPath();
         String collectionName;
 
         int punt;
@@ -291,20 +292,16 @@ public class CreateCollectionWizard extends AbstractWizard {
             collectionName = sourceName + ".col";
         }
 
-        String collectionURI = ResourceUtils.concatURIs(
-                ResourceUtils.getParentURI(sourceURI),
-                collectionName
-        );
+        ORI collectionURI = new ORI(sourceURI.getProjectUrl(), collectionName);
 
         Collection collection = new Collection();
         collection.setURI(collectionURI);
-        collection.setName(collectionName);
         collection.setTitle(collectionName);
 
         return collection;
     }
 
-    private void addAllCollections(List<Collection> collections, String parentUri) {
+    private void addAllCollections(List<Collection> collections, ORI parentUri) {
         collections.addAll(resourceManager.loadChildren(Collection.class, parentUri));
         List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);
         for (Folder folder : folders) {

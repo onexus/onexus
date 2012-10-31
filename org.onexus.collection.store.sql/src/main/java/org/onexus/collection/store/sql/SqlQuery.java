@@ -25,6 +25,7 @@ import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.collection.store.sql.adapters.SqlAdapter;
 import org.onexus.collection.store.sql.filters.FilterBuilder;
+import org.onexus.resource.api.ORI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +68,7 @@ public class SqlQuery {
         for (Map.Entry<String, List<String>> selectCollection : query.getSelect().entrySet()) {
 
             String collectionAlias = selectCollection.getKey();
-            String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+            ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);
             SqlCollectionDDL collectionDDL = manager.getDDL(collectionUri);
 
             List<String> fields = selectCollection.getValue();
@@ -90,7 +91,7 @@ public class SqlQuery {
     protected void addFrom() {
 
         String collectionAlias = query.getFrom();
-        String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+        ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);
         String collectionTable = manager.getDDL(collectionUri).getTableName();
 
         this.from = "`" + collectionTable + "` AS " + collectionAlias;
@@ -98,20 +99,20 @@ public class SqlQuery {
 
     protected void addJoins() {
 
-        Collection fromCollection = manager.getCollection(QueryUtils.getCollectionUri(query, query.getFrom()));
+        Collection fromCollection = manager.getCollection(QueryUtils.getCollectionOri(query, query.getFrom()));
 
         // Fixed entities
         List<EqualId> equalIds = new ArrayList<EqualId>();
         addEqualIdFilters(equalIds, query.getWhere());
 
-        Map<String, List<String>> networkFixedCollection = new HashMap<String, List<String>>();
-        Map<String, StringBuilder> networkFixedJoins = new HashMap<String, StringBuilder>();
-        Map<String, List<FieldLink>> networkLinks = new HashMap<String, List<FieldLink>>();
+        Map<ORI, List<ORI>> networkFixedCollection = new HashMap<ORI, List<ORI>>();
+        Map<ORI, StringBuilder> networkFixedJoins = new HashMap<ORI, StringBuilder>();
+        Map<ORI, List<FieldLink>> networkLinks = new HashMap<ORI, List<FieldLink>>();
 
-        for (Map.Entry<String, String> define : query.getDefine().entrySet()) {
+        for (Map.Entry<String, ORI> define : query.getDefine().entrySet()) {
 
             String collectionAlias = define.getKey();
-            String collectionUri = QueryUtils.getAbsoluteCollectionUri(query, define.getValue());
+            ORI collectionUri = define.getValue().toAbsolute(query.getOn());
 
             // Skip from collection
             if (collectionUri.equals(fromCollection.getURI())) {
@@ -127,13 +128,13 @@ public class SqlQuery {
             leftJoin.append(collectionTable).append("` AS `").append(collectionAlias).append("` ON ");
 
             // Fixed entities
-            List<String> collectionsFixed = new ArrayList<String>();
+            List<ORI> collectionsFixed = new ArrayList<ORI>();
             for (EqualId se : equalIds) {
                 if (joinCollection.getLinks() != null) {
                     for (Link colLink : joinCollection.getLinks()) {
 
-                        String fixedCollection = QueryUtils.getCollectionUri(query, se.getCollectionAlias());
-                        String linkCollection = QueryUtils.getAbsoluteCollectionUri(query, colLink.getCollection());
+                        ORI fixedCollection = QueryUtils.getCollectionOri(query, se.getCollectionAlias());
+                        ORI linkCollection = colLink.getCollection().toAbsolute(query.getOn());
 
                         if (fixedCollection.equals(linkCollection)) {
                             collectionsFixed.add(fixedCollection);
@@ -170,7 +171,7 @@ public class SqlQuery {
             }
 
             // Add links
-            String parentURI = query.getOn();
+            ORI parentURI = query.getOn();
             List<FieldLink> linkFields = LinkUtils.getLinkFields(parentURI, joinCollection, fromCollection);
 
             // Add thirdParty joins
@@ -178,14 +179,14 @@ public class SqlQuery {
 
                 // Check if it's possible to link with another joined collection
 
-                for (Map.Entry<String, String> tpDefine : query.getDefine().entrySet()) {
+                for (Map.Entry<String, ORI> tpDefine : query.getDefine().entrySet()) {
 
                     // Skip current joined collection
                     if (tpDefine.getKey().equals(define.getKey())) {
                         continue;
                     }
 
-                    String tpCollectionUri = QueryUtils.getAbsoluteCollectionUri(query, tpDefine.getValue());
+                    ORI tpCollectionUri = tpDefine.getValue().toAbsolute(query.getOn());
 
                     // Skip from collection
                     if (tpCollectionUri.equals(fromCollection.getURI())) {
@@ -212,32 +213,30 @@ public class SqlQuery {
 
         // Sort the network to include JOINS in the correct order
 
-        List<String> keys = new ArrayList<String>(networkLinks.keySet());
+        List<ORI> keys = new ArrayList<ORI>(networkLinks.keySet());
         keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getURI()));
 
-        //TODO remove loops
-
-        for (String collectionUri : keys) {
+        for (ORI collectionUri : keys) {
 
             StringBuilder leftJoin = networkFixedJoins.get(collectionUri);
-            List<String> collectionsFixed = networkFixedCollection.get(collectionUri);
+            List<ORI> collectionsFixed = networkFixedCollection.get(collectionUri);
 
             for (FieldLink fieldLink : networkLinks.get(collectionUri)) {
 
-                String linkCollection = QueryUtils.getAbsoluteCollectionUri(query, fieldLink.getToCollection());
+                ORI linkCollection = fieldLink.getToCollection().toAbsolute(query.getOn());
                 if (!collectionsFixed.contains(linkCollection)) {
 
-                    String aCollection = fieldLink.getFromCollection();
+                    ORI aCollection = fieldLink.getFromCollection();
                     SqlCollectionDDL aDDL = manager.getDDL(aCollection);
-                    String aAlias = QueryUtils.getCollectionAlias(query, aCollection);
+                    String aAlias = QueryUtils.newCollectionAlias(query, aCollection);
                     String aField = aDDL.getColumnInfoByFieldName(
                             fieldLink.getFromFieldName()).getColumnName();
                     leftJoin.append("`").append(aAlias).append("`.`")
                             .append(aField).append("` = `");
 
-                    String bCollection = fieldLink.getToCollection();
+                    ORI bCollection = fieldLink.getToCollection();
                     SqlCollectionDDL bDDL = manager.getDDL(bCollection);
-                    String bAlias = QueryUtils.getCollectionAlias(query, bCollection);
+                    String bAlias = QueryUtils.newCollectionAlias(query, bCollection);
                     String bField = bDDL.getColumnInfoByFieldName(
                             fieldLink.getToFieldName()).getColumnName();
                     leftJoin.append(bAlias).append("`.`").append(bField)
@@ -254,9 +253,9 @@ public class SqlQuery {
 
     }
 
-    private static List<String> sort(List<String> keys, LinksNetworkComparator comparator) {
+    private static List<ORI> sort(List<ORI> keys, LinksNetworkComparator comparator) {
 
-        List<String> sortedKeys = new ArrayList<String>(keys);
+        List<ORI> sortedKeys = new ArrayList<ORI>(keys);
 
         int l = keys.size();
         boolean swaped = true;
@@ -266,8 +265,8 @@ public class SqlQuery {
                 for (int f = i + 1; f < l; f++) {
                     int value = comparator.compare(sortedKeys.get(i), sortedKeys.get(f));
                     if (value > 0) {
-                        String vI = sortedKeys.get(f);
-                        String vF = sortedKeys.get(i);
+                        ORI vI = sortedKeys.get(f);
+                        ORI vF = sortedKeys.get(i);
                         sortedKeys.set(i, vI);
                         sortedKeys.set(f, vF);
                         swaped = true;
@@ -319,7 +318,7 @@ public class SqlQuery {
         Iterator<OrderBy> orderIt = ordersOql.iterator();
         while (orderIt.hasNext()) {
             OrderBy order = orderIt.next();
-            String field = "`" + order.getCollectionRef() + "`.`" + order.getFieldId() + "`";
+            String field = "`" + order.getCollection() + "`.`" + order.getField() + "`";
             if (order.isAscendent()) {
                 this.orderBy.add("ISNULL(" + field + ") ASC");
             }

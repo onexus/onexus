@@ -2,6 +2,7 @@ package org.onexus.ui.website.widgets.icanplot;
 
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.WidgetStatus;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
@@ -32,7 +33,7 @@ public class PlotViewerStatus extends WidgetStatus<PlotViewerConfig> {
     @Override
     public void onQueryBuild(Query query) {
 
-        String collectionURI = getConfig().getCollection();
+        ORI collectionURI = getConfig().getCollection();
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, collectionURI);
         query.setFrom(collectionAlias);

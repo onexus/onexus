@@ -24,6 +24,7 @@ import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class EqualIdFilterBuilder extends AbstractFilterBuilder<EqualId> {
     protected void innerBuild(SqlCollectionStore store,  Query query, StringBuilder where, EqualId filter) {
 
         String collectionAlias = filter.getCollectionAlias();
-        String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+        ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);
         SqlCollectionDDL collection = store.getDDL(collectionUri);
 
         List<Field> primaryKey = new ArrayList<Field>();

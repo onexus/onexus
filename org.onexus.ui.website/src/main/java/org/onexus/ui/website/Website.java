@@ -37,6 +37,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
@@ -79,14 +80,14 @@ public class Website extends WebPage {
             Session.get().setMetaData(WEBSITE_CONFIG, config);
         }
 
-        String parentUri = ResourceUtils.getParentURI(config.getURI());
-        String cssUri = ResourceUtils.getAbsoluteURI(parentUri, config.getCss());
+        ORI parentUri = config.getURI().getParent();
+        ORI cssUri = new ORI(parentUri, config.getCss());
         add(new CustomCssBehavior(cssUri));
 
-        Project project = resourceManager.getProject(ResourceUtils.getProjectURI(config.getURI()));
+        Project project = resourceManager.getProject(config.getURI().getProjectUrl());
         String urlMount = project.getProperty("URL_MOUNT");
 
-        final String projectName = (urlMount!=null?urlMount.split(",")[1] : project.getName());
+        final String projectName = (urlMount!=null?urlMount.split(",")[1] : project.getURL());
 
         // Init currentPage
         if (status.getCurrentPage() == null) {
@@ -101,7 +102,7 @@ public class Website extends WebPage {
         //TODO add(new ProgressBar("progressbar", false));
 
         String header = config.getHeader();
-        String headerUri = ResourceUtils.getAbsoluteURI(parentUri, header);
+        ORI headerUri = new ORI(parentUri, header);
 
         ResourceReference webservice = OnexusWebApplication.get().getDataService();
         String webserviceUrl = urlFor(webservice, null).toString();
@@ -136,6 +137,13 @@ public class Website extends WebPage {
 
             }
         });
+
+        if (pageParameters.get("embed").toBoolean(false)) {
+            menuSection.setVisible(false);
+        } else {
+            menuSection.setVisible(true);
+        }
+
 
         // Login section
         //TODO final boolean isAnonymous = AuthenticatedWebSession.get().getRoles().isEmpty();
@@ -186,7 +194,7 @@ public class Website extends WebPage {
         }
 
         String bottom = config.getBottom();
-        String bottomUri = ResourceUtils.getAbsoluteURI(parentUri, bottom);
+        ORI bottomUri = new ORI(parentUri, bottom);
 
         Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri, webserviceUrl));
         bottomLabel.setVisible(bottom != null && !bottom.isEmpty());

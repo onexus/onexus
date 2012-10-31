@@ -24,6 +24,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Field;
+import org.onexus.resource.api.ORI;
 
 /**
  * Base class to instantiate (creates) new concrete panel.
@@ -36,7 +37,7 @@ import org.onexus.collection.api.Field;
  */
 public class GenericBox extends AbstractBox {
 
-    public GenericBox(String collectionId, IModel<IEntity> entityModel) {
+    public GenericBox(ORI collectionId, IModel<IEntity> entityModel) {
         super(collectionId, entityModel);
 
         RepeatingView fieldsRV = new RepeatingView("fields");

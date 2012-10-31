@@ -40,7 +40,7 @@ public class H2Query extends SqlQuery {
         }
 
         for (OrderBy order : ordersOql) {
-            this.orderBy.add("`" + order.getCollectionRef() + "`.`" + order.getFieldId() + "`" + (order.isAscendent() ? " ASC" : "DESC") + " NULLS LAST");
+            this.orderBy.add("`" + order.getCollection() + "`.`" + order.getField() + "`" + (order.isAscendent() ? " ASC" : "DESC") + " NULLS LAST");
         }
     }
 }

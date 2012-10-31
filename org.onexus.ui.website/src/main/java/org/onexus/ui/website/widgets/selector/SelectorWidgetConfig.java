@@ -20,6 +20,7 @@ package org.onexus.ui.website.widgets.selector;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.collection.api.IEntity;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class SelectorWidgetConfig extends WidgetConfig {
 
     private SelectorWidgetStatus defaultStatus;
 
-    private String collection;
+    private ORI collection;
     private String field;
     private String where;
 
@@ -42,11 +43,11 @@ public class SelectorWidgetConfig extends WidgetConfig {
         super(id);
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 

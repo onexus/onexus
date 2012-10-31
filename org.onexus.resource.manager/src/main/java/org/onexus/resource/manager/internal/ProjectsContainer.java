@@ -23,6 +23,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.onexus.resource.api.ORI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,10 +86,11 @@ public class ProjectsContainer {
     }
 
     public File projectImport(String projectUri) {
-        assert projectUri != null;
-        assert !projectUri.isEmpty();
 
-        if (projectUri.startsWith("git://") || projectUri.endsWith(".git")) {
+
+
+
+        if (projectUri.endsWith(".git")) {
             return projectImportGit(projectUri);
         }
 
@@ -111,10 +113,10 @@ public class ProjectsContainer {
             CloneCommand clone = git.cloneRepository();
             clone.setBare(false);
             clone.setCloneAllBranches(true);
-            clone.setDirectory(projectFolder).setURI(projectUri);
+            clone.setDirectory(projectFolder).setURI(projectUri.toString());
             clone.call();
 
-            properties.setProperty(projectUri, projectFolder.getAbsolutePath());
+            properties.setProperty(projectUri.toString(), projectFolder.getAbsolutePath());
             properties.store(new FileWriter(propertiesFile), "Onexus Projects");
 
             return projectFolder;
@@ -127,27 +129,24 @@ public class ProjectsContainer {
     }
 
     private File projectImportZipOrFolder(String projectUri) {
-        assert projectUri != null;
-        assert !projectUri.isEmpty();
 
-        URL url;
         try {
-            url = new URL(projectUri);
 
             byte[] buffer = new byte[1024];
-            ZipInputStream zis = new ZipInputStream(url.openStream());
+            URL projectUrl = new URL(projectUri);
+            ZipInputStream zis = new ZipInputStream(projectUrl.openStream());
             ZipEntry ze = zis.getNextEntry();
 
             // It's not a ZIP file return it.
             File projectFolder;
             if (ze == null) {
-                projectFolder = new File(url.toURI());
-                properties.setProperty(projectUri, projectFolder.getAbsolutePath());
+                projectFolder = new File(projectUrl.toURI());
+                properties.setProperty(projectUri.toString(), projectFolder.getAbsolutePath());
                 properties.store(new FileWriter(propertiesFile), "Onexus Projects");
                 return projectFolder;
             }
 
-            projectFolder = new File(projectsFolder, Integer.toHexString(url.hashCode()));
+            projectFolder = new File(projectsFolder, Integer.toHexString(projectUri.hashCode()));
             if (projectFolder.exists()) {
                 throw new InvalidParameterException("This project is already imported");
             }
@@ -181,7 +180,7 @@ public class ProjectsContainer {
             }
             zis.close();
 
-            properties.setProperty(projectUri, outputFolder.getAbsolutePath());
+            properties.setProperty(projectUri.toString(), outputFolder.getAbsolutePath());
             properties.store(new FileWriter(propertiesFile), "Onexus Projects");
             return outputFolder;
 

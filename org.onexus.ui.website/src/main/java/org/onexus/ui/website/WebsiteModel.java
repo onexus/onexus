@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
@@ -37,7 +38,7 @@ import java.util.List;
 
 public class WebsiteModel implements IModel<WebsiteStatus> {
 
-    private String websiteUri;
+    private ORI websiteUri;
     private WebsiteStatus status;
 
     private transient WebsiteConfig websiteConfig;
@@ -83,7 +84,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
             } catch (ClassCastException e) {
 
                 // Force project reload
-                getResourceManager().syncProject(ResourceUtils.getProjectURI(websiteUri));
+                getResourceManager().syncProject(websiteUri.getProjectUrl());
 
                 // Try again
                 websiteConfig = getResourceManager().load(WebsiteConfig.class, websiteUri);
@@ -161,7 +162,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
                 if (urlMount != null) {
                     String[] urlMounts = urlMount.split(",");
                     if (urlName.equals(urlMounts[1])) {
-                        this.websiteUri = ResourceUtils.concatURIs(project.getURI(), urlMounts[0]);
+                        this.websiteUri = new ORI(project.getURL(), urlMounts[0]);
                         break;
                     }
                 }

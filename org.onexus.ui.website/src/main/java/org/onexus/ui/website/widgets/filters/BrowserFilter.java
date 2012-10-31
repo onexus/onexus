@@ -25,6 +25,7 @@ import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.browser.IFilter;
@@ -59,7 +60,7 @@ public class BrowserFilter implements IFilter {
     }
 
     @Override
-    public String getFilteredCollection() {
+    public ORI getFilteredCollection() {
         return config.getCollection();
     }
 
@@ -90,14 +91,14 @@ public class BrowserFilter implements IFilter {
         String oqlWhere = config.getWhere();
 
         if (oqlDefine != null && oqlWhere != null) {
-            Map<String, String> define = getQueryParser().parseDefine(oqlDefine);
+            Map<String, ORI> define = getQueryParser().parseDefine(oqlDefine);
 
 
             if (define == null) {
                 log.error("Malformed filter definition\n DEFINE: " + config.getDefine() + "\n");
             } else {
 
-                for (Map.Entry<String, String> entry : define.entrySet()) {
+                for (Map.Entry<String, ORI> entry : define.entrySet()) {
                     String collectionAlias = QueryUtils.newCollectionAlias(query, entry.getValue());
                     oqlWhere = oqlWhere.replaceAll(entry.getKey() + ".", collectionAlias + ".");
                 }
@@ -126,19 +127,15 @@ public class BrowserFilter implements IFilter {
     }
 
     @Override
-    public Panel getTooltip(String componentId, Query query) {
-        return new EmptyPanel(componentId);
-    }
-
-    @Override
     public boolean match(VisibleRule rule) {
 
-            String visibleCollection = config.getVisibleCollection();
+            ORI visibleCollection = config.getVisibleCollection();
             if (visibleCollection == null) {
                 visibleCollection = config.getCollection();
             }
 
-            boolean validCollection = visibleCollection.endsWith(rule.getFilteredCollection());
+            //TODO
+            boolean validCollection = visibleCollection.getPath().endsWith(rule.getFilteredCollection().getPath());
 
             if (rule.getOperator() == null) {
                 return validCollection;

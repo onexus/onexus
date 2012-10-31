@@ -21,6 +21,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
 @XStreamAlias("column-tags")
 public class TagColumnConfig implements IColumnConfig {
 
-    private String collection;
+    private ORI collection;
 
     private String visible;
 
@@ -36,16 +37,16 @@ public class TagColumnConfig implements IColumnConfig {
         super();
     }
 
-    public TagColumnConfig(String collection) {
+    public TagColumnConfig(ORI collection) {
         super();
         this.collection = collection;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 
@@ -64,7 +65,7 @@ public class TagColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, String parentURI) {
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI) {
         columns.add(new TagColumn(collection));
     }
 

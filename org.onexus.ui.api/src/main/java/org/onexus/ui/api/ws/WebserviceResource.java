@@ -17,12 +17,11 @@
  */
 package org.onexus.ui.api.ws;
 
+import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.AbstractResource;
 import org.onexus.ui.api.ws.response.DataResourceResponse;
-import org.onexus.ui.api.ws.response.ListResourceResponse;
 import org.onexus.ui.api.ws.response.QueryResponse;
-import org.onexus.ui.api.ws.response.SingleResourceResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,13 +68,7 @@ public class WebserviceResource extends AbstractResource {
 
         }
 
-        String children = parameters.get("children").toOptionalString();
-        String select = parameters.get("select").toOptionalString();
-        String orderBy = parameters.get("orderby").toOptionalString();
-        String limit = parameters.get("limit").toOptionalString();
         Boolean count = parameters.get("count").toBooleanObject();
-        String where = parameters.get("where").toOptionalString();
-        String recursive = parameters.get("recursive").toOptionalString();
         Boolean prettyPrint = parameters.get("prettyPrint").toOptionalBoolean();
         String format = parameters.get("format").toOptionalString();
         String filename = parameters.get("filename").toOptionalString();
@@ -86,23 +79,12 @@ public class WebserviceResource extends AbstractResource {
             return new QueryResponse(query, count, format, prettyPrint, filename);
         }
 
-        // Single collection query
-        if (select != null) {
-            return new QueryResponse(url, select, where, orderBy, limit, count, format, prettyPrint);
-        }
-
-        // Get children
-        if (children != null) {
-            return new ListResourceResponse(url, children, where, recursive, format, prettyPrint);
-        }
-
         // Get data
         if (data != null) {
             return new DataResourceResponse(data, url);
         }
 
-        // Get resource
-        return new SingleResourceResponse(url, format, prettyPrint);
+        throw new AbortWithHttpErrorCodeException(404);
 
     }
 

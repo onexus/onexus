@@ -23,6 +23,7 @@ import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import javax.inject.Inject;
@@ -61,13 +62,6 @@ public class QueryResponse extends AbstractResponse {
         setFileName(fileName);
     }
 
-    public QueryResponse(String url, String select, String where, String orderBy, String limit, Boolean count, String format, Boolean prettyPrint) {
-        this(buildQuery(url, select, where, orderBy, limit), count, format, prettyPrint, ResourceUtils.getResourceName(url) + ".tsv");
-
-
-    }
-
-
     @Override
     protected void writeData(Response response) {
 
@@ -98,7 +92,7 @@ public class QueryResponse extends AbstractResponse {
             while (selectIt.hasNext()){
                 Map.Entry<String, List<String>> select = selectIt.next();
 
-                String collectionUri = QueryUtils.getCollectionUri(table.getQuery(), select.getKey());
+                ORI collectionUri = QueryUtils.getCollectionOri(table.getQuery(), select.getKey());
                 Collection collection = resourceManager.load(Collection.class, collectionUri);
 
                 Iterator<String> fieldId = select.getValue().iterator();
@@ -142,7 +136,7 @@ public class QueryResponse extends AbstractResponse {
         while (selectIt.hasNext()){
             Map.Entry<String, List<String>> select = selectIt.next();
 
-            String collection = QueryUtils.getCollectionUri(table.getQuery(), select.getKey());
+            ORI collection = QueryUtils.getCollectionOri(table.getQuery(), select.getKey());
             IEntity entity = table.getEntity(collection);
 
             Iterator<String> fieldId = select.getValue().iterator();
@@ -155,48 +149,6 @@ public class QueryResponse extends AbstractResponse {
         }
 
         response.write("\n");
-    }
-
-    private static String buildQuery(String url, String select, String where, String orderBy, String limit) {
-
-        StringBuilder query = new StringBuilder();
-
-        query.append("DEFINE c='").append(url);
-
-        Iterator<String> fields = Arrays.asList(select.split(",")).iterator();
-
-        query.append("' SELECT c (");
-
-        while (fields.hasNext()) {
-            String field = fields.next();
-
-            if (field.startsWith("'")) {
-                query.append(field);
-            } else {
-                query.append(Query.escapeString(field));
-            }
-
-            if (fields.hasNext()) {
-                query.append(",");
-            }
-        }
-
-        query.append(")");
-        query.append(" FROM c ");
-
-        if (where != null) {
-            //TODO
-        }
-
-        if (orderBy != null) {
-            //TODO
-        }
-
-        if (limit != null) {
-            query.append(" LIMIT ").append(limit);
-        }
-
-        return query.toString();
     }
 
 }

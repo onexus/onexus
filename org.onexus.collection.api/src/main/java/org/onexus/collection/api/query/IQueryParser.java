@@ -17,6 +17,8 @@
  */
 package org.onexus.collection.api.query;
 
+import org.onexus.resource.api.ORI;
+
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public interface IQueryParser {
 
     Query parseQuery(String expression);
 
-    Map<String, String> parseDefine(String expression);
+    Map<String, ORI> parseDefine(String expression);
 
     Map<String, List<String>> parserSelect(String expression);
 

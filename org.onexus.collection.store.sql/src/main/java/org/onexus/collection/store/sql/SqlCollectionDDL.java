@@ -43,12 +43,12 @@ public class SqlCollectionDDL implements Serializable {
     private List<String> createIndex;
     private List<String> dropIndex;
 
-    public SqlCollectionDDL(SqlDialect sqlDialect, Collection collection) {
+    public SqlCollectionDDL(SqlDialect sqlDialect, Collection collection, String tableName) {
 
         this.sqlDialect = sqlDialect;
         this.collection = collection;
         this.columnInfos = new HashMap<String, ColumnInfo>();
-        this.tableName = convertURItoTableName(collection);
+        this.tableName = (tableName == null ? convertURItoTableName(collection) : tableName);
 
         prepareFieldInfoMap(null, collection);
         prepareCreateTable(collection);
@@ -90,8 +90,8 @@ public class SqlCollectionDDL implements Serializable {
     }
 
     private static String convertURItoTableName(Collection collection) {
-        String hashCode = Integer.toHexString(ResourceUtils.getParentURI(collection.getURI()).hashCode());
-        String tableName = removeNonValidChars(collection.getName());
+        String hashCode = Integer.toHexString(collection.getURI().getProjectUrl().hashCode());
+        String tableName = removeNonValidChars(collection.getURI().getPath());
 
         // Check that the table name is no longer than 64 characters (the
         // maximum allowed)

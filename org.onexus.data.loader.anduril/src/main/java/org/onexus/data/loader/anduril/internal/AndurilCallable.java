@@ -26,6 +26,7 @@ import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.data.api.utils.UrlDataStreams;
+import org.onexus.resource.api.ORI;
 
 import java.io.File;
 import java.net.URL;
@@ -42,7 +43,7 @@ public class AndurilCallable implements Callable<IDataStreams> {
     public AndurilCallable(Progress progress, Repository repository, String baseExecutionDir, Data data) {
         super();
 
-        String collectionURI = data.getURI();
+        ORI collectionURI = data.getURI();
         String collectionHash = Long.toHexString(collectionURI.hashCode());
 
         this.progress = progress;

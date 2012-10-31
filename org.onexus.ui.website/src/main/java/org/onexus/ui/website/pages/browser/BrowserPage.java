@@ -34,6 +34,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.WebsiteStatus;
@@ -47,6 +48,7 @@ import org.onexus.ui.website.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -209,7 +211,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         // Check that the current view is visible
         List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
-        VisiblePredicate predicate = new VisiblePredicate(getStatus().getBase(), getStatus().getFilters());
+        VisiblePredicate predicate = new VisiblePredicate(getStatus().getORI().getParent(), getStatus().getFilters());
         CollectionUtils.select(getCurrentTab().getViews(), predicate, filteredViews);
 
         boolean visibleView = false;
@@ -265,7 +267,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             List<TabConfig> allTabs = getConfig().getTabs();
 
             // A predicate that filters the visible views
-            Predicate filter = new VisiblePredicate(getStatus().getBase(), getStatus().getFilters());
+            Predicate filter = new VisiblePredicate(getStatus().getORI().getParent(), getStatus().getFilters());
 
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();

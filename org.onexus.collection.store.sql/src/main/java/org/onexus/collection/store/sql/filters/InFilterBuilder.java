@@ -23,6 +23,7 @@ import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.api.query.In;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 
 import java.util.Iterator;
 
@@ -38,7 +39,7 @@ public class InFilterBuilder extends AbstractFilterBuilder<In> {
 
         // Collection
         String collectionAlias = filter.getCollectionAlias();
-        String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+        ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);
         SqlCollectionDDL collection = store.getDDL(collectionUri);
 
         // Field

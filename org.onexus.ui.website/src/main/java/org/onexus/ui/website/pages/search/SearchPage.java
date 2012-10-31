@@ -45,6 +45,7 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.Page;
@@ -72,7 +73,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(pageStatusModel)) {
             @Override
             protected void onSubmit() {
-                String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
                 SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
             }
         };
@@ -96,7 +97,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         search.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
                 SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
                 target.add(SearchPage.this.get("boxes"));
             }
@@ -130,7 +131,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         getStatus().setSearch(getModelObject());
-                        String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+                        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
                         SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri));
                         target.add(search);
                         target.add(SearchPage.this.get("boxes"));
@@ -158,7 +159,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         Query query = new Query();
         SearchType type = getStatus().getType();
 
-        String collectionUri = getAbsoluteUri(type.getCollection());
+        ORI collectionUri = getAbsoluteUri(type.getCollection());
         String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
         query.setFrom(collectionAlias);
 
@@ -175,9 +176,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         return new EntityIterator(collectionManager.load(query), collectionUri);
     }
 
-    private String getAbsoluteUri(String partialUri) {
-        String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
-        return ResourceUtils.getAbsoluteURI(baseUri, partialUri);
+    private ORI getAbsoluteUri(ORI partialUri) {
+        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
+        return partialUri.toAbsolute(baseUri);
     }
 
     private IResourceManager getResourceManager() {
@@ -194,7 +195,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         @Override
         public Object getDisplayValue(SearchType type) {
 
-            String collectionUri = type.getCollection();
+            ORI collectionUri = type.getCollection();
 
             Collection collection = getResourceManager().load(Collection.class, getAbsoluteUri(collectionUri));
 

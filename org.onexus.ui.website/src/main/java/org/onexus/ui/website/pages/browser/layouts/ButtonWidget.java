@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.events.AbstractEvent;
 import org.onexus.ui.website.events.EventPanel;
 import org.onexus.ui.website.events.EventQueryUpdate;
@@ -92,7 +93,7 @@ public class ButtonWidget extends EventPanel {
         button.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                Widget<?, ?> widgetPanel = widgetManager.create("widget", new WidgetModel(widgetConfig.getId(), pageModel));
+                Widget<?, ?> widgetPanel = getWidgetManager().create("widget", new WidgetModel(widgetConfig.getId(), pageModel));
                 widgetModal.addOrReplace(widgetPanel);
                 target.add(widgetModal);
                 target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
@@ -102,6 +103,15 @@ public class ButtonWidget extends EventPanel {
         add(button);
 
 
+    }
+
+    private IWidgetManager getWidgetManager() {
+
+        if (widgetManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return widgetManager;
     }
 
     public String getButtonText() {

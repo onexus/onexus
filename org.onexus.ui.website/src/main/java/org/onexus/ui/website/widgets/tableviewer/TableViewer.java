@@ -36,6 +36,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.data.api.Progress;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
 import org.onexus.ui.website.events.EventRemoveFilter;
@@ -110,7 +111,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         List<IColumnConfig> columnsConfig = getConfig().getColumnSets().get(ccs).getColumns();
         List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
 
-        String parentURI = getQuery().getOn();
+        ORI parentURI = getQuery().getOn();
 
         List<IColumnConfig> visibleColumnsConfig = new ArrayList<IColumnConfig>(columnsConfig.size());
         BrowserPageStatus pageStatus = findParentStatus(status, BrowserPageStatus.class);

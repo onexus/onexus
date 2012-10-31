@@ -18,6 +18,7 @@
 package org.onexus.ui.website.widgets.filters;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.utils.visible.IVisible;
 
 import java.io.Serializable;
@@ -34,9 +35,9 @@ public class FilterConfig implements Serializable, IVisible {
     private String visible;
 
     @XStreamAlias("visible-collection")
-    private String visibleCollection;
+    private ORI visibleCollection;
 
-    private String collection;
+    private ORI collection;
 
     private String define;
 
@@ -71,19 +72,19 @@ public class FilterConfig implements Serializable, IVisible {
         this.name = name;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 
-    public String getVisibleCollection() {
+    public ORI getVisibleCollection() {
         return visibleCollection;
     }
 
-    public void setVisibleCollection(String visibleCollection) {
+    public void setVisibleCollection(ORI visibleCollection) {
         this.visibleCollection = visibleCollection;
     }
 

@@ -17,20 +17,22 @@
  */
 package org.onexus.ui.website.utils.visible;
 
+import org.onexus.resource.api.ORI;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VisibleRule implements Serializable {
 
-    private String parentURI;
-    private String filteredCollection;
+    private ORI parentURI;
+    private ORI filteredCollection;
     private String field;
     private String operator;
     private String value;
     private boolean negated;
 
-    private VisibleRule(String parentURI, String rule) {
+    private VisibleRule(ORI parentURI, String rule) {
         super();
 
         this.parentURI = parentURI;
@@ -39,10 +41,10 @@ public class VisibleRule implements Serializable {
 
         negated = rule.startsWith("!");
 
-        filteredCollection = rule.replace("!", "");
-        int ini = filteredCollection.indexOf("[");
+        rule = rule.replace("!", "");
+        int ini = rule.indexOf("[");
         if (ini != -1) {
-            filteredCollection = filteredCollection.substring(0, ini).trim();
+            filteredCollection = new ORI(rule.substring(0, ini));
 
             int end = rule.indexOf("]");
             String values[] = rule.substring(ini + 1, end).split(" ");
@@ -51,15 +53,17 @@ public class VisibleRule implements Serializable {
             if (values.length > 1) operator = values[1].trim();
             if (values.length > 2) value = values[2].trim();
 
+        } else {
+            filteredCollection = new ORI(rule);
         }
 
     }
 
-    public String getParentURI() {
+    public ORI getParentURI() {
         return parentURI;
     }
 
-    public String getFilteredCollection() {
+    public ORI getFilteredCollection() {
         return filteredCollection;
     }
 
@@ -79,7 +83,7 @@ public class VisibleRule implements Serializable {
         return negated;
     }
 
-    public static List<VisibleRule> parseRules(String parentURI, String visible ) {
+    public static List<VisibleRule> parseRules(ORI parentURI, String visible ) {
 
         List<VisibleRule> rules = new ArrayList<VisibleRule>();
 

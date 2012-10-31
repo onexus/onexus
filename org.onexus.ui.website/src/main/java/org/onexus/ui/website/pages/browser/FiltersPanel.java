@@ -28,6 +28,7 @@ import org.apache.wicket.model.Model;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventAddFilter;
@@ -119,9 +120,9 @@ public class FiltersPanel extends EventPanel {
         return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
     }
 
-    protected String getBaseUri() {
+    protected ORI getBaseUri() {
         WebsiteStatus websiteStatus = Widget.findParentStatus(getDefaultModel(), WebsiteStatus.class);
-        return (websiteStatus == null ? null : ResourceUtils.getParentURI(websiteStatus.getConfig().getURI()));
+        return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
     }
 
 }

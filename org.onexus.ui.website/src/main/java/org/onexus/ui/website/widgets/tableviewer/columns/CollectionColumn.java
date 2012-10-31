@@ -23,6 +23,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.headers.IHeader;
 
@@ -35,7 +36,7 @@ public class CollectionColumn extends AbstractColumn {
     private IDecorator cellDecorator;
     private List<IDecorator> cellActions;
 
-    public CollectionColumn(String collectionId, IHeader headerDecorator, IDecorator cellDecorator, List<IDecorator> cellActions) {
+    public CollectionColumn(ORI collectionId, IHeader headerDecorator, IDecorator cellDecorator, List<IDecorator> cellActions) {
         super(collectionId);
 
         this.headerDecorator = headerDecorator;

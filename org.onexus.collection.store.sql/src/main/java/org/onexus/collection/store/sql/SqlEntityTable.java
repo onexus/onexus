@@ -23,6 +23,7 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.data.api.Progress;
+import org.onexus.resource.api.ORI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,14 +137,14 @@ public class SqlEntityTable implements IEntityTable {
     }
 
     @Override
-    public IEntity getEntity(String collectionURI) {
+    public IEntity getEntity(ORI collectionURI) {
 
-        collectionURI = QueryUtils.getAbsoluteCollectionUri(query, collectionURI);
+        collectionURI = collectionURI.toAbsolute(query.getOn());
 
         Collection collection = store.getCollection(collectionURI);
         SqlEntity entity = new SqlEntity(collection);
         store.getSqlDialect().loadEntity(query, store.getDDL(collectionURI), dataRS, entity,
-                QueryUtils.getCollectionAlias(query, collectionURI));
+                QueryUtils.newCollectionAlias(query, collectionURI));
 
         return entity;
     }

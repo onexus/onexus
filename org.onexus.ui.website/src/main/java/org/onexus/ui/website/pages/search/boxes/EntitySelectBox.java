@@ -28,6 +28,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.pages.browser.FilterEntity;
 import org.onexus.ui.website.pages.browser.IFilter;
@@ -98,7 +99,7 @@ public class EntitySelectBox extends Panel {
         if (searchType.getLinks()!=null) {
 
             List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
-            VisiblePredicate predicate = new VisiblePredicate(ResourceUtils.getParentURI(collection.getURI()), Arrays.asList(new IFilter[] { new FilterEntity(entity) }));
+            VisiblePredicate predicate = new VisiblePredicate(collection.getURI().getParent(), Arrays.asList(new IFilter[] { new FilterEntity(entity) }));
             CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
 
             for (SearchLink searchLink : filteredLinks) {
@@ -113,10 +114,10 @@ public class EntitySelectBox extends Panel {
         accordionBody.add(links);
     }
 
-    private String createLink(String url, String collection, String entityId) {
+    private String createLink(String url, ORI collection, String entityId) {
 
         String link = url;
-        link = link.replace("$collection", collection);
+        link = link.replace("$collection", collection.toString());
         link = link.replace("$entity", entityId);
 
         /*StringValue uri = getPage().getPageParameters().get("uri");

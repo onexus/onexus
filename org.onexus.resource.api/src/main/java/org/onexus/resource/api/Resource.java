@@ -25,10 +25,7 @@ import java.util.List;
 
 public abstract class Resource implements IMetadata, Serializable {
 
-    public static final char SEPARATOR = '/';
-
-    private String uri;
-    private String name;
+    private ORI uri;
     private String label;
     private String title;
     private String description;
@@ -39,20 +36,20 @@ public abstract class Resource implements IMetadata, Serializable {
         super();
     }
 
-    public String getURI() {
+    public ORI getURI() {
         return uri;
     }
 
-    public void setURI(String uri) {
+    public void setURI(ORI uri) {
         this.uri = uri;
     }
 
     public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        String oriStr = uri.toString();
+        int lsep = oriStr.lastIndexOf('/');
+        int lquestion = oriStr.indexOf('?');
+        int last = (lquestion != -1 && lquestion > lsep ? lquestion : lsep);
+        return oriStr.substring(last+1);
     }
 
     public String getLabel() {

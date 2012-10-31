@@ -17,20 +17,22 @@
  */
 package org.onexus.data.api;
 
+import org.onexus.resource.api.ORI;
+
 import java.util.List;
 
 public interface IDataStore {
 
     public void cancel(Progress progress);
 
-    public boolean isRegistered(String dataUri);
+    public boolean isRegistered(ORI dataUri);
 
-    public void register(String dataUri);
+    public void register(ORI dataUri);
 
-    public void deregister(String dataUri);
+    public void deregister(ORI dataUri);
 
     public List<String> getRegistered();
 
-    public IDataStreams load(String dataUri);
+    public IDataStreams load(ORI dataUri);
 
 }

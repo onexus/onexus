@@ -21,6 +21,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.WebsiteStatus;
 import org.onexus.ui.website.events.EventPanel;
@@ -50,14 +51,14 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
         return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
     }
 
-    protected String getBaseUri() {
+    protected ORI getBaseUri() {
         WebsiteStatus websiteStatus = findParentStatus(statusModel, WebsiteStatus.class);
-        return (websiteStatus == null ? null : ResourceUtils.getParentURI(websiteStatus.getConfig().getURI()));
+        return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
     }
 
-    protected String getReleaseUri() {
+    protected ORI getReleaseUri() {
         BrowserPageStatus pageStatus = findParentStatus(statusModel, BrowserPageStatus.class);
-        return (pageStatus==null ? getBaseUri() : ResourceUtils.concatURIs(getBaseUri(), pageStatus.getBase()));
+        return (pageStatus==null ? getBaseUri() : new ORI(getBaseUri(), pageStatus.getBase()));
     }
 
     public static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {

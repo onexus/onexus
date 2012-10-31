@@ -21,6 +21,7 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.data.api.Progress;
+import org.onexus.resource.api.ORI;
 
 public class ProgressEntityTable implements IEntityTable {
 
@@ -40,7 +41,7 @@ public class ProgressEntityTable implements IEntityTable {
     }
 
     @Override
-    public IEntity getEntity(String collectionURI) {
+    public IEntity getEntity(ORI collectionURI) {
         return entityTable.getEntity(collectionURI);
     }
 

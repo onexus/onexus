@@ -20,6 +20,7 @@ package org.onexus.collection.api.utils;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.IEntityTable;
+import org.onexus.resource.api.ORI;
 
 import java.util.Iterator;
 
@@ -27,7 +28,7 @@ public class EntityIterator implements Iterator<IEntity> {
 
     private transient IEntitySet entitySet;
 
-    private transient String collectionURI;
+    private transient ORI collectionOri;
     private transient IEntityTable entityTable;
 
     private boolean _movedToNext = false;
@@ -37,15 +38,15 @@ public class EntityIterator implements Iterator<IEntity> {
         super();
 
         this.entitySet = entitySet;
-        this.collectionURI = null;
+        this.collectionOri = null;
         this.entityTable = null;
     }
 
-    public EntityIterator(IEntityTable entityTable, String collectionURI) {
+    public EntityIterator(IEntityTable entityTable, ORI collectionOri) {
         super();
 
         this.entitySet = null;
-        this.collectionURI = collectionURI;
+        this.collectionOri = collectionOri;
         this.entityTable = entityTable;
     }
 
@@ -84,7 +85,7 @@ public class EntityIterator implements Iterator<IEntity> {
         if (entitySet != null) {
             return entitySet.detachedEntity();
         } else {
-            return entityTable.getEntity(collectionURI);
+            return entityTable.getEntity(collectionOri);
         }
     }
 

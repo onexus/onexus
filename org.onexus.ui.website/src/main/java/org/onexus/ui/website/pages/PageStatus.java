@@ -21,6 +21,7 @@ import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.WidgetStatus;
 
 import java.io.Serializable;
@@ -96,7 +97,7 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
     public MetaDataKey<Query> QUERY = new MetaDataKey<Query>() {};
 
-    public Query buildQuery(String resourceUri) {
+    public Query buildQuery(ORI resourceUri) {
 
         Query query = RequestCycle.get().getMetaData(QUERY);
 

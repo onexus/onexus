@@ -24,6 +24,7 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.pages.PageStatus;
@@ -78,6 +79,10 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         return base;
     }
 
+    public ORI getORI() {
+        return getConfig().getWebsiteConfig().getURI();
+    }
+
     public String getCurrentTabId() {
         return currentTabId;
     }
@@ -113,7 +118,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     public void beforeQueryBuild(Query query) {
 
         if (!StringUtils.isEmpty(getBase())) {
-            query.setOn(ResourceUtils.concatURIs(query.getOn(), getBase()));
+            query.setOn(new ORI(query.getOn(), getBase()));
         }
 
     }
@@ -123,7 +128,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
         if (filters != null) {
             for (IFilter fe : filters) {
-                if (getCollectionManager().isLinkable(query, QueryUtils.getAbsoluteCollectionUri(query, fe.getFilteredCollection()))) {
+                if (getCollectionManager().isLinkable(query, fe.getFilteredCollection().toAbsolute(query.getOn()))) {
                     Filter filter = fe.buildFilter(query);
                     QueryUtils.and(query, filter);
                     fe.setEnable(true);

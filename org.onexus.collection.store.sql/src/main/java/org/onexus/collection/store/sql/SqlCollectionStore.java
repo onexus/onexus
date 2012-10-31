@@ -44,7 +44,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
     private DataSource dataSource;
 
-    private Map<String, SqlCollectionDDL> ddls;
+    private Map<ORI, SqlCollectionDDL> ddls;
 
     private SqlDialect sqlDialect;
 
@@ -73,21 +73,28 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             throw new RuntimeException(e);
         }
 
-        this.ddls = new HashMap<String, SqlCollectionDDL>();
+        this.ddls = new HashMap<ORI, SqlCollectionDDL>();
     }
 
     protected abstract DataSource newDataSource();
 
     @Override
-    public boolean isRegistered(String collectionURI) {
-        String tableName = null;
+    public boolean isRegistered(ORI collectionURI) {
+
+        String tableName = getProperty(collectionURI.toString());
+
+        return (tableName != null);
+
+    }
+
+    private String getProperty(String propertyKey) {
+        String property = null;
         Connection conn = null;
         try {
             conn = dataSource.getConnection();
-            tableName = sqlDialect.loadProperty(conn, collectionURI);
+            property = sqlDialect.loadProperty(conn, propertyKey);
         } catch (Exception e) {
-            LOGGER.error("Error reading property " + collectionURI, e);
-            return false;
+            LOGGER.error("Error reading property " + propertyKey, e);
         } finally {
             if (conn != null)
                 try {
@@ -97,20 +104,17 @@ public abstract class SqlCollectionStore implements ICollectionStore {
                 }
         }
 
-        if (tableName == null) {
-            return false;
-        }
-
-        return true;
+        return property;
     }
 
+
     @Override
-    public void register(String collectionURI) {
+    public void register(ORI collectionURI) {
         LOGGER.debug("Registering collection {}", collectionURI);
 
         // Rebuild always the DDL before registering
         ddls.put(collectionURI, new SqlCollectionDDL(sqlDialect,
-                getCollection(collectionURI)));
+                getCollection(collectionURI), getProperty(collectionURI.toString())));
 
         SqlCollectionDDL ddl = getDDL(collectionURI);
         Connection conn = null;
@@ -139,7 +143,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             }
 
             sqlDialect.createSystemPropertiesTable(conn, false);
-            sqlDialect.saveProperty(conn, collectionURI, ddl.getTableName());
+            sqlDialect.saveProperty(conn, collectionURI.toString(), ddl.getTableName());
 
         } catch (Exception e) {
             String msg = String.format(
@@ -159,7 +163,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     @Override
-    public void deregister(String collectionURI) {
+    public void deregister(ORI collectionURI) {
         LOGGER.debug("Unregistering collection {}", collectionURI);
 
         Connection conn = null;
@@ -168,8 +172,8 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
             conn = dataSource.getConnection();
 
-            tableName = sqlDialect.loadProperty(conn, collectionURI);
-            sqlDialect.removeProperty(conn, collectionURI);
+            tableName = sqlDialect.loadProperty(conn, collectionURI.toString());
+            sqlDialect.removeProperty(conn, collectionURI.toString());
             sqlDialect.execute(conn, "DROP TABLE `" + tableName + "`");
 
         } catch (Exception e) {
@@ -332,14 +336,14 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
     }
 
-    public Collection getCollection(String collectionURI) {
+    public Collection getCollection(ORI collectionURI) {
         return getResourceManager().load(Collection.class, collectionURI);
     }
 
-    public SqlCollectionDDL getDDL(String collectionURI) {
+    public SqlCollectionDDL getDDL(ORI collectionURI) {
         if (!ddls.containsKey(collectionURI)) {
             ddls.put(collectionURI, new SqlCollectionDDL(sqlDialect,
-                    getCollection(collectionURI)));
+                    getCollection(collectionURI), getProperty(collectionURI.toString())));
         }
 
         return ddls.get(collectionURI);

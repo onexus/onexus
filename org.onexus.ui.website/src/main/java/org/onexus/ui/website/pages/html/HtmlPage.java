@@ -28,6 +28,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.data.api.IDataManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.WebsiteConfig;
@@ -49,8 +50,8 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
 
 
         WebsiteConfig websiteConfig = config.getWebsiteConfig();
-        String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
-        String contentUri = ResourceUtils.getAbsoluteURI(parentUri, content);
+        ORI parentUri = (websiteConfig != null) ? websiteConfig.getURI().getParent() : null;
+        ORI contentUri = new ORI(parentUri, content);
 
         ResourceReference webservice = OnexusWebApplication.get().getDataService();
         String webserviceUrl = urlFor(webservice, null).toString();

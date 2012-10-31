@@ -9,12 +9,14 @@ options {
   package org.onexus.collection.query.parser.internal;
 
   import org.onexus.collection.api.query.*;
+  import org.onexus.resource.api.ORI;
 }
 
 @parser::header {
   package org.onexus.collection.query.parser.internal;
 
   import org.onexus.collection.api.query.*;
+  import org.onexus.resource.api.ORI;
 }
 
 @members {
@@ -36,13 +38,13 @@ defineClause
 
 defineItem 
 	:	alias=varname '=' uri=string
-		{ query.addDefine( $alias.text, $uri.v ); }
+		{ query.addDefine( $alias.text, new ORI($uri.v) ); }
 ;
 
 /* ON clause */
 onClause 
 	:	'ON' uri=string
-		{ query.setOn($uri.v); }
+		{ query.setOn( new ORI($uri.v)); }
 ;
 
 /* SELECT clause */

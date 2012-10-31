@@ -20,6 +20,7 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.utils.visible.IVisible;
 
 import java.io.Serializable;
@@ -29,6 +30,6 @@ public interface IColumnConfig extends IVisible, Serializable {
 
     public void buildQuery(Query query);
 
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, String parentURI);
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI);
 
 }

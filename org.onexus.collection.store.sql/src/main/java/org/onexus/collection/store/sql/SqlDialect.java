@@ -261,7 +261,7 @@ public class SqlDialect {
 
         Set<String> columnWithError = new HashSet<String>();
 
-        String collectionAlias = QueryUtils.getCollectionAlias(query, ddl.getCollection().getURI());
+        String collectionAlias = QueryUtils.newCollectionAlias(query, ddl.getCollection().getURI());
         List<String> queryFields = query.getSelect().get(collectionAlias);
 
         for (ColumnInfo column : ddl.getColumnInfos()) {

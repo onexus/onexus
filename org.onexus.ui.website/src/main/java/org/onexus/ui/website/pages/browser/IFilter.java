@@ -20,6 +20,7 @@ package org.onexus.ui.website.pages.browser;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.utils.visible.IVisible;
 import org.onexus.ui.website.utils.visible.VisibleRule;
 import org.onexus.ui.website.widgets.filters.FilterConfig;
@@ -28,7 +29,7 @@ import java.io.Serializable;
 
 public interface IFilter extends Serializable, IVisible {
 
-    String getFilteredCollection();
+    ORI getFilteredCollection();
 
     FilterConfig getFilterConfig();
 
@@ -45,8 +46,6 @@ public interface IFilter extends Serializable, IVisible {
     String getLabel(Query query);
 
     String getTitle(Query query);
-
-    Panel getTooltip(String componentId, Query query);
 
     boolean match(VisibleRule rule);
 

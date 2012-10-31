@@ -18,11 +18,11 @@
 package org.onexus.ui.website.widgets.tableviewer;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.WebsiteConfig;
 import org.onexus.ui.website.pages.PageConfig;
 import org.onexus.ui.website.widgets.WidgetStatus;
@@ -88,9 +88,9 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
         OrderBy orderWithCollection = getOrder();
 
         if (orderWithCollection != null) {
-            String collectionUri = QueryUtils.getAbsoluteCollectionUri(query, orderWithCollection.getCollectionRef());
+            ORI collectionUri = new ORI(orderWithCollection.getCollection()).toAbsolute(query.getOn());
             String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
-            OrderBy orderWithAlias = new OrderBy(collectionAlias, orderWithCollection.getFieldId(), orderWithCollection.isAscendent());
+            OrderBy orderWithAlias = new OrderBy(collectionAlias, orderWithCollection.getField(), orderWithCollection.isAscendent());
             query.addOrderBy(orderWithAlias);
         }
 
@@ -101,7 +101,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
         PageConfig pageConfig = getConfig().getPageConfig();
         WebsiteConfig websiteConfig = (pageConfig == null ? null : pageConfig.getWebsiteConfig());
-        String projectUri = (websiteConfig == null ? null : ResourceUtils.getProjectURI(websiteConfig.getURI()));
+        ORI projectUri = (websiteConfig == null ? null : websiteConfig.getURI().getParent());
 
         TableViewerStatus defaultStatus = getConfig().getDefaultStatus();
         if (defaultStatus == null) {
@@ -113,7 +113,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
         }
 
         if (order != null && !order.equals(defaultStatus.getOrder())) {
-            parameters.add(keyPrefix + "o", ResourceUtils.getRelativeURI(projectUri, order.getCollectionRef()) + "::" + order.getFieldId() + "::" + (order.isAscendent()?"a":"d"));
+            parameters.add(keyPrefix + "o", new ORI(order.getCollection()).toRelative(projectUri).toString() + "::" + order.getField() + "::" + (order.isAscendent()?"a":"d"));
         }
 
         super.encodeParameters(parameters, keyPrefix);
@@ -121,10 +121,6 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
     @Override
     public void decodeParameters(PageParameters parameters, String keyPrefix) {
-
-        PageConfig pageConfig = getConfig().getPageConfig();
-        WebsiteConfig websiteConfig = (pageConfig == null ? null : pageConfig.getWebsiteConfig());
-        String projectUri = (websiteConfig == null ? null : ResourceUtils.getProjectURI(websiteConfig.getURI()));
 
         StringValue cs = parameters.get(keyPrefix + "cs");
 
@@ -136,7 +132,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
         if (!o.isEmpty()) {
             String[] values = o.toString().split("::");
-            order = new OrderBy(ResourceUtils.getAbsoluteURI(projectUri, values[0]), values[1], (values[2].contains("a")));
+            order = new OrderBy(values[0], values[1], (values[2].contains("a")));
         }
 
         super.decodeParameters(parameters, keyPrefix);

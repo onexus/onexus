@@ -22,6 +22,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -32,9 +33,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.viewers.IViewerCreator;
 import org.onexus.ui.api.viewers.EmptyPanelViewerCreator;
 import org.onexus.ui.api.viewers.IViewersManager;
@@ -53,10 +57,7 @@ public class ResourcesPage extends BaseResourcePage {
     public final static String PARAMETER_RESOURCE = "uri";
 
     @Inject
-    public transient IResourceManager resourceManager;
-
-    @Inject
-    public transient IViewersManager viewersManager;
+    private transient IViewersManager viewersManager;
 
     public ResourcesPage(PageParameters parameters) {
         super(new ResourceModel(parameters.get(PARAMETER_RESOURCE).toOptionalString()));
@@ -75,6 +76,14 @@ public class ResourcesPage extends BaseResourcePage {
 
     }
 
+    private IViewersManager getViewersManager() {
+        if (viewersManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return viewersManager;
+    }
+
     public class ToolProjectReload extends Link<Resource> {
 
         public ToolProjectReload(String id) {
@@ -86,16 +95,16 @@ public class ResourcesPage extends BaseResourcePage {
             Resource resource = ResourcesPage.this.getModelObject();
 
             if (resource != null) {
-                String resourceUri = resource.getURI();
-                resourceManager.syncProject(ResourceUtils.getProjectURI(resourceUri));
+                ORI resourceUri = resource.getURI();
+                getResourceManager().syncProject(resourceUri.getProjectUrl());
 
-                Resource newVersion = resourceManager.load(Resource.class, resourceUri);
+                Resource newVersion = getResourceManager().load(Resource.class, resourceUri);
                 if (newVersion == null) {
-                    resourceUri = ResourceUtils.getParentURI(resourceUri);
+                    resourceUri = resourceUri.getParent();
 
-                    newVersion = resourceManager.load(Resource.class, resourceUri);
+                    newVersion = getResourceManager().load(Resource.class, resourceUri);
                     if (newVersion == null) {
-                        resourceUri = ResourceUtils.getProjectURI(resourceUri);
+                        resourceUri = new ORI(resourceUri.getProjectUrl(), null);
                     }
                 }
 
@@ -154,7 +163,7 @@ public class ResourcesPage extends BaseResourcePage {
 
                     links = new ArrayList<String>(uriItems.size());
                     Resource resource = model.getWrappedModel().getObject();
-                    String projectUri = (resource == null ? null : ResourceUtils.getProjectURI(resource.getURI()));
+                    String projectUri = (resource == null ? null : resource.getURI().getProjectUrl().toString());
 
                     links.add(projectUri);
                     for (int i = 1; i < uriItems.size(); i++) {
@@ -164,7 +173,7 @@ public class ResourcesPage extends BaseResourcePage {
                         link.append(projectUri).append("?");
                         link.append(uriItems.get(1));
                         for (int t = 2; t <= i; t++) {
-                            link.append(Resource.SEPARATOR);
+                            link.append(ORI.SEPARATOR);
                             link.append(uriItems.get(t));
                         }
                         links.add(link.toString());
@@ -189,7 +198,8 @@ public class ResourcesPage extends BaseResourcePage {
 
                     // Divider
                     boolean showDivider = !(getModelObject().size() - 1 == item.getIndex());
-                    item.add(new WebMarkupContainer("divider").setVisible(showDivider));
+                    Label divider = new Label("divider", (item.getIndex() == 0 ? "?" : "/"));
+                    item.add(divider.setVisible(showDivider));
                     item.add(link);
 
                 }
@@ -274,7 +284,7 @@ public class ResourcesPage extends BaseResourcePage {
                 return Collections.EMPTY_LIST;
             }
 
-            return viewersManager.getViewerCreators(resource);
+            return getViewersManager().getViewerCreators(resource);
         }
 
         @Override
@@ -300,7 +310,7 @@ public class ResourcesPage extends BaseResourcePage {
     private static class BreadCrumbItemsModel extends AbstractWrapModel<List<String>> {
 
         private IModel<Resource> resource;
-        private String lastResourceUri;
+        private ORI lastResourceUri;
         private transient List<String> object;
 
         private BreadCrumbItemsModel(IModel<Resource> resource) {
@@ -325,22 +335,23 @@ public class ResourcesPage extends BaseResourcePage {
                 Resource resource = this.resource.getObject();
                 lastResourceUri = resource.getURI();
 
-                if (resource == null || resource.getURI() == null || resource.getURI().isEmpty()) {
+                if (resource == null || resource.getURI() == null) {
                     return Collections.EMPTY_LIST;
                 }
 
-                String uri = resource.getURI();
+                ORI uri = resource.getURI();
 
                 // Separate project uri and path
-                String projectUri = ResourceUtils.getProjectURI(uri);
-                String projectName = ResourceUtils.getProjectName(uri);
-                String resourcePath = ResourceUtils.getResourcePath(uri);
 
                 object = new ArrayList<String>();
-                object.add(projectName);
 
-                if (!resourcePath.isEmpty()) {
-                    object.addAll(Arrays.asList(resourcePath.split(Pattern.quote(String.valueOf(Resource.SEPARATOR)))));
+                ORI resourceOri = resource.getURI();
+                object.add(resourceOri.getProjectUrl());
+
+                if (!Strings.isEmpty(uri.getPath())) {
+                    // Remove the first separator
+                    String path = resourceOri.getPath().substring(1);
+                    object.addAll(Arrays.asList(path.split(Pattern.quote(String.valueOf(ORI.SEPARATOR)))));
                 }
 
             }
@@ -357,6 +368,7 @@ public class ResourcesPage extends BaseResourcePage {
         public IModel<Resource> getWrappedModel() {
             return resource;
         }
+
     }
 
 }

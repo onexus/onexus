@@ -31,6 +31,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
@@ -43,7 +44,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
     private transient IResourceManager resourceManager;
 
     private T resource;
-    private String parentUri;
+    private ORI parentUri;
 
     public AbstractNewResourceWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id);
@@ -63,8 +64,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
     public void onFinish() {
 
         if (parentUri != null) {
-            String resourceUri = ResourceUtils.concatURIs(parentUri, resource.getName());
-            resource.setURI(resourceUri);
+            resource.setURI(new ORI(parentUri, resource.getLabel()));
         }
 
         if (resource.getURI() != null) {
@@ -84,12 +84,12 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
         this.resource = resource;
     }
 
-    protected String getParentUri() {
+    protected ORI getParentUri() {
         return this.parentUri;
     }
 
     protected RequiredTextField<String> getFieldResourceName() {
-        final RequiredTextField<String> resourceName = new RequiredTextField<String>("resource.name");
+        final RequiredTextField<String> resourceName = new RequiredTextField<String>("resource.label");
         resourceName.setOutputMarkupId(true);
         resourceName.add(new PatternValidator("[\\w-.\\+]*"));
         resourceName.add(new DuplicatedResourceValidator());
@@ -114,9 +114,9 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
         @Override
         public void validate(IValidatable<String> validatable) {
 
-            if (parentUri != null && resource != null && resource.getName() != null) {
+            if (parentUri != null && resource != null && resource.getLabel() != null) {
 
-                String resourceURI = ResourceUtils.concatURIs(parentUri, validatable.getValue());
+                ORI resourceURI = new ORI(parentUri, validatable.getValue());
 
                 Resource test = resourceManager.load(Resource.class, resourceURI);
 

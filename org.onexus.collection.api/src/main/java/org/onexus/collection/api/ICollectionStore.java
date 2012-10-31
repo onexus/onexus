@@ -18,6 +18,7 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 
 import java.util.List;
 
@@ -39,24 +40,24 @@ public interface ICollectionStore {
     /**
      * Check if a collection is registered in this store.
      *
-     * @param collectionURI The Collection URI.
+     * @param collectionOri The Collection URI.
      * @return Returns true if it's stored and false if not.
      */
-    public boolean isRegistered(String collectionURI);
+    public boolean isRegistered(ORI collectionOri);
 
     /**
      * Prepare the store to be able to insert entities of this collection.
      *
-     * @param collectionURI The Collection URI
+     * @param collectionOri The Collection URI
      */
-    public void register(String collectionURI);
+    public void register(ORI collectionOri);
 
     /**
      * Remove the collection from the store.
      *
-     * @param collectionURI
+     * @param collectionOri
      */
-    public void deregister(String collectionURI);
+    public void deregister(ORI collectionOri);
 
 
     /**

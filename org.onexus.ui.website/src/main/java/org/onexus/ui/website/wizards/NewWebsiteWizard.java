@@ -28,6 +28,7 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
@@ -57,8 +58,8 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
     private Boolean addTab = true;
     private String tabName = "Tab-0";
-    private String mainTabCollection;
-    private List<String> linkCollections = new ArrayList<String>();
+    private ORI mainTabCollection;
+    private List<ORI> linkCollections = new ArrayList<ORI>();
     private TabConfig currentTab;
 
     @Inject
@@ -84,7 +85,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
         WebsiteConfig website = new WebsiteConfig();
         website.setPages(new ArrayList<PageConfig>());
-        website.setName("website");
+        website.setLabel("website");
         website.setTitle("Website title");
 
         // Browser page
@@ -165,9 +166,9 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
         public MainTabCollection() {
             super("New website", "Main tab collection");
 
-            List<String> projectCollections = new ArrayList<String>();
+            List<ORI> projectCollections = new ArrayList<ORI>();
             addAllCollections(projectCollections, getParentUri());
-            add(new DropDownChoice<String>("mainTabCollection", projectCollections));
+            add(new DropDownChoice<ORI>("mainTabCollection", projectCollections));
 
         }
 
@@ -195,7 +196,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             tableWidget.setColumnSets(new ArrayList<ColumnSet>());
 
             // Main collection columns
-            Collection collection = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), mainTabCollection));
+            Collection collection = resourceManager.load(Collection.class, mainTabCollection.toAbsolute(getParentUri()));
 
             List<String> keyFields = new ArrayList<String>();
             List<String> fields = new ArrayList<String>();
@@ -243,7 +244,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
     private final class LinkedCollections extends WizardStep {
 
-        private List<String> linkedCollections;
+        private List<ORI> linkedCollections;
 
         public LinkedCollections() {
             super("New website", "Linked collections");
@@ -253,18 +254,18 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
         @Override
         protected void onBeforeRender() {
 
-            List<String> projectCollections = new ArrayList<String>();
+            List<ORI> projectCollections = new ArrayList<ORI>();
             addAllCollections(projectCollections, getParentUri());
 
-            linkedCollections = new ArrayList<String>();
+            linkedCollections = new ArrayList<ORI>();
 
 
-            Collection colA = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), getMainTabCollection()));
+            Collection colA = resourceManager.load(Collection.class, getMainTabCollection().toAbsolute(getParentUri()));
 
-            for (String collection : projectCollections) {
+            for (ORI collection : projectCollections) {
 
 
-                Collection colB = resourceManager.load(Collection.class, ResourceUtils.getAbsoluteURI(getParentUri(), collection));
+                Collection colB = resourceManager.load(Collection.class,  collection.toAbsolute(getParentUri()));
 
                 if (colA.getURI().equals(colB.getURI())) {
                     continue;
@@ -277,7 +278,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
                 }
             }
 
-            addOrReplace(new ListMultipleChoice<String>("linkCollections", linkedCollections));
+            addOrReplace(new ListMultipleChoice<ORI>("linkCollections", linkedCollections));
 
             super.onBeforeRender();
         }
@@ -293,9 +294,9 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
                 TableViewerConfig tableWidget = (TableViewerConfig) browserPage.getWidget(tableWidgetId);
                 ColumnSet columnSet = tableWidget.getColumnSets().get(0);
 
-                for (String linkCollection : linkCollections) {
+                for (ORI linkCollection : linkCollections) {
 
-                    String resourceUri = ResourceUtils.getAbsoluteURI(getParentUri(), linkCollection);
+                    ORI resourceUri = linkCollection.toAbsolute(getParentUri());
                     Collection collection = resourceManager.load(Collection.class, resourceUri);
 
                     List<String> otherFields = new ArrayList<String>();
@@ -346,19 +347,19 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
         this.tabName = tabName;
     }
 
-    public String getMainTabCollection() {
+    public ORI getMainTabCollection() {
         return mainTabCollection;
     }
 
-    public void setMainTabCollection(String mainTabCollection) {
+    public void setMainTabCollection(ORI mainTabCollection) {
         this.mainTabCollection = mainTabCollection;
     }
 
-    private void addAllCollections(List<String> collectionUris, String parentUri) {
+    private void addAllCollections(List<ORI> collectionUris, ORI parentUri) {
 
         List<Collection> collections = resourceManager.loadChildren(Collection.class, parentUri);
         for (Collection collection : collections) {
-            collectionUris.add(ResourceUtils.getResourcePath(collection.getURI()));
+            collectionUris.add(collection.getURI());
         }
 
         List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);

@@ -25,6 +25,7 @@ import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.io.ByteArrayOutputStream;
 import org.apache.wicket.validation.IValidationError;
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 
 import javax.inject.Inject;
@@ -37,8 +38,7 @@ public class XmlTextArea extends TextArea<Resource> {
     private transient IResourceSerializer resourceSerializer;
 
     private IConverter<Resource> converter;
-    private String resourceUri;
-    private String resourceName;
+    private ORI resourceUri;
 
     public XmlTextArea(String id, IModel<Resource> model) {
         super(id, model);
@@ -67,7 +67,6 @@ public class XmlTextArea extends TextArea<Resource> {
                         new ByteArrayInputStream(value.getBytes()));
 
                 resource.setURI(resourceUri);
-                resource.setName(resourceName);
 
                 return resource;
             } catch (Exception e) {
@@ -87,16 +86,12 @@ public class XmlTextArea extends TextArea<Resource> {
             try {
 
                 resourceUri = value.getURI();
-                resourceName = value.getName();
-
                 value.setURI(null);
-                value.setName(null);
 
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 resourceSerializer.serialize(value, output);
 
                 value.setURI(resourceUri);
-                value.setName(resourceName);
 
                 return output.toString();
             } catch (Exception e) {

@@ -19,6 +19,7 @@ package org.onexus.ui.api.pages.resource;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebApplication;
 
@@ -26,7 +27,7 @@ import javax.inject.Inject;
 
 public class ResourceModel extends LoadableDetachableModel<Resource> {
 
-    private String resourceURI;
+    private ORI resourceURI;
 
     @Inject
     private transient IResourceManager resourceManager;
@@ -35,7 +36,13 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
         super();
     }
 
-    public ResourceModel(String resourceURI) {
+    public ResourceModel(String resourceParameter) {
+        if (resourceParameter != null) {
+            this.resourceURI = new ORI(resourceParameter);
+        }
+    }
+
+    public ResourceModel(ORI resourceURI) {
         super();
         this.resourceURI = resourceURI;
     }

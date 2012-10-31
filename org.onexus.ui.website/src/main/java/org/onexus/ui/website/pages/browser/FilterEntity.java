@@ -17,21 +17,19 @@
  */
 package org.onexus.ui.website.pages.browser;
 
-import org.apache.wicket.markup.html.panel.Panel;
 import org.h2.util.StringUtils;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
-import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.api.OnexusWebApplication;
-import org.onexus.ui.website.pages.browser.boxes.GenericBox;
 import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.SingleEntityQuery;
 import org.onexus.ui.website.utils.visible.VisibleRule;
@@ -42,7 +40,7 @@ import java.util.regex.Pattern;
 
 public class FilterEntity implements IFilter {
 
-    private String filteredCollection;
+    private ORI filteredCollection;
     private String entityId;
     private boolean deletable;
     private boolean enable;
@@ -66,11 +64,11 @@ public class FilterEntity implements IFilter {
         this(entity.getCollection().getURI(), entity.getId(), deletable);
     }
 
-    public FilterEntity(String filteredCollection, String entityId) {
+    public FilterEntity(ORI filteredCollection, String entityId) {
         this(filteredCollection, entityId, true);
     }
 
-    public FilterEntity(String filteredCollection, String entityId, boolean deletable) {
+    public FilterEntity(ORI filteredCollection, String entityId, boolean deletable) {
         super();
         OnexusWebApplication.inject(this);
 
@@ -81,7 +79,7 @@ public class FilterEntity implements IFilter {
     }
 
     @Override
-    public String getFilteredCollection() {
+    public ORI getFilteredCollection() {
         return filteredCollection;
     }
 
@@ -91,7 +89,7 @@ public class FilterEntity implements IFilter {
         return null;
     }
 
-    public void setFilteredCollection(String filteredCollection) {
+    public void setFilteredCollection(ORI filteredCollection) {
         this.filteredCollection = filteredCollection;
     }
 
@@ -139,13 +137,18 @@ public class FilterEntity implements IFilter {
     @Override
     public boolean match(VisibleRule rule) {
 
-        boolean validCollection = filteredCollection.endsWith(rule.getFilteredCollection());
+        //TODO Check projects
+
+        String filterPath = filteredCollection.getPath();
+        String rulePath = rule.getFilteredCollection().getPath();
+
+        boolean validCollection = ( filterPath == null || rulePath == null ) ? false : filterPath.endsWith(rulePath);
 
         if (rule.getOperator() == null) {
             return validCollection;
         }
 
-        String collectionUri = ResourceUtils.getAbsoluteURI(rule.getParentURI(), filteredCollection);
+        ORI collectionUri = filteredCollection.toAbsolute(rule.getParentURI());
         IEntity entity = (new EntityModel(collectionUri, entityId)).getObject();
 
         String fieldValue = String.valueOf(entity.get(rule.getField()));
@@ -162,7 +165,7 @@ public class FilterEntity implements IFilter {
     public void loadUrlPrameter(String parameter) {
         String[] values = parameter.split("::");
 
-        this.filteredCollection = values[0];
+        this.filteredCollection = new ORI(values[0]);
         this.entityId = values[1];
         String flags = values[2];
         deletable = flags.contains("d");
@@ -174,7 +177,7 @@ public class FilterEntity implements IFilter {
     public String getLabel(Query query) {
 
         // Make collection URI absolute
-        String filteredCollection = QueryUtils.getAbsoluteCollectionUri(query, getFilteredCollection());
+        ORI filteredCollection = getFilteredCollection().toAbsolute(query.getOn());
         Collection collection = getResourceManager().load(Collection.class, filteredCollection);
 
         String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
@@ -190,7 +193,7 @@ public class FilterEntity implements IFilter {
     public String getTitle(Query query) {
 
         // Make collection URI absolute
-        String filteredCollection = QueryUtils.getAbsoluteCollectionUri(query, getFilteredCollection());
+        ORI filteredCollection = getFilteredCollection().toAbsolute(query.getOn());
         Collection collection = getResourceManager().load(Collection.class, filteredCollection);
 
         String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
@@ -232,12 +235,6 @@ public class FilterEntity implements IFilter {
         }
 
         return collectionManager;
-    }
-
-    @Override
-    public Panel getTooltip(String componentId, Query query) {
-        String filteredCollection = QueryUtils.getAbsoluteCollectionUri(query, getFilteredCollection());
-        return new GenericBox(componentId, new EntityModel(filteredCollection, entityId));
     }
 
     private String parseTemplate(String entityPattern, IEntity entity) {

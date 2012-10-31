@@ -19,6 +19,7 @@ package org.onexus.ui.website.pages;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.StringValue;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.CustomCssBehavior;
 import org.onexus.ui.website.WebsiteConfig;
@@ -34,7 +35,7 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
 
 
     @Inject
-    private transient IWidgetManager widgetManager;
+    public transient IWidgetManager widgetManager;
 
     public Page(String componentId, IModel<S> pageModel) {
         super(componentId, pageModel);
@@ -44,18 +45,10 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
 
 
         WebsiteConfig websiteConfig = config.getWebsiteConfig();
-        String parentUri = (websiteConfig != null) ? ResourceUtils.getParentURI(websiteConfig.getURI()) : null;
-        String fileUri = ResourceUtils.getAbsoluteURI(parentUri, css);
+        ORI parentUri = (websiteConfig != null) ? websiteConfig.getURI().getParent() : null;
+        ORI fileUri = new ORI(parentUri, css);
 
         add(new CustomCssBehavior(fileUri));
-    }
-
-    public IWidgetManager getWidgetManager() {
-        return widgetManager;
-    }
-
-    public void setWidgetManager(IWidgetManager widgetManager) {
-        this.widgetManager = widgetManager;
     }
 
     public IModel<S> getModel() {

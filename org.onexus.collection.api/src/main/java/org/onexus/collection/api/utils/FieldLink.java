@@ -17,16 +17,18 @@
  */
 package org.onexus.collection.api.utils;
 
+import org.onexus.resource.api.ORI;
+
 public class FieldLink {
 
-    private String fromCollection;
+    private ORI fromCollection;
     private String fromFieldName;
-    private String toCollection;
+    private ORI toCollection;
     private String toFieldName;
 
 
-    public FieldLink(String fromCollection, String fromFieldName,
-                     String toCollection, String toFieldName) {
+    public FieldLink(ORI fromCollection, String fromFieldName,
+                     ORI toCollection, String toFieldName) {
         super();
         this.fromCollection = fromCollection;
         this.fromFieldName = fromFieldName;
@@ -35,12 +37,12 @@ public class FieldLink {
     }
 
 
-    public String getFromCollection() {
+    public ORI getFromCollection() {
         return fromCollection;
     }
 
 
-    public void setFromCollection(String fromCollection) {
+    public void setFromCollection(ORI fromCollection) {
         this.fromCollection = fromCollection;
     }
 
@@ -55,12 +57,12 @@ public class FieldLink {
     }
 
 
-    public String getToCollection() {
+    public ORI getToCollection() {
         return toCollection;
     }
 
 
-    public void setToCollection(String toCollection) {
+    public void setToCollection(ORI toCollection) {
         this.toCollection = toCollection;
     }
 

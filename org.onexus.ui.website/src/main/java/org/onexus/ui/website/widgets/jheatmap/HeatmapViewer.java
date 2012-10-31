@@ -33,6 +33,7 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.events.EventAddFilter;
 import org.onexus.ui.website.events.EventQueryUpdate;
@@ -75,7 +76,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
         List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
 
-        String parentUri = getReleaseUri();
+        ORI parentUri = getReleaseUri();
         for (ColumnConfig column : getConfig().getColumns()) {
             column.addColumns(columns, parentUri);
         }

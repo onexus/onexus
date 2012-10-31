@@ -19,16 +19,17 @@ package org.onexus.ui.website.utils.visible;
 
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.pages.browser.IFilter;
 
 import java.util.Collection;
 
 public class VisiblePredicate implements Predicate {
 
-    private String parentURI;
+    private ORI parentURI;
     private Collection<IFilter> filters;
 
-    public VisiblePredicate(String parentURI, Collection<IFilter> filters) {
+    public VisiblePredicate(ORI parentURI, Collection<IFilter> filters) {
         super();
 
         this.parentURI = parentURI;

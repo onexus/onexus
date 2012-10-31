@@ -19,6 +19,7 @@ package org.onexus.ui.website.pages.search;
 
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.StringUtils;
+import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
 
 public class SearchType implements Serializable {
 
-    private String collection;
+    private ORI collection;
     private String fields;
     private String keys;
     private String examples;
@@ -37,11 +38,11 @@ public class SearchType implements Serializable {
     private List<SearchLink> links = new ArrayList<SearchLink>();
 
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 

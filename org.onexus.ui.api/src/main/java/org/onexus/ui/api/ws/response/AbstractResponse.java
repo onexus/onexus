@@ -39,5 +39,4 @@ public abstract class AbstractResponse extends AbstractResource.ResourceResponse
 
     protected abstract void writeData(Response response);
 
-
 }

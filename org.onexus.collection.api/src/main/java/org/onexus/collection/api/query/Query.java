@@ -17,14 +17,16 @@
  */
 package org.onexus.collection.api.query;
 
+import org.onexus.resource.api.ORI;
+
 import java.io.Serializable;
 import java.util.*;
 
 public class Query implements Serializable {
 
-    private Map<String, String> define = new LinkedHashMap<String, String>();
+    private Map<String, ORI> define = new LinkedHashMap<String, ORI>();
 
-    private String on;
+    private ORI on;
 
     private Map<String, List<String>> select = new LinkedHashMap<String, List<String>>();
 
@@ -42,12 +44,12 @@ public class Query implements Serializable {
         super();
     }
 
-    public Map<String, String> getDefine() {
+    public Map<String, ORI> getDefine() {
         return define;
     }
 
-    public void addDefine(String key, String resourceURI) {
-        define.put(key, resourceURI);
+    public void addDefine(String key, ORI resourceURI) {
+        define.put(key, resourceURI.toRelative(on));
     }
 
     public Map<String, List<String>> getSelect() {
@@ -78,11 +80,11 @@ public class Query implements Serializable {
         }
     }
 
-    public String getOn() {
+    public ORI getOn() {
         return this.on;
     }
 
-    public void setOn(String resourceURI) {
+    public void setOn(ORI resourceURI) {
         this.on = resourceURI;
     }
 
@@ -132,12 +134,12 @@ public class Query implements Serializable {
         if (define != null && !define.isEmpty()) {
             oql.append("DEFINE");
 
-            Iterator<Map.Entry<String, String>> itDefine = define.entrySet().iterator();
+            Iterator<Map.Entry<String, ORI>> itDefine = define.entrySet().iterator();
             while (itDefine.hasNext()) {
                 oql.append(prettyPrint ? "\n\t" : " ");
 
-                Map.Entry<String, String> entry = itDefine.next();
-                oql.append(entry.getKey()).append("=").append(escapeString(entry.getValue()));
+                Map.Entry<String, ORI> entry = itDefine.next();
+                oql.append(entry.getKey()).append("=").append(escapeString(entry.getValue().toString()));
 
                 if (itDefine.hasNext()) {
                     oql.append(',');
@@ -146,11 +148,11 @@ public class Query implements Serializable {
         }
 
         // On section
-        if (on != null && !on.isEmpty()) {
+        if (on != null) {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("ON");
             oql.append(prettyPrint ? "\n\t" : " ");
-            oql.append(escapeString(on));
+            oql.append(escapeString(on.toString()));
         }
 
 

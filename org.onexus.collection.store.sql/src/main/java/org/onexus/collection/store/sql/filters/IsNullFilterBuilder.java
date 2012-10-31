@@ -23,6 +23,7 @@ import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.api.query.IsNull;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 
 
 public class IsNullFilterBuilder extends AbstractFilterBuilder<IsNull> {
@@ -36,7 +37,7 @@ public class IsNullFilterBuilder extends AbstractFilterBuilder<IsNull> {
 
         // Collection
         String collectionAlias = filter.getCollectionAlias();
-        String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+        ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);
         SqlCollectionDDL collection = store.getDDL(collectionUri);
         SqlCollectionDDL.ColumnInfo column = collection.getColumnInfoByFieldName(filter.getFieldId());
 

@@ -21,6 +21,7 @@ import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.data.api.utils.SingleDataStreams;
+import org.onexus.resource.api.ORI;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class BiomartCallable implements Callable<IDataStreams> {
     public BiomartCallable(Progress progress, BiomartRequest request) {
         this.request = request;
 
-        String collectionURI = request.getData().getURI();
+        ORI collectionURI = request.getData().getURI();
         this.progress = progress;
 
         progress.info("Preparing BIOMART collection '" + collectionURI + "'");

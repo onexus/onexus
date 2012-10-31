@@ -17,40 +17,42 @@
  */
 package org.onexus.collection.api.query;
 
+import org.onexus.resource.api.ORI;
+
 import java.io.Serializable;
 
 public class OrderBy implements Serializable {
 
-    private String collectionRef;
+    private String collection;
 
-    private String fieldId;
+    private String field;
 
     private boolean ascendent = true;
 
-    public OrderBy(String collectionRef, String fieldId) {
-        this(collectionRef, fieldId, true);
+    public OrderBy(String collection, String field) {
+        this(collection, field, true);
     }
 
-    public OrderBy(String collectionRef, String fieldId, boolean ascendent) {
-        this.collectionRef = collectionRef;
-        this.fieldId = fieldId;
+    public OrderBy(String collection, String field, boolean ascendent) {
+        this.collection = collection;
+        this.field = field;
         this.ascendent = ascendent;
     }
 
-    public String getCollectionRef() {
-        return collectionRef;
+    public String getCollection() {
+        return collection;
     }
 
-    public void setCollectionRef(String collectionRef) {
-        this.collectionRef = collectionRef;
+    public void setCollection(String collection) {
+        this.collection = collection;
     }
 
-    public String getFieldId() {
-        return fieldId;
+    public String getField() {
+        return field;
     }
 
-    public void setFieldId(String fieldId) {
-        this.fieldId = fieldId;
+    public void setField(String field) {
+        this.field = field;
     }
 
     public boolean isAscendent() {
@@ -66,7 +68,7 @@ public class OrderBy implements Serializable {
     }
 
     public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
-        oql.append(collectionRef).append('.').append(fieldId);
+        oql.append(collection).append('.').append(field);
         if (!ascendent) {
             oql.append(" DESC");
         }
@@ -81,17 +83,17 @@ public class OrderBy implements Serializable {
         OrderBy orderBy = (OrderBy) o;
 
         if (ascendent != orderBy.ascendent) return false;
-        if (collectionRef != null ? !collectionRef.equals(orderBy.collectionRef) : orderBy.collectionRef != null)
+        if (collection != null ? !collection.equals(orderBy.collection) : orderBy.collection != null)
             return false;
-        if (fieldId != null ? !fieldId.equals(orderBy.fieldId) : orderBy.fieldId != null) return false;
+        if (field != null ? !field.equals(orderBy.field) : orderBy.field != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = collectionRef != null ? collectionRef.hashCode() : 0;
-        result = 31 * result + (fieldId != null ? fieldId.hashCode() : 0);
+        int result = collection != null ? collection.hashCode() : 0;
+        result = 31 * result + (field != null ? field.hashCode() : 0);
         result = 31 * result + (ascendent ? 1 : 0);
         return result;
     }

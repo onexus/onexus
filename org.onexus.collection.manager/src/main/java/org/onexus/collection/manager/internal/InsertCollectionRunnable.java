@@ -60,7 +60,7 @@ class InsertCollectionRunnable implements Runnable {
             Callable<IEntitySet> callable = loader.newCallable(progress, plugin, collection);
             IEntitySet entitySet = callable.call();
 
-            String msg = "Inserting '" + ResourceUtils.getResourcePath(collection.getURI()) + "'";
+            String msg = "Inserting '" + collection.getURI().getPath() + "'";
 
             progress.run();
             progress.info(msg);
@@ -68,7 +68,7 @@ class InsertCollectionRunnable implements Runnable {
 
             store.insert(entitySet);
 
-            msg = "Collection '" + ResourceUtils.getResourcePath(collection.getURI()) + "' inserted.";
+            msg = "Collection '" + collection.getURI().getPath() + "' inserted.";
             progress.info(msg);
             progress.done();
 

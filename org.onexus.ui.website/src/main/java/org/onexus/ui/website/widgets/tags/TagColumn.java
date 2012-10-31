@@ -23,13 +23,14 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.IEntityTable;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.tableviewer.columns.AbstractColumn;
 
 public class TagColumn extends AbstractColumn {
 
-    private String collectionURI;
+    private ORI collectionURI;
 
-    public TagColumn(String collectionURI) {
+    public TagColumn(ORI collectionURI) {
         super();
         this.collectionURI = collectionURI;
     }

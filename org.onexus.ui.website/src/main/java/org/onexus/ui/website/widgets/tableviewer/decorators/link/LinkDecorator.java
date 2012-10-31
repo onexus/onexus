@@ -26,6 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.ParameterKey;
 import org.onexus.ui.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 
@@ -39,7 +40,7 @@ public class LinkDecorator extends FieldDecorator {
 
     private Map<ParameterKey, String> parameters;
 
-    public LinkDecorator(String collectionId, Field field, Map<ParameterKey, String> parameters) {
+    public LinkDecorator(ORI collectionId, Field field, Map<ParameterKey, String> parameters) {
         super(field);
         this.parameters = parameters;
     }

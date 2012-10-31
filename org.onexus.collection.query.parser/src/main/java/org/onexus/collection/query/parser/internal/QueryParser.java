@@ -22,6 +22,7 @@ import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class QueryParser implements IQueryParser {
 
     @Override
-    public Map<String, String> parseDefine(String expression) {
+    public Map<String, ORI> parseDefine(String expression) {
         OqlParser parser = newParser("DEFINE " + expression);
 
         try {

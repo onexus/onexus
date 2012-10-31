@@ -26,6 +26,7 @@ import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.utils.ResourceUtils;
 
@@ -67,11 +68,13 @@ public class FileCallable implements Callable<IDataStreams> {
         return new UrlDataStreams(progress, getUrls(plugin, data), compressed);
     }
 
-    private String replaceProperties(String strUrl, Map<String, String> properties) {
+    private String replaceProperties(String strUrl, ORI dataOri) {
 
+        /*TODO
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
         }
+        */
 
         return strUrl;
     }
@@ -86,7 +89,7 @@ public class FileCallable implements Callable<IDataStreams> {
         List<URL> urls = new ArrayList<URL>();
 
         for (String templatePath : paths) {
-            String path = replaceProperties(templatePath, ResourceUtils.getProperties(data.getURI()));
+            String path = replaceProperties(templatePath, data.getURI());
             String fileName = FilenameUtils.getName(path);
 
             // Check if it is a wildcard filter

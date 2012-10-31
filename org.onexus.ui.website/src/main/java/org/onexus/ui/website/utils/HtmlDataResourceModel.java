@@ -4,6 +4,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.util.io.IOUtils;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
@@ -21,10 +22,10 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     @Inject
     private transient IDataManager dataManager;
 
-    private String contentUri;
+    private ORI contentUri;
     private String webserviceUrl;
 
-    public HtmlDataResourceModel(String contentUri, String webserviceUrl) {
+    public HtmlDataResourceModel(ORI contentUri, String webserviceUrl) {
         this.contentUri = contentUri;
         this.webserviceUrl = webserviceUrl;
 
@@ -55,10 +56,10 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
 
     private String filterRelativeUrls(String html) {
-        String projectUrl = webserviceUrl + Integer.toHexString(ResourceUtils.getProjectURI(contentUri).hashCode());
+        String projectUrl = webserviceUrl + Integer.toHexString(contentUri.getProjectUrl().hashCode());
 
-        String resourcePath = ResourceUtils.getResourcePath(contentUri);
-        resourcePath = resourcePath.substring(0, resourcePath.lastIndexOf('/'));
+        String resourcePath = contentUri.getPath();
+        resourcePath = resourcePath.substring(1, resourcePath.lastIndexOf('/'));
 
         Matcher mHref = PATTERN_HREF.matcher(html);
         StringBuffer sbHref = new StringBuffer();

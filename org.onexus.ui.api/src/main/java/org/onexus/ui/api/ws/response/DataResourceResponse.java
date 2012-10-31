@@ -24,6 +24,7 @@ import org.apache.wicket.util.io.Streams;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
@@ -48,20 +49,19 @@ public class DataResourceResponse extends AbstractResponse {
     @Inject
     public transient IResourceManager resourceManager;
 
-    private String resourceUri;
+    private ORI resourceUri;
 
     public DataResourceResponse(String data, String url) {
         super();
 
         int pos = url.indexOf(data) + data.length() + 1;
         String filename = UrlDecoder.PATH_INSTANCE.decode(url.substring(pos), "UTF-8");
-        this.resourceUri = ResourceUtils.concatURIs(data, filename);
 
         OnexusWebApplication.inject(this);
         for (Project project : resourceManager.getProjects()) {
-            String projectHash = Integer.toHexString(project.getURI().hashCode());
+            String projectHash = Integer.toHexString(project.getURL().hashCode());
             if (data.equals(projectHash)) {
-                this.resourceUri = ResourceUtils.concatURIs(project.getURI(), filename);
+                this.resourceUri = new ORI(project.getURL(), filename);
                 break;
             }
         }

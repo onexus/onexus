@@ -26,6 +26,7 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
@@ -49,7 +50,7 @@ public class ColumnConfig implements IColumnConfig {
 
     private String title;
 
-    private String collection;
+    private ORI collection;
 
     private String fields;
 
@@ -65,15 +66,15 @@ public class ColumnConfig implements IColumnConfig {
         super();
     }
 
-    public ColumnConfig(String collectionId) {
+    public ColumnConfig(ORI collectionId) {
         this(collectionId, null, null);
     }
 
-    public ColumnConfig(String collectionId, String fields) {
+    public ColumnConfig(ORI collectionId, String fields) {
         this(collectionId, fields, null);
     }
 
-    public ColumnConfig(String collectionURI, String fields, String decorator) {
+    public ColumnConfig(ORI collectionURI, String fields, String decorator) {
         super();
 
         this.collection = collectionURI;
@@ -97,11 +98,11 @@ public class ColumnConfig implements IColumnConfig {
         this.title = title;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collectionURI) {
+    public void setCollection(ORI collectionURI) {
         this.collection = collectionURI;
     }
 
@@ -138,9 +139,9 @@ public class ColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, String parentURI) {
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI) {
 
-        String collectionURI = ResourceUtils.getAbsoluteURI(parentURI, collection);
+        ORI collectionURI = collection.toAbsolute(parentURI);
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
@@ -229,7 +230,7 @@ public class ColumnConfig implements IColumnConfig {
     @Override
     public void buildQuery(Query query) {
 
-        String collectionURI = ResourceUtils.getAbsoluteURI(query.getOn(), collection);
+        ORI collectionURI = collection.toAbsolute(query.getOn());
         String columnAlias = QueryUtils.newCollectionAlias(query, collectionURI);
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 

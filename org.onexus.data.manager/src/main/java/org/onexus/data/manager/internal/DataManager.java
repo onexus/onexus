@@ -20,17 +20,11 @@ package org.onexus.data.manager.internal;
 import org.onexus.data.api.*;
 import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.data.api.utils.UrlDataStreams;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.Loader;
-import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Project;
-import org.onexus.resource.api.utils.ResourceUtils;
+import org.onexus.resource.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -50,13 +44,13 @@ public class DataManager implements IDataManager {
     }
 
     @Override
-    public IDataStreams load(String dataURI) {
+    public IDataStreams load(ORI dataURI) {
 
-        Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
+        Project project = resourceManager.getProject(dataURI.getProjectUrl());
         Data data = resourceManager.load(Data.class, dataURI);
 
         Loader loader = data.getLoader();
-        Progress progress = new Progress(Integer.toHexString(dataURI.hashCode()), "Retrive '" + ResourceUtils.getResourcePath(dataURI) + "'");
+        Progress progress = new Progress(Integer.toHexString(dataURI.hashCode()), "Retrive '" + dataURI.getPath() + "'");
         progress.run();
 
         Plugin plugin = project.getPlugin(loader.getPlugin());
@@ -113,9 +107,9 @@ public class DataManager implements IDataManager {
     }
 
     @Override
-    public long size(String dataURI) {
+    public long size(ORI dataURI) {
 
-        Project project = resourceManager.getProject(ResourceUtils.getProjectURI(dataURI));
+        Project project = resourceManager.getProject(dataURI.getProjectUrl());
         Data data = resourceManager.load(Data.class, dataURI);
 
         Loader loader = data.getLoader();

@@ -21,15 +21,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.UnserializeException;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.Collection;
-import java.util.regex.Pattern;
 
 public class ProjectManager {
 
@@ -38,17 +37,17 @@ public class ProjectManager {
     public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
     private IResourceSerializer serializer;
-    private String projectUri;
+    private String projectUrl;
     private File projectFolder;
 
     private Project project;
-    private Map<String, Resource> resources;
+    private Map<ORI, Resource> resources;
 
-    public ProjectManager(IResourceSerializer serializer, String projectUri, File projectFolder) throws InvalidParameterException {
+    public ProjectManager(IResourceSerializer serializer, String projectUrl, File projectFolder) throws InvalidParameterException {
         super();
 
         this.serializer = serializer;
-        this.projectUri = projectUri;
+        this.projectUrl = projectUrl;
         this.projectFolder = projectFolder;
 
     }
@@ -63,7 +62,7 @@ public class ProjectManager {
 
     public void loadResources() {
 
-        this.resources = new HashMap<String, Resource>();
+        this.resources = new HashMap<ORI, Resource>();
 
         Collection<File> files = addFilesRecursive(new ArrayList<File>(), projectFolder);
 
@@ -83,9 +82,9 @@ public class ProjectManager {
 
     }
 
-    public Resource getResource(String resourceUri) {
+    public Resource getResource(ORI resourceUri) {
 
-        if (projectUri.equals(resourceUri)) {
+        if (resourceUri.getPath() == null && projectUrl.equals(resourceUri.getProjectUrl())) {
             return project;
         }
 
@@ -101,18 +100,7 @@ public class ProjectManager {
 
     }
 
-    public <T extends Resource> List<T> getResourceChildren(Class<T> resourceType, String parentURI) {
-
-        String projectURI = ResourceUtils.getProjectURI(parentURI);
-
-        if (projectURI.equals(parentURI)) {
-            parentURI = projectURI + "?";
-        } else {
-            // End parentURI with a SEPARATOR if it's not present.
-            if (parentURI.charAt(parentURI.length() - 1) != Resource.SEPARATOR) {
-                parentURI = parentURI + Resource.SEPARATOR;
-            }
-        }
+    public <T extends Resource> List<T> getResourceChildren(Class<T> resourceType, ORI parentURI) {
 
         if (resources == null) {
             loadResources();
@@ -120,7 +108,7 @@ public class ProjectManager {
 
         List<T> children = new ArrayList<T>();
         for (Resource resource : resources.values()) {
-            if (isChild(parentURI, resource.getURI()) && resourceType.isAssignableFrom(resource.getClass())) {
+            if (parentURI.isChild(resource.getURI()) && resourceType.isAssignableFrom(resource.getClass())) {
                 children.add((T) resource);
             }
         }
@@ -179,19 +167,13 @@ public class ProjectManager {
         String filePath = resourceFile.getAbsolutePath();
         String relativePath = filePath.replace(projectPath, "");
 
-        String resourceURI;
         if (relativePath.equals(ONEXUS_PROJECT_FILE)) {
-            resourceURI = projectUri;
-            if (resource.getName() == null) {
-                resource.setName(ResourceUtils.getResourceName(projectUri));
-            }
+            relativePath = null;
         } else {
-            resourceURI = projectUri + "?" + relativePath;
-            resourceURI = resourceURI.replace("." + ONEXUS_EXTENSION, "");
-            resource.setName(resourceName);
+            relativePath = relativePath.replace("." + ONEXUS_EXTENSION, "");
         }
 
-        resource.setURI(resourceURI);
+        resource.setURI(new ORI(projectUrl, relativePath));
         return resource;
 
     }
@@ -210,27 +192,6 @@ public class ProjectManager {
         loader.getParameters().add(new Parameter("data-url", resourceFile.toURI().toString()));
         data.setLoader(loader);
         return data;
-    }
-
-    private static boolean isChild(String parentURI, String resourceURI) {
-        if (parentURI == null || resourceURI == null) {
-            return false;
-        }
-
-        // Trim the two URIs
-        parentURI = parentURI.trim();
-        resourceURI = resourceURI.trim();
-
-        if (!resourceURI.startsWith(parentURI)) {
-            return false;
-        }
-
-        String diff = resourceURI.replace(parentURI, "");
-        if (diff.indexOf(Resource.SEPARATOR) != -1 || diff.isEmpty()) {
-            return false;
-        }
-
-        return true;
     }
 
     private static Collection<File> addFilesRecursive(Collection<File> files, File parentFolder) {
@@ -259,21 +220,21 @@ public class ProjectManager {
         }
 
         if (resource instanceof Project) {
-            throw new IllegalArgumentException("Cannot create a project '" + resource.getURI() + "' inside project '" + projectUri + "'");
+            throw new IllegalArgumentException("Cannot create a project '" + resource.getURI() + "' inside project '" + projectUrl + "'");
         }
 
-        String filePath = ResourceUtils.getResourcePath(resource.getURI());
+        String resourcePath = resource.getURI().getPath();
 
         File file;
         if (resource instanceof Folder) {
-            file = new File(projectFolder, filePath);
+            file = new File(projectFolder, resourcePath);
             file.mkdirs();
 
             return;
         }
 
 
-        file = new File(projectFolder, filePath + "." + ONEXUS_EXTENSION);
+        file = new File(projectFolder, resourcePath + "." + ONEXUS_EXTENSION);
 
         try {
             if (!file.exists()) {

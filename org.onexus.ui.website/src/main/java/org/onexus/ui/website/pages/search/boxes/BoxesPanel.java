@@ -27,6 +27,7 @@ import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.pages.search.SearchPageStatus;
 import org.onexus.ui.website.pages.search.SearchType;
@@ -39,13 +40,13 @@ public class BoxesPanel extends Panel {
     @Inject
     public transient ICollectionManager collectionManager;
 
-    public BoxesPanel(String id, SearchPageStatus status, String baseUri) {
+    public BoxesPanel(String id, SearchPageStatus status, ORI baseUri) {
         super(id);
         setMarkupId("boxes");
         add(new AttributeModifier("class", "accordion"));
 
         SearchType type = status.getType();
-        String collectionUri = ResourceUtils.getAbsoluteURI(baseUri, type.getCollection());
+        ORI collectionUri = type.getCollection().toAbsolute(baseUri);
 
         IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
 
@@ -65,7 +66,7 @@ public class BoxesPanel extends Panel {
 
     }
 
-    private IEntityTable getEntityTable(SearchType type, String collectionUri, String search) {
+    private IEntityTable getEntityTable(SearchType type, ORI collectionUri, String search) {
 
         Query query = new Query();
 

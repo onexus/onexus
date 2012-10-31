@@ -22,6 +22,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.utils.ResourceUtils;
 
@@ -29,10 +30,10 @@ public class CustomCssBehavior extends Behavior {
 
     private transient CssHeaderItem CSS;
 
-    private String resourceUri;
+    private ORI resourceUri;
 
 
-    public CustomCssBehavior(String resourceUri) {
+    public CustomCssBehavior(ORI resourceUri) {
         this.resourceUri = resourceUri;
     }
 
@@ -42,7 +43,7 @@ public class CustomCssBehavior extends Behavior {
         if (CSS == null) {
 
             if (resourceUri != null) {
-                String dataServiceUrl = "data" + Resource.SEPARATOR + Integer.toHexString(ResourceUtils.getProjectURI(resourceUri).hashCode()) + Resource.SEPARATOR + ResourceUtils.getResourcePath(resourceUri);
+                String dataServiceUrl = "data/" + Integer.toHexString(resourceUri.getProjectUrl().hashCode()) + resourceUri.getPath();
                 CSS = CssHeaderItem.forUrl(dataServiceUrl);
             } else {
                 CSS = CssHeaderItem.forReference(new CssResourceReference(component.getClass(), component.getClass().getSimpleName() + ".css"));

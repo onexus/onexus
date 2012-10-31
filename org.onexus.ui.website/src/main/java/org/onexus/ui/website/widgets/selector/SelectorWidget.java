@@ -36,6 +36,7 @@ import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.events.EventFiltersUpdate;
 import org.onexus.ui.website.utils.EntityModel;
 import org.onexus.ui.website.utils.EntityRenderer;
@@ -112,7 +113,7 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
     private List<String> getChoices() {
 
         String field = getConfig().getField();
-        String collection = getConfig().getCollection();
+        ORI collection = getConfig().getCollection();
 
 
         Query query = new Query();

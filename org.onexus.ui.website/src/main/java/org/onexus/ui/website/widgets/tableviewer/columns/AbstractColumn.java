@@ -19,26 +19,27 @@ package org.onexus.ui.website.widgets.tableviewer.columns;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.collection.api.IEntityTable;
+import org.onexus.resource.api.ORI;
 
 public abstract class AbstractColumn implements IColumn<IEntityTable, String> {
 
-    private String collectionId;
+    private ORI collectionId;
 
     public AbstractColumn() {
         super();
         this.collectionId = null;
     }
 
-    public AbstractColumn(String collectionId) {
+    public AbstractColumn(ORI collectionId) {
         super();
         this.collectionId = collectionId;
     }
 
-    public String getCollectionId() {
+    public ORI getCollectionId() {
         return collectionId;
     }
 
-    public void setCollectionId(String collectionId) {
+    public void setCollectionId(ORI collectionId) {
         this.collectionId = collectionId;
     }
 

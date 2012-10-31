@@ -19,12 +19,13 @@ package org.onexus.ui.website.utils;
 
 import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 
 public class SingleEntityQuery extends Query {
 
     public final static String COLLECTION_ALIAS = "c";
 
-    public SingleEntityQuery(String collectionURI, String entityId) {
+    public SingleEntityQuery(ORI collectionURI, String entityId) {
         super();
 
         addDefine(COLLECTION_ALIAS, collectionURI);

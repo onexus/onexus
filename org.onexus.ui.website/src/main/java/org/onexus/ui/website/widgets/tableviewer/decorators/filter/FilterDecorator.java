@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Field;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.website.Website;
 import org.onexus.ui.website.events.AbstractEvent;
@@ -36,9 +37,9 @@ import org.onexus.ui.website.widgets.tableviewer.decorators.utils.LinkPanel;
 
 public class FilterDecorator extends FieldDecorator {
 
-    private String collectionId;
+    private ORI collectionId;
 
-    public FilterDecorator(String collectionId, Field field) {
+    public FilterDecorator(ORI collectionId, Field field) {
         super(field);
         this.collectionId = collectionId;
     }
@@ -55,7 +56,7 @@ public class FilterDecorator extends FieldDecorator {
         cellContainer.add(new LinkPanel(componentId, label, getLink(collectionId, data, tooltip)));
     }
 
-    protected WebMarkupContainer getLink(String collectionId, IModel<IEntity> data, String tooltip) {
+    protected WebMarkupContainer getLink(ORI collectionId, IModel<IEntity> data, String tooltip) {
 
         String entityId = null;
         IEntity entity = data.getObject();
@@ -76,8 +77,8 @@ public class FilterDecorator extends FieldDecorator {
                 // Try to make the link relative to the current website project
                 Website website = findParent(Website.class);
                 if (website != null) {
-                    String projectUri = ResourceUtils.getProjectURI(website.getConfig().getURI());
-                    String relativeUri = ResourceUtils.getRelativeURI(projectUri, rowEntity.getFilteredCollection());
+                    ORI projectUri = website.getConfig().getURI().getParent();
+                    ORI relativeUri = rowEntity.getFilteredCollection().toRelative(projectUri);
                     rowEntity.setFilteredCollection(relativeUri);
                 }
 

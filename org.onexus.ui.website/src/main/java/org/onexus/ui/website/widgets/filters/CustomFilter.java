@@ -18,6 +18,7 @@
 package org.onexus.ui.website.widgets.filters;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
 
@@ -25,10 +26,10 @@ import java.io.Serializable;
 public class CustomFilter implements Serializable {
 
     private String title;
-    private String collection;
+    private ORI collection;
 
     @XStreamAlias("visible-collection")
-    private String visibleCollection;
+    private ORI visibleCollection;
 
     private String field;
 
@@ -36,7 +37,7 @@ public class CustomFilter implements Serializable {
         super();
     }
 
-    public CustomFilter(String title, String collectionURI, String field) {
+    public CustomFilter(String title, ORI collectionURI, String field) {
         super();
         this.title = title;
         this.collection = collectionURI;
@@ -51,19 +52,19 @@ public class CustomFilter implements Serializable {
         this.title = title;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collectionURI) {
+    public void setCollection(ORI collectionURI) {
         this.collection = collectionURI;
     }
 
-    public String getVisibleCollection() {
+    public ORI getVisibleCollection() {
         return visibleCollection;
     }
 
-    public void setVisibleCollection(String visibleCollection) {
+    public void setVisibleCollection(ORI visibleCollection) {
         this.visibleCollection = visibleCollection;
     }
 

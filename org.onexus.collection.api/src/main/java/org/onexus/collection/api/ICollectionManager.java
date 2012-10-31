@@ -18,6 +18,7 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 
 /**
  * <p>A ICollectionManager manage the life-cycle of a collection. We can have a non-blocking
@@ -49,9 +50,9 @@ public interface ICollectionManager {
     /**
      * Unload the collection from origin store.
      *
-     * @param collectionURI
+     * @param collectionOri
      */
-    public void unload(String collectionURI);
+    public void unload(ORI collectionOri);
 
-    boolean isLinkable(Query query, String collectionUri);
+    boolean isLinkable(Query query, ORI collectionOri);
 }

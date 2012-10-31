@@ -23,6 +23,7 @@ import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.Collection;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.concurrent.Callable;
@@ -55,7 +56,7 @@ public class TsvCallable implements Callable<IEntitySet> {
             return new EmptyEntitySet();
         }
 
-        String absDataUri = ResourceUtils.getAbsoluteURI( ResourceUtils.getParentURI(collection.getURI()), dataUri);
+        ORI absDataUri = new ORI(dataUri).toAbsolute(collection.getURI());
         IDataStreams dataStreams = dataManager.load(absDataUri);
 
         if (dataStreams.getProgress() != null) {

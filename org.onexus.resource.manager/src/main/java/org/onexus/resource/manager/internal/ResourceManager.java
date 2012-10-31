@@ -18,7 +18,6 @@
 package org.onexus.resource.manager.internal;
 
 import org.onexus.resource.api.*;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -27,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +64,8 @@ public class ResourceManager implements IResourceManager {
         for (String projectUri : this.projectsContainer.getProjectUris()) {
             File projectFolder = projectsContainer.getProjectFolder(projectUri);
 
-            this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
+                this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
+
         }
 
     }
@@ -76,9 +78,9 @@ public class ResourceManager implements IResourceManager {
     }
 
     @Override
-    public Project getProject(String projectUri) {
+    public Project getProject(String projectUrl) {
 
-        ProjectManager projectManager = getProjectManager(projectUri);
+        ProjectManager projectManager = getProjectManager(projectUrl);
 
         if (projectManager == null) {
             return null;
@@ -100,16 +102,14 @@ public class ResourceManager implements IResourceManager {
     }
 
     @Override
-    public <T extends Resource> T load(Class<T> resourceType, String resourceURI) {
+    public <T extends Resource> T load(Class<T> resourceType, ORI resourceURI) {
         assert resourceType != null;
 
         if (resourceURI == null) {
             return null;
         }
 
-        resourceURI = ResourceUtils.normalizeUri(resourceURI);
-
-        ProjectManager projectManager = getProjectManager(resourceURI);
+        ProjectManager projectManager = getProjectManager(resourceURI.getProjectUrl());
 
         T output = (T) projectManager.getResource(resourceURI);
 
@@ -117,11 +117,9 @@ public class ResourceManager implements IResourceManager {
     }
 
     @Override
-    public <T extends Resource> List<T> loadChildren(Class<T> resourceType, String parentURI) {
-        assert resourceType != null;
-        assert parentURI != null;
+    public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentURI) {
 
-        ProjectManager projectManager = getProjectManager(parentURI);
+        ProjectManager projectManager = getProjectManager(parentURI.getProjectUrl());
 
         return projectManager.getResourceChildren(resourceType, parentURI);
     }
@@ -133,7 +131,7 @@ public class ResourceManager implements IResourceManager {
             return;
         }
 
-        ProjectManager projectManager = getProjectManager(resource.getURI());
+        ProjectManager projectManager = getProjectManager(resource.getURI().getProjectUrl());
         projectManager.save(resource);
     }
 
@@ -173,7 +171,6 @@ public class ResourceManager implements IResourceManager {
 
     @Override
     public void importProject(String projectUri) {
-        projectUri = ResourceUtils.normalizeUri(projectUri);
         File projectFolder = projectsContainer.projectImport(projectUri);
         this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
     }
@@ -186,13 +183,12 @@ public class ResourceManager implements IResourceManager {
         projectManager.loadResources();
     }
 
-    private ProjectManager getProjectManager(String resourceUri) {
+    private ProjectManager getProjectManager(String projectUrl) {
 
-        String projectUri = ResourceUtils.getProjectURI(resourceUri);
-        ProjectManager projectManager = projectManagers.get(projectUri);
+        ProjectManager projectManager = projectManagers.get(projectUrl);
 
         if (projectManager == null) {
-            throw new InvalidParameterException("Project '" + projectUri + "' is not imported");
+            throw new InvalidParameterException("Project '" + projectUrl + "' is not imported");
         }
 
         return projectManager;

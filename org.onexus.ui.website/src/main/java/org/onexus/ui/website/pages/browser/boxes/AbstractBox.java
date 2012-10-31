@@ -22,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.Collection;
+import org.onexus.resource.api.ORI;
 
 import javax.inject.Inject;
 
@@ -31,9 +32,9 @@ public abstract class AbstractBox extends Panel {
 
     @Inject
     private transient IResourceManager resourceManager;
-    private String collectionId;
+    private ORI collectionId;
 
-    public AbstractBox(String collectionId, IModel<IEntity> entityModel) {
+    public AbstractBox(ORI collectionId, IModel<IEntity> entityModel) {
         super(COMPONENT_ID, entityModel);
         this.collectionId = collectionId;
     }
@@ -47,11 +48,11 @@ public abstract class AbstractBox extends Panel {
         return (title == null ? collection.getName() : title);
     }
 
-    public String getCollectionId() {
+    public ORI getCollectionId() {
         return collectionId;
     }
 
-    public void setCollectionId(String collectionId) {
+    public void setCollectionId(ORI collectionId) {
         this.collectionId = collectionId;
     }
 

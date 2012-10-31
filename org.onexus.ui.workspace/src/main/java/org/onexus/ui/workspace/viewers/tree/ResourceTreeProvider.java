@@ -57,7 +57,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        Project project = resourceManager.getProject( ResourceUtils.getProjectURI(resource.getURI()) );
+        Project project = getResourceManager().getProject( resource.getURI().getProjectUrl() );
 
         if (project == null) {
             return EMPTY_ITERATOR;
@@ -87,7 +87,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        List<Resource> children = resourceManager.loadChildren(Resource.class, node.getURI());
+        List<Resource> children = getResourceManager().loadChildren(Resource.class, node.getURI());
 
         Collections.sort(children, RESOURCE_COMPARATOR);
 
@@ -106,6 +106,16 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
     @Override
     public void detach() {
+    }
+
+    private IResourceManager getResourceManager() {
+
+        if (resourceManager == null) {
+            OnexusWebApplication.inject(this);
+        }
+
+        return resourceManager;
+
     }
 
     private final static ResourceComparator RESOURCE_COMPARATOR = new ResourceComparator();
@@ -135,7 +145,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
                 return 1;
             }
 
-            return o1.getName().compareTo(o2.getName());
+            return o1.getURI().toString().compareTo(o2.getURI().toString());
 
         }
 

@@ -17,21 +17,22 @@
  */
 package org.onexus.resource.api;
 
+import java.net.URL;
 import java.util.List;
 
 public interface IResourceManager {
 
     public List<Project> getProjects();
 
-    public Project getProject(String projectUri);
+    public Project getProject(String projectUrl);
 
-    public void importProject(String projectURI);
+    public void importProject(String projectUrl);
 
-    public void syncProject(String projectURI);
+    public void syncProject(String projectUrl);
 
-    public <T extends Resource> T load(Class<T> resourceType, String resourceURI);
+    public <T extends Resource> T load(Class<T> resourceType, ORI resourceOri);
 
-    public <T extends Resource> List<T> loadChildren(Class<T> resourceType, String parentURI);
+    public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentResourceOri);
 
     public void save(Resource resource);
 

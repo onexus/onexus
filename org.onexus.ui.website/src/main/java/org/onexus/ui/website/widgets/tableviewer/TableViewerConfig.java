@@ -19,6 +19,7 @@ package org.onexus.ui.website.widgets.tableviewer;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.ORI;
 import org.onexus.ui.website.widgets.WidgetConfig;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.List;
 @XStreamAlias("viewer-table")
 public class TableViewerConfig extends WidgetConfig {
     
-    private String collection;
+    private ORI collection;
 
     private TableViewerStatus defaultStatus;
 
@@ -38,16 +39,16 @@ public class TableViewerConfig extends WidgetConfig {
         super();
     }
 
-    public TableViewerConfig(String id, String collection) {
+    public TableViewerConfig(String id, ORI collection) {
         super(id);
         this.collection = collection;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 

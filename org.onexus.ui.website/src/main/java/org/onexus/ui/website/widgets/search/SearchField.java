@@ -18,13 +18,14 @@
 package org.onexus.ui.website.widgets.search;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
 
 @XStreamAlias("search-field")
 public class SearchField implements Serializable {
 
-    private String collection;
+    private ORI collection;
 
     private String fields;
 
@@ -32,17 +33,17 @@ public class SearchField implements Serializable {
         super();
     }
 
-    public SearchField(String collectionURI, String fields) {
+    public SearchField(ORI collectionURI, String fields) {
         super();
         this.collection = collectionURI;
         this.fields = fields;
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collectionURI) {
+    public void setCollection(ORI collectionURI) {
         this.collection = collectionURI;
     }
 

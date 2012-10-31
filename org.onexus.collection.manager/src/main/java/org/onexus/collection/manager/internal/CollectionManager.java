@@ -24,10 +24,7 @@ import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.data.api.Progress;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.Loader;
-import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Project;
+import org.onexus.resource.api.*;
 import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,13 +64,13 @@ public class CollectionManager implements ICollectionManager {
     }
 
     @Override
-    public boolean isLinkable(Query query, String collectionUri) {
+    public boolean isLinkable(Query query, ORI collectionUri) {
 
         Collection joinCollection = resourceManager.load(Collection.class, collectionUri);
 
-        for (Map.Entry<String, String> tpDefine : query.getDefine().entrySet()) {
+        for (Map.Entry<String, ORI> tpDefine : query.getDefine().entrySet()) {
 
-            String tpCollectionUri = QueryUtils.getAbsoluteCollectionUri(query, tpDefine.getValue());
+            ORI tpCollectionUri = tpDefine.getValue().toAbsolute(query.getOn());
 
             Collection tpJoinCollection = resourceManager.load(Collection.class, tpCollectionUri);
 
@@ -91,8 +88,8 @@ public class CollectionManager implements ICollectionManager {
     public IEntityTable load(Query query) {
         LOGGER.debug("Loading query {}", query);
 
-        Set<String> notRegisteredCollections = new HashSet<String>();
-        for (String collectionURI : getQueryCollections(query)) {
+        Set<ORI> notRegisteredCollections = new HashSet<ORI>();
+        for (ORI collectionURI : getQueryCollections(query)) {
             if (!collectionStore.isRegistered(collectionURI)) {
                 notRegisteredCollections.add(collectionURI);
             }
@@ -105,9 +102,9 @@ public class CollectionManager implements ICollectionManager {
             progress = new Progress(taskId, "Loading collections");
 
             LOGGER.info("Starting task {}", taskId);
-            for (String collectionURI : notRegisteredCollections) {
+            for (ORI collectionURI : notRegisteredCollections) {
 
-                Project project = resourceManager.load(Project.class, ResourceUtils.getProjectURI(collectionURI));
+                Project project = resourceManager.getProject(collectionURI.getProjectUrl());
                 Collection collection = resourceManager.load(Collection.class, collectionURI);
 
                 if (collection == null) {
@@ -119,7 +116,7 @@ public class CollectionManager implements ICollectionManager {
 
                     if (!runningCollections.containsKey(subTaskId)) {
 
-                        Progress subProgress = new Progress(subTaskId, "Load '" + ResourceUtils.getResourcePath(collectionURI) + "'");
+                        Progress subProgress = new Progress(subTaskId, "Load '" + collectionURI.getPath() + "'");
                         runningCollections.put(subTaskId, subProgress);
 
                         LOGGER.info("Registering {}", collectionURI);
@@ -151,13 +148,13 @@ public class CollectionManager implements ICollectionManager {
         return partialResults;
     }
 
-    private Set<String> getQueryCollections(Query query) {
+    private Set<ORI> getQueryCollections(Query query) {
 
-        Set<String> queryCollections = new HashSet<String>();
-        String onUri = query.getOn();
+        Set<ORI> queryCollections = new HashSet<ORI>();
+        ORI onUri = query.getOn();
 
-        for (String collectionUri : query.getDefine().values()) {
-            queryCollections.add(ResourceUtils.getAbsoluteURI(onUri, collectionUri));
+        for (ORI collectionUri : query.getDefine().values()) {
+            queryCollections.add(collectionUri.toAbsolute(onUri));
         }
 
         return queryCollections;
@@ -178,7 +175,7 @@ public class CollectionManager implements ICollectionManager {
     }
 
     @Override
-    public void unload(String collectionURI) {
+    public void unload(ORI collectionURI) {
 
         if (collectionStore.isRegistered(collectionURI)) {
             // If in future exist multiple collectionStores this action makes

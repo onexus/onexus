@@ -26,6 +26,7 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.Collection;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.wizards.AbstractWizard;
 import org.onexus.ui.api.progressbar.ProgressBar;
@@ -42,7 +43,7 @@ public class ManageCollectionsWizard extends AbstractWizard {
     private static final List<String> COMMANDS = Arrays.asList(new String[]{LOAD, UNLOAD});
 
     private String selected;
-    private String resourceURI;
+    private ORI resourceURI;
 
     @Inject
     public transient IResourceManager resourceManager;

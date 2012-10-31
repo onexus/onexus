@@ -18,10 +18,12 @@
 package org.onexus.data.api;
 
 
+import org.onexus.resource.api.ORI;
+
 public interface IDataManager {
 
-    public IDataStreams load(String dataUri);
+    public IDataStreams load(ORI dataOri);
 
-    public long size(String dataUri);
+    public long size(ORI dataOri);
 
 }

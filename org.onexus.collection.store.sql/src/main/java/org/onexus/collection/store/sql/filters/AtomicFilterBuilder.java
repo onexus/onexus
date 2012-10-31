@@ -24,6 +24,7 @@ import org.onexus.collection.api.query.AtomicFilter;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class AtomicFilterBuilder extends AbstractFilterBuilder<AtomicFilter> {
     protected void innerBuild(SqlCollectionStore store, Query query, StringBuilder where, AtomicFilter filter) {
 
         String collectionAlias = filter.getCollectionAlias();
-        String collectionUri = QueryUtils.getCollectionUri(query, collectionAlias);
+        ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);
         SqlCollectionDDL collection = store.getDDL(collectionUri);
 
         SqlCollectionDDL.ColumnInfo column = collection.getColumnInfoByFieldName(filter.getFieldId());
