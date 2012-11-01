@@ -47,7 +47,9 @@ public class ImportProjectModal extends Panel {
             protected void onSubmit() {
 
                 try {
-
+                    if (!projectURL.contains("://")) {
+                        projectURL = "file://" + projectURL;
+                    }
                     resourceManager.importProject(projectURL);
                     PageParameters parameters = new PageParameters();
                     parameters.set(ResourcesPage.PARAMETER_RESOURCE, projectURL);
