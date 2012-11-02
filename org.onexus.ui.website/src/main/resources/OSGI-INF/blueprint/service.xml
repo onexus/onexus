@@ -162,6 +162,14 @@
     </service>
 
     <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.scale.UniformColorDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.scale.CategoricalDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.onexus.ui.website.widgets.tableviewer.decorators.scale.RankDecoratorCreator"/>
     </service>
 

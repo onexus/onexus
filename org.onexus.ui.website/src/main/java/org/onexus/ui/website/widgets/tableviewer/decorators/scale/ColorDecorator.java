@@ -112,11 +112,7 @@ public class ColorDecorator extends FieldDecorator {
             return emptyColor;
         }
 
-        if (value instanceof Double) {
-            return colorScale.valueColor((Double) value);
-        }
-
-        return colorScale.valueColor(new Double(value.toString()));
+        return colorScale.valueColor(value);
     }
 
 

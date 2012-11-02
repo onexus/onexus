@@ -53,4 +53,28 @@ public class ColorUtils {
                 + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000)
                 .substring(1);
     }
+
+    public static Color stringToColor(String color) {
+
+        if (color == null) {
+            return null;
+        }
+
+        int r = 0, g = 0, b = 0;
+        try {
+            String tmpcolor = color.trim();
+            tmpcolor = tmpcolor.substring(1, tmpcolor.length() - 1);
+            String rgb[] = tmpcolor.split(",");
+
+            r = (new Integer(rgb[0])).intValue();
+            g = (new Integer(rgb[1])).intValue();
+            b = (new Integer(rgb[2])).intValue();
+
+            return new Color(r, g, b);
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("The color '" + color + "' is malformed. Syntax: [r,g,b] Example: \"[128,12,34]\"");
+        }
+    }
 }
+
+

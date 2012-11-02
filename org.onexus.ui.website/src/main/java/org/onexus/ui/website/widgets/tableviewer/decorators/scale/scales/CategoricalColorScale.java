@@ -19,26 +19,28 @@ package org.onexus.ui.website.widgets.tableviewer.decorators.scale.scales;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Map;
 
-public class UniformColorScale implements IColorScaleHtml, Serializable {
+public class CategoricalColorScale implements IColorScaleHtml, Serializable {
 
-    protected Color color;
+    private Color unknownColor;
+    private Map<String, Color> colors;
 
-    public UniformColorScale(Color color) {
-        this.color = color;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
+    public CategoricalColorScale(Color unknownColor, Map<String, Color> colors) {
+        this.unknownColor = unknownColor;
+        this.colors = colors;
     }
 
     @Override
     public Color valueColor(Object value) {
-        return color;
+
+        String key = String.valueOf(value).trim();
+
+        if (colors.containsKey(key)) {
+            return colors.get(key);
+        }
+
+        return unknownColor;
     }
 
     @Override

@@ -23,11 +23,11 @@ public interface IColorScaleHtml extends IColorScale {
      * @param value
      * @return The color as rgb(red, green, blue) string
      */
-    String valueRGBHtmlColor(double value);
+    String valueRGBHtmlColor(Object value);
 
     /**
      * @param value
      * @return The color in a Hexadecimal format. Ex: #FFA01C
      */
-    String valueHexHtmlColor(double value);
+    String valueHexHtmlColor(Object value);
 }

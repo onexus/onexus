@@ -58,7 +58,16 @@ public class LogColorScale extends AbstractColorScale {
         this.logFactor = logFactor;
     }
 
-    public Color valueColor(double value) {
+    public Color valueColor(Object obj) {
+
+        double value;
+        if (obj instanceof Double) {
+            value = (Double) obj;
+        } else {
+            value = Double.valueOf(String.valueOf(obj));
+        }
+
+
         if (Double.isNaN(value))
             return notANumberColor;
         else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
