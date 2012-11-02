@@ -53,6 +53,7 @@
 
         <module>org.onexus.resource.api</module>
         <module>org.onexus.resource.manager</module>
+	<module>org.onexus.resource.authorization</module>
         <module>org.onexus.resource.serializer.xstream</module>
 
         <module>org.onexus.data.api</module>
@@ -332,6 +333,11 @@
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.resource.manager</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.resource.authorization</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -3,10 +3,12 @@
            xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
 
     <reference id="serializerRef" interface="org.onexus.resource.api.IResourceSerializer"/>
+    <reference id="authorizationRef" interface="org.onexus.resource.api.IAuthorizationManager"/>
 
     <service id="org.onexus.resource.manager" interface="org.onexus.resource.api.IResourceManager">
         <bean class="org.onexus.resource.manager.internal.ResourceManager" init-method="init">
             <property name="serializer" ref="serializerRef"/>
+            <property name="authorizationManager" ref="authorizationRef"/>
             <property name="context" ref="blueprintBundleContext"/>
         </bean>
     </service>

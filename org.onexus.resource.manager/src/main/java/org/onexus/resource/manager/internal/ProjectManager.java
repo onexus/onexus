@@ -25,10 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.*;
-import java.util.Collection;
 
 public class ProjectManager {
 
@@ -100,7 +98,7 @@ public class ProjectManager {
 
     }
 
-    public <T extends Resource> List<T> getResourceChildren(Class<T> resourceType, ORI parentURI) {
+    public <T extends Resource> List<T> getResourceChildren(IAuthorizationManager authorizationManager, Class<T> resourceType, ORI parentURI) {
 
         if (resources == null) {
             loadResources();
@@ -109,7 +107,9 @@ public class ProjectManager {
         List<T> children = new ArrayList<T>();
         for (Resource resource : resources.values()) {
             if (parentURI.isChild(resource.getURI()) && resourceType.isAssignableFrom(resource.getClass())) {
-                children.add((T) resource);
+                if (authorizationManager.check(IAuthorizationManager.READ, resource.getURI())) {
+                    children.add((T) resource);
+                }
             }
         }
 

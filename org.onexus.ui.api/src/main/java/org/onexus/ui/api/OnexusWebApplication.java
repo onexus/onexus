@@ -34,6 +34,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.resource.api.IResourceRegister;
 import org.onexus.resource.api.IResourceService;
+import org.onexus.resource.api.ResourceLoginContext;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.ws.WebserviceResource;
@@ -83,6 +84,14 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
             @Override
             public IRequestHandler onException(RequestCycle cycle, Exception e) {
                 return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e)));
+            }
+        });
+
+        // Set the login context on each thread
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+            @Override
+            public void onBeginRequest(RequestCycle cycle) {
+                ResourceLoginContext.set(OnexusWebSession.get().getLoginContext());
             }
         });
 
@@ -174,6 +183,8 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
     public ResourceReference getDataService() {
         return getSharedResources().get(Application.class, "dataservice", null, null, null, true);
     }
+
+
 
 
 

@@ -44,7 +44,7 @@ import org.onexus.ui.api.progressbar.ProgressBar;
 import javax.inject.Inject;
 import java.util.List;
 
-@AuthorizeInstantiation("onexus-admin")
+@AuthorizeInstantiation({ "onexus-admin", "onexus-user" })
 public class BaseResourcePage extends WebPage {
 
 
@@ -79,6 +79,7 @@ public class BaseResourcePage extends WebPage {
             @Override
             public void onClick() {
                 OnexusWebSession.get().invalidate();
+                setResponsePage(OnexusWebApplication.get().getHomePage());
             }
         });
 

@@ -17,6 +17,7 @@
  */
 package org.onexus.resource.manager.internal;
 
+import static org.onexus.resource.api.IAuthorizationManager.*;
 import org.onexus.resource.api.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -26,8 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +39,9 @@ public class ResourceManager implements IResourceManager {
 
     // Injected OSGi services
     private IResourceSerializer serializer;
+
+    private IAuthorizationManager authorizationManager;
+
     private BundleContext context;
 
     // Loaders and managers
@@ -51,34 +53,12 @@ public class ResourceManager implements IResourceManager {
         super();
     }
 
-    public void init() {
-
-        // Projects container
-        this.projectsContainer = new ProjectsContainer();
-
-        // Plugin loader
-        this.pluginLoader = new PluginLoader(context);
-
-        // Load projects managers
-        this.projectManagers = new HashMap<String, ProjectManager>();
-        for (String projectUri : this.projectsContainer.getProjectUris()) {
-            File projectFolder = projectsContainer.getProjectFolder(projectUri);
-
-                this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
-
-        }
-
-    }
-
-    private ProjectManager newProjectManager(String projectUri, File projectFolder) {
-        ProjectManager projectManager = new ProjectManager(serializer, projectUri, projectFolder);
-        projectManager.loadProject();
-        this.pluginLoader.load(projectManager.getProject());
-        return projectManager;
-    }
-
     @Override
     public Project getProject(String projectUrl) {
+
+        if (!authorizationManager.check(READ, new ORI(projectUrl))) {
+             throw new SecurityException("Unauthorized READ access to project '" + projectUrl + "'");
+        };
 
         ProjectManager projectManager = getProjectManager(projectUrl);
 
@@ -95,7 +75,10 @@ public class ResourceManager implements IResourceManager {
         List<Project> projects = new ArrayList<Project>();
 
         for (ProjectManager projectManager : projectManagers.values()) {
-            projects.add(projectManager.getProject());
+            Project project = projectManager.getProject();
+            if (authorizationManager.check(READ, project.getURI())) {
+                projects.add(project);
+            };
         }
 
         return projects;
@@ -109,6 +92,10 @@ public class ResourceManager implements IResourceManager {
             return null;
         }
 
+        if (!authorizationManager.check(READ, resourceURI)) {
+            throw new SecurityException("Unauthorized READ access to '" + resourceURI.toString() + "'");
+        };
+
         ProjectManager projectManager = getProjectManager(resourceURI.getProjectUrl());
 
         T output = (T) projectManager.getResource(resourceURI);
@@ -119,9 +106,14 @@ public class ResourceManager implements IResourceManager {
     @Override
     public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentURI) {
 
+        if (!authorizationManager.check(READ, parentURI)) {
+            throw new SecurityException("Unauthorized READ access to '" + parentURI.toString() + "'");
+        };
+
+
         ProjectManager projectManager = getProjectManager(parentURI.getProjectUrl());
 
-        return projectManager.getResourceChildren(resourceType, parentURI);
+        return projectManager.getResourceChildren(authorizationManager, resourceType, parentURI);
     }
 
     @Override
@@ -130,6 +122,10 @@ public class ResourceManager implements IResourceManager {
         if (resource == null) {
             return;
         }
+
+        if (!authorizationManager.check(WRITE, resource.getURI())) {
+            throw new SecurityException("Unauthorized WRITE access to '" + resource.toString() + "'");
+        };
 
         ProjectManager projectManager = getProjectManager(resource.getURI().getProjectUrl());
         projectManager.save(resource);
@@ -177,10 +173,41 @@ public class ResourceManager implements IResourceManager {
 
     @Override
     public void syncProject(String projectURI) {
+
+        if (!authorizationManager.check(READ, new ORI(projectURI, null))) {
+            throw new SecurityException("Unauthorized READ access to '" + projectURI + "'");
+        };
+
         ProjectManager projectManager = getProjectManager(projectURI);
         projectManager.loadProject();
         this.pluginLoader.load(projectManager.getProject());
         projectManager.loadResources();
+    }
+
+    public void init() {
+
+        // Projects container
+        this.projectsContainer = new ProjectsContainer();
+
+        // Plugin loader
+        this.pluginLoader = new PluginLoader(context);
+
+        // Load projects managers
+        this.projectManagers = new HashMap<String, ProjectManager>();
+        for (String projectUri : this.projectsContainer.getProjectUris()) {
+            File projectFolder = projectsContainer.getProjectFolder(projectUri);
+
+            this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
+
+        }
+
+    }
+
+    private ProjectManager newProjectManager(String projectUri, File projectFolder) {
+        ProjectManager projectManager = new ProjectManager(serializer, projectUri, projectFolder);
+        projectManager.loadProject();
+        this.pluginLoader.load(projectManager.getProject());
+        return projectManager;
     }
 
     private ProjectManager getProjectManager(String projectUrl) {
@@ -211,5 +238,11 @@ public class ResourceManager implements IResourceManager {
         this.context = context;
     }
 
+    public IAuthorizationManager getAuthorizationManager() {
+        return authorizationManager;
+    }
 
+    public void setAuthorizationManager(IAuthorizationManager authorizationManager) {
+        this.authorizationManager = authorizationManager;
+    }
 }

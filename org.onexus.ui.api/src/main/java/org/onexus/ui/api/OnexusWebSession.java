@@ -25,6 +25,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.util.time.Duration;
+import org.onexus.resource.api.ResourceLoginContext;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
@@ -37,9 +38,9 @@ import java.util.Random;
 
 public class OnexusWebSession extends AuthenticatedWebSession {
 
-    private String userName = null;
     private String userToken = null;
-
+    private ResourceLoginContext ctx = new ResourceLoginContext();
+    private Roles roles = new Roles();
 
     public static final String APPLICATION_POLICY_NAME = "karaf";
     public static final String ONEXUS_COOKIE = "onexus-user-token";
@@ -50,9 +51,6 @@ public class OnexusWebSession extends AuthenticatedWebSession {
     }
 
     private final static Random RANDOM = new Random();
-
-    private Subject subject;
-    private Roles roles = new Roles();
 
     public OnexusWebSession(Request request) {
         super(request);
@@ -75,14 +73,18 @@ public class OnexusWebSession extends AuthenticatedWebSession {
         this.userToken = userToken;
     }
 
+    @Override
+    public Roles getRoles() {
+        return roles;
+    }
 
 
     public String getUserToken() {
-        return (isSignedIn() ? userName : userToken);
+        return (isSignedIn() ? ctx.getUserName() : userToken);
     }
 
-    public String getUserName() {
-        return userName;
+    public ResourceLoginContext getLoginContext() {
+        return ctx;
     }
 
     public static OnexusWebSession get() {
@@ -92,30 +94,32 @@ public class OnexusWebSession extends AuthenticatedWebSession {
     @Override
     public void signOut() {
         super.signOut();
-        this.userName = null;
+        this.ctx.logout();
     }
 
     public boolean authenticate(String username, String password) {
         boolean authenticated = false;
         LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
         try {
-            LoginContext ctx = new LoginContext(APPLICATION_POLICY_NAME, handler);
-            ctx.login();
+            LoginContext javaCtx = new LoginContext(APPLICATION_POLICY_NAME, handler);
+            javaCtx.login();
             authenticated = true;
-            subject = ctx.getSubject();
-            userName = username;
-            for (Principal p : subject.getPrincipals()) {
-                roles.add(p.getName());
+
+            this.ctx = new ResourceLoginContext(username);
+
+            Subject subject = javaCtx.getSubject();
+            if (subject != null) {
+                for (Principal p : subject.getPrincipals()) {
+                    ctx.addRole(p.getName());
+                    roles.add(p.getName());
+                }
             }
+
         } catch (LoginException e) {
             // You'll get a LoginException on a failed username/password combo.
             authenticated = false;
         }
         return authenticated;
-    }
-
-    public Roles getRoles() {
-        return roles;
     }
 
     private class LoginCallbackHandler implements CallbackHandler {
