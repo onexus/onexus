@@ -29,6 +29,8 @@ public interface IResourceManager {
 
     public void syncProject(String projectUrl);
 
+    public void updateProject(String projectUrl);
+
     public <T extends Resource> T load(Class<T> resourceType, ORI resourceOri);
 
     public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentResourceOri);

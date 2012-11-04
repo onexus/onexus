@@ -19,6 +19,7 @@ package org.onexus.resource.manager.internal;
 
 import static org.onexus.resource.api.IAuthorizationManager.*;
 import org.onexus.resource.api.*;
+import org.onexus.resource.manager.internal.providers.ProjectProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -26,12 +27,9 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ResourceManager implements IResourceManager {
 
@@ -45,9 +43,7 @@ public class ResourceManager implements IResourceManager {
     private BundleContext context;
 
     // Loaders and managers
-    private PluginLoader pluginLoader;
     private ProjectsContainer projectsContainer;
-    private Map<String, ProjectManager> projectManagers;
 
     public ResourceManager() {
         super();
@@ -60,7 +56,7 @@ public class ResourceManager implements IResourceManager {
              throw new SecurityException("Unauthorized READ access to project '" + projectUrl + "'");
         };
 
-        ProjectManager projectManager = getProjectManager(projectUrl);
+        ProjectProvider projectManager = getProjectProvider(projectUrl);
 
         if (projectManager == null) {
             return null;
@@ -74,8 +70,9 @@ public class ResourceManager implements IResourceManager {
 
         List<Project> projects = new ArrayList<Project>();
 
-        for (ProjectManager projectManager : projectManagers.values()) {
-            Project project = projectManager.getProject();
+        for (String projectUrl : projectsContainer.getProjectUrls()) {
+            ProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
+            Project project = provider.getProject();
             if (authorizationManager.check(READ, project.getURI())) {
                 projects.add(project);
             };
@@ -96,9 +93,9 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized READ access to '" + resourceURI.toString() + "'");
         };
 
-        ProjectManager projectManager = getProjectManager(resourceURI.getProjectUrl());
+        ProjectProvider provider = getProjectProvider(resourceURI.getProjectUrl());
 
-        T output = (T) projectManager.getResource(resourceURI);
+        T output = (T) provider.getResource(resourceURI);
 
         return output;
     }
@@ -111,9 +108,9 @@ public class ResourceManager implements IResourceManager {
         };
 
 
-        ProjectManager projectManager = getProjectManager(parentURI.getProjectUrl());
+        ProjectProvider provider = getProjectProvider(parentURI.getProjectUrl());
 
-        return projectManager.getResourceChildren(authorizationManager, resourceType, parentURI);
+        return provider.getResourceChildren(authorizationManager, resourceType, parentURI);
     }
 
     @Override
@@ -127,8 +124,8 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized WRITE access to '" + resource.toString() + "'");
         };
 
-        ProjectManager projectManager = getProjectManager(resource.getURI().getProjectUrl());
-        projectManager.save(resource);
+        ProjectProvider provider = getProjectProvider(resource.getURI().getProjectUrl());
+        provider.save(resource);
     }
 
     @Override
@@ -167,8 +164,7 @@ public class ResourceManager implements IResourceManager {
 
     @Override
     public void importProject(String projectUri) {
-        File projectFolder = projectsContainer.projectImport(projectUri);
-        this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
+        projectsContainer.importProject(projectUri);
     }
 
     @Override
@@ -178,47 +174,36 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized READ access to '" + projectURI + "'");
         };
 
-        ProjectManager projectManager = getProjectManager(projectURI);
-        projectManager.loadProject();
-        this.pluginLoader.load(projectManager.getProject());
-        projectManager.loadResources();
+        ProjectProvider provider = getProjectProvider(projectURI);
+        provider.syncProject();
+    }
+
+    @Override
+    public void updateProject(String projectUrl) {
+
+        if (!authorizationManager.check(WRITE, new ORI(projectUrl, null))) {
+            throw new SecurityException("Unauthorized WRITE access to '" + projectUrl + "'");
+        }
+
+        ProjectProvider provider = getProjectProvider(projectUrl);
+        provider.updateProject();
+
     }
 
     public void init() {
-
         // Projects container
-        this.projectsContainer = new ProjectsContainer();
-
-        // Plugin loader
-        this.pluginLoader = new PluginLoader(context);
-
-        // Load projects managers
-        this.projectManagers = new HashMap<String, ProjectManager>();
-        for (String projectUri : this.projectsContainer.getProjectUris()) {
-            File projectFolder = projectsContainer.getProjectFolder(projectUri);
-
-            this.projectManagers.put(projectUri, newProjectManager(projectUri, projectFolder));
-
-        }
-
+        this.projectsContainer = new ProjectsContainer(serializer, new PluginLoader(context));
     }
 
-    private ProjectManager newProjectManager(String projectUri, File projectFolder) {
-        ProjectManager projectManager = new ProjectManager(serializer, projectUri, projectFolder);
-        projectManager.loadProject();
-        this.pluginLoader.load(projectManager.getProject());
-        return projectManager;
-    }
+    private ProjectProvider getProjectProvider(String projectUrl) {
 
-    private ProjectManager getProjectManager(String projectUrl) {
+        ProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
 
-        ProjectManager projectManager = projectManagers.get(projectUrl);
-
-        if (projectManager == null) {
+        if (provider == null) {
             throw new InvalidParameterException("Project '" + projectUrl + "' is not imported");
         }
 
-        return projectManager;
+        return provider;
 
     }
 

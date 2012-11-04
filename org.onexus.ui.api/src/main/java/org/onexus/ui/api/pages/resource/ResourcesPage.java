@@ -22,7 +22,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -34,10 +33,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.viewers.IViewerCreator;
 import org.onexus.ui.api.viewers.EmptyPanelViewerCreator;
@@ -62,8 +59,11 @@ public class ResourcesPage extends BaseResourcePage {
     public ResourcesPage(PageParameters parameters) {
         super(new ResourceModel(parameters.get(PARAMETER_RESOURCE).toOptionalString()));
 
-        // Reload project
-        add(new ToolProjectReload("projectReload"));
+        // Sync project
+        add(new ToolProjectSync("projectSync"));
+
+        // Update project
+        add(new ToolProjectUpdate("projectUpdate"));
 
         // Copy resource URI
         add(new ToolCopyUri("copyURI", getModel()));
@@ -84,9 +84,9 @@ public class ResourcesPage extends BaseResourcePage {
         return viewersManager;
     }
 
-    public class ToolProjectReload extends Link<Resource> {
+    public class ToolProjectSync extends Link<Resource> {
 
-        public ToolProjectReload(String id) {
+        public ToolProjectSync(String id) {
             super(id);
         }
 
@@ -120,6 +120,44 @@ public class ResourcesPage extends BaseResourcePage {
             return ResourcesPage.this.getModelObject() != null;
         }
     }
+
+    public class ToolProjectUpdate extends Link<Resource> {
+
+        public ToolProjectUpdate(String id) {
+            super(id);
+        }
+
+        @Override
+        public void onClick() {
+            Resource resource = ResourcesPage.this.getModelObject();
+
+            if (resource != null) {
+                ORI resourceUri = resource.getURI();
+                getResourceManager().updateProject(resourceUri.getProjectUrl());
+
+                Resource newVersion = getResourceManager().load(Resource.class, resourceUri);
+                if (newVersion == null) {
+                    resourceUri = resourceUri.getParent();
+
+                    newVersion = getResourceManager().load(Resource.class, resourceUri);
+                    if (newVersion == null) {
+                        resourceUri = new ORI(resourceUri.getProjectUrl(), null);
+                    }
+                }
+
+                PageParameters parameters = new PageParameters();
+                parameters.set(ResourcesPage.PARAMETER_RESOURCE, resourceUri);
+
+                setResponsePage(ResourcesPage.class, parameters);
+            }
+        }
+
+        @Override
+        public boolean isVisible() {
+            return ResourcesPage.this.getModelObject() != null;
+        }
+    }
+
 
     public static class ToolCopyUri extends ExternalLink {
 

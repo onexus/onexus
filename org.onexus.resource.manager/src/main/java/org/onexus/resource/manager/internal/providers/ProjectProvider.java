@@ -15,12 +15,13 @@
  *
  *
  */
-package org.onexus.resource.manager.internal;
+package org.onexus.resource.manager.internal.providers;
 
 import org.apache.commons.io.FilenameUtils;
 import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.UnserializeException;
+import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,26 +29,25 @@ import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-public class ProjectManager {
+public abstract class ProjectProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(ProjectManager.class);
+    private static final Logger log = LoggerFactory.getLogger(ProjectProvider.class);
     public final static String ONEXUS_EXTENSION = "onx";
     public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
     private IResourceSerializer serializer;
+    private PluginLoader pluginLoader;
+
     private String projectUrl;
     private File projectFolder;
 
     private Project project;
     private Map<ORI, Resource> resources;
 
-    public ProjectManager(IResourceSerializer serializer, String projectUrl, File projectFolder) throws InvalidParameterException {
+    public ProjectProvider(String projectUrl, File projectFolder) throws InvalidParameterException {
         super();
-
-        this.serializer = serializer;
         this.projectUrl = projectUrl;
         this.projectFolder = projectFolder;
-
     }
 
     public Project getProject() {
@@ -58,7 +58,27 @@ public class ProjectManager {
         return project;
     }
 
-    public void loadResources() {
+    public File getProjectFolder() {
+        return projectFolder;
+    }
+
+    protected void setProjectFolder(File projectFolder) {
+        this.projectFolder = projectFolder;
+    }
+
+    private void loadProject() {
+        File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
+
+        if (!projectOnx.exists()) {
+            throw new InvalidParameterException("No Onexus project in " + projectFolder.getAbsolutePath());
+        }
+
+        this.project = (Project) loadResource(projectOnx);
+
+        this.pluginLoader.load(project);
+    }
+
+    private void loadResources() {
 
         this.resources = new HashMap<ORI, Resource>();
 
@@ -116,15 +136,17 @@ public class ProjectManager {
         return children;
     }
 
-    public void loadProject() {
-        File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
-
-        if (!projectOnx.exists()) {
-            throw new InvalidParameterException("No Onexus project in " + projectFolder.getAbsolutePath());
-        }
-
-        this.project = (Project) loadResource(projectOnx);
+    public void syncProject() {
+        loadProject();
+        loadResources();
     }
+
+    public void updateProject() {
+        importProject();
+        syncProject();
+    }
+
+    protected abstract void importProject();
 
     private Resource loadResource(File resourceFile) {
 
@@ -257,4 +279,23 @@ public class ProjectManager {
 
     }
 
+    public String getProjectUrl() {
+        return projectUrl;
+    }
+
+    public PluginLoader getPluginLoader() {
+        return pluginLoader;
+    }
+
+    public void setPluginLoader(PluginLoader pluginLoader) {
+        this.pluginLoader = pluginLoader;
+    }
+
+    public IResourceSerializer getSerializer() {
+        return serializer;
+    }
+
+    public void setSerializer(IResourceSerializer serializer) {
+        this.serializer = serializer;
+    }
 }

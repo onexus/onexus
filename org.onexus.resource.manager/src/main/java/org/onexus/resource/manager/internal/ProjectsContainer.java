@@ -17,23 +17,17 @@
  */
 package org.onexus.resource.manager.internal;
 
-import org.eclipse.jgit.api.CheckoutCommand;
-import org.eclipse.jgit.api.CloneCommand;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.manager.internal.providers.ProjectProvider;
+import org.onexus.resource.manager.internal.providers.ProjectProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.URL;
-import java.security.InvalidParameterException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class ProjectsContainer {
 
@@ -43,17 +37,19 @@ public class ProjectsContainer {
     private final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
 
     private Properties properties;
-    private File projectsFolder;
-    private File propertiesFile;
+    private ProjectProviderFactory providerFactory;
+    private Map<String, ProjectProvider> providers = new HashMap<String, ProjectProvider>();
 
-    public ProjectsContainer() {
+    public ProjectsContainer(IResourceSerializer serializer, PluginLoader pluginLoader) {
         super();
+
+        this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader);
 
         this.properties = new Properties();
 
         File onexusFolder = new File(ONEXUS_FOLDER);
-        projectsFolder = new File(ONEXUS_PROJECTS_FOLDER);
-        propertiesFile = new File(onexusFolder, ONEXUS_PROJECTS_SETTINGS);
+        File projectsFolder = new File(ONEXUS_PROJECTS_FOLDER);
+        File propertiesFile = new File(onexusFolder, ONEXUS_PROJECTS_SETTINGS);
 
         try {
 
@@ -75,121 +71,44 @@ public class ProjectsContainer {
             throw new IllegalStateException(e);
         }
 
+        for (String projectUrl : getProjectUrls()) {
+            File projectFolder = new File(properties.getProperty(projectUrl));
+            ProjectProvider provider = providerFactory.newProjectProvider(projectUrl, projectFolder);
+            providers.put(projectUrl, provider);
+        }
     }
 
-    public File getProjectFolder(String projectUri) {
-        return new File(properties.getProperty(projectUri));
-    }
-
-    public Collection<String> getProjectUris() {
+    public Collection<String> getProjectUrls() {
         return properties.stringPropertyNames();
     }
 
-    public File projectImport(String projectUri) {
-
-
-
-
-        if (projectUri.endsWith(".git")) {
-            return projectImportGit(projectUri);
-        }
-
-        return projectImportZipOrFolder(projectUri);
+    public ProjectProvider getProjectProvider(String projectUri) {
+        return providers.get(projectUri);
     }
 
-    private File projectImportGit(String projectUri) {
+    public ProjectProvider importProject(String projectUri) {
 
-        try {
+        File defaultProjectFolder = newProjectFolder(projectUri);
 
-            File projectFolder = new File(projectsFolder, Integer.toHexString(projectUri.hashCode()));
-            if (projectFolder.exists()) {
-                throw new InvalidParameterException("This project is already imported");
+        ProjectProvider provider = providerFactory.newProjectProvider(projectUri, defaultProjectFolder);
+
+        if (provider != null) {
+            providers.put(projectUri, provider);
+            properties.setProperty(projectUri, provider.getProjectFolder().getAbsolutePath());
+
+            try {
+                properties.store(new FileOutputStream(new File(new File(ONEXUS_FOLDER), ONEXUS_PROJECTS_SETTINGS)), null);
+            } catch (FileNotFoundException e) {
+                log.error(e.getMessage());
+            } catch (IOException e) {
+                log.error(e.getMessage());
             }
-            projectFolder.mkdir();
-
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            Repository repository = builder.setGitDir(projectFolder).readEnvironment().findGitDir().build();
-            Git git = new Git(repository);
-            CloneCommand clone = git.cloneRepository();
-            clone.setBare(false);
-            clone.setCloneAllBranches(true);
-            clone.setDirectory(projectFolder).setURI(projectUri.toString());
-            clone.call();
-
-            properties.setProperty(projectUri.toString(), projectFolder.getAbsolutePath());
-            properties.store(new FileWriter(propertiesFile), "Onexus Projects");
-
-            return projectFolder;
-
-        } catch (Exception e) {
-            log.error("Importing project '" + projectUri +"'", e);
-            throw new InvalidParameterException("Invalid Onexus URL project");
         }
 
+        return provider;
     }
 
-    private File projectImportZipOrFolder(String projectUri) {
-
-        try {
-
-            byte[] buffer = new byte[1024];
-            URL projectUrl = new URL(projectUri);
-            ZipInputStream zis = new ZipInputStream(projectUrl.openStream());
-            ZipEntry ze = zis.getNextEntry();
-
-            // It's not a ZIP file return it.
-            File projectFolder;
-            if (ze == null) {
-                projectFolder = new File(projectUrl.toURI());
-                properties.setProperty(projectUri.toString(), projectFolder.getAbsolutePath());
-                properties.store(new FileWriter(propertiesFile), "Onexus Projects");
-                return projectFolder;
-            }
-
-            projectFolder = new File(projectsFolder, Integer.toHexString(projectUri.hashCode()));
-            if (projectFolder.exists()) {
-                throw new InvalidParameterException("This project is already imported");
-            }
-            projectFolder.mkdir();
-
-            File outputFolder = projectFolder;
-            if (ze.isDirectory()) {
-                String fileName = ze.getName();
-                outputFolder = new File(projectFolder, fileName);
-                outputFolder.mkdir();
-                ze = zis.getNextEntry();
-            }
-
-            while (ze != null) {
-
-                String fileName = ze.getName();
-                File newFile = new File(projectFolder, fileName);
-                if (ze.isDirectory()) {
-                    newFile.mkdir();
-                } else {
-                    FileOutputStream fos = new FileOutputStream(newFile);
-                    int len;
-                    while ((len = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, len);
-                    }
-                    fos.close();
-                }
-
-                ze = zis.getNextEntry();
-
-            }
-            zis.close();
-
-            properties.setProperty(projectUri.toString(), outputFolder.getAbsolutePath());
-            properties.store(new FileWriter(propertiesFile), "Onexus Projects");
-            return outputFolder;
-
-
-        } catch (Exception e) {
-            log.error("Importing project '" + projectUri +"'", e);
-            throw new InvalidParameterException("Invalid Onexus URL project");
-        }
-
+    private File newProjectFolder(String projectUri) {
+        return new File(new File(ONEXUS_PROJECTS_FOLDER), Integer.toHexString(projectUri.hashCode()));
     }
-
 }
