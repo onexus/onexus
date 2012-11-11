@@ -17,7 +17,6 @@
  */
 package org.onexus.ui.api.pages.resource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -28,7 +27,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
@@ -40,16 +38,16 @@ import org.onexus.ui.api.OnexusWebSession;
 import org.onexus.ui.api.pages.resource.modals.ImportProjectModal;
 import org.onexus.ui.api.pages.theme.DefaultTheme;
 import org.onexus.ui.api.progressbar.ProgressBar;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 import java.util.List;
 
 @AuthorizeInstantiation({ "onexus-admin", "onexus-user" })
 public class BaseResourcePage extends WebPage {
 
 
-    @Inject
-    private transient IResourceManager resourceManager;
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
 
     public BaseResourcePage(IModel<Resource> resourceModel) {
         super(resourceModel);
@@ -144,7 +142,7 @@ public class BaseResourcePage extends WebPage {
     protected IResourceManager getResourceManager() {
 
         if (resourceManager == null) {
-            OnexusWebApplication.inject(this);
+            //OnexusWebApplication.inject(this);
         }
 
         return resourceManager;

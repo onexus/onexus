@@ -24,24 +24,22 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.utils.ResourceUtils;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class QueryResponse extends AbstractResponse {
 
-    @Inject
-    public transient IQueryParser queryParser;
+    @PaxWicketBean(name="queryParser")
+    private IQueryParser queryParser;
 
-    @Inject
-    public transient ICollectionManager collectionManager;
+    @PaxWicketBean(name="collectionManager")
+    private ICollectionManager collectionManager;
 
-    @Inject
-    public transient IResourceManager resourceManager;
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
 
     private String query;
     private boolean count;

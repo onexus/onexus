@@ -33,14 +33,13 @@ import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
-import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.api.OnexusWebApplication;
+import org.onexus.website.api.WebsiteApplication;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 
 public abstract class AbstractNewResourceWizard<T extends Resource> extends AbstractWizard {
 
-    @Inject
+    @PaxWicketBean(name = "resourceManager")
     private transient IResourceManager resourceManager;
 
     private T resource;
@@ -71,7 +70,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
         if (resource.getURI() != null) {
             resourceManager.save(resource);
             PageParameters params = new PageParameters().add("uri", resource.getURI());
-            setResponsePage(OnexusWebApplication.get().getHomePage(), params);
+            setResponsePage(WebsiteApplication.get().getHomePage(), params);
         }
 
         super.onFinish();

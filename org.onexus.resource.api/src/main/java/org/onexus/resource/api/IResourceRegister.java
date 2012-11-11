@@ -17,16 +17,8 @@
  */
 package org.onexus.resource.api;
 
-import java.util.List;
-
 public interface IResourceRegister {
 
     public void register(Class<?> resourceType);
-
-    public ClassLoader getResourcesClassLoader();
-
-    public void addResourceService(IResourceService service);
-
-    public List<IResourceService> getResourceServices();
 
 }

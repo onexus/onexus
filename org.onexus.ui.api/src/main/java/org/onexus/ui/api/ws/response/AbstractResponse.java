@@ -27,7 +27,6 @@ public abstract class AbstractResponse extends AbstractResource.ResourceResponse
 
     public AbstractResponse() {
         super();
-        OnexusWebApplication.inject(this);
 
         setWriteCallback(new AbstractResource.WriteCallback() {
             @Override

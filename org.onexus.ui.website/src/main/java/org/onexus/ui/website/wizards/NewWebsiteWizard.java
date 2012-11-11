@@ -18,38 +18,40 @@
 package org.onexus.ui.website.wizards;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.wicket.extensions.wizard.*;
+import org.apache.wicket.extensions.wizard.IWizardStep;
+import org.apache.wicket.extensions.wizard.StaticContentStep;
+import org.apache.wicket.extensions.wizard.WizardModel;
+import org.apache.wicket.extensions.wizard.WizardStep;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
-import org.onexus.resource.api.Folder;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Resource;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
-import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.website.WebsiteConfig;
-import org.onexus.ui.website.pages.PageConfig;
-import org.onexus.ui.website.pages.browser.BrowserPageConfig;
-import org.onexus.ui.website.pages.browser.TabConfig;
-import org.onexus.ui.website.pages.browser.ViewConfig;
-import org.onexus.ui.website.pages.html.HtmlPageConfig;
-import org.onexus.ui.website.widgets.WidgetConfig;
-import org.onexus.ui.website.widgets.download.DownloadWidgetConfig;
-import org.onexus.ui.website.widgets.search.SearchField;
-import org.onexus.ui.website.widgets.search.SearchWidgetConfig;
-import org.onexus.ui.website.widgets.share.ShareWidgetConfig;
-import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
-import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
-import org.onexus.ui.website.widgets.tableviewer.columns.IColumnConfig;
+import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Resource;
+import org.onexus.website.api.WebsiteConfig;
+import org.onexus.website.api.pages.PageConfig;
+import org.onexus.website.api.pages.browser.BrowserPageConfig;
+import org.onexus.website.api.pages.browser.TabConfig;
+import org.onexus.website.api.pages.browser.ViewConfig;
+import org.onexus.website.api.pages.html.HtmlPageConfig;
+import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.download.DownloadWidgetConfig;
+import org.onexus.website.api.widgets.search.SearchField;
+import org.onexus.website.api.widgets.search.SearchWidgetConfig;
+import org.onexus.website.api.widgets.share.ShareWidgetConfig;
+import org.onexus.website.api.widgets.tableviewer.ColumnSet;
+import org.onexus.website.api.widgets.tableviewer.TableViewerConfig;
+import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
+import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,8 +64,8 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
     private List<ORI> linkCollections = new ArrayList<ORI>();
     private TabConfig currentTab;
 
-    @Inject
-    public transient IResourceManager resourceManager;
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
 
     public NewWebsiteWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id, resourceModel);

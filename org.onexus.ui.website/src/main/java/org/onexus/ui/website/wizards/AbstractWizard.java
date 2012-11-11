@@ -51,6 +51,7 @@ public abstract class AbstractWizard extends Wizard {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected Form<AbstractWizard> newForm(String id) {
 
         Form<AbstractWizard> form = new Form<AbstractWizard>(id, new CompoundPropertyModel<AbstractWizard>(this));

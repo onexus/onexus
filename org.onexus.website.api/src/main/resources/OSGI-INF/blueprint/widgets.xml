@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        >
+
+
+    <!-- Default widget resource -->
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.views.ViewsWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.tableviewer.TableViewerCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.jheatmap.HeatmapViewerCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.icanplot.PlotViewerCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.share.ShareWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.download.DownloadWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.filters.FiltersWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.filters.SelectorFiltersWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.search.SearchWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.selector.SelectorWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.tags.TagWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.text.TextWidgetCreator"/>
+    </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.columnsets.ColumnsetsWidgetCreator"/>
+    </service>
+
+</blueprint>

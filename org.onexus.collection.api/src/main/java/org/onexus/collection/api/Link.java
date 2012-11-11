@@ -17,17 +17,23 @@
  */
 package org.onexus.collection.api;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamImplicitCollection;
 import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@XStreamAlias("link")
 public class Link implements Serializable {
 
     public final static String FIELDS_SEPARATOR = "==";
 
     private ORI collection;
+
+    @XStreamImplicit(itemFieldName = "field")
     private List<String> fields = new ArrayList<String>();
 
     public Link() {

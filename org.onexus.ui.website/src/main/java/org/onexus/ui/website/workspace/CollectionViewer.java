@@ -24,11 +24,11 @@ import org.apache.wicket.model.Model;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.Collection;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.website.widgets.tableviewer.ColumnSet;
-import org.onexus.ui.website.widgets.tableviewer.TableViewer;
-import org.onexus.ui.website.widgets.tableviewer.TableViewerConfig;
-import org.onexus.ui.website.widgets.tableviewer.TableViewerStatus;
-import org.onexus.ui.website.widgets.tableviewer.columns.ColumnConfig;
+import org.onexus.website.api.widgets.tableviewer.ColumnSet;
+import org.onexus.website.api.widgets.tableviewer.TableViewer;
+import org.onexus.website.api.widgets.tableviewer.TableViewerConfig;
+import org.onexus.website.api.widgets.tableviewer.TableViewerStatus;
+import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
 
 public class CollectionViewer extends Panel {
 

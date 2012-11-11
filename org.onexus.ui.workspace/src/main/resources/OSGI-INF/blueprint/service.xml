@@ -12,16 +12,16 @@
 
     <!-- ViewersCreators -->
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.wizards.WizardViewerTab"/>
+        <bean class="org.onexus.ui.workspace.viewers.wizards.WizardViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.editor.EditorViewerTab"/>
+        <bean class="org.onexus.ui.workspace.viewers.definition.DefinitionViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.tree.ProjectTreeViewerTab"/>
+        <bean class="org.onexus.ui.workspace.viewers.tree.ProjectTreeViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.preview.FilePreviewViewerTab"/>
+        <bean class="org.onexus.ui.workspace.viewers.preview.FilePreviewViewerCreator"/>
     </service>
 
     <!-- Wizards -->
@@ -40,5 +40,11 @@
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
         <bean class="org.onexus.ui.workspace.wizards.folder.ManageCollectionsWizardCreator"/>
     </service>
+
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
+    <reference id="wizardsManager" interface="org.onexus.ui.api.wizards.IWizardsManager"/>
+    <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
+    <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer"/>
 
 </blueprint>

@@ -22,14 +22,15 @@ import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.website.Website;
+import org.onexus.website.api.Website;
+import org.onexus.website.api.WebsiteModel;
 
 public class PreviewBrowserViewer extends Panel {
 
     public PreviewBrowserViewer(String id, final IModel<? extends Resource> model) {
         super(id);
 
-        Session.get().setMetaData(Website.WEBSITE_CONFIG, model.getObject());
+        Session.get().setMetaData(WebsiteModel.WEBSITE_KEY, model.getObject().getURI());
         add(new InlineFrame("browser", Website.class));
     }
 

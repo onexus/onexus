@@ -31,7 +31,7 @@ public class AuthorizationManager implements IAuthorizationManager {
         ResourceLoginContext ctx = ResourceLoginContext.get();
 
         if (ctx == null) {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         Set<String> result = new HashSet<String>();

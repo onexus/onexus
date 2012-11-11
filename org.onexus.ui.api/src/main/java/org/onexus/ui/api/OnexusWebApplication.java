@@ -23,40 +23,24 @@ import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSessio
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
-import org.apache.wicket.core.util.resource.locator.OsgiResourceStreamLocator;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.RequestUtils;
-import org.apache.wicket.protocol.http.WicketFilter;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.onexus.resource.api.IResourceRegister;
-import org.onexus.resource.api.IResourceService;
 import org.onexus.resource.api.ResourceLoginContext;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.ws.WebserviceResource;
-import org.wicketstuff.osgi.inject.OsgiComponentInjector;
-import org.wicketstuff.osgi.inject.impl.OsgiServiceProxyTargetLocator;
+import org.ops4j.pax.wicket.api.InjectorHolder;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-public class OnexusWebApplication extends AuthenticatedWebApplication implements IResourceService {
-
-    // Force to import the package
-    public final static WicketFilter wicketFilter = null;
-    public final static OsgiServiceProxyTargetLocator targetLocator = null;
+public class OnexusWebApplication extends AuthenticatedWebApplication {
 
     private final static String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
     private final static String WEBSERVICE_MOUNT = "/onx";
-
-    private OsgiComponentInjector injector;
-
-    @Inject
-    private transient IResourceRegister resourceRegister;
 
     public Class<? extends Page> getHomePage() {
         return ResourcesPage.class;
@@ -95,29 +79,10 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
             }
         });
 
-
-        // Injection
-        getComponentInstantiationListeners().add(getInjector());
-
-        inject(this);
-        resourceRegister.addResourceService(this);
-
-        // OSGi
-        getResourceSettings().setResourceStreamLocator(new OsgiResourceStreamLocator());
-
         // Mount pages
         mountPage("/login", getSignInPageClass());
         mountPage("/admin", ResourcesPage.class);
 
-    }
-
-    public OsgiComponentInjector getInjector() {
-
-        if (injector == null) {
-            injector = new OsgiComponentInjector(false);
-        }
-
-        return injector;
     }
 
     @Override
@@ -132,20 +97,6 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
 
     public static OnexusWebApplication get() {
         return (OnexusWebApplication) Application.get();
-    }
-
-    public static void inject(Object object) {
-
-        OnexusWebApplication app = get();
-
-        if (app != null) {
-            OsgiComponentInjector injector = app.getInjector();
-
-            if (injector != null) {
-                injector.inject(object);
-            }
-        }
-
     }
 
     public ResourceReference getWebService() {
@@ -184,9 +135,9 @@ public class OnexusWebApplication extends AuthenticatedWebApplication implements
         return getSharedResources().get(Application.class, "dataservice", null, null, null, true);
     }
 
-
-
-
-
-
+    public static void inject(Object obj) {
+        if (obj != null) {
+            InjectorHolder.getInjector().inject(obj, obj.getClass());
+        }
+    }
 }

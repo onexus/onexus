@@ -19,23 +19,22 @@ package org.onexus.ui.workspace.viewers.tree;
 
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Resource;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.pages.resource.ResourceModel;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 import java.util.*;
 
 public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
     private IModel<? extends Resource> currentResource;
 
-    @Inject
-    public transient IResourceManager resourceManager;
+    @PaxWicketBean(name="resourceManager")
+    public IResourceManager resourceManager;
 
     private final static Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
 
@@ -57,7 +56,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        Project project = getResourceManager().getProject( resource.getURI().getProjectUrl() );
+        Project project = resourceManager.getProject( resource.getURI().getProjectUrl() );
 
         if (project == null) {
             return EMPTY_ITERATOR;
@@ -87,7 +86,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        List<Resource> children = getResourceManager().loadChildren(Resource.class, node.getURI());
+        List<Resource> children = resourceManager.loadChildren(Resource.class, node.getURI());
 
         Collections.sort(children, RESOURCE_COMPARATOR);
 
@@ -106,16 +105,6 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
     @Override
     public void detach() {
-    }
-
-    private IResourceManager getResourceManager() {
-
-        if (resourceManager == null) {
-            OnexusWebApplication.inject(this);
-        }
-
-        return resourceManager;
-
     }
 
     private final static ResourceComparator RESOURCE_COMPARATOR = new ResourceComparator();

@@ -26,28 +26,23 @@ import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
-import org.onexus.resource.api.utils.ResourceUtils;
-import org.onexus.ui.api.OnexusWebApplication;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class DataResourceResponse extends AbstractResponse {
 
     private static final Logger log = LoggerFactory.getLogger(DataResourceResponse.class);
 
-    @Inject
-    public transient IDataManager dataManager;
+    @PaxWicketBean(name="dataManager")
+    private IDataManager dataManager;
 
-    @Inject
-    public transient IResourceManager resourceManager;
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
 
     private ORI resourceUri;
 
@@ -57,7 +52,6 @@ public class DataResourceResponse extends AbstractResponse {
         int pos = url.indexOf(data) + data.length() + 1;
         String filename = UrlDecoder.PATH_INSTANCE.decode(url.substring(pos), "UTF-8");
 
-        OnexusWebApplication.inject(this);
         for (Project project : resourceManager.getProjects()) {
             String projectHash = Integer.toHexString(project.getURL().hashCode());
             if (data.equals(projectHash)) {

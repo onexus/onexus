@@ -17,8 +17,10 @@
  */
 package org.onexus.data.api;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.Resource;
 
+@XStreamAlias("data")
 public class Data extends Resource {
 
     public Data() {

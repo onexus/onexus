@@ -17,46 +17,16 @@
  */
 package org.onexus.resource.api;
 
-import org.osgi.framework.ServiceReference;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class DefaultResourceRegister implements IResourceRegister {
 
-    private Set<ClassLoader> registeredLoaders = new HashSet<ClassLoader>();
-    private ClassLoader classLoader = new RegisteredClassLoader();
-
     private IResourceSerializer serializer;
-    private List<IResourceActivator> resourceActivators;
-
-    private List<IResourceService> resourceServices = new ArrayList<IResourceService>();
 
     public DefaultResourceRegister() {
-        registeredLoaders.add(getClass().getClassLoader());
     }
 
     @Override
     public void register(Class<?> resourceType) {
         serializer.register(resourceType);
-        registeredLoaders.add(resourceType.getClassLoader());
-    }
-
-    @Override
-    public ClassLoader getResourcesClassLoader() {
-        return classLoader;
-    }
-
-    @Override
-    public void addResourceService(IResourceService service) {
-        resourceServices.add(service);
-    }
-
-    @Override
-    public List<IResourceService> getResourceServices() {
-        return resourceServices;
     }
 
     public IResourceSerializer getSerializer() {
@@ -65,50 +35,5 @@ public class DefaultResourceRegister implements IResourceRegister {
 
     public void setSerializer(IResourceSerializer serializer) {
         this.serializer = serializer;
-    }
-
-    public List<IResourceActivator> getResourceActivators() {
-        return resourceActivators;
-    }
-
-    public void setResourceActivators(List<IResourceActivator> resourceActivators) {
-        this.resourceActivators = resourceActivators;
-    }
-
-    public void bindActivators(ServiceReference serviceRef) {
-
-        if (resourceActivators != null) {
-            for (IResourceActivator ra : resourceActivators) {
-                ra.bind(this);
-            }
-        }
-
-    }
-
-    public void unbindActivators(ServiceReference serviceRef) {
-
-        if (resourceActivators != null) {
-            for (IResourceActivator ra : resourceActivators) {
-                ra.unbind(this);
-            }
-        }
-
-    }
-
-    private class RegisteredClassLoader extends ClassLoader {
-
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        public Class loadClass(String name) throws ClassNotFoundException {
-
-            for (ClassLoader loader : registeredLoaders) {
-                try {
-                    return loader.loadClass(name);
-                } catch (ClassNotFoundException e) {
-                    // Continue
-                }
-            }
-
-            return null;
-        }
     }
 }

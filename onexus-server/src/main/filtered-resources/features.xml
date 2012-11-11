@@ -19,6 +19,8 @@
 		<feature version='${project.version}'>org.onexus.collection.store.mysql</feature>
 		<feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>
 
+        <feature version='${project.version}'>org.onexus.website.api</feature>
+
         <feature version='${project.version}'>onexus-server-ui</feature>
 
         <!-- Dependencies -->

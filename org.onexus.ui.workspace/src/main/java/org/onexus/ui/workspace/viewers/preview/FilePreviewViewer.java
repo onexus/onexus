@@ -17,69 +17,49 @@
  */
 package org.onexus.ui.workspace.viewers.preview;
 
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.onexus.data.api.IDataManager;
-import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.workspace.viewers.editor.XmlEditorTab;
+import org.onexus.ui.workspace.viewers.utils.PrettifyBehavior;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Iterator;
-import java.util.List;
 
 public class FilePreviewViewer extends Panel {
 
-    @Inject
-    public transient IDataManager dataManager;
-    
+    @PaxWicketBean(name = "dataManager")
+    private IDataManager dataManager;
+
     public final static int MAXIMUM_LINES = 100;
 
     public FilePreviewViewer(String containerId, IModel<? extends Resource> model) {
         super(containerId, model);
 
-        Form<Resource> form = new Form<Resource>("form", (IModel<Resource>) model);
-        add(form);
-
-        TextArea<String> textArea = new TextArea<String>("file", new PreviewModel());
-        textArea.setEnabled(false);
-        form.add(textArea);
-
-
+        add(new PrettifyBehavior());
+        add(new Label("file", new PreviewModel()));
 
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(XmlEditorTab.CODEMIRROR_CSS));
-        response.render(JavaScriptHeaderItem.forReference(XmlEditorTab.CODEMIRROR_JS));
-    }
-
-
-        private class PreviewModel extends LoadableDetachableModel<String> {
+    private class PreviewModel extends LoadableDetachableModel<String> {
 
         @Override
         protected String load() {
-            
+
             Resource resource = (Resource) FilePreviewViewer.this.getDefaultModelObject();
-            
+
             if (resource == null) {
-                return null;                
+                return null;
             }
-            
+
             Iterator<InputStream> inIterator = dataManager.load(resource.getURI()).iterator();
-            
+
             if (!inIterator.hasNext()) {
                 return null;
             }
@@ -89,11 +69,11 @@ public class FilePreviewViewer extends Panel {
 
                 String line = in.readLine();
                 StringBuilder str = new StringBuilder();
-                for (int i=0; i < MAXIMUM_LINES && line!=null; i++) {
+                for (int i = 0; i < MAXIMUM_LINES && line != null; i++) {
                     str.append(line).append("\n");
                     line = in.readLine();
                 }
-                
+
                 in.close();
                 return str.toString();
 

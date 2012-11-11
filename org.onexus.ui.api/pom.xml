@@ -39,28 +39,8 @@
 
         <!-- Wicket dependencies -->
         <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-extensions</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-ioc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-auth-roles</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wicketstuff</groupId>
-            <artifactId>wicketstuff-osgi</artifactId>
+            <groupId>org.ops4j.pax.wicket</groupId>
+            <artifactId>org.ops4j.pax.wicket.service</artifactId>
         </dependency>
 
         <!-- Other -->
@@ -84,12 +64,6 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-atinject_1.0_spec</artifactId>
-            <version>1.0</version>
         </dependency>
 
     </dependencies>
@@ -135,7 +109,36 @@
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
                         <Bundle-Version>${pom.version}</Bundle-Version>
                         <DynamicImport-Package>*</DynamicImport-Package>
-                        <Web-ContextPath>/onexus</Web-ContextPath>
+                        <Import-Package>
+                            org.apache.wicket,
+                            org.apache.wicket.util,
+                            org.apache.wicket.event,
+                            org.apache.wicket.page,
+                            org.apache.wicket.request.resource,
+                            org.apache.wicket.request.mapper,
+                            org.apache.wicket.request.cycle,
+                            org.apache.wicket.markup.html,
+                            org.apache.wicket.markup.html.basic,
+                            org.apache.wicket.protocol.http,
+                            org.apache.wicket.request.http,
+                            org.ops4j.pax.wicket.api,
+                            org.ops4j.pax.wicket.util,
+                            org.ops4j.pax.wicket.util.proxy,
+                            org.osgi.framework,
+                            net.sf.cglib.proxy;version="[2,3)",
+                            net.sf.cglib.core;version="[2,3)",
+                            net.sf.cglib.reflect;version="[2,3)",
+                            javax.servlet,
+                            org.apache.wicket.settings,
+                            org.apache.wicket.session,
+                            org.apache.wicket.util.file,
+                            org.apache.wicket.request,
+                            javax.servlet.http,
+                            org.apache.wicket.ajax,
+                            org.osgi.service.blueprint,
+                            org.apache.wicket.core.request.mapper,
+                            org.apache.commons.collections
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>

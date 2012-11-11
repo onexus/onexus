@@ -31,24 +31,22 @@ import org.onexus.collection.api.Link;
 import org.onexus.collection.api.types.Text;
 import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.*;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.wizards.AbstractWizard;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.*;
 
 public class CreateCollectionWizard extends AbstractWizard {
 
-    @Inject
+    @PaxWicketBean(name="dataManager")
     public transient IDataManager dataManager;
 
-    @Inject
+    @PaxWicketBean(name="resourceManager")
     public transient IResourceManager resourceManager;
 
     // Formats
