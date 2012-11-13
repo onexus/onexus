@@ -211,11 +211,6 @@
 
         <dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.data.loader.biomart</artifactId>
-		</dependency>
-
-        <dependency>
-			<groupId>org.onexus</groupId>
 			<artifactId>org.onexus.collection.loader.tsv</artifactId>
 		</dependency>
 	</dependencies>

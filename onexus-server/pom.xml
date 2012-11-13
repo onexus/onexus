@@ -114,6 +114,7 @@
 							</descriptors>
 							<features>
 								<feature>org.onexus.resource.api</feature>
+                                <feature>org.onexus.resource.authorization</feature>
                                 <feature>org.onexus.resource.manager</feature>
                                 <feature>org.onexus.resource.serializer.xstream</feature>
 
@@ -121,12 +122,18 @@
                                 <feature>org.onexus.data.manager</feature>
 
                                 <feature>org.onexus.collection.api</feature>
+                                <feature>org.onexus.collection.loader.tsv</feature>
                                 <feature>org.onexus.collection.manager</feature>
+                                <feature>org.onexus.collection.query.parser</feature>
+                                <feature>org.onexus.collection.store.h2sql</feature>
                                 <feature>org.onexus.collection.store.mysql</feature>
-								<feature>org.onexus.collection.store.h2sql</feature>
+                                <feature>org.onexus.collection.store.sql</feature>
 
 								<feature>org.onexus.ui.api</feature>
+                                <feature>org.onexus.ui.website</feature>
                                 <feature>org.onexus.ui.workspace</feature>
+
+                                <feature>org.onexus.website.api</feature>
 
 								<feature>war</feature>
 							</features>

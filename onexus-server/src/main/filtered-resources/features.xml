@@ -4,35 +4,34 @@
 	</repository>
 
 	<feature name='onexus-server' version='${project.version}'>
-		<feature version='${project.version}'>org.onexus.resource.api</feature>
-        <feature version='${project.version}'>org.onexus.resource.manager</feature>
+
+        <feature version='${project.version}'>org.onexus.resource.api</feature>
         <feature version='${project.version}'>org.onexus.resource.authorization</feature>
+        <feature version='${project.version}'>org.onexus.resource.manager</feature>
         <feature version='${project.version}'>org.onexus.resource.serializer.xstream</feature>
 
         <feature version='${project.version}'>org.onexus.data.api</feature>
+        <feature version='${project.version}'>org.onexus.data.loader.file</feature>
         <feature version='${project.version}'>org.onexus.data.manager</feature>
 
         <feature version='${project.version}'>org.onexus.collection.api</feature>
+        <feature version='${project.version}'>org.onexus.collection.loader.tsv</feature>
+        <feature version='${project.version}'>org.onexus.collection.manager</feature>
         <feature version='${project.version}'>org.onexus.collection.query.parser</feature>
-		<feature version='${project.version}'>org.onexus.collection.manager</feature>
+        <feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>
+        <feature version='${project.version}'>org.onexus.collection.store.mysql</feature>
         <feature version='${project.version}'>org.onexus.collection.store.sql</feature>
-		<feature version='${project.version}'>org.onexus.collection.store.mysql</feature>
-		<feature version='${project.version}'>org.onexus.collection.store.h2sql</feature>
+
+        <feature version='${project.version}'>org.onexus.ui.api</feature>
+        <feature version='${project.version}'>org.onexus.ui.website</feature>
+        <feature version='${project.version}'>org.onexus.ui.workspace</feature>
 
         <feature version='${project.version}'>org.onexus.website.api</feature>
 
-        <feature version='${project.version}'>onexus-server-ui</feature>
-
         <!-- Dependencies -->
         <bundle>mvn:org.openengsb.wrapped/com.jcraft.jsch-all/0.1.42.w1</bundle>
-
-	</feature>	
-
-	<feature name='onexus-server-ui' version='${project.version}'>
-		<feature version='${project.version}'>org.onexus.ui.api</feature>
-        <feature version='${project.version}'>org.onexus.ui.workspace</feature>
-        <feature version='${project.version}'>org.onexus.ui.website</feature>
-		<feature version='${karaf.version}'>war</feature>
+        <feature version='${karaf.version}'>war</feature>
         <feature version='2.2.0'>com.springsource.net.sf.cglib</feature>
+
 	</feature>
 </features>

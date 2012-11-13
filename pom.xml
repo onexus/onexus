@@ -13,7 +13,7 @@
 
     <properties>
         <wicket.version>6.2.0</wicket.version>
-        <karaf.version>2.3.0</karaf.version>
+        <karaf.version>2.2.9</karaf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
