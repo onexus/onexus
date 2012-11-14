@@ -51,7 +51,7 @@ public class DataResource extends AbstractResource {
         ResourceReference reference = Application.get().getSharedResources().get(Application.class, DATA_MOUNT_POINT, null, null, null, true);
 
         if (reference == null) {
-            DataResource projectResource = new DataResource(getWebsiteOri().getProjectUrl());
+            DataResource projectResource = new DataResource(WebsiteApplication.get().getWebsiteOri().getProjectUrl());
             WebApplication.get().getSharedResources().add(DATA_MOUNT_POINT, projectResource);
             reference = Application.get().getSharedResources().get(Application.class, DATA_MOUNT_POINT, null, null, null, true);
             WebApplication.get().mountResource(DATA_MOUNT_POINT, reference);
@@ -60,15 +60,6 @@ public class DataResource extends AbstractResource {
         return reference;
     }
 
-    private static ORI getWebsiteOri() {
-        ORI websiteUri = Session.get().getMetaData(WebsiteModel.WEBSITE_KEY);
-
-        if (websiteUri == null) {
-            websiteUri = WebsiteApplication.get().getWebsiteOri();
-        }
-
-        return websiteUri;
-    }
 
     public static PageParameters buildPageParameters(ORI resourceUri) {
 

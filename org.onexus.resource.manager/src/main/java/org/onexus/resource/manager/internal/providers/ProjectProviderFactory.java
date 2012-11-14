@@ -17,16 +17,16 @@ public class ProjectProviderFactory {
         this.serializer = serializer;
     }
 
-    public ProjectProvider newProjectProvider(String projectUri, File projectFolder) {
+    public ProjectProvider newProjectProvider(String projectName, String projectUri, File projectFolder) {
 
         ProjectProvider provider;
 
         if (projectUri.endsWith(".git")) {
-            provider = new GitProjectProvider(projectUri, projectFolder);
+            provider = new GitProjectProvider(projectName, projectUri, projectFolder);
         } else if (projectUri.endsWith(".zip")) {
-            provider = new ZipProjectProvider(projectUri, projectFolder);
+            provider = new ZipProjectProvider(projectName, projectUri, projectFolder);
         } else {
-            provider = new FolderProjectProvider(projectUri, projectFolder);
+            provider = new FolderProjectProvider(projectName, projectUri, projectFolder);
         }
 
         provider.setSerializer(serializer);

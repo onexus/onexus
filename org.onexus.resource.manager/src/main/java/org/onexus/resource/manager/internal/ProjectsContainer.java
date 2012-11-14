@@ -72,8 +72,13 @@ public class ProjectsContainer {
         }
 
         for (String projectUrl : getProjectUrls()) {
-            File projectFolder = new File(properties.getProperty(projectUrl));
-            ProjectProvider provider = providerFactory.newProjectProvider(projectUrl, projectFolder);
+
+            String projectProperty[] = properties.getProperty(projectUrl).split(",");
+            String projectPath = projectProperty[0];
+            String projectName = (projectProperty.length == 2 ? projectProperty[1] : Integer.toHexString(projectUrl.hashCode()));
+
+            File projectFolder = new File(projectPath);
+            ProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUrl, projectFolder);
             providers.put(projectUrl, provider);
         }
     }
@@ -86,15 +91,15 @@ public class ProjectsContainer {
         return providers.get(projectUri);
     }
 
-    public ProjectProvider importProject(String projectUri) {
+    public ProjectProvider importProject(String projectName, String projectUri) {
 
         File defaultProjectFolder = newProjectFolder(projectUri);
 
-        ProjectProvider provider = providerFactory.newProjectProvider(projectUri, defaultProjectFolder);
+        ProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUri, defaultProjectFolder);
 
         if (provider != null) {
             providers.put(projectUri, provider);
-            properties.setProperty(projectUri, provider.getProjectFolder().getAbsolutePath());
+            properties.setProperty(projectUri, provider.getProjectFolder().getAbsolutePath() + "," + projectName);
 
             try {
                 properties.store(new FileOutputStream(new File(new File(ONEXUS_FOLDER), ONEXUS_PROJECTS_SETTINGS)), null);

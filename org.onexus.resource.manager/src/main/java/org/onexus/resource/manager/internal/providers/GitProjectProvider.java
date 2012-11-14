@@ -16,8 +16,8 @@ public class GitProjectProvider extends ProjectProvider {
 
     private static final Logger log = LoggerFactory.getLogger(GitProjectProvider.class);
 
-    public GitProjectProvider(String projectUrl, File projectFolder) throws InvalidParameterException {
-        super(projectUrl, projectFolder);
+    public GitProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
+        super(projectName, projectUrl, projectFolder);
 
         if (!projectFolder.exists()) {
             importProject();

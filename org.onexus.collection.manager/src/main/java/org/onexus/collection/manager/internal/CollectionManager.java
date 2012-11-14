@@ -208,4 +208,8 @@ public class CollectionManager implements ICollectionManager {
         this.collectionStore = collectionStore;
     }
 
+    @Override
+    public String getMount() {
+        return "oql";
+    }
 }

@@ -31,8 +31,6 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class WebsiteModel implements IModel<WebsiteStatus> {
 
-    public static MetaDataKey<ORI> WEBSITE_KEY =  new MetaDataKey<ORI>() {};
-
     private WebsiteStatus status;
 
     private transient WebsiteConfig websiteConfig;
@@ -70,11 +68,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
         // On attach
         if (websiteConfig == null) {
 
-            ORI websiteUri = Session.get().getMetaData(WEBSITE_KEY);
-
-            if (websiteUri == null) {
-                websiteUri = WebsiteApplication.get().getWebsiteOri();
-            }
+            ORI websiteUri = WebsiteApplication.get().getWebsiteOri();
 
             // Attach website config
             try {

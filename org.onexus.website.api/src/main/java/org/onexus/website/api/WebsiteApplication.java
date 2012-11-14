@@ -19,10 +19,12 @@ package org.onexus.website.api;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.resource.api.ORI;
 import org.ops4j.pax.wicket.api.InjectorHolder;
@@ -40,6 +42,11 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
         super();
     }
 
+    @Override
+    public RuntimeConfigurationType getConfigurationType() {
+        return RuntimeConfigurationType.DEPLOYMENT;
+    }
+
     public Class<? extends Page> getHomePage() {
         return Website.class;
     }
@@ -47,8 +54,9 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
     @Override
     protected void init() {
         super.init();
-        mountPage(webPath + "/${"+Website.PARAMETER_PAGE+"}/#{ptab}", Website.class);
+        mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
     }
+
 
     @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
@@ -62,11 +70,6 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
 
     public static WebsiteApplication get() {
         return (WebsiteApplication) Application.get();
-    }
-
-    @Deprecated
-    public String getWebserviceUrl() {
-        return "http://localhost:8181/onexus/onx";
     }
 
     public ORI getWebsiteOri() {
@@ -85,17 +88,19 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
         this.webPath = webPath;
     }
 
-    public String getRequestUrl() {
-
+    public final static String toAbsolutePath(String relativePagePath) {
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
-        String requestUrl = request.getRequestURL().toString();
 
-        if (SERVER_URL != null) {
-            String baseUrl = RequestCycle.get().getUrlRenderer().getBaseUrl().toString();
-            return SERVER_URL + '/' + baseUrl;
+        String serverUrl = SERVER_URL;
+        if (serverUrl == null) {
+            serverUrl = "http://" + request.getServerName() + ":" + request.getServerPort();
         }
 
-        return requestUrl;
+        if (relativePagePath.charAt(0) == '/') {
+            return serverUrl + relativePagePath;
+        }
+
+        return RequestUtils.toAbsolutePath(request.getRequestURL().toString(), relativePagePath.toString());
     }
 
     public static void inject(Object obj) {

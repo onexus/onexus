@@ -11,6 +11,11 @@ public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteA
     public WebsiteApplicationFactory() {
     }
 
+    public WebsiteApplicationFactory(String webPath, String website) {
+        this.webPath = webPath;
+        this.website = website;
+    }
+
     public String getWebPath() {
         return webPath;
     }

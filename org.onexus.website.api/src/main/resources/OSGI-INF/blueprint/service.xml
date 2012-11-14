@@ -66,4 +66,10 @@
     <bean id="decoratorManager" class="org.onexus.website.api.widgets.tableviewer.decorators.DefaultDecoratorManager">
         <property name="creators" ref="decoratorCreatorsRef"/>
     </bean>
+
+    <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService" />
+    <bean id="websiteService" class="org.onexus.website.api.WebsiteService" init-method="init" destroy-method="destroy">
+        <property name="resourceManager" ref="resourceManager" />
+        <property name="context" ref="blueprintBundleContext"/>
+    </bean>
 </blueprint>

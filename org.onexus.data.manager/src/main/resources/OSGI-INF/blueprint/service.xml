@@ -2,11 +2,20 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
            xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
 
-    <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service interface="org.onexus.data.api.IDataManager">
-        <bean class="org.onexus.data.manager.internal.DataManager">
-            <property name="resourceManager" ref="resourceManagerRef"/>
+    <service interface="org.onexus.data.api.IDataManager" ref="dataManager" />
+    <bean id="dataManager" class="org.onexus.data.manager.internal.DataManager">
+        <property name="resourceManager" ref="resourceManager"/>
+    </bean>
+
+    <service interface="javax.servlet.http.HttpServlet">
+        <service-properties>
+            <entry key="alias" value="/ds"/>
+        </service-properties>
+        <bean class="org.onexus.data.manager.internal.ws.WsServlet">
+            <property name="dataManager" ref="dataManager"/>
+            <property name="resourceManager" ref="resourceManager"/>
         </bean>
     </service>
 

@@ -234,7 +234,7 @@ varname returns [String v]:
 
 IDENTIFIER 
     : 
-        LETTER (LETTER | DIGIT | '_' | '-' )*
+        (LETTER | DIGIT | '_' | '-' )*
     ;
 	
 STRING :

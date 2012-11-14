@@ -120,6 +120,7 @@
 
                                 <feature>org.onexus.data.api</feature>
                                 <feature>org.onexus.data.manager</feature>
+                                <feature>org.onexus.data.loader.file</feature>
 
                                 <feature>org.onexus.collection.api</feature>
                                 <feature>org.onexus.collection.loader.tsv</feature>

@@ -30,16 +30,20 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.download.scripts.*;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,6 +51,9 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
 
     public final static ResourceReference CSS = new CssResourceReference(DownloadWidget.class, "prettify/prettify.css");
     public final static ResourceReference JS = new JavaScriptResourceReference(DownloadWidget.class, "prettify/prettify.js");
+
+    @PaxWicketBean(name = "collectionManager")
+    private ICollectionManager collectionManager;
 
     public final static List<IQueryScript> scripts = Arrays.asList(new IQueryScript[]{
             new RScript(),
@@ -67,11 +74,12 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         query.toString(oql, true);
 
         // Webservice URL
-        webserviceUrl = WebsiteApplication.get().getWebserviceUrl();
+        String serviceMount = collectionManager.getMount();
+        webserviceUrl = WebsiteApplication.toAbsolutePath('/' + serviceMount);
 
         // Download as file
         String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
-        ExternalLink link = new ExternalLink("download-link", webserviceUrl + "?query=" + query.toString() + "&filename=" + fileName);
+        ExternalLink link = new ExternalLink("download-link", webserviceUrl + "?query=" + URLEncoder.encode(query.toString()) + "&filename=" + fileName);
         link.add(new Label("download-filename", fileName));
         add(link);
 
@@ -115,4 +123,5 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         response.render(CssHeaderItem.forReference(CSS));
         response.render(JavaScriptHeaderItem.forReference(JS));
     }
+
 }

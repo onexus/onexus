@@ -66,6 +66,7 @@ public class ResourceSerializer implements IResourceSerializer {
         // Project
         alias("project", Project.class);
         xstream.addImplicitCollection(Plugin.class, "parameters", "parameter", Parameter.class);
+        xstream.omitField(Project.class, "name");
 
         // Plugin
         alias("plugin", Plugin.class);

@@ -19,20 +19,18 @@ package org.onexus.ui.api;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.resource.api.ResourceLoginContext;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
-import org.onexus.ui.api.ws.WebserviceResource;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,25 +38,19 @@ import javax.servlet.http.HttpServletRequest;
 public class OnexusWebApplication extends AuthenticatedWebApplication {
 
     private final static String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
-    private final static String WEBSERVICE_MOUNT = "/onx";
 
     public Class<? extends Page> getHomePage() {
         return ResourcesPage.class;
     }
 
     @Override
+    public RuntimeConfigurationType getConfigurationType() {
+        return RuntimeConfigurationType.DEPLOYMENT;
+    }
+
+    @Override
     protected void init() {
         super.init();
-
-        // Debug mode
-        getDebugSettings().setAjaxDebugModeEnabled(false);
-        getMarkupSettings().setStripWicketTags(true);
-
-        // Webservices
-        getSharedResources().add("webservice", new WebserviceResource());
-        getSharedResources().add("dataservice", new WebserviceResource());
-        mountResource(WEBSERVICE_MOUNT, getSharedResources().get(Application.class, "webservice", null, null, null, true));
-        mountResource("/data/${data}", getSharedResources().get(Application.class, "dataservice", null, null, null, true));
 
         // Authentication
         getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
@@ -99,24 +91,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
         return (OnexusWebApplication) Application.get();
     }
 
-    public ResourceReference getWebService() {
-        return getSharedResources().get(Application.class, "webservice", null, null, null, true);
-    }
-
-    public String getWebserviceUrl() {
-
-        if (SERVER_URL != null) {
-            return SERVER_URL + WEBSERVICE_MOUNT;
-        }
-
-        ResourceReference webservice = OnexusWebApplication.get().getWebService();
-        String serverUrl = OnexusWebApplication.get().getRequestUrl();
-        CharSequence wsPath = RequestCycle.get().urlFor(webservice, null);
-        return RequestUtils.toAbsolutePath(serverUrl, wsPath.toString());
-
-    }
-
-    public String getRequestUrl() {
+    public static String getRequestUrl() {
 
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
         String requestUrl = request.getRequestURL().toString();
@@ -127,12 +102,6 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
         }
 
         return requestUrl;
-    }
-
-
-
-    public ResourceReference getDataService() {
-        return getSharedResources().get(Application.class, "dataservice", null, null, null, true);
     }
 
     public static void inject(Object obj) {

@@ -354,8 +354,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-
-            <!-- ONEXUS TaskExecutors -->
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.collection.loader.tsv</artifactId>
@@ -367,9 +365,16 @@
                 <artifactId>org.onexus.data.loader.biomart</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.data.loader.anduril</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.data.loader.file</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

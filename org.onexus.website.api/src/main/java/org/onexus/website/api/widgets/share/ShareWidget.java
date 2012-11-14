@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets.share;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -82,7 +81,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
             status.encodeParameters(params);
         }
 
-        linkURL = toAbsolutePath(urlFor(getPage().getClass(), params));
+        linkURL = WebsiteApplication.toAbsolutePath(urlFor(getPage().getClass(), params).toString());
         WebMarkupContainer link = new WebMarkupContainer("link");
         link.add(new AttributeModifier("value", linkURL));
         addOrReplace(link);
@@ -90,7 +89,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
         PageParameters embedParams = new PageParameters(params);
         embedParams.set("embed", true);
 
-        embedURL = toAbsolutePath(urlFor(getPage().getClass(), embedParams));
+        embedURL = WebsiteApplication.toAbsolutePath(urlFor(getPage().getClass(), embedParams).toString());
         WebMarkupContainer embed = new WebMarkupContainer("embed");
         embed.setOutputMarkupId(true);
 
@@ -120,11 +119,6 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
     public void setHeight(String height) {
         this.height = height;
-    }
-
-    public final static String toAbsolutePath(final CharSequence relativePagePath) {
-        String serverUrl = WebsiteApplication.get().getRequestUrl();
-        return RequestUtils.toAbsolutePath(serverUrl, relativePagePath.toString());
     }
 
     private final static String getEmbedHTML(String embedURL, String browseURL, String width, String height) {

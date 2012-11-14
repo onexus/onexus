@@ -18,15 +18,24 @@
 package org.onexus.resource.api;
 
 
-import java.net.URL;
 import java.util.List;
 
 public class Project extends Resource {
+
+    private String name;
 
     private List<Plugin> plugins;
 
     public Project() {
         super();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getURL() {
