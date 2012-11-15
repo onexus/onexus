@@ -22,6 +22,7 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.WebsiteApplication;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class EntityModel implements IModel<IEntity> {
@@ -32,7 +33,7 @@ public class EntityModel implements IModel<IEntity> {
     private transient IEntity entity;
 
     @PaxWicketBean(name="collectionManager")
-    public transient ICollectionManager collectionManager;
+    private ICollectionManager collectionManager;
 
     public EntityModel() {
         this(null, null);
@@ -54,7 +55,7 @@ public class EntityModel implements IModel<IEntity> {
     public IEntity getObject() {
         if (entity == null && entityId != null && collectionURI != null) {
             entity = new EntityIterator(
-                    collectionManager.load(new SingleEntityQuery(collectionURI, entityId)),
+                    getCollectionManager().load(new SingleEntityQuery(collectionURI, entityId)),
                     collectionURI
             ).next();
         }
@@ -68,5 +69,13 @@ public class EntityModel implements IModel<IEntity> {
 
     @Override
     public void detach() {
+    }
+
+    private ICollectionManager getCollectionManager() {
+        if (collectionManager == null) {
+            WebsiteApplication.inject(this);
+        }
+
+        return collectionManager;
     }
 }
