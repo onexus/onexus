@@ -8,14 +8,27 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
-    <reference id="collectionStoreRef" interface="org.onexus.collection.api.ICollectionStore" filter="(status=enabled)"/>
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
+    <reference id="collectionStore" interface="org.onexus.collection.api.ICollectionStore"
+               filter="(status=enabled)"/>
 
-    <service id="org.onexus.collection.manager" interface="org.onexus.collection.api.ICollectionManager">
-        <bean class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
-            <property name="maxThreads" value="${maxThreads}"/>
-            <property name="resourceManager" ref="resourceManagerRef"/>
-            <property name="collectionStore" ref="collectionStoreRef"/>
+    <service interface="org.onexus.collection.api.ICollectionManager" ref="collectionManager"/>
+    <bean id="collectionManager" class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
+        <property name="maxThreads" value="${maxThreads}"/>
+        <property name="resourceManager" ref="resourceManager"/>
+        <property name="collectionStore" ref="collectionStore"/>
+    </bean>
+
+    <service interface="javax.servlet.http.HttpServlet">
+        <service-properties>
+            <entry key="alias" value="/oql"/>
+        </service-properties>
+        <bean class="org.onexus.collection.manager.internal.ws.WsServlet">
+            <property name="collectionManager" ref="collectionManager"/>
+            <property name="resourceManager" ref="resourceManager"/>
+            <property name="queryParser" ref="queryParser"/>
         </bean>
     </service>
+
 </blueprint>

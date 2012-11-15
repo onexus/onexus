@@ -163,8 +163,8 @@ public class ResourceManager implements IResourceManager {
     }
 
     @Override
-    public void importProject(String projectUri) {
-        projectsContainer.importProject(projectUri);
+    public void importProject(String projectName, String projectUri) {
+        projectsContainer.importProject(projectName, projectUri);
     }
 
     @Override

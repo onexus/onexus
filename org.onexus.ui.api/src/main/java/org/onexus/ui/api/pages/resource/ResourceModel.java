@@ -22,15 +22,14 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebApplication;
-
-import javax.inject.Inject;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     private ORI resourceURI;
 
-    @Inject
-    private transient IResourceManager resourceManager;
+    @PaxWicketBean(name = "resourceManager")
+    private IResourceManager resourceManager;
 
     public ResourceModel() {
         super();
@@ -49,7 +48,6 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     public ResourceModel(Resource resource) {
         super(resource);
-        OnexusWebApplication.inject(this);
         this.resourceURI = resource.getURI();
     }
 
@@ -73,7 +71,6 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
         if (resourceManager == null) {
             OnexusWebApplication.inject(this);
         }
-
         return resourceManager;
     }
 
@@ -87,18 +84,15 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof ResourceModel)
-        {
-            return ((ResourceModel)obj).resourceURI.equals(this.resourceURI);
+    public boolean equals(Object obj) {
+        if (obj instanceof ResourceModel) {
+            return ((ResourceModel) obj).resourceURI.equals(this.resourceURI);
         }
         return false;
     }
 
 
-    public int hashCode()
-    {
+    public int hashCode() {
         return resourceURI.hashCode();
     }
 

@@ -20,10 +20,9 @@ package org.onexus.resource.serializer.xstream.internal;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
-import org.onexus.collection.api.*;
-import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.UnserializeException;
+import org.onexus.resource.api.utils.AbstractMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,38 +59,31 @@ public class ResourceSerializer implements IResourceSerializer {
 
         this.xstream.setClassLoader(new RegisteredClassLoader());
 
+        // Resource
+        xstream.addImplicitCollection(Resource.class, "properties", "property", Property.class);
+        xstream.addImplicitCollection(AbstractMetadata.class, "properties", "property", Property.class);
+
         // Project
         alias("project", Project.class);
-        xstream.addImplicitCollection(Project.class, "properties", "property", Property.class);
         xstream.addImplicitCollection(Plugin.class, "parameters", "parameter", Parameter.class);
+        xstream.omitField(Project.class, "name");
 
         // Plugin
         alias("plugin", Plugin.class);
 
         // Folder
         alias("folder", Folder.class);
-        xstream.addImplicitCollection(Folder.class, "properties", "property", Property.class);
 
-        // Data
-        alias("data", Data.class);
-        xstream.addImplicitCollection(Data.class, "properties", "property", Property.class);
-
-        // Collection
-        alias("collection", Collection.class);
-        xstream.addImplicitCollection(Collection.class, "properties", "property", Property.class);
-
+        // Loader
         alias("parameter", Parameter.class);
         xstream.addImplicitCollection(Loader.class, "parameters", "parameter", Parameter.class );
 
-        alias("field", Field.class);
-        xstream.addImplicitCollection(Field.class, "properties", "property", Property.class);
-        xstream.aliasField("primary-key", Field.class, "primaryKey");
+        alias("property", Property.class);
+
         xstream.registerConverter(new ClassConverter());
         xstream.registerConverter(new ORIConverter());
 
-        alias("link", Link.class);
-        xstream.addImplicitCollection(Link.class, "fields", "field", String.class);
-        alias("property", Property.class);
+
 
     }
 

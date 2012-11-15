@@ -35,14 +35,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
-import org.onexus.ui.api.OnexusWebApplication;
-import org.onexus.ui.api.viewers.IViewerCreator;
-import org.onexus.ui.api.viewers.EmptyPanelViewerCreator;
-import org.onexus.ui.api.viewers.IViewersManager;
 import org.onexus.ui.api.events.AjaxUpdateOnEvent;
 import org.onexus.ui.api.events.EventResourceSelect;
+import org.onexus.ui.api.viewers.EmptyPanelViewerCreator;
+import org.onexus.ui.api.viewers.IViewerCreator;
+import org.onexus.ui.api.viewers.IViewersManager;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -53,8 +52,8 @@ public class ResourcesPage extends BaseResourcePage {
 
     public final static String PARAMETER_RESOURCE = "uri";
 
-    @Inject
-    private transient IViewersManager viewersManager;
+    @PaxWicketBean(name="viewersManager")
+    private IViewersManager viewersManager;
 
     public ResourcesPage(PageParameters parameters) {
         super(new ResourceModel(parameters.get(PARAMETER_RESOURCE).toOptionalString()));
@@ -74,14 +73,6 @@ public class ResourcesPage extends BaseResourcePage {
         // Tabs
         add(new ViewerTabs("tabs", getModel() ));
 
-    }
-
-    private IViewersManager getViewersManager() {
-        if (viewersManager == null) {
-            OnexusWebApplication.inject(this);
-        }
-
-        return viewersManager;
     }
 
     public class ToolProjectSync extends Link<Resource> {
@@ -322,7 +313,7 @@ public class ResourcesPage extends BaseResourcePage {
                 return Collections.EMPTY_LIST;
             }
 
-            return getViewersManager().getViewerCreators(resource);
+            return viewersManager.getViewerCreators(resource);
         }
 
         @Override

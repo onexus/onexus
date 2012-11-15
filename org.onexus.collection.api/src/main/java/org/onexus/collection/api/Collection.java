@@ -17,10 +17,14 @@
  */
 package org.onexus.collection.api;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamInclude;
 import org.onexus.resource.api.Resource;
 
 import java.util.List;
 
+@XStreamAlias("collection")
+@XStreamInclude({ Link.class, Field.class })
 public class Collection extends Resource {
 
     private List<Field> fields;

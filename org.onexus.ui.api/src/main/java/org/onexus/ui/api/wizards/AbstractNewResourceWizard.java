@@ -33,15 +33,13 @@ import org.apache.wicket.validation.validator.PatternValidator;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
-
-import javax.inject.Inject;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public abstract class AbstractNewResourceWizard<T extends Resource> extends AbstractWizard {
 
-    @Inject
-    private transient IResourceManager resourceManager;
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
 
     private T resource;
     private ORI parentUri;

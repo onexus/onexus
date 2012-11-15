@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+    <cm:property-placeholder persistent-id="org.onexus.ui.workspace" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="database" value="onexus-h2-tags"/>
+            <cm:property name="username" value="sa"/>
+            <cm:property name="password" value=""/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!-- References -->
+    <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister"/>
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
+    <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
+    <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
+
+    <!-- Resource activation -->
+    <bean id="websiteResourceActivator" class="org.onexus.resource.api.ResourceActivator" init-method="init">
+        <property name="resourceRegister" ref="resourceRegister"/>
+        <property name="resourceType" value="org.onexus.website.api.WebsiteConfig" />
+    </bean>
+
+
+    <!-- ITagStoreManager -->
+    <service interface="org.onexus.website.api.widgets.tags.tagstore.ITagStoreManager"
+             ref="tagStoreManager">
+        <registration-listener unregistration-method="stop" ref="tagStoreManager"/>
+    </service>
+    <bean id="tagStoreManager" class="org.onexus.website.api.widgets.tags.tagstore.TagStoreManager" init-method="init">
+        <property name="database" value="${database}"></property>
+        <property name="username" value="${username}"></property>
+        <property name="password" value="${password}"></property>
+    </bean>
+
+    <!-- Default widget manager -->
+    <reference-list id="widgetCreatorsRef" interface="org.onexus.website.api.widgets.IWidgetCreator" availability="optional">
+        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="widgetManager"/>
+    </reference-list>
+    <service interface="org.onexus.website.api.widgets.IWidgetManager" ref="widgetManager"/>
+    <bean id="widgetManager"
+          class="org.onexus.website.api.widgets.DefaultWidgetManager">
+        <property name="resourceRegister" ref="resourceRegister"/>
+        <property name="creators" ref="widgetCreatorsRef"/>
+    </bean>
+
+    <!-- PageManager -->
+    <reference-list id="pageCreatorsRef" interface="org.onexus.website.api.pages.IPageCreator" availability="optional">
+        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="pageManager"/>
+    </reference-list>
+    <service interface="org.onexus.website.api.pages.IPageManager" ref="pageManager"/>
+    <bean id="pageManager"
+          class="org.onexus.website.api.pages.DefaultPageManager">
+        <property name="resourceRegister" ref="resourceRegister"/>
+        <property name="creators" ref="pageCreatorsRef"/>
+    </bean>
+
+    <!-- Default decorator manager -->
+    <reference-list id="decoratorCreatorsRef"
+                    interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator"
+                    availability="optional"/>
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager"
+             ref="decoratorManager"/>
+    <bean id="decoratorManager" class="org.onexus.website.api.widgets.tableviewer.decorators.DefaultDecoratorManager">
+        <property name="creators" ref="decoratorCreatorsRef"/>
+    </bean>
+
+    <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService" />
+    <bean id="websiteService" class="org.onexus.website.api.WebsiteService" init-method="init" destroy-method="destroy">
+        <property name="resourceManager" ref="resourceManager" />
+        <property name="context" ref="blueprintBundleContext"/>
+    </bean>
+</blueprint>

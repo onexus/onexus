@@ -61,6 +61,11 @@
             <artifactId>com.springsource.org.apache.commons.compress</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+
 		<dependency>
 			<groupId>com.googlecode.guava-osgi</groupId>
 			<artifactId>guava-osgi</artifactId>
@@ -118,27 +123,6 @@
 			<artifactId>com.springsource.org.joda.time</artifactId>
 		</dependency>
 
-		<!-- WICKET -->
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-core</artifactId>
-		</dependency>
-
-        <dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-datetime</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-auth-roles</artifactId>
-		</dependency>
-
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -159,6 +143,11 @@
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.data.api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.website.api</artifactId>
         </dependency>
 
         <dependency>
@@ -216,13 +205,13 @@
 		</dependency>
 
         <dependency>
-			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.resource.serializer.xstream</artifactId>
-		</dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.data.loader.file</artifactId>
+        </dependency>
 
         <dependency>
 			<groupId>org.onexus</groupId>
-			<artifactId>org.onexus.data.loader.biomart</artifactId>
+			<artifactId>org.onexus.resource.serializer.xstream</artifactId>
 		</dependency>
 
         <dependency>

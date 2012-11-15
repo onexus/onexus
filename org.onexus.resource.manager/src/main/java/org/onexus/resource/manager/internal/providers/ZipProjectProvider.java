@@ -17,8 +17,8 @@ public class ZipProjectProvider extends ProjectProvider {
 
     private static final Logger log = LoggerFactory.getLogger(ZipProjectProvider.class);
 
-    public ZipProjectProvider(String projectUrl, File projectFolder) throws InvalidParameterException {
-        super(projectUrl, projectFolder);
+    public ZipProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
+        super(projectName, projectUrl, projectFolder);
 
         if (!projectFolder.exists()) {
 

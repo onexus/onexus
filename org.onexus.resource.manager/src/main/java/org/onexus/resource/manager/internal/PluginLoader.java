@@ -42,10 +42,13 @@ public class PluginLoader implements Serializable {
 
         if (project.getPlugins() != null) {
             for (Plugin plugin : project.getPlugins()) {
-                load(plugin);
+                try {
+                    load(plugin);
+                } catch (InvalidParameterException e) {
+                    log.error(e.getMessage());
+                }
             }
         }
-
     }
 
     public void load(Plugin plugin) throws InvalidParameterException {

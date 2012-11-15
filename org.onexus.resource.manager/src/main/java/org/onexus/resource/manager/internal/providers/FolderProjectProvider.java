@@ -5,8 +5,8 @@ import java.io.File;
 import java.security.InvalidParameterException;
 
 public class FolderProjectProvider extends ProjectProvider {
-    public FolderProjectProvider(String projectUrl, File projectFolder) throws InvalidParameterException {
-        super(projectUrl, projectFolder);
+    public FolderProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
+        super(projectName, projectUrl, projectFolder);
 
         if (projectUrl.startsWith("file")) {
             File urlFolder = new File(projectUrl.replace("file://", ""));

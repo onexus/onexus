@@ -1,0 +1,126 @@
+/**
+ *  Copyright 2012 Universitat Pompeu Fabra.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ */
+package org.onexus.website.api.pages.browser;
+
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
+import org.onexus.website.api.WebsiteStatus;
+import org.onexus.website.api.events.EventAddFilter;
+import org.onexus.website.api.events.EventFiltersUpdate;
+import org.onexus.website.api.events.EventPanel;
+import org.onexus.website.api.events.EventRemoveFilter;
+import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.widgets.Widget;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import java.util.List;
+
+public class FiltersPanel extends EventPanel {
+
+    @PaxWicketBean(name="resourceManager")
+    public transient IResourceManager resourceManager;
+
+    @PaxWicketBean(name="collectionManager")
+    public transient ICollectionManager collectionManager;
+
+
+    public FiltersPanel(String id, IModel<BrowserPageStatus> pageModel) {
+        super(id, pageModel);
+
+        // Update this component if this events are fired.
+        onEventFireUpdate(EventAddFilter.class, EventRemoveFilter.class, EventFiltersUpdate.class);
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+
+        RepeatingView filterRules = new RepeatingView("filter");
+
+        List<IFilter> filters = getBrowserPage().getFilters();
+
+        if (filters != null && !filters.isEmpty()) {
+
+            Query query = getQuery();
+
+            for (int i=0; i < filters.size(); i++ ) {
+
+                IFilter filter = filters.get(i);
+
+                WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
+
+                // Add new fixed entity
+                //TODO container.add(new Label("collectionLabel", filter.getLabel(query)));
+                Label labelComponent = new Label("title", filter.getTitle(query));
+                labelComponent.setEscapeModelStrings(false);
+                container.add(labelComponent);
+
+                //TODO container.add(filter.getTooltip("box", query));
+
+                BrowserPageLink<Integer> removeLink = new IndicatingBrowserPageLink<Integer>("remove", Model.of(i)) {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        Integer pos = getModelObject();
+                        getBrowserPageStatus().getFilters().remove(pos.intValue());
+                        sendEvent(EventRemoveFilter.EVENT);
+                    }
+
+                };
+                removeLink.setVisible(filter.isDeletable());
+
+                if (filter.isEnable()) {
+                    container.add(new AttributeModifier("class", "btn btn-large"));
+                } else {
+                    container.add(new AttributeModifier("class", "btn btn-large disabled"));
+                }
+
+                container.add(removeLink);
+                filterRules.add(container);
+            }
+        }
+
+        addOrReplace(filterRules);
+
+    }
+
+    private BrowserPageStatus getBrowserPage() {
+        return (BrowserPageStatus) getDefaultModelObject();
+    }
+
+    protected Query getQuery() {
+        PageStatus pageStatus = Widget.findParentStatus(getDefaultModel(), PageStatus.class);
+        return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
+    }
+
+    protected ORI getBaseUri() {
+        WebsiteStatus websiteStatus = Widget.findParentStatus(getDefaultModel(), WebsiteStatus.class);
+        return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
+    }
+
+}

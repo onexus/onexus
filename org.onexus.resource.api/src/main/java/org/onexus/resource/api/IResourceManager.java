@@ -25,7 +25,7 @@ public interface IResourceManager {
 
     public Project getProject(String projectUrl);
 
-    public void importProject(String projectUrl);
+    public void importProject(String projectName, String projectUrl);
 
     public void syncProject(String projectUrl);
 

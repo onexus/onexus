@@ -18,9 +18,10 @@
 package org.onexus.data.api;
 
 
+import org.onexus.resource.api.IResourceService;
 import org.onexus.resource.api.ORI;
 
-public interface IDataManager {
+public interface IDataManager extends IResourceService {
 
     public IDataStreams load(ORI dataOri);
 

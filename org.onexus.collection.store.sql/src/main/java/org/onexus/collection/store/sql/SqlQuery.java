@@ -79,7 +79,12 @@ public class SqlQuery {
                 }
             }
             for (String fieldId : fields) {
-                String fieldName = collectionDDL.getColumnInfoByFieldName(fieldId).getColumnName();
+
+                SqlCollectionDDL.ColumnInfo columnInfo = collectionDDL.getColumnInfoByFieldName(fieldId);
+                if (columnInfo == null) {
+                    throw new UnsupportedOperationException("Unknown field '" + fieldId + "'");
+                }
+                String fieldName = columnInfo.getColumnName();
                 select.add("`" + collectionAlias + "`.`" + fieldName + "` " + collectionAlias + "_" + fieldName);
             }
 

@@ -38,14 +38,16 @@ public abstract class ProjectProvider {
     private IResourceSerializer serializer;
     private PluginLoader pluginLoader;
 
+    private String projectName;
     private String projectUrl;
     private File projectFolder;
 
     private Project project;
     private Map<ORI, Resource> resources;
 
-    public ProjectProvider(String projectUrl, File projectFolder) throws InvalidParameterException {
+    public ProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
         super();
+        this.projectName = projectName;
         this.projectUrl = projectUrl;
         this.projectFolder = projectFolder;
     }
@@ -74,6 +76,7 @@ public abstract class ProjectProvider {
         }
 
         this.project = (Project) loadResource(projectOnx);
+        this.project.setName(projectName);
 
         this.pluginLoader.load(project);
     }

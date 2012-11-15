@@ -18,6 +18,7 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.IResourceService;
 import org.onexus.resource.api.ORI;
 
 /**
@@ -38,7 +39,7 @@ import org.onexus.resource.api.ORI;
  *
  * @author Jordi Deu-Pons
  */
-public interface ICollectionManager {
+public interface ICollectionManager extends IResourceService {
 
     /**
      * @param query The query

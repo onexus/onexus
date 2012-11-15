@@ -12,33 +12,39 @@
 
     <!-- ViewersCreators -->
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.wizards.WizardViewerTab"/>
+        <bean class="org.onexus.ui.workspace.internal.viewers.wizards.WizardViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.editor.EditorViewerTab"/>
+        <bean class="org.onexus.ui.workspace.internal.viewers.definition.DefinitionViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.tree.ProjectTreeViewerTab"/>
+        <bean class="org.onexus.ui.workspace.internal.viewers.tree.ProjectTreeViewerCreator"/>
     </service>
     <service interface="org.onexus.ui.api.viewers.IViewerCreator">
-        <bean class="org.onexus.ui.workspace.viewers.preview.FilePreviewViewerTab"/>
+        <bean class="org.onexus.ui.workspace.internal.viewers.preview.FilePreviewViewerCreator"/>
     </service>
 
     <!-- Wizards -->
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
-        <bean class="org.onexus.ui.workspace.wizards.folder.NewFolderWizardCreator"/>
+        <bean class="org.onexus.ui.workspace.internal.wizards.folder.NewFolderWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
-        <bean class="org.onexus.ui.workspace.wizards.data.CreateCollectionWizardCreator"/>
+        <bean class="org.onexus.ui.workspace.internal.wizards.data.CreateCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
-        <bean class="org.onexus.ui.workspace.wizards.collection.NewCollectionWizardCreator"/>
+        <bean class="org.onexus.ui.workspace.internal.wizards.collection.NewCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
-        <bean class="org.onexus.ui.workspace.wizards.collection.ManageCollectionWizardCreator"/>
+        <bean class="org.onexus.ui.workspace.internal.wizards.collection.ManageCollectionWizardCreator"/>
     </service>
     <service interface="org.onexus.ui.api.wizards.IWizardCreator">
-        <bean class="org.onexus.ui.workspace.wizards.folder.ManageCollectionsWizardCreator"/>
+        <bean class="org.onexus.ui.workspace.internal.wizards.folder.ManageCollectionsWizardCreator"/>
     </service>
+
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
+    <reference id="wizardsManager" interface="org.onexus.ui.api.wizards.IWizardsManager"/>
+    <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
+    <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer"/>
 
 </blueprint>

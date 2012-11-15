@@ -12,13 +12,8 @@
 
     <!-- IResourceRegister -->
     <reference id="serializerRef" interface="org.onexus.resource.api.IResourceSerializer"/>
-    <reference-list id="resourceActivatorsRef" interface="org.onexus.resource.api.IResourceActivator" availability="optional">
-        <reference-listener bind-method="bindActivators" unbind-method="unbindActivators"
-                            ref="org.onexus.ui.resourceregister"/>
-    </reference-list>
     <service interface="org.onexus.resource.api.IResourceRegister" ref="org.onexus.ui.resourceregister"/>
     <bean id="org.onexus.ui.resourceregister" class="org.onexus.resource.api.DefaultResourceRegister">
-        <property name="resourceActivators" ref="resourceActivatorsRef"/>
         <property name="serializer" ref="serializerRef"/>
     </bean>
 

@@ -62,6 +62,8 @@
         <module>org.onexus.data.loader.biomart</module>
         <module>org.onexus.data.loader.anduril</module>
 
+        <module>org.onexus.website.api</module>
+
         <module>org.onexus.ui.api</module>
         <module>org.onexus.ui.workspace</module>
         <module>org.onexus.ui.website</module>
@@ -311,6 +313,12 @@
 
             <dependency>
                 <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.website.api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.collection.store.sql</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -346,8 +354,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-
-            <!-- ONEXUS TaskExecutors -->
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.collection.loader.tsv</artifactId>
@@ -359,9 +365,16 @@
                 <artifactId>org.onexus.data.loader.biomart</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.data.loader.anduril</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.onexus</groupId>
+                <artifactId>org.onexus.data.loader.file</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -374,38 +387,9 @@
 
             <!-- WICKET -->
             <dependency>
-                <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-core</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-ioc</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-extensions</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-datetime</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-auth-roles</artifactId>
-                <version>${wicket.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wicketstuff</groupId>
-                <artifactId>wicketstuff-osgi</artifactId>
-                <version>6.0.0-beta1</version>
+                <groupId>org.ops4j.pax.wicket</groupId>
+                <artifactId>org.ops4j.pax.wicket.service</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
             </dependency>
 
             <!-- LIBRARIES -->
