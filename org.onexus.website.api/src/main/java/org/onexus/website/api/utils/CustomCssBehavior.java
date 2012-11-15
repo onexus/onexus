@@ -25,6 +25,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.resource.api.ORI;
 
 public class CustomCssBehavior extends Behavior {
@@ -43,7 +44,7 @@ public class CustomCssBehavior extends Behavior {
 
         if (CSS == null) {
 
-            if (resourceUri != null) {
+            if (resourceUri != null && !Strings.isEmpty(resourceUri.getPath())) {
                 ResourceReference reference = DataResource.getResourceReference();
                 PageParameters pageParameters = DataResource.buildPageParameters(resourceUri);
                 CSS = new CssReferenceHeaderItem(reference, pageParameters, null, null) {

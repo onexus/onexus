@@ -16,13 +16,18 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteModel;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DataResource extends AbstractResource {
 
+    private static final Logger log = LoggerFactory.getLogger(DataResource.class);
     private final static String DATA_MOUNT_POINT = "data";
 
     @PaxWicketBean(name = "dataManager")
@@ -58,6 +63,7 @@ public class DataResource extends AbstractResource {
         }
 
         return reference;
+
     }
 
 
@@ -67,7 +73,7 @@ public class DataResource extends AbstractResource {
 
         String segments[] = resourceUri.getPath().substring(1).split("/");
 
-        for (int i=0; i < segments.length; i++) {
+        for (int i = 0; i < segments.length; i++) {
             parameters.set(i, segments[i]);
         }
 
@@ -107,6 +113,7 @@ public class DataResource extends AbstractResource {
                     response.write(b, off, len);
                 }
             };
+
             try {
 
                 ORI resource;
@@ -124,10 +131,10 @@ public class DataResource extends AbstractResource {
                     Streams.copy(stream, s);
                 }
 
-            } catch (IOException e) {
-                throw new WicketRuntimeException(e);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                setError(HttpServletResponse.SC_NOT_FOUND);
             }
-
 
         }
 

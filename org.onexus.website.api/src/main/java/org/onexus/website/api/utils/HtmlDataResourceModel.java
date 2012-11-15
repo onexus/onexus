@@ -43,7 +43,7 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
             IDataStreams stream = getDataManager().load(contentUri);
             return filterRelativeUrls(IOUtils.toString(stream.iterator().next()));
         } catch (Exception e) {
-            log.error("Error loading HTML source '" + contentUri + "'", e);
+            log.error("Error loading HTML source '" + contentUri + "'");
             return "";
         }
     }

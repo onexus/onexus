@@ -51,6 +51,9 @@ public class DefaultDecoratorManager implements IDecoratorManager {
 
         // Look for a decorator creator
         if (decorator != null) {
+
+            decorator = decorator.trim();
+
             String decoratorId = decorator;
 
 
