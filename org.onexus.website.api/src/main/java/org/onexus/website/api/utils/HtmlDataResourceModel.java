@@ -58,9 +58,13 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
     private final static Pattern PATTERN_HREF = Pattern.compile("(<a\\s+href\\s*=\\s*[\"|']?)(.*?)([\"|'])", Pattern.CASE_INSENSITIVE);
     private final static Pattern PATTERN_SRC = Pattern.compile("(src\\s*=\\s*\"?)(.*?)(\")", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_ANTICACHE = Pattern.compile("\\$\\{anticache\\}", Pattern.CASE_INSENSITIVE);
 
 
     private String filterRelativeUrls(String html) {
+
+        // Replace anticache token
+        html = PATTERN_ANTICACHE.matcher(html).replaceAll(Long.toHexString(System.currentTimeMillis()));
 
         String resourcePath = contentUri.getPath();
         resourcePath = resourcePath.substring(1, resourcePath.lastIndexOf('/'));
