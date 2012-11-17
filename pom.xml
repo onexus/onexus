@@ -69,7 +69,7 @@
         <module>org.onexus.ui.website</module>
 
         <module>provision</module>
-        <module>onexus-resources</module>
+        <module>onexus-metainf</module>
         <module>onexus-server</module>
         <module>onexus-archetypes/widget</module>
 
@@ -124,7 +124,7 @@
                 <artifactId>maven-license-plugin</artifactId>
                 <version>1.9.0</version>
                 <configuration>
-                    <header>onexus-resources/src/main/resources/META-INF/LICENSE.txt</header>
+                    <header>onexus-metainf/src/main/resources/META-INF/LICENSE.txt</header>
                     <strictCheck>true</strictCheck>
                     <aggregate>true</aggregate>
                     <includes>
@@ -160,7 +160,7 @@
                         </goals>
                         <configuration>
                             <resourceBundles>
-                                <resourceBundle>org.onexus:onexus-resources:${project.version}</resourceBundle>
+                                <resourceBundle>org.onexus:onexus-metainf:${project.version}</resourceBundle>
                             </resourceBundles>
                         </configuration>
                     </execution>
