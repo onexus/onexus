@@ -59,8 +59,6 @@
         <module>org.onexus.data.api</module>
         <module>org.onexus.data.manager</module>
         <module>org.onexus.data.loader.file</module>
-        <module>org.onexus.data.loader.biomart</module>
-        <module>org.onexus.data.loader.anduril</module>
 
         <module>org.onexus.website.api</module>
 
@@ -258,12 +256,6 @@
             </dependency>
 
             <dependency>
-                <groupId>fi.helsinki.ltdk.csbl</groupId>
-                <artifactId>anduril</artifactId>
-                <version>1.2.5</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.ops4j.pax.wicket</groupId>
                 <artifactId>org.ops4j.pax.wicket.service</artifactId>
                 <version>2.0.0-SNAPSHOT</version>
@@ -433,18 +425,6 @@
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.collection.loader.tsv</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.data.loader.biomart</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.onexus</groupId>
-                <artifactId>org.onexus.data.loader.anduril</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
