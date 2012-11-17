@@ -88,11 +88,6 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit</groupId>
-            <artifactId>com.springsource.org.junit</artifactId>
-        </dependency>
-
         <!-- Other -->
         <dependency>
             <groupId>javax.servlet</groupId>

@@ -17,14 +17,13 @@
  */
 package org.onexus.collection.loader.tsv.internal;
 
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EmptyEntitySet;
 import org.onexus.data.api.IDataManager;
-import org.onexus.collection.api.IEntitySet;
-import org.onexus.collection.api.Collection;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.Progress;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.concurrent.Callable;
 

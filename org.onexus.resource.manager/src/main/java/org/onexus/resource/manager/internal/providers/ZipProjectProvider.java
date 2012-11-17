@@ -1,13 +1,11 @@
 package org.onexus.resource.manager.internal.providers;
 
 import org.apache.commons.io.FileUtils;
-import org.onexus.resource.api.IResourceSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.zip.ZipEntry;

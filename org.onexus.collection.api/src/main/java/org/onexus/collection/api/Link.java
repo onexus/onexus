@@ -19,7 +19,6 @@ package org.onexus.collection.api;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamImplicitCollection;
 import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;

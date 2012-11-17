@@ -30,11 +30,6 @@
             <artifactId>org.onexus.data.api</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>

@@ -23,13 +23,6 @@ import org.onexus.resource.api.Resource;
 import org.onexus.data.api.Data;
 import org.onexus.ui.api.wizards.IWizardCreator;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jordi
- * Date: 29/03/12
- * Time: 16:19
- * To change this template use File | Settings | File Templates.
- */
 public class CreateCollectionWizardCreator implements IWizardCreator {
 
     @Override

@@ -28,7 +28,6 @@ import org.onexus.data.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -36,9 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 
 public class FileCallable implements Callable<IDataStreams> {
 
