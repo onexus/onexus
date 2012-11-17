@@ -199,7 +199,6 @@
     <dependencyManagement>
         <dependencies>
 
-            <!-- OSGi framework -->
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
@@ -216,51 +215,130 @@
                 <optional>true</optional>
             </dependency>
 
-            <!-- XStream dependencies -->
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
                 <artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
                 <version>1.3.1</version>
             </dependency>
-            <dependency>
-                <groupId>net.sourceforge.cglib</groupId>
-                <artifactId>com.springsource.net.sf.cglib</artifactId>
-                <version>2.2.0</version>
-            </dependency>
+
             <dependency>
                 <groupId>javax.xml.stream</groupId>
                 <artifactId>com.springsource.javax.xml.stream</artifactId>
                 <version>1.0.1</version>
             </dependency>
+
             <dependency>
                 <groupId>nu.xom</groupId>
                 <artifactId>com.springsource.nu.xom</artifactId>
                 <version>1.1.0</version>
             </dependency>
+
             <dependency>
                 <groupId>org.jdom</groupId>
                 <artifactId>com.springsource.org.jdom</artifactId>
                 <version>1.1.0</version>
             </dependency>
+
             <dependency>
                 <groupId>org.dom4j</groupId>
                 <artifactId>com.springsource.org.dom4j</artifactId>
                 <version>1.6.1</version>
             </dependency>
+
             <dependency>
                 <groupId>org.joda</groupId>
                 <artifactId>com.springsource.org.joda.time</artifactId>
                 <version>1.6.0</version>
             </dependency>
 
-            <!-- Logging -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>1.6.1</version>
             </dependency>
 
-            <!-- ONEXUS -->
+            <dependency>
+                <groupId>fi.helsinki.ltdk.csbl</groupId>
+                <artifactId>anduril</artifactId>
+                <version>1.2.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ops4j.pax.wicket</groupId>
+                <artifactId>org.ops4j.pax.wicket.service</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.21</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.7</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.guava-osgi</groupId>
+                <artifactId>guava-osgi</artifactId>
+                <version>11.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>com.springsource.org.apache.commons.compress</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>com.springsource.org.junit</artifactId>
+                <version>4.9.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+                <version>3.4_2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit</artifactId>
+                <version>2.0.0.201206130900-r</version>
+            </dependency>
+
+            <!-- Internal dependencies -->
+
             <dependency>
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.resource.api</artifactId>
@@ -374,89 +452,6 @@
                 <groupId>org.onexus</groupId>
                 <artifactId>org.onexus.data.loader.file</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <!-- ONEXUS dependencies -->
-            <dependency>
-                <groupId>fi.helsinki.ltdk.csbl</groupId>
-                <artifactId>anduril</artifactId>
-                <version>1.2.5</version>
-            </dependency>
-
-            <!-- WICKET -->
-            <dependency>
-                <groupId>org.ops4j.pax.wicket</groupId>
-                <artifactId>org.ops4j.pax.wicket.service</artifactId>
-                <version>2.0.0-SNAPSHOT</version>
-            </dependency>
-
-            <!-- LIBRARIES -->
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
-                <version>2.5</version>
-            </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.18</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.6</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>3.2.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.googlecode.guava-osgi</groupId>
-                <artifactId>guava-osgi</artifactId>
-                <version>9.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>com.springsource.org.apache.commons.dbcp</artifactId>
-                <version>1.2.2.osgi</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>com.springsource.org.apache.commons.io</artifactId>
-                <version>1.4.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>com.springsource.org.apache.commons.beanutils</artifactId>
-                <version>1.8.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>com.springsource.org.apache.commons.compress</artifactId>
-                <version>1.1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>com.springsource.org.junit</artifactId>
-                <version>4.9.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.servicemix.bundles</groupId>
-                <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
-                <version>3.4_2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jgit</groupId>
-                <artifactId>org.eclipse.jgit</artifactId>
-                <version>2.0.0.201206130900-r</version>
             </dependency>
 
         </dependencies>

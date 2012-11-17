@@ -40,21 +40,15 @@
 
 	<dependencies>
 
-		<!-- Tools -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>com.springsource.org.apache.commons.beanutils</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>com.springsource.org.apache.commons.dbcp</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>com.springsource.org.apache.commons.io</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -86,16 +80,9 @@
             <artifactId>org.eclipse.jgit</artifactId>
         </dependency>
 
-        <!-- XStream dependencies -->
-
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>net.sourceforge.cglib</groupId>
-			<artifactId>com.springsource.net.sf.cglib</artifactId>
 		</dependency>
 
 		<dependency>
@@ -123,13 +110,11 @@
 			<artifactId>com.springsource.org.joda.time</artifactId>
 		</dependency>
 
-		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 
-		<!-- Onexus -->
 		<dependency>
 			<groupId>org.onexus</groupId>
 			<artifactId>org.onexus.resource.api</artifactId>
