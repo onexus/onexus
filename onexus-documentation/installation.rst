@@ -1,7 +1,10 @@
 Onexus installation
 ++++++++++++++++++++++++++++
 
-.. note:: Onexus is under development and we still haven't released any final version, so you first need to `compile <compilation.rst>`_ the source code.
+Note
+****
+
+Onexus is under development and we still haven't released any final version, so you first need to `compile <compilation.rst>`_ the source code.
 
 Requirements
 ************
@@ -21,11 +24,11 @@ Installation
 
 #. Start Karaf_ console::
 
-   # ./bin/karaf
+	# ./bin/karaf
 
 #. Install the Onexus features repository (changing [version] for the current version number) ::
 
-   karaf@root> features:addurl mvn:org.onexus/onexus-features/[version]/xml/features
+	karaf@root> features:addurl mvn:org.onexus/onexus-features/[version]/xml/features
    
 #. Now you can choose between H2 version and MySQL version. The H2 version uses an embedded database
    so you won't need to do any extra configuration, it's a good choice to test Onexus. The MySQL is
@@ -33,11 +36,11 @@ Installation
 
    The H2 version::
 
-   karaf@root> features:install -v onexus-h2
+	karaf@root> features:install -v onexus-h2
 
    The MySQL version::
 
-   karaf@root> features:install -v onexus-mysql
+	karaf@root> features:install -v onexus-mysql
 
 #. MySQL version needs to be configured, check the above configuration section.
    
