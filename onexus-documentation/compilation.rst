@@ -1,5 +1,5 @@
-Onexus installation
-++++++++++++++++++++++++++++
+Compilation
++++++++++++
 
 Follow above instructions to compile Onexus source code.
 
