@@ -44,8 +44,6 @@ public class H2CollectionStore extends SqlCollectionStore {
 
     private String password = "";
 
-    private String status;
-
     private IResourceManager resourceManager;
 
     public H2CollectionStore() {
@@ -121,14 +119,6 @@ public class H2CollectionStore extends SqlCollectionStore {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public IResourceManager getResourceManager() {

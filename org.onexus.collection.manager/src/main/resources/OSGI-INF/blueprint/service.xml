@@ -10,8 +10,7 @@
 
     <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
     <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
-    <reference id="collectionStore" interface="org.onexus.collection.api.ICollectionStore"
-               filter="(status=enabled)"/>
+    <reference id="collectionStore" interface="org.onexus.collection.api.ICollectionStore"/>
 
     <service interface="org.onexus.collection.api.ICollectionManager" ref="collectionManager"/>
     <bean id="collectionManager" class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">

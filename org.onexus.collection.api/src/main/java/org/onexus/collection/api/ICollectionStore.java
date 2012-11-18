@@ -29,14 +29,6 @@ import java.util.List;
  */
 public interface ICollectionStore {
 
-    public String STATUS_ENABLED = "enabled";
-    public String STATUS_DISABLED = "disabled";
-
-    /**
-     * @return This collection store is status ('enabled' or 'disabled').
-     */
-    public String getStatus();
-
     /**
      * Check if a collection is registered in this store.
      *

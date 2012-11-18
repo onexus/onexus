@@ -42,7 +42,7 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
 
-@AuthorizeInstantiation({ "onexus-admin", "onexus-user" })
+@AuthorizeInstantiation({ "admin", "onexus-admin", "onexus-user" })
 public class BaseResourcePage extends WebPage {
 
 

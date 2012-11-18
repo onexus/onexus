@@ -40,8 +40,6 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     private static final int INSERT_BATCH_SIZE = 400;
     private static final int INSERT_BUFFER_SIZE = INSERT_BATCH_SIZE * 400;
 
-    private String status;
-
     private DataSource dataSource;
 
     private Map<ORI, SqlCollectionDDL> ddls;
@@ -59,10 +57,6 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     public void init() {
-
-        if (!STATUS_ENABLED.equals(getStatus())) {
-            return;
-        }
 
         dataSource = newDataSource();
 
@@ -350,14 +344,6 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     public abstract IResourceManager getResourceManager();
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     protected DataSource getDataSource() {
         return this.dataSource;

@@ -9,7 +9,6 @@
             <cm:property name="database" value="onexus"/>
             <cm:property name="username" value="onexus"/>
             <cm:property name="password" value="onexus"/>
-            <cm:property name="status" value="disabled"/>
         </cm:default-properties>
     </cm:property-placeholder>
 
@@ -26,7 +25,6 @@
             <property name="database" value="${database}"/>
             <property name="username" value="${username}"/>
             <property name="password" value="${password}"/>
-            <property name="status" value="${status}"/>
             <property name="resourceManager" ref="resourceManagerRef"/>
         </bean>
     </service>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+    <repository>mvn:org.ops4j.pax.wicket/features/${pax-wicket.version}/xml/features</repository>
+
+    <!-- Onexus H2Sql -->
+    <feature name="onexus-h2" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.resource.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.data.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.collection.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.website.api/${project.version}</bundle>
+
+        <feature version="${project.version}">org.onexus.resource</feature>
+        <feature version="${project.version}">org.onexus.data</feature>
+        <feature version="${project.version}">org.onexus.collection</feature>
+        <feature version="${project.version}">org.onexus.collection.store.h2sql</feature>
+        <feature version="${project.version}">org.onexus.ui</feature>
+    </feature>
+
+    <!-- Onexus MySQL -->
+    <feature name="onexus-mysql" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.resource.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.data.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.collection.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.website.api/${project.version}</bundle>
+
+        <feature version="${project.version}">org.onexus.resource</feature>
+        <feature version="${project.version}">org.onexus.data</feature>
+        <feature version="${project.version}">org.onexus.collection</feature>
+        <feature version="${project.version}">org.onexus.collection.store.mysql</feature>
+        <feature version="${project.version}">org.onexus.ui</feature>
+    </feature>
+
+    <!-- Onexus core -->
+    <feature name="org.onexus.resource" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.resource.manager/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.resource.authorization/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.resource.serializer.xstream/${project.version}</bundle>
+
+        <!-- xstream -->
+        <bundle>mvn:com.thoughtworks.xstream/com.springsource.com.thoughtworks.xstream/${xstream.version}</bundle>
+        <bundle>mvn:org.xmlpull/com.springsource.org.xmlpull/${xmlpull.version}</bundle>
+
+        <!-- git -->
+        <bundle>mvn:org.openengsb.wrapped/com.jcraft.jsch-all/${jsch.version}</bundle>
+        <bundle>mvn:org.eclipse.jgit/org.eclipse.jgit/${jgit.version}</bundle>
+
+    </feature>
+
+    <!-- Data core -->
+    <feature name="org.onexus.data" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.data.manager/${project.version}</bundle>
+    </feature>
+
+    <!-- Data loaders -->
+    <feature name="org.onexus.data.loader.file" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.data.loader.file/${project.version}</bundle>
+    </feature>
+
+    <!-- Collection core -->
+    <feature name="org.onexus.collection" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.collection.manager/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.collection.query.parser/${project.version}</bundle>
+
+        <!-- dependencies -->
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr-runtime/${antlr.version}</bundle>
+    </feature>
+
+    <!-- Collections stores -->
+    <feature name="org.onexus.collection.store.mysql" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.collection.store.mysql/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.collection.store.sql/${project.version}</bundle>
+
+        <!-- dependencies -->
+        <bundle>mvn:mysql/mysql-connector-java/${mysql.version}</bundle>
+    </feature>
+
+    <feature name="org.onexus.collection.store.h2sql" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.collection.store.h2sql/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.collection.store.sql/${project.version}</bundle>
+
+        <!-- dependencies -->
+        <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
+    </feature>
+
+    <!-- Collection loaders -->
+    <feature name="org.onexus.collection.loader.tsv" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.collection.loader.tsv/${project.version}</bundle>
+    </feature>
+
+    <!-- Onexus UI -->
+    <feature name="org.onexus.ui" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.ui.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.ui.website/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.ui.workspace/${project.version}</bundle>
+
+        <!-- dependencies -->
+        <feature version="${wicket.version}">wicket</feature>
+        <feature version="${pax-wicket.version}">pax-wicket</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
+
+        <bundle>mvn:commons-pool/commons-pool/${commons-pool.version}</bundle>
+        <bundle>mvn:commons-dbcp/commons-dbcp/${commons-dbcp.version}</bundle>
+        <bundle>mvn:commons-io/commons-io/${commons-io.version}</bundle>
+        <bundle>mvn:commons-collections/commons-collections/${commons-collections.version}</bundle>
+        <bundle>mvn:commons-codec/commons-codec/${commons-codec.version}</bundle>
+        <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.compress/${commons-compress.version}</bundle>
+        <bundle>mvn:com.googlecode.guava-osgi/guava-osgi/${guava.version}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${commons-lang.version}</bundle>
+        <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
+    </feature>
+
+</features>

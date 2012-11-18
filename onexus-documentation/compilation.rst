@@ -1,10 +1,12 @@
 Onexus installation
 ++++++++++++++++++++++++++++
 
-Follow above instructions to install Onexus from source code.
+Follow above instructions to compile Onexus source code.
 
 Requirements
 ************
+
+If you have Java JDK 6, Maven 3 and Git installed you can skip these steps.
 
 #. We will install everything in the same folder::
 
@@ -40,31 +42,6 @@ Compile and package Onexus
 #. Compile and package Onexus::
 
    # cd onexus
-   # mvn clean package install
+   # mvn clean install
 
-#. Install Onexus from your local maven repository::
-
-   # cd ..
-   # mkdir server
-   # cd server
-   # tar xvzf ~/.m2/repository/org/onexus/onexus-server/0.3.0-SNAPSHOT/onexus-server-0.3.0-SNAPSHOT.tar.gz
-
-#. Run Onexus
-
-   # ./onexus-server-0.3.0-SNAPSHOT/bin/onexus
-
-Run in debug mode
-*****************
-
-#. Run it in debug mode and attach remote debuging to port 5005::
-
-   # ./onexus-server-0.3.0-SNAPSHOT/bin/onexus debug
-   Browse: http://localhost:8181/onexus
-
-
-#. Watch all SNAPSHOT bundles on local Maven repository
-
-   karaf@onexus-root> dev:watch *
-
-   Now when you run "mvn clean install" on any Onexus bundle code it will be updated automatically on the running Onexus server.
-
+#. Now you can proceed to the normal `installation <installation.rst>`_ using the SNAPSHOT version.

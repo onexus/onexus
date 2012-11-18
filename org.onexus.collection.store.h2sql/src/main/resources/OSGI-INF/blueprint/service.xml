@@ -7,7 +7,6 @@
             <cm:property name="database" value="onexus-h2-database"/>
             <cm:property name="username" value="sa"/>
             <cm:property name="password" value=""/>
-            <cm:property name="status" value="enabled"/>
         </cm:default-properties>
     </cm:property-placeholder>
 
@@ -25,7 +24,6 @@
         <property name="database" value="${database}"/>
         <property name="username" value="${username}"/>
         <property name="password" value="${password}"/>
-        <property name="status" value="${status}"/>
         <property name="resourceManager" ref="resourceManagerRef"/>
     </bean>
 </blueprint>

@@ -31,16 +31,18 @@
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.resource.api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.collection.api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
+            <artifactId>xstream</artifactId>
         </dependency>
 
     </dependencies>

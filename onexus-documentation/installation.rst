@@ -1,76 +1,57 @@
 Onexus installation
 ++++++++++++++++++++++++++++
 
+.. note:: Onexus is under development and we still haven't released any final version, so you first need to `compile <compilation.rst>`_ the source code.
+
 Requirements
 ************
 
-It's possible to install Onexus on any operating system that has installed Java SDK 6 (previous versions
+You need to install Karaf_ server from here: http://karaf.apache.org/
+
+It's possible to install Karaf_ on any operating system that has installed Java SDK 6 (previous versions
 of Java do not work). It is important that you install both the SDK and the JRE version to be able to 
-run Java in server mode.
+run Java in server mode. You can download and install **Java SE Development Kit 6** from here: http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html.
 
-The default installation uses H2_ database as data store. H2_ is an
-embedded pure Java database, which is perfect for projects with small datasets but not
-for projects where you have large datasets. We recommend you to use MySQL_ database to achieve
-better performance with big datasets.   
+Once you java Java installed to install Karaf_ you only need to extract the Karaf_
+distribution on a folder.
 
-You can download and install **Java SE Development Kit 6** from here: http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase6-419409.html.  
- 
 
-Quick start
-***********
+Installation
+************
 
-#. Download last Onexus release from the repository::
+#. Start Karaf_ console::
 
-   http://repo.onexus.org/nexus/content/repositories/releases/org/onexus/onexus-server
+   # ./bin/karaf
 
-#. Extract **onexus-server-[version].tar.gz** to the installation folder::
+#. Install the Onexus features repository (changing [version] for the current version number) ::
 
-   # tar xzvf onexus-server-[version].tar.gz
+   karaf@root> features:addurl mvn:org.onexus/onexus-features/[version]/xml/features
    
-#. Run it::
+#. Now you can choose between H2 version and MySQL version. The H2 version uses an embedded database
+   so you won't need to do any extra configuration, it's a good choice to test Onexus. The MySQL is
+   the recommended version if you plan to use big datasets or want to support many concurrent users.
 
-   # ./onexus-server-[vesion]/bin/onexus
+   The H2 version::
 
-   You will see the Karaf_ console where you can install/uninstall new Onexus plugins.
+   karaf@root> features:install -v onexus-h2
+
+   The MySQL version::
+
+   karaf@root> features:install -v onexus-mysql
+
+#. MySQL version needs to be configured, check the above configuration section.
    
-#. Point your browser to the Onexus web interface on `http://localhost:8181/onexus <http://localhost:8181/onexus>`_.
-   Authenticate as *admin* with password *admin* (See users configuration section if you want to add, remove or change users and passwords).
+#. Point your browser to the Onexus web interface on `http://localhost:8181/ws <http://localhost:8181/es>`_.
+   If you are using the default Karaf_ user configuration you'll be able to login with username "karaf" and password "karaf"
+   (See users configuration section if you want to add, remove or change users and passwords).
 
 #. You can stop Onexus closing the Karaf_ console by pressing Ctrl + D.
-
-
 
 Configuration
 *************
 
-Onexus_ framework is deployed on top of Karaf_, a small OSGi based runtime which provides a lightweight container
-onto which various components and applications can be deployed. If you want to understand better all the configuration options please check the
-documentation of http://karaf.apache.org/.
-
-Directory structure
--------------------
-
-Karaf_ runtime folders. See the Karaf_ user guide for more details about this folders.
-   
-- **/bin**: startup scripts
-- **/data**: OSGi_ working directory that contains all the current deployed bundles. If you remove this folder it is rebuild on the start up process.
-- **/deploy**: Hot bundle deploy directory
-- **/instances**: Directory containing child instances. See Karaf_ user guide.
-- **/lib**: contains the bootstrap libraries
-- **/system**: OSGi bundles repository, laid out as a Maven 2 repository
-- **/local-repo**: Maven_ 2 library repository.
-- **/etc**: configuration files
-
-Onexus_ files.
-
-- **/etc**: The files that start with *org.onexus...* are Onexus_ configuration files.
-- **/repository**: This is the default local repository data (You can change it setting ONEXUS_REPOSITORY environment variable)
-- **/workspaces**: The Onexus_ resources definitions. All the project, websites and data collections definitions. (You can change it setting ONEXUS_WORKSPACES environment variable).
-- **onexus-h2-database.[h2/trace].db**: If you are using H2_ database these files contain all the data.
-- **onexus-h2-tags.[h2/trace].db**: The label system always store the *tags* in this H2_ database (even if you are using MySQL as data store).
-    
-Use MySQL as data store
------------------------
+Config MySQL collection store
+-----------------------------
 
 Follow this steps to install MySQL_ as default data store.
 
@@ -88,14 +69,17 @@ Follow this steps to install MySQL_ as default data store.
 
 #. Stop Onexus with Ctrl + D on Karaf_ console
 
-#. Edit *org.onexus.collection.store.h2sql.cfg* and set "status = disabled".
+#. Create *org.onexus.collection.store.mysql.cfg* file and add this lines with the correct values::
 
-#. Edit *org.onexus.collection.store.mysql.cfg* and set "status = enabled" and change other connection parameters if it's needed.
+	server = localhost
+	port = 3306
+	database = onexus
+	username = onexus
+	password = onexus
 
-#. Start Onexus.
 
-Now you can go to the Onexus_ web interface and using the wizard **Manage collections** click on the **load** collections to force the datasets loading into the database, or you can start
-browsing any project and the loading will be done on the fly while your are browsing the project.  
+#. Start Karaf_.
+
 
 Users authentication system
 ---------------------------

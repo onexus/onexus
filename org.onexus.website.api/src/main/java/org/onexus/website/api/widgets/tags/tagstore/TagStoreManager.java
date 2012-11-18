@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,8 +57,7 @@ public class TagStoreManager implements ITagStoreManager {
         Driver.load();
 
         // Initialize the DataSource with a connection pool
-        ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(
-                "jdbc:h2:" + database, username, password);
+        ConnectionFactory connectionFactory = new H2ConnectionFactory();
         ObjectPool connectionPool = new GenericObjectPool(null,
                 GenericObjectPool.DEFAULT_MAX_ACTIVE,
                 GenericObjectPool.WHEN_EXHAUSTED_GROW,
@@ -69,6 +70,17 @@ public class TagStoreManager implements ITagStoreManager {
 
         this.tagStores = Collections.synchronizedMap(new HashMap<String, TagStore>());
 
+    }
+
+    public class H2ConnectionFactory implements ConnectionFactory {
+
+        @Override
+        public Connection createConnection() throws SQLException {
+            return DriverManager.getConnection(
+                    "jdbc:h2:" + database,
+                    username,
+                    password);
+        }
     }
 
 
@@ -93,12 +105,13 @@ public class TagStoreManager implements ITagStoreManager {
 
     public void stop() {
         try {
-            Connection conn = dataSource.getConnection();
-            Statement stat = conn.createStatement();
+            if (dataSource != null) {
+                Connection conn = dataSource.getConnection();
+                Statement stat = conn.createStatement();
 
-            stat.execute("SHUTDOWN");
-            stat.close();
-
+                stat.execute("SHUTDOWN");
+                stat.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

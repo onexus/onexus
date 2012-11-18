@@ -26,11 +26,13 @@
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.resource.api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.data.api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
