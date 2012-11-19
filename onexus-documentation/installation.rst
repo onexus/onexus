@@ -72,7 +72,7 @@ Follow this steps to install MySQL_ as default data store.
 
 #. Stop Onexus with Ctrl + D on Karaf_ console
 
-#. Create *org.onexus.collection.store.mysql.cfg* file and add this lines with the correct values::
+#. Create *org.onexus.collection.store.mysql.cfg* file into /etc folder and add this lines with the correct values::
 
 	server = localhost
 	port = 3306
