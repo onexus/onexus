@@ -17,7 +17,6 @@
  */
 package org.onexus.resource.manager.internal;
 
-import static org.onexus.resource.api.IAuthorizationManager.*;
 import org.onexus.resource.api.*;
 import org.onexus.resource.manager.internal.providers.ProjectProvider;
 import org.osgi.framework.Bundle;
@@ -30,6 +29,9 @@ import org.slf4j.LoggerFactory;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.onexus.resource.api.IAuthorizationManager.READ;
+import static org.onexus.resource.api.IAuthorizationManager.WRITE;
 
 public class ResourceManager implements IResourceManager {
 
@@ -53,8 +55,9 @@ public class ResourceManager implements IResourceManager {
     public Project getProject(String projectUrl) {
 
         if (!authorizationManager.check(READ, new ORI(projectUrl))) {
-             throw new SecurityException("Unauthorized READ access to project '" + projectUrl + "'");
-        };
+            throw new SecurityException("Unauthorized READ access to project '" + projectUrl + "'");
+        }
+        ;
 
         ProjectProvider projectManager = getProjectProvider(projectUrl);
 
@@ -71,11 +74,17 @@ public class ResourceManager implements IResourceManager {
         List<Project> projects = new ArrayList<Project>();
 
         for (String projectUrl : projectsContainer.getProjectUrls()) {
-            ProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
-            Project project = provider.getProject();
-            if (authorizationManager.check(READ, project.getURI())) {
-                projects.add(project);
-            };
+            try {
+
+                ProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
+                Project project = provider.getProject();
+                if (authorizationManager.check(READ, project.getURI())) {
+                    projects.add(project);
+                }
+
+            } catch (Exception e) {
+                LOGGER.error("Loading project '" + projectUrl + "'", e);
+            }
         }
 
         return projects;
@@ -91,7 +100,7 @@ public class ResourceManager implements IResourceManager {
 
         if (!authorizationManager.check(READ, resourceURI)) {
             throw new SecurityException("Unauthorized READ access to '" + resourceURI.toString() + "'");
-        };
+        }
 
         ProjectProvider provider = getProjectProvider(resourceURI.getProjectUrl());
 
@@ -105,8 +114,7 @@ public class ResourceManager implements IResourceManager {
 
         if (!authorizationManager.check(READ, parentURI)) {
             throw new SecurityException("Unauthorized READ access to '" + parentURI.toString() + "'");
-        };
-
+        }
 
         ProjectProvider provider = getProjectProvider(parentURI.getProjectUrl());
 
@@ -122,7 +130,7 @@ public class ResourceManager implements IResourceManager {
 
         if (!authorizationManager.check(WRITE, resource.getURI())) {
             throw new SecurityException("Unauthorized WRITE access to '" + resource.toString() + "'");
-        };
+        }
 
         ProjectProvider provider = getProjectProvider(resource.getURI().getProjectUrl());
         provider.save(resource);
@@ -163,6 +171,11 @@ public class ResourceManager implements IResourceManager {
     }
 
     @Override
+    public void addResourceListener(IResourceListener resourceListener) {
+        projectsContainer.addResourceListener(resourceListener);
+    }
+
+    @Override
     public void importProject(String projectName, String projectUri) {
         projectsContainer.importProject(projectName, projectUri);
     }
@@ -172,7 +185,8 @@ public class ResourceManager implements IResourceManager {
 
         if (!authorizationManager.check(READ, new ORI(projectURI, null))) {
             throw new SecurityException("Unauthorized READ access to '" + projectURI + "'");
-        };
+        }
+        ;
 
         ProjectProvider provider = getProjectProvider(projectURI);
         provider.syncProject();
@@ -193,6 +207,10 @@ public class ResourceManager implements IResourceManager {
     public void init() {
         // Projects container
         this.projectsContainer = new ProjectsContainer(serializer, new PluginLoader(context));
+    }
+
+    public void destroy() {
+        this.projectsContainer.destroy();
     }
 
     private ProjectProvider getProjectProvider(String projectUrl) {

@@ -78,29 +78,27 @@ public class PluginLoader implements Serializable {
             }
         }
 
-
         if (bundle != null) {
+
+            if (bundle.getState() == Bundle.ACTIVE) {
+                // It was already installed
+                return;
+            }
+
             try {
 
                 int previousState = bundle.getState();
 
                 bundle.start();
 
-                log.debug("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
+                log.info("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
 
-               /* if (previousState != Bundle.ACTIVE) {
-
-                    log.info("Waiting 3 seconds while bundle '"+bundle.getLocation()+"' starts.");
-                    Thread.sleep(3000);
-
-                } */
+                Thread.sleep(1000);
 
             } catch (BundleException e) {
                 String msg = "Plugin " + plugin.getId() + " installed but NOT started. Bundle ID: " + bundle.getBundleId();
                 log.error(msg, e);
-                throw new InvalidParameterException(msg);
-            /*} catch (InterruptedException e) {
-                log.error(e.getMessage()); */
+            } catch (InterruptedException e) {
             }
         }
     }

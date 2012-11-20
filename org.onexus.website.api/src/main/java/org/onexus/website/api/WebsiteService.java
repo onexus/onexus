@@ -17,10 +17,8 @@
  */
 package org.onexus.website.api;
 
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.IResourceService;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Project;
+import org.onexus.resource.api.*;
+import org.onexus.resource.api.utils.ResourceListener;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.BundleContext;
@@ -28,9 +26,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class WebsiteService implements IWebsiteService {
 
@@ -40,7 +36,7 @@ public class WebsiteService implements IWebsiteService {
     private IResourceManager resourceManager;
     private BundleContext context;
 
-    private List<ServiceRegistration> registrations = new ArrayList<ServiceRegistration>();
+    private Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
 
 
     @Override
@@ -48,21 +44,77 @@ public class WebsiteService implements IWebsiteService {
         return MOUNT;
     }
 
-    public void init() {
+    public void bind(IResourceManager resourceManager) {
 
-        for (Project project : resourceManager.getProjects()) {
-
-            List<WebsiteConfig> websites = resourceManager.loadChildren(WebsiteConfig.class, new ORI(project.getURL(), null));
-
-            for (WebsiteConfig website : websites) {
-                registerWebsite(project.getName(), website);
-
-                //TODO Allow multiple websites per project
-                break;
-            }
-
+        if (!registrations.isEmpty()) {
+            destroy();
         }
 
+        for (Project project : resourceManager.getProjects()) {
+            registerProject(project);
+        }
+
+        resourceManager.addResourceListener(new ResourceListener() {
+
+            @Override
+            public void onProjectCreate(Project project) {
+                registerProject(project);
+            }
+
+            @Override
+            public void onProjectChange(Project project) {
+
+                String projectUrl = project.getURL();
+
+                if (registrations.containsKey(projectUrl)) {
+
+                    ServiceRegistration registration = registrations.get(projectUrl);
+                    registration.unregister();
+
+                    registerProject(project);
+                }
+
+            }
+
+            @Override
+            public void onProjectDelete(Project project) {
+
+                String projectUrl = project.getURL();
+
+                if (registrations.containsKey(projectUrl)) {
+
+                    ServiceRegistration registration = registrations.get(projectUrl);
+
+                    log.info("Unregistering website /web/" + project.getName());
+                    registration.unregister();
+                }
+
+            }
+        });
+    }
+
+    public void unbind(IResourceManager resourceManager) {
+        destroy();
+    }
+
+    public void destroy() {
+        log.info("Unregistering all websites.");
+        for (ServiceRegistration registration : registrations.values()) {
+            registration.unregister();
+        }
+        registrations.clear();
+    }
+
+    private void registerProject(Project project) {
+
+        List<WebsiteConfig> websites = resourceManager.loadChildren(WebsiteConfig.class, new ORI(project.getURL(), null));
+
+        for (WebsiteConfig website : websites) {
+            registerWebsite(project.getName(), website);
+
+            //TODO Allow multiple websites per project
+            break;
+        }
     }
 
     private void registerWebsite(String name, WebsiteConfig website) {
@@ -71,21 +123,13 @@ public class WebsiteService implements IWebsiteService {
         props.put(Constants.APPLICATION_NAME, "web_" + name.replace('/', '_'));
         props.put(Constants.MOUNTPOINT, "web/" + name);
 
-        registrations.add(context.registerService(
+        registrations.put(website.getURI().getProjectUrl(), context.registerService(
                 WebApplicationFactory.class.getName(),
                 new WebsiteApplicationFactory(website.getName(), website.getURI().toString()),
                 props
         ));
 
         log.info("Registering website /web/" + name);
-
-    }
-
-    public void destroy() {
-
-        for (ServiceRegistration registration : registrations) {
-            registration.unregister();
-        }
 
     }
 

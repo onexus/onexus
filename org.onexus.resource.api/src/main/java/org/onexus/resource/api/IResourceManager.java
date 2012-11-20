@@ -39,4 +39,6 @@ public interface IResourceManager {
 
     <T> T getLoader(Class<T> serviceClass, Plugin plugin, Loader loader);
 
+    public void addResourceListener(IResourceListener resourceListener);
+
 }

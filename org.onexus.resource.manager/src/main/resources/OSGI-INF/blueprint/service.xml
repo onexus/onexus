@@ -5,12 +5,11 @@
     <reference id="serializerRef" interface="org.onexus.resource.api.IResourceSerializer"/>
     <reference id="authorizationRef" interface="org.onexus.resource.api.IAuthorizationManager"/>
 
-    <service id="org.onexus.resource.manager" interface="org.onexus.resource.api.IResourceManager">
-        <bean class="org.onexus.resource.manager.internal.ResourceManager" init-method="init">
-            <property name="serializer" ref="serializerRef"/>
-            <property name="authorizationManager" ref="authorizationRef"/>
-            <property name="context" ref="blueprintBundleContext"/>
-        </bean>
-    </service>
+    <service interface="org.onexus.resource.api.IResourceManager" ref="resourceManager" />
+    <bean id="resourceManager" class="org.onexus.resource.manager.internal.ResourceManager" init-method="init" destroy-method="destroy">
+        <property name="serializer" ref="serializerRef"/>
+        <property name="authorizationManager" ref="authorizationRef"/>
+        <property name="context" ref="blueprintBundleContext"/>
+    </bean>
 
 </blueprint>

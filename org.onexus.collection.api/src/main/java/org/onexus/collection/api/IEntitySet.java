@@ -35,7 +35,7 @@ public interface IEntitySet extends IEntity, Iterable<IEntity> {
     /**
      * Move the cursor to the next interface
      *
-     * @return
+     * @return Returns true if there is a next value, false otherwise.
      */
     public boolean next();
 

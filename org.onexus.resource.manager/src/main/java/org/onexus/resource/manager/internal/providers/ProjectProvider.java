@@ -45,7 +45,7 @@ public abstract class ProjectProvider {
     private Project project;
     private Map<ORI, Resource> resources;
 
-    public ProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
+    public ProjectProvider(String projectName, String projectUrl, File projectFolder) {
         super();
         this.projectName = projectName;
         this.projectUrl = projectUrl;

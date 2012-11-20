@@ -17,16 +17,18 @@
  */
 package org.onexus.resource.api;
 
-import org.onexus.resource.api.IResourceRegister;
-
 public class ResourceActivator {
 
     private IResourceRegister resourceRegister;
 
     private Class<?> resourceType;
 
-    public void init() {
+    public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(resourceType);
+    }
+
+    public void unbind(IResourceRegister resourceRegister) {
+        resourceRegister.unregister(resourceType);
     }
 
     public Class<?> getResourceType() {

@@ -4,8 +4,10 @@
 
 
     <!-- Resource activation -->
-    <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister" />
-    <bean id="collectionResourceActivator" class="org.onexus.resource.api.ResourceActivator" init-method="init">
+    <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister">
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="resourceActivator" />
+    </reference>
+    <bean id="resourceActivator" class="org.onexus.resource.api.ResourceActivator">
         <property name="resourceRegister" ref="resourceRegister"/>
         <property name="resourceType" value="org.onexus.collection.api.Collection" />
     </bean>

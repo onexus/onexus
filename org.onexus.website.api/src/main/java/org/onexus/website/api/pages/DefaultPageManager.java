@@ -61,6 +61,10 @@ public class DefaultPageManager implements IPageManager {
         this.resourceRegister = resourceRegister;
     }
 
+    public void bindResourceRegister(IResourceRegister resourceRegister) {
+        bindCreators(null);
+    }
+
     public void bindCreators(ServiceReference serviceRef) {
 
         if (resourceRegister != null && creators != null) {

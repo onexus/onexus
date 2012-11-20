@@ -17,17 +17,20 @@
  */
 package org.onexus.resource.manager.internal;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
+import org.onexus.resource.api.IResourceListener;
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.Project;
 import org.onexus.resource.manager.internal.providers.ProjectProvider;
 import org.onexus.resource.manager.internal.providers.ProjectProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class ProjectsContainer {
 
@@ -36,50 +39,128 @@ public class ProjectsContainer {
     private final static String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
     private final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
 
+    private IResourceSerializer serializer;
+    private PluginLoader pluginLoader;
+    private File propertiesFile;
+    private FileAlterationMonitor monitor;
+
     private Properties properties;
     private ProjectProviderFactory providerFactory;
-    private Map<String, ProjectProvider> providers = new HashMap<String, ProjectProvider>();
+    private Map<String, ProjectProvider> providers;
+
+    // Listeners
+    private List<IResourceListener> listeners = new ArrayList<IResourceListener>();
 
     public ProjectsContainer(IResourceSerializer serializer, PluginLoader pluginLoader) {
         super();
 
-        this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader);
-
-        this.properties = new Properties();
+        this.serializer = serializer;
+        this.pluginLoader = pluginLoader;
 
         File onexusFolder = new File(ONEXUS_FOLDER);
         File projectsFolder = new File(ONEXUS_PROJECTS_FOLDER);
-        File propertiesFile = new File(onexusFolder, ONEXUS_PROJECTS_SETTINGS);
+        propertiesFile = new File(onexusFolder, ONEXUS_PROJECTS_SETTINGS);
+
+        if (!onexusFolder.exists()) {
+            onexusFolder.mkdir();
+        }
+
+        if (!projectsFolder.exists()) {
+            projectsFolder.mkdir();
+        }
 
         try {
-
-            if (!onexusFolder.exists()) {
-                onexusFolder.mkdir();
-            }
-
-            if (!projectsFolder.exists()) {
-                projectsFolder.mkdir();
-            }
-
             if (!propertiesFile.exists()) {
                 propertiesFile.createNewFile();
             }
 
-            properties.load(new FileInputStream(propertiesFile));
+            this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader);
+            this.providers = new HashMap<String, ProjectProvider>();
 
+            init();
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new RuntimeException("Loading projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
         }
+
+
+        FileAlterationObserver observer = new FileAlterationObserver(onexusFolder, FileFilterUtils.nameFileFilter(ONEXUS_PROJECTS_SETTINGS));
+        observer.addListener(new FileAlterationListenerAdaptor() {
+            @Override
+            public void onFileChange(File file) {
+                try {
+                    ProjectsContainer.this.init();
+                } catch (IOException e) {
+                    log.error("Loading projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
+                }
+            }
+        });
+
+        monitor = new FileAlterationMonitor(2000);
+        monitor.addObserver(observer);
+        try {
+            monitor.start();
+        } catch (Exception e) {
+            log.error("On start projects file monitor", e);
+        }
+
+    }
+
+    public void destroy() {
+        try {
+            monitor.stop();
+
+
+        } catch (Exception e) {
+            log.error("On stop projects file monitor", e);
+        }
+    }
+
+    private void init() throws IOException {
+        this.properties = new Properties();
+
+        properties.load(new FileInputStream(propertiesFile));
 
         for (String projectUrl : getProjectUrls()) {
 
-            String projectProperty[] = properties.getProperty(projectUrl).split(",");
-            String projectPath = projectProperty[0];
-            String projectName = (projectProperty.length == 2 ? projectProperty[1] : Integer.toHexString(projectUrl.hashCode()));
+            String projectPath = null;
+            String projectName = null;
+            try {
 
-            File projectFolder = new File(projectPath);
-            ProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUrl, projectFolder);
-            providers.put(projectUrl, provider);
+                String projectProperty[] = properties.getProperty(projectUrl).split(",");
+                projectPath = projectProperty[0];
+                projectName = (projectProperty.length == 2 ? projectProperty[1] : Integer.toHexString(projectUrl.hashCode()));
+
+                File projectFolder = new File(projectPath);
+
+                ProjectProvider previousProvider = providers.get(projectUrl);
+
+                if (previousProvider != null) {
+                    if (previousProvider.getProjectFolder().equals(projectFolder) && previousProvider.getProject().getName().equals(projectName)) {
+
+                        // This project is already registered, skip it
+                        continue;
+                    }
+                }
+
+                ProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUrl, projectFolder);
+                providers.put(projectUrl, provider);
+
+                if (previousProvider == null) {
+                    onProjectCreate(provider.getProject());
+                } else {
+                    onProjectChange(provider.getProject());
+                }
+            } catch (Exception e) {
+                log.error("Loading project '" + projectUrl + "' named '" + projectName + "' at " + projectPath, e);
+            }
+        }
+
+        // Remove deleted projects
+        List<String> deletedProjects = new ArrayList<String>(providers.keySet());
+        deletedProjects.removeAll(getProjectUrls());
+        for (String deletedProject : deletedProjects) {
+            onProjectDelete(providers.get(deletedProject).getProject());
+            providers.remove(deletedProject);
         }
     }
 
@@ -116,4 +197,33 @@ public class ProjectsContainer {
     private File newProjectFolder(String projectUri) {
         return new File(new File(ONEXUS_PROJECTS_FOLDER), Integer.toHexString(projectUri.hashCode()));
     }
+
+    void addResourceListener(IResourceListener resourceListener) {
+        listeners.add(resourceListener);
+    }
+
+    private void onProjectCreate(Project project) {
+        log.info("Project '" + project.getName() + "' created.");
+
+        for (IResourceListener listener : listeners) {
+            listener.onProjectCreate(project);
+        }
+    }
+
+    private void onProjectChange(Project project) {
+        log.info("Project '" + project.getName() + "' changed.");
+
+        for (IResourceListener listener : listeners) {
+            listener.onProjectChange(project);
+        }
+    }
+
+    private void onProjectDelete(Project project) {
+        log.info("Project '" + project.getName() + "' deleted.");
+
+        for (IResourceListener listener : listeners) {
+            listener.onProjectDelete(project);
+        }
+    }
+
 }

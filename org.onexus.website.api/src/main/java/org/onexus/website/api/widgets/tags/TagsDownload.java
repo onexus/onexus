@@ -56,12 +56,8 @@ public abstract class TagsDownload extends AbstractAjaxBehavior {
 
     /**
      * Override this method for a file name which will let the browser prompt with a save/open dialog.
-     *
-     * @see ResourceStreamRequestTarget#getFileName()
      */
-    protected String getFileName() {
-        return null;
-    }
+    protected abstract String getFileName();
 
     /**
      * Hook method providing the actual resource stream.

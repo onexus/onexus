@@ -162,7 +162,6 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
             @Override
             protected IResourceStream getResourceStream() {
                 return new StringResourceStream(createDownload(), "text/csv");
-
             }
 
             @Override
