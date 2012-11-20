@@ -29,6 +29,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.onexus.collection.api.query.In;
 import org.onexus.website.api.events.EventAddFilter;
+import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPage;
@@ -144,6 +145,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 applyFilter(filter);
 
+                send(getPage(), Broadcast.BREADTH, EventCloseModal.EVENT);
             }
 
             @Override

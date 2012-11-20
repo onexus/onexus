@@ -22,14 +22,17 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.events.AbstractEvent;
+import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
@@ -44,15 +47,17 @@ public class ButtonWidget extends EventPanel {
 
     private WidgetConfig widgetConfig;
     private IModel<BrowserPageStatus> pageModel;
+    private WebMarkupContainer widgetModal;
 
     public ButtonWidget(String id, final WidgetConfig widgetConfig, final IModel<BrowserPageStatus> pageModel) {
         super(id);
         onEventFireUpdate(EventQueryUpdate.class);
 
+
         this.widgetConfig = widgetConfig;
         this.pageModel = pageModel;
 
-        final WebMarkupContainer widgetModal = new WebMarkupContainer("widgetModal");
+        this.widgetModal = new WebMarkupContainer("widgetModal");
         widgetModal.setOutputMarkupId(true);
         widgetModal.add(new EmptyPanel("widget"));
 
@@ -101,7 +106,6 @@ public class ButtonWidget extends EventPanel {
 
         add(button);
 
-
     }
 
     private IWidgetManager getWidgetManager() {
@@ -125,5 +129,19 @@ public class ButtonWidget extends EventPanel {
     @Override
     protected void onRegisteredEvent(AjaxRequestTarget target, AbstractEvent event) {
         target.add( get("button"));
+    }
+
+    @Override
+    public void onEvent(IEvent<?> event) {
+
+        if (event.getPayload() instanceof EventCloseModal) {
+            AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
+
+            if (target != null) {
+                target.prependJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
+            }
+        }
+
+        super.onEvent(event);
     }
 }
