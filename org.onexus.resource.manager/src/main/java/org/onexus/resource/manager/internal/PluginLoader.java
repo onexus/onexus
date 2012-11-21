@@ -82,6 +82,12 @@ public class PluginLoader implements Serializable {
 
             if (bundle.getState() == Bundle.ACTIVE) {
                 // It was already installed
+                //TODO remove this delay if the blueprint services are ready
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                }
+
                 return;
             }
 
@@ -93,6 +99,7 @@ public class PluginLoader implements Serializable {
 
                 log.info("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
 
+                //TODO wait unit blueprint services are ready
                 Thread.sleep(1000);
 
             } catch (BundleException e) {
