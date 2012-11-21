@@ -32,6 +32,8 @@
 
     <!-- Onexus core -->
     <feature name="org.onexus.resource" version="${project.version}">
+        <feature>war</feature>
+
         <bundle>mvn:org.onexus/org.onexus.resource.manager/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.authorization/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.serializer.xstream/${project.version}</bundle>
@@ -48,6 +50,7 @@
 
     <!-- Data core -->
     <feature name="org.onexus.data" version="${project.version}">
+        <feature>war</feature>
         <bundle>mvn:org.onexus/org.onexus.data.manager/${project.version}</bundle>
     </feature>
 
@@ -58,6 +61,7 @@
 
     <!-- Collection core -->
     <feature name="org.onexus.collection" version="${project.version}">
+        <feature>war</feature>
         <bundle>mvn:org.onexus/org.onexus.collection.manager/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.collection.query.parser/${project.version}</bundle>
 
