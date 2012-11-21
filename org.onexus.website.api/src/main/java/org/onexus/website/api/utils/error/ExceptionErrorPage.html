@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<title>Unexpected error</title>
+</head>
+<body>
+
+    <div class="modal container-fluid">
+        <div class="row-fluid">
+            <br />
+            <h4>Internal error</h4>
+	        <div class="alert alert-error" wicket:id="exception">message</div>
+            <input type="button" onclick="window.history.back();" value="Go back" class="btn btn-primary">
+        </div>
+
+        <br />
+
+        <div class="accordion" id="accordion">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                        details
+                    </a>
+                </div>
+                <div id="collapseOne" class="accordion-body collapse">
+                    <div class="accordion-inner" wicket:id="stacktrace">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -206,7 +206,7 @@ public class SqlQuery {
 
             // Check if it's possible to join this collection
             if (linkFields.isEmpty()) {
-                throw new UnsupportedOperationException("Impossible to link collection '" + collectionUri + "'.");
+                throw new UnsupportedOperationException("Impossible to link collection '" + collectionUri + "' to '" + fromCollection.getURI() + "'.");
             }
 
             networkFixedJoins.put(collectionUri, leftJoin);

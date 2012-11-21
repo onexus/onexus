@@ -106,6 +106,14 @@ public class ResourceManager implements IResourceManager {
 
         T output = (T) provider.getResource(resourceURI);
 
+        if (output == null) {
+            throw new RuntimeException("Resource '" + resourceURI + "' not found.");
+        }
+
+        if (!resourceType.isAssignableFrom(output.getClass())) {
+            throw new RuntimeException("The resource '" + resourceURI + "' is not a '" + resourceType.getSimpleName() + "' is a '" +  output.getClass().getSimpleName() + "'" );
+        }
+
         return output;
     }
 
