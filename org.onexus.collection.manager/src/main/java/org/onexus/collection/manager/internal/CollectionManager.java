@@ -73,6 +73,10 @@ public class CollectionManager implements ICollectionManager {
 
             Collection tpJoinCollection = resourceManager.load(Collection.class, tpCollectionUri);
 
+            if (joinCollection.equals(tpJoinCollection)) {
+                return true;
+            }
+
             List<FieldLink> links = LinkUtils.getLinkFields(query.getOn(), joinCollection, tpJoinCollection);
 
             if (links != null && !links.isEmpty()) {

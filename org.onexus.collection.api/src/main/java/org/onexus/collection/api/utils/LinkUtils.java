@@ -32,7 +32,7 @@ public class LinkUtils {
     public static List<FieldLink> getLinkFields(ORI parentURI,
                                                      Collection a, Collection b) {
 
-        List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
+            List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
 
         List<Link> linksA = a.getLinks();
         List<Link> linksB = b.getLinks();
@@ -57,8 +57,8 @@ public class LinkUtils {
             }
         }
 
-        // Case 1b: B has a direct link to A
-        for (Link link : linksB) {
+       // Case 1b: B has a direct link to A
+       for (Link link : linksB) {
             if (link.getCollection().toAbsolute(parentURI).equals(a.getURI())) {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(b.getURI(), Link
@@ -72,8 +72,11 @@ public class LinkUtils {
 
         // Case 2: All the primary fields of A has a link to collections linked
         // by B
+        int totalPrimaryKeyFields = 0;
+        List<FieldLink> primaryKeyLinks = new ArrayList<FieldLink>();
         for (Field field : a.getFields()) {
             if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
+                totalPrimaryKeyFields++;
 
                 // The links that link to this field
                 List<Link> keyLinks = new ArrayList<Link>();
@@ -107,7 +110,7 @@ public class LinkUtils {
                                                 .getFromFieldName(fieldLinkA);
                                         String fromFieldB = Link
                                                 .getFromFieldName(fieldLinkB);
-                                        fieldLinks.add(new FieldLink(
+                                        primaryKeyLinks.add(new FieldLink(
                                                 a.getURI(), fromFieldA, b
                                                 .getURI(), fromFieldB));
                                     }
@@ -119,6 +122,10 @@ public class LinkUtils {
                 }
 
             }
+        }
+
+        if (totalPrimaryKeyFields == primaryKeyLinks.size()) {
+            fieldLinks.addAll(primaryKeyLinks);
         }
 
         return fieldLinks;
