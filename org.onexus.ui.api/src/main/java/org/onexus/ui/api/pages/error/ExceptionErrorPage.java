@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.pages.AbstractErrorPage;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.util.lang.Generics;
+import org.onexus.resource.api.exceptions.OnexusException;
 import org.onexus.ui.api.pages.theme.DefaultTheme;
 
 import javax.servlet.http.HttpServletResponse;
@@ -66,11 +67,22 @@ public class ExceptionErrorPage extends AbstractErrorPage
 		{
 			StringBuilder sb = new StringBuilder(256);
 
-			// first print the last cause
-			List<Throwable> al = convertToList(throwable);
-			int length = al.size() - 1;
-			Throwable cause = al.get(length);
-			sb.append(cause.getMessage());
+			// first print the last cause or the first onexus exception
+            Throwable cause = null;
+            List<Throwable> al = convertToList(throwable);
+            for (Throwable e : al) {
+                if (OnexusException.class.isAssignableFrom(e.getClass())) {
+                    cause = e;
+                    break;
+                }
+            }
+
+            if (cause == null) {
+			    int length = al.size() - 1;
+			    cause = al.get(length);
+            }
+
+            sb.append(cause.getMessage());
 			return sb.toString();
 		}
 		else

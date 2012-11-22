@@ -23,10 +23,15 @@ import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.pages.SignInPage;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.RequestUtils;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.utils.error.ExceptionErrorPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +60,14 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
     protected void init() {
         super.init();
         mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
+
+        /* In case of unhandled exception redirect it to a custom page */
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+            @Override
+            public IRequestHandler onException(RequestCycle cycle, Exception e) {
+                return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e)));
+            }
+        });
     }
 
 

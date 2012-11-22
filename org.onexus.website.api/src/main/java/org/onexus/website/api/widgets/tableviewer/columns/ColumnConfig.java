@@ -215,7 +215,7 @@ public class ColumnConfig implements IColumnConfig {
                     }
 
                     if (field == null) {
-                        LOGGER.warn("Field '" + fieldName + "' not found on collection '" + collection.getURI() + "'.");
+                        throw new RuntimeException("Field '" + fieldName + "' not found on collection '" + collection.getURI() + "'.");
                     } else {
                         fields.add(field.getId());
                     }

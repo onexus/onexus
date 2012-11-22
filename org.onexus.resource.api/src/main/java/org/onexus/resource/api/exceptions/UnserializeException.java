@@ -17,7 +17,7 @@
  */
 package org.onexus.resource.api.exceptions;
 
-public class UnserializeException extends RuntimeException {
+public class UnserializeException extends OnexusException {
 
     private String path;
     private String line;

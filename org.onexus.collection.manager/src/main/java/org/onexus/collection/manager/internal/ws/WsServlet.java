@@ -23,6 +23,9 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.exceptions.OnexusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +40,7 @@ import java.util.Map;
 
 public class WsServlet extends HttpServlet {
 
+    private static final Logger log = LoggerFactory.getLogger(WsServlet.class);
     private IResourceManager resourceManager;
     private ICollectionManager collectionManager;
     private IQueryParser queryParser;
@@ -71,11 +75,12 @@ public class WsServlet extends HttpServlet {
             if (sb.length() > 0) {
                 response(resp, sb.toString(), null);
             } else {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Missing query");
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Missing query");
             }
 
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            log.error("Query service", e);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
     }
@@ -88,9 +93,19 @@ public class WsServlet extends HttpServlet {
 
         PrintWriter pw = resp.getWriter();
 
-        Query query = queryParser.parseQuery(oqlQuery);
+        Query query;
+        try {
+            query = queryParser.parseQuery(oqlQuery);
+        } catch (Exception e) {
+            throw new OnexusException("Error parsing OQL. " + oqlQuery, e);
+        }
 
-        IEntityTable result = collectionManager.load(query);
+        IEntityTable result;
+        try {
+            result = collectionManager.load(query);
+        } catch (Exception e) {
+            throw new OnexusException("Error loading OQL. " + oqlQuery, e);
+        }
 
         writeHeader(pw, result);
 

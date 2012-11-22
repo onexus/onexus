@@ -26,6 +26,7 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.collection.store.sql.adapters.SqlAdapter;
 import org.onexus.collection.store.sql.filters.FilterBuilder;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.exceptions.OnexusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,12 +55,19 @@ public class SqlQuery {
         this.manager = manager;
         this.query = query;
 
-        addSelect();
-        addFrom();
-        addJoins();
-        addWhere();
-        addOrderBy();
-        addLimit();
+        try {
+            addSelect();
+            addFrom();
+            addJoins();
+            addWhere();
+            addOrderBy();
+            addLimit();
+        } catch (Exception e) {
+            StringBuilder msg = new StringBuilder();
+            msg.append(e.getMessage()).append(". Rendering query:\n");
+            query.toString(msg, true);
+            throw new OnexusException(msg.toString(), e);
+        }
 
     }
 
