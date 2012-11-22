@@ -21,9 +21,8 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionLoader;
 import org.onexus.collection.api.ICollectionStore;
 import org.onexus.collection.api.IEntitySet;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

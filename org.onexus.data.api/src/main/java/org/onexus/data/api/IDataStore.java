@@ -18,6 +18,7 @@
 package org.onexus.data.api;
 
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Progress;
 
 import java.util.List;
 

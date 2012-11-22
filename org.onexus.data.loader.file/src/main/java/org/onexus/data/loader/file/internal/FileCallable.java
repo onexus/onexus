@@ -24,7 +24,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 
 public class StatusColumn extends AbstractColumn<Progress, String> {
 

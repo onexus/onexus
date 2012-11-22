@@ -20,7 +20,7 @@ package org.onexus.collection.manager.internal;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.ORI;
 
 public class ProgressEntityTable implements IEntityTable {

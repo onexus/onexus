@@ -19,7 +19,7 @@ package org.onexus.ui.api.progressbar;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 
 import java.io.Serializable;
 import java.util.Collection;

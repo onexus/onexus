@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.data.api;
+package org.onexus.resource.api;
 
 import java.io.Serializable;
 import java.util.*;

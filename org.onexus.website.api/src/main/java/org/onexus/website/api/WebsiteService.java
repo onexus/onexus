@@ -119,11 +119,13 @@ public class WebsiteService implements IWebsiteService {
 
     private void registerWebsite(String name, WebsiteConfig website) {
 
+        String projectUrl = website.getURI().getProjectUrl();
+
         Properties props = new Properties();
         props.put(Constants.APPLICATION_NAME, "web_" + name.replace('/', '_'));
         props.put(Constants.MOUNTPOINT, "web/" + name);
 
-        registrations.put(website.getURI().getProjectUrl(), context.registerService(
+        registrations.put(projectUrl, context.registerService(
                 WebApplicationFactory.class.getName(),
                 new WebsiteApplicationFactory(website.getName(), website.getURI().toString()),
                 props

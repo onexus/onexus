@@ -21,7 +21,7 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionLoader;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.data.api.IDataManager;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.Plugin;
 
 import java.util.concurrent.Callable;

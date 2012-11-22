@@ -34,7 +34,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventQueryUpdate;

@@ -18,7 +18,7 @@
 package org.onexus.data.api.utils;
 
 import org.onexus.data.api.IDataStreams;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -26,7 +26,7 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 import org.ops4j.pax.wicket.api.PaxWicketBean;

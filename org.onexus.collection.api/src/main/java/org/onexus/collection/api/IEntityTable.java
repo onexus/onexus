@@ -18,8 +18,7 @@
 package org.onexus.collection.api;
 
 import org.onexus.collection.api.query.Query;
-import org.onexus.data.api.IProgressable;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.IProgressable;
 import org.onexus.resource.api.ORI;
 
 public interface IEntityTable extends IProgressable {

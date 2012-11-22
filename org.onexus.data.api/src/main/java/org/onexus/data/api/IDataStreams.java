@@ -17,6 +17,8 @@
  */
 package org.onexus.data.api;
 
+import org.onexus.resource.api.IProgressable;
+
 import java.io.IOException;
 import java.io.InputStream;
 

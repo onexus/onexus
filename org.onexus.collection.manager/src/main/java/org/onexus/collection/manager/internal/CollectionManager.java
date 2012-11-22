@@ -22,17 +22,14 @@ import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
-import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.*;
-import org.onexus.resource.api.utils.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class CollectionManager implements ICollectionManager {
 
@@ -41,6 +38,8 @@ public class CollectionManager implements ICollectionManager {
     private IResourceManager resourceManager;
 
     private ICollectionStore collectionStore;
+
+    private IProgressManager progressManager;
 
     private int maxThreads = 4;
 
@@ -117,6 +116,7 @@ public class CollectionManager implements ICollectionManager {
                     if (!runningCollections.containsKey(subTaskId)) {
 
                         Progress subProgress = new Progress(subTaskId, "Load '" + collectionURI.getPath() + "'");
+                        progressManager.addProgress(subProgress);
                         runningCollections.put(subTaskId, subProgress);
 
                         LOGGER.info("Registering {}", collectionURI);
@@ -211,5 +211,13 @@ public class CollectionManager implements ICollectionManager {
     @Override
     public String getMount() {
         return "oql";
+    }
+
+    public IProgressManager getProgressManager() {
+        return progressManager;
+    }
+
+    public void setProgressManager(IProgressManager progressManager) {
+        this.progressManager = progressManager;
     }
 }

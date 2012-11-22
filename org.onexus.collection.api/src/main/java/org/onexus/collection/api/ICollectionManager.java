@@ -23,7 +23,7 @@ import org.onexus.resource.api.ORI;
 
 /**
  * <p>A ICollectionManager manage the life-cycle of a collection. We can have a non-blocking
- * ICollectionManager, so it will return partial {@link IEntityTable} result with a {@link org.onexus.data.api.Progress}
+ * ICollectionManager, so it will return partial {@link IEntityTable} result with a {@link org.onexus.resource.api.Progress}
  * in process. It is the user that have to keep calling getTaskStatus() method until the task
  * is done and then call again the load() method with the same query to get all the results.</p>
  * <p/>
@@ -44,7 +44,7 @@ public interface ICollectionManager extends IResourceService {
     /**
      * @param query The query
      * @return The result of the query. If it's not a blocking ICollectionManager
-     *         it can return a partial result but with a {@link org.onexus.data.api.Progress} under process.
+     *         it can return a partial result but with a {@link org.onexus.resource.api.Progress} under process.
      */
     public IEntityTable load(Query query);
 

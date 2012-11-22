@@ -9,6 +9,7 @@
     </cm:property-placeholder>
 
     <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="progressManager" interface="org.onexus.resource.api.IProgressManager"/>
     <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
     <reference id="collectionStore" interface="org.onexus.collection.api.ICollectionStore"/>
 
@@ -16,6 +17,7 @@
     <bean id="collectionManager" class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
         <property name="maxThreads" value="${maxThreads}"/>
         <property name="resourceManager" ref="resourceManager"/>
+        <property name="progressManager" ref="progressManager"/>
         <property name="collectionStore" ref="collectionStore"/>
     </bean>
 

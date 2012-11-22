@@ -17,8 +17,6 @@
  */
 package org.onexus.ui.api.progressbar;
 
-import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
@@ -37,13 +35,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.onexus.data.api.IProgressable;
-import org.onexus.data.api.Progress;
+import org.onexus.resource.api.IProgressable;
+import org.onexus.resource.api.IProgressManager;
+import org.onexus.resource.api.Progress;
 import org.onexus.ui.api.progressbar.columns.LogsColumn;
 import org.onexus.ui.api.progressbar.columns.StatusColumn;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -51,11 +50,13 @@ import java.util.*;
 
 public class ProgressBar extends Panel {
     public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
-    public final static MetaDataKey<ActiveProgress> TASKS = new MetaDataKey<ActiveProgress>() {};
 
     private List<IColumn<Progress, String>> columns;
     private ProgressTreeProvider provider;
     private ProgressExpansionModel treeState;
+
+    @PaxWicketBean(name = "progressManager")
+    private IProgressManager progressManager;
 
     public ProgressBar(String id) {
         super(id);
@@ -146,7 +147,7 @@ public class ProgressBar extends Panel {
 
         @Override
         public Iterator<? extends Progress> getRoots() {
-            Collection<Progress> progresses = getActiveProgress().getProgresses();
+            Collection<Progress> progresses = progressManager.getProgresses();
             List<Progress> orderProgresses = new ArrayList<Progress>(progresses);
 
             Collections.sort(orderProgresses, new Comparator<Progress>() {
@@ -218,26 +219,11 @@ public class ProgressBar extends Panel {
         }
     }
 
-    public static ActiveProgress getActiveProgress() {
-        ActiveProgress progress = Session.get().getMetaData(TASKS);
-        if (progress == null) {
-            progress = new ActiveProgress();
-            Session.get().setMetaData(TASKS, progress);
-        }
-        return progress;
-    }
 
     public static <T extends IProgressable> T show(T progressable) {
 
         Progress progress = progressable.getProgress();
         if (progress != null) {
-            if (!progress.getSubProgresses().isEmpty()) {
-                for (Progress subprogress : progress.getSubProgresses()) {
-                    getActiveProgress().addTask(subprogress);
-                }
-            } else {
-                getActiveProgress().addTask(progress);
-            }
 
             AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
             if (target != null) {

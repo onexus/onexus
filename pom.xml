@@ -75,6 +75,7 @@
         <module>org.onexus.resource.api</module>
         <module>org.onexus.resource.manager</module>
         <module>org.onexus.resource.authorization</module>
+	<module>org.onexus.resource.progress</module>
         <module>org.onexus.resource.serializer.xstream</module>
         <module>org.onexus.data.api</module>
         <module>org.onexus.data.manager</module>
