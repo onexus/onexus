@@ -37,19 +37,7 @@ public abstract class Filter implements Serializable {
 
 
     public static String convertToOQL(Object value) {
-
-        if (value instanceof Date ||
-                value instanceof Time ||
-                value instanceof Timestamp
-                ) {
-            return "#" + String.valueOf(value) + "#";
-        }
-
-        if (value instanceof String) {
-            return Query.escapeString(value.toString());
-        }
-
-        return String.valueOf(value);
+        return Query.escapeString(value.toString());
     }
 
     public static Long convertToLong(String oqlValue) {

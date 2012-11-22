@@ -107,15 +107,15 @@ filterNot returns [Not f]
     ;
 
 filterEqual returns [Equal f]
-	:	alias=varname '.' field=varname '=' value=numberOrStringOrDateOrTime    { $f=new Equal($alias.text, $field.text, $value.v); }
+	:	alias=varname '.' field=varname '=' value=string    { $f=new Equal($alias.text, $field.text, $value.v); }
 ;
 
 filterEqualId returns [EqualId f]
-    :   alias=varname '=' value=numberOrStringOrDateOrTime  { $f=new EqualId($alias.text, $value.v); }
+    :   alias=varname '=' value=string  { $f=new EqualId($alias.text, $value.v); }
 ;
 
 filterNotEqual returns [NotEqual f]
-	:	alias=varname '.' field=varname ('!='|'<>') value=numberOrStringOrDateOrTime  { $f=new NotEqual($alias.text, $field.text, $value.v); }
+	:	alias=varname '.' field=varname ('!='|'<>') value=string  { $f=new NotEqual($alias.text, $field.text, $value.v); }
 ;
 
 filterContains returns [Contains f]
@@ -124,19 +124,19 @@ filterContains returns [Contains f]
 
 
 filterLessThan returns [LessThan f]
-	:	alias=varname '.' field=varname '<' value=numberOrDateOrTime { $f=new LessThan($alias.text, $field.text, $value.v); }
+	:	alias=varname '.' field=varname '<' value=string { $f=new LessThan($alias.text, $field.text, $value.v); }
 ;
 
 filterLessThanOrEqual returns [LessThanOrEqual f]
-	:	alias=varname '.' field=varname '<=' value=numberOrDateOrTime { $f=new LessThanOrEqual($alias.text, $field.text, $value.v); }
+	:	alias=varname '.' field=varname '<=' value=string { $f=new LessThanOrEqual($alias.text, $field.text, $value.v); }
 ;
 
 filterGreaterThan returns [GreaterThan f]
-	:	alias=varname '.' field=varname '>' value=numberOrDateOrTime { $f=new GreaterThan($alias.text, $field.text, $value.v); }
+	:	alias=varname '.' field=varname '>' value=string { $f=new GreaterThan($alias.text, $field.text, $value.v); }
 ;
 
 filterGreaterThanOrEqual returns [GreaterThanOrEqual f]
-	:	alias=varname '.' field=varname '>=' value=numberOrDateOrTime { $f=new GreaterThanOrEqual($alias.text, $field.text, $value.v); }
+	:	alias=varname '.' field=varname '>=' value=string { $f=new GreaterThanOrEqual($alias.text, $field.text, $value.v); }
 ;
 
 filterIsNull returns [IsNull f]
@@ -145,7 +145,7 @@ filterIsNull returns [IsNull f]
 
 filterIn returns [In f]
     :   alias=varname '.' field=varname { $f=new In($alias.text, $field.text); }
-        'IN' LPAREN first=numberOrStringOrDateOrTime { $f.addValue($first.v); } (',' other=numberOrStringOrDateOrTime { $f.addValue($other.v); } )* RPAREN
+        'IN' LPAREN first=string { $f.addValue($first.v); } (',' other=string { $f.addValue($other.v); } )* RPAREN
     ;
 
 
@@ -162,69 +162,13 @@ orderItem returns [ OrderBy o ] :
 
 /* LIMIT clause */
 limitClause :
-    'LIMIT' offset=integer ',' count=integer { query.setOffset(Long.valueOf($offset.text)); query.setCount(Long.valueOf($count.text)); }
+    'LIMIT' offset=string ',' count=string { query.setOffset(Long.valueOf($offset.v)); query.setCount(Long.valueOf($count.v)); }
 ;
 
 /* Common */
-
-numberOrStringOrDateOrTime returns [Object v]
-    :
-    ( ndt=numberOrDateOrTime    { $v = $ndt.v; }
-    | str=string                { $v = $str.v; }
-    )
-;
-
-numberOrDateOrTime returns [Object v]
-    :
-    ( num=number    { $v = $num.v; }
-    | dte=t_date      { $v = $dte.v; }
-    | tme=t_time      { $v = $tme.v; }
-    | tst=t_timestamp { $v = $tst.v; }
-    )
-;
-
-
-
-integer returns [Long v]:
-	value=(DIGIT)+ { $v = Filter.convertToLong($value.text); }
-	;
-
-number returns [Double v]:
-    	value=doubleAndInteger { $v = Filter.convertToDouble($value.text); }
-;
-
-doubleAndInteger :	
-	(DIGIT)+ ( '.' (DIGIT)* (EXPONENT)? | EXPONENT)?
-;
-
-t_timestamp returns [java.sql.Timestamp v]:
-    '#' value= '#' { $v = java.sql.Timestamp.valueOf($value.text); }
-;
-
-t_time returns [java.sql.Time v]:
-    '#' value=time '#' { $v = java.sql.Time.valueOf($value.text); }
-;
-
-t_date returns [java.sql.Date v]:
-    '#' value=date '#' { $v = java.sql.Date.valueOf($value.text); }
-;
-
 string returns [String v]:
 	value=STRING { $v = Query.unescapeString($value.text); }
 ;
-
-timestamp :
-        date time ( '.' DIGIT+ )?
-;
-
-date :
-    	DIGIT DIGIT DIGIT DIGIT '-' DIGIT DIGIT '-' DIGIT DIGIT
-;
-
-time :
-        DIGIT DIGIT ':' DIGIT DIGIT ':' DIGIT DIGIT
-;
-
 
 /* Literals */
 
