@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceRegister;
 import org.onexus.website.api.widgets.AbstractWidgetCreator;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.api.widgets.filters.custom.CustomFilter;
 
 public class FiltersWidgetCreator extends AbstractWidgetCreator<FiltersWidgetConfig, FiltersWidgetStatus> {
 

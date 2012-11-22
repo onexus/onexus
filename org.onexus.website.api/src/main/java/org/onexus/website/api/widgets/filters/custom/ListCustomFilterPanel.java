@@ -15,40 +15,39 @@
  *
  *
  */
-package org.onexus.website.api.widgets.filters;
+package org.onexus.website.api.widgets.filters.custom;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
+import org.onexus.collection.api.query.In;
+import org.onexus.website.api.events.EventCloseModal;
+import org.onexus.website.api.widgets.filters.FilterConfig;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Random;
 
-/**
- * Simple lightweight form panel.
- *
- * @author armand
- */
-public abstract class CustomFilterPanel extends Panel {
+public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
 
     private IModel<String> filterNameModel;
-    private CustomFilter fieldSelected;
-    private List<CustomFilter> customFilterList;
+    private CustomFilter customFilter;
 
-    public CustomFilterPanel(String id, List<CustomFilter> filterableProps) {
+    private final static Random RANDOM = new Random();
+
+    public ListCustomFilterPanel(String id, CustomFilter customFilter) {
         super(id);
 
         this.filterNameModel = new Model<String>("");
-        this.customFilterList = filterableProps;
+        this.customFilter = customFilter;
 
         // Create feedback panels
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
@@ -63,10 +62,32 @@ public abstract class CustomFilterPanel extends Panel {
 
     }
 
-    // Methods to send result of user interaction
-    public abstract void recuperateFormValues(AjaxRequestTarget target, String filterName, CustomFilter property, Collection<String> values);
+    private void recuperateFormValues(AjaxRequestTarget target, String filterName, CustomFilter field, Collection<String> values) {
 
-    public abstract void cancel(AjaxRequestTarget target);
+        // Generate a pseudo random identifier
+        String filterId = "user-filter-" + Integer.toHexString(filterName.hashCode()) + "-" + Integer.toHexString(RANDOM.nextInt());
+
+        // Create the filter
+        FilterConfig filter = new FilterConfig(filterId, filterName);
+        filter.setDeletable(true);
+        filter.setCollection(field.getCollection());
+        filter.setDefine("fc='" + field.getCollection() + "'");
+        In where = new In("fc", field.getField());
+        for (Object value : values) {
+            where.addValue(value);
+        }
+        filter.setWhere(where.toString());
+        filter.setVisibleCollection(field.getVisibleCollection());
+
+        addFilter(target, filter);
+
+        send(getPage(), Broadcast.BREADTH, EventCloseModal.EVENT);
+
+    }
+
+    public void cancel(AjaxRequestTarget target) {
+
+    }
 
     public IModel<String> getFilterNameModel() {
         return filterNameModel;
@@ -80,21 +101,6 @@ public abstract class CustomFilterPanel extends Panel {
         this.filterNameModel.setObject(filterName);
     }
 
-    public List<CustomFilter> getCustomFilterList() {
-        return customFilterList;
-    }
-
-    public void setCustomFilterList(List<CustomFilter> customFilterList) {
-        this.customFilterList = customFilterList;
-    }
-
-    public CustomFilter getFieldSelected() {
-        return fieldSelected;
-    }
-
-    public void setFieldSelected(CustomFilter fieldSelectedModel) {
-        this.fieldSelected = fieldSelectedModel;
-    }
 
     /**
      * Inner Form object
@@ -115,12 +121,6 @@ public abstract class CustomFilterPanel extends Panel {
             TextField<String> filterName = new TextField<String>("filterName", getFilterNameModel());
             add(filterName);
 
-            PropertyModel propModel = new PropertyModel();
-            fieldSelected = (getCustomFilterList() == null || getCustomFilterList().isEmpty()) ? null : getCustomFilterList().get(0);
-            propModel.setObject(fieldSelected);
-
-            add(new DropDownChoice<CustomFilter>("select", propModel, getCustomFilterList(), new ChoiceRenderer<CustomFilter>("title")));
-
             add(new TextArea<String>("textarea", textArea));
 
             // Add one file input field
@@ -137,11 +137,9 @@ public abstract class CustomFilterPanel extends Panel {
                     if (isDataFormOk()) {
                         try {
                             Collection<String> values = getValuesFromForm();
-                            recuperateFormValues(target, getFilterName(), getFieldSelected(), values);
-
+                            recuperateFormValues(target, getFilterName(), ListCustomFilterPanel.this.customFilter, values);
                         } catch (Exception e) {
-                            // TODO
-                            e.printStackTrace();
+                            error(e.getMessage());
                         }
                     }
                     target.add(pfeedback);
@@ -186,7 +184,7 @@ public abstract class CustomFilterPanel extends Panel {
 
             }
 
-            if ((fileUploadField.getFileUpload() == null && (textArea.getObject() == null || textArea.getObject().length() == 0)) ) {
+            if ((fileUploadField.getFileUpload() == null && (textArea.getObject() == null || textArea.getObject().length() == 0))) {
                 error("You must enter some values or upload a file");
                 return false;
             }
@@ -243,25 +241,5 @@ public abstract class CustomFilterPanel extends Panel {
 
     }
 
-    /*
-     * Class to interact with property.
-     */
-    private class PropertyModel implements IModel<CustomFilter> {
-
-        @Override
-        public CustomFilter getObject() {
-            return getFieldSelected();
-        }
-
-        @Override
-        public void setObject(CustomFilter object) {
-            setFieldSelected(object);
-        }
-
-        @Override
-        public void detach() {
-            // Nothing
-        }
-    }
 
 }

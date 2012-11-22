@@ -18,18 +18,21 @@
 package org.onexus.website.api.widgets.filters;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.onexus.collection.api.query.In;
 import org.onexus.website.api.events.EventAddFilter;
-import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPage;
@@ -37,21 +40,25 @@ import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.IFilter;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.api.widgets.filters.custom.CustomFilter;
+import org.onexus.website.api.widgets.filters.custom.ListCustomFilterPanel;
+import org.onexus.website.api.widgets.filters.custom.NumericCustomFilterPanel;
 
-import java.util.Collection;
 import java.util.List;
 
 public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStatus> {
 
+    private CustomFilter currentFilter;
+
+    private final static Component EMPTY_CUSTOM_PANEL = new EmptyPanel("customPanel").setOutputMarkupId(true);
 
     public FiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
-        onEventFireUpdate(EventQueryUpdate.class);
 
         // Filters list
-        final Form<String> form = new Form<String>("form");
-        form.setOutputMarkupId(true);
-        form.add(new ListView<FilterConfig>("filters", new PropertyModel<List<? extends FilterConfig>>(statusModel, "filters")) {
+        final Form<String> filtersForm = new Form<String>("filtersForm");
+        filtersForm.setOutputMarkupId(true);
+        filtersForm.add(new ListView<FilterConfig>("filters", new PropertyModel<List<? extends FilterConfig>>(statusModel, "filters")) {
 
             @Override
             protected void populateItem(final ListItem<FilterConfig> item) {
@@ -71,7 +78,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                         public void onClick(AjaxRequestTarget target) {
                             FiltersWidget.this.getStatus().getFilters().remove(filterConfig);
                             unapplyFilter(filterConfig);
-                            target.add(form);
+                            target.add(filtersForm);
                         }
 
                         @Override
@@ -112,7 +119,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                     // Title
                     item.add(new Label("name", new TextFormaterPropertyModel(item.getModel(), "name", 65, true)));
 
-                    if (item.getModelObject().getHelp()!=null) {
+                    if (item.getModelObject().getHelp() != null) {
                         add(new AttributeModifier("title", new PropertyModel<String>(item.getModel(), "help")));
                         add(new AttributeModifier("rel", "tooltip"));
                         add(new AttributeModifier("data-placement", "right"));
@@ -124,42 +131,62 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
             }
         });
+        add(filtersForm);
 
-        // Custom filter accordion
-        CustomFilterPanel customFilter = new CustomFilterPanel("customFilter", getConfig().getCustomFilters()) {
+        // Add custom filter select
+        Form<String> selectForm = new Form<String>("selectForm");
+        DropDownChoice<CustomFilter> selector = new DropDownChoice<CustomFilter>(
+                "select",
+                new PropertyModel<CustomFilter>(this, "currentFilter"),
+                getConfig().getCustomFilters(),
+                new ChoiceRenderer<CustomFilter>("title"));
 
+        selector.add( new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
-            public void recuperateFormValues(AjaxRequestTarget target, String filterName, CustomFilter field, Collection<String> values) {
+            protected void onUpdate(AjaxRequestTarget target) {
 
+                CustomFilter customFilter = getCurrentFilter();
+
+                if (customFilter == null || customFilter.getType() == null) {
+                    FiltersWidget.this.addOrReplace(EMPTY_CUSTOM_PANEL);
+                } else if (customFilter.getType().equalsIgnoreCase("list")) {
+                    FiltersWidget.this.addOrReplace(new ListCustomFilterPanel("customPanel", customFilter) {
+                        @Override
+                        protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
+                            addCustomFilter(target, filterConfig);
+                        }
+                    });
+                } else if (customFilter.getType().equalsIgnoreCase("numeric")) {
+                    FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter) {
+                        @Override
+                        protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
+                           addCustomFilter(target, filterConfig);
+                        }
+                    });
+                }
+
+                target.add(FiltersWidget.this.get("customPanel"));
+
+            }
+
+            private void addCustomFilter(AjaxRequestTarget target, FilterConfig filter) {
                 List<FilterConfig> filters = getStatus().getFilters();
-                FilterConfig filter = new FilterConfig("user-filter-" + String.valueOf(filters.size() + 1), filterName);
-                filter.setDeletable(true);
-                filter.setCollection(field.getCollection());
-                filter.setDefine("fc='" + field.getCollection() + "'");
-                In where = new In("fc", field.getField());
-                for (Object value : values) { where.addValue(value); }
-                filter.setWhere(where.toString());
-                filter.setVisibleCollection(field.getVisibleCollection());
                 filters.add(filter);
-                target.add(form);
-
+                target.add(filtersForm);
                 applyFilter(filter);
-
-                send(getPage(), Broadcast.BREADTH, EventCloseModal.EVENT);
             }
 
-            @Override
-            public void cancel(AjaxRequestTarget target) {
-            }
+        });
+        selectForm.add(selector);
+        add(selectForm);
 
-        };
+        // Add custom filter panel
+        add(EMPTY_CUSTOM_PANEL);
 
-        customFilter.setVisible(getConfig().getCustomFilters() != null && !getConfig().getCustomFilters().isEmpty());
 
-        // Add components
-        add(form);
-        add(customFilter);
     }
+
+
 
     private boolean isFilterApplyed(FilterConfig filterConfig) {
         List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
@@ -174,7 +201,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     private void unapplyFilter(FilterConfig filterConfig) {
 
-            List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+        List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
 
         IFilter removeMe = null;
         for (IFilter filter : filters) {
@@ -200,4 +227,11 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         return findParent(BrowserPage.class).getStatus();
     }
 
+    public CustomFilter getCurrentFilter() {
+        return currentFilter;
+    }
+
+    public void setCurrentFilter(CustomFilter currentFilter) {
+        this.currentFilter = currentFilter;
+    }
 }

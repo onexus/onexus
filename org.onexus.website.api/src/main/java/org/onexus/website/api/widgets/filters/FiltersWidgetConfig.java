@@ -21,6 +21,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.filters.custom.CustomFilter;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,0 +1,44 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <form class="form-horizontal" wicket:id="simpleUpload">
+        <fieldset>
+
+            <div class="control-group">
+                <label class="control-label" for="input01">Filter name</label>
+
+                <div class="controls">
+                    <input type="text" class="input-xlarge" id="input01" wicket:id="filterName">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="input03">Values</label>
+
+                <div class="controls">
+                    <textarea id="input03" wicket:id="textarea" cols="70" rows="8"></textarea>
+
+                    <p class="help-block">Write values separated by a comma or one per line</p>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="upload">or upload a file</label>
+
+                <div class="controls">
+                    <input wicket:id="fileInput" id="upload" type="file"/>
+                </div>
+            </div>
+
+            <span wicket:id="p-feedback"></span>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" wicket:id="okButton">Create filter</button>
+                <button class="btn" wicket:id="cancelButton">Cancel</button>
+            </div>
+        </fieldset>
+
+    </form>
+
+    <div><span wicket:id="uploadFeedback"/></div>
+</wicket:panel>
+</html>

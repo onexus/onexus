@@ -1,6 +1,6 @@
 <html xmlns:wicket="">
 <wicket:panel>
-    <form style="width:100%;" wicket:id="form">
+    <form style="width:100%;" wicket:id="filtersForm">
 
 
         <ul class="unstyled">
@@ -22,7 +22,23 @@
         <div class="accordion-heading">
             <a data-parent="#cf-container" data-toggle="collapse" class="accordion-toggle" href="#cf-body"><span>Create custom filter</span></a>
         </div>
-        <div class="accordion-body collapse" id="cf-body" wicket:id="customFilter">
+        <div class="accordion-body collapse" id="cf-body">
+            <div style="margin: 5% 5%;">
+                <form class="form-horizontal" wicket:id="selectForm">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="column">Select column</label>
+
+                            <div class="controls">
+                                <select wicket:id="select" id="column"></select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div style="margin: 5% 5%;" wicket:id="customPanel">
+
+            </div>
         </div>
     </div>
 
