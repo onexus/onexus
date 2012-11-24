@@ -17,21 +17,20 @@
  */
 package org.onexus.website.api.widgets.icanplot;
 
-import org.apache.wicket.IResourceListener;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
+import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.Widget;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import java.net.URLEncoder;
 
 
-public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> implements IResourceListener {
+public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> {
 
     public PlotViewer(String componentId, IModel<PlotViewerStatus> statusModel) {
         super(componentId, statusModel);
@@ -41,6 +40,9 @@ public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> imple
     private final static HeaderItem JS_ICANPLOT = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PlotViewer.class, "icanplot.js"));
     private final static HeaderItem JS_ICANPLOT_ONEXUS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PlotViewer.class, "icanplot-onexus.js"));
     private final static HeaderItem JS_ICANPLOT_DATA = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PlotViewer.class, "data.js"));
+
+    @PaxWicketBean(name = "collectionManager")
+    private ICollectionManager collectionManager;
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -64,25 +66,17 @@ public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> imple
             defaultCols = defaultCols + (fields.getSize()==null ? "-1" : fields.getSize()) + "]";
         }
 
-        return "icanplot_init('" + urlFor(IResourceListener.INTERFACE, new PageParameters().set("ac", Integer.toHexString((int)System.currentTimeMillis()))) + "', "+defaultCols+", 'ilinear', 'ilinear');";
+        return "icanplot_init('" + getQueryUrl() + "', "+defaultCols+", 'ilinear', 'ilinear');";
     }
 
-    @Override
-    public void onResourceRequested() {
-
+    private String getQueryUrl() {
+        String serviceMount = collectionManager.getMount();
+        String webserviceUrl = WebsiteApplication.toAbsolutePath('/' + serviceMount);
         Query query = getQuery();
-        String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
-        PageParameters params = new PageParameters();
-        params.add("query", query);
-        params.add("prettyPrint", true);
-        params.add("filename", fileName);
 
-        /*TODO
-        ResourceReference webservice = WebsiteApplication.get().getWebService();
-        IResource resource = webservice.getResource();
-        IResource.Attributes a = new IResource.Attributes(RequestCycle.get().getRequest(), RequestCycle.get().getResponse(), params);
-        resource.respond(a);
-        */
+        String strQuery = query.toString();
+        String fileName = "file-" + Integer.toHexString(strQuery.hashCode()) + ".tsv";
 
+        return webserviceUrl + "?query=" + URLEncoder.encode(strQuery) + "&filename=" + fileName;
     }
 }

@@ -125,8 +125,10 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         String serviceMount = collectionManager.getMount();
         String webserviceUrl = WebsiteApplication.toAbsolutePath('/' + serviceMount);
         Query query = getQuery();
-        String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
 
-        return webserviceUrl + "?query=" + URLEncoder.encode(query.toString()) + "&filename=" + fileName;
+        String strQuery = query.toString();
+        String fileName = "file-" + Integer.toHexString(strQuery.hashCode()) + ".tsv";
+
+        return webserviceUrl + "?query=" + URLEncoder.encode(strQuery) + "&filename=" + fileName;
     }
 }
