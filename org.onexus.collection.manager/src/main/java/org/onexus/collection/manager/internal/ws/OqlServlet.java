@@ -38,9 +38,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class WsServlet extends HttpServlet {
+public class OqlServlet extends HttpServlet {
 
-    private static final Logger log = LoggerFactory.getLogger(WsServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(OqlServlet.class);
     private IResourceManager resourceManager;
     private ICollectionManager collectionManager;
     private IQueryParser queryParser;

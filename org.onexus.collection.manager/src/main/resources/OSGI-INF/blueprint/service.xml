@@ -25,7 +25,7 @@
         <service-properties>
             <entry key="alias" value="/oql"/>
         </service-properties>
-        <bean class="org.onexus.collection.manager.internal.ws.WsServlet">
+        <bean class="org.onexus.collection.manager.internal.ws.OqlServlet">
             <property name="collectionManager" ref="collectionManager"/>
             <property name="resourceManager" ref="resourceManager"/>
             <property name="queryParser" ref="queryParser"/>

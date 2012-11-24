@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class WsServlet extends HttpServlet {
+public class DsServlet extends HttpServlet {
 
     private IResourceManager resourceManager;
     private IDataManager dataManager;

@@ -13,7 +13,7 @@
         <service-properties>
             <entry key="alias" value="/ds"/>
         </service-properties>
-        <bean class="org.onexus.data.manager.internal.ws.WsServlet">
+        <bean class="org.onexus.data.manager.internal.ws.DsServlet">
             <property name="dataManager" ref="dataManager"/>
             <property name="resourceManager" ref="resourceManager"/>
         </bean>
