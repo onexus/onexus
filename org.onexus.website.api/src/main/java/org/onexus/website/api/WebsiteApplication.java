@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class WebsiteApplication extends AuthenticatedWebApplication  {
 
-    private final static String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
+    private final static String SERVER_URL = System.getProperty("onexus.server.url");
 
     private String webPath;
     private ORI websiteOri;
