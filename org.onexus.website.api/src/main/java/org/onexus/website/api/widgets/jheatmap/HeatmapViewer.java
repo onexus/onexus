@@ -17,35 +17,37 @@
  */
 package org.onexus.website.api.widgets.jheatmap;
 
-import org.apache.wicket.IResourceListener;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
+import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> implements IResourceListener {
+public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> {
 
     private final static HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
     private final static HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
 
     private final static ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
 
+
+    @PaxWicketBean(name = "collectionManager")
+    private ICollectionManager collectionManager;
 
     public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {
         super(componentId, status);
@@ -80,11 +82,12 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         int lastRowFields = lastColumnFields + columns.size();
         columns.clear();
 
+        // Webservice URL
         code.append(
                 "$('#heatmap').heatmap({\n" +
                         "       data : {\n" +
                         "                 type : \"tdm\",\n" +
-                        "                 values : '" + urlFor(IResourceListener.INTERFACE, new PageParameters().set("ac", Integer.toHexString((int) System.currentTimeMillis()))) + "', \n");
+                        "                 values : '" + getQueryUrl() + "', \n");
 
         code.append("\t\t\t\tcols_annotations : [");
         if (config.getColAnnotations() == null) {
@@ -118,23 +121,12 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         return code.toString();
     }
 
-    @Override
-    public void onResourceRequested() {
-
+    private String getQueryUrl() {
+        String serviceMount = collectionManager.getMount();
+        String webserviceUrl = WebsiteApplication.toAbsolutePath('/' + serviceMount);
         Query query = getQuery();
         String fileName = "file-" + Integer.toHexString(query.hashCode()) + ".tsv";
-        PageParameters params = new PageParameters();
-        params.add("query", query);
-        params.add("prettyPrint", true);
-        params.add("filename", fileName);
 
-        /*TODO
-        ResourceReference webservice = WebsiteApplication.get().getWebService();
-        IResource resource = webservice.getResource();
-        IResource.Attributes a = new IResource.Attributes(RequestCycle.get().getRequest(), RequestCycle.get().getResponse(), params);
-        resource.respond(a);
-        */
-
+        return webserviceUrl + "?query=" + URLEncoder.encode(query.toString()) + "&filename=" + fileName;
     }
-
 }
