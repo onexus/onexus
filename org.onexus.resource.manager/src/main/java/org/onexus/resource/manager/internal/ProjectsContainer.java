@@ -35,9 +35,9 @@ import java.util.*;
 public class ProjectsContainer {
 
     private static final Logger log = LoggerFactory.getLogger(ProjectsContainer.class);
-    private final static String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
-    private final static String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
-    private final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
+    public final static String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
+    public final static String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
+    public final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
 
     private IResourceSerializer serializer;
     private PluginLoader pluginLoader;

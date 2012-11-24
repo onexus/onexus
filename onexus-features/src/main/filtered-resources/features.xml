@@ -46,6 +46,7 @@
         <!-- git -->
         <bundle>mvn:org.openengsb.wrapped/com.jcraft.jsch-all/${jsch.version}</bundle>
         <bundle>mvn:org.eclipse.jgit/org.eclipse.jgit/${jgit.version}</bundle>
+        <bundle>mvn:org.eclipse.jgit/org.eclipse.jgit.http.server/${jgit.version}</bundle>
 
     </feature>
 

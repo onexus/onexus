@@ -59,7 +59,6 @@ public class GitProjectProvider extends ProjectProvider {
             Repository repository = builder.setWorkTree(projectFolder).readEnvironment().build();
             Git git = new Git(repository);
 
-
             if (cloneDone) {
                 PullCommand pull = git.pull();
                 pull.call();
