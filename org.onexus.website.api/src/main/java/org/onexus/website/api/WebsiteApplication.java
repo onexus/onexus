@@ -113,7 +113,8 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
             return serverUrl + relativePagePath;
         }
 
-        return RequestUtils.toAbsolutePath(request.getRequestURL().toString(), relativePagePath.toString());
+        String fullPath = RequestUtils.toAbsolutePath(request.getRequestURI(), relativePagePath.toString());
+        return serverUrl + fullPath;
     }
 
     public static void inject(Object obj) {
