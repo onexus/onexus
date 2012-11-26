@@ -26,7 +26,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.data.api.IDataManager;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Project;
+import org.onexus.website.api.WebsiteApplication;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class CustomCssBehavior extends Behavior {
 
@@ -34,6 +39,11 @@ public class CustomCssBehavior extends Behavior {
 
     private ORI resourceUri;
 
+    @PaxWicketBean(name = "dataManager")
+    private IDataManager dataManager;
+
+    @PaxWicketBean(name = "resourceManager")
+    private IResourceManager resourceManager;
 
     public CustomCssBehavior(ORI resourceUri) {
         this.resourceUri = resourceUri;
@@ -45,16 +55,12 @@ public class CustomCssBehavior extends Behavior {
         if (CSS == null) {
 
             if (resourceUri != null && !Strings.isEmpty(resourceUri.getPath())) {
-                ResourceReference reference = DataResource.getResourceReference();
-                PageParameters pageParameters = DataResource.buildPageParameters(resourceUri);
-                CSS = new CssReferenceHeaderItem(reference, pageParameters, null, null) {
-                    @Override
-                    public int hashCode() {
-                        int result = getReference().hashCode();
-                        result = 31 * result + (getPageParameters() != null ? getPageParameters().hashCode() : 0);
-                        return result;
-                    }
-                };
+
+                String dataService = getDataManager().getMount();
+                Project project = getResourceManager().getProject(resourceUri.getProjectUrl());
+
+                String url = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName() + resourceUri.getPath());
+                CSS = CssHeaderItem.forUrl(url);
 
             } else {
                 CSS = CssHeaderItem.forReference(new CssResourceReference(component.getClass(), component.getClass().getSimpleName() + ".css"));
@@ -64,5 +70,22 @@ public class CustomCssBehavior extends Behavior {
         response.render(CSS);
     }
 
+    private IDataManager getDataManager() {
+
+        if (dataManager == null) {
+            WebsiteApplication.inject(this);
+        }
+
+        return dataManager;
+    }
+
+    private IResourceManager getResourceManager() {
+
+        if (resourceManager == null) {
+            WebsiteApplication.inject(this);
+        }
+
+        return resourceManager;
+    }
 
 }

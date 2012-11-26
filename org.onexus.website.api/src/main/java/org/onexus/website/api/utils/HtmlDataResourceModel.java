@@ -22,7 +22,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.util.io.IOUtils;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
+import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Project;
 import org.onexus.website.api.WebsiteApplication;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.slf4j.Logger;
@@ -38,16 +40,19 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     @PaxWicketBean(name="dataManager")
     private IDataManager dataManager;
 
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
+
     private ORI contentUri;
     private String dataResourceUrl;
 
     public HtmlDataResourceModel(ORI contentUri, Component component) {
+
         this.contentUri = contentUri;
-        CharSequence urlDataResource = component.urlFor(DataResource.getResourceReference(), null);
-        this.dataResourceUrl = urlDataResource.toString();
+        String dataService = getDataManager().getMount();
+        Project project = getResourceManager().getProject(contentUri.getProjectUrl());
+        this.dataResourceUrl = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName());
     }
-
-
 
     @Override
     protected String load() {
@@ -66,11 +71,21 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     }
 
     private IDataManager getDataManager() {
+
         if (dataManager == null) {
             WebsiteApplication.inject(this);
         }
 
         return dataManager;
+    }
+
+    private IResourceManager getResourceManager() {
+
+        if (resourceManager == null) {
+            WebsiteApplication.inject(this);
+        }
+
+        return resourceManager;
     }
 
     private final static Pattern PATTERN_HREF = Pattern.compile("(<a\\s+href\\s*=\\s*[\"|']?)(.*?)([\"|'])", Pattern.CASE_INSENSITIVE);

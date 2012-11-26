@@ -92,12 +92,12 @@ public class DsServlet extends HttpServlet {
             return null;
         }
 
-        String projectName = uri.substring(servletPath.length() + 1);
-
+        String projectNameAndResource = uri.substring(servletPath.length() + 1);
         String projectUrl = null;
+        String projectName = null;
         for(Project project : resourceManager.getProjects()) {
-            String name = project.getName();
-            if (name.equals(projectName)) {
+            projectName = project.getName();
+            if (projectNameAndResource.startsWith(projectName)) {
                 projectUrl = project.getURL();
                 break;
             }
@@ -107,8 +107,8 @@ public class DsServlet extends HttpServlet {
             return null;
         }
 
-        String queryString = req.getQueryString();
-        return new ORI(projectUrl, '/' + queryString);
+        String resourcePath = projectNameAndResource.replace(projectName, "");
+        return new ORI(projectUrl, resourcePath);
 
     }
 }
