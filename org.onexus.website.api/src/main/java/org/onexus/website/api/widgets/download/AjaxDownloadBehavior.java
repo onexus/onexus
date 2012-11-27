@@ -2,9 +2,8 @@ package org.onexus.website.api.widgets.download;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
+import org.apache.wicket.request.resource.IResource;
 
 public abstract class AjaxDownloadBehavior extends AbstractAjaxBehavior {
 
@@ -35,8 +34,7 @@ public abstract class AjaxDownloadBehavior extends AbstractAjaxBehavior {
 	}
 
 	public void onRequest() {
-		ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(getResourceStream(), getFileName());
-		handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+		ResourceRequestHandler handler = new ResourceRequestHandler(getResource(), null);
 		getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 	}
 
@@ -49,5 +47,5 @@ public abstract class AjaxDownloadBehavior extends AbstractAjaxBehavior {
 	/**
 	 * Hook method providing the actual resource stream.
 	 */
-	protected abstract IResourceStream getResourceStream();
+	protected abstract IResource getResource();
 }

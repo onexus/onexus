@@ -20,7 +20,6 @@ package org.onexus.website.api.widgets.download;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.core.util.resource.PackageResourceStream;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -32,23 +31,22 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.resource.AbstractResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.resource.*;
 import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.api.widgets.download.formats.ExcelFormat;
+import org.onexus.website.api.widgets.download.formats.IDownloadFormat;
+import org.onexus.website.api.widgets.download.formats.TsvFormat;
 import org.onexus.website.api.widgets.download.scripts.*;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,12 +65,13 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
             new BashScript()
     });
 
-	private final static List<String> formats = Arrays.asList( new String[] {
-		    "Tabbulated text file",
-			"Microsoft excel file"
+	private final static List<IDownloadFormat> formats = Arrays.asList( new IDownloadFormat[] {
+		    new TsvFormat(),
+			new ExcelFormat()
 	});
 
     private String webserviceUrl;
+    private IDownloadFormat format;
 
     public DownloadWidget(String componentId, IModel<DownloadWidgetStatus> statusModel) {
         super(componentId, statusModel);
@@ -90,24 +89,19 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         // Download form
 		final Form<String> downloadForm = new Form<String>("form");
 		downloadForm.setOutputMarkupId(true);
-		final Model<String> format = new Model<String>(formats.get(0));
-		downloadForm.add(new DropDownChoice<String>("format", format, formats));
+		setFormat(formats.get(0));
+		downloadForm.add(new DropDownChoice<IDownloadFormat>("format", new PropertyModel<IDownloadFormat>(this, "format"), formats));
 		add(downloadForm);
 
 		final AjaxDownloadBehavior ajaxDownloadBehavior = new AjaxDownloadBehavior() {
 			@Override
 			protected String getFileName() {
-				String currentFormat = format.getObject();
-				if (formats.get(0).equals(currentFormat)) {
-					return "file-download.tsv";
-				} else {
-					return "file-download.xls";
-				}
+				return getFormat().getFileName();
 			}
 
 			@Override
-			protected IResourceStream getResourceStream() {
-				return new PackageResourceStream(DownloadWidget.class, "DownloadWidget.html");
+			protected IResource getResource() {
+				return new DownloadResource();
 			}
 		};
 		downloadForm.add(ajaxDownloadBehavior);
@@ -162,18 +156,55 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         response.render(JavaScriptHeaderItem.forReference(JS));
     }
 
-	private class DownloadResourceStream extends AbstractResourceStream {
+    public IDownloadFormat getFormat() {
+        return format;
+    }
 
-		@Override
-		public InputStream getInputStream() throws ResourceStreamNotFoundException {
-			return null;
-		}
+    public void setFormat(IDownloadFormat format) {
+        this.format = format;
+    }
 
-		@Override
-		public void close() throws IOException {
+    private ICollectionManager getCollectionManager() {
 
-		}
-	}
+        if (collectionManager == null) {
+            WebsiteApplication.inject(this);
+        }
+
+        return collectionManager;
+    }
+
+    private class DownloadResource extends AbstractResource {
+
+        @Override
+        protected ResourceResponse newResourceResponse(Attributes attributes) {
+
+            ResourceResponse resourceResponse = new ResourceResponse();
+
+            resourceResponse.setContentDisposition(ContentDisposition.ATTACHMENT);
+            resourceResponse.setContentType(getFormat().getContentType());
+            resourceResponse.setFileName(getFormat().getFileName());
+            resourceResponse.setWriteCallback(new WriteCallback() {
+                @Override
+                public void writeData(Attributes attributes) throws IOException {
+
+                    Query query = getQuery();
+                    IDownloadFormat format = getFormat();
+
+                    if (format.getMaxRowsLimit() != null) {
+                        if (query.getCount() == null || format.getMaxRowsLimit() < query.getCount()) {
+                            query.setCount(format.getMaxRowsLimit());
+                        }
+                    }
+
+                    IEntityTable table = getCollectionManager().load(query);
+                    OutputStream out = attributes.getResponse().getOutputStream();
+                    getFormat().write(table, out);
+                }
+            });
+
+            return resourceResponse;
+        }
+    }
 
 
 }
