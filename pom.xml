@@ -36,6 +36,7 @@
         <jgit.version>2.1.0.201209190230-r</jgit.version>
         <jsch.version>0.1.42.w1</jsch.version>
         <cglib.version>2.2_2</cglib.version>
+        <poi.version>3.8</poi.version>
 
         <!-- Project properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -319,6 +320,13 @@
                 <artifactId>org.eclipse.jgit.http.server</artifactId>
                 <version>${jgit.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

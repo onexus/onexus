@@ -103,6 +103,7 @@
         <feature version="${wicket.version}">wicket</feature>
         <feature version="${pax-wicket.version}">pax-wicket</feature>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.junit/4.10_1</bundle>
 
         <bundle>mvn:commons-pool/commons-pool/${commons-pool.version}</bundle>
         <bundle>mvn:commons-dbcp/commons-dbcp/${commons-dbcp.version}</bundle>
@@ -113,6 +114,7 @@
         <bundle>mvn:com.googlecode.guava-osgi/guava-osgi/${guava.version}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${commons-lang.version}</bundle>
         <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
+        <bundle>wrap:mvn:org.apache.poi/poi/${poi.version}</bundle>
     </feature>
 
 </features>

@@ -9,13 +9,16 @@
             <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-download"
                    href="#export-data">
-                    Export as a tabbulated file
+                    Download
                 </a>
             </div>
             <div id="export-data" class="accordion-body collapse in">
                 <div class="accordion-inner">
                     <div class="well" style="border: 1px solid #888;">
-                        Download: <a href="" wicket:id="download-link"><span wicket:id="download-filename"></span></a>
+                        <form class="form-inline" wicket:id="form">
+	                        <select wicket:id="format"></select>
+	                        <input type="submit" class="btn btn-primary" wicket:id="download" value="Download" />
+                        </form>
                     </div>
                 </div>
             </div>
