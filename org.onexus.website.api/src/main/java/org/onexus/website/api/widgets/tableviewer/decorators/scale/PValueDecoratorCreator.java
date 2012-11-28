@@ -23,14 +23,18 @@ import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
+import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.ColorConstants;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.IColorScaleHtml;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.PValueColorScale;
 import org.onexus.website.api.widgets.tableviewer.formaters.PValueFormater;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class PValueDecoratorCreator implements IDecoratorCreator {
 
+    private static final Logger log = LoggerFactory.getLogger(PValueDecoratorCreator.class);
     private final static IColorScaleHtml pvalueScale = new PValueColorScale();
 
     @Override
@@ -53,6 +57,23 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
             showValue = Boolean.valueOf(parameterValue);
         }
 
-        return new ColorDecorator(columnField, columnField, pvalueScale, null, showValue, PValueFormater.INSTANCE, parameters.get(PValueDecoratorParameters.URL), parameters.get(PValueDecoratorParameters.URL_TITLE));
+        IColorScaleHtml scale = pvalueScale;
+
+        if (parameters.containsKey(PValueDecoratorParameters.SIGNIFICANCE)) {
+            double significance = 0.05;
+
+            try {
+                significance = Double.valueOf(parameters.get(PValueDecoratorParameters.SIGNIFICANCE)).doubleValue();
+            } catch (Exception e) {
+                log.error("Impossible to convert 'significance' PVALUE decorator parameter to a double");
+            }
+
+            scale = new PValueColorScale(significance, ColorConstants.pvalueMinColor,
+                    ColorConstants.pvalueMaxColor,
+                    ColorConstants.nonSignificantColor);
+        }
+
+
+        return new ColorDecorator(columnField, columnField, scale, null, showValue, PValueFormater.INSTANCE, parameters.get(PValueDecoratorParameters.URL), parameters.get(PValueDecoratorParameters.URL_TITLE));
     }
 }

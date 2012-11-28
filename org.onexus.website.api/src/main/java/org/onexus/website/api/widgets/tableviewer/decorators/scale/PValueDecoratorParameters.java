@@ -22,6 +22,7 @@ import org.onexus.resource.api.ParameterKey;
 public enum PValueDecoratorParameters implements ParameterKey {
 
     SHOW_VALUE("show-value", "Print the value inside the cell. Valid values: true, false", true),
+    SIGNIFICANCE("significance", "p-value signinficance cutoff. Default '0.05'.", true),
     URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false),
     URL_TITLE("url-title", "The tooltip title to show over URL link button", false);
 
