@@ -100,10 +100,8 @@
         <bundle>mvn:org.onexus/org.onexus.ui.workspace/${project.version}</bundle>
 
         <!-- dependencies -->
-        <feature version="${wicket.version}">wicket</feature>
-        <feature version="${pax-wicket.version}">pax-wicket</feature>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.junit/4.10_1</bundle>
+        <feature version="${project.version}">onexus-wicket</feature>
+        <feature version="${project.version}">onexus-pax-wicket</feature>
 
         <bundle>mvn:commons-pool/commons-pool/${commons-pool.version}</bundle>
         <bundle>mvn:commons-dbcp/commons-dbcp/${commons-dbcp.version}</bundle>
@@ -115,6 +113,25 @@
         <bundle>mvn:org.apache.commons/commons-lang3/${commons-lang.version}</bundle>
         <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
         <bundle>wrap:mvn:org.apache.poi/poi/${poi.version}</bundle>
+    </feature>
+
+    <feature name="onexus-wicket" version="${project.version}">
+        <feature>http</feature>
+        <bundle>mvn:org.apache.wicket/wicket-util/${wicket.version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-request/${wicket.version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-core/${wicket.version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-auth-roles/${wicket.version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-extensions/${wicket.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.junit/4.10_1</bundle>
+    </feature>
+
+    <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
+    <feature name="onexus-pax-wicket" version="${project.version}">
+        <feature>http</feature>
+        <feature>eventadmin</feature>
+        <bundle>mvn:org.ops4j.base/ops4j-base/${ops4j.base.version}</bundle>
+        <bundle>mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${pax-wicket.version}</bundle>
     </feature>
 
 </features>
