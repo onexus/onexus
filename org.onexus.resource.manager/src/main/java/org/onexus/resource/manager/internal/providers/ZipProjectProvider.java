@@ -18,6 +18,8 @@
 package org.onexus.resource.manager.internal.providers;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.onexus.resource.api.IResourceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,20 +27,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.security.InvalidParameterException;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZipProjectProvider extends ProjectProvider {
+public class ZipProjectProvider extends AbstractProjectProvider {
 
     private static final Logger log = LoggerFactory.getLogger(ZipProjectProvider.class);
 
-    public ZipProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
-        super(projectName, projectUrl, projectFolder);
-
-        if (!projectFolder.exists()) {
-
-
-        }
+    public ZipProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) throws InvalidParameterException {
+        super(projectName, projectUrl, projectFolder, monitor, listeners);
     }
 
     @Override

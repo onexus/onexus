@@ -18,6 +18,12 @@
 package org.onexus.resource.manager.internal.providers;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.HiddenFileFilter;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.UnserializeException;
@@ -29,9 +35,9 @@ import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.*;
 
-public abstract class ProjectProvider {
+public abstract class AbstractProjectProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(ProjectProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractProjectProvider.class);
     public final static String ONEXUS_EXTENSION = "onx";
     public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
@@ -42,14 +48,86 @@ public abstract class ProjectProvider {
     private String projectUrl;
     private File projectFolder;
 
+
+	private FileAlterationObserver observer;
+
     private Project project;
     private Map<ORI, Resource> resources;
 
-    public ProjectProvider(String projectName, String projectUrl, File projectFolder) {
+	private List<IResourceListener> listeners = new ArrayList<IResourceListener>();
+
+	public AbstractProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) {
         super();
         this.projectName = projectName;
         this.projectUrl = projectUrl;
         this.projectFolder = projectFolder;
+		this.listeners = listeners;
+
+
+		// Don't watch hidden folders and files
+		IOFileFilter notHiddenDirectoryFilter = FileFilterUtils.notFileFilter(
+				FileFilterUtils.or(
+					FileFilterUtils.and(
+							FileFilterUtils.directoryFileFilter(),
+							HiddenFileFilter.HIDDEN
+					),
+					HiddenFileFilter.HIDDEN
+				)
+		);
+
+		observer = new FileAlterationObserver(projectFolder, notHiddenDirectoryFilter);
+		observer.addListener(new FileAlterationListenerAdaptor() {
+
+			@Override
+			public void onDirectoryCreate(File directory) {
+				log.info("Creating folder '" + directory.getName() + "'");
+				onResourceCreate( loadFile(directory) );
+			}
+
+			@Override
+			public void onDirectoryDelete(File directory) {
+				log.info("Deleting folder '" + directory.getName() + "'");
+				ORI resourceOri = convertFileToORI(directory);
+				onResourceDelete( resources.remove(resourceOri) );
+			}
+
+			@Override
+			public void onFileChange(File file) {
+				log.info("Reloading file '" + file.getName() + "'");
+				onResourceChange( loadFile(file) );
+			}
+
+			@Override
+			public void onFileCreate(File file) {
+				log.info("Creating file '" + file.getName() + "'");
+				onResourceCreate( loadFile(file) );
+			}
+
+			@Override
+			public void onFileDelete(File file) {
+				log.info("Deleting file '" + file.getName() + "'");
+				ORI resourceOri = convertFileToORI(file);
+				onResourceDelete( resources.remove(resourceOri) );
+			}
+
+			private Resource loadFile(File file) {
+				// Skip project file
+				if (ONEXUS_PROJECT_FILE.equals(file.getName())) {
+					return null;
+				}
+
+				Resource resource = loadResource(file);
+
+				if (resource != null) {
+					resources.put(resource.getURI(), resource);
+				}
+
+				return resource;
+			}
+		});
+
+		monitor.addObserver(observer);
+
     }
 
     public Project getProject() {
@@ -79,6 +157,7 @@ public abstract class ProjectProvider {
         this.project.setName(projectName);
 
         this.pluginLoader.load(project);
+
     }
 
     private void loadResources() {
@@ -100,7 +179,6 @@ public abstract class ProjectProvider {
                 resources.put(resource.getURI(), resource);
             }
         }
-
     }
 
     public Resource getResource(ORI resourceUri) {
@@ -188,20 +266,26 @@ public abstract class ProjectProvider {
             return null;
         }
 
-        String projectPath = projectFolder.getAbsolutePath() + File.separator;
-        String filePath = resourceFile.getAbsolutePath();
-        String relativePath = filePath.replace(projectPath, "");
-
-        if (relativePath.equals(ONEXUS_PROJECT_FILE)) {
-            relativePath = null;
-        } else {
-            relativePath = relativePath.replace("." + ONEXUS_EXTENSION, "");
-        }
-
-        resource.setURI(new ORI(projectUrl, relativePath));
+        resource.setURI(convertFileToORI(resourceFile));
         return resource;
 
     }
+
+	private ORI convertFileToORI(File file) {
+
+		String projectPath = projectFolder.getAbsolutePath() + File.separator;
+		String filePath = file.getAbsolutePath();
+		String relativePath = filePath.replace(projectPath, "");
+
+		if (relativePath.equals(ONEXUS_PROJECT_FILE)) {
+			relativePath = null;
+		} else {
+			relativePath = relativePath.replace("." + ONEXUS_EXTENSION, "");
+		}
+
+		return new ORI(projectUrl, relativePath);
+
+	}
 
     private Resource createErrorResource(File resourceFile, String msg) {
         log.error(msg);
@@ -274,11 +358,7 @@ public abstract class ProjectProvider {
             log.error("Saving resource '" + resource.getURI() + "' in file '" + file.getAbsolutePath() + "'", e);
         }
 
-        if (resources == null) {
-            loadResources();
-        }
-
-        this.resources.put(resource.getURI(), resource);
+		observer.checkAndNotify();
 
     }
 
@@ -301,4 +381,44 @@ public abstract class ProjectProvider {
     public void setSerializer(IResourceSerializer serializer) {
         this.serializer = serializer;
     }
+
+	protected void onResourceCreate(Resource resource) {
+
+		if (resource == null) {
+			return;
+		}
+
+		log.info("Resource '" + resource.getName() + "' created.");
+
+		for (IResourceListener listener : listeners) {
+			listener.onResourceCreate(resource);
+		}
+	}
+
+	protected void onResourceChange(Resource resource) {
+
+		if (resource == null) {
+			return;
+		}
+
+		log.info("Resource '" + resource.getName() + "' changed.");
+
+		for (IResourceListener listener : listeners) {
+			listener.onResourceChange(resource);
+		}
+	}
+
+	protected void onResourceDelete(Resource resource) {
+
+		if (resource == null) {
+			return;
+		}
+
+		log.info("Resource '" + resource.getName() + "' deleted.");
+
+		for (IResourceListener listener : listeners) {
+			listener.onResourceDelete(resource);
+		}
+	}
+
 }

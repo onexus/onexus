@@ -24,7 +24,7 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.onexus.resource.api.IResourceListener;
 import org.onexus.resource.api.IResourceSerializer;
 import org.onexus.resource.api.Project;
-import org.onexus.resource.manager.internal.providers.ProjectProvider;
+import org.onexus.resource.manager.internal.providers.AbstractProjectProvider;
 import org.onexus.resource.manager.internal.providers.ProjectProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,14 +39,12 @@ public class ProjectsContainer {
     public final static String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
     public final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
 
-    private IResourceSerializer serializer;
-    private PluginLoader pluginLoader;
     private File propertiesFile;
     private FileAlterationMonitor monitor;
 
     private Properties properties;
     private ProjectProviderFactory providerFactory;
-    private Map<String, ProjectProvider> providers;
+    private Map<String, AbstractProjectProvider> providers;
 
     // Listeners
     private List<IResourceListener> listeners = new ArrayList<IResourceListener>();
@@ -54,12 +52,10 @@ public class ProjectsContainer {
     public ProjectsContainer(IResourceSerializer serializer, PluginLoader pluginLoader) {
         super();
 
-        this.serializer = serializer;
-        this.pluginLoader = pluginLoader;
-
         File onexusFolder = new File(ONEXUS_FOLDER);
         File projectsFolder = new File(ONEXUS_PROJECTS_FOLDER);
         propertiesFile = new File(onexusFolder, ONEXUS_PROJECTS_SETTINGS);
+		monitor = new FileAlterationMonitor(2000);
 
         if (!onexusFolder.exists()) {
             onexusFolder.mkdir();
@@ -74,8 +70,8 @@ public class ProjectsContainer {
                 propertiesFile.createNewFile();
             }
 
-            this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader);
-            this.providers = new HashMap<String, ProjectProvider>();
+            this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader, monitor, listeners);
+            this.providers = new HashMap<String, AbstractProjectProvider>();
 
             init();
         } catch (IOException e) {
@@ -95,7 +91,6 @@ public class ProjectsContainer {
             }
         });
 
-        monitor = new FileAlterationMonitor(2000);
         monitor.addObserver(observer);
         try {
             monitor.start();
@@ -132,7 +127,7 @@ public class ProjectsContainer {
 
                 File projectFolder = new File(projectPath);
 
-                ProjectProvider previousProvider = providers.get(projectUrl);
+                AbstractProjectProvider previousProvider = providers.get(projectUrl);
 
                 if (previousProvider != null) {
                     if (previousProvider.getProjectFolder().equals(projectFolder) && previousProvider.getProject().getName().equals(projectName)) {
@@ -142,7 +137,7 @@ public class ProjectsContainer {
                     }
                 }
 
-                ProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUrl, projectFolder);
+                AbstractProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUrl, projectFolder);
                 providers.put(projectUrl, provider);
 
                 if (previousProvider == null) {
@@ -168,15 +163,15 @@ public class ProjectsContainer {
         return properties.stringPropertyNames();
     }
 
-    public ProjectProvider getProjectProvider(String projectUri) {
+    public AbstractProjectProvider getProjectProvider(String projectUri) {
         return providers.get(projectUri);
     }
 
-    public ProjectProvider importProject(String projectName, String projectUri) {
+    public AbstractProjectProvider importProject(String projectName, String projectUri) {
 
         File defaultProjectFolder = newProjectFolder(projectUri);
 
-        ProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUri, defaultProjectFolder);
+        AbstractProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUri, defaultProjectFolder);
 
         if (provider != null) {
             providers.put(projectUri, provider);

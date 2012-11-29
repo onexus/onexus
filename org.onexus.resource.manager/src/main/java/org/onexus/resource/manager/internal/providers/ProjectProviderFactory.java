@@ -17,33 +17,40 @@
  */
 package org.onexus.resource.manager.internal.providers;
 
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.onexus.resource.api.IResourceListener;
 import org.onexus.resource.api.IResourceSerializer;
 import org.onexus.resource.manager.internal.PluginLoader;
 
 import java.io.File;
+import java.util.List;
 
 public class ProjectProviderFactory {
 
     private IResourceSerializer serializer;
     private PluginLoader pluginLoader;
+	private FileAlterationMonitor monitor;
+	private List<IResourceListener> listeners;
 
-    public ProjectProviderFactory(IResourceSerializer serializer, PluginLoader pluginLoader) {
+    public ProjectProviderFactory(IResourceSerializer serializer, PluginLoader pluginLoader, FileAlterationMonitor monitor, List<IResourceListener> listeners) {
         super();
 
         this.pluginLoader = pluginLoader;
         this.serializer = serializer;
+		this.monitor = monitor;
+		this.listeners = listeners;
     }
 
-    public ProjectProvider newProjectProvider(String projectName, String projectUri, File projectFolder) {
+    public AbstractProjectProvider newProjectProvider(String projectName, String projectUri, File projectFolder) {
 
-        ProjectProvider provider;
+        AbstractProjectProvider provider;
 
         if (projectUri.endsWith(".git")) {
-            provider = new GitProjectProvider(projectName, projectUri, projectFolder);
+            provider = new GitProjectProvider(projectName, projectUri, projectFolder, monitor, listeners);
         } else if (projectUri.endsWith(".zip")) {
-            provider = new ZipProjectProvider(projectName, projectUri, projectFolder);
+            provider = new ZipProjectProvider(projectName, projectUri, projectFolder, monitor, listeners);
         } else {
-            provider = new FolderProjectProvider(projectName, projectUri, projectFolder);
+            provider = new FolderProjectProvider(projectName, projectUri, projectFolder, monitor, listeners);
         }
 
         provider.setSerializer(serializer);

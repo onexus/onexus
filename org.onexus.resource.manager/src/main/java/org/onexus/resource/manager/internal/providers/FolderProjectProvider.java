@@ -18,12 +18,16 @@
 package org.onexus.resource.manager.internal.providers;
 
 
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.onexus.resource.api.IResourceListener;
+
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.List;
 
-public class FolderProjectProvider extends ProjectProvider {
-    public FolderProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
-        super(projectName, projectUrl, projectFolder);
+public class FolderProjectProvider extends AbstractProjectProvider {
+    public FolderProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) throws InvalidParameterException {
+        super(projectName, projectUrl, projectFolder, monitor, listeners);
 
         if (projectUrl.startsWith("file")) {
             File urlFolder = new File(projectUrl.replace("file://", ""));

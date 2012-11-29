@@ -17,24 +17,27 @@
  */
 package org.onexus.resource.manager.internal.providers;
 
+import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.lib.ProgressMonitor;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.onexus.resource.api.IResourceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.List;
 
-public class GitProjectProvider extends ProjectProvider {
+public class GitProjectProvider extends AbstractProjectProvider {
 
     private static final Logger log = LoggerFactory.getLogger(GitProjectProvider.class);
 
-    public GitProjectProvider(String projectName, String projectUrl, File projectFolder) throws InvalidParameterException {
-        super(projectName, projectUrl, projectFolder);
+    public GitProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) throws InvalidParameterException {
+        super(projectName, projectUrl, projectFolder, monitor, listeners);
 
         if (!projectFolder.exists()) {
             importProject();

@@ -18,7 +18,7 @@
 package org.onexus.resource.manager.internal;
 
 import org.onexus.resource.api.*;
-import org.onexus.resource.manager.internal.providers.ProjectProvider;
+import org.onexus.resource.manager.internal.providers.AbstractProjectProvider;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -59,7 +59,7 @@ public class ResourceManager implements IResourceManager {
         }
         ;
 
-        ProjectProvider projectManager = getProjectProvider(projectUrl);
+        AbstractProjectProvider projectManager = getProjectProvider(projectUrl);
 
         if (projectManager == null) {
             return null;
@@ -76,7 +76,7 @@ public class ResourceManager implements IResourceManager {
         for (String projectUrl : projectsContainer.getProjectUrls()) {
             try {
 
-                ProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
+                AbstractProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
                 Project project = provider.getProject();
                 if (authorizationManager.check(READ, project.getURI())) {
                     projects.add(project);
@@ -102,7 +102,7 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized READ access to '" + resourceURI.toString() + "'");
         }
 
-        ProjectProvider provider = getProjectProvider(resourceURI.getProjectUrl());
+        AbstractProjectProvider provider = getProjectProvider(resourceURI.getProjectUrl());
 
         T output = (T) provider.getResource(resourceURI);
 
@@ -124,7 +124,7 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized READ access to '" + parentURI.toString() + "'");
         }
 
-        ProjectProvider provider = getProjectProvider(parentURI.getProjectUrl());
+        AbstractProjectProvider provider = getProjectProvider(parentURI.getProjectUrl());
 
         return provider.getResourceChildren(authorizationManager, resourceType, parentURI);
     }
@@ -140,7 +140,7 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized WRITE access to '" + resource.toString() + "'");
         }
 
-        ProjectProvider provider = getProjectProvider(resource.getURI().getProjectUrl());
+        AbstractProjectProvider provider = getProjectProvider(resource.getURI().getProjectUrl());
         provider.save(resource);
     }
 
@@ -196,7 +196,7 @@ public class ResourceManager implements IResourceManager {
         }
         ;
 
-        ProjectProvider provider = getProjectProvider(projectURI);
+        AbstractProjectProvider provider = getProjectProvider(projectURI);
         provider.syncProject();
     }
 
@@ -207,7 +207,7 @@ public class ResourceManager implements IResourceManager {
             throw new SecurityException("Unauthorized WRITE access to '" + projectUrl + "'");
         }
 
-        ProjectProvider provider = getProjectProvider(projectUrl);
+        AbstractProjectProvider provider = getProjectProvider(projectUrl);
         provider.updateProject();
 
     }
@@ -221,9 +221,9 @@ public class ResourceManager implements IResourceManager {
         this.projectsContainer.destroy();
     }
 
-    private ProjectProvider getProjectProvider(String projectUrl) {
+    private AbstractProjectProvider getProjectProvider(String projectUrl) {
 
-        ProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
+        AbstractProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
 
         if (provider == null) {
             throw new InvalidParameterException("Project '" + projectUrl + "' is not imported");
