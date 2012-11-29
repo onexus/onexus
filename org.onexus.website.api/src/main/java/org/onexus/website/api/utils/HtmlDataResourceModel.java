@@ -20,6 +20,7 @@ package org.onexus.website.api.utils;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.util.io.IOUtils;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.IResourceManager;
@@ -57,7 +58,7 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     @Override
     protected String load() {
 
-        if (contentUri == null) {
+        if (contentUri == null || Strings.isEmpty(contentUri.getPath())) {
             return "";
         }
 
