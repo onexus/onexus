@@ -144,19 +144,17 @@ public class ColumnConfig implements IColumnConfig {
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
-            List<String> fields = getFields(collection);
+            List<Field> fields = getFields(collection);
 
             if (Strings.isEmpty(template)) {
-                for (String fieldId : fields) {
-                    Field field = collection.getField(fieldId);
-
+                for (Field field : fields) {
                     IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                     List<IDecorator> actionsImpl = createActions(collection, field);
 
                     columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
                 }
             } else {
-                Field field = collection.getField(fields.get(0));
+                Field field = fields.get(0);
 
                 IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                 List<IDecorator> actionsImpl = createActions(collection, field);
@@ -185,16 +183,16 @@ public class ColumnConfig implements IColumnConfig {
 
     }
 
-    private List<String> getFields(Collection collection) {
-        List<String> fields;
+    protected List<Field> getFields(Collection collection) {
+        List<Field> fields;
 
         if (this.fields == null) {
-            fields = new ArrayList<String>();
+            fields = new ArrayList<Field>();
             for (Field field : collection.getFields()) {
-                fields.add(field.getId());
+                fields.add(field);
             }
         } else {
-            fields = new ArrayList<String>();
+            fields = new ArrayList<Field>();
 
             for (String fieldName : this.fields.split(",")) {
                 if (fieldName.trim().startsWith("*{")) {
@@ -203,7 +201,7 @@ public class ColumnConfig implements IColumnConfig {
                     Pattern pattern = Pattern.compile(regExp);
                     for (Field field : collection.getFields()) {
                         if (pattern.matcher(field.getId()).matches()) {
-                            fields.add(field.getId());
+                            fields.add(field);
                         }
                     }
                 } else {
@@ -217,7 +215,7 @@ public class ColumnConfig implements IColumnConfig {
                     if (field == null) {
                         throw new RuntimeException("Field '" + fieldName + "' not found on collection '" + collection.getURI() + "'.");
                     } else {
-                        fields.add(field.getId());
+                        fields.add(field);
                     }
                 }
 
@@ -234,7 +232,12 @@ public class ColumnConfig implements IColumnConfig {
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
-            query.addSelect(columnAlias, getFields(collection));
+            List<Field> fields = getFields(collection);
+            List<String> fieldIds = new ArrayList<String>(fields.size());
+            for (Field field : fields) {
+                fieldIds.add(field.getId());
+            }
+            query.addSelect(columnAlias, fieldIds);
         }
 
         /*TODO The primary key fields must always be present. Why??
