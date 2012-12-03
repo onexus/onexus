@@ -17,8 +17,6 @@
  */
 package org.onexus.collection.api.query;
 
-import org.onexus.resource.api.ORI;
-
 import java.io.Serializable;
 
 public class OrderBy implements Serializable {

@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.onexus.resource.api.ResourceLoginContext;
+import org.onexus.resource.api.LoginContext;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
@@ -67,7 +67,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
             @Override
             public void onBeginRequest(RequestCycle cycle) {
-                ResourceLoginContext.set(OnexusWebSession.get().getLoginContext());
+                LoginContext.set(OnexusWebSession.get().getLoginContext());
             }
         });
 

@@ -206,7 +206,7 @@ public class SqlCollectionDDL implements Serializable {
     }
 
     private static String removeNonValidChars(String id) {
-        return id.toLowerCase().trim().replaceAll("[^(a-z|0-9)]", "_");
+        return id.toLowerCase().trim().replaceAll("[^a-z0-9]", "_");
     }
 
     public List<String> getCreateIndex() {

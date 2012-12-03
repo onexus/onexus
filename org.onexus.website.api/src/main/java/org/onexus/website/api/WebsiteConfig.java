@@ -33,6 +33,8 @@ public class WebsiteConfig extends Resource {
 
     private String authorization;
 
+	private Boolean login;
+
     private List<PageConfig> pages;
 
     private String header;
@@ -53,7 +55,15 @@ public class WebsiteConfig extends Resource {
         this.authorization = authorization;
     }
 
-    public String getHeader() {
+	public Boolean getLogin() {
+		return login;
+	}
+
+	public void setLogin(Boolean login) {
+		this.login = login;
+	}
+
+	public String getHeader() {
         return header;
     }
 

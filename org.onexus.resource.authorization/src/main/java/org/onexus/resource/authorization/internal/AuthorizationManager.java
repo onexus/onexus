@@ -18,8 +18,8 @@
 package org.onexus.resource.authorization.internal;
 
 import org.onexus.resource.api.IAuthorizationManager;
+import org.onexus.resource.api.LoginContext;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.ResourceLoginContext;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,7 +45,7 @@ public class AuthorizationManager implements IAuthorizationManager {
     @Override
     public Set<String> getPrivileges(ORI resourceOri) {
 
-        ResourceLoginContext ctx = ResourceLoginContext.get();
+        LoginContext ctx = LoginContext.get();
 
         if (ctx == null) {
             return Collections.emptySet();

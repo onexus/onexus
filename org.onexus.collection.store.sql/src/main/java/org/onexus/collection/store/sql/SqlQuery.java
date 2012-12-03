@@ -329,9 +329,16 @@ public class SqlQuery {
         }
 
         Iterator<OrderBy> orderIt = ordersOql.iterator();
-        while (orderIt.hasNext()) {
+
+		while (orderIt.hasNext()) {
             OrderBy order = orderIt.next();
-            String field = "`" + order.getCollection() + "`.`" + order.getField() + "`";
+
+			String collectionAlias = order.getCollection();
+			ORI collectionOri = QueryUtils.getCollectionOri(query, collectionAlias);
+			SqlCollectionDDL collectionDDL = manager.getDDL(collectionOri);
+			SqlCollectionDDL.ColumnInfo columnInfo = collectionDDL.getColumnInfoByFieldName(order.getField());
+
+            String field = "`" + collectionAlias + "`.`" + columnInfo.getColumnName() + "`";
             if (order.isAscendent()) {
                 this.orderBy.add("ISNULL(" + field + ") ASC");
             }

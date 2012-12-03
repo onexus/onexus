@@ -27,13 +27,13 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.IPageManager;
 import org.onexus.website.api.pages.PageConfig;
@@ -41,6 +41,7 @@ import org.onexus.website.api.pages.PageModel;
 import org.onexus.website.api.theme.DefaultTheme;
 import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
+import org.onexus.website.api.utils.panels.LoginPanel;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -119,39 +120,12 @@ public class Website extends WebPage {
             menuSection.setVisible(true);
         }
 
-
         // Login section
-        //TODO final boolean isAnonymous = AuthenticatedWebSession.get().getRoles().isEmpty();
-        final boolean isAnonymous = true;
-
-        Link<String> link = new Link<String>("account-details") {
-            @Override
-            public void onClick() {
-
-                if (isAnonymous) {
-                    //TODO WebsiteSession.get().signOut();
-                    setResponsePage(Website.this);
-                    //TODO WebsiteApplication.get().restartResponseAtSignInPage();
-                }
-
-            }
-        };
-        link.add(new AttributeModifier("title", (isAnonymous ? "Sign in" : "Account Details")));
-        //TODO link.add(new Label("username", (isAnonymous?"Sign in" : OnexusWebSession.get().getUserToken())));
-        link.add(new Label("username", (isAnonymous ? "Sign in" : "TODO")));
-
-        Link<String> signOut = new Link<String>("signout") {
-            @Override
-            public void onClick() {
-                //TODO OnexusWebSession.get().invalidate();
-            }
-        };
-
-        link.setVisible(!isAnonymous);
-        signOut.setVisible(!isAnonymous);
-
-        menuSection.add(signOut);
-        menuSection.add(link);
+		Panel login = new LoginPanel("login");
+		menuSection.add(login);
+		if (config.getLogin() == null || !config.getLogin()) {
+			login.setVisible(false);
+		}
 
         add(menuSection);
 
@@ -164,7 +138,7 @@ public class Website extends WebPage {
             String role = config.getAuthorization();
 
             if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
-                //TODO OnexusWebApplication.get().restartResponseAtSignInPage();
+                WebsiteApplication.get().restartResponseAtSignInPage();
             }
 
         }

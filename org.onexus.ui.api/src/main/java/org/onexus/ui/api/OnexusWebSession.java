@@ -25,11 +25,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.util.time.Duration;
-import org.onexus.resource.api.ResourceLoginContext;
+import org.onexus.resource.api.LoginContext;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
 import java.io.IOException;
@@ -39,7 +38,7 @@ import java.util.Random;
 public class OnexusWebSession extends AuthenticatedWebSession {
 
     private String userToken = null;
-    private ResourceLoginContext ctx = new ResourceLoginContext();
+    private LoginContext ctx = new LoginContext();
     private Roles roles = new Roles();
 
     public static final String APPLICATION_POLICY_NAME = "karaf";
@@ -83,7 +82,7 @@ public class OnexusWebSession extends AuthenticatedWebSession {
         return (isSignedIn() ? ctx.getUserName() : userToken);
     }
 
-    public ResourceLoginContext getLoginContext() {
+    public LoginContext getLoginContext() {
         return ctx;
     }
 
@@ -101,11 +100,11 @@ public class OnexusWebSession extends AuthenticatedWebSession {
         boolean authenticated = false;
         LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
         try {
-            LoginContext javaCtx = new LoginContext(APPLICATION_POLICY_NAME, handler);
+            javax.security.auth.login.LoginContext javaCtx = new javax.security.auth.login.LoginContext(APPLICATION_POLICY_NAME, handler);
             javaCtx.login();
             authenticated = true;
 
-            this.ctx = new ResourceLoginContext(username);
+            this.ctx = new LoginContext(username);
 
             Subject subject = javaCtx.getSubject();
             if (subject != null) {
