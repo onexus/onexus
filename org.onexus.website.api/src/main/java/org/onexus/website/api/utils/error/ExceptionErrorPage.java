@@ -17,11 +17,13 @@
  */
 package org.onexus.website.api.utils.error;
 
+import org.apache.wicket.core.request.mapper.StalePageException;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.pages.AbstractErrorPage;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.util.lang.Generics;
 import org.onexus.resource.api.exceptions.OnexusException;
+import org.onexus.website.api.Website;
 import org.onexus.website.api.theme.DefaultTheme;
 
 import javax.servlet.http.HttpServletResponse;
@@ -170,5 +172,15 @@ public class ExceptionErrorPage extends AbstractErrorPage {
      */
     public Throwable getThrowable() {
         return throwable;
+    }
+
+    @Override
+    protected void onBeforeRender() {
+
+        if (getThrowable() instanceof StalePageException) {
+            setResponsePage(Website.class);
+        }
+
+        super.onBeforeRender();
     }
 }

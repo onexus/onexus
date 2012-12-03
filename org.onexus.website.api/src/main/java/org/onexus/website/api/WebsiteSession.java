@@ -94,6 +94,7 @@ public class WebsiteSession extends AuthenticatedWebSession {
     public void signOut() {
         super.signOut();
         this.ctx.logout();
+        this.roles.clear();
     }
 
     public boolean authenticate(String username, String password) {

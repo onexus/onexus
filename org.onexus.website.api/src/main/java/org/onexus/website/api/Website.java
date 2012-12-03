@@ -33,7 +33,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.IPageManager;
 import org.onexus.website.api.pages.PageConfig;
@@ -162,6 +161,17 @@ public class Website extends WebPage {
 
         get("header").setVisible(visible);
         get("bottom").setVisible(visible);
+
+        WebsiteConfig config = getConfig();
+        if (config != null && config.getAuthorization() != null) {
+
+            String role = config.getAuthorization();
+
+            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
+                WebsiteApplication.get().restartResponseAtSignInPage();
+            }
+
+        }
 
         super.onBeforeRender();
     }
