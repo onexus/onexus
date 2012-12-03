@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -160,11 +159,11 @@ public class GitSecurityFilter implements Filter {
         boolean authenticated;
         LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
         try {
-            LoginContext javaCtx = new LoginContext(APPLICATION_POLICY_NAME, handler);
+            javax.security.auth.login.LoginContext javaCtx = new javax.security.auth.login.LoginContext(APPLICATION_POLICY_NAME, handler);
             javaCtx.login();
             authenticated = true;
 
-            ResourceLoginContext ctx = new ResourceLoginContext(username);
+            LoginContext ctx = new LoginContext(username);
 
             Subject subject = javaCtx.getSubject();
             if (subject != null) {
@@ -172,7 +171,7 @@ public class GitSecurityFilter implements Filter {
                     ctx.addRole(p.getName());
                 }
             }
-            ResourceLoginContext.set(ctx);
+            LoginContext.set(ctx);
 
         } catch (LoginException e) {
             authenticated = false;

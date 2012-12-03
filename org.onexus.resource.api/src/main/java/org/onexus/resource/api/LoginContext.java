@@ -21,37 +21,41 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ResourceLoginContext implements Serializable {
+public class LoginContext implements Serializable {
 
-    private static ThreadLocal<ResourceLoginContext> loginContext = new ThreadLocal<ResourceLoginContext>() {
+    private static ThreadLocal<LoginContext> loginContext = new ThreadLocal<LoginContext>() {
         @Override
-        protected ResourceLoginContext initialValue() {
-            return new ResourceLoginContext();
+        protected LoginContext initialValue() {
+            return new LoginContext();
         }
     };
 
-    public static ResourceLoginContext get() {
+    public static LoginContext get() {
         return loginContext.get();
     }
 
-    public static void set(ResourceLoginContext ctx) {
+    public static void set(LoginContext ctx) {
         loginContext.set(ctx);
     }
 
     private String userName;
     private Set<String> roles = new HashSet<String>();
 
-    public ResourceLoginContext() {
+    public LoginContext() {
         this.userName = null;
     }
 
-    public ResourceLoginContext(String userName) {
+    public LoginContext(String userName) {
         this.userName = userName;
     }
 
     public void logout() {
         this.userName = null;
     }
+
+	public boolean isAnonymous() {
+		return (userName == null);
+	}
 
     public String getUserName() {
         return userName;

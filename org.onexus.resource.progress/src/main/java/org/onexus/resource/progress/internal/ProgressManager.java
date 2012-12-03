@@ -18,8 +18,8 @@
 package org.onexus.resource.progress.internal;
 
 import org.onexus.resource.api.IProgressManager;
+import org.onexus.resource.api.LoginContext;
 import org.onexus.resource.api.Progress;
-import org.onexus.resource.api.ResourceLoginContext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class ProgressManager implements IProgressManager {
     @Override
     public Collection<Progress> getProgresses() {
 
-        String userName = ResourceLoginContext.get().getUserName();
+        String userName = LoginContext.get().getUserName();
 
         if (!progresses.containsKey(userName)) {
             progresses.put(userName, new ArrayList<Progress>());
