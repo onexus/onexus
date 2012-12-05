@@ -112,10 +112,10 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         ORI parentURI = getQuery().getOn();
 
         List<IColumnConfig> visibleColumnsConfig = new ArrayList<IColumnConfig>(columnsConfig.size());
-        BrowserPageStatus pageStatus = findParentStatus(status, BrowserPageStatus.class);
+        BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
 
         if (pageStatus!=null) {
-            Predicate filter = new VisiblePredicate(getReleaseUri(), pageStatus.getFilters());
+            Predicate filter = new VisiblePredicate(getPageBaseOri(), pageStatus.getFilters());
             CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
         } else {
             visibleColumnsConfig = columnsConfig;

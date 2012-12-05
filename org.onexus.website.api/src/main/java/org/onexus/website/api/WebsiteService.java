@@ -71,9 +71,9 @@ public class WebsiteService implements IWebsiteService {
                     ServiceRegistration registration = registrations.get(projectUrl);
                     registration.unregister();
 
-                    registerProject(project);
                 }
 
+				registerProject(project);
             }
 
             @Override

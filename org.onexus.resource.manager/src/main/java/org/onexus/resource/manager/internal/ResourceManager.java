@@ -19,10 +19,9 @@ package org.onexus.resource.manager.internal;
 
 import org.onexus.resource.api.*;
 import org.onexus.resource.manager.internal.providers.AbstractProjectProvider;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
+import org.osgi.service.blueprint.container.BlueprintEvent;
+import org.osgi.service.blueprint.container.BlueprintListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ import java.util.List;
 import static org.onexus.resource.api.IAuthorizationManager.READ;
 import static org.onexus.resource.api.IAuthorizationManager.WRITE;
 
-public class ResourceManager implements IResourceManager {
+public class ResourceManager implements IResourceManager, BlueprintListener, BundleListener {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
 
@@ -45,6 +44,7 @@ public class ResourceManager implements IResourceManager {
     private BundleContext context;
 
     // Loaders and managers
+	private PluginLoader pluginLoader;
     private ProjectsContainer projectsContainer;
 
     public ResourceManager() {
@@ -57,7 +57,6 @@ public class ResourceManager implements IResourceManager {
         if (!authorizationManager.check(READ, new ORI(projectUrl))) {
             throw new SecurityException("Unauthorized READ access to project '" + projectUrl + "'");
         }
-        ;
 
         AbstractProjectProvider projectManager = getProjectProvider(projectUrl);
 
@@ -137,7 +136,7 @@ public class ResourceManager implements IResourceManager {
         }
 
         if (!authorizationManager.check(WRITE, resource.getURI())) {
-            throw new SecurityException("Unauthorized WRITE access to '" + resource.toString() + "'");
+            throw new SecurityException("Unauthorized WRITE access to '" + resource.getURI().toString() + "'");
         }
 
         AbstractProjectProvider provider = getProjectProvider(resource.getURI().getProjectUrl());
@@ -194,7 +193,6 @@ public class ResourceManager implements IResourceManager {
         if (!authorizationManager.check(READ, new ORI(projectURI, null))) {
             throw new SecurityException("Unauthorized READ access to '" + projectURI + "'");
         }
-        ;
 
         AbstractProjectProvider provider = getProjectProvider(projectURI);
         provider.syncProject();
@@ -214,7 +212,9 @@ public class ResourceManager implements IResourceManager {
 
     public void init() {
         // Projects container
-        this.projectsContainer = new ProjectsContainer(serializer, new PluginLoader(context));
+		this.pluginLoader = new PluginLoader(context);
+        this.projectsContainer = new ProjectsContainer(serializer, pluginLoader);
+
     }
 
     public void destroy() {
@@ -256,4 +256,32 @@ public class ResourceManager implements IResourceManager {
     public void setAuthorizationManager(IAuthorizationManager authorizationManager) {
         this.authorizationManager = authorizationManager;
     }
+
+
+	public ProjectsContainer getProjectsContainer() {
+		return projectsContainer;
+	}
+
+	public void setProjectsContainer(ProjectsContainer projectsContainer) {
+		this.projectsContainer = projectsContainer;
+	}
+
+
+	@Override
+	public void blueprintEvent(BlueprintEvent blueprintEvent) {
+
+		if(blueprintEvent.getType() == BlueprintEvent.CREATED) {
+			this.projectsContainer.bundleCreated(blueprintEvent.getBundle().getBundleId());
+		}
+
+	}
+
+	@Override
+	public void bundleChanged(BundleEvent bundleEvent) {
+
+		if (bundleEvent.getType() == BundleEvent.UNINSTALLED) {
+			this.projectsContainer.bundleUninstalled(bundleEvent.getBundle().getBundleId());
+		}
+
+	}
 }

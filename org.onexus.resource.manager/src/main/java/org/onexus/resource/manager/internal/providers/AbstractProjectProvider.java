@@ -42,7 +42,9 @@ public abstract class AbstractProjectProvider {
     public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
     private IResourceSerializer serializer;
+
     private PluginLoader pluginLoader;
+	private Set<Long> bundleDependencies = new HashSet<Long>();
 
     private String projectName;
     private String projectUrl;
@@ -146,7 +148,7 @@ public abstract class AbstractProjectProvider {
         this.projectFolder = projectFolder;
     }
 
-    private void loadProject() {
+    public void loadProject() {
         File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
 
         if (!projectOnx.exists()) {
@@ -156,8 +158,20 @@ public abstract class AbstractProjectProvider {
         this.project = (Project) loadResource(projectOnx);
         this.project.setName(projectName);
 
-        this.pluginLoader.load(project);
+		this.bundleDependencies.clear();
 
+		if (project.getPlugins() != null) {
+			for (Plugin plugin : project.getPlugins()) {
+				try {
+					long bundleId = pluginLoader.load(plugin);
+					bundleDependencies.add(bundleId);
+				} catch (InvalidParameterException e) {
+					log.error(e.getMessage());
+				}
+			}
+		}
+
+		this.resources = null;
     }
 
     private void loadResources() {
@@ -176,6 +190,11 @@ public abstract class AbstractProjectProvider {
             Resource resource = loadResource(file);
 
             if (resource != null) {
+
+				if (resources == null) {
+					return;
+				}
+
                 resources.put(resource.getURI(), resource);
             }
         }
@@ -421,4 +440,7 @@ public abstract class AbstractProjectProvider {
 		}
 	}
 
+	public boolean dependsOnBundle(long bundleId) {
+		return bundleDependencies.contains(Long.valueOf(bundleId));
+	}
 }

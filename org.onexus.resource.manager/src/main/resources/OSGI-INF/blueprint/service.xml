@@ -5,6 +5,8 @@
     <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer"/>
     <reference id="authorizationManager" interface="org.onexus.resource.api.IAuthorizationManager"/>
 
+    <service interface="org.osgi.service.blueprint.container.BlueprintListener" ref="resourceManager" />
+    <service interface="org.osgi.framework.BundleListener" ref="resourceManager" />
     <service interface="org.onexus.resource.api.IResourceManager" ref="resourceManager" />
     <bean id="resourceManager" class="org.onexus.resource.manager.internal.ResourceManager" init-method="init" destroy-method="destroy">
         <property name="serializer" ref="resourceSerializer"/>

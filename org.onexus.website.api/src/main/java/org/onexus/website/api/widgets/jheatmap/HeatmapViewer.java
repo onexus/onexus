@@ -69,7 +69,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
         List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
 
-        ORI parentUri = getReleaseUri();
+        ORI parentUri = getPageBaseOri();
         for (ColumnConfig column : getConfig().getColumns()) {
             column.addColumns(columns, parentUri);
         }

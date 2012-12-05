@@ -221,4 +221,20 @@ public class ProjectsContainer {
         }
     }
 
+	public void bundleCreated(long bundleId) {
+
+		for (AbstractProjectProvider provider : providers.values()) {
+
+			if (provider.dependsOnBundle(bundleId)) {
+				provider.loadProject();
+				onProjectChange(provider.getProject());
+			}
+
+		}
+
+	}
+
+	public void bundleUninstalled(long bundleId) {
+
+	}
 }

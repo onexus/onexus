@@ -144,7 +144,7 @@ public class ColumnConfig implements IColumnConfig {
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
-            List<Field> fields = getFields(collection);
+            List<Field> fields = getFields(collection, parentURI);
 
             if (Strings.isEmpty(template)) {
                 for (Field field : fields) {
@@ -183,7 +183,7 @@ public class ColumnConfig implements IColumnConfig {
 
     }
 
-    protected List<Field> getFields(Collection collection) {
+    protected List<Field> getFields(Collection collection, ORI parentOri) {
         List<Field> fields;
 
         if (this.fields == null) {
@@ -232,7 +232,7 @@ public class ColumnConfig implements IColumnConfig {
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
 
         if (collection != null) {
-            List<Field> fields = getFields(collection);
+            List<Field> fields = getFields(collection, query.getOn());
             List<String> fieldIds = new ArrayList<String>(fields.size());
             for (Field field : fields) {
                 fieldIds.add(field.getId());
@@ -252,19 +252,19 @@ public class ColumnConfig implements IColumnConfig {
     }
 
     @PaxWicketBean(name = "resourceManager")
-    public transient IResourceManager resourceManager;
+    private IResourceManager resourceManager;
 
     @PaxWicketBean(name = "decoratorManager")
-    public transient IDecoratorManager decoratorManager;
+    private IDecoratorManager decoratorManager;
 
-    private IResourceManager getResourceManager() {
+    protected IResourceManager getResourceManager() {
         if (resourceManager == null) {
             WebsiteApplication.inject(this);
         }
         return resourceManager;
     }
 
-    private IDecoratorManager getDecoratorManager() {
+    protected IDecoratorManager getDecoratorManager() {
         if (decoratorManager == null) {
             WebsiteApplication.inject(this);
         }

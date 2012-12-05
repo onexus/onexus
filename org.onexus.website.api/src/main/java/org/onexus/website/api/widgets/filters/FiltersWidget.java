@@ -33,7 +33,6 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.onexus.website.api.events.EventAddFilter;
-import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPage;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
@@ -66,7 +65,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 final FilterConfig filterConfig = item.getModelObject();
                 BrowserPageStatus browserStatus = getPageStatus();
 
-                VisiblePredicate fixedPredicate = new VisiblePredicate(getReleaseUri(), browserStatus.getFilters());
+                VisiblePredicate fixedPredicate = new VisiblePredicate(getPageBaseOri(), browserStatus.getFilters());
 
                 if (fixedPredicate.evaluate(filterConfig)) {
 

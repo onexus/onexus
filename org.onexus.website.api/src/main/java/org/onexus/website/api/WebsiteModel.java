@@ -17,8 +17,6 @@
  */
 package org.onexus.website.api;
 
-import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;

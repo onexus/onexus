@@ -113,7 +113,7 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
 
         Query query = new Query();
-        query.setOn(getBaseUri());
+        query.setOn(getWebsiteOri());
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, collection);
         query.setFrom(collectionAlias);

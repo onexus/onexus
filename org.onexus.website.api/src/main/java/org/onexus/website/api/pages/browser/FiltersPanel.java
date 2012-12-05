@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
@@ -114,13 +115,29 @@ public class FiltersPanel extends EventPanel {
     }
 
     protected Query getQuery() {
-        PageStatus pageStatus = Widget.findParentStatus(getDefaultModel(), PageStatus.class);
+        PageStatus pageStatus = findParentStatus(getDefaultModel(), PageStatus.class);
         return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
     }
 
     protected ORI getBaseUri() {
-        WebsiteStatus websiteStatus = Widget.findParentStatus(getDefaultModel(), WebsiteStatus.class);
+        WebsiteStatus websiteStatus = findParentStatus(getDefaultModel(), WebsiteStatus.class);
         return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
     }
+
+	private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
+
+		Object obj = model.getObject();
+
+		if (obj != null && statusClass.isAssignableFrom(obj.getClass())) {
+			return (T) obj;
+		}
+
+		if (model instanceof IWrapModel) {
+			IModel<?> parentModel = ((IWrapModel)model).getWrappedModel();
+			return findParentStatus(parentModel, statusClass);
+		}
+
+		return null;
+	}
 
 }

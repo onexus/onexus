@@ -17,6 +17,7 @@
  */
 package org.onexus.website.api.widgets;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
@@ -47,20 +48,24 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     protected Query getQuery() {
         PageStatus pageStatus = findParentStatus(statusModel, PageStatus.class);
-        return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
+        return (pageStatus == null ? null : pageStatus.buildQuery(getWebsiteOri()));
     }
 
-    protected ORI getBaseUri() {
-        WebsiteStatus websiteStatus = findParentStatus(statusModel, WebsiteStatus.class);
+    protected ORI getWebsiteOri() {
+        WebsiteStatus websiteStatus = findParentStatus(WebsiteStatus.class);
         return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
     }
 
-    protected ORI getReleaseUri() {
-        BrowserPageStatus pageStatus = findParentStatus(statusModel, BrowserPageStatus.class);
-        return (pageStatus==null ? getBaseUri() : new ORI(getBaseUri(), pageStatus.getBase()));
+    protected ORI getPageBaseOri() {
+        BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
+        return (pageStatus==null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase()));
     }
 
-    public static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
+	protected <T> T findParentStatus(Class<T> statusClass) {
+		return findParentStatus(statusModel, statusClass);
+	}
+
+    private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
 
         Object obj = model.getObject();
 

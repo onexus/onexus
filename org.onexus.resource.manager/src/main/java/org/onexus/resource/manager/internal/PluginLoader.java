@@ -18,7 +18,6 @@
 package org.onexus.resource.manager.internal;
 
 import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Project;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -30,83 +29,61 @@ import java.security.InvalidParameterException;
 
 public class PluginLoader implements Serializable {
 
-    private static final Logger log = LoggerFactory.getLogger(PluginLoader.class);
-    private BundleContext context;
+	private static final Logger log = LoggerFactory.getLogger(PluginLoader.class);
+	private BundleContext context;
 
-    public PluginLoader(BundleContext context) {
-        super();
-        this.context = context;
-    }
 
-    public void load(Project project) {
+	public PluginLoader(BundleContext context) {
+		super();
+		this.context = context;
+	}
 
-        if (project.getPlugins() != null) {
-            for (Plugin plugin : project.getPlugins()) {
-                try {
-                    load(plugin);
-                } catch (InvalidParameterException e) {
-                    log.error(e.getMessage());
-                }
-            }
-        }
-    }
+	public long load(Plugin plugin) throws InvalidParameterException {
 
-    public void load(Plugin plugin) throws InvalidParameterException {
+		String location = plugin.getLocation();
 
-        String location = plugin.getLocation();
+		if (location == null) {
+			throw new InvalidParameterException("Plugin \" + plugin.getId() + \" without location.");
+		}
 
-        if (location == null) {
-            throw new InvalidParameterException("Plugin \" + plugin.getId() + \" without location.");
-        }
+		location = location.trim();
 
-        location = location.trim();
+		if (location.isEmpty()) {
+			throw new InvalidParameterException("Plugin " + plugin.getId() + " without location.");
+		}
 
-        if (location.isEmpty()) {
-            throw new InvalidParameterException("Plugin " + plugin.getId() + " without location.");
-        }
+		Bundle bundle = null;
+		try {
+			bundle = context.installBundle(location, null);
+		} catch (IllegalStateException ex) {
+			log.error(ex.toString());
+		} catch (BundleException ex) {
+			if (ex.getNestedException() != null) {
+				log.error(ex.getNestedException().toString());
+			} else {
+				log.error(ex.toString());
+			}
+		}
 
-        Bundle bundle = null;
-        try {
-            bundle = context.installBundle(location, null);
-        } catch (IllegalStateException ex) {
-            log.error(ex.toString());
-        } catch (BundleException ex) {
-            if (ex.getNestedException() != null) {
-                log.error(ex.getNestedException().toString());
-            } else {
-                log.error(ex.toString());
-            }
-        }
+		if (bundle != null) {
 
-        if (bundle != null) {
+			if (bundle.getState() == Bundle.ACTIVE) {
+				return bundle.getBundleId();
+			}
 
-            if (bundle.getState() == Bundle.ACTIVE) {
-                // It was already installed
-                //TODO remove this delay if the blueprint services are ready
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                }
+			try {
+				int previousState = bundle.getState();
+				bundle.start();
+				log.info("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
+				return bundle.getBundleId();
 
-                return;
-            }
+			} catch (BundleException e) {
+				String msg = "Plugin " + plugin.getId() + " installed but NOT started. Bundle ID: " + bundle.getBundleId();
+				log.error(msg, e);
+			}
 
-            try {
+		}
 
-                int previousState = bundle.getState();
-
-                bundle.start();
-
-                log.info("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
-
-                //TODO wait unit blueprint services are ready
-                Thread.sleep(1000);
-
-            } catch (BundleException e) {
-                String msg = "Plugin " + plugin.getId() + " installed but NOT started. Bundle ID: " + bundle.getBundleId();
-                log.error(msg, e);
-            } catch (InterruptedException e) {
-            }
-        }
-    }
+		return -1;
+	}
 }
