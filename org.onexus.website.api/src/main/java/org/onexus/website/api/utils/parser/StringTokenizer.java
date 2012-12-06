@@ -39,7 +39,7 @@ public class StringTokenizer implements Iterator<String> {
             // Blank
             if (c == ' ') {
                 position++;
-                skipBlanks();
+                skipWhitespaces();
 
                 if (token.length() > 0) {
                     return token.toString();
@@ -67,8 +67,8 @@ public class StringTokenizer implements Iterator<String> {
         return token.toString();
     }
 
-    private void skipBlanks() {
-        while (position < length && expression.charAt(position) == ' ') {
+    private void skipWhitespaces() {
+        while (position < length && Character.isWhitespace(expression.charAt(position))) {
             position++;
         }
     }

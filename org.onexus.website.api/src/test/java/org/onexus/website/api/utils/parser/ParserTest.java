@@ -11,7 +11,7 @@ public class ParserTest {
     @Test
     public void testStringTokenizer() {
 
-        StringTokenizer tokenizer = new StringTokenizer("  c1 (c2     AND c3),c4 OR (c5,c6)    ,     c7   ", "(),");
+        StringTokenizer tokenizer = new StringTokenizer("  c1 (c2    AND c3),c4 OR (c5,c6)    ,     c7   ", "(),");
 
         assertTrue(tokenizer.hasNext());
         assertEquals(tokenizer.next(), "c1");
