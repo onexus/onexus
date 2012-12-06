@@ -144,7 +144,7 @@ public class FilterEntity implements IFilter {
 
         boolean validCollection = ( filterPath == null || rulePath == null ) ? false : filterPath.endsWith(rulePath);
 
-        if (rule.getOperator() == null) {
+        if (rule.getField() == null) {
             return validCollection;
         }
 

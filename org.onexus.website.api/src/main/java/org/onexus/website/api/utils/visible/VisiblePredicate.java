@@ -21,6 +21,7 @@ import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.browser.IFilter;
+import org.onexus.website.api.utils.parser.BooleanExpressionEvaluator;
 
 import java.util.Collection;
 
@@ -59,26 +60,31 @@ public class VisiblePredicate implements Predicate {
             return false;
         }
 
-        for (VisibleRule rule : VisibleRule.parseRules(parentURI, visible.getVisible())) {
+        // Use only single character operators.
+        String normalizedQuery = visibleQuery
+                .replace("NOT","!")
+                .replace("AND",",")
+                .replace("OR", "|")
+                .replaceAll("\\s", "");
 
-            boolean matchAnyFilter = false;
-            for (IFilter filter : filters) {
-                if (filter.match(rule)) {
-                    matchAnyFilter = true;
-                    break;
+        BooleanExpressionEvaluator evaluator = new BooleanExpressionEvaluator(normalizedQuery) {
+            @Override
+            protected boolean evaluateToken(String token) {
+
+                VisibleRule rule = new VisibleRule(parentURI, token);
+
+                boolean matchAnyFilter = false;
+                for (IFilter filter : filters) {
+                    if (filter.match(rule)) {
+                        matchAnyFilter = true;
+                        break;
+                    }
                 }
+
+                return matchAnyFilter;
             }
+        };
 
-            if (rule.isNegated() && matchAnyFilter) {
-                return false;
-            }
-
-            if (!rule.isNegated() && !matchAnyFilter) {
-                return false;
-            }
-
-        }
-
-        return true;
+        return evaluator.evaluate();
     }
 }

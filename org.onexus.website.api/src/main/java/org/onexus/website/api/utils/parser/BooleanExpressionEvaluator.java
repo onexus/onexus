@@ -111,11 +111,11 @@ public class BooleanExpressionEvaluator {
     }
 
     protected boolean isOrOperand(String token) {
-        return "OR".equalsIgnoreCase(token);
+        return "OR".equalsIgnoreCase(token) || "|".equals(token);
     }
 
     protected String getSingleOperands() {
-        return "!(),";
+        return "!(),|";
     }
 
 

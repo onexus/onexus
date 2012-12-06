@@ -131,7 +131,7 @@ public class BrowserFilter implements IFilter {
             //TODO
             boolean validCollection = visibleCollection.getPath().endsWith(rule.getFilteredCollection().getPath());
 
-            if (rule.getOperator() == null) {
+            if (rule.getField() == null) {
                 return validCollection;
             } else {
                 return false;
