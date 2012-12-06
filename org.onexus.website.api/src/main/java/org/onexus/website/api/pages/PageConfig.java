@@ -19,6 +19,7 @@ package org.onexus.website.api.pages;
 
 import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.website.api.WebsiteConfig;
+import org.onexus.website.api.utils.authorization.IAuthorization;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
@@ -26,7 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PageConfig implements Serializable {
+public abstract class PageConfig implements Serializable, IAuthorization {
 
     private String id;
     private String label;
@@ -82,6 +83,7 @@ public abstract class PageConfig implements Serializable {
         this.css = css;
     }
 
+    @Override
     public String getAuthorization() {
         return authorization;
     }

@@ -22,12 +22,13 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.resource.api.Resource;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.utils.authorization.IAuthorization;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @XStreamAlias("website")
-public class WebsiteConfig extends Resource {
+public class WebsiteConfig extends Resource implements IAuthorization {
 
     private WebsiteStatus defaultStatus;
 
@@ -47,6 +48,7 @@ public class WebsiteConfig extends Resource {
         super();
     }
 
+    @Override
     public String getAuthorization() {
         return authorization;
     }

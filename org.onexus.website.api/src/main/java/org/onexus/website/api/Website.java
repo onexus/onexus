@@ -18,7 +18,6 @@
 package org.onexus.website.api;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,6 +39,7 @@ import org.onexus.website.api.pages.PageModel;
 import org.onexus.website.api.theme.DefaultTheme;
 import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
+import org.onexus.website.api.utils.authorization.Authorization;
 import org.onexus.website.api.utils.panels.LoginPanel;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -132,14 +132,8 @@ public class Website extends WebPage {
 
         add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
 
-        if (config != null && config.getAuthorization() != null) {
-
-            String role = config.getAuthorization();
-
-            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
-                WebsiteApplication.get().restartResponseAtSignInPage();
-            }
-
+        if (!Authorization.authorize(config)) {
+            WebsiteApplication.get().restartResponseAtSignInPage();
         }
 
         String bottom = config.getBottom();
@@ -162,15 +156,8 @@ public class Website extends WebPage {
         get("header").setVisible(visible);
         get("bottom").setVisible(visible);
 
-        WebsiteConfig config = getConfig();
-        if (config != null && config.getAuthorization() != null) {
-
-            String role = config.getAuthorization();
-
-            if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
-                WebsiteApplication.get().restartResponseAtSignInPage();
-            }
-
+        if (!Authorization.authorize(getConfig())) {
+            WebsiteApplication.get().restartResponseAtSignInPage();
         }
 
         super.onBeforeRender();
@@ -189,19 +176,9 @@ public class Website extends WebPage {
 
         for (PageConfig page : getConfig().getPages()) {
 
-            String role = page.getAuthorization();
-
-            if (role != null && !role.isEmpty()) {
-                if (role.equalsIgnoreCase("anonymous")) {
-                    if (!AuthenticatedWebSession.get().getRoles().isEmpty()) {
-                        continue;
-                    }
-                } else if (!AuthenticatedWebSession.get().getRoles().hasRole(role)) {
-                    continue;
-                }
+            if (Authorization.authorize(page)) {
+                pages.add(page);
             }
-
-            pages.add(page);
         }
 
         return pages;
