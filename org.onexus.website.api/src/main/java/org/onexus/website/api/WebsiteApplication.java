@@ -81,6 +81,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
 		});
 
         mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
+        mountPage("/login", getSignInPageClass());
 
     }
 
