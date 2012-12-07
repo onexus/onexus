@@ -37,43 +37,43 @@ import java.util.*;
 
 public abstract class AbstractProjectProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractProjectProvider.class);
-    public final static String ONEXUS_EXTENSION = "onx";
-    public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
+	private static final Logger log = LoggerFactory.getLogger(AbstractProjectProvider.class);
+	public final static String ONEXUS_EXTENSION = "onx";
+	public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
-    private IResourceSerializer serializer;
+	private IResourceSerializer serializer;
 
-    private PluginLoader pluginLoader;
+	private PluginLoader pluginLoader;
 	private Set<Long> bundleDependencies = new HashSet<Long>();
 
-    private String projectName;
-    private String projectUrl;
-    private File projectFolder;
+	private String projectName;
+	private String projectUrl;
+	private File projectFolder;
 
 
 	private FileAlterationObserver observer;
 
-    private Project project;
-    private Map<ORI, Resource> resources;
+	private Project project;
+	private Map<ORI, Resource> resources;
 
 	private List<IResourceListener> listeners = new ArrayList<IResourceListener>();
 
 	public AbstractProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) {
-        super();
-        this.projectName = projectName;
-        this.projectUrl = projectUrl;
-        this.projectFolder = projectFolder;
+		super();
+		this.projectName = projectName;
+		this.projectUrl = projectUrl;
+		this.projectFolder = projectFolder;
 		this.listeners = listeners;
 
 
 		// Don't watch hidden folders and files
 		IOFileFilter notHiddenDirectoryFilter = FileFilterUtils.notFileFilter(
 				FileFilterUtils.or(
-					FileFilterUtils.and(
-							FileFilterUtils.directoryFileFilter(),
-							HiddenFileFilter.HIDDEN
-					),
-					HiddenFileFilter.HIDDEN
+						FileFilterUtils.and(
+								FileFilterUtils.directoryFileFilter(),
+								HiddenFileFilter.HIDDEN
+						),
+						HiddenFileFilter.HIDDEN
 				)
 		);
 
@@ -83,33 +83,33 @@ public abstract class AbstractProjectProvider {
 			@Override
 			public void onDirectoryCreate(File directory) {
 				log.info("Creating folder '" + directory.getName() + "'");
-				onResourceCreate( loadFile(directory) );
+				onResourceCreate(loadFile(directory));
 			}
 
 			@Override
 			public void onDirectoryDelete(File directory) {
 				log.info("Deleting folder '" + directory.getName() + "'");
 				ORI resourceOri = convertFileToORI(directory);
-				onResourceDelete( resources.remove(resourceOri) );
+				onResourceDelete(resources.remove(resourceOri));
 			}
 
 			@Override
 			public void onFileChange(File file) {
 				log.info("Reloading file '" + file.getName() + "'");
-				onResourceChange( loadFile(file) );
+				onResourceChange(loadFile(file));
 			}
 
 			@Override
 			public void onFileCreate(File file) {
 				log.info("Creating file '" + file.getName() + "'");
-				onResourceCreate( loadFile(file) );
+				onResourceCreate(loadFile(file));
 			}
 
 			@Override
 			public void onFileDelete(File file) {
 				log.info("Deleting file '" + file.getName() + "'");
 				ORI resourceOri = convertFileToORI(file);
-				onResourceDelete( resources.remove(resourceOri) );
+				onResourceDelete(resources.remove(resourceOri));
 			}
 
 			private Resource loadFile(File file) {
@@ -130,33 +130,33 @@ public abstract class AbstractProjectProvider {
 
 		monitor.addObserver(observer);
 
-    }
+	}
 
-    public Project getProject() {
-        if (project == null) {
-            loadProject();
-        }
+	public Project getProject() {
+		if (project == null) {
+			loadProject();
+		}
 
-        return project;
-    }
+		return project;
+	}
 
-    public File getProjectFolder() {
-        return projectFolder;
-    }
+	public File getProjectFolder() {
+		return projectFolder;
+	}
 
-    protected void setProjectFolder(File projectFolder) {
-        this.projectFolder = projectFolder;
-    }
+	protected void setProjectFolder(File projectFolder) {
+		this.projectFolder = projectFolder;
+	}
 
-    public void loadProject() {
-        File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
+	public void loadProject() {
+		File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
 
-        if (!projectOnx.exists()) {
-            throw new InvalidParameterException("No Onexus project in " + projectFolder.getAbsolutePath());
-        }
+		if (!projectOnx.exists()) {
+			throw new InvalidParameterException("No Onexus project in " + projectFolder.getAbsolutePath());
+		}
 
-        this.project = (Project) loadResource(projectOnx);
-        this.project.setName(projectName);
+		this.project = (Project) loadResource(projectOnx);
+		this.project.setName(projectName);
 
 		this.bundleDependencies.clear();
 
@@ -172,123 +172,125 @@ public abstract class AbstractProjectProvider {
 		}
 
 		this.resources = null;
-    }
+	}
 
-    private void loadResources() {
+	private void loadResources() {
 
-        this.resources = new HashMap<ORI, Resource>();
+		this.resources = new HashMap<ORI, Resource>();
 
-        Collection<File> files = addFilesRecursive(new ArrayList<File>(), projectFolder);
+		Collection<File> files = addFilesRecursive(new ArrayList<File>(), projectFolder);
 
-        for (File file : files) {
+		for (File file : files) {
 
-            // Skip project file
-            if (ONEXUS_PROJECT_FILE.equals(file.getName())) {
-                continue;
-            }
+			// Skip project file
+			if (ONEXUS_PROJECT_FILE.equals(file.getName())) {
+				continue;
+			}
 
-            Resource resource = loadResource(file);
+			Resource resource = loadResource(file);
 
-            if (resource != null) {
+			if (resource != null) {
 
 				if (resources == null) {
 					return;
 				}
 
-                resources.put(resource.getURI(), resource);
-            }
-        }
-    }
+				resources.put(resource.getURI(), resource);
+			}
+		}
+	}
 
-    public Resource getResource(ORI resourceUri) {
+	public Resource getResource(ORI resourceUri) {
 
-        if (resourceUri.getPath() == null && projectUrl.equals(resourceUri.getProjectUrl())) {
-            return project;
-        }
+		if (resourceUri.getPath() == null && projectUrl.equals(resourceUri.getProjectUrl())) {
+			return project;
+		}
 
-        if (resources == null) {
-            loadResources();
-        }
+		if (resources == null) {
+			loadResources();
+		}
 
-        if (!resources.containsKey(resourceUri)) {
-            throw new UnsupportedOperationException("Resource '" + resourceUri + "' is not defined in any project.");
-        }
+		if (!resources.containsKey(resourceUri)) {
+			throw new UnsupportedOperationException("Resource '" + resourceUri + "' is not defined in any project.");
+		}
 
-        return resources.get(resourceUri);
+		return resources.get(resourceUri);
 
-    }
+	}
 
-    public <T extends Resource> List<T> getResourceChildren(IAuthorizationManager authorizationManager, Class<T> resourceType, ORI parentURI) {
+	public <T extends Resource> List<T> getResourceChildren(IAuthorizationManager authorizationManager, Class<T> resourceType, ORI parentURI) {
 
-        if (resources == null) {
-            loadResources();
-        }
+		if (resources == null) {
+			loadResources();
+		}
 
-        List<T> children = new ArrayList<T>();
-        for (Resource resource : resources.values()) {
-            if (parentURI.isChild(resource.getURI()) && resourceType.isAssignableFrom(resource.getClass())) {
-                if (authorizationManager.check(IAuthorizationManager.READ, resource.getURI())) {
-                    children.add((T) resource);
-                }
-            }
-        }
+		List<T> children = new ArrayList<T>();
+		if (resources != null) {
+			for (Resource resource : resources.values()) {
+				if (parentURI.isChild(resource.getURI()) && resourceType.isAssignableFrom(resource.getClass())) {
+					if (authorizationManager.check(IAuthorizationManager.READ, resource.getURI())) {
+						children.add((T) resource);
+					}
+				}
+			}
+		}
 
-        return children;
-    }
+		return children;
+	}
 
-    public void syncProject() {
-        loadProject();
-        loadResources();
-    }
+	public void syncProject() {
+		loadProject();
+		loadResources();
+	}
 
-    public void updateProject() {
-        importProject();
-        syncProject();
-    }
+	public void updateProject() {
+		importProject();
+		syncProject();
+	}
 
-    protected abstract void importProject();
+	protected abstract void importProject();
 
-    private Resource loadResource(File resourceFile) {
+	private Resource loadResource(File resourceFile) {
 
-        String resourceName;
-        Resource resource;
+		String resourceName;
+		Resource resource;
 
-        if (ONEXUS_EXTENSION.equalsIgnoreCase(FilenameUtils.getExtension(resourceFile.getName()))) {
+		if (ONEXUS_EXTENSION.equalsIgnoreCase(FilenameUtils.getExtension(resourceFile.getName()))) {
 
-            resourceName = FilenameUtils.getBaseName(resourceFile.getName());
+			resourceName = FilenameUtils.getBaseName(resourceFile.getName());
 
-            try {
+			try {
 
-                resource = serializer.unserialize(Resource.class, new FileInputStream(resourceFile));
+				resource = serializer.unserialize(Resource.class, new FileInputStream(resourceFile));
 
-            } catch (FileNotFoundException e) {
-                resource = createErrorResource(resourceFile, "File '" + resourceFile.getPath() + "' not found.");
-            } catch (UnserializeException e) {
-                resource = createErrorResource(resourceFile, "Parsing file " + resourceFile.getPath() + " at line " + e.getLine() + " on " + e.getPath());
-            } catch (Exception e) {
-                resource = createErrorResource(resourceFile, e.getMessage());
-            }
+			} catch (FileNotFoundException e) {
+				resource = createErrorResource(resourceFile, "File '" + resourceFile.getPath() + "' not found.");
+			} catch (UnserializeException e) {
+				resource = createErrorResource(resourceFile, "Parsing file " + resourceFile.getPath() + " at line " + e.getLine() + " on " + e.getPath());
+			} catch (Exception e) {
+				resource = createErrorResource(resourceFile, e.getMessage());
+			}
 
-        } else {
+		} else {
 
-            resourceName = resourceFile.getName();
+			resourceName = resourceFile.getName();
 
-            if (resourceFile.isDirectory()) {
-                resource = new Folder();
-            } else {
-                resource = createDataResource(resourceFile);
-            }
+			if (resourceFile.isDirectory()) {
+				resource = new Folder();
+			} else {
+				resource = createDataResource(resourceFile);
+			}
 
-        }
+		}
 
-        if (resource == null) {
-            return null;
-        }
+		if (resource == null) {
+			return null;
+		}
 
-        resource.setURI(convertFileToORI(resourceFile));
-        return resource;
+		resource.setURI(convertFileToORI(resourceFile));
+		return resource;
 
-    }
+	}
 
 	private ORI convertFileToORI(File file) {
 
@@ -306,100 +308,100 @@ public abstract class AbstractProjectProvider {
 
 	}
 
-    private Resource createErrorResource(File resourceFile, String msg) {
-        log.error(msg);
-        Resource errorResource = createDataResource(resourceFile);
-        errorResource.setDescription("ERROR: " + msg);
-        return errorResource;
-    }
+	private Resource createErrorResource(File resourceFile, String msg) {
+		log.error(msg);
+		Resource errorResource = createDataResource(resourceFile);
+		errorResource.setDescription("ERROR: " + msg);
+		return errorResource;
+	}
 
-    private Resource createDataResource(File resourceFile) {
-        Data data = new Data();
-        Loader loader = new Loader();
-        loader.setParameters(new ArrayList<Parameter>());
-        loader.getParameters().add(new Parameter("data-url", resourceFile.toURI().toString()));
-        data.setLoader(loader);
-        return data;
-    }
+	private Resource createDataResource(File resourceFile) {
+		Data data = new Data();
+		Loader loader = new Loader();
+		loader.setParameters(new ArrayList<Parameter>());
+		loader.getParameters().add(new Parameter("data-url", resourceFile.toURI().toString()));
+		data.setLoader(loader);
+		return data;
+	}
 
-    private static Collection<File> addFilesRecursive(Collection<File> files, File parentFolder) {
+	private static Collection<File> addFilesRecursive(Collection<File> files, File parentFolder) {
 
-        if (parentFolder.isDirectory()) {
-            File[] inFiles = parentFolder.listFiles();
-            if (inFiles != null) {
-                for (File file : inFiles) {
-                    if (!file.isHidden()) {
-                        files.add(file);
-                        if (file.isDirectory()) {
-                            addFilesRecursive(files, file);
-                        }
-                    }
-                }
-            }
-        }
+		if (parentFolder.isDirectory()) {
+			File[] inFiles = parentFolder.listFiles();
+			if (inFiles != null) {
+				for (File file : inFiles) {
+					if (!file.isHidden()) {
+						files.add(file);
+						if (file.isDirectory()) {
+							addFilesRecursive(files, file);
+						}
+					}
+				}
+			}
+		}
 
-        return files;
-    }
+		return files;
+	}
 
-    public void save(Resource resource) {
+	public void save(Resource resource) {
 
-        if (resource == null) {
-            return;
-        }
+		if (resource == null) {
+			return;
+		}
 
-        if (resource instanceof Project) {
-            throw new IllegalArgumentException("Cannot create a project '" + resource.getURI() + "' inside project '" + projectUrl + "'");
-        }
+		if (resource instanceof Project) {
+			throw new IllegalArgumentException("Cannot create a project '" + resource.getURI() + "' inside project '" + projectUrl + "'");
+		}
 
-        String resourcePath = resource.getURI().getPath();
+		String resourcePath = resource.getURI().getPath();
 
-        File file;
-        if (resource instanceof Folder) {
-            file = new File(projectFolder, resourcePath);
-            file.mkdirs();
+		File file;
+		if (resource instanceof Folder) {
+			file = new File(projectFolder, resourcePath);
+			file.mkdirs();
 
-            return;
-        }
+			return;
+		}
 
 
-        file = new File(projectFolder, resourcePath + "." + ONEXUS_EXTENSION);
+		file = new File(projectFolder, resourcePath + "." + ONEXUS_EXTENSION);
 
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
+		try {
+			if (!file.exists()) {
+				file.createNewFile();
+			}
 
-            FileOutputStream os = new FileOutputStream(file);
-            serializer.serialize(resource, os);
-            os.close();
+			FileOutputStream os = new FileOutputStream(file);
+			serializer.serialize(resource, os);
+			os.close();
 
-        } catch (IOException e) {
-            log.error("Saving resource '" + resource.getURI() + "' in file '" + file.getAbsolutePath() + "'", e);
-        }
+		} catch (IOException e) {
+			log.error("Saving resource '" + resource.getURI() + "' in file '" + file.getAbsolutePath() + "'", e);
+		}
 
 		observer.checkAndNotify();
 
-    }
+	}
 
-    public String getProjectUrl() {
-        return projectUrl;
-    }
+	public String getProjectUrl() {
+		return projectUrl;
+	}
 
-    public PluginLoader getPluginLoader() {
-        return pluginLoader;
-    }
+	public PluginLoader getPluginLoader() {
+		return pluginLoader;
+	}
 
-    public void setPluginLoader(PluginLoader pluginLoader) {
-        this.pluginLoader = pluginLoader;
-    }
+	public void setPluginLoader(PluginLoader pluginLoader) {
+		this.pluginLoader = pluginLoader;
+	}
 
-    public IResourceSerializer getSerializer() {
-        return serializer;
-    }
+	public IResourceSerializer getSerializer() {
+		return serializer;
+	}
 
-    public void setSerializer(IResourceSerializer serializer) {
-        this.serializer = serializer;
-    }
+	public void setSerializer(IResourceSerializer serializer) {
+		this.serializer = serializer;
+	}
 
 	protected void onResourceCreate(Resource resource) {
 
