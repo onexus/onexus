@@ -8,6 +8,10 @@
     </service>
 
     <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.onexus.website.api.widgets.tableviewer.decorators.box.BoxDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.onexus.website.api.widgets.tableviewer.decorators.ct.CtDecoratorCreator"/>
     </service>
 

@@ -51,10 +51,10 @@ public class Collection extends Resource {
         return "Collection [getURI()=" + getURI() + ", fields=" + fields + ", links=" + links + "]";
     }
 
-    public Field getField(String fieldName) {
-        if (fieldName != null) {
+    public Field getField(String fieldId) {
+        if (fieldId != null) {
             for (Field field : fields) {
-                if (field.getId().equals(fieldName)) {
+                if (field.getId().equals(fieldId)) {
                     return field;
                 }
             }
