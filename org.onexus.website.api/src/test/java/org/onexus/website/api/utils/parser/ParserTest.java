@@ -59,6 +59,12 @@ public class ParserTest {
         assertFalse(evaluate("!!!(!!!)!!!!"));
         assertTrue(evaluate("", "c2"));
 
+        assertTrue(evaluate("NOT c1 OR c2"));
+        assertTrue(evaluate("NOT c1 OR c2", "c2"));
+
+        assertTrue(evaluate("(c2 OR !c1)"));
+        assertTrue(evaluate("(c2 OR !c1)", "c2"));
+
     }
 
     private boolean evaluate(String expression, String... trueValues) {
