@@ -8,7 +8,7 @@
     </parent>
     <artifactId>onexus-archetype-widget</artifactId>
     <packaging>maven-archetype</packaging>
-    <name>Onexus Widget Archetype</name>
+    <name>Onexus :: Archetypes :: Widget</name>
     <build>
         <resources>
             <resource>

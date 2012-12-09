@@ -12,7 +12,7 @@
     <groupId>org.onexus</groupId>
     <artifactId>onexus-features</artifactId>
     <packaging>pom</packaging>
-    <name>Onexus :: Kar</name>
+    <name>Onexus :: Features</name>
 
     <build>
         <resources>
