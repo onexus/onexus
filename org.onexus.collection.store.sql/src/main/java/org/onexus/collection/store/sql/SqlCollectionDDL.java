@@ -24,10 +24,9 @@ import org.onexus.collection.store.sql.adapters.SqlAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class SqlCollectionDDL implements Serializable {
+public class SqlCollectionDDL {
     private final static Logger LOGGER = LoggerFactory
             .getLogger(SqlCollectionDDL.class);
 
@@ -217,7 +216,7 @@ public class SqlCollectionDDL implements Serializable {
         return dropIndex;
     }
 
-    public class ColumnInfo implements Serializable {
+    public class ColumnInfo {
 
         private Field field;
         private String columnName;

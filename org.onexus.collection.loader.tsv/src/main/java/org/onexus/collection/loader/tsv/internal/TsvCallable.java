@@ -52,7 +52,7 @@ public class TsvCallable implements Callable<IEntitySet> {
             String errMsg = "Required parameter '" + PARAMETER_DATA_URI +"' not found in '" + collection.getURI() + "'.";
             progress.error(errMsg);
             progress.fail();
-            return new EmptyEntitySet();
+            return new EmptyEntitySet(collection);
         }
 
         ORI absDataUri = new ORI(dataUri).toAbsolute(collection.getURI());

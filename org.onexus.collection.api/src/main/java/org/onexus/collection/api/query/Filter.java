@@ -20,8 +20,6 @@ package org.onexus.collection.api.query;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 
 public abstract class Filter implements Serializable {
 
@@ -57,13 +55,13 @@ public abstract class Filter implements Serializable {
     }
 
     public static String endingTabs(StringBuilder oql) {
-        String prevTabs = "";
+        StringBuilder prevTabs = new StringBuilder();
         int l = oql.length();
         for (int i = l - 1; oql.charAt(i) == '\t' && i > 0; i--) {
-            prevTabs += "\t";
+            prevTabs.append('\t');
         }
 
-        return prevTabs;
+        return prevTabs.toString();
     }
 
 }

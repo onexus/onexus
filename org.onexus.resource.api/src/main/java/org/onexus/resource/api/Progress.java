@@ -158,7 +158,7 @@ public class Progress implements Serializable {
     }
 
 
-    public class LogMsg implements Serializable {
+    public static class LogMsg implements Serializable {
 
         private Date time;
         private String message;

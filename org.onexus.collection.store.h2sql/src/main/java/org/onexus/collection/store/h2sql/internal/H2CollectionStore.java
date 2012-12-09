@@ -28,6 +28,8 @@ import org.onexus.collection.store.sql.SqlQuery;
 import org.onexus.collection.api.ICollectionStore;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.collection.api.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -38,6 +40,7 @@ import java.util.Map;
 
 public class H2CollectionStore extends SqlCollectionStore {
 
+    private static final Logger log = LoggerFactory.getLogger(H2CollectionStore.class);
     private String database = "onexus-h2-database;LOG=0;CACHE_SIZE=65536;LOCK_MODE=0"; // ;TRACE_LEVEL_FILE=3;TRACE_LEVEL_SYSTEM_OUT=3";
 
     private String username = "sa";
@@ -79,8 +82,8 @@ public class H2CollectionStore extends SqlCollectionStore {
                 stat.close();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            log.error("At H2CollectionStore close", e);
         }
 
     }

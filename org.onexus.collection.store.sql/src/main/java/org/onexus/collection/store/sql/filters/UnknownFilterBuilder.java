@@ -23,10 +23,7 @@ import org.onexus.collection.api.query.Query;
 
 public class UnknownFilterBuilder implements FilterBuilder {
 
-    private Filter filter;
-
     public UnknownFilterBuilder(Filter filter) {
-         this.filter = filter;
     }
 
     @Override

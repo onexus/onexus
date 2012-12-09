@@ -198,7 +198,7 @@ public class ORI implements Serializable {
 
     private void parseString(String ori) {
 
-        ori.replaceAll("[\n\t ]", "");
+        ori = ori.replaceAll("[\n\t ]", "");
 
         String normalizedOri = ori.trim();
 

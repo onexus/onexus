@@ -28,6 +28,9 @@ public class EmptyEntitySet implements IEntitySet {
 
     private Collection collection;
 
+    public EmptyEntitySet(Collection collection) {
+        this.collection = collection;
+    }
 
     @Override
     public boolean next() {
