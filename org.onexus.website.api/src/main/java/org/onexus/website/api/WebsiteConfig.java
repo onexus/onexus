@@ -34,7 +34,7 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private String authorization;
 
-	private Boolean login;
+    private Boolean login;
 
     private List<PageConfig> pages;
 
@@ -57,15 +57,15 @@ public class WebsiteConfig extends Resource implements IAuthorization {
         this.authorization = authorization;
     }
 
-	public Boolean getLogin() {
-		return login;
-	}
+    public Boolean getLogin() {
+        return login;
+    }
 
-	public void setLogin(Boolean login) {
-		this.login = login;
-	}
+    public void setLogin(Boolean login) {
+        this.login = login;
+    }
 
-	public String getHeader() {
+    public String getHeader() {
         return header;
     }
 

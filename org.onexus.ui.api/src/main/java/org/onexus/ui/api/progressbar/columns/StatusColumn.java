@@ -41,7 +41,7 @@ public class StatusColumn extends AbstractColumn<Progress, String> {
 
         Progress progress = rowModel.getObject();
 
-        if (progress!= null && progress.getStatus() != null) {
+        if (progress != null && progress.getStatus() != null) {
             switch (progress.getStatus()) {
                 case DONE:
                     label = "<span class=\"label label-success\">done</span>";

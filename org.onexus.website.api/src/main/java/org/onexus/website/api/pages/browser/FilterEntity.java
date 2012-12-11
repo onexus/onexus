@@ -45,10 +45,10 @@ public class FilterEntity implements IFilter {
     private boolean deletable;
     private boolean enable;
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
     public FilterEntity() {
@@ -99,7 +99,6 @@ public class FilterEntity implements IFilter {
     }
 
 
-
     public void setEntityId(String entityId) {
         this.entityId = entityId;
     }
@@ -142,7 +141,7 @@ public class FilterEntity implements IFilter {
         String filterPath = filteredCollection.getPath();
         String rulePath = rule.getFilteredCollection().getPath();
 
-        boolean validCollection = ( filterPath == null || rulePath == null ) ? false : filterPath.endsWith(rulePath);
+        boolean validCollection = (filterPath == null || rulePath == null) ? false : filterPath.endsWith(rulePath);
 
         if (rule.getField() == null) {
             return validCollection;
@@ -153,12 +152,12 @@ public class FilterEntity implements IFilter {
 
         String fieldValue = String.valueOf(entity.get(rule.getField()));
 
-        return StringUtils.equals(fieldValue , rule.getValue());
+        return StringUtils.equals(fieldValue, rule.getValue());
     }
 
     @Override
     public String toUrlParameter() {
-        return filteredCollection + "::" + entityId + "::" + (deletable?"d":"") + (enable?"e":"");
+        return filteredCollection + "::" + entityId + "::" + (deletable ? "d" : "") + (enable ? "e" : "");
     }
 
     @Override
@@ -295,7 +294,6 @@ public class FilterEntity implements IFilter {
             return false;
         return true;
     }
-
 
 
 }

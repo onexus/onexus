@@ -17,13 +17,13 @@
  */
 package org.onexus.collection.store.sql.filters;
 
-import org.onexus.collection.store.sql.SqlCollectionDDL;
-import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.api.query.AtomicFilter;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.collection.store.sql.SqlCollectionDDL;
+import org.onexus.collection.store.sql.SqlCollectionStore;
+import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.resource.api.ORI;
 
 import java.util.HashMap;
@@ -58,7 +58,7 @@ public class AtomicFilterBuilder extends AbstractFilterBuilder<AtomicFilter> {
 
         SqlCollectionDDL.ColumnInfo column = collection.getColumnInfoByFieldName(filter.getFieldId());
 
-        where.append('`').append( filter.getCollectionAlias()).append("`.`").append(column.getColumnName()).append('`');
+        where.append('`').append(filter.getCollectionAlias()).append("`.`").append(column.getColumnName()).append('`');
 
         String operator = oqlToSql.get(filter.getOperandSymbol());
         if (operator == null) {

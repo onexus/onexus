@@ -28,11 +28,9 @@ import java.util.ListIterator;
 
 
 public class ListComposer<T> extends AbstractList<T> {
-    
+
     private Object parent;
     private String[] expression;
-    
-    private Iterator<T> chain;
 
     public ListComposer(Object parent, String expression) {
         super();
@@ -42,14 +40,14 @@ public class ListComposer<T> extends AbstractList<T> {
 
     @Override
     public T get(int index) {
-        
+
         Iterator<T> it = iterator();
-        
+
         T value = it.next();
-        for (int i=0; i < index; i++) {
+        for (int i = 0; i < index; i++) {
             value = it.next();
         }
-        
+
         return value;
     }
 
@@ -60,7 +58,7 @@ public class ListComposer<T> extends AbstractList<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return new ListIteratorWrapper( iterator() ); 
+        return new ListIteratorWrapper(iterator());
     }
 
     @Override
@@ -68,34 +66,34 @@ public class ListComposer<T> extends AbstractList<T> {
 
         Iterator<T> it = newIteratorChain();
 
-        int size=0;
-        while(it.hasNext()) {
+        int size = 0;
+        while (it.hasNext()) {
             size++;
         }
-        
+
         return size;
     }
-    
+
     private Iterator<T> newIteratorChain() {
         IteratorChain chain = new IteratorChain();
         addInnerIterators(chain, expression, 0, parent);
         return chain;
     }
-    
+
     private static void addInnerIterators(IteratorChain chain, String[] expression, int depth, Object currentParent) {
 
         String method = expression[depth];
         List list = (List) PropertyResolver.getValue(method, currentParent);
 
         int nextDepth = depth + 1;
-        if (nextDepth < expression.length )  {
-            for(Object child : list) {
+        if (nextDepth < expression.length) {
+            for (Object child : list) {
                 addInnerIterators(chain, expression, nextDepth, child);
             }
         } else {
             chain.addIterator(list.iterator());
         }
-        
+
     }
-    
+
 }

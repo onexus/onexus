@@ -32,7 +32,7 @@ public class SearchPageConfig extends PageConfig {
 
     private SearchPageStatus defaultStatus;
 
-    @XStreamImplicit( itemFieldName = "type" )
+    @XStreamImplicit(itemFieldName = "type")
     private List<SearchType> types = new ArrayList<SearchType>();
 
 

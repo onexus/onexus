@@ -3,33 +3,34 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns:wicket="http://wicket.apache.org">
 <head>
-<title>Unexpected error</title>
+    <title>Unexpected error</title>
 </head>
 <body>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <br />
-            <div class="alert alert-error" wicket:id="exception">message</div>
-            <input type="button" onclick="window.history.back();" value="Go back" class="btn btn-primary">
-        </div>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <br/>
 
-        <br />
+        <div class="alert alert-error" wicket:id="exception">message</div>
+        <input type="button" onclick="window.history.back();" value="Go back" class="btn btn-primary">
+    </div>
 
-        <div class="accordion" id="accordion">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                        details
-                    </a>
-                </div>
-                <div id="collapseOne" class="accordion-body collapse">
-                    <div class="accordion-inner" wicket:id="stacktrace">
-                    </div>
+    <br/>
+
+    <div class="accordion" id="accordion">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                    details
+                </a>
+            </div>
+            <div id="collapseOne" class="accordion-body collapse">
+                <div class="accordion-inner" wicket:id="stacktrace">
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 </body>
 </html>

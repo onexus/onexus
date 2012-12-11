@@ -13,7 +13,7 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
 
 </head>
 
@@ -37,13 +37,16 @@
                         </a>
 
                         <a class="pull-left" href="http://www.onexus.org/">
-                            <wicket:link><img src="logo.png" height="40" alt="onexus"></wicket:link></a>
+                            <wicket:link><img src="logo.png" height="40" alt="onexus"></wicket:link>
+                        </a>
 
                         <div class="btn-group pull-right">
-                            <a wicket:id="account-details" class="btn btn-inverse" href="#" rel="tooltip" title="Account Details">
+                            <a wicket:id="account-details" class="btn btn-inverse" href="#" rel="tooltip"
+                               title="Account Details">
                                 <i class="icon-user icon-white"></i> <span wicket:id="username">jordeu</span>
                             </a>
-                            <a wicket:id="signout" class="btn btn-inverse" href="#" rel="tooltip" title="Log Out"><i class="icon-off icon-white"></i></a>
+                            <a wicket:id="signout" class="btn btn-inverse" href="#" rel="tooltip" title="Log Out"><i
+                                    class="icon-off icon-white"></i></a>
                         </div>
 
                         <div class="nav-collapse collapse">
@@ -57,7 +60,8 @@
                                     <ul class="dropdown-menu">
                                         <li><a data-toggle="modal" href="#importProjectModal">Import Project...</a></li>
                                         <li class="divider"></li>
-                                        <li wicket:id="projects" class="dropdown"><a wicket:id="link" href="#"><span wicket:id="label">intogen</span></a></li>
+                                        <li wicket:id="projects" class="dropdown"><a wicket:id="link" href="#"><span
+                                                wicket:id="label">intogen</span></a></li>
                                     </ul>
                                 </li>
                             </ul>

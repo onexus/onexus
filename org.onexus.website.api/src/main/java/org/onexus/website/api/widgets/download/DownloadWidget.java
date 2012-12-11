@@ -32,7 +32,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.resource.*;
+import org.apache.wicket.request.resource.AbstractResource;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
@@ -42,7 +47,11 @@ import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.download.formats.ExcelFormat;
 import org.onexus.website.api.widgets.download.formats.IDownloadFormat;
 import org.onexus.website.api.widgets.download.formats.TsvFormat;
-import org.onexus.website.api.widgets.download.scripts.*;
+import org.onexus.website.api.widgets.download.scripts.BashScript;
+import org.onexus.website.api.widgets.download.scripts.IQueryScript;
+import org.onexus.website.api.widgets.download.scripts.PerlScript;
+import org.onexus.website.api.widgets.download.scripts.PythonScript;
+import org.onexus.website.api.widgets.download.scripts.RScript;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.IOException;
@@ -65,10 +74,10 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
             new BashScript()
     });
 
-	private final static List<IDownloadFormat> formats = Arrays.asList( new IDownloadFormat[] {
-		    new TsvFormat(),
-			new ExcelFormat()
-	});
+    private final static List<IDownloadFormat> formats = Arrays.asList(new IDownloadFormat[]{
+            new TsvFormat(),
+            new ExcelFormat()
+    });
 
     private String webserviceUrl;
     private IDownloadFormat format;
@@ -87,56 +96,56 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         webserviceUrl = WebsiteApplication.toAbsolutePath('/' + serviceMount);
 
         // Download form
-		final Form<String> downloadForm = new Form<String>("form");
-		downloadForm.setOutputMarkupId(true);
-		setFormat(formats.get(0));
-		downloadForm.add(new DropDownChoice<IDownloadFormat>("format", new PropertyModel<IDownloadFormat>(this, "format"), formats));
-		add(downloadForm);
+        final Form<String> downloadForm = new Form<String>("form");
+        downloadForm.setOutputMarkupId(true);
+        setFormat(formats.get(0));
+        downloadForm.add(new DropDownChoice<IDownloadFormat>("format", new PropertyModel<IDownloadFormat>(this, "format"), formats));
+        add(downloadForm);
 
-		final AjaxDownloadBehavior ajaxDownloadBehavior = new AjaxDownloadBehavior() {
-			@Override
-			protected String getFileName() {
-				return getFormat().getFileName();
-			}
+        final AjaxDownloadBehavior ajaxDownloadBehavior = new AjaxDownloadBehavior() {
+            @Override
+            protected String getFileName() {
+                return getFormat().getFileName();
+            }
 
-			@Override
-			protected IResource getResource() {
-				return new DownloadResource();
-			}
-		};
-		downloadForm.add(ajaxDownloadBehavior);
+            @Override
+            protected IResource getResource() {
+                return new DownloadResource();
+            }
+        };
+        downloadForm.add(ajaxDownloadBehavior);
 
-		AjaxButton link = new AjaxButton("download") {
+        AjaxButton link = new AjaxButton("download") {
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				ajaxDownloadBehavior.initiate(target);
-				target.add(form);
-			}
-		};
-		downloadForm.add(link);
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                ajaxDownloadBehavior.initiate(target);
+                target.add(form);
+            }
+        };
+        downloadForm.add(link);
 
 
         // Add scripts
         add(new ListView<IQueryScript>("scripts", scripts) {
-			@Override
-			protected void populateItem(ListItem<IQueryScript> item) {
+            @Override
+            protected void populateItem(ListItem<IQueryScript> item) {
 
-				IQueryScript script = item.getModelObject();
+                IQueryScript script = item.getModelObject();
 
-				// Code body
-				WebMarkupContainer body = new WebMarkupContainer("body");
-				body.setMarkupId(item.getMarkupId() + "-body");
-				item.add(body);
-				body.add(new Label("code", script.getContent(oql.toString(), webserviceUrl)).setEscapeModelStrings(false));
+                // Code body
+                WebMarkupContainer body = new WebMarkupContainer("body");
+                body.setMarkupId(item.getMarkupId() + "-body");
+                item.add(body);
+                body.add(new Label("code", script.getContent(oql.toString(), webserviceUrl)).setEscapeModelStrings(false));
 
-				// Code toggle
-				Label toggle = new Label("toggle", "Use in " + script.getLabel() + " script");
-				toggle.add(new AttributeModifier("href", "#" + body.getMarkupId()));
-				item.add(toggle);
+                // Code toggle
+                Label toggle = new Label("toggle", "Use in " + script.getLabel() + " script");
+                toggle.add(new AttributeModifier("href", "#" + body.getMarkupId()));
+                item.add(toggle);
 
-			}
-		});
+            }
+        });
 
     }
 
@@ -190,10 +199,8 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
                     Query query = getQuery();
                     IDownloadFormat format = getFormat();
 
-                    if (format.getMaxRowsLimit() != null) {
-                        if (query.getCount() == null || format.getMaxRowsLimit() < query.getCount()) {
-                            query.setCount(format.getMaxRowsLimit());
-                        }
+                    if (format.getMaxRowsLimit() != null && (query.getCount() == null || format.getMaxRowsLimit() < query.getCount())) {
+                        query.setCount(format.getMaxRowsLimit());
                     }
 
                     IEntityTable table = getCollectionManager().load(query);

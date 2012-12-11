@@ -17,8 +17,8 @@
  */
 package org.onexus.collection.api;
 
-import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Progress;
 
 import java.util.concurrent.Callable;
 

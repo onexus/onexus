@@ -34,8 +34,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Progress;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
@@ -74,14 +74,12 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
             status.setObject(getStatus());
         }
 
-        TableViewerConfig config = getConfig();
-
         this.getVariation();
 
         Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
         rowsPerPage = (rowsPerPage == null ? 30 : rowsPerPage);
 
-        this.dataProvider = new EntitiesRowProvider(config, status, rowsPerPage) {
+        this.dataProvider = new EntitiesRowProvider(status, rowsPerPage) {
 
             @Override
             protected Query getQuery() {
@@ -114,7 +112,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         List<IColumnConfig> visibleColumnsConfig = new ArrayList<IColumnConfig>(columnsConfig.size());
         BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
 
-        if (pageStatus!=null) {
+        if (pageStatus != null) {
             Predicate filter = new VisiblePredicate(getPageBaseOri(), pageStatus.getFilters());
             CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
         } else {
@@ -122,7 +120,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         }
 
         for (IColumnConfig columnConfig : visibleColumnsConfig) {
-            columnConfig.addColumns(columns, parentURI );
+            columnConfig.addColumns(columns, parentURI);
         }
 
         DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, rowsPerPage);
@@ -153,8 +151,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
     /**
      * @see org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
      */
-    public String getAjaxIndicatorMarkupId()
-    {
+    public String getAjaxIndicatorMarkupId() {
         return indicatorAppender.getMarkupId();
     }
 

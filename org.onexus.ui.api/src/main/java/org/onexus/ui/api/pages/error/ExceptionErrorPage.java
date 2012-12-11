@@ -28,46 +28,42 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
-public class ExceptionErrorPage extends AbstractErrorPage
-{
-	private static final long serialVersionUID = 1L;
+public class ExceptionErrorPage extends AbstractErrorPage {
+    private static final long serialVersionUID = 1L;
 
-	/** Keep a reference to the root cause. WicketTester will use it */
-	private final transient Throwable throwable;
+    /**
+     * Keep a reference to the root cause. WicketTester will use it
+     */
+    private final transient Throwable throwable;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param throwable
-	 *            The exception to show
-	 */
-	public ExceptionErrorPage(final Throwable throwable)
-	{
-		this.throwable = throwable;
+    /**
+     * Constructor.
+     *
+     * @param throwable The exception to show
+     */
+    public ExceptionErrorPage(final Throwable throwable) {
+        this.throwable = throwable;
 
-        add( new DefaultTheme() );
+        add(new DefaultTheme());
 
-		// Add exception label
-		add(new MultiLineLabel("exception", getErrorMessage(throwable)));
+        // Add exception label
+        add(new MultiLineLabel("exception", getErrorMessage(throwable)));
 
-		add(new MultiLineLabel("stacktrace", getStackTrace(throwable)));
+        add(new MultiLineLabel("stacktrace", getStackTrace(throwable)));
 
-	}
+    }
 
-	/**
-	 * Converts a Throwable to a string.
-	 * 
-	 * @param throwable
-	 *            The throwable
-	 * @return The string
-	 */
-	public String getErrorMessage(final Throwable throwable)
-	{
-		if (throwable != null)
-		{
-			StringBuilder sb = new StringBuilder(256);
+    /**
+     * Converts a Throwable to a string.
+     *
+     * @param throwable The throwable
+     * @return The string
+     */
+    public String getErrorMessage(final Throwable throwable) {
+        if (throwable != null) {
+            StringBuilder sb = new StringBuilder(256);
 
-			// first print the last cause or the first onexus exception
+            // first print the last cause or the first onexus exception
             Throwable cause = null;
             List<Throwable> al = convertToList(throwable);
             for (Throwable e : al) {
@@ -78,118 +74,101 @@ public class ExceptionErrorPage extends AbstractErrorPage
             }
 
             if (cause == null) {
-			    int length = al.size() - 1;
-			    cause = al.get(length);
+                int length = al.size() - 1;
+                cause = al.get(length);
             }
 
             sb.append(cause.getMessage());
-			return sb.toString();
-		}
-		else
-		{
-			return "[Unknown]";
-		}
-	}
+            return sb.toString();
+        } else {
+            return "[Unknown]";
+        }
+    }
 
-	/**
-	 * Converts a Throwable to a string.
-	 * 
-	 * @param throwable
-	 *            The throwable
-	 * @return The string
-	 */
-	public String getStackTrace(final Throwable throwable)
-	{
-		if (throwable != null)
-		{
-			List<Throwable> al = convertToList(throwable);
+    /**
+     * Converts a Throwable to a string.
+     *
+     * @param throwable The throwable
+     * @return The string
+     */
+    public String getStackTrace(final Throwable throwable) {
+        if (throwable != null) {
+            List<Throwable> al = convertToList(throwable);
 
-			StringBuilder sb = new StringBuilder(256);
+            StringBuilder sb = new StringBuilder(256);
 
-			// first print the last cause
-			int length = al.size() - 1;
-			Throwable cause = al.get(length);
+            // first print the last cause
+            int length = al.size() - 1;
+            Throwable cause = al.get(length);
 
-			outputThrowable(cause, sb, false);
+            outputThrowable(cause, sb, false);
 
-			if (length > 0)
-			{
-				sb.append("\n\nComplete stack:\n\n");
-				for (int i = 0; i < length; i++)
-				{
-					outputThrowable(al.get(i), sb, true);
-					sb.append("\n");
-				}
-			}
-			return sb.toString();
-		}
-		else
-		{
-			return "<Null Throwable>";
-		}
-	}
+            if (length > 0) {
+                sb.append("\n\nComplete stack:\n\n");
+                for (int i = 0; i < length; i++) {
+                    outputThrowable(al.get(i), sb, true);
+                    sb.append("\n");
+                }
+            }
+            return sb.toString();
+        } else {
+            return "<Null Throwable>";
+        }
+    }
 
-	/**
-	 * @param throwable
-	 * @return xxx
-	 */
-	private List<Throwable> convertToList(final Throwable throwable)
-	{
-		List<Throwable> al = Generics.newArrayList();
-		Throwable cause = throwable;
-		al.add(cause);
-		while ((cause.getCause() != null) && (cause != cause.getCause()))
-		{
-			cause = cause.getCause();
-			al.add(cause);
-		}
-		return al;
-	}
+    /**
+     * @param throwable
+     * @return xxx
+     */
+    private List<Throwable> convertToList(final Throwable throwable) {
+        List<Throwable> al = Generics.newArrayList();
+        Throwable cause = throwable;
+        al.add(cause);
+        while ((cause.getCause() != null) && (cause != cause.getCause())) {
+            cause = cause.getCause();
+            al.add(cause);
+        }
+        return al;
+    }
 
-	/**
-	 * Outputs the throwable and its stacktrace to the stringbuffer. If stopAtWicketSerlvet is true
-	 * then the output will stop when the org.apache.wicket servlet is reached. sun.reflect.
-	 * packages are filtered out.
-	 * 
-	 * @param cause
-	 * @param sb
-	 * @param stopAtWicketServlet
-	 */
-	private void outputThrowable(Throwable cause, StringBuilder sb, boolean stopAtWicketServlet)
-	{
-		sb.append(cause);
-		sb.append("\n");
-		StackTraceElement[] trace = cause.getStackTrace();
-		for (int i = 0; i < trace.length; i++)
-		{
-			String traceString = trace[i].toString();
-			if (!(traceString.startsWith("sun.reflect.") && i > 1))
-			{
-				sb.append("     at ");
-				sb.append(traceString);
-				sb.append("\n");
-				if (stopAtWicketServlet &&
-					(traceString.startsWith("org.apache.wicket.protocol.http.WicketServlet") || traceString.startsWith("org.apache.wicket.protocol.http.WicketFilter")))
-				{
-					return;
-				}
-			}
-		}
-	}
+    /**
+     * Outputs the throwable and its stacktrace to the stringbuffer. If stopAtWicketSerlvet is true
+     * then the output will stop when the org.apache.wicket servlet is reached. sun.reflect.
+     * packages are filtered out.
+     *
+     * @param cause
+     * @param sb
+     * @param stopAtWicketServlet
+     */
+    private void outputThrowable(Throwable cause, StringBuilder sb, boolean stopAtWicketServlet) {
+        sb.append(cause);
+        sb.append("\n");
+        StackTraceElement[] trace = cause.getStackTrace();
+        for (int i = 0; i < trace.length; i++) {
+            String traceString = trace[i].toString();
+            if (!(traceString.startsWith("sun.reflect.") && i > 1)) {
+                sb.append("     at ");
+                sb.append(traceString);
+                sb.append("\n");
+                if (stopAtWicketServlet &&
+                        (traceString.startsWith("org.apache.wicket.protocol.http.WicketServlet") || traceString.startsWith("org.apache.wicket.protocol.http.WicketFilter"))) {
+                    return;
+                }
+            }
+        }
+    }
 
-	@Override
-	protected void setHeaders(final WebResponse response)
-	{
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	}
+    @Override
+    protected void setHeaders(final WebResponse response) {
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+    }
 
-	/**
-	 * Get access to the exception
-	 * 
-	 * @return The exception
-	 */
-	public Throwable getThrowable()
-	{
-		return throwable;
-	}
+    /**
+     * Get access to the exception
+     *
+     * @return The exception
+     */
+    public Throwable getThrowable() {
+        return throwable;
+    }
 }

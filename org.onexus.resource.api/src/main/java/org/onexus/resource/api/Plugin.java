@@ -75,7 +75,6 @@ public class Plugin extends AbstractMetadata {
     }
 
 
-
     public List<Parameter> getParameters() {
         return parameters;
     }

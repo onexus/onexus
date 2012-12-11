@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class BinaryDecoratorCreator implements IDecoratorCreator {
 
-    private final static IColorScaleHtml binaryScale = new BinaryColorScale(0.0, 1.0, 1.0, Color.LIGHT_GRAY, Color.RED, Color.WHITE);
+    private final static IColorScaleHtml binaryScale = new BinaryColorScale(0.0, 1.0, 1.0, Color.LIGHT_GRAY, Color.RED);
 
     @Override
     public String getDecoratorId() {

@@ -20,14 +20,13 @@ package org.onexus.website.api.pages.browser.layouts;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.ViewConfig;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,10 +47,10 @@ public class AbstractLayout extends Panel {
 
     public List<WidgetConfig> filterWidgets(String selectedWidgets) {
         List<WidgetConfig> widgets = ViewConfig.getSelectedWidgetConfigs(getPageConfig(), selectedWidgets);
-		VisiblePredicate predicate = new VisiblePredicate(getPageStatus().getORI(), getPageStatus().getFilters());
-		List<WidgetConfig> visibleWidgets = new ArrayList<WidgetConfig>();
-		CollectionUtils.select(widgets, predicate, visibleWidgets);
-		return visibleWidgets;
+        VisiblePredicate predicate = new VisiblePredicate(getPageStatus().getORI(), getPageStatus().getFilters());
+        List<WidgetConfig> visibleWidgets = new ArrayList<WidgetConfig>();
+        CollectionUtils.select(widgets, predicate, visibleWidgets);
+        return visibleWidgets;
     }
 
     protected boolean isEmbed() {

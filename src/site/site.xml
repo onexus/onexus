@@ -30,8 +30,8 @@
         </menu>
 
         <menu name="Documentation">
-            <item name="Installation" href="docs/installation.html" />
-            <item name="Compilation" href="docs/compilation.html" />
+            <item name="Installation" href="docs/installation.html"/>
+            <item name="Compilation" href="docs/compilation.html"/>
         </menu>
 
         <menu ref="reports"/>

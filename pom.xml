@@ -77,7 +77,7 @@
         <module>org.onexus.resource.api</module>
         <module>org.onexus.resource.manager</module>
         <module>org.onexus.resource.authorization</module>
-	    <module>org.onexus.resource.progress</module>
+        <module>org.onexus.resource.progress</module>
         <module>org.onexus.resource.serializer.xstream</module>
         <module>org.onexus.data.api</module>
         <module>org.onexus.data.manager</module>
@@ -196,7 +196,7 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-surefire-report-plugin</artifactId>
-                            <version>${maven.surefire.report.plugin.version}</version>
+                            <version>2.12.4</version>
                             <configuration>
                                 <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
                                 <aggregate>true</aggregate>
@@ -215,7 +215,7 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-pmd-plugin</artifactId>
-                            <version>2.5</version>
+                            <version>2.7.1</version>
                             <configuration>
                                 <linkXref>true</linkXref>
                                 <sourceEncoding>utf-8</sourceEncoding>
@@ -421,7 +421,6 @@
                 <artifactId>poi</artifactId>
                 <version>${poi.version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>

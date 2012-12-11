@@ -17,9 +17,12 @@
  */
 package org.onexus.collection.query.parser.internal;
 
-import org.antlr.runtime.*;
-import org.onexus.collection.api.query.IQueryParser;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.TokenStream;
 import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;

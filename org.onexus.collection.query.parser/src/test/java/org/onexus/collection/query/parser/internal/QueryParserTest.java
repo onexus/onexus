@@ -17,12 +17,10 @@
  */
 package org.onexus.collection.query.parser.internal;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
-
-import static org.junit.Assert.assertEquals;
-
 
 
 public class QueryParserTest {

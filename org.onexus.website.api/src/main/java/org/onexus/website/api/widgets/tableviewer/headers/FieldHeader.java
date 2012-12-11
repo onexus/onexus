@@ -62,7 +62,7 @@ public class FieldHeader extends ElementHeader {
     @Override
     public String getTitle() {
 
-        if (defaultTitle!= null) {
+        if (defaultTitle != null) {
             return defaultTitle;
         }
 

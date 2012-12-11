@@ -40,6 +40,6 @@ public class LinkDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        return new LinkDecorator(collection.getURI(), columnField, parameters);
+        return new LinkDecorator(columnField, parameters);
     }
 }

@@ -15,7 +15,9 @@
  *
  *
  */
-package ${package};
+package $
+
+{package};
 
 import org.onexus.ui.website.widgets.WidgetStatus;
 

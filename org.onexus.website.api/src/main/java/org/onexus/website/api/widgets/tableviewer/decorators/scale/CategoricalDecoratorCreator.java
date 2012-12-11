@@ -47,7 +47,7 @@ public class CategoricalDecoratorCreator implements IDecoratorCreator {
         Color defaultColor = ColorUtils.stringToColor(parameters.get(CategoricalDecoratorParameters.DEFAULT));
 
         if (defaultColor == null) {
-            defaultColor = new Color(255,255,255);
+            defaultColor = new Color(255, 255, 255);
         }
 
         Map<String, Color> colorsMap = new HashMap<String, Color>();

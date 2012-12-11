@@ -17,7 +17,8 @@
  */
 package org.onexus.data.api.utils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;

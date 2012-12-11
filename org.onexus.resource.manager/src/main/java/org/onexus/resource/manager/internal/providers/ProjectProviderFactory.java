@@ -29,16 +29,16 @@ public class ProjectProviderFactory {
 
     private IResourceSerializer serializer;
     private PluginLoader pluginLoader;
-	private FileAlterationMonitor monitor;
-	private List<IResourceListener> listeners;
+    private FileAlterationMonitor monitor;
+    private List<IResourceListener> listeners;
 
     public ProjectProviderFactory(IResourceSerializer serializer, PluginLoader pluginLoader, FileAlterationMonitor monitor, List<IResourceListener> listeners) {
         super();
 
         this.pluginLoader = pluginLoader;
         this.serializer = serializer;
-		this.monitor = monitor;
-		this.listeners = listeners;
+        this.monitor = monitor;
+        this.listeners = listeners;
     }
 
     public AbstractProjectProvider newProjectProvider(String projectName, String projectUri, File projectFolder) {

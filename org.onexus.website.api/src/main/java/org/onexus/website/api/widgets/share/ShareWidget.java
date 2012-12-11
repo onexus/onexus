@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteApplication;
@@ -52,7 +51,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
         width.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.add( ShareWidget.this.get("embed"));
+                target.add(ShareWidget.this.get("embed"));
             }
         });
         form.add(width);
@@ -61,7 +60,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
         height.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.add( ShareWidget.this.get("embed") );
+                target.add(ShareWidget.this.get("embed"));
             }
         });
         form.add(height);

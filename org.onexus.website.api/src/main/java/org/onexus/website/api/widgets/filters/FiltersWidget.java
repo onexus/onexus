@@ -140,7 +140,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 getConfig().getCustomFilters(),
                 new ChoiceRenderer<CustomFilter>("title"));
 
-        selector.add( new AjaxFormComponentUpdatingBehavior("onchange") {
+        selector.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
 
@@ -159,7 +159,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                     FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter) {
                         @Override
                         protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
-                           addCustomFilter(target, filterConfig);
+                            addCustomFilter(target, filterConfig);
                         }
                     });
                 }
@@ -184,7 +184,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
 
     }
-
 
 
     private boolean isFilterApplyed(FilterConfig filterConfig) {

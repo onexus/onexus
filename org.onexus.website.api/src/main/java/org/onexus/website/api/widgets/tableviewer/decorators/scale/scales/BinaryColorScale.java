@@ -25,7 +25,7 @@ public class BinaryColorScale extends AbstractColorScale {
     private CutoffCmp cutoffCmp = CutoffCmp.EQ;
 
     public BinaryColorScale(double minPoint, double maxPoint, double cutoff,
-                            Color minColor, Color maxColor, Color nonSignificantColor) {
+                            Color minColor, Color maxColor) {
         super(minPoint, maxPoint);
         this.cutoff = cutoff;
         this.minColor = minColor;

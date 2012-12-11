@@ -18,14 +18,11 @@
 package org.onexus.website.api.widgets.filters;
 
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
-
-    private static final Logger log = LoggerFactory.getLogger(FiltersWidgetStatus.class);
 
     private List<FilterConfig> filters = new ArrayList<FilterConfig>();
 

@@ -34,7 +34,7 @@ public class SearchType implements Serializable {
     private String examples;
     private String template;
 
-    @XStreamImplicit( itemFieldName = "link" )
+    @XStreamImplicit(itemFieldName = "link")
     private List<SearchLink> links = new ArrayList<SearchLink>();
 
 

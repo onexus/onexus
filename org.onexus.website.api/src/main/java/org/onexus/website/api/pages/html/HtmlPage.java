@@ -19,19 +19,12 @@ package org.onexus.website.api.pages.html;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
-
-    @PaxWicketBean(name="dataManager")
-    private IDataManager dataManager;
 
     public HtmlPage(String componentId, IModel<HtmlPageStatus> statusModel) {
         super(componentId, statusModel);
@@ -44,6 +37,6 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
         ORI parentUri = (websiteConfig != null) ? websiteConfig.getURI().getParent() : null;
         ORI contentUri = new ORI(parentUri, content);
 
-        add(new Label("content", new HtmlDataResourceModel(contentUri, this)).setEscapeModelStrings(false));
+        add(new Label("content", new HtmlDataResourceModel(contentUri)).setEscapeModelStrings(false));
     }
 }

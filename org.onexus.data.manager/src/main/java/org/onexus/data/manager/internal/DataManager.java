@@ -17,10 +17,18 @@
  */
 package org.onexus.data.manager.internal;
 
-import org.onexus.data.api.*;
+import org.onexus.data.api.Data;
+import org.onexus.data.api.IDataLoader;
+import org.onexus.data.api.IDataManager;
+import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.data.api.utils.UrlDataStreams;
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.Loader;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Progress;
+import org.onexus.resource.api.Project;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,11 +95,10 @@ public class DataManager implements IDataManager {
         try {
             dataStreams = callable.call();
         } catch (Exception e) {
-
+            log.error("Error loading '" + dataURI.toString() + "'", e);
             progress.error(e.getMessage());
             progress.fail();
             return new EmptyDataStreams(progress);
-
         }
 
         return dataStreams;

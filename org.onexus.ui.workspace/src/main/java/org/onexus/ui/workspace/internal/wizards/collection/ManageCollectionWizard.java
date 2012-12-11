@@ -43,7 +43,7 @@ public class ManageCollectionWizard extends AbstractWizard {
     private String selected;
     private ORI resourceURI;
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
     public ManageCollectionWizard(String id, IModel<? extends Resource> resourceModel) {

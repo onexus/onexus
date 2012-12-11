@@ -35,9 +35,9 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
 
     private String title;
 
-	private String authorization;
+    private String authorization;
 
-	private String visible;
+    private String visible;
 
     private transient PageConfig pageConfig;
 
@@ -83,23 +83,23 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
         this.title = title;
     }
 
-	public String getAuthorization() {
-		return authorization;
-	}
+    public String getAuthorization() {
+        return authorization;
+    }
 
-	public void setAuthorization(String authorization) {
-		this.authorization = authorization;
-	}
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
+    }
 
-	public String getVisible() {
-		return visible;
-	}
+    public String getVisible() {
+        return visible;
+    }
 
-	public void setVisible(String visible) {
-		this.visible = visible;
-	}
+    public void setVisible(String visible) {
+        this.visible = visible;
+    }
 
-	public PageConfig getPageConfig() {
+    public PageConfig getPageConfig() {
         return pageConfig;
     }
 

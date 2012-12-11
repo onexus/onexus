@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets.filters.custom;
 
-import com.google.common.math.DoubleMath;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
@@ -26,17 +25,19 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.Strings;
-import org.onexus.collection.api.query.*;
-import org.onexus.resource.api.IResourceManager;
+import org.onexus.collection.api.query.Equal;
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.GreaterThan;
+import org.onexus.collection.api.query.GreaterThanOrEqual;
+import org.onexus.collection.api.query.LessThan;
+import org.onexus.collection.api.query.LessThanOrEqual;
+import org.onexus.collection.api.query.NotEqual;
 import org.onexus.resource.api.exceptions.OnexusException;
 import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.widgets.filters.FilterConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -44,11 +45,8 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
 
     private CustomFilter customFilter;
 
-    @PaxWicketBean(name = "resourceManager")
-    private IResourceManager resourceManager;
-
     private final static Random RANDOM = new Random();
-    private final static List<String> OPERATIONS = Arrays.asList(new String[] { "<" , ">", "<=", ">=", "=", "!=" });
+    private final static List<String> OPERATIONS = Arrays.asList(new String[]{"<", ">", "<=", ">=", "=", "!="});
 
     public NumericCustomFilterPanel(String id, CustomFilter customFilter) {
         super(id);
@@ -92,7 +90,7 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
             where = new Equal("fc", customFilter.getField(), value);
         } else if (operation.equals("<=")) {
             where = new LessThanOrEqual("fc", customFilter.getField(), value);
-        } else if (operation.equals(">=")){
+        } else if (operation.equals(">=")) {
             where = new GreaterThanOrEqual("fc", customFilter.getField(), value);
         } else {
             where = new NotEqual("fc", customFilter.getField(), value);
@@ -135,10 +133,10 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
             setOutputMarkupId(true);
 
             // Operation
-            add( new DropDownChoice<String>("operation", new PropertyModel<String>(this, "operation"), OPERATIONS) );
+            add(new DropDownChoice<String>("operation", new PropertyModel<String>(this, "operation"), OPERATIONS));
 
             // Value
-            add(new TextField<String>("value", new PropertyModel<String>(this, "value")) );
+            add(new TextField<String>("value", new PropertyModel<String>(this, "value")));
 
             final FeedbackPanel pfeedback = new FeedbackPanel("p-feedback");
             add(pfeedback);

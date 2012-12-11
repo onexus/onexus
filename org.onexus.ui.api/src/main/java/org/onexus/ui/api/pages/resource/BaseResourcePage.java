@@ -42,19 +42,19 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
 
-@AuthorizeInstantiation({ "admin", "onexus-admin", "onexus-user" })
+@AuthorizeInstantiation({"admin", "onexus-admin", "onexus-user"})
 public class BaseResourcePage extends WebPage {
 
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
     public BaseResourcePage(IModel<Resource> resourceModel) {
         super(resourceModel);
 
-        add( new DefaultTheme() );
+        add(new DefaultTheme());
 
-        add( new ProgressBar("progressbar"));
+        add(new ProgressBar("progressbar"));
 
         // Select the first project if there is no selection
         if (getModelObject() == null) {
@@ -101,10 +101,9 @@ public class BaseResourcePage extends WebPage {
                     item.add(link);
 
                     Resource currentResource = BaseResourcePage.this.getModelObject();
-                    if (currentResource != null) {
-                        if (projectURI.equals(currentResource.getURI())) {
-                            item.add(new AttributeAppender("class", " active"));
-                        }
+                    if (currentResource != null
+                            && projectURI.equals(currentResource.getURI())) {
+                        item.add(new AttributeAppender("class", " active"));
                     }
 
 
@@ -140,13 +139,7 @@ public class BaseResourcePage extends WebPage {
     }
 
     protected IResourceManager getResourceManager() {
-
-        if (resourceManager == null) {
-            //OnexusWebApplication.inject(this);
-        }
-
         return resourceManager;
-
     }
 
 

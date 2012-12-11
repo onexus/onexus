@@ -41,6 +41,7 @@ public class OnexusSignInPage extends WebPage {
      * @param parameters The page parameters
      */
     public OnexusSignInPage(final PageParameters parameters) {
+        super(parameters);
         SignInPanel signPanel = null;
         add(signPanel = new SignInPanel("signInPanel"));
         signPanel.setRememberMe(false);

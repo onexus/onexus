@@ -11,27 +11,29 @@
     </cm:property-placeholder>
 
     <!-- Default Viewers manager -->
-    <reference-list id="viewerCreatorsRef" interface="org.onexus.ui.api.viewers.IViewerCreator" availability="optional"/>
-    <service interface="org.onexus.ui.api.viewers.IViewersManager" ref="viewersManager" />
+    <reference-list id="viewerCreatorsRef" interface="org.onexus.ui.api.viewers.IViewerCreator"
+                    availability="optional"/>
+    <service interface="org.onexus.ui.api.viewers.IViewersManager" ref="viewersManager"/>
     <bean id="viewersManager" class="org.onexus.ui.api.viewers.DefaultViewersManager">
         <property name="viewerCreators" ref="viewerCreatorsRef"/>
     </bean>
 
     <!-- Default wizard manager -->
-    <reference-list id="wizardCreatorsRef" interface="org.onexus.ui.api.wizards.IWizardCreator" availability="optional"/>
-    <service interface="org.onexus.ui.api.wizards.IWizardsManager" ref="wizardsManager" />
+    <reference-list id="wizardCreatorsRef" interface="org.onexus.ui.api.wizards.IWizardCreator"
+                    availability="optional"/>
+    <service interface="org.onexus.ui.api.wizards.IWizardsManager" ref="wizardsManager"/>
     <bean id="wizardsManager" class="org.onexus.ui.api.wizards.DefaultWizardsManager">
         <property name="wizardCreators" ref="wizardCreatorsRef"/>
     </bean>
 
     <!-- Mount wicket application -->
-    <service interface="org.ops4j.pax.wicket.api.WebApplicationFactory" >
+    <service interface="org.ops4j.pax.wicket.api.WebApplicationFactory">
         <service-properties>
-            <entry key="pax.wicket.applicationname" value="onexus.ui" />
-            <entry key="pax.wicket.mountpoint" value="ws" />
+            <entry key="pax.wicket.applicationname" value="onexus.ui"/>
+            <entry key="pax.wicket.mountpoint" value="ws"/>
         </service-properties>
-        <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory" >
-            <property name="wicketApplication" value="org.onexus.ui.api.OnexusWebApplication" />
+        <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory">
+            <property name="wicketApplication" value="org.onexus.ui.api.OnexusWebApplication"/>
         </bean>
     </service>
 

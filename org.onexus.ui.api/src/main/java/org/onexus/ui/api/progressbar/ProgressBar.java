@@ -37,8 +37,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.onexus.resource.api.IProgressable;
 import org.onexus.resource.api.IProgressManager;
+import org.onexus.resource.api.IProgressable;
 import org.onexus.resource.api.Progress;
 import org.onexus.ui.api.progressbar.columns.LogsColumn;
 import org.onexus.ui.api.progressbar.columns.StatusColumn;
@@ -46,7 +46,15 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ProgressBar extends Panel {
     public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
@@ -61,7 +69,7 @@ public class ProgressBar extends Panel {
     public ProgressBar(String id) {
         super(id);
 
-        provider =  new ProgressTreeProvider();
+        provider = new ProgressTreeProvider();
         treeState = new ProgressExpansionModel();
 
         setOutputMarkupId(true);
@@ -121,7 +129,7 @@ public class ProgressBar extends Panel {
 
     }
 
-    private static SimpleDateFormat formatter= new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MMM/dd HH:mm:ss");
 
     private static String toLogsString(Progress progress) {
 
@@ -210,11 +218,9 @@ public class ProgressBar extends Panel {
 
     }
 
-    private class ProgressExpansionModel extends AbstractReadOnlyModel<Set<Progress>>
-    {
+    private class ProgressExpansionModel extends AbstractReadOnlyModel<Set<Progress>> {
         @Override
-        public Set<Progress> getObject()
-        {
+        public Set<Progress> getObject() {
             return ProgressExpansion.get();
         }
     }

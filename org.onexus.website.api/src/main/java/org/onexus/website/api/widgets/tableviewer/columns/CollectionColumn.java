@@ -45,10 +45,6 @@ public class CollectionColumn extends AbstractColumn {
 
     }
 
-    public CollectionColumn(IHeader headerDecorator, IDecorator cellDecorator) {
-        super();
-    }
-
     protected IModel<IEntity> getModelAdapter(IModel<IEntityTable> rowModel) {
         return new ModelAdapter(rowModel);
     }

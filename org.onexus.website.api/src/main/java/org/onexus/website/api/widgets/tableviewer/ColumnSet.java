@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ColumnSet implements Serializable {
-    
+
     private String title;
 
     private List<IColumnConfig> columns = new ArrayList<IColumnConfig>();
@@ -48,7 +48,7 @@ public class ColumnSet implements Serializable {
     public void setColumns(List<IColumnConfig> columns) {
         this.columns = columns;
     }
-    
+
     public String toString() {
         return title;
     }

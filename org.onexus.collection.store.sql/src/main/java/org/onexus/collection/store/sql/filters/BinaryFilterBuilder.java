@@ -17,11 +17,11 @@
  */
 package org.onexus.collection.store.sql.filters;
 
-import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.api.query.BinaryFilter;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
+import org.onexus.collection.store.sql.SqlCollectionStore;
+import org.onexus.collection.store.sql.SqlDialect;
 
 public class BinaryFilterBuilder extends AbstractFilterBuilder<BinaryFilter> {
 
@@ -30,7 +30,7 @@ public class BinaryFilterBuilder extends AbstractFilterBuilder<BinaryFilter> {
     }
 
     @Override
-    protected void innerBuild(SqlCollectionStore store,  Query query, StringBuilder where, BinaryFilter filter) {
+    protected void innerBuild(SqlCollectionStore store, Query query, StringBuilder where, BinaryFilter filter) {
 
         Filter leftFilter = filter.getLeft();
         Filter rightFilter = filter.getRight();

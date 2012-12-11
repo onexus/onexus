@@ -44,5 +44,4 @@ public class PerlScript implements IQueryScript {
     }
 
 
-
 }

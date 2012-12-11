@@ -31,7 +31,7 @@ import java.util.Collection;
 
 public class HorizontalWidgetBar extends Panel {
 
-    @PaxWicketBean(name="widgetManager")
+    @PaxWicketBean(name = "widgetManager")
     private IWidgetManager widgetManager;
 
     public HorizontalWidgetBar(String componentId, Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {

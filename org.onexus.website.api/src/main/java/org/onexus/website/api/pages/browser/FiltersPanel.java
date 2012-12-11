@@ -21,7 +21,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
@@ -36,17 +35,16 @@ import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.PageStatus;
-import org.onexus.website.api.widgets.Widget;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
 
 public class FiltersPanel extends EventPanel {
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     public transient IResourceManager resourceManager;
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     public transient ICollectionManager collectionManager;
 
 
@@ -69,7 +67,7 @@ public class FiltersPanel extends EventPanel {
 
             Query query = getQuery();
 
-            for (int i=0; i < filters.size(); i++ ) {
+            for (int i = 0; i < filters.size(); i++) {
 
                 IFilter filter = filters.get(i);
 
@@ -124,20 +122,20 @@ public class FiltersPanel extends EventPanel {
         return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
     }
 
-	private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
+    private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
 
-		Object obj = model.getObject();
+        Object obj = model.getObject();
 
-		if (obj != null && statusClass.isAssignableFrom(obj.getClass())) {
-			return (T) obj;
-		}
+        if (obj != null && statusClass.isAssignableFrom(obj.getClass())) {
+            return (T) obj;
+        }
 
-		if (model instanceof IWrapModel) {
-			IModel<?> parentModel = ((IWrapModel)model).getWrappedModel();
-			return findParentStatus(parentModel, statusClass);
-		}
+        if (model instanceof IWrapModel) {
+            IModel<?> parentModel = ((IWrapModel) model).getWrappedModel();
+            return findParentStatus(parentModel, statusClass);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

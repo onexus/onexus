@@ -27,12 +27,12 @@ import java.util.List;
 
 @XStreamAlias("viewer-table")
 public class TableViewerConfig extends WidgetConfig {
-    
+
     private ORI collection;
 
     private TableViewerStatus defaultStatus;
 
-    @XStreamImplicit(itemFieldName="columnset")
+    @XStreamImplicit(itemFieldName = "columnset")
     private List<ColumnSet> columnSets = new ArrayList<ColumnSet>();
 
     public TableViewerConfig() {

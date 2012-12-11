@@ -95,7 +95,8 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
         this.widgetStatuses = widgetStatuses;
     }
 
-    public MetaDataKey<Query> QUERY = new MetaDataKey<Query>() {};
+    public MetaDataKey<Query> QUERY = new MetaDataKey<Query>() {
+    };
 
     public Query buildQuery(ORI resourceUri) {
 

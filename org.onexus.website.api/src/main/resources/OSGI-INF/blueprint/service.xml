@@ -12,18 +12,18 @@
 
     <!-- Resource activation -->
     <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister">
-        <reference-listener bind-method="bind" unbind-method="unbind" ref="resourceActivator" />
-        <reference-listener bind-method="bindResourceRegister" ref="widgetManager" />
-        <reference-listener bind-method="bindResourceRegister" ref="pageManager" />
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="resourceActivator"/>
+        <reference-listener bind-method="bindResourceRegister" ref="widgetManager"/>
+        <reference-listener bind-method="bindResourceRegister" ref="pageManager"/>
     </reference>
     <bean id="resourceActivator" class="org.onexus.resource.api.ResourceActivator">
         <property name="resourceRegister" ref="resourceRegister"/>
-        <property name="resourceType" value="org.onexus.website.api.WebsiteConfig" />
+        <property name="resourceType" value="org.onexus.website.api.WebsiteConfig"/>
     </bean>
 
     <!-- References -->
     <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager">
-        <reference-listener bind-method="bind" unbind-method="unbind" ref="websiteService" />
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="websiteService"/>
     </reference>
     <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
     <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
@@ -41,7 +41,8 @@
     </bean>
 
     <!-- Default widget manager -->
-    <reference-list id="widgetCreatorsRef" interface="org.onexus.website.api.widgets.IWidgetCreator" availability="optional">
+    <reference-list id="widgetCreatorsRef" interface="org.onexus.website.api.widgets.IWidgetCreator"
+                    availability="optional">
         <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="widgetManager"/>
     </reference-list>
     <service interface="org.onexus.website.api.widgets.IWidgetManager" ref="widgetManager"/>
@@ -72,9 +73,9 @@
         <property name="creators" ref="decoratorCreatorsRef"/>
     </bean>
 
-    <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService" />
+    <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
     <bean id="websiteService" class="org.onexus.website.api.WebsiteService" depends-on="resourceActivator">
-        <property name="resourceManager" ref="resourceManager" />
+        <property name="resourceManager" ref="resourceManager"/>
         <property name="context" ref="blueprintBundleContext"/>
     </bean>
 </blueprint>

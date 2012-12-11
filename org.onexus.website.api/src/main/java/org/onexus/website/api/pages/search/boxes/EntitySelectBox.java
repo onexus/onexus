@@ -24,9 +24,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.browser.FilterEntity;
 import org.onexus.website.api.pages.browser.IFilter;
@@ -94,10 +94,10 @@ public class EntitySelectBox extends Panel {
         // Links
         RepeatingView links = new RepeatingView("links");
 
-        if (searchType.getLinks()!=null) {
+        if (searchType.getLinks() != null) {
 
             List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
-            VisiblePredicate predicate = new VisiblePredicate(collection.getURI().getParent(), Arrays.asList(new IFilter[] { new FilterEntity(entity) }));
+            VisiblePredicate predicate = new VisiblePredicate(collection.getURI().getParent(), Arrays.asList(new IFilter[]{new FilterEntity(entity)}));
             CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
 
             for (SearchLink searchLink : filteredLinks) {
@@ -131,7 +131,7 @@ public class EntitySelectBox extends Panel {
         Collection collection = entity.getCollection();
 
         for (Field field : collection.getFields()) {
-            template = template.replaceAll("\\$"+field.getId(), String.valueOf(entity.get(field.getId())));
+            template = template.replaceAll("\\$" + field.getId(), String.valueOf(entity.get(field.getId())));
         }
 
         return template;

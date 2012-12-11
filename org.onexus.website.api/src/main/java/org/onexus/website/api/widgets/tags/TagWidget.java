@@ -25,7 +25,11 @@ import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
@@ -38,7 +42,12 @@ import org.onexus.website.api.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.website.api.widgets.tags.tagstore.TagStore;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 
@@ -93,7 +102,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                TagWidget.this.getStatus().setFilter( !getSelectedTags().isEmpty() );
+                TagWidget.this.getStatus().setFilter(!getSelectedTags().isEmpty());
                 sendEvent(EventFiltersUpdate.EVENT);
                 target.add(TagWidget.this);
             }

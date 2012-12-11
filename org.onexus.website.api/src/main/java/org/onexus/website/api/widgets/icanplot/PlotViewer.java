@@ -17,7 +17,11 @@
  */
 package org.onexus.website.api.widgets.icanplot;
 
-import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
@@ -60,13 +64,13 @@ public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> {
         String defaultCols = "[0, 0, -1, -1]";
         if (fields != null) {
             defaultCols = "[";
-            defaultCols = defaultCols + (fields.getX()==null ? "0" : fields.getX()) + ", ";
-            defaultCols = defaultCols + (fields.getY()==null ? "0" : fields.getY()) + ", ";
-            defaultCols = defaultCols + (fields.getColor()==null ? "-1" : fields.getColor()) + ", ";
-            defaultCols = defaultCols + (fields.getSize()==null ? "-1" : fields.getSize()) + "]";
+            defaultCols = defaultCols + (fields.getX() == null ? "0" : fields.getX()) + ", ";
+            defaultCols = defaultCols + (fields.getY() == null ? "0" : fields.getY()) + ", ";
+            defaultCols = defaultCols + (fields.getColor() == null ? "-1" : fields.getColor()) + ", ";
+            defaultCols = defaultCols + (fields.getSize() == null ? "-1" : fields.getSize()) + "]";
         }
 
-        return "icanplot_init('" + getQueryUrl() + "', "+defaultCols+", 'ilinear', 'ilinear');";
+        return "icanplot_init('" + getQueryUrl() + "', " + defaultCols + ", 'ilinear', 'ilinear');";
     }
 
     private String getQueryUrl() {

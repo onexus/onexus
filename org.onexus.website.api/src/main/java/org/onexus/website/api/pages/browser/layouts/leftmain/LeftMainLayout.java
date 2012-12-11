@@ -21,7 +21,7 @@ import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.ViewConfig;
 import org.onexus.website.api.pages.browser.layouts.AbstractLayout;

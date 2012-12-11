@@ -39,7 +39,7 @@ public class BrowserPageConfig extends PageConfig {
     public BrowserPageConfig() {
         super();
     }
-    
+
     public TabConfig getTab(String tabId) {
         for (TabConfig tab : getTabs()) {
             if (tabId.equals(tab.getId())) {

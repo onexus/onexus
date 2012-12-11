@@ -97,10 +97,6 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
 
     private BrowserPageStatus getPageStatus() {
         return findParent(BrowserPage.class).getStatus();
-    };
-
-    private BrowserPageConfig getPageConfig() {
-        return (BrowserPageConfig) getPageStatus().getConfig();
-    };
+    }
 
 }

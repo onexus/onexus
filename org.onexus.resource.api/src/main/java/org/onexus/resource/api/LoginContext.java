@@ -53,9 +53,9 @@ public class LoginContext implements Serializable {
         this.userName = null;
     }
 
-	public boolean isAnonymous() {
-		return (userName == null);
-	}
+    public boolean isAnonymous() {
+        return (userName == null);
+    }
 
     public String getUserName() {
         return userName;

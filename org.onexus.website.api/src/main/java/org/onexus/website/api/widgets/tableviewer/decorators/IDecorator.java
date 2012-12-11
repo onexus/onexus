@@ -42,5 +42,4 @@ public interface IDecorator extends IClusterable, IDetachable {
     void setTemplate(String template);
 
 
-
 }

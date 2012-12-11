@@ -19,14 +19,12 @@ package org.onexus.ui.website.internal.workspace;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.InlineFrame;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Resource;
 import org.onexus.website.api.IWebsiteService;
-import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteConfig;
 import org.ops4j.pax.wicket.api.PaxWicketBean;

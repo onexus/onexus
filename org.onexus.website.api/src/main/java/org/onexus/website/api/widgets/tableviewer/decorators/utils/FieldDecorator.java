@@ -23,8 +23,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.types.Text;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
@@ -205,10 +205,8 @@ public class FieldDecorator implements IDecorator {
                 value = String.valueOf(getValue(entity, field.getId()));
             }
 
-            if (columnField != null) {
-                if (field.equals(columnField)) {
-                    value = columnValue;
-                }
+            if (columnField != null && field.equals(columnField)) {
+                value = columnValue;
             }
 
             String fieldPattern = "${" + field.getId() + "}";

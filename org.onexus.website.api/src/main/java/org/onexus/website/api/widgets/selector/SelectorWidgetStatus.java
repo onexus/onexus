@@ -30,7 +30,7 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
 
     private String selection;
 
-    @PaxWicketBean(name="queryParser")
+    @PaxWicketBean(name = "queryParser")
     private IQueryParser queryParser;
 
 

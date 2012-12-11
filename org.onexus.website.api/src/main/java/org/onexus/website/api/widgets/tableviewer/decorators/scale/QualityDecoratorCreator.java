@@ -25,7 +25,7 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.IColorScaleHtml;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.LinearColorScale;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Map;
 
 public class QualityDecoratorCreator implements IDecoratorCreator {

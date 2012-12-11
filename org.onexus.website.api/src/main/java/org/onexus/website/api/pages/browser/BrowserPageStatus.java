@@ -43,7 +43,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private List<IFilter> filters = new ArrayList<IFilter>();
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
     public BrowserPageStatus() {

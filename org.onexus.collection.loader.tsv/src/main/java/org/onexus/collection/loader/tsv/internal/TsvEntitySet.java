@@ -23,11 +23,12 @@ import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.data.api.IDataStreams;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.regex.Pattern;
 
 public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
@@ -55,17 +56,6 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
             nextInputStream();
         }
 
-    }
-
-    private String replaceProperties(String strUrl, Map<String, String> properties) {
-
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            if (entry.getValue() != null) {
-                strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
-            }
-        }
-
-        return strUrl;
     }
 
     private void nextInputStream() {

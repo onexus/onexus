@@ -31,7 +31,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.IPageManager;
 import org.onexus.website.api.pages.PageConfig;
@@ -54,9 +53,6 @@ public class Website extends WebPage {
 
     @PaxWicketBean(name = "pageManager")
     private IPageManager pageManager;
-
-    @PaxWicketBean(name = "resourceManager")
-    private IResourceManager resourceManager;
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
@@ -83,7 +79,7 @@ public class Website extends WebPage {
         String header = config.getHeader();
         ORI headerUri = new ORI(parentUri, header);
 
-        Label headerLabel = new Label("header", new HtmlDataResourceModel(headerUri, this));
+        Label headerLabel = new Label("header", new HtmlDataResourceModel(headerUri));
         headerLabel.setVisible(header != null && !header.isEmpty());
         headerLabel.setEscapeModelStrings(false);
         add(headerLabel);
@@ -120,11 +116,11 @@ public class Website extends WebPage {
         }
 
         // Login section
-		Panel login = new LoginPanel("login");
-		menuSection.add(login);
-		if (config.getLogin() == null || !config.getLogin()) {
-			login.setVisible(false);
-		}
+        Panel login = new LoginPanel("login");
+        menuSection.add(login);
+        if (config.getLogin() == null || !config.getLogin()) {
+            login.setVisible(false);
+        }
 
         add(menuSection);
 
@@ -139,7 +135,7 @@ public class Website extends WebPage {
         String bottom = config.getBottom();
         ORI bottomUri = new ORI(parentUri, bottom);
 
-        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri, this));
+        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri));
         bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);

@@ -17,9 +17,15 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.collection.api.*;
-import org.onexus.resource.api.*;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.ICollectionStore;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntitySet;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,15 +121,23 @@ public abstract class SqlCollectionStore implements ICollectionStore {
         try {
             conn = dataSource.getConnection();
 
-                String dropTable = ddl.getDropTable();
-                LOGGER.debug(dropTable);
-                try { sqlDialect.execute(conn, dropTable); } catch (Exception e) {};
+            String dropTable = ddl.getDropTable();
+            LOGGER.debug(dropTable);
+            try {
+                sqlDialect.execute(conn, dropTable);
+            } catch (Exception e) {
+                LOGGER.debug("Error droping table '" + dropTable + "' at register()", e);
+            }
 
-                List<String> dropIndex = ddl.getDropIndex();
-                for (String indexSQL : dropIndex) {
-                    LOGGER.debug(indexSQL);
-                    try { sqlDialect.execute(conn, indexSQL); } catch (Exception e) {};
+            List<String> dropIndex = ddl.getDropIndex();
+            for (String indexSQL : dropIndex) {
+                LOGGER.debug(indexSQL);
+                try {
+                    sqlDialect.execute(conn, indexSQL);
+                } catch (Exception e) {
+                    LOGGER.debug("Error creating index for table '" + dropTable + "' at register()", e);
                 }
+            }
 
 
             String createTable = ddl.getCreateTable();
@@ -250,11 +264,11 @@ public abstract class SqlCollectionStore implements ICollectionStore {
                 boolean allPrimaryKeysNotNull = true;
                 for (SqlCollectionDDL.ColumnInfo columnInfo : ddl.getColumnInfos()) {
                     Field field = columnInfo.getField();
-                    if(field.isPrimaryKey() != null && field.isPrimaryKey()) {
-                        if (entitySet.get(field.getId())== null) {
-                            allPrimaryKeysNotNull = false;
-                            break;
-                        }
+                    if (field.isPrimaryKey() != null
+                            && field.isPrimaryKey()
+                            && entitySet.get(field.getId()) == null) {
+                        allPrimaryKeysNotNull = false;
+                        break;
                     }
                 }
 

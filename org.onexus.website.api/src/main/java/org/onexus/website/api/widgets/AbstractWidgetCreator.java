@@ -25,7 +25,7 @@ public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends Wi
     private Class<C> configType;
     private String title;
     private String description;
-    
+
     public AbstractWidgetCreator(Class<C> configType, String title, String description) {
         super();
 

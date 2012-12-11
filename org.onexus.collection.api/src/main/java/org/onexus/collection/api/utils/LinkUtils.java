@@ -21,7 +21,6 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +29,9 @@ import java.util.List;
 public class LinkUtils {
 
     public static List<FieldLink> getLinkFields(ORI parentURI,
-                                                     Collection a, Collection b) {
+                                                Collection a, Collection b) {
 
-            List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
+        List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
 
         List<Link> linksA = a.getLinks();
         List<Link> linksB = b.getLinks();
@@ -57,8 +56,8 @@ public class LinkUtils {
             }
         }
 
-       // Case 1b: B has a direct link to A
-       for (Link link : linksB) {
+        // Case 1b: B has a direct link to A
+        for (Link link : linksB) {
             if (link.getCollection().toAbsolute(parentURI).equals(a.getURI())) {
                 for (String field : link.getFields()) {
                     fieldLinks.add(new FieldLink(b.getURI(), Link

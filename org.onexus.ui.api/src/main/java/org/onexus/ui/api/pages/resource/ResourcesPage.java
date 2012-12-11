@@ -52,7 +52,7 @@ public class ResourcesPage extends BaseResourcePage {
 
     public final static String PARAMETER_RESOURCE = "uri";
 
-    @PaxWicketBean(name="viewersManager")
+    @PaxWicketBean(name = "viewersManager")
     private IViewersManager viewersManager;
 
     public ResourcesPage(PageParameters parameters) {
@@ -71,7 +71,7 @@ public class ResourcesPage extends BaseResourcePage {
         add(new ToolUriBreadCrumb("uriBreadCrumb", getModel()));
 
         // Tabs
-        add(new ViewerTabs("tabs", getModel() ));
+        add(new ViewerTabs("tabs", getModel()));
 
     }
 
@@ -196,8 +196,6 @@ public class ResourcesPage extends BaseResourcePage {
 
                     links.add(projectUri);
                     for (int i = 1; i < uriItems.size(); i++) {
-                        String uriItem = uriItems.get(i);
-
                         StringBuilder link = new StringBuilder();
                         link.append(projectUri).append("?");
                         link.append(uriItems.get(1));
@@ -246,7 +244,7 @@ public class ResourcesPage extends BaseResourcePage {
     public class ViewerTabs extends WebMarkupContainer {
 
 
-        public ViewerTabs(String id, final IModel<Resource> resourceModel ) {
+        public ViewerTabs(String id, final IModel<Resource> resourceModel) {
             super(id);
 
             final IModel<Integer> currentViewer = new Model<Integer>(0);
@@ -259,22 +257,22 @@ public class ResourcesPage extends BaseResourcePage {
                 @Override
                 protected void populateItem(ListItem<IViewerCreator> item) {
 
-                    AjaxLink<Integer> link = new AjaxLink<Integer>("link", Model.of(item.getIndex()) ) {
+                    AjaxLink<Integer> link = new AjaxLink<Integer>("link", Model.of(item.getIndex())) {
 
                         @Override
                         public void onClick(AjaxRequestTarget target) {
 
-                               // Update selected tab
-                               Integer pos = getModelObject();
-                               currentViewer.setObject(pos);
+                            // Update selected tab
+                            Integer pos = getModelObject();
+                            currentViewer.setObject(pos);
 
-                               // Update main panel
-                               IViewerCreator viewerCreator = viewerCreators.getViewerCreatorAt(pos);
-                               ResourcesPage.this.addOrReplace(viewerCreators.getViewerCreatorAt(pos).getPanel("main", resourceModel).setOutputMarkupId(true));
+                            // Update main panel
+                            IViewerCreator viewerCreator = viewerCreators.getViewerCreatorAt(pos);
+                            ResourcesPage.this.addOrReplace(viewerCreators.getViewerCreatorAt(pos).getPanel("main", resourceModel).setOutputMarkupId(true));
 
-                               // Refresh using AJAX
-                               target.add(ResourcesPage.this.get("main"));
-                               target.add(ViewerTabs.this);
+                            // Refresh using AJAX
+                            target.add(ResourcesPage.this.get("main"));
+                            target.add(ViewerTabs.this);
                         }
                     };
 
@@ -291,7 +289,6 @@ public class ResourcesPage extends BaseResourcePage {
 
 
         }
-
 
 
     }

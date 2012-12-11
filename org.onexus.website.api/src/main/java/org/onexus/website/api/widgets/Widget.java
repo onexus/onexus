@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
@@ -29,12 +28,12 @@ import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 
 public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel {
-    
+
     private IModel<S> statusModel;
 
     public Widget(String componentId, IModel<S> statusModel) {
         super(componentId);
-        
+
         this.statusModel = statusModel;
     }
 
@@ -58,12 +57,12 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     protected ORI getPageBaseOri() {
         BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
-        return (pageStatus==null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase()));
+        return (pageStatus == null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase()));
     }
 
-	protected <T> T findParentStatus(Class<T> statusClass) {
-		return findParentStatus(statusModel, statusClass);
-	}
+    protected <T> T findParentStatus(Class<T> statusClass) {
+        return findParentStatus(statusModel, statusClass);
+    }
 
     private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {
 
@@ -74,7 +73,7 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
         }
 
         if (model instanceof IWrapModel) {
-            IModel<?> parentModel = ((IWrapModel)model).getWrappedModel();
+            IModel<?> parentModel = ((IWrapModel) model).getWrappedModel();
             return findParentStatus(parentModel, statusClass);
         }
 

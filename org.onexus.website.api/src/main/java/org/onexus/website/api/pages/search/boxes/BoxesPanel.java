@@ -36,7 +36,7 @@ import java.util.List;
 
 public class BoxesPanel extends Panel {
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
     public BoxesPanel(String id, SearchPageStatus status, ORI baseUri) {

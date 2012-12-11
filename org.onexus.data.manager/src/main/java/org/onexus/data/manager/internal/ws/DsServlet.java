@@ -95,7 +95,7 @@ public class DsServlet extends HttpServlet {
         String projectNameAndResource = uri.substring(servletPath.length() + 1);
         String projectUrl = null;
         String projectName = null;
-        for(Project project : resourceManager.getProjects()) {
+        for (Project project : resourceManager.getProjects()) {
             projectName = project.getName();
             if (projectNameAndResource.startsWith(projectName)) {
                 projectUrl = project.getURL();

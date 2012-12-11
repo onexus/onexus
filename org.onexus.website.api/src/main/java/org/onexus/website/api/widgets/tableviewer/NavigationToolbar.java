@@ -33,8 +33,6 @@ public class NavigationToolbar extends AbstractToolbar {
         super(table);
 
 
-
-
     }
 
     @Override
@@ -51,8 +49,8 @@ public class NavigationToolbar extends AbstractToolbar {
         AjaxLink<String> countLink = new IndicatingAjaxLink<String>("count") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-              getDataProvider().forceCount();
-              target.add(getTable());
+                getDataProvider().forceCount();
+                target.add(getTable());
             }
         };
         span.add(countLink);
@@ -103,7 +101,7 @@ public class NavigationToolbar extends AbstractToolbar {
 
         @Override
         public void onClick(AjaxRequestTarget target) {
-            getTable().setCurrentPage( getTable().getCurrentPage() - 1);
+            getTable().setCurrentPage(getTable().getCurrentPage() - 1);
             target.add(getTable());
         }
 
@@ -125,9 +123,9 @@ public class NavigationToolbar extends AbstractToolbar {
         public void onClick(AjaxRequestTarget target) {
 
             long page = getTable().getCurrentPage() + 1;
-            getTable().setCurrentPage( page );
+            getTable().setCurrentPage(page);
 
-            getDataProvider().setKnownSize(((page+1)*getTable().getItemsPerPage()) + 2);
+            getDataProvider().setKnownSize(((page + 1) * getTable().getItemsPerPage()) + 2);
 
             target.add(getTable());
 

@@ -17,13 +17,13 @@
  */
 package org.onexus.collection.store.sql.filters;
 
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.query.EqualId;
+import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.collection.store.sql.SqlCollectionDDL;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
-import org.onexus.collection.api.query.EqualId;
-import org.onexus.collection.api.query.Query;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class EqualIdFilterBuilder extends AbstractFilterBuilder<EqualId> {
 
 
     @Override
-    protected void innerBuild(SqlCollectionStore store,  Query query, StringBuilder where, EqualId filter) {
+    protected void innerBuild(SqlCollectionStore store, Query query, StringBuilder where, EqualId filter) {
 
         String collectionAlias = filter.getCollectionAlias();
         ORI collectionUri = QueryUtils.getCollectionOri(query, collectionAlias);

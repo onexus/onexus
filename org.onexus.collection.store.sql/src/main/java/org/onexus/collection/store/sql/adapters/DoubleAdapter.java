@@ -27,7 +27,7 @@ public class DoubleAdapter extends SqlAdapter {
 
     @Override
     public void append(StringBuilder container, Object object) throws Exception {
-        container.append(object );
+        container.append(object);
     }
 
     @Override

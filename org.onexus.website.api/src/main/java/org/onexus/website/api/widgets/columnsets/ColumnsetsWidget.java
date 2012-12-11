@@ -48,26 +48,30 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
 
         final IModel<ColumnSet> csModel = new Model<ColumnSet>();
         TableViewerStatus status = getTableViewerStatus();
-        
+
         int cs = (status == null ? 0 : status.getCurrentColumnSet());
         csModel.setObject(getTableViewerConfig().getColumnSets().get(cs));
-        
+
         form.add(new AjaxColumnSetSelector("columnsets", csModel, getTableViewerConfig().getColumnSets()));
 
     }
 
     private BrowserPageStatus getPageStatus() {
         return findParent(BrowserPage.class).getStatus();
-    };
+    }
+
+    ;
 
     private BrowserPageConfig getPageConfig() {
         return (BrowserPageConfig) getPageStatus().getConfig();
-    };
+    }
+
+    ;
 
     private TableViewerStatus getTableViewerStatus() {
 
         String widgetId = getTableViewerConfig().getId();
-        return (TableViewerStatus) (widgetId==null? null : getPageStatus().getWidgetStatus(widgetId));
+        return (TableViewerStatus) (widgetId == null ? null : getPageStatus().getWidgetStatus(widgetId));
 
     }
 

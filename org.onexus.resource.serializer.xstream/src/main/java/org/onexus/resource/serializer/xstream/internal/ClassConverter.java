@@ -56,7 +56,7 @@ public class ClassConverter implements SingleValueConverter {
             return classToString.get(obj);
         }
 
-        return ((Class)obj).getCanonicalName();
+        return ((Class) obj).getCanonicalName();
     }
 
     @Override

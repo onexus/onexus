@@ -24,10 +24,9 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.resource.api.Progress;
 import org.onexus.data.api.utils.UrlDataStreams;
-import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Progress;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -65,17 +64,6 @@ public class FileCallable implements Callable<IDataStreams> {
         return new UrlDataStreams(progress, getUrls(plugin, data), compressed);
     }
 
-    private String replaceProperties(String strUrl, ORI dataOri) {
-
-        /*TODO
-        for (Map.Entry<String, String> entry : properties.entrySet()) {
-            strUrl = strUrl.replaceAll(Pattern.quote("${" + entry.getKey() + "}"), entry.getValue());
-        }
-        */
-
-        return strUrl;
-    }
-
     private List<URL> getUrls(Plugin plugin, Data data) {
 
         String location = plugin.getParameter("location");
@@ -86,7 +74,7 @@ public class FileCallable implements Callable<IDataStreams> {
         List<URL> urls = new ArrayList<URL>();
 
         for (String templatePath : paths) {
-            String path = replaceProperties(templatePath, data.getURI());
+            String path = templatePath;
             String fileName = FilenameUtils.getName(path);
 
             // Check if it is a wildcard filter

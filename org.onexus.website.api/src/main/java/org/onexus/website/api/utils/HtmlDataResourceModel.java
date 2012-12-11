@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.utils;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.util.io.IOUtils;
 import org.apache.wicket.util.string.Strings;
@@ -38,16 +37,16 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
     private static final Logger log = LoggerFactory.getLogger(HtmlDataResourceModel.class);
 
-    @PaxWicketBean(name="dataManager")
+    @PaxWicketBean(name = "dataManager")
     private IDataManager dataManager;
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
     private ORI contentUri;
     private String dataResourceUrl;
 
-    public HtmlDataResourceModel(ORI contentUri, Component component) {
+    public HtmlDataResourceModel(ORI contentUri) {
 
         this.contentUri = contentUri;
         String dataService = getDataManager().getMount();

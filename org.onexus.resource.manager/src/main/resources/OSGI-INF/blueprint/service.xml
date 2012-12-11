@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+        >
 
     <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer"/>
     <reference id="authorizationManager" interface="org.onexus.resource.api.IAuthorizationManager"/>
 
-    <service interface="org.osgi.service.blueprint.container.BlueprintListener" ref="resourceManager" />
-    <service interface="org.osgi.framework.BundleListener" ref="resourceManager" />
-    <service interface="org.onexus.resource.api.IResourceManager" ref="resourceManager" />
-    <bean id="resourceManager" class="org.onexus.resource.manager.internal.ResourceManager" init-method="init" destroy-method="destroy">
+    <service interface="org.osgi.service.blueprint.container.BlueprintListener" ref="resourceManager"/>
+    <service interface="org.osgi.framework.BundleListener" ref="resourceManager"/>
+    <service interface="org.onexus.resource.api.IResourceManager" ref="resourceManager"/>
+    <bean id="resourceManager" class="org.onexus.resource.manager.internal.ResourceManager" init-method="init"
+          destroy-method="destroy">
         <property name="serializer" ref="resourceSerializer"/>
         <property name="authorizationManager" ref="authorizationManager"/>
         <property name="context" ref="blueprintBundleContext"/>
@@ -17,16 +18,16 @@
     <service interface="javax.servlet.Servlet">
         <service-properties>
             <entry key="alias" value="/git"/>
-            <entry key="servlet-name" value="git-servlet" />
+            <entry key="servlet-name" value="git-servlet"/>
         </service-properties>
-        <bean class="org.onexus.resource.manager.internal.ws.git.GitServlet" />
+        <bean class="org.onexus.resource.manager.internal.ws.git.GitServlet"/>
     </service>
 
     <service interface="javax.servlet.Filter">
         <service-properties>
-            <entry key="filter-name" value="git-filter" />
+            <entry key="filter-name" value="git-filter"/>
             <entry key="urlPatterns" value="/git"/>
-            <entry key="servletNames" value="git-servlet" />
+            <entry key="servletNames" value="git-servlet"/>
         </service-properties>
         <bean class="org.onexus.resource.manager.internal.ws.git.GitSecurityFilter">
             <property name="authorizationManager" ref="authorizationManager"/>

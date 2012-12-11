@@ -82,7 +82,7 @@ public class HeadersToolbar extends AbstractToolbar {
         int col = 0;
         for (final IColumn<T, S> c : columns) {
 
-            String placement = (col == 0 ? "right" : (col+1 == columns.size() ? "left" : "top"));
+            String placement = (col == 0 ? "right" : (col + 1 == columns.size() ? "left" : "top"));
 
             // Process only Track columns
             CollectionColumn column = null;

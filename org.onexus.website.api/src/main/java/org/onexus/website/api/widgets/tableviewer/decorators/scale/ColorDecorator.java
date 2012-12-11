@@ -30,7 +30,7 @@ import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.IColor
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.formaters.ITextFormater;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ColorDecorator extends FieldDecorator {
     private static final Color emptyColor = new Color(255, 255, 255);
@@ -132,7 +132,7 @@ public class ColorDecorator extends FieldDecorator {
             String styleCss = (black ? "color: #000;" : "color: #FFF;");
             if (urlLink != null && !StringUtils.isEmpty(value)) {
                 String url = replaceParameters(getField(), value, rowEntity, urlLink, false);
-                String link = "<a href=\"" + url + "\" rel=\"tooltip\" title=\""+urlTitle+"\"><i class=\"icon-zoom-in" + (black?"":" icon-white") + "\"></i></a>&nbsp;";
+                String link = "<a href=\"" + url + "\" rel=\"tooltip\" title=\"" + urlTitle + "\"><i class=\"icon-zoom-in" + (black ? "" : " icon-white") + "\"></i></a>&nbsp;";
                 value = link + value;
             }
             Label textValue = new Label(componentId, value);

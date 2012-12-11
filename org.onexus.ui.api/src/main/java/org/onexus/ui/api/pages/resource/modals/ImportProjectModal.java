@@ -32,7 +32,7 @@ public class ImportProjectModal extends Panel {
 
     private static final Logger log = LoggerFactory.getLogger(ImportProjectModal.class);
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     public IResourceManager resourceManager;
 
     private String projectURL;

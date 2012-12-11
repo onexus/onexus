@@ -17,12 +17,12 @@
  */
 package org.onexus.collection.store.sql.filters;
 
-import org.onexus.collection.store.sql.SqlCollectionDDL;
-import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.api.query.IsNull;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.collection.store.sql.SqlCollectionDDL;
+import org.onexus.collection.store.sql.SqlCollectionStore;
+import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.resource.api.ORI;
 
 

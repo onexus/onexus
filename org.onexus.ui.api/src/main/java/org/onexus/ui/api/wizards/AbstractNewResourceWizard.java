@@ -38,7 +38,7 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public abstract class AbstractNewResourceWizard<T extends Resource> extends AbstractWizard {
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
     private T resource;
@@ -94,13 +94,12 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
 
         resourceName.add(new AjaxFormValidatingBehavior(getForm(), "onchange") {
             @Override
-            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes)
-            {
+            protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
 
                 String id = "throttle-" + resourceName.getMarkupId();
                 ThrottlingSettings throttlingSettings = new ThrottlingSettings(id, Duration.seconds(1));
-                 attributes.setThrottlingSettings(throttlingSettings);
+                attributes.setThrottlingSettings(throttlingSettings);
             }
         });
 

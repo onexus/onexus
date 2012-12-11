@@ -22,12 +22,12 @@ public class RScript implements IQueryScript {
     public String getContent(String query, CharSequence url) {
         return
                 "require(RCurl)\n" +
-                "\n" +
-                "url <- \""+ url +"\"\n" +
-                "oql <- \""+ query + "\" \n" +
-                "\n" +
-                "dataTsv <- httpPUT(url, oql)\n" +
-                "data <- read.csv(textConnection(dataTsv), header = TRUE, sep=\"\\t\")" ;
+                        "\n" +
+                        "url <- \"" + url + "\"\n" +
+                        "oql <- \"" + query + "\" \n" +
+                        "\n" +
+                        "dataTsv <- httpPUT(url, oql)\n" +
+                        "data <- read.csv(textConnection(dataTsv), header = TRUE, sep=\"\\t\")";
     }
 
     @Override

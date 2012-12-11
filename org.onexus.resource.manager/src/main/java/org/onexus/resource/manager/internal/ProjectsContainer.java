@@ -29,8 +29,17 @@ import org.onexus.resource.manager.internal.providers.ProjectProviderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class ProjectsContainer {
 
@@ -55,7 +64,7 @@ public class ProjectsContainer {
         File onexusFolder = new File(ONEXUS_FOLDER);
         File projectsFolder = new File(ONEXUS_PROJECTS_FOLDER);
         propertiesFile = new File(onexusFolder, ONEXUS_PROJECTS_SETTINGS);
-		monitor = new FileAlterationMonitor(2000);
+        monitor = new FileAlterationMonitor(2000);
 
         if (!onexusFolder.exists()) {
             onexusFolder.mkdir();
@@ -129,12 +138,13 @@ public class ProjectsContainer {
 
                 AbstractProjectProvider previousProvider = providers.get(projectUrl);
 
-                if (previousProvider != null) {
-                    if (previousProvider.getProjectFolder().equals(projectFolder) && previousProvider.getProject().getName().equals(projectName)) {
+                if (previousProvider != null
+                        && previousProvider.getProjectFolder().equals(projectFolder)
+                        && previousProvider.getProject().getName().equals(projectName)
+                        ) {
 
-                        // This project is already registered, skip it
-                        continue;
-                    }
+                    // This project is already registered, skip it
+                    continue;
                 }
 
                 AbstractProjectProvider provider = providerFactory.newProjectProvider(projectName, projectUrl, projectFolder);
@@ -221,20 +231,20 @@ public class ProjectsContainer {
         }
     }
 
-	public void bundleCreated(long bundleId) {
+    public void bundleCreated(long bundleId) {
 
-		for (AbstractProjectProvider provider : providers.values()) {
+        for (AbstractProjectProvider provider : providers.values()) {
 
-			if (provider.dependsOnBundle(bundleId)) {
-				provider.loadProject();
-				onProjectChange(provider.getProject());
-			}
+            if (provider.dependsOnBundle(bundleId)) {
+                provider.loadProject();
+                onProjectChange(provider.getProject());
+            }
 
-		}
+        }
 
-	}
+    }
 
-	public void bundleUninstalled(long bundleId) {
+    public void bundleUninstalled(long bundleId) {
 
-	}
+    }
 }

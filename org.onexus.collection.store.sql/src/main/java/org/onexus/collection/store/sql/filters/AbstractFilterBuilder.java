@@ -17,11 +17,11 @@
  */
 package org.onexus.collection.store.sql.filters;
 
+import org.onexus.collection.api.query.Filter;
+import org.onexus.collection.api.query.Query;
 import org.onexus.collection.store.sql.SqlCollectionStore;
 import org.onexus.collection.store.sql.SqlDialect;
 import org.onexus.collection.store.sql.adapters.SqlAdapter;
-import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

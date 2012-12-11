@@ -31,7 +31,7 @@ import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
     private OrderBy order;
-    
+
     private int currentColumnSet;
 
     public TableViewerStatus() {
@@ -113,7 +113,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
         }
 
         if (order != null && !order.equals(defaultStatus.getOrder())) {
-            parameters.add(keyPrefix + "o", new ORI(order.getCollection()).toRelative(projectUri).toString() + "::" + order.getField() + "::" + (order.isAscendent()?"a":"d"));
+            parameters.add(keyPrefix + "o", new ORI(order.getCollection()).toRelative(projectUri).toString() + "::" + order.getField() + "::" + (order.isAscendent() ? "a" : "d"));
         }
 
         super.encodeParameters(parameters, keyPrefix);

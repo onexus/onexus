@@ -62,8 +62,8 @@ public class VisiblePredicate implements Predicate {
 
         // Use only single character operators.
         String normalizedQuery = visibleQuery
-                .replace("NOT","!")
-                .replace("AND",",")
+                .replace("NOT", "!")
+                .replace("AND", ",")
                 .replace("OR", "|")
                 .replaceAll("\\s", "");
 

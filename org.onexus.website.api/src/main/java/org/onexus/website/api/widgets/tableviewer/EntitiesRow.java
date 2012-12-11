@@ -57,7 +57,7 @@ public class EntitiesRow implements Iterator<IEntityTable>, Serializable {
     }
 
     public void close() {
-        if (dataMatrix!=null) {
+        if (dataMatrix != null) {
             dataMatrix.close();
         }
     }

@@ -17,10 +17,10 @@
  */
 package org.onexus.collection.store.h2sql.internal;
 
-import org.onexus.collection.store.sql.SqlCollectionStore;
-import org.onexus.collection.store.sql.SqlQuery;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
+import org.onexus.collection.store.sql.SqlCollectionStore;
+import org.onexus.collection.store.sql.SqlQuery;
 
 import java.util.List;
 

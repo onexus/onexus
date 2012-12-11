@@ -78,7 +78,7 @@ public class ZipProjectProvider extends AbstractProjectProvider {
 
         } catch (Exception e) {
 
-            log.error("Importing project '" + getProjectUrl() +"'", e);
+            log.error("Importing project '" + getProjectUrl() + "'", e);
             throw new InvalidParameterException("Invalid Onexus URL project");
         }
 

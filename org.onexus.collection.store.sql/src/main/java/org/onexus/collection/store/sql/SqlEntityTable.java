@@ -22,8 +22,8 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Progress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,9 +101,9 @@ public class SqlEntityTable implements IEntityTable {
             String sql = null;
             try {
                 // Count all
-                Statement dataSt = dataConn.createStatement();
                 sql = mysqlQuery.toCountSQL();
                 LOGGER.debug(sql);
+                Statement dataSt = dataConn.createStatement();
                 ResultSet dataRS = dataSt.executeQuery(sql);
                 if (dataRS.next()) {
                     size = dataRS.getLong("size");

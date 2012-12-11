@@ -61,10 +61,10 @@ import java.util.List;
 
 public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {

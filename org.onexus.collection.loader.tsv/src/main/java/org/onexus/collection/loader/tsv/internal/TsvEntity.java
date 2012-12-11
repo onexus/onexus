@@ -17,9 +17,9 @@
  */
 package org.onexus.collection.loader.tsv.internal;
 
-import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +43,7 @@ public class TsvEntity implements IEntity {
     public TsvEntity(Collection collection, String line, long position) {
         this.collection = collection;
         this.position = position;
+        this.line = line;
 
         this.fields = new HashMap<String, Field>();
         for (Field field : collection.getFields()) {
@@ -112,14 +113,11 @@ public class TsvEntity implements IEntity {
             }
 
             // For number types return null if the value is empty
-            if (Number.class.isAssignableFrom(fieldClass)) {
-                if (value.equals("")) {
-                    return null;
-                }
+            if (Number.class.isAssignableFrom(fieldClass) && value.equals("")) {
+                return null;
             }
 
-            Constructor<?> constructor = fieldClass
-                    .getConstructor(String.class);
+            Constructor<?> constructor = fieldClass.getConstructor(String.class);
 
             return constructor.newInstance(value);
         } catch (Exception e) {

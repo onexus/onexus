@@ -34,11 +34,11 @@ public interface IFilter extends Serializable, IVisible {
 
     boolean isEnable();
 
-    void setEnable(boolean enabled );
+    void setEnable(boolean enabled);
 
     boolean isDeletable();
 
-    void setDeletable(boolean deletable );
+    void setDeletable(boolean deletable);
 
     Filter buildFilter(Query query);
 

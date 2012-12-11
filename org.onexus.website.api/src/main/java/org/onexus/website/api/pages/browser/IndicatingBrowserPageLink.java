@@ -21,7 +21,7 @@ import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.model.IModel;
 
-public abstract class IndicatingBrowserPageLink<T> extends BrowserPageLink<T>  implements IAjaxIndicatorAware {
+public abstract class IndicatingBrowserPageLink<T> extends BrowserPageLink<T> implements IAjaxIndicatorAware {
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
@@ -38,8 +38,7 @@ public abstract class IndicatingBrowserPageLink<T> extends BrowserPageLink<T>  i
     /**
      * @see org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
      */
-    public String getAjaxIndicatorMarkupId()
-    {
+    public String getAjaxIndicatorMarkupId() {
         return indicatorAppender.getMarkupId();
     }
 }

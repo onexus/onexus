@@ -36,10 +36,9 @@ import java.util.Iterator;
 public abstract class EntitiesRowProvider implements
         ISortableDataProvider<IEntityTable, String> {
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    private TableViewerConfig config;
     private IModel<TableViewerStatus> statusModel;
     private transient EntitiesRow rows;
     private SortState sortState = new SortState();
@@ -47,11 +46,9 @@ public abstract class EntitiesRowProvider implements
     private long knownSize;
     private long realSize;
 
-    public EntitiesRowProvider(TableViewerConfig config,
-                               IModel<TableViewerStatus> status, int rowsPerPage) {
+    public EntitiesRowProvider(IModel<TableViewerStatus> status, int rowsPerPage) {
         WebsiteApplication.inject(this);
         this.statusModel = status;
-        this.config = config;
         this.rowsPerPage = rowsPerPage;
         this.knownSize = rowsPerPage + 2;
         this.realSize = -1;

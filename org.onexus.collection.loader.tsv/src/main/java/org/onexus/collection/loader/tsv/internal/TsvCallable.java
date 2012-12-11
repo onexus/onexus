@@ -22,8 +22,8 @@ import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EmptyEntitySet;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
-import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Progress;
 
 import java.util.concurrent.Callable;
 
@@ -49,7 +49,7 @@ public class TsvCallable implements Callable<IEntitySet> {
         String dataUri = collection.getLoader().getParameter(PARAMETER_DATA_URI);
 
         if (dataUri == null) {
-            String errMsg = "Required parameter '" + PARAMETER_DATA_URI +"' not found in '" + collection.getURI() + "'.";
+            String errMsg = "Required parameter '" + PARAMETER_DATA_URI + "' not found in '" + collection.getURI() + "'.";
             progress.error(errMsg);
             progress.fail();
             return new EmptyEntitySet(collection);

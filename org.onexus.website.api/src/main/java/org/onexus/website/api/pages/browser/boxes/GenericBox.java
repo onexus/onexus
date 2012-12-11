@@ -22,8 +22,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
-import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 
 /**

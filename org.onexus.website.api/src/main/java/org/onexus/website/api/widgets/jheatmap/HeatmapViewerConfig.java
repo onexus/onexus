@@ -30,22 +30,22 @@ import java.util.List;
 public class HeatmapViewerConfig extends WidgetConfig {
 
     private HeatmapViewerStatus defaultStatus;
-    
+
     private ORI collection;
-   
+
     private String init;
 
     private String colAnnotations;
 
     private String rowAnnotations;
 
-    @XStreamImplicit(itemFieldName="column")
+    @XStreamImplicit(itemFieldName = "column")
     private List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 
-    @XStreamImplicit(itemFieldName="row")
+    @XStreamImplicit(itemFieldName = "row")
     private List<ColumnConfig> rows = new ArrayList<ColumnConfig>();
 
-    @XStreamImplicit(itemFieldName="cell")
+    @XStreamImplicit(itemFieldName = "cell")
     private List<ColumnConfig> cells = new ArrayList<ColumnConfig>();
 
 

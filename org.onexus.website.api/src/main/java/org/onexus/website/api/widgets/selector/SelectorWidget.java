@@ -47,10 +47,10 @@ import java.util.List;
 
 public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetStatus> {
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name="queryParser")
+    @PaxWicketBean(name = "queryParser")
     private IQueryParser queryParser;
 
     public SelectorWidget(String componentId, IModel<SelectorWidgetStatus> statusModel) {
@@ -78,8 +78,7 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
                 buffer.append("\n<option");
 
                 // If null is selected, indicate that
-                if ("".equals(selectedValue))
-                {
+                if ("".equals(selectedValue)) {
                     buffer.append(" selected=\"selected\"");
                 }
 
@@ -90,7 +89,7 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
             }
         };
 
-        dropDown.add( new OnChangeAjaxBehavior() {
+        dropDown.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
@@ -99,7 +98,7 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
         dropDown.setNullValid(true);
 
-        add( new AjaxIndicatorAppender() );
+        add(new AjaxIndicatorAppender());
 
         form.add(dropDown);
         add(form);
@@ -137,8 +136,6 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
         return choices;
     }
-
-
 
 
 }

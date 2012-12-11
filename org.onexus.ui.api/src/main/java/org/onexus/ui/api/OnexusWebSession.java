@@ -28,7 +28,11 @@ import org.apache.wicket.util.time.Duration;
 import org.onexus.resource.api.LoginContext;
 
 import javax.security.auth.Subject;
-import javax.security.auth.callback.*;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
 import java.io.IOException;

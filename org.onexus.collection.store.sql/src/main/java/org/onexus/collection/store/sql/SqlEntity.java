@@ -17,11 +17,15 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class SqlEntity implements IEntity {
 
@@ -43,7 +47,7 @@ public class SqlEntity implements IEntity {
 
         List<String> collectionKeys = new ArrayList<String>();
         for (Field field : collection.getFields()) {
-            if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+            if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
                 collectionKeys.add(field.getId());
             }
         }

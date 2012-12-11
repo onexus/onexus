@@ -64,7 +64,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
     private List<ORI> linkCollections = new ArrayList<ORI>();
     private TabConfig currentTab;
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
     public NewWebsiteWizard(String id, IModel<? extends Resource> resourceModel) {
@@ -267,7 +267,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             for (ORI collection : projectCollections) {
 
 
-                Collection colB = resourceManager.load(Collection.class,  collection.toAbsolute(getParentUri()));
+                Collection colB = resourceManager.load(Collection.class, collection.toAbsolute(getParentUri()));
 
                 if (colA.getURI().equals(colB.getURI())) {
                     continue;

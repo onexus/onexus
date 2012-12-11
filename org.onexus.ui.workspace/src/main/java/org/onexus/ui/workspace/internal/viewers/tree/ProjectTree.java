@@ -41,8 +41,6 @@ import java.util.Set;
 
 public class ProjectTree extends NestedTree<Resource> {
 
-    private ITreeProvider<Resource> provider;
-
     private IModel<Resource> selected;
 
     private Set<Resource> state;
@@ -53,7 +51,6 @@ public class ProjectTree extends NestedTree<Resource> {
         super(id, treeProvider);
 
         this.state = new InverseSet<Resource>(new ProviderSubset<Resource>(treeProvider));
-        this.provider = treeProvider;
         this.selected = (IModel<Resource>) selectedResource;
 
         setOutputMarkupId(true);
@@ -86,13 +83,10 @@ public class ProjectTree extends NestedTree<Resource> {
         send(getPage(), Broadcast.BREADTH, EventResourceSelect.EVENT);
     }
 
-    private IModel<Set<Resource>> newStateModel()
-    {
-        return new AbstractReadOnlyModel<Set<Resource>>()
-        {
+    private IModel<Set<Resource>> newStateModel() {
+        return new AbstractReadOnlyModel<Set<Resource>>() {
             @Override
-            public Set<Resource> getObject()
-            {
+            public Set<Resource> getObject() {
                 return state;
             }
 
@@ -100,9 +94,8 @@ public class ProjectTree extends NestedTree<Resource> {
              * Super class doesn't detach - would be nice though.
              */
             @Override
-            public void detach()
-            {
-                ((IDetachable)state).detach();
+            public void detach() {
+                ((IDetachable) state).detach();
             }
         };
     }
@@ -147,32 +140,25 @@ public class ProjectTree extends NestedTree<Resource> {
                 Resource t = getModelObject();
 
                 String styleClass;
-                if (getProvider().hasChildren(t))
-                {
-                    if (getState(t) == State.EXPANDED)
-                    {
+                if (getProvider().hasChildren(t)) {
+                    if (getState(t) == State.EXPANDED) {
                         if (t instanceof Project) {
                             styleClass = "tree-project-open";
                         } else {
                             styleClass = getOpenStyleClass();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         if (t instanceof Project) {
                             styleClass = "tree-project-closed";
                         } else {
                             styleClass = getClosedStyleClass();
                         }
                     }
-                }
-                else
-                {
+                } else {
                     styleClass = getOtherStyleClass(t);
                 }
 
-                if (isSelected())
-                {
+                if (isSelected()) {
                     styleClass += " " + getSelectedStyleClass();
                 }
 
@@ -187,8 +173,7 @@ public class ProjectTree extends NestedTree<Resource> {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response)
-    {
+    public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(CSS));
     }
 

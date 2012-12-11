@@ -67,7 +67,7 @@ public abstract class AtomicFilter extends Filter {
         oql.append(collectionAlias);
         oql.append('.');
         oql.append(fieldId);
-        oql.append(' ').append( getOperandSymbol() ).append(' ');
+        oql.append(' ').append(getOperandSymbol()).append(' ');
         oql.append(Filter.convertToOQL(value));
 
         return oql;

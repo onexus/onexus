@@ -22,7 +22,6 @@ import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Or;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -31,9 +30,9 @@ public class QueryUtils {
 
     public static String newCollectionAlias(Query query, ORI collectionUri) {
 
-         if (!collectionUri.isAbsolute()) {
-             collectionUri = collectionUri.toAbsolute(query.getOn());
-         }
+        if (!collectionUri.isAbsolute()) {
+            collectionUri = collectionUri.toAbsolute(query.getOn());
+        }
 
         String collectionAlias = null;
         for (Map.Entry<String, ORI> define : query.getDefine().entrySet()) {
@@ -49,7 +48,7 @@ public class QueryUtils {
         if (collectionAlias == null) {
             int size = query.getDefine().size();
 
-            while ( getCollectionOri(query, "c" + size) != null) {
+            while (getCollectionOri(query, "c" + size) != null) {
                 size++;
             }
 
@@ -97,7 +96,7 @@ public class QueryUtils {
     }
 
     public static Filter joinAnd(Iterable<Filter> filters) {
-        return (filters == null? null : joinAnd(filters.iterator()));
+        return (filters == null ? null : joinAnd(filters.iterator()));
     }
 
     public static void or(Query query, Filter newFilter) {
@@ -129,9 +128,8 @@ public class QueryUtils {
     }
 
     public static Filter joinOr(Iterable<Filter> filters) {
-        return (filters == null? null : joinOr(filters.iterator()));
+        return (filters == null ? null : joinOr(filters.iterator()));
     }
-
 
 
 }

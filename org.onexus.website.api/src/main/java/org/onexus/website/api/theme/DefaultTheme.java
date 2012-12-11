@@ -21,7 +21,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.HeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
 
@@ -49,14 +53,14 @@ public class DefaultTheme extends Behavior {
         response.render(THEME_JS);
 
         response.render(OnLoadHeaderItem.forScript(
-               getTooltipJavascript() +
-               getModalJavascript() +
-               getPopoverJavascript() +
-               getMoveFooter()));
+                getTooltipJavascript() +
+                        getModalJavascript() +
+                        getPopoverJavascript() +
+                        getMoveFooter()));
     }
 
     private static String getTooltipJavascript() {
-        return  "$(\"[rel=tooltip]\").tooltip({ placement: 'bottom'});";
+        return "$(\"[rel=tooltip]\").tooltip({ placement: 'bottom'});";
     }
 
     private static String getTooltipHideJavascript() {
@@ -68,7 +72,7 @@ public class DefaultTheme extends Behavior {
     }
 
     private static String getPopoverJavascript() {
-        return  "$(\"[rel=popover]\").popover({ placement: 'bottom'});";
+        return "$(\"[rel=popover]\").popover({ placement: 'bottom'});";
     }
 
     private static String getMoveFooter() {

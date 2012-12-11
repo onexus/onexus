@@ -20,7 +20,12 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.resource.api.ORI;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class LinksNetworkComparator implements Comparator<ORI> {
 
@@ -43,7 +48,7 @@ public class LinksNetworkComparator implements Comparator<ORI> {
 
                 // Remove FieldLink from B to A from linksA
                 List<FieldLink> linksA = networkLinks.get(a);
-                for (int i=0; i <linksA.size(); i++) {
+                for (int i = 0; i < linksA.size(); i++) {
                     FieldLink link = linksA.get(i);
                     if (link.getFromCollection().equals(b) && link.getToCollection().equals(a)) {
                         linksA.set(i, null);
@@ -53,7 +58,7 @@ public class LinksNetworkComparator implements Comparator<ORI> {
 
                 // Remove FieldLink from A to B from linksB
                 List<FieldLink> linksB = networkLinks.get(b);
-                for (int i=0; i <linksB.size(); i++) {
+                for (int i = 0; i < linksB.size(); i++) {
                     FieldLink link = linksB.get(i);
                     if (link.getFromCollection().equals(a) && link.getToCollection().equals(b)) {
                         linksB.set(i, null);
@@ -118,8 +123,8 @@ public class LinksNetworkComparator implements Comparator<ORI> {
         int minDerived = -1;
         for (FieldLink link : links) {
             ORI nextCollection = (link.getToCollection().equals(a) ? link.getFromCollection() : link.getToCollection());
-            int derived = depend(nextCollection, b, depth+1, visitedNodes);
-            if (derived != -1 && (minDerived==-1 || derived < minDerived)) {
+            int derived = depend(nextCollection, b, depth + 1, visitedNodes);
+            if (derived != -1 && (minDerived == -1 || derived < minDerived)) {
                 minDerived = derived;
             }
         }

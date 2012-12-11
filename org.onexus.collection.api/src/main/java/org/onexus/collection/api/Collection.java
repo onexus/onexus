@@ -24,7 +24,7 @@ import org.onexus.resource.api.Resource;
 import java.util.List;
 
 @XStreamAlias("collection")
-@XStreamInclude({ Link.class, Field.class })
+@XStreamInclude({Link.class, Field.class})
 public class Collection extends Resource {
 
     private List<Field> fields;

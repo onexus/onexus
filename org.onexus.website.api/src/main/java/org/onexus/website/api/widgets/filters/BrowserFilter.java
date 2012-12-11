@@ -123,19 +123,19 @@ public class BrowserFilter implements IFilter {
     @Override
     public boolean match(VisibleRule rule) {
 
-            ORI visibleCollection = config.getVisibleCollection();
-            if (visibleCollection == null) {
-                visibleCollection = config.getCollection();
-            }
+        ORI visibleCollection = config.getVisibleCollection();
+        if (visibleCollection == null) {
+            visibleCollection = config.getCollection();
+        }
 
-            //TODO
-            boolean validCollection = visibleCollection.getPath().endsWith(rule.getFilteredCollection().getPath());
+        //TODO
+        boolean validCollection = visibleCollection.getPath().endsWith(rule.getFilteredCollection().getPath());
 
-            if (rule.getField() == null) {
-                return validCollection;
-            } else {
-                return false;
-            }
+        if (rule.getField() == null) {
+            return validCollection;
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -90,7 +90,7 @@ public class DefaultDecoratorManager implements IDecoratorManager {
                             }
 
                             String value = keyAndValue[1].trim();
-                            value = value.substring(0, value.length()-1);
+                            value = value.substring(0, value.length() - 1);
                             parameters.put(key, value);
                         }
                     }
@@ -150,7 +150,7 @@ public class DefaultDecoratorManager implements IDecoratorManager {
 
         boolean inQuote = false;
         int last = 0;
-        for (int i=0; i < allParameters.length(); i++) {
+        for (int i = 0; i < allParameters.length(); i++) {
             char c = allParameters.charAt(i);
 
             if (c == '"') {

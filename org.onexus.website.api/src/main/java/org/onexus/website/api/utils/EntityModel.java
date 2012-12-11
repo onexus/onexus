@@ -32,7 +32,7 @@ public class EntityModel implements IModel<IEntity> {
 
     private transient IEntity entity;
 
-    @PaxWicketBean(name="collectionManager")
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
     public EntityModel() {
@@ -40,8 +40,8 @@ public class EntityModel implements IModel<IEntity> {
     }
 
     public EntityModel(IEntity entity) {
-		this.entity = entity;
-		this.collectionURI = entity.getCollection().getURI();
+        this.entity = entity;
+        this.collectionURI = entity.getCollection().getURI();
         this.entityId = entity.getId();
     }
 

@@ -19,6 +19,8 @@ package org.onexus.website.api.widgets.share;
 
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.zip.Inflater;
 
 public class StatusEncoder {
 
+    private static final Logger log = LoggerFactory.getLogger(StatusEncoder.class);
     private XStream XSTREAM;
 
     public StatusEncoder(ClassLoader classLoader) {
@@ -68,11 +71,14 @@ public class StatusEncoder {
                 int count = decompressor.inflate(buf);
                 bos.write(buf, 0, count);
             } catch (DataFormatException e) {
+                log.error("Decompressing '" + inputStr + "'", e);
             }
         }
+
         try {
             bos.close();
         } catch (IOException e) {
+            log.error(e.getMessage());
         }
 
         // Get the decompressed data
@@ -107,6 +113,7 @@ public class StatusEncoder {
         try {
             bos.close();
         } catch (IOException e) {
+            log.error(e.getMessage());
         }
 
         // Get the compressed data

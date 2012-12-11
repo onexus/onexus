@@ -28,8 +28,7 @@ import java.util.Set;
  *
  * @author Sven Meier
  */
-public class InverseSet<T> implements Set<T>, IDetachable
-{
+public class InverseSet<T> implements Set<T>, IDetachable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,61 +37,48 @@ public class InverseSet<T> implements Set<T>, IDetachable
     /**
      * Create a full set.
      *
-     * @param set
-     *            the contained set
+     * @param set the contained set
      */
-    public InverseSet(Set<T> set)
-    {
+    public InverseSet(Set<T> set) {
         this.set = set;
     }
 
-    public void detach()
-    {
-        if (set instanceof IDetachable)
-        {
-            ((IDetachable)set).detach();
+    public void detach() {
+        if (set instanceof IDetachable) {
+            ((IDetachable) set).detach();
         }
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return !set.isEmpty();
     }
 
-    public boolean contains(Object o)
-    {
+    public boolean contains(Object o) {
         return !set.contains(o);
     }
 
-    public boolean add(T t)
-    {
+    public boolean add(T t) {
         return set.remove(t);
     }
 
     @SuppressWarnings("unchecked")
-    public boolean remove(Object o)
-    {
-        return set.add((T)o);
+    public boolean remove(Object o) {
+        return set.add((T) o);
     }
 
-    public boolean addAll(Collection<? extends T> ts)
-    {
+    public boolean addAll(Collection<? extends T> ts) {
         boolean changed = false;
 
-        for (T t : ts)
-        {
+        for (T t : ts) {
             changed |= set.remove(t);
         }
 
         return changed;
     }
 
-    public boolean containsAll(Collection<?> cs)
-    {
-        for (Object c : cs)
-        {
-            if (set.contains(c))
-            {
+    public boolean containsAll(Collection<?> cs) {
+        for (Object c : cs) {
+            if (set.contains(c)) {
                 return false;
             }
         }
@@ -100,45 +86,37 @@ public class InverseSet<T> implements Set<T>, IDetachable
     }
 
     @SuppressWarnings("unchecked")
-    public boolean removeAll(Collection<?> cs)
-    {
+    public boolean removeAll(Collection<?> cs) {
         boolean changed = false;
 
-        for (Object c : cs)
-        {
-            changed |= set.add((T)c);
+        for (Object c : cs) {
+            changed |= set.add((T) c);
         }
 
         return changed;
     }
 
-    public int size()
-    {
+    public int size() {
         throw new UnsupportedOperationException();
     }
 
-    public void clear()
-    {
+    public void clear() {
         throw new UnsupportedOperationException();
     }
 
-    public Iterator<T> iterator()
-    {
+    public Iterator<T> iterator() {
         throw new UnsupportedOperationException();
     }
 
-    public boolean retainAll(Collection<?> c)
-    {
+    public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException();
     }
 
-    public Object[] toArray()
-    {
+    public Object[] toArray() {
         throw new UnsupportedOperationException();
     }
 
-    public <S> S[] toArray(S[] a)
-    {
+    public <S> S[] toArray(S[] a) {
         throw new UnsupportedOperationException();
     }
 }

@@ -20,7 +20,11 @@ package org.onexus.collection.api.query;
 import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Query implements Serializable {
 
@@ -240,7 +244,7 @@ public class Query implements Serializable {
 
         char quote = value.charAt(0);
 
-        value = value.substring(1, value.length()-1);
+        value = value.substring(1, value.length() - 1);
         if (quote == '"') {
             value = value.replace("\\\"", "\"");
         } else {

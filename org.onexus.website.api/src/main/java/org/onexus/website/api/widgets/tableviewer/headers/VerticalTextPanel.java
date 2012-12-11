@@ -24,8 +24,7 @@ import java.awt.*;
 
 public class VerticalTextPanel extends Panel {
 
-    private VerticalTextPanel(String id, String text,
-                              VerticalTextResource resource) {
+    private VerticalTextPanel(String id, VerticalTextResource resource) {
         super(id);
         Image image = new Image("image", resource);
         add(image);
@@ -33,19 +32,19 @@ public class VerticalTextPanel extends Panel {
 
     public VerticalTextPanel(String id, String text, int width, int height,
                              Font font) {
-        this(id, text, new VerticalTextResource(text, width, height, font));
+        this(id, new VerticalTextResource(text, width, height, font));
     }
 
     public VerticalTextPanel(String id, String text, int width, int height) {
-        this(id, text, new VerticalTextResource(text, width, height));
+        this(id, new VerticalTextResource(text, width, height));
     }
 
     public VerticalTextPanel(String id, String text) {
-        this(id, text, new VerticalTextResource(text));
+        this(id, new VerticalTextResource(text));
     }
 
     public VerticalTextPanel(String id, String text, Font font) {
-        this(id, text, new VerticalTextResource(text, font));
+        this(id, new VerticalTextResource(text, font));
     }
 
 }

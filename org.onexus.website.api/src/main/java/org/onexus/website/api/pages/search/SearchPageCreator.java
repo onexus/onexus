@@ -37,9 +37,9 @@ public class SearchPageCreator extends AbstractPageCreator<SearchPageConfig, Sea
     public void register(IResourceRegister resourceRegister) {
         super.register(resourceRegister);
 
-       resourceRegister.register(SearchPageStatus.class);
-       resourceRegister.register(SearchPageStatus.class);
-       resourceRegister.register(SearchType.class);
-       resourceRegister.register(SearchLink.class);
+        resourceRegister.register(SearchPageStatus.class);
+        resourceRegister.register(SearchPageStatus.class);
+        resourceRegister.register(SearchType.class);
+        resourceRegister.register(SearchLink.class);
     }
 }

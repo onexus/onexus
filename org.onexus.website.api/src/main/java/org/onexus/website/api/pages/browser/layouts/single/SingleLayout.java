@@ -36,7 +36,7 @@ public class SingleLayout extends Panel {
     public static final String REGION_MAIN = "main";
     public static final CssResourceReference CSS = new CssResourceReference(SingleLayout.class, "SingleLayout.css");
 
-    @PaxWicketBean(name="widgetManager")
+    @PaxWicketBean(name = "widgetManager")
     private IWidgetManager widgetManager;
 
     public SingleLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {
@@ -54,7 +54,7 @@ public class SingleLayout extends Panel {
         }
 
     }
-    
+
     protected CssResourceReference getCssResourceReference() {
         return CSS;
     }
@@ -62,7 +62,7 @@ public class SingleLayout extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        
+
         CssResourceReference css = getCssResourceReference();
         if (css != null) {
             response.render(CssHeaderItem.forReference(CSS));

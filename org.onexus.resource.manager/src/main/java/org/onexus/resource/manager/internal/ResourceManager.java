@@ -17,9 +17,24 @@
  */
 package org.onexus.resource.manager.internal;
 
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.IAuthorizationManager;
+import static org.onexus.resource.api.IAuthorizationManager.READ;
+import static org.onexus.resource.api.IAuthorizationManager.WRITE;
+import org.onexus.resource.api.IResourceListener;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.Loader;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.manager.internal.providers.AbstractProjectProvider;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.blueprint.container.BlueprintEvent;
 import org.osgi.service.blueprint.container.BlueprintListener;
 import org.slf4j.Logger;
@@ -28,9 +43,6 @@ import org.slf4j.LoggerFactory;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.onexus.resource.api.IAuthorizationManager.READ;
-import static org.onexus.resource.api.IAuthorizationManager.WRITE;
 
 public class ResourceManager implements IResourceManager, BlueprintListener, BundleListener {
 
@@ -44,7 +56,7 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
     private BundleContext context;
 
     // Loaders and managers
-	private PluginLoader pluginLoader;
+    private PluginLoader pluginLoader;
     private ProjectsContainer projectsContainer;
 
     public ResourceManager() {
@@ -110,7 +122,7 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
         }
 
         if (!resourceType.isAssignableFrom(output.getClass())) {
-            throw new RuntimeException("The resource '" + resourceURI + "' is not a '" + resourceType.getSimpleName() + "' is a '" +  output.getClass().getSimpleName() + "'" );
+            throw new RuntimeException("The resource '" + resourceURI + "' is not a '" + resourceType.getSimpleName() + "' is a '" + output.getClass().getSimpleName() + "'");
         }
 
         return output;
@@ -212,7 +224,7 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
 
     public void init() {
         // Projects container
-		this.pluginLoader = new PluginLoader(context);
+        this.pluginLoader = new PluginLoader(context);
         this.projectsContainer = new ProjectsContainer(serializer, pluginLoader);
 
     }
@@ -258,30 +270,30 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
     }
 
 
-	public ProjectsContainer getProjectsContainer() {
-		return projectsContainer;
-	}
+    public ProjectsContainer getProjectsContainer() {
+        return projectsContainer;
+    }
 
-	public void setProjectsContainer(ProjectsContainer projectsContainer) {
-		this.projectsContainer = projectsContainer;
-	}
+    public void setProjectsContainer(ProjectsContainer projectsContainer) {
+        this.projectsContainer = projectsContainer;
+    }
 
 
-	@Override
-	public void blueprintEvent(BlueprintEvent blueprintEvent) {
+    @Override
+    public void blueprintEvent(BlueprintEvent blueprintEvent) {
 
-		if(blueprintEvent.getType() == BlueprintEvent.CREATED) {
-			this.projectsContainer.bundleCreated(blueprintEvent.getBundle().getBundleId());
-		}
+        if (blueprintEvent.getType() == BlueprintEvent.CREATED) {
+            this.projectsContainer.bundleCreated(blueprintEvent.getBundle().getBundleId());
+        }
 
-	}
+    }
 
-	@Override
-	public void bundleChanged(BundleEvent bundleEvent) {
+    @Override
+    public void bundleChanged(BundleEvent bundleEvent) {
 
-		if (bundleEvent.getType() == BundleEvent.UNINSTALLED) {
-			this.projectsContainer.bundleUninstalled(bundleEvent.getBundle().getBundleId());
-		}
+        if (bundleEvent.getType() == BundleEvent.UNINSTALLED) {
+            this.projectsContainer.bundleUninstalled(bundleEvent.getBundle().getBundleId());
+        }
 
-	}
+    }
 }

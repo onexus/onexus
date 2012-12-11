@@ -73,7 +73,7 @@ public class In extends Filter {
         Iterator<Object> it = values.iterator();
         while (it.hasNext()) {
             Object value = it.next();
-            oql.append( convertToOQL(value) );
+            oql.append(convertToOQL(value));
             if (it.hasNext()) {
                 oql.append(", ");
             }

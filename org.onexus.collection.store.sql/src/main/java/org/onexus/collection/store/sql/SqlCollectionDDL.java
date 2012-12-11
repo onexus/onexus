@@ -24,7 +24,11 @@ import org.onexus.collection.store.sql.adapters.SqlAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class SqlCollectionDDL {
     private final static Logger LOGGER = LoggerFactory
@@ -48,7 +52,7 @@ public class SqlCollectionDDL {
         this.columnInfos = new HashMap<String, ColumnInfo>();
         this.tableName = (tableName == null ? convertURItoTableName(collection) : tableName);
 
-        prepareFieldInfoMap(null, collection);
+        prepareFieldInfoMap(collection);
         prepareCreateTable(collection);
         prepareCreateIndex(collection);
 
@@ -136,13 +140,13 @@ public class SqlCollectionDDL {
         return null;
     }
 
-    private void prepareFieldInfoMap(String prefix, Collection collection) {
+    private void prepareFieldInfoMap(Collection collection) {
         if (collection == null) {
             return;
         }
 
         for (Field field : collection.getFields()) {
-            ColumnInfo fi = new ColumnInfo(prefix, field);
+            ColumnInfo fi = new ColumnInfo(field);
             columnInfos.put(fi.getColumnName(), fi);
         }
     }
@@ -168,7 +172,7 @@ public class SqlCollectionDDL {
         // TODO Use common collections filters
         List<String> keys = new ArrayList<String>();
         for (Field field : collection.getFields()) {
-            if (field.isPrimaryKey()!=null && field.isPrimaryKey()) {
+            if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
                 keys.add(field.getId());
             }
         }
@@ -222,7 +226,7 @@ public class SqlCollectionDDL {
         private String columnName;
         private String columnType = null;
 
-        private ColumnInfo(String prefix, Field field) {
+        private ColumnInfo(Field field) {
             this.columnName = removeNonValidChars(field.getId());
             this.field = field;
 

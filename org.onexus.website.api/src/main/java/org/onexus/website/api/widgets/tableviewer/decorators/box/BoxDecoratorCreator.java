@@ -39,6 +39,6 @@ public class BoxDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        return new BoxDecorator(collection, columnField, parameters);
+        return new BoxDecorator(columnField, parameters);
     }
 }

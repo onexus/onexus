@@ -40,7 +40,7 @@ import java.util.List;
 
 public class TagColumnItem extends Panel {
 
-    @PaxWicketBean(name="tagStoreManager")
+    @PaxWicketBean(name = "tagStoreManager")
     private ITagStoreManager tagStoreManager;
 
     private WebMarkupContainer checkbox;

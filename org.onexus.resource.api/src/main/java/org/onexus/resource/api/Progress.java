@@ -18,7 +18,9 @@
 package org.onexus.resource.api;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Progress implements Serializable {
 
@@ -100,15 +102,6 @@ public class Progress implements Serializable {
         Status status = getStatus();
         return status != Status.WAITING &&
                 status != Status.RUNNING;
-    }
-
-    private boolean areSubTasksDone() {
-        for (Progress subProgress : subProgresses) {
-            if (!subProgress.isDone()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public Status getStatus() {

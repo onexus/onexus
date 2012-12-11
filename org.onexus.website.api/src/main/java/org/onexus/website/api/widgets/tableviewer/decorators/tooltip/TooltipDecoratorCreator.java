@@ -39,6 +39,6 @@ public class TooltipDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        return new TooltipDecorator(collection, columnField, parameters);
+        return new TooltipDecorator(columnField, parameters);
     }
 }

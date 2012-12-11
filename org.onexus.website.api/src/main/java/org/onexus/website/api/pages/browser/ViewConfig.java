@@ -22,7 +22,6 @@ import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.authorization.Authorization;
 import org.onexus.website.api.utils.visible.IVisible;
-import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
@@ -102,10 +101,8 @@ public class ViewConfig implements Serializable, IVisible {
                 if (selectedWidget != null) {
                     for (String widget : selectedWidget.split(",")) {
                         WidgetConfig widgetConfig = pageConfig.getWidget(widget.trim());
-                        if (widgetConfig != null) {
-							if (Authorization.authorize(widgetConfig)) {
-                            	widgets.add(widgetConfig);
-							}
+                        if (widgetConfig != null && Authorization.authorize(widgetConfig)) {
+                            widgets.add(widgetConfig);
                         }
                     }
                 }

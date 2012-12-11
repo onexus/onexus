@@ -27,7 +27,7 @@ import java.util.List;
 
 @XStreamAlias("html")
 public class HtmlPageConfig extends PageConfig {
-    
+
     private String content;
 
     public HtmlPageConfig() {

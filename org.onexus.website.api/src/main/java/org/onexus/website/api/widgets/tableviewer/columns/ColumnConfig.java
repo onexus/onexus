@@ -33,8 +33,6 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
 import org.onexus.website.api.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +41,6 @@ import java.util.regex.Pattern;
 
 @XStreamAlias("column")
 public class ColumnConfig implements IColumnConfig {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ColumnConfig.class);
 
     private String label;
 

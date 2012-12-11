@@ -27,13 +27,18 @@ import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.pages.resource.ResourceModel;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
     private IModel<? extends Resource> currentResource;
 
-    @PaxWicketBean(name="resourceManager")
+    @PaxWicketBean(name = "resourceManager")
     public IResourceManager resourceManager;
 
     private final static Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
@@ -56,7 +61,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        Project project = resourceManager.getProject( resource.getURI().getProjectUrl() );
+        Project project = resourceManager.getProject(resource.getURI().getProjectUrl());
 
         if (project == null) {
             return EMPTY_ITERATOR;

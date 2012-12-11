@@ -22,19 +22,18 @@ public class PythonScript implements IQueryScript {
     public String getContent(String query, CharSequence url) {
         return
                 "import urllib2\n" +
-                "\n" +
-                "query=\"\"\"\n" + query + "\"\"\"\n" +
-                "\n" +
-                "req = urllib2.Request(\"" + url + "\")\n" +
-                "res = urllib2.urlopen(req, query)\n" +
-                "print res.read()";
+                        "\n" +
+                        "query=\"\"\"\n" + query + "\"\"\"\n" +
+                        "\n" +
+                        "req = urllib2.Request(\"" + url + "\")\n" +
+                        "res = urllib2.urlopen(req, query)\n" +
+                        "print res.read()";
     }
 
     @Override
     public String getLabel() {
         return "python";
     }
-
 
 
 }

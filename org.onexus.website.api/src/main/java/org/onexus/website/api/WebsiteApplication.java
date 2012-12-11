@@ -37,7 +37,7 @@ import org.ops4j.pax.wicket.api.InjectorHolder;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class WebsiteApplication extends AuthenticatedWebApplication  {
+public class WebsiteApplication extends AuthenticatedWebApplication {
 
     private final static String SERVER_URL = System.getProperty("onexus.server.url");
 
@@ -61,24 +61,24 @@ public class WebsiteApplication extends AuthenticatedWebApplication  {
     protected void init() {
         super.init();
 
-		// Authentication
-		getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
+        // Authentication
+        getApplicationSettings().setAccessDeniedPage(getSignInPageClass());
 
 		/* In case of unhandled exception redirect it to a custom page */
-		getRequestCycleListeners().add(new AbstractRequestCycleListener() {
-			@Override
-			public IRequestHandler onException(RequestCycle cycle, Exception e) {
-				return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e)));
-			}
-		});
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+            @Override
+            public IRequestHandler onException(RequestCycle cycle, Exception e) {
+                return new RenderPageRequestHandler(new PageProvider(new ExceptionErrorPage(e)));
+            }
+        });
 
-		// Set the login context on each thread
-		getRequestCycleListeners().add(new AbstractRequestCycleListener() {
-			@Override
-			public void onBeginRequest(RequestCycle cycle) {
-				LoginContext.set(WebsiteSession.get().getLoginContext());
-			}
-		});
+        // Set the login context on each thread
+        getRequestCycleListeners().add(new AbstractRequestCycleListener() {
+            @Override
+            public void onBeginRequest(RequestCycle cycle) {
+                LoginContext.set(WebsiteSession.get().getLoginContext());
+            }
+        });
 
         mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
         mountPage("/login", getSignInPageClass());

@@ -20,17 +20,11 @@ package org.onexus.website.api.pages;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.events.EventPanel;
-import org.onexus.website.api.widgets.IWidgetManager;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.onexus.website.api.utils.CustomCssBehavior;
 
 public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel {
-
-
-    @PaxWicketBean(name="widgetManager")
-    private IWidgetManager widgetManager;
 
     public Page(String componentId, IModel<S> pageModel) {
         super(componentId, pageModel);

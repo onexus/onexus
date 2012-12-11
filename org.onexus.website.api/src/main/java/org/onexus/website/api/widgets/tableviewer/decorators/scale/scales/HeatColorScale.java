@@ -34,9 +34,9 @@ public class HeatColorScale extends CompositeColorScale {
         super(minValue, maxValue, minColor, maxColor);
 
 
-        ScaleRange[] scaleRanges = new ScaleRange[] {
-            new ScaleRange(minValue, midValue, new LinearColorScale(minValue, midValue, minColor, midColor)),
-            new ScaleRange(midValue, maxValue, new LinearColorScale(midValue, maxValue, midColor, maxColor))
+        ScaleRange[] scaleRanges = new ScaleRange[]{
+                new ScaleRange(minValue, midValue, new LinearColorScale(minValue, midValue, minColor, midColor)),
+                new ScaleRange(midValue, maxValue, new LinearColorScale(midValue, maxValue, midColor, maxColor))
         };
 
         setScaleRanges(scaleRanges);

@@ -38,7 +38,7 @@ import java.util.List;
 
 public class WizardViewer extends Panel {
 
-    @PaxWicketBean(name="wizardsManager")
+    @PaxWicketBean(name = "wizardsManager")
     private IWizardsManager wizardsManager;
 
     private IModel<? extends Resource> resourceModel;
@@ -73,7 +73,7 @@ public class WizardViewer extends Panel {
 
                 item.add(new Label("title", title));
 
-                if ( description != null ) {
+                if (description != null) {
                     item.add(new HelpMark("description", title, description));
                 } else {
                     item.add(new EmptyPanel("description"));

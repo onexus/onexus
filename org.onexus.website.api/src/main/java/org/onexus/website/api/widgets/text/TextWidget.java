@@ -31,7 +31,7 @@ public class TextWidget extends Widget<TextWidgetConfig, TextWidgetStatus> {
         String button = getConfig().getButton();
         add(new Label("title", getConfig().getTitle()).setVisible(button == null || button.isEmpty()));
         add(new Label("text", getConfig().getText()).setEscapeModelStrings(false));
-        
+
         if (getConfig().getDetails() != null) {
             add(new HelpMark("details", getConfig().getText(), getConfig().getDetails()));
         } else {

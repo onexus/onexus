@@ -21,15 +21,11 @@ import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectorFiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
-
-    private static final Logger log = LoggerFactory.getLogger(SelectorFiltersWidgetStatus.class);
 
     private List<FilterConfig> selectedFilters;
 

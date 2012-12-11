@@ -29,7 +29,7 @@ public class SearchWidgetConfig extends WidgetConfig {
 
     private SearchWidgetStatus defaultStatus;
 
-    @XStreamImplicit(itemFieldName="column")
+    @XStreamImplicit(itemFieldName = "column")
     private List<SearchField> fields;
 
     public SearchWidgetConfig() {

@@ -18,7 +18,12 @@
 package org.onexus.ui.api.wizards;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.wizard.*;
+import org.apache.wicket.extensions.wizard.FinishButton;
+import org.apache.wicket.extensions.wizard.IDefaultButtonProvider;
+import org.apache.wicket.extensions.wizard.IWizard;
+import org.apache.wicket.extensions.wizard.IWizardStep;
+import org.apache.wicket.extensions.wizard.Wizard;
+import org.apache.wicket.extensions.wizard.WizardButtonBar;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 

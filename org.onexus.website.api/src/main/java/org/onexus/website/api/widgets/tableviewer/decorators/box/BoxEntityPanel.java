@@ -36,43 +36,43 @@ import java.util.List;
 
 public class BoxEntityPanel extends Panel {
 
-	public static CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(BoxEntityPanel.class, "BoxEntityPanel.css"));
+    public static CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(BoxEntityPanel.class, "BoxEntityPanel.css"));
 
     public BoxEntityPanel(String id, IEntity entity, List<String> fieldIds) {
         super(id);
 
-		Collection collection = entity.getCollection();
+        Collection collection = entity.getCollection();
 
-		List<Field> fields = new ArrayList<Field>();
-		if (fieldIds == null || fieldIds.isEmpty()) {
-			fields.addAll(collection.getFields());
-		} else {
-			for (String fieldId : fieldIds) {
-				fields.add( collection.getField(fieldId) );
-			}
-		}
+        List<Field> fields = new ArrayList<Field>();
+        if (fieldIds == null || fieldIds.isEmpty()) {
+            fields.addAll(collection.getFields());
+        } else {
+            for (String fieldId : fieldIds) {
+                fields.add(collection.getField(fieldId));
+            }
+        }
 
-		RepeatingView fieldsView = new RepeatingView("fields");
-		for (Field field : fields) {
+        RepeatingView fieldsView = new RepeatingView("fields");
+        for (Field field : fields) {
 
-			Object value = entity.get(field.getId());
-			if (value != null && !StringUtils.isEmpty(value.toString())) {
+            Object value = entity.get(field.getId());
+            if (value != null && !StringUtils.isEmpty(value.toString())) {
 
-				WebMarkupContainer fc = new WebMarkupContainer(fieldsView.newChildId());
-				fc.setRenderBodyOnly(true);
-				fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
-				fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
-				fieldsView.add(fc);
-			}
-		}
+                WebMarkupContainer fc = new WebMarkupContainer(fieldsView.newChildId());
+                fc.setRenderBodyOnly(true);
+                fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
+                fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
+                fieldsView.add(fc);
+            }
+        }
 
-		add(fieldsView);
+        add(fieldsView);
 
 
     }
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		response.render(CSS);
-	}
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(CSS);
+    }
 }

@@ -17,7 +17,9 @@
  */
 package org.onexus.website.api;
 
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
@@ -26,7 +28,10 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class WebsiteService implements IWebsiteService {
 
@@ -73,7 +78,7 @@ public class WebsiteService implements IWebsiteService {
 
                 }
 
-				registerProject(project);
+                registerProject(project);
             }
 
             @Override

@@ -21,7 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceRegister;
 
 public abstract class AbstractPageCreator<C extends PageConfig, S extends PageStatus> implements IPageCreator {
-    
+
     private Class<C> configType;
     private String title;
     private String description;

@@ -36,13 +36,17 @@ import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.widgets.*;
+import org.onexus.website.api.widgets.IWidgetManager;
+import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.WidgetModel;
+import org.onexus.website.api.widgets.WidgetStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 
 public class ButtonWidget extends EventPanel {
 
-    @PaxWicketBean(name="widgetManager")
+    @PaxWicketBean(name = "widgetManager")
     private IWidgetManager widgetManager;
 
     private WidgetConfig widgetConfig;
@@ -76,7 +80,7 @@ public class ButtonWidget extends EventPanel {
         if (!Strings.isEmpty(widgetConfig.getWidth())) {
             int width = Integer.valueOf(widgetConfig.getWidth());
             int marginLeft = width / 2;
-            widgetModal.add(new AttributeModifier("style", "width: "+ width +"px; margin-left: -"+ marginLeft +"px;"));
+            widgetModal.add(new AttributeModifier("style", "width: " + width + "px; margin-left: -" + marginLeft + "px;"));
         }
 
         add(widgetModal);
@@ -128,7 +132,7 @@ public class ButtonWidget extends EventPanel {
 
     @Override
     protected void onRegisteredEvent(AjaxRequestTarget target, AbstractEvent event) {
-        target.add( get("button"));
+        target.add(get("button"));
     }
 
     @Override

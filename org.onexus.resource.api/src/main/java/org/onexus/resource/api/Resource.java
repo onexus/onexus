@@ -49,7 +49,7 @@ public abstract class Resource implements IMetadata, Serializable {
         int lsep = oriStr.lastIndexOf('/');
         int lquestion = oriStr.indexOf('?');
         int last = (lquestion != -1 && lquestion > lsep ? lquestion : lsep);
-        return oriStr.substring(last+1);
+        return oriStr.substring(last + 1);
     }
 
     public String getLabel() {

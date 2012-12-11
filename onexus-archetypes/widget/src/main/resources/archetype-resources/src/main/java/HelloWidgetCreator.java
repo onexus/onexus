@@ -15,7 +15,9 @@
  *
  *
  */
-package ${package};
+package $
+
+{package};
 
 import org.apache.wicket.model.IModel;
 import org.onexus.ui.website.WebsiteConfig;

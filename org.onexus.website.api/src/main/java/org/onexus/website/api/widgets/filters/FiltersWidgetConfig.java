@@ -93,7 +93,7 @@ public class FiltersWidgetConfig extends WidgetConfig {
         FiltersWidgetStatus status = new FiltersWidgetStatus(getId());
         if (filters != null) {
             for (FilterConfig filter : filters) {
-                 status.getFilters().add(SerializationUtils.clone(filter));
+                status.getFilters().add(SerializationUtils.clone(filter));
             }
         }
 

@@ -29,61 +29,60 @@ import java.security.InvalidParameterException;
 
 public class PluginLoader implements Serializable {
 
-	private static final Logger log = LoggerFactory.getLogger(PluginLoader.class);
-	private BundleContext context;
+    private static final Logger log = LoggerFactory.getLogger(PluginLoader.class);
+    private BundleContext context;
 
 
-	public PluginLoader(BundleContext context) {
-		super();
-		this.context = context;
-	}
+    public PluginLoader(BundleContext context) {
+        super();
+        this.context = context;
+    }
 
-	public long load(Plugin plugin) throws InvalidParameterException {
+    public long load(Plugin plugin) throws InvalidParameterException {
 
-		String location = plugin.getLocation();
+        String location = plugin.getLocation();
 
-		if (location == null) {
-			throw new InvalidParameterException("Plugin \" + plugin.getId() + \" without location.");
-		}
+        if (location == null) {
+            throw new InvalidParameterException("Plugin \" + plugin.getId() + \" without location.");
+        }
 
-		location = location.trim();
+        location = location.trim();
 
-		if (location.isEmpty()) {
-			throw new InvalidParameterException("Plugin " + plugin.getId() + " without location.");
-		}
+        if (location.isEmpty()) {
+            throw new InvalidParameterException("Plugin " + plugin.getId() + " without location.");
+        }
 
-		Bundle bundle = null;
-		try {
-			bundle = context.installBundle(location, null);
-		} catch (IllegalStateException ex) {
-			log.error(ex.toString());
-		} catch (BundleException ex) {
-			if (ex.getNestedException() != null) {
-				log.error(ex.getNestedException().toString());
-			} else {
-				log.error(ex.toString());
-			}
-		}
+        Bundle bundle = null;
+        try {
+            bundle = context.installBundle(location, null);
+        } catch (IllegalStateException ex) {
+            log.error(ex.toString());
+        } catch (BundleException ex) {
+            if (ex.getNestedException() != null) {
+                log.error(ex.getNestedException().toString());
+            } else {
+                log.error(ex.toString());
+            }
+        }
 
-		if (bundle != null) {
+        if (bundle != null) {
 
-			if (bundle.getState() == Bundle.ACTIVE) {
-				return bundle.getBundleId();
-			}
+            if (bundle.getState() == Bundle.ACTIVE) {
+                return bundle.getBundleId();
+            }
 
-			try {
-				int previousState = bundle.getState();
-				bundle.start();
-				log.info("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
-				return bundle.getBundleId();
+            try {
+                bundle.start();
+                log.info("Plugin " + plugin.getId() + " installed and started. Bundle ID: " + bundle.getBundleId());
+                return bundle.getBundleId();
 
-			} catch (BundleException e) {
-				String msg = "Plugin " + plugin.getId() + " installed but NOT started. Bundle ID: " + bundle.getBundleId();
-				log.error(msg, e);
-			}
+            } catch (BundleException e) {
+                String msg = "Plugin " + plugin.getId() + " installed but NOT started. Bundle ID: " + bundle.getBundleId();
+                log.error(msg, e);
+            }
 
-		}
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 }

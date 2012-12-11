@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ParameterKey;
@@ -34,7 +33,7 @@ public class TooltipDecorator implements IDecorator {
     private Field field;
     private Map<ParameterKey, String> parameters;
 
-    public TooltipDecorator(Collection collection, Field field, Map<ParameterKey, String> parameters) {
+    public TooltipDecorator(Field field, Map<ParameterKey, String> parameters) {
         super();
         this.field = field;
         this.parameters = parameters;
@@ -67,7 +66,6 @@ public class TooltipDecorator implements IDecorator {
 
         return String.valueOf(value);
     }
-
 
 
     @Override
