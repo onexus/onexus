@@ -29,6 +29,7 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
 import org.onexus.collection.api.types.Text;
+import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.Folder;
 import org.onexus.resource.api.IResourceManager;
@@ -266,7 +267,7 @@ public class CreateCollectionWizard extends AbstractWizard {
 
                     // Only simple links (not composed)
                     if (link.getFields().size() == 1) {
-                        String field = Link.getFromFieldName(link.getFields().get(0));
+                        String field = LinkUtils.getFromFieldName(link.getFields().get(0));
                         links.put(field, link);
                     }
                 }

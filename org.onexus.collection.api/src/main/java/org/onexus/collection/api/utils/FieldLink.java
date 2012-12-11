@@ -76,5 +76,37 @@ public class FieldLink {
         this.toFieldName = toFieldName;
     }
 
+    @Override
+    public String toString() {
+        return "FieldLink{" +
+                "fromCollection=" + fromCollection +
+                ", fromFieldName='" + fromFieldName + '\'' +
+                ", toCollection=" + toCollection +
+                ", toFieldName='" + toFieldName + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FieldLink fieldLink = (FieldLink) o;
+
+        if (!fromCollection.equals(fieldLink.fromCollection)) return false;
+        if (!fromFieldName.equals(fieldLink.fromFieldName)) return false;
+        if (!toCollection.equals(fieldLink.toCollection)) return false;
+        if (!toFieldName.equals(fieldLink.toFieldName)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fromCollection.hashCode();
+        result = 31 * result + fromFieldName.hashCode();
+        result = 31 * result + toCollection.hashCode();
+        result = 31 * result + toFieldName.hashCode();
+        return result;
+    }
 }

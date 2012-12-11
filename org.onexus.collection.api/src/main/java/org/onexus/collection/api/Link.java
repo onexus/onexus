@@ -23,12 +23,11 @@ import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @XStreamAlias("link")
 public class Link implements Serializable {
-
-    public final static String FIELDS_SEPARATOR = "==";
 
     private ORI collection;
 
@@ -39,10 +38,10 @@ public class Link implements Serializable {
         super();
     }
 
-    public Link(ORI collection, List<String> fields) {
+    public Link(ORI collection, String... fields) {
         super();
         this.collection = collection;
-        this.fields = fields;
+        this.fields = Arrays.asList(fields);
     }
 
     public ORI getCollection() {
@@ -65,16 +64,6 @@ public class Link implements Serializable {
     public String toString() {
         return "Link [collection=" + collection + ", fields="
                 + fields + "]";
-    }
-
-    public static String getToFieldName(String fieldLink) {
-        String values[] = fieldLink.split(FIELDS_SEPARATOR);
-        return (values.length == 2 ? values[1].trim() : values[0].trim());
-    }
-
-    public static String getFromFieldName(String fieldLink) {
-        String values[] = fieldLink.split(FIELDS_SEPARATOR);
-        return values[0].trim();
     }
 
 }

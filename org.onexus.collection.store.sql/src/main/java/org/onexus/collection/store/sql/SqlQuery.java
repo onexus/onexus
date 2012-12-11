@@ -172,7 +172,7 @@ public class SqlQuery {
                             for (int i = 0; i < ids.length; i++) {
 
                                 leftJoin.append("`").append(collectionAlias).append("`.`")
-                                        .append(Link.getToFieldName(fields.get(i)))
+                                        .append(LinkUtils.getToFieldName(fields.get(i)))
                                         .append("` = ");
 
                                 SqlAdapter adapter = manager.getSqlDialect().getAdapter(joinCollection.getField(fields.get(i)).getType());

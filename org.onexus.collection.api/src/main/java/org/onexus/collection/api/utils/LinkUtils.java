@@ -28,6 +28,8 @@ import java.util.List;
 
 public class LinkUtils {
 
+    public final static String FIELDS_SEPARATOR = "==";
+
     public static List<FieldLink> getLinkFields(ORI parentURI,
                                                 Collection a, Collection b) {
 
@@ -48,9 +50,9 @@ public class LinkUtils {
         for (Link link : linksA) {
             if (link.getCollection().toAbsolute(parentURI).equals(b.getURI())) {
                 for (String field : link.getFields()) {
-                    fieldLinks.add(new FieldLink(a.getURI(), Link
-                            .getFromFieldName(field), b.getURI(), Link
-                            .getToFieldName(field)));
+                    fieldLinks.add(new FieldLink(a.getURI(),
+                            getFromFieldName(field), b.getURI(),
+                            getToFieldName(field)));
                 }
                 return fieldLinks;
             }
@@ -60,9 +62,9 @@ public class LinkUtils {
         for (Link link : linksB) {
             if (link.getCollection().toAbsolute(parentURI).equals(a.getURI())) {
                 for (String field : link.getFields()) {
-                    fieldLinks.add(new FieldLink(b.getURI(), Link
-                            .getFromFieldName(field), a.getURI(), Link
-                            .getToFieldName(field)));
+                    fieldLinks.add(new FieldLink(b.getURI(),
+                            getFromFieldName(field), a.getURI(),
+                            getToFieldName(field)));
                 }
                 return fieldLinks;
             }
@@ -81,7 +83,7 @@ public class LinkUtils {
                 List<Link> keyLinks = new ArrayList<Link>();
                 for (Link link : linksA) {
                     for (String fieldName : link.getFields()) {
-                        String fromField = Link.getFromFieldName(fieldName);
+                        String fromField = getFromFieldName(fieldName);
                         if (fromField.equals(field.getId())) {
                             keyLinks.add(link);
                         }
@@ -98,17 +100,17 @@ public class LinkUtils {
 
                             // Try to match the field links
                             for (String fieldLinkA : linkA.getFields()) {
-                                String toFieldA = Link
-                                        .getToFieldName(fieldLinkA);
+                                String toFieldA =
+                                        getToFieldName(fieldLinkA);
 
                                 for (String fieldLinkB : linkB.getFields()) {
-                                    String toFieldB = Link
-                                            .getToFieldName(fieldLinkB);
+                                    String toFieldB =
+                                            getToFieldName(fieldLinkB);
                                     if (toFieldA.equals(toFieldB)) {
-                                        String fromFieldA = Link
-                                                .getFromFieldName(fieldLinkA);
-                                        String fromFieldB = Link
-                                                .getFromFieldName(fieldLinkB);
+                                        String fromFieldA =
+                                                getFromFieldName(fieldLinkA);
+                                        String fromFieldB =
+                                                getFromFieldName(fieldLinkB);
                                         primaryKeyLinks.add(new FieldLink(
                                                 a.getURI(), fromFieldA, b
                                                 .getURI(), fromFieldB));
@@ -131,4 +133,13 @@ public class LinkUtils {
 
     }
 
+    public static String getToFieldName(String fieldLink) {
+        String values[] = fieldLink.split(FIELDS_SEPARATOR);
+        return (values.length == 2 ? values[1].trim() : values[0].trim());
+    }
+
+    public static String getFromFieldName(String fieldLink) {
+        String values[] = fieldLink.split(FIELDS_SEPARATOR);
+        return values[0].trim();
+    }
 }

@@ -20,6 +20,7 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
+import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.store.sql.adapters.SqlAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class SqlCollectionDDL {
 
                 Iterator<String> fieldIt = link.getFields().iterator();
                 while (fieldIt.hasNext()) {
-                    linkSQL.append("`").append(Link.getFromFieldName(fieldIt.next())).append("`");
+                    linkSQL.append("`").append(LinkUtils.getFromFieldName(fieldIt.next())).append("`");
                     if (fieldIt.hasNext()) {
                         linkSQL.append(", ");
                     }
