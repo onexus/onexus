@@ -37,14 +37,14 @@ defineClause
 ;
 
 defineItem 
-	:	alias=varname '=' uri=string
-		{ query.addDefine( $alias.text, new ORI($uri.v) ); }
+	:	alias=varname '=' ori=string
+		{ query.addDefine( $alias.text, new ORI($ori.v) ); }
 ;
 
 /* ON clause */
 onClause 
-	:	'ON' uri=string
-		{ query.setOn( new ORI($uri.v)); }
+	:	'ON' ori=string
+		{ query.setOn( new ORI($ori.v)); }
 ;
 
 /* SELECT clause */

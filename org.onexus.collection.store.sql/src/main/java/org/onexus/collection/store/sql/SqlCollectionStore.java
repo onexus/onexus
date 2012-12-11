@@ -242,13 +242,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     @Override
     public void insert(IEntitySet entitySet) {
 
-        if (!isRegistered(entitySet.getCollection().getURI())) {
+        if (!isRegistered(entitySet.getCollection().getORI())) {
             throw new RuntimeException("The collection '"
-                    + entitySet.getCollection().getURI()
+                    + entitySet.getCollection().getORI()
                     + "' is NOT registered in this collection store.");
         }
 
-        SqlCollectionDDL ddl = getDDL(entitySet.getCollection().getURI());
+        SqlCollectionDDL ddl = getDDL(entitySet.getCollection().getORI());
 
         StringBuilder sql = new StringBuilder(INSERT_BUFFER_SIZE);
 
@@ -311,15 +311,15 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     @Override
     public void insert(IEntity entity) {
 
-        if (!isRegistered(entity.getCollection().getURI())) {
+        if (!isRegistered(entity.getCollection().getORI())) {
             throw new RuntimeException("The collection '"
-                    + entity.getCollection().getURI()
+                    + entity.getCollection().getORI()
                     + "' is NOT registered in this collection store.");
         }
 
         StringBuilder sql = new StringBuilder();
 
-        SqlCollectionDDL ddl = getDDL(entity.getCollection().getURI());
+        SqlCollectionDDL ddl = getDDL(entity.getCollection().getORI());
 
         // Open insert
         sqlDialect.openInsert(sql, ddl);

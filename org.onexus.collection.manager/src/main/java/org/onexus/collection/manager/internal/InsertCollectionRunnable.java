@@ -50,7 +50,7 @@ class InsertCollectionRunnable implements Runnable {
     @Override
     public void run() {
 
-        String taskId = Integer.toHexString(collection.getURI().hashCode());
+        String taskId = Integer.toHexString(collection.getORI().hashCode());
 
         Progress progress = tasks.get(taskId);
 
@@ -59,7 +59,7 @@ class InsertCollectionRunnable implements Runnable {
             Callable<IEntitySet> callable = loader.newCallable(progress, plugin, collection);
             IEntitySet entitySet = callable.call();
 
-            String msg = "Inserting '" + collection.getURI().getPath() + "'";
+            String msg = "Inserting '" + collection.getORI().getPath() + "'";
 
             progress.run();
             progress.info(msg);
@@ -67,7 +67,7 @@ class InsertCollectionRunnable implements Runnable {
 
             store.insert(entitySet);
 
-            msg = "Collection '" + collection.getURI().getPath() + "' inserted.";
+            msg = "Collection '" + collection.getORI().getPath() + "' inserted.";
             progress.info(msg);
             progress.done();
 
@@ -79,7 +79,7 @@ class InsertCollectionRunnable implements Runnable {
             log.error(e.getMessage(), e);
 
             progress.fail();
-            store.deregister(collection.getURI());
+            store.deregister(collection.getORI());
 
         } finally {
 

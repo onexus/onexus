@@ -97,7 +97,7 @@ public class EntitySelectBox extends Panel {
         if (searchType.getLinks() != null) {
 
             List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
-            VisiblePredicate predicate = new VisiblePredicate(collection.getURI().getParent(), Arrays.asList(new IFilter[]{new FilterEntity(entity)}));
+            VisiblePredicate predicate = new VisiblePredicate(collection.getORI().getParent(), Arrays.asList(new IFilter[]{new FilterEntity(entity)}));
             CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
 
             for (SearchLink searchLink : filteredLinks) {
@@ -117,11 +117,6 @@ public class EntitySelectBox extends Panel {
         String link = url;
         link = link.replace("$collection", collection.toString());
         link = link.replace("$entity", entityId);
-
-        /*StringValue uri = getPage().getPageParameters().get("uri");
-        if (!uri.isEmpty()) {
-            link = link + "&uri=" + uri.toString();
-        } */
 
         return link;
     }

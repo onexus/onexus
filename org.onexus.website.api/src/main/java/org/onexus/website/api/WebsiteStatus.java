@@ -73,7 +73,7 @@ public class WebsiteStatus implements Serializable {
     }
 
     public void onQueryBuild(Query query) {
-        query.setOn(getConfig().getURI());
+        query.setOn(getConfig().getORI());
     }
 
     public void encodeParameters(PageParameters parameters) {

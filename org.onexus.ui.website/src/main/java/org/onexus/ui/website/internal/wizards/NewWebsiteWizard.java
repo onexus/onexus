@@ -269,7 +269,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
                 Collection colB = resourceManager.load(Collection.class, collection.toAbsolute(getParentUri()));
 
-                if (colA.getURI().equals(colB.getURI())) {
+                if (colA.getORI().equals(colB.getORI())) {
                     continue;
                 }
 
@@ -361,12 +361,12 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
         List<Collection> collections = resourceManager.loadChildren(Collection.class, parentUri);
         for (Collection collection : collections) {
-            collectionUris.add(collection.getURI());
+            collectionUris.add(collection.getORI());
         }
 
         List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);
         for (Folder folder : folders) {
-            addAllCollections(collectionUris, folder.getURI());
+            addAllCollections(collectionUris, folder.getORI());
         }
 
     }

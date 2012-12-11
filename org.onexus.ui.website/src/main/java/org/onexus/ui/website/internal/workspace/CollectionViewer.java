@@ -43,10 +43,10 @@ public class CollectionViewer extends Panel {
 
             Collection collection = (Collection) resource;
 
-            TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", collection.getURI());
+            TableViewerConfig viewerConfig = new TableViewerConfig("tableviewer", collection.getORI());
 
             ColumnSet columnSet = new ColumnSet();
-            columnSet.getColumns().add(new ColumnConfig(collection.getURI(), REGEXP_ALL_FIELDS));
+            columnSet.getColumns().add(new ColumnConfig(collection.getORI(), REGEXP_ALL_FIELDS));
             viewerConfig.getColumnSets().add(columnSet);
 
             TableViewerStatus viewerStatus = new TableViewerStatus();

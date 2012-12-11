@@ -41,7 +41,7 @@ public class EntityModel implements IModel<IEntity> {
 
     public EntityModel(IEntity entity) {
         this.entity = entity;
-        this.collectionURI = entity.getCollection().getURI();
+        this.collectionURI = entity.getCollection().getORI();
         this.entityId = entity.getId();
     }
 

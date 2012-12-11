@@ -119,7 +119,7 @@ public class FiltersPanel extends EventPanel {
 
     protected ORI getBaseUri() {
         WebsiteStatus websiteStatus = findParentStatus(getDefaultModel(), WebsiteStatus.class);
-        return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
+        return (websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent());
     }
 
     private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {

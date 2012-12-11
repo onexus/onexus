@@ -62,7 +62,7 @@ public class ProjectTree extends NestedTree<Resource> {
     protected boolean isSelected(Resource resource) {
 
         if (resource != null && selected.getObject() != null) {
-            return resource.getURI().equals(selected.getObject().getURI());
+            return resource.getORI().equals(selected.getObject().getORI());
         }
 
         return false;

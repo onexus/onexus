@@ -54,7 +54,7 @@ public class ManageCollectionsWizard extends AbstractWizard {
     public ManageCollectionsWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id);
 
-        this.resourceURI = resourceModel.getObject().getURI();
+        this.resourceURI = resourceModel.getObject().getORI();
 
         WizardModel model = new WizardModel();
         model.add(new BasicOptions());
@@ -70,7 +70,7 @@ public class ManageCollectionsWizard extends AbstractWizard {
         if (selected.equals(UNLOAD)) {
             List<Collection> collections = resourceManager.loadChildren(Collection.class, resourceURI);
             for (Collection collection : collections) {
-                collectionManager.unload(collection.getURI());
+                collectionManager.unload(collection.getORI());
             }
             return;
         }
@@ -78,9 +78,9 @@ public class ManageCollectionsWizard extends AbstractWizard {
         if (selected.equals(LOAD)) {
             List<Collection> collections = resourceManager.loadChildren(Collection.class, resourceURI);
             for (Collection collection : collections) {
-                collectionManager.unload(collection.getURI());
+                collectionManager.unload(collection.getORI());
                 Query emptyQuery = new Query();
-                emptyQuery.addDefine("c", collection.getURI());
+                emptyQuery.addDefine("c", collection.getORI());
                 emptyQuery.setFrom("c");
                 emptyQuery.setOffset(0);
                 emptyQuery.setCount(0);

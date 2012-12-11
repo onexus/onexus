@@ -61,7 +61,7 @@ public class FilterEntity implements IFilter {
     }
 
     public FilterEntity(IEntity entity, boolean deletable) {
-        this(entity.getCollection().getURI(), entity.getId(), deletable);
+        this(entity.getCollection().getORI(), entity.getId(), deletable);
     }
 
     public FilterEntity(ORI filteredCollection, String entityId) {

@@ -136,7 +136,7 @@ public class SqlQuery {
             ORI collectionUri = define.getValue().toAbsolute(query.getOn());
 
             // Skip from collection
-            if (collectionUri.equals(fromCollection.getURI())) {
+            if (collectionUri.equals(fromCollection.getORI())) {
                 continue;
             }
 
@@ -210,7 +210,7 @@ public class SqlQuery {
                     ORI tpCollectionUri = tpDefine.getValue().toAbsolute(query.getOn());
 
                     // Skip from collection
-                    if (tpCollectionUri.equals(fromCollection.getURI())) {
+                    if (tpCollectionUri.equals(fromCollection.getORI())) {
                         continue;
                     }
 
@@ -222,7 +222,7 @@ public class SqlQuery {
 
             // Check if it's possible to join this collection
             if (linkFields.isEmpty()) {
-                throw new UnsupportedOperationException("Impossible to link collection '" + collectionUri + "' to '" + fromCollection.getURI() + "'.");
+                throw new UnsupportedOperationException("Impossible to link collection '" + collectionUri + "' to '" + fromCollection.getORI() + "'.");
             }
 
             networkFixedJoins.put(collectionUri, leftJoin);
@@ -235,7 +235,7 @@ public class SqlQuery {
         // Sort the network to include JOINS in the correct order
 
         List<ORI> keys = new ArrayList<ORI>(networkLinks.keySet());
-        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getURI()));
+        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getORI()));
 
         for (ORI collectionUri : keys) {
 

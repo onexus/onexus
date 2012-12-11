@@ -48,13 +48,13 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     public ResourceModel(Resource resource) {
         super(resource);
-        this.resourceURI = resource.getURI();
+        this.resourceURI = resource.getORI();
     }
 
     @Override
     public void setObject(Resource object) {
         super.setObject(object);
-        this.resourceURI = object.getURI();
+        this.resourceURI = object.getORI();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ResourceModel extends LoadableDetachableModel<Resource> {
     @Override
     protected void onDetach() {
         if (getObject() != null) {
-            this.resourceURI = getObject().getURI();
+            this.resourceURI = getObject().getORI();
         } else {
             this.resourceURI = null;
         }

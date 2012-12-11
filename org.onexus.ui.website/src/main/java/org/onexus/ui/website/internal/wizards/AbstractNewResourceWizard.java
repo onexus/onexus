@@ -49,7 +49,7 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
         super(id);
 
         Resource parent = resourceModel.getObject();
-        this.parentUri = (parent == null) ? null : parent.getURI();
+        this.parentUri = (parent == null) ? null : parent.getORI();
 
         this.resource = getDefaultResource();
 
@@ -64,12 +64,12 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
 
         if (parentUri != null) {
             ORI resourceUri = new ORI(parentUri, resource.getLabel());
-            resource.setURI(resourceUri);
+            resource.setORI(resourceUri);
         }
 
-        if (resource.getURI() != null) {
+        if (resource.getORI() != null) {
             resourceManager.save(resource);
-            PageParameters params = new PageParameters().add("uri", resource.getURI());
+            PageParameters params = new PageParameters().add("ori", resource.getORI());
             setResponsePage(WebsiteApplication.get().getHomePage(), params);
         }
 
@@ -115,9 +115,9 @@ public abstract class AbstractNewResourceWizard<T extends Resource> extends Abst
 
             if (parentUri != null && resource != null && resource.getLabel() != null) {
 
-                ORI resourceURI = new ORI(parentUri, validatable.getValue());
+                ORI resourceORI = new ORI(parentUri, validatable.getValue());
 
-                Resource test = resourceManager.load(Resource.class, resourceURI);
+                Resource test = resourceManager.load(Resource.class, resourceORI);
 
                 if (test != null) {
                     validatable.error(new ValidationError("duplicated-resource"));

@@ -94,7 +94,7 @@ public class BaseResourcePage extends WebPage {
 
                 if (project != null) {
 
-                    ORI projectURI = project.getURI();
+                    ORI projectURI = project.getORI();
                     parameters.set(ResourcesPage.PARAMETER_RESOURCE, projectURI);
                     Link<ResourcesPage> link = new BookmarkablePageLink<ResourcesPage>("link", ResourcesPage.class, parameters);
                     link.add(new Label("label", project.getURL()));
@@ -102,7 +102,7 @@ public class BaseResourcePage extends WebPage {
 
                     Resource currentResource = BaseResourcePage.this.getModelObject();
                     if (currentResource != null
-                            && projectURI.equals(currentResource.getURI())) {
+                            && projectURI.equals(currentResource.getORI())) {
                         item.add(new AttributeAppender("class", " active"));
                     }
 

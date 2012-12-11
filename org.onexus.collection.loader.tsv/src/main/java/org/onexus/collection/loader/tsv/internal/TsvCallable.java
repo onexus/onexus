@@ -49,13 +49,13 @@ public class TsvCallable implements Callable<IEntitySet> {
         String dataUri = collection.getLoader().getParameter(PARAMETER_DATA_URI);
 
         if (dataUri == null) {
-            String errMsg = "Required parameter '" + PARAMETER_DATA_URI + "' not found in '" + collection.getURI() + "'.";
+            String errMsg = "Required parameter '" + PARAMETER_DATA_URI + "' not found in '" + collection.getORI() + "'.";
             progress.error(errMsg);
             progress.fail();
             return new EmptyEntitySet(collection);
         }
 
-        ORI absDataUri = new ORI(dataUri).toAbsolute(collection.getURI());
+        ORI absDataUri = new ORI(dataUri).toAbsolute(collection.getORI());
         IDataStreams dataStreams = dataManager.load(absDataUri);
 
         if (dataStreams.getProgress() != null) {

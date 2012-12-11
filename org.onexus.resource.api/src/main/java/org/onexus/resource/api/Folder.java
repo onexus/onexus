@@ -25,7 +25,7 @@ public class Folder extends Resource {
 
     @Override
     public String toString() {
-        return "Folder [uri=" + getURI() + "]";
+        return "Folder [ori=" + getORI() + "]";
     }
 
 }

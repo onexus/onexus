@@ -89,7 +89,7 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
 
                 AbstractProjectProvider provider = projectsContainer.getProjectProvider(projectUrl);
                 Project project = provider.getProject();
-                if (authorizationManager.check(READ, project.getURI())) {
+                if (authorizationManager.check(READ, project.getORI())) {
                     projects.add(project);
                 }
 
@@ -147,11 +147,11 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
             return;
         }
 
-        if (!authorizationManager.check(WRITE, resource.getURI())) {
-            throw new SecurityException("Unauthorized WRITE access to '" + resource.getURI().toString() + "'");
+        if (!authorizationManager.check(WRITE, resource.getORI())) {
+            throw new SecurityException("Unauthorized WRITE access to '" + resource.getORI().toString() + "'");
         }
 
-        AbstractProjectProvider provider = getProjectProvider(resource.getURI().getProjectUrl());
+        AbstractProjectProvider provider = getProjectProvider(resource.getORI().getProjectUrl());
         provider.save(resource);
     }
 

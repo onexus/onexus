@@ -75,7 +75,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(pageStatusModel)) {
             @Override
             protected void onSubmit() {
-                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
+                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
                 SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
             }
         };
@@ -99,7 +99,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         search.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
+                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
                 SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
                 target.add(SearchPage.this.get("boxes"));
             }
@@ -133,7 +133,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         getStatus().setSearch(getModelObject());
-                        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
+                        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
                         SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri));
                         target.add(search);
                         target.add(SearchPage.this.get("boxes"));
@@ -179,7 +179,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     }
 
     private ORI getAbsoluteUri(ORI partialUri) {
-        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getURI().getParent();
+        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
         return partialUri.toAbsolute(baseUri);
     }
 

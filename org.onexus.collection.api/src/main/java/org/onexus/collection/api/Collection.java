@@ -48,7 +48,7 @@ public class Collection extends Resource {
 
     @Override
     public String toString() {
-        return "Collection [getURI()=" + getURI() + ", fields=" + fields + ", links=" + links + "]";
+        return "Collection [getORI()=" + getORI() + ", fields=" + fields + ", links=" + links + "]";
     }
 
     public Field getField(String fieldId) {

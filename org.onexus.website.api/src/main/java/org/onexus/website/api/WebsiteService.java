@@ -124,7 +124,7 @@ public class WebsiteService implements IWebsiteService {
 
     private void registerWebsite(String name, WebsiteConfig website) {
 
-        String projectUrl = website.getURI().getProjectUrl();
+        String projectUrl = website.getORI().getProjectUrl();
 
         Properties props = new Properties();
         props.put(Constants.APPLICATION_NAME, "web_" + name.replace('/', '_'));
@@ -132,7 +132,7 @@ public class WebsiteService implements IWebsiteService {
 
         registrations.put(projectUrl, context.registerService(
                 WebApplicationFactory.class.getName(),
-                new WebsiteApplicationFactory(website.getName(), website.getURI().toString()),
+                new WebsiteApplicationFactory(website.getName(), website.getORI().toString()),
                 props
         ));
 

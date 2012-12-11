@@ -25,7 +25,7 @@ import java.util.List;
 
 public abstract class Resource implements IMetadata, Serializable {
 
-    private ORI uri;
+    private ORI ori;
     private String label;
     private String title;
     private String description;
@@ -36,16 +36,16 @@ public abstract class Resource implements IMetadata, Serializable {
         super();
     }
 
-    public ORI getURI() {
-        return uri;
+    public ORI getORI() {
+        return ori;
     }
 
-    public void setURI(ORI uri) {
-        this.uri = uri;
+    public void setORI(ORI ori) {
+        this.ori = ori;
     }
 
     public String getName() {
-        String oriStr = uri.toString();
+        String oriStr = ori.toString();
         int lsep = oriStr.lastIndexOf('/');
         int lquestion = oriStr.indexOf('?');
         int last = (lquestion != -1 && lquestion > lsep ? lquestion : lsep);

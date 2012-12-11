@@ -39,7 +39,7 @@ public class FilterDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        return new FilterDecorator(collection.getURI(), columnField);
+        return new FilterDecorator(collection.getORI(), columnField);
     }
 
 }

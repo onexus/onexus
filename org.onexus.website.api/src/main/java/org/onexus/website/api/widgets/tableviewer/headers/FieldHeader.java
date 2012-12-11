@@ -44,7 +44,7 @@ public class FieldHeader extends ElementHeader {
     public String getSortProperty() {
         StringBuilder sortProperty = new StringBuilder();
 
-        sortProperty.append(collection.getURI()).append(SORT_PROPERTY_SEPARATOR);
+        sortProperty.append(collection.getORI()).append(SORT_PROPERTY_SEPARATOR);
         sortProperty.append(field.getId());
 
         return sortProperty.toString();

@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 
 public class ResourcesPage extends BaseResourcePage {
 
-    public final static String PARAMETER_RESOURCE = "uri";
+    public final static String PARAMETER_RESOURCE = "ori";
 
     @PaxWicketBean(name = "viewersManager")
     private IViewersManager viewersManager;
@@ -68,7 +68,7 @@ public class ResourcesPage extends BaseResourcePage {
         add(new ToolCopyUri("copyURI", getModel()));
 
         // Resource URI breadcrumb
-        add(new ToolUriBreadCrumb("uriBreadCrumb", getModel()));
+        add(new ToolOriBreadCrumb("oriBreadCrumb", getModel()));
 
         // Tabs
         add(new ViewerTabs("tabs", getModel()));
@@ -86,7 +86,7 @@ public class ResourcesPage extends BaseResourcePage {
             Resource resource = ResourcesPage.this.getModelObject();
 
             if (resource != null) {
-                ORI resourceUri = resource.getURI();
+                ORI resourceUri = resource.getORI();
                 getResourceManager().syncProject(resourceUri.getProjectUrl());
 
                 Resource newVersion = getResourceManager().load(Resource.class, resourceUri);
@@ -123,7 +123,7 @@ public class ResourcesPage extends BaseResourcePage {
             Resource resource = ResourcesPage.this.getModelObject();
 
             if (resource != null) {
-                ORI resourceUri = resource.getURI();
+                ORI resourceUri = resource.getORI();
                 getResourceManager().updateProject(resourceUri.getProjectUrl());
 
                 Resource newVersion = getResourceManager().load(Resource.class, resourceUri);
@@ -153,7 +153,7 @@ public class ResourcesPage extends BaseResourcePage {
     public static class ToolCopyUri extends ExternalLink {
 
         public ToolCopyUri(String id, IModel<Resource> resourceModel) {
-            super(id, new PropertyModel<String>(resourceModel, "URI"));
+            super(id, new PropertyModel<String>(resourceModel, "ORI"));
 
             add(new AjaxUpdateOnEvent(EventResourceSelect.EVENT));
         }
@@ -166,16 +166,16 @@ public class ResourcesPage extends BaseResourcePage {
 
     }
 
-    public static class ToolUriBreadCrumb extends WebMarkupContainer {
+    public static class ToolOriBreadCrumb extends WebMarkupContainer {
 
 
-        public ToolUriBreadCrumb(String id, IModel<Resource> resource) {
+        public ToolOriBreadCrumb(String id, IModel<Resource> resource) {
             super(id, resource);
 
             add(new AjaxUpdateOnEvent(EventResourceSelect.EVENT));
 
             // Add list items
-            add(new ListView<String>("uri", new BreadCrumbItemsModel(resource)) {
+            add(new ListView<String>("ori", new BreadCrumbItemsModel(resource)) {
 
                 private transient List<String> links;
 
@@ -184,24 +184,24 @@ public class ResourcesPage extends BaseResourcePage {
 
                     BreadCrumbItemsModel model = (BreadCrumbItemsModel) getModel();
 
-                    List<String> uriItems = model.getObject();
+                    List<String> oriItems = model.getObject();
 
-                    if (uriItems == null) {
+                    if (oriItems == null) {
                         links = Collections.EMPTY_LIST;
                     }
 
-                    links = new ArrayList<String>(uriItems.size());
+                    links = new ArrayList<String>(oriItems.size());
                     Resource resource = model.getWrappedModel().getObject();
-                    String projectUri = (resource == null ? null : resource.getURI().getProjectUrl().toString());
+                    String projectUri = (resource == null ? null : resource.getORI().getProjectUrl().toString());
 
                     links.add(projectUri);
-                    for (int i = 1; i < uriItems.size(); i++) {
+                    for (int i = 1; i < oriItems.size(); i++) {
                         StringBuilder link = new StringBuilder();
                         link.append(projectUri).append("?");
-                        link.append(uriItems.get(1));
+                        link.append(oriItems.get(1));
                         for (int t = 2; t <= i; t++) {
                             link.append(ORI.SEPARATOR);
-                            link.append(uriItems.get(t));
+                            link.append(oriItems.get(t));
                         }
                         links.add(link.toString());
 
@@ -352,29 +352,27 @@ public class ResourcesPage extends BaseResourcePage {
                 return Collections.EMPTY_LIST;
             }
 
-            if (!resource.getObject().getURI().equals(lastResourceUri)) {
+            if (!resource.getObject().getORI().equals(lastResourceUri)) {
                 this.object = null;
             }
 
             if (object == null) {
 
                 Resource resource = this.resource.getObject();
-                lastResourceUri = resource.getURI();
+                lastResourceUri = resource.getORI();
 
-                if (resource == null || resource.getURI() == null) {
+                if (resource == null || resource.getORI() == null) {
                     return Collections.EMPTY_LIST;
                 }
 
-                ORI uri = resource.getURI();
-
-                // Separate project uri and path
+                ORI ori = resource.getORI();
 
                 object = new ArrayList<String>();
 
-                ORI resourceOri = resource.getURI();
+                ORI resourceOri = resource.getORI();
                 object.add(resourceOri.getProjectUrl());
 
-                if (!Strings.isEmpty(uri.getPath())) {
+                if (!Strings.isEmpty(ori.getPath())) {
                     // Remove the first separator
                     String path = resourceOri.getPath().substring(1);
                     object.addAll(Arrays.asList(path.split(Pattern.quote(String.valueOf(ORI.SEPARATOR)))));

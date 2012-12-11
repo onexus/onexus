@@ -58,7 +58,7 @@ public class FilePreviewViewer extends Panel {
                 return null;
             }
 
-            Iterator<InputStream> inIterator = dataManager.load(resource.getURI()).iterator();
+            Iterator<InputStream> inIterator = dataManager.load(resource.getORI()).iterator();
 
             if (!inIterator.hasNext()) {
                 return null;

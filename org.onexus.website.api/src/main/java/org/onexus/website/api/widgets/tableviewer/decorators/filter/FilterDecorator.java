@@ -60,7 +60,7 @@ public class FilterDecorator extends FieldDecorator {
         String entityId = null;
         IEntity entity = data.getObject();
 
-        if (entity.getCollection().getURI().equals(collectionId)) {
+        if (entity.getCollection().getORI().equals(collectionId)) {
             entityId = entity.getId();
         } else {
             entityId = String.valueOf(entity.get(getField().getId()));
@@ -76,7 +76,7 @@ public class FilterDecorator extends FieldDecorator {
                 // Try to make the link relative to the current website project
                 Website website = findParent(Website.class);
                 if (website != null) {
-                    ORI projectUri = website.getConfig().getURI().getParent();
+                    ORI projectUri = website.getConfig().getORI().getParent();
                     ORI relativeUri = rowEntity.getFilteredCollection().toRelative(projectUri);
                     rowEntity.setFilteredCollection(relativeUri);
                 }

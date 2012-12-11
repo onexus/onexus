@@ -79,7 +79,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     public ORI getORI() {
-        return getConfig().getWebsiteConfig().getURI();
+        return getConfig().getWebsiteConfig().getORI();
     }
 
     public String getCurrentTabId() {

@@ -48,10 +48,10 @@ public class LinkUtils {
 
         // Case 1: A has a direct link to B
         for (Link link : linksA) {
-            if (link.getCollection().toAbsolute(parentURI).equals(b.getURI())) {
+            if (link.getCollection().toAbsolute(parentURI).equals(b.getORI())) {
                 for (String field : link.getFields()) {
-                    fieldLinks.add(new FieldLink(a.getURI(),
-                            getFromFieldName(field), b.getURI(),
+                    fieldLinks.add(new FieldLink(a.getORI(),
+                            getFromFieldName(field), b.getORI(),
                             getToFieldName(field)));
                 }
                 return fieldLinks;
@@ -60,10 +60,10 @@ public class LinkUtils {
 
         // Case 1b: B has a direct link to A
         for (Link link : linksB) {
-            if (link.getCollection().toAbsolute(parentURI).equals(a.getURI())) {
+            if (link.getCollection().toAbsolute(parentURI).equals(a.getORI())) {
                 for (String field : link.getFields()) {
-                    fieldLinks.add(new FieldLink(b.getURI(),
-                            getFromFieldName(field), a.getURI(),
+                    fieldLinks.add(new FieldLink(b.getORI(),
+                            getFromFieldName(field), a.getORI(),
                             getToFieldName(field)));
                 }
                 return fieldLinks;
@@ -112,8 +112,8 @@ public class LinkUtils {
                                         String fromFieldB =
                                                 getFromFieldName(fieldLinkB);
                                         primaryKeyLinks.add(new FieldLink(
-                                                a.getURI(), fromFieldA, b
-                                                .getURI(), fromFieldB));
+                                                a.getORI(), fromFieldA, b
+                                                .getORI(), fromFieldB));
                                     }
                                 }
                             }

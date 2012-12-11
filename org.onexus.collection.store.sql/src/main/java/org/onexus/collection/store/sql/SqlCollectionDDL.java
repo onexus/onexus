@@ -93,8 +93,8 @@ public class SqlCollectionDDL {
     }
 
     private static String convertURItoTableName(Collection collection) {
-        String hashCode = Integer.toHexString(collection.getURI().getProjectUrl().hashCode());
-        String tableName = removeNonValidChars(collection.getURI().getPath());
+        String hashCode = Integer.toHexString(collection.getORI().getProjectUrl().hashCode());
+        String tableName = removeNonValidChars(collection.getORI().getPath());
 
         // Check that the table name is no longer than 64 characters (the
         // maximum allowed)

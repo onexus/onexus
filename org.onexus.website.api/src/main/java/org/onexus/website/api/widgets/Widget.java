@@ -52,7 +52,7 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     protected ORI getWebsiteOri() {
         WebsiteStatus websiteStatus = findParentStatus(WebsiteStatus.class);
-        return (websiteStatus == null ? null : websiteStatus.getConfig().getURI().getParent());
+        return (websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent());
     }
 
     protected ORI getPageBaseOri() {

@@ -25,12 +25,12 @@ public class LinkUtilsTest {
         String bFieldId = "bTestField";
 
         Collection a = new Collection();
-        a.setURI(aOri);
+        a.setORI(aOri);
         a.setLinks(Arrays.asList(new Link[]{
                 new Link(bOri, aFieldId + " == " + bFieldId)
         }));
         Collection b = new Collection();
-        b.setURI(bOri);
+        b.setORI(bOri);
         b.setLinks(Collections.EMPTY_LIST);
 
         List<FieldLink> links = LinkUtils.getLinkFields(parentORI, a, b);

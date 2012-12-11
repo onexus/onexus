@@ -49,7 +49,7 @@ public class ManageCollectionWizard extends AbstractWizard {
     public ManageCollectionWizard(String id, IModel<? extends Resource> resourceModel) {
         super(id);
 
-        this.resourceURI = resourceModel.getObject().getURI();
+        this.resourceURI = resourceModel.getObject().getORI();
 
         WizardModel model = new WizardModel();
         model.add(new BasicOptions());

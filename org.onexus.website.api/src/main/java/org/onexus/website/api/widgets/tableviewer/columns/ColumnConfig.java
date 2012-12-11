@@ -210,7 +210,7 @@ public class ColumnConfig implements IColumnConfig {
                     }
 
                     if (field == null) {
-                        throw new RuntimeException("Field '" + fieldName + "' not found on collection '" + collection.getURI() + "'.");
+                        throw new RuntimeException("Field '" + fieldName + "' not found on collection '" + collection.getORI() + "'.");
                     } else {
                         fields.add(field);
                     }

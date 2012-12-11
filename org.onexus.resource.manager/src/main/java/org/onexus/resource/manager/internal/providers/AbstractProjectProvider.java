@@ -131,7 +131,7 @@ public abstract class AbstractProjectProvider {
                 Resource resource = loadResource(file);
 
                 if (resource != null) {
-                    resources.put(resource.getURI(), resource);
+                    resources.put(resource.getORI(), resource);
                 }
 
                 return resource;
@@ -205,7 +205,7 @@ public abstract class AbstractProjectProvider {
                     return;
                 }
 
-                resources.put(resource.getURI(), resource);
+                resources.put(resource.getORI(), resource);
             }
         }
     }
@@ -237,9 +237,9 @@ public abstract class AbstractProjectProvider {
         List<T> children = new ArrayList<T>();
         if (resources != null) {
             for (Resource resource : resources.values()) {
-                if (parentURI.isChild(resource.getURI())
+                if (parentURI.isChild(resource.getORI())
                         && resourceType.isAssignableFrom(resource.getClass())
-                        && authorizationManager.check(IAuthorizationManager.READ, resource.getURI())) {
+                        && authorizationManager.check(IAuthorizationManager.READ, resource.getORI())) {
                     children.add((T) resource);
                 }
             }
@@ -292,7 +292,7 @@ public abstract class AbstractProjectProvider {
             return null;
         }
 
-        resource.setURI(convertFileToORI(resourceFile));
+        resource.setORI(convertFileToORI(resourceFile));
         return resource;
 
     }
@@ -355,10 +355,10 @@ public abstract class AbstractProjectProvider {
         }
 
         if (resource instanceof Project) {
-            throw new IllegalArgumentException("Cannot create a project '" + resource.getURI() + "' inside project '" + projectUrl + "'");
+            throw new IllegalArgumentException("Cannot create a project '" + resource.getORI() + "' inside project '" + projectUrl + "'");
         }
 
-        String resourcePath = resource.getURI().getPath();
+        String resourcePath = resource.getORI().getPath();
 
         File file;
         if (resource instanceof Folder) {
@@ -381,7 +381,7 @@ public abstract class AbstractProjectProvider {
             os.close();
 
         } catch (IOException e) {
-            log.error("Saving resource '" + resource.getURI() + "' in file '" + file.getAbsolutePath() + "'", e);
+            log.error("Saving resource '" + resource.getORI() + "' in file '" + file.getAbsolutePath() + "'", e);
         }
 
         observer.checkAndNotify();

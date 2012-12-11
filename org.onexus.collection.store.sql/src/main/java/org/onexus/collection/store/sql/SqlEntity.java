@@ -87,7 +87,7 @@ public class SqlEntity implements IEntity {
     @Override
     public String toString() {
         return "{" +
-                "collection=" + collection.getURI() +
+                "collection=" + collection.getORI() +
                 ", values=" + values +
                 '}';
     }

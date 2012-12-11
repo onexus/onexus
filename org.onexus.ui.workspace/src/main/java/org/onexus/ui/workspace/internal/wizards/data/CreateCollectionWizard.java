@@ -87,7 +87,7 @@ public class CreateCollectionWizard extends AbstractWizard {
     public CreateCollectionWizard(String id, IModel<? extends Resource> model) {
         super(id);
 
-        sourceURI = model.getObject().getURI();
+        sourceURI = model.getObject().getORI();
 
         WizardModel wizardModel = new WizardModel();
         wizardModel.add(new ChooseFormat());
@@ -194,7 +194,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         List<Link> links = new ArrayList<Link>();
 
         List<Collection> allProjectCollections = new ArrayList<Collection>();
-        addAllCollections(allProjectCollections, resourceManager.getProject(sourceURI.getProjectUrl()).getURI());
+        addAllCollections(allProjectCollections, resourceManager.getProject(sourceURI.getProjectUrl()).getORI());
 
         for (String header : headers) {
             if (otherLinks.containsKey(header)) {
@@ -213,7 +213,7 @@ public class CreateCollectionWizard extends AbstractWizard {
                         // Only link to collections without any link
                         if (col.getLinks() == null || col.getLinks().isEmpty()) {
                             Link link = new Link();
-                            link.setCollection(new ORI((String) null, col.getURI().getPath()));
+                            link.setCollection(new ORI((String) null, col.getORI().getPath()));
                             link.getFields().add(header);
                             links.add(link);
                         }
@@ -248,7 +248,7 @@ public class CreateCollectionWizard extends AbstractWizard {
 
         resourceManager.save(collection);
 
-        PageParameters params = new PageParameters().add(ResourcesPage.PARAMETER_RESOURCE, collection.getURI());
+        PageParameters params = new PageParameters().add(ResourcesPage.PARAMETER_RESOURCE, collection.getORI());
         setResponsePage(ResourcesPage.class, params);
 
 
@@ -307,7 +307,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         ORI collectionURI = new ORI(sourceURI.getProjectUrl(), collectionName);
 
         Collection collection = new Collection();
-        collection.setURI(collectionURI);
+        collection.setORI(collectionURI);
         collection.setTitle(collectionName);
 
         return collection;
@@ -317,7 +317,7 @@ public class CreateCollectionWizard extends AbstractWizard {
         collections.addAll(resourceManager.loadChildren(Collection.class, parentUri));
         List<Folder> folders = resourceManager.loadChildren(Folder.class, parentUri);
         for (Folder folder : folders) {
-            addAllCollections(collections, folder.getURI());
+            addAllCollections(collections, folder.getORI());
         }
     }
 

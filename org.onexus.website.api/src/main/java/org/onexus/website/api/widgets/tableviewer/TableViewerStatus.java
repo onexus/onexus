@@ -101,7 +101,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
         PageConfig pageConfig = getConfig().getPageConfig();
         WebsiteConfig websiteConfig = (pageConfig == null ? null : pageConfig.getWebsiteConfig());
-        ORI projectUri = (websiteConfig == null ? null : websiteConfig.getURI().getParent());
+        ORI projectUri = (websiteConfig == null ? null : websiteConfig.getORI().getParent());
 
         TableViewerStatus defaultStatus = getConfig().getDefaultStatus();
         if (defaultStatus == null) {

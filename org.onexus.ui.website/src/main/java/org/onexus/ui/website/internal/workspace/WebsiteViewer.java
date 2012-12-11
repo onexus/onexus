@@ -41,7 +41,7 @@ public class WebsiteViewer extends Panel {
         super(id);
 
         WebsiteConfig website = (WebsiteConfig) model.getObject();
-        Project project = resourceManager.getProject(website.getURI().getProjectUrl());
+        Project project = resourceManager.getProject(website.getORI().getProjectUrl());
 
         String path = '/' + websiteService.getMount() + '/' + project.getName() + '/' + website.getName() + '/';
         String src = WebsiteApplication.toAbsolutePath(path);

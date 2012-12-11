@@ -48,7 +48,7 @@ import java.util.List;
 public class Website extends WebPage {
 
     // Parameters
-    public final static String PARAMETER_WEBSITE = "uri";
+    public final static String PARAMETER_WEBSITE = "ori";
     public final static String PARAMETER_PAGE = "c";
 
     @PaxWicketBean(name = "pageManager")
@@ -62,7 +62,7 @@ public class Website extends WebPage {
         final WebsiteStatus status = getStatus();
         final WebsiteConfig config = getConfig();
 
-        ORI parentUri = config.getURI().getParent();
+        ORI parentUri = config.getORI().getParent();
         ORI cssUri = new ORI(parentUri, config.getCss());
         add(new CustomCssBehavior(cssUri));
 

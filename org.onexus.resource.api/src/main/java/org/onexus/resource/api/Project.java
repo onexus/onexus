@@ -39,7 +39,7 @@ public class Project extends Resource {
     }
 
     public String getURL() {
-        return getURI().getProjectUrl();
+        return getORI().getProjectUrl();
     }
 
     public Plugin getPlugin(String pluginId) {

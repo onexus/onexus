@@ -61,7 +61,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        Project project = resourceManager.getProject(resource.getURI().getProjectUrl());
+        Project project = resourceManager.getProject(resource.getORI().getProjectUrl());
 
         if (project == null) {
             return EMPTY_ITERATOR;
@@ -91,7 +91,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             return EMPTY_ITERATOR;
         }
 
-        List<Resource> children = resourceManager.loadChildren(Resource.class, node.getURI());
+        List<Resource> children = resourceManager.loadChildren(Resource.class, node.getORI());
 
         Collections.sort(children, RESOURCE_COMPARATOR);
 
@@ -139,7 +139,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
                 return 1;
             }
 
-            return o1.getURI().toString().compareTo(o2.getURI().toString());
+            return o1.getORI().toString().compareTo(o2.getORI().toString());
 
         }
 
