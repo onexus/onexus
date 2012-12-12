@@ -45,7 +45,7 @@ public class WebsiteSession extends AuthenticatedWebSession {
     private LoginContext ctx = new LoginContext();
     private Roles roles = new Roles();
 
-    public static final String APPLICATION_POLICY_NAME = "karaf";
+    public static final String APPLICATION_POLICY_NAME = "onexus";
     public static final String ONEXUS_COOKIE = "onexus-user-token";
 
 
