@@ -46,12 +46,17 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
     private ORI contentUri;
     private String dataResourceUrl;
 
-    public HtmlDataResourceModel(ORI contentUri) {
+    public HtmlDataResourceModel(ORI parentUri, String htmlTag) {
+        if (!Strings.isEmpty(htmlTag)) {
+            contentUri = new ORI(htmlTag);
+            if (!contentUri.isAbsolute()) {
+                contentUri = contentUri.toAbsolute(parentUri);
+            }
 
-        this.contentUri = contentUri;
-        String dataService = getDataManager().getMount();
-        Project project = getResourceManager().getProject(contentUri.getProjectUrl());
-        this.dataResourceUrl = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName());
+            String dataService = getDataManager().getMount();
+            Project project = getResourceManager().getProject(contentUri.getProjectUrl());
+            this.dataResourceUrl = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName());
+        }
     }
 
     @Override

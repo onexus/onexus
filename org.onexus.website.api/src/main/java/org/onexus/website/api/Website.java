@@ -76,9 +76,8 @@ public class Website extends WebPage {
         //TODO add(new ProgressBar("progressbar", false));
 
         String header = config.getHeader();
-        ORI headerUri = new ORI(parentUri, header);
 
-        Label headerLabel = new Label("header", new HtmlDataResourceModel(headerUri));
+        Label headerLabel = new Label("header", new HtmlDataResourceModel(parentUri, header));
         headerLabel.setVisible(header != null && !header.isEmpty());
         headerLabel.setEscapeModelStrings(false);
         add(headerLabel);
@@ -132,9 +131,7 @@ public class Website extends WebPage {
         }
 
         String bottom = config.getBottom();
-        ORI bottomUri = new ORI(parentUri, bottom);
-
-        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(bottomUri));
+        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(parentUri, bottom));
         bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);

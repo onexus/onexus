@@ -32,11 +32,9 @@ public class HtmlPage extends Page<HtmlPageConfig, HtmlPageStatus> {
         HtmlPageConfig config = getConfig();
         String content = config.getContent();
 
-
         WebsiteConfig websiteConfig = config.getWebsiteConfig();
         ORI parentUri = (websiteConfig != null) ? websiteConfig.getORI().getParent() : null;
-        ORI contentUri = new ORI(parentUri, content);
 
-        add(new Label("content", new HtmlDataResourceModel(contentUri)).setEscapeModelStrings(false));
+        add(new Label("content", new HtmlDataResourceModel(parentUri, content)).setEscapeModelStrings(false));
     }
 }
