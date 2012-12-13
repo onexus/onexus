@@ -258,8 +258,15 @@ public class SqlQuery {
                     ORI bCollection = fieldLink.getToCollection();
                     SqlCollectionDDL bDDL = manager.getDDL(bCollection);
                     String bAlias = QueryUtils.newCollectionAlias(query, bCollection);
-                    String bField = bDDL.getColumnInfoByFieldName(
-                            fieldLink.getToFieldName()).getColumnName();
+
+                    SqlCollectionDDL.ColumnInfo columnInfo = bDDL.getColumnInfoByFieldName(fieldLink.getToFieldName());
+
+                    if (columnInfo == null) {
+                        throw new UnsupportedOperationException("Malformed link '" + fieldLink.toString() + "'");
+                    }
+
+
+                    String bField = columnInfo.getColumnName();
                     leftJoin.append(bAlias).append("`.`").append(bField)
                             .append("` AND ");
                 }
