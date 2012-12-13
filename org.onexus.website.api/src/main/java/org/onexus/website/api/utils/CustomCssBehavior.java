@@ -42,7 +42,16 @@ public class CustomCssBehavior extends Behavior {
     @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
-    public CustomCssBehavior(ORI resourceUri) {
+    public CustomCssBehavior(ORI parentOri, String cssTag) {
+        if (!Strings.isEmpty(cssTag)) {
+            resourceUri = new ORI(cssTag);
+            if (!resourceUri.isAbsolute()) {
+                resourceUri = resourceUri.toAbsolute(parentOri);
+            }
+        }
+    }
+
+    private CustomCssBehavior(ORI resourceUri) {
         this.resourceUri = resourceUri;
     }
 
@@ -51,12 +60,17 @@ public class CustomCssBehavior extends Behavior {
 
         if (CSS == null) {
 
-            if (resourceUri != null && !Strings.isEmpty(resourceUri.getPath())) {
+            if (resourceUri != null) {
 
                 String dataService = getDataManager().getMount();
                 Project project = getResourceManager().getProject(resourceUri.getProjectUrl());
 
-                String url = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName() + resourceUri.getPath());
+                String url;
+                if (project!=null) {
+                    url = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName() + resourceUri.getPath());
+                } else {
+                    url = resourceUri.toString();
+                }
                 CSS = CssHeaderItem.forUrl(url);
 
             } else {

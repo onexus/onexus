@@ -35,9 +35,7 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
 
         WebsiteConfig websiteConfig = config.getWebsiteConfig();
         ORI parentUri = (websiteConfig != null) ? websiteConfig.getORI().getParent() : null;
-        ORI fileUri = new ORI(parentUri, css);
-
-        add(new CustomCssBehavior(fileUri));
+        add(new CustomCssBehavior(parentUri, css));
     }
 
     public IModel<S> getModel() {

@@ -63,8 +63,7 @@ public class Website extends WebPage {
         final WebsiteConfig config = getConfig();
 
         ORI parentUri = config.getORI().getParent();
-        ORI cssUri = new ORI(parentUri, config.getCss());
-        add(new CustomCssBehavior(cssUri));
+        add(new CustomCssBehavior(parentUri, config.getCss()));
 
         // Init currentPage
         if (status.getCurrentPage() == null) {
