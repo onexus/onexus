@@ -17,11 +17,13 @@
  */
 package org.onexus.website.api.widgets.selector;
 
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
@@ -55,8 +57,19 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
 
         if (selection != null) {
             SelectorWidgetConfig config = getConfig();
-            String collectionAlias = QueryUtils.newCollectionAlias(query, config.getCollection());
-            QueryUtils.and(query, new Equal(collectionAlias, config.getField(), selection));
+
+            ORI whereCollection = config.getWhereCollection();
+            if (whereCollection == null || Strings.isEmpty(whereCollection.getPath())) {
+                whereCollection = config.getCollection();
+            }
+
+            String whereField = config.getWhereField();
+            if (Strings.isEmpty(whereField)) {
+                whereField = config.getField();
+            }
+
+            String collectionAlias = QueryUtils.newCollectionAlias(query, whereCollection);
+            QueryUtils.and(query, new Equal(collectionAlias, whereField, selection));
 
             String oqlWhere = getConfig().getWhere();
 
