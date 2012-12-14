@@ -56,7 +56,8 @@ public class DefaultTheme extends Behavior {
                 getTooltipJavascript() +
                         getModalJavascript() +
                         getPopoverJavascript() +
-                        getMoveFooter()));
+                        getMoveFooter() +
+                        getColorBoxJavascript()));
     }
 
     private static String getTooltipJavascript() {
@@ -79,6 +80,10 @@ public class DefaultTheme extends Behavior {
         return "moveFooter();";
     }
 
+    private static String getColorBoxJavascript() {
+        return "$(\".iframe\").colorbox({iframe:true, width:\"80%\", height:\"80%\"});";
+    }
+
     @Override
     public void onEvent(Component component, IEvent<?> event) {
 
@@ -87,6 +92,7 @@ public class DefaultTheme extends Behavior {
             target.prependJavaScript(getTooltipHideJavascript());
             target.appendJavaScript(getTooltipJavascript());
             target.appendJavaScript(getMoveFooter());
+            target.appendJavaScript(getColorBoxJavascript());
         }
 
     }

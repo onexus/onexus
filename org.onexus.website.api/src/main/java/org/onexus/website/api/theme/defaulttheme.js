@@ -12,6 +12,5 @@ var moveFooter = function(e) {
     };
 
 $(document).ready(function(){
-    $(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
     $(window).resize(moveFooter);
 });
