@@ -87,7 +87,7 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
         return widgetStatuses;
     }
 
-    public List<WidgetStatus> getActiveWidgetStatuses() {
+    public List<WidgetStatus> getActiveWidgetStatuses(ORI parentOri) {
         return getWidgetStatuses();
     }
 
@@ -110,7 +110,7 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
         query.setOn(resourceUri);
 
-        List<WidgetStatus> activeWidgets = getActiveWidgetStatuses();
+        List<WidgetStatus> activeWidgets = getActiveWidgetStatuses(resourceUri);
 
         // Before cycle
         beforeQueryBuild(query);

@@ -17,6 +17,8 @@
  */
 package org.onexus.website.api.pages.browser;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -27,6 +29,8 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.utils.visible.VisiblePredicate;
+import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -54,19 +58,32 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     @Override
-    public List<WidgetStatus> getActiveWidgetStatuses() {
+    public List<WidgetStatus> getActiveWidgetStatuses(ORI parentOri) {
 
         BrowserPageConfig pageConfig = getConfig();
         TabConfig tabConfig = pageConfig.getTab(currentTabId);
         ViewConfig viewConfig = tabConfig.getView(currentView);
 
-        return ViewConfig.getSelectedWidgetStatuses(
-                this,
+        List<WidgetConfig> widgetConfigs = new ArrayList<WidgetConfig>();
+        Predicate visible = new VisiblePredicate(parentOri, filters);
+        CollectionUtils.select(ViewConfig.getSelectedWidgetConfigs(
+                pageConfig,
                 viewConfig.getLeft(),
                 viewConfig.getTop(),
                 viewConfig.getTopRight(),
                 viewConfig.getMain()
-        );
+        ), visible, widgetConfigs);
+
+
+        List<WidgetStatus> statuses = new ArrayList<WidgetStatus>();
+        for (WidgetConfig config : widgetConfigs) {
+            WidgetStatus status = getWidgetStatus(config.getId());
+            if (status!=null) {
+                statuses.add(status);
+            }
+        }
+
+        return statuses;
     }
 
     public String getBase() {

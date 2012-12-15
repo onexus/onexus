@@ -19,11 +19,9 @@ package org.onexus.website.api.pages.browser;
 
 
 import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.authorization.Authorization;
 import org.onexus.website.api.utils.visible.IVisible;
 import org.onexus.website.api.widgets.WidgetConfig;
-import org.onexus.website.api.widgets.WidgetStatus;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -112,6 +110,7 @@ public class ViewConfig implements Serializable, IVisible {
         return widgets;
     }
 
+    /*
     public static List<WidgetStatus> getSelectedWidgetStatuses(PageStatus pageStatus, String... selectedWidgets) {
 
         List<WidgetStatus> widgets = new ArrayList<WidgetStatus>();
@@ -130,7 +129,7 @@ public class ViewConfig implements Serializable, IVisible {
         }
 
         return widgets;
-    }
+    } */
 
     @Override
     public String toString() {
