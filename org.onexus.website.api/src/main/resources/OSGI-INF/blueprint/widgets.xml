@@ -43,5 +43,8 @@
     <service interface="org.onexus.website.api.widgets.IWidgetCreator">
         <bean class="org.onexus.website.api.widgets.columnsets.ColumnsetsWidgetCreator"/>
     </service>
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator">
+        <bean class="org.onexus.website.api.widgets.map.MapWidgetCreator"/>
+    </service>
 
 </blueprint>
