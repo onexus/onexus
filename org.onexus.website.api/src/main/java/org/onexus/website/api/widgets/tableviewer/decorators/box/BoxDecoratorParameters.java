@@ -22,7 +22,8 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum BoxDecoratorParameters implements ParameterKey {
 
-    FIELDS("fields", "Field IDs to show into the box, separated by comma", true);
+    FIELDS("fields", "Field IDs to show into the box, separated by comma", true),
+    DECORATORS("decorators", "Syntax: [DECORATOR_ID]:[Title], ...", true);
 
     private final String key;
     private final String description;

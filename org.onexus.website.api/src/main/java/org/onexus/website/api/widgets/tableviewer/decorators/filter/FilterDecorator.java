@@ -49,7 +49,7 @@ public class FilterDecorator extends FieldDecorator {
 
         //TODO String label = getFormatValue(data.getObject());
         //TODO String tooltip = (value == null ? "No data" : value.toString());
-        String label = "<i class=\"icon-filter\"></i>";
+        String label = "<i class=\"icon-hand-up\"></i>";
         String tooltip = "Filter results by " + getField().getLabel() + " = " + String.valueOf(value);
 
         cellContainer.add(new LinkPanel(componentId, label, getLink(collectionId, data, tooltip)));

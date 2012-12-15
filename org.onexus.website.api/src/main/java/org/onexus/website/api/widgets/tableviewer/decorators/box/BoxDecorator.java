@@ -27,23 +27,37 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class BoxDecorator implements IDecorator {
 
+    private final static Pattern commaPattern = Pattern.compile(",");
+    private final static Pattern colonPattern = Pattern.compile(":");
+
     private Field field;
     private String fields;
+    private Map<String, String> decorators = new HashMap<String, String>();
 
     public BoxDecorator(Field field, Map<ParameterKey, String> parameters) {
         super();
         this.field = field;
         this.fields = parameters.get(BoxDecoratorParameters.FIELDS);
+
+        String decoParameters[] = commaPattern.split(parameters.get(BoxDecoratorParameters.DECORATORS));
+
+        for (String decoParam : decoParameters) {
+            String[] values = colonPattern.split(decoParam);
+            decorators.put(values[0], values[1]);
+        }
+
     }
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> entity) {
-        cellContainer.add(new BoxEntityPanel(componentId, entity.getObject(), getFieldIds(fields)));
+        cellContainer.add(new BoxEntityPanel(componentId, field, entity.getObject(), getFieldIds(fields), decorators));
     }
 
     private static List<String> getFieldIds(String fields) {

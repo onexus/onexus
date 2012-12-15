@@ -30,15 +30,24 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
+import org.onexus.website.api.WebsiteApplication;
+import org.onexus.website.api.utils.EntityModel;
+import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
+import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BoxEntityPanel extends Panel {
 
     public static CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(BoxEntityPanel.class, "BoxEntityPanel.css"));
 
-    public BoxEntityPanel(String id, IEntity entity, List<String> fieldIds) {
+    @PaxWicketBean(name = "decoratorManager")
+    private IDecoratorManager decoratorManager;
+
+    public BoxEntityPanel(String id, Field columnField, IEntity entity, List<String> fieldIds, Map<String, String> decorators) {
         super(id);
 
         Collection collection = entity.getCollection();
@@ -69,10 +78,30 @@ public class BoxEntityPanel extends Panel {
         add(fieldsView);
 
 
+        RepeatingView decoratorsView = new RepeatingView("decorators");
+
+        for (Map.Entry<String, String> decorator : decorators.entrySet()) {
+            WebMarkupContainer item = new WebMarkupContainer(decoratorsView.newChildId());
+
+            IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator.getKey(), entity.getCollection(), columnField);
+            decoratorImpl.populateCell(item, "decorator", new EntityModel(entity));
+            item.add(new Label("label", decorator.getValue()));
+            decoratorsView.add(item);
+        }
+
+        add(decoratorsView);
+
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         response.render(CSS);
+    }
+
+    protected IDecoratorManager getDecoratorManager() {
+        if (decoratorManager == null) {
+            WebsiteApplication.inject(this);
+        }
+        return decoratorManager;
     }
 }
