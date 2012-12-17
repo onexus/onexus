@@ -56,28 +56,41 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetStatus> {
 
     public final static ResourceReference CSS = new CssResourceReference(DownloadWidget.class, "prettify/prettify.css");
     public final static ResourceReference JS = new JavaScriptResourceReference(DownloadWidget.class, "prettify/prettify.js");
+    private static Pattern commaPattern = Pattern.compile(",");
 
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    public final static List<IQueryScript> scripts = Arrays.asList(new IQueryScript[]{
-            new RScript(),
-            new PythonScript(),
-            new PerlScript(),
-            new BashScript()
-    });
+    public final static Map<String, IQueryScript> scriptsMap = new LinkedHashMap<String, IQueryScript>();
+    static {
+            addScript(new RScript());
+            addScript(new PythonScript());
+            addScript(new PerlScript());
+            addScript(new BashScript());
+    }
+    private static void addScript(IQueryScript queryScript) {
+        scriptsMap.put(queryScript.getLabel().toLowerCase(), queryScript);
+    }
 
-    private final static List<IDownloadFormat> formats = Arrays.asList(new IDownloadFormat[]{
-            new TsvFormat(),
-            new ExcelFormat()
-    });
+    private final static Map<String, IDownloadFormat> formatsMap = new LinkedHashMap<String, IDownloadFormat>();
+    static {
+            addFormat(new TsvFormat());
+            addFormat(new ExcelFormat());
+    }
+    private static void addFormat(IDownloadFormat format) {
+        formatsMap.put(format.getLabel().toLowerCase(), format);
+    }
+
 
     private String webserviceUrl;
     private IDownloadFormat format;
@@ -98,6 +111,11 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         // Download form
         final Form<String> downloadForm = new Form<String>("form");
         downloadForm.setOutputMarkupId(true);
+
+        List<IDownloadFormat> formats = getFormats();
+        if (formats.isEmpty()) {
+            throw new UnsupportedOperationException("Download widget: At least one format is needed.");
+        }
         setFormat(formats.get(0));
         downloadForm.add(new DropDownChoice<IDownloadFormat>("format", new PropertyModel<IDownloadFormat>(this, "format"), formats));
         add(downloadForm);
@@ -125,9 +143,9 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         };
         downloadForm.add(link);
 
-
+        List<IQueryScript> scripts = getScripts();
         // Add scripts
-        add(new ListView<IQueryScript>("scripts", scripts) {
+        ListView scriptsView = new ListView<IQueryScript>("scripts", scripts) {
             @Override
             protected void populateItem(ListItem<IQueryScript> item) {
 
@@ -145,8 +163,54 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
                 item.add(toggle);
 
             }
-        });
+        };
 
+        if (scripts.isEmpty()) {
+            scriptsView.setVisible(false);
+        }
+        add(scriptsView);
+
+    }
+
+    private List<IDownloadFormat> getFormats() {
+        List<IDownloadFormat> formats = new ArrayList<IDownloadFormat>();
+
+        String formatsStr = getConfig().getFormats();
+
+        if (formatsStr == null) {
+            formats.addAll(formatsMap.values());
+        } else {
+            String[] values = commaPattern.split(formatsStr);
+            for (String value : values) {
+                IDownloadFormat format = formatsMap.get(value.trim().toLowerCase());
+                if (format != null) {
+                    formats.add(format);
+                }
+            }
+        }
+
+        return formats;
+    }
+
+
+    private List<IQueryScript> getScripts() {
+        List<IQueryScript> scripts = new ArrayList<IQueryScript>();
+
+        String scriptsStr = getConfig().getScripts();
+
+        if (scriptsStr == null) {
+            scripts.addAll(scriptsMap.values());
+        } else {
+            String[] values = commaPattern.split(scriptsStr);
+            for (String value : values) {
+                IQueryScript script = scriptsMap.get(value.trim().toLowerCase());
+                if (script != null) {
+                    scripts.add(script);
+                }
+            }
+        }
+
+        return scripts;
     }
 
     @Override

@@ -29,6 +29,10 @@ public abstract class AbstractFormat implements IDownloadFormat {
         this.title = title;
     }
 
+    public String getLabel() {
+        return extension;
+    }
+
     @Override
     public String getTitle() {
         return title;

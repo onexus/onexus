@@ -25,12 +25,32 @@ public class DownloadWidgetConfig extends WidgetConfig {
 
     private DownloadWidgetStatus defaultStatus;
 
+    private String formats;
+
+    private String scripts;
+
     public DownloadWidgetConfig(String id) {
         super(id);
     }
 
     public DownloadWidgetConfig() {
         super();
+    }
+
+    public String getFormats() {
+        return formats;
+    }
+
+    public void setFormats(String formats) {
+        this.formats = formats;
+    }
+
+    public String getScripts() {
+        return scripts;
+    }
+
+    public void setScripts(String scripts) {
+        this.scripts = scripts;
     }
 
     @Override

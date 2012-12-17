@@ -25,6 +25,8 @@ import java.io.Serializable;
 
 public interface IDownloadFormat extends Serializable {
 
+    public String getLabel();
+
     public String getTitle();
 
     public String getFileName();
