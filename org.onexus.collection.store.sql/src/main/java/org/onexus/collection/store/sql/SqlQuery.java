@@ -240,7 +240,7 @@ public class SqlQuery {
         // Sort the network to include JOINS in the correct order
 
         List<ORI> keys = new ArrayList<ORI>(networkLinks.keySet());
-        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getORI(), equalIdsCollections));
+        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getORI()));
 
         for (ORI collectionUri : keys) {
 
