@@ -46,25 +46,14 @@ public class LinksNetworkComparator implements Comparator<ORI> {
         if (a_b != -1 && b_a != -1) {
             if (a_b == 0 && b_a == 0) {
 
-                // Remove FieldLink from B to A from linksA
                 List<FieldLink> linksA = networkLinks.get(a);
-                for (int i = 0; i < linksA.size(); i++) {
-                    FieldLink link = linksA.get(i);
-                    if (link.getFromCollection().equals(b) && link.getToCollection().equals(a)) {
-                        linksA.set(i, null);
-                    }
-                }
-                linksA.removeAll(Collections.singletonList(null));
-
-                // Remove FieldLink from A to B from linksB
                 List<FieldLink> linksB = networkLinks.get(b);
-                for (int i = 0; i < linksB.size(); i++) {
-                    FieldLink link = linksB.get(i);
-                    if (link.getFromCollection().equals(a) && link.getToCollection().equals(b)) {
-                        linksB.set(i, null);
-                    }
+
+                if (linksA.size() > linksB.size()) {
+                    removeLinksToOrFromCollection(linksA, b);
+                } else {
+                    removeLinksToOrFromCollection(linksB, a);
                 }
-                linksB.removeAll(Collections.singletonList(null));
                 return compare(a, b);
             } else {
                 throw new RuntimeException("Mutually dependency on different depth level");
@@ -80,6 +69,18 @@ public class LinksNetworkComparator implements Comparator<ORI> {
         }
 
         return 0;
+    }
+
+    private void removeLinksToOrFromCollection(List<FieldLink> links, ORI collection) {
+
+        for (int i = 0; i < links.size(); i++) {
+            FieldLink link = links.get(i);
+            if (link.getFromCollection().equals(collection) || link.getToCollection().equals(collection)) {
+                links.set(i, null);
+            }
+        }
+        links.removeAll(Collections.singletonList(null));
+
     }
 
     /*

@@ -26,17 +26,22 @@ public class LinkUtilsTest {
 
         Collection a = new Collection();
         a.setORI(aOri);
+        a.setFields(Arrays.asList(new Field[]{ new Field(aFieldId, aFieldId, aFieldId, String.class, true)}));
         a.setLinks(Arrays.asList(new Link[]{
                 new Link(bOri, aFieldId + " == " + bFieldId)
         }));
         Collection b = new Collection();
         b.setORI(bOri);
+        b.setFields(Arrays.asList(new Field[]{ new Field(bFieldId, bFieldId, bFieldId, String.class, false)}));
         b.setLinks(Collections.EMPTY_LIST);
 
         List<FieldLink> links = LinkUtils.getLinkFields(parentORI, a, b);
 
         assertEquals(links.size(), 1);
         assertArrayEquals(links.toArray(), new FieldLink[] { new FieldLink(aOri, aFieldId, bOri, bFieldId)});
+
+        links = LinkUtils.getLinkFields(parentORI, b, a);
+        assertEquals(links.size(), 0);
 
     }
 }

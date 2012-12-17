@@ -34,10 +34,14 @@ public class Field extends AbstractMetadata {
     }
 
     public Field(String id, String label, String title, Class<?> type) {
+        this(id, label, title, type, null);
+    }
+
+    public Field(String id, String label, String title, Class<?> type, Boolean primaryKey) {
         super();
         this.id = id;
         this.type = type;
-        this.primaryKey = null;
+        this.primaryKey = primaryKey;
         setLabel(label);
         setTitle(title);
     }

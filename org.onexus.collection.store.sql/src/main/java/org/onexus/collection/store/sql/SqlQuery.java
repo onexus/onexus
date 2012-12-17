@@ -126,6 +126,11 @@ public class SqlQuery {
         List<EqualId> equalIds = new ArrayList<EqualId>();
         addEqualIdFilters(equalIds, query.getWhere());
 
+        List<ORI> equalIdsCollections = new ArrayList<ORI>();
+        for (EqualId se : equalIds) {
+            equalIdsCollections.add(QueryUtils.getCollectionOri(query, se.getCollectionAlias()));
+        }
+
         Map<ORI, List<ORI>> networkFixedCollection = new HashMap<ORI, List<ORI>>();
         Map<ORI, StringBuilder> networkFixedJoins = new HashMap<ORI, StringBuilder>();
         Map<ORI, List<FieldLink>> networkLinks = new HashMap<ORI, List<FieldLink>>();
@@ -193,7 +198,7 @@ public class SqlQuery {
 
             // Add links
             ORI parentURI = query.getOn();
-            List<FieldLink> linkFields = LinkUtils.getLinkFields(parentURI, joinCollection, fromCollection);
+            List<FieldLink> linkFields = LinkUtils.getLinkFields(parentURI, joinCollection, fromCollection, equalIdsCollections);
 
             // Add thirdParty joins
             if (linkFields.isEmpty()) {
@@ -216,7 +221,7 @@ public class SqlQuery {
 
                     Collection tpJoinCollection = manager.getCollection(tpCollectionUri);
 
-                    linkFields.addAll(LinkUtils.getLinkFields(parentURI, joinCollection, tpJoinCollection));
+                    linkFields.addAll(LinkUtils.getLinkFields(parentURI, joinCollection, tpJoinCollection, equalIdsCollections));
                 }
             }
 
@@ -235,7 +240,7 @@ public class SqlQuery {
         // Sort the network to include JOINS in the correct order
 
         List<ORI> keys = new ArrayList<ORI>(networkLinks.keySet());
-        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getORI()));
+        keys = sort(keys, new LinksNetworkComparator(networkLinks, fromCollection.getORI(), equalIdsCollections));
 
         for (ORI collectionUri : keys) {
 

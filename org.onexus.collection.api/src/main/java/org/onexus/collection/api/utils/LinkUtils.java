@@ -24,14 +24,19 @@ import org.onexus.resource.api.ORI;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LinkUtils {
 
     public final static String FIELDS_SEPARATOR = "==";
 
-    public static List<FieldLink> getLinkFields(ORI parentURI,
-                                                Collection a, Collection b) {
+    public static List<FieldLink> getLinkFields(ORI parentURI, Collection a, Collection b) {
+        return getLinkFields(parentURI, a, b, Collections.EMPTY_LIST);
+    }
+
+    public static List<FieldLink> getLinkFields(ORI parentURI, Collection a, Collection b, List<ORI> fixedCollections) {
 
         List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
 
@@ -47,13 +52,30 @@ public class LinkUtils {
         }
 
         // Case 1: A has a direct link to B
+        Map<String, FieldLink> fieldToLink = new HashMap<String, FieldLink>();
         for (Link link : linksA) {
-            if (link.getCollection().toAbsolute(parentURI).equals(b.getORI())) {
+            ORI linkCollection = link.getCollection().toAbsolute(parentURI);
+            if (linkCollection.equals(b.getORI())) {
                 for (String field : link.getFields()) {
-                    fieldLinks.add(new FieldLink(a.getORI(),
-                            getFromFieldName(field), b.getORI(),
-                            getToFieldName(field)));
+                    String fromField = getFromFieldName(field);
+                    String toField = getToFieldName(field);
+                    fieldToLink.put(fromField, new FieldLink(a.getORI(), fromField, b.getORI(), toField));
                 }
+            } else {
+                if (fixedCollections.contains(linkCollection)) {
+                    for (String field : link.getFields()) {
+                        String fromField = getFromFieldName(field);
+                        String toField = getToFieldName(field);
+                        fieldToLink.put(fromField, new FieldLink(a.getORI(), fromField, linkCollection, toField));
+                    }
+                }
+            }
+        }
+
+        // Check that all A primary keys are linked
+        if (!fieldToLink.isEmpty()) {
+            if (areAllPrimaryKeyLinked(a.getFields(), fieldToLink)) {
+                fieldLinks.addAll(fieldToLink.values());
                 return fieldLinks;
             }
         }
@@ -62,14 +84,20 @@ public class LinkUtils {
         for (Link link : linksB) {
             if (link.getCollection().toAbsolute(parentURI).equals(a.getORI())) {
                 for (String field : link.getFields()) {
-                    fieldLinks.add(new FieldLink(b.getORI(),
-                            getFromFieldName(field), a.getORI(),
-                            getToFieldName(field)));
+                    String fromField = getFromFieldName(field);
+                    String toField = getToFieldName(field);
+                    fieldToLink.put(toField, new FieldLink(b.getORI(), fromField, a.getORI(), toField));
                 }
-                return fieldLinks;
             }
         }
 
+        // Check that all A primary keys are linked
+        if (!fieldToLink.isEmpty()) {
+            if (areAllPrimaryKeyLinked(a.getFields(), fieldToLink)) {
+                fieldLinks.addAll(fieldToLink.values());
+                return fieldLinks;
+            }
+        }
 
         // Case 2: All the primary fields of A has a link to collections linked
         // by B
@@ -131,6 +159,22 @@ public class LinkUtils {
 
         return fieldLinks;
 
+    }
+
+    private static boolean areAllPrimaryKeyLinked(List<Field> fields, Map<String, FieldLink> fieldToLink) {
+        boolean allKeyLinked = false;
+        if (fields != null) {
+            for (Field field : fields) {
+                if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
+                    allKeyLinked = true;
+                    if (!fieldToLink.containsKey(field.getId())) {
+                        allKeyLinked = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return allKeyLinked;
     }
 
     public static String getToFieldName(String fieldLink) {
