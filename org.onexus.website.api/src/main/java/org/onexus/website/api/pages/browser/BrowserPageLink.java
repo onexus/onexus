@@ -17,12 +17,12 @@
  */
 package org.onexus.website.api.pages.browser;
 
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.model.IModel;
 import org.onexus.website.api.events.AbstractEvent;
 
-public abstract class BrowserPageLink<T> extends AjaxLink<T> {
+public abstract class BrowserPageLink<T> extends IndicatingAjaxLink<T> {
 
     public BrowserPageLink(String id) {
         super(id);
