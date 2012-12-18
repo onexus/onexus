@@ -40,8 +40,8 @@ import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.widgets.Widget;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,13 +53,15 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
     @PaxWicketBean(name = "queryParser")
     private IQueryParser queryParser;
 
+    private transient EntityChoice selection;
+
     public SelectorWidget(String componentId, IModel<SelectorWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         Form form = new Form("form");
-        DropDownChoice<String> dropDown = new DropDownChoice<String>(
+        DropDownChoice<EntityChoice> dropDown = new DropDownChoice<EntityChoice>(
                 "select",
-                new PropertyModel<String>(statusModel, "selection"),
+                new PropertyModel<EntityChoice>(this, "selection"),
                 getChoices()
         ) {
             @Override
@@ -105,18 +107,26 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
     }
 
-    private List<String> getChoices() {
+    public EntityChoice getSelection() {
+        return selection;
+    }
+
+    public void setSelection(EntityChoice entityChoice) {
+        selection = entityChoice;
+        getStatus().setSelection(entityChoice.getId());
+    }
+
+    private List<EntityChoice> getChoices() {
 
         String field = getConfig().getField();
         ORI collection = getConfig().getCollection();
-
 
         Query query = new Query();
         query.setOn(getWebsiteOri());
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, collection);
         query.setFrom(collectionAlias);
-        query.addSelect(collectionAlias, Arrays.asList(field));
+        query.addSelect(collectionAlias, null);
         query.addOrderBy(new OrderBy(collectionAlias, field));
 
         String oqlWhere = getConfig().getWhere();
@@ -128,13 +138,45 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
         Iterator<IEntity> choicesIt = new EntityIterator(collectionManager.load(query), collection);
 
-        List<String> choices = new ArrayList<String>();
+        List<EntityChoice> choices = new ArrayList<EntityChoice>();
 
         while (choicesIt.hasNext()) {
-            choices.add(String.valueOf(choicesIt.next().get(field)));
+            IEntity entity = choicesIt.next();
+            choices.add(new EntityChoice(entity.getId(), String.valueOf(entity.get(field))));
         }
 
         return choices;
+    }
+
+    public static class EntityChoice implements Serializable {
+
+        private String id;
+        private String field;
+
+        public EntityChoice(String id, String field) {
+            this.id = id;
+            this.field = field;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
+
+        public String toString() {
+            return getField();
+        }
     }
 
 

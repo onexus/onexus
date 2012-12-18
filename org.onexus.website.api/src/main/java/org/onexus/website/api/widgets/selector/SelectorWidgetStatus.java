@@ -17,24 +17,15 @@
  */
 package org.onexus.website.api.widgets.selector;
 
-import org.apache.wicket.util.string.Strings;
-import org.onexus.collection.api.query.Equal;
-import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.IQueryParser;
+import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
 
     private String selection;
-
-    @PaxWicketBean(name = "queryParser")
-    private IQueryParser queryParser;
-
 
     public SelectorWidgetStatus() {
         super();
@@ -58,34 +49,15 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
         if (selection != null) {
             SelectorWidgetConfig config = getConfig();
 
-            ORI whereCollection = config.getWhereCollection();
-            if (whereCollection == null || Strings.isEmpty(whereCollection.getPath())) {
-                whereCollection = config.getCollection();
-            }
+            String collectionAlias = QueryUtils.newCollectionAlias(query, config.getCollection());
+            QueryUtils.and(query, new EqualId(collectionAlias, selection));
 
-            String whereField = config.getWhereField();
-            if (Strings.isEmpty(whereField)) {
-                whereField = config.getField();
-            }
-
-            String collectionAlias = QueryUtils.newCollectionAlias(query, whereCollection);
-            QueryUtils.and(query, new Equal(collectionAlias, whereField, selection));
-
-            String oqlWhere = getConfig().getWhere();
-
-            if (oqlWhere != null && !oqlWhere.isEmpty()) {
-                Filter where = getQueryParser().parseWhere(collectionAlias + "." + getConfig().getWhere().trim());
-                QueryUtils.and(query, where);
+            ORI mapCollection = config.getMapCollection();
+            if (mapCollection!=null) {
+                QueryUtils.newCollectionAlias(query, mapCollection);
             }
         }
 
     }
 
-    private IQueryParser getQueryParser() {
-        if (queryParser == null) {
-            WebsiteApplication.inject(this);
-        }
-
-        return queryParser;
-    }
 }

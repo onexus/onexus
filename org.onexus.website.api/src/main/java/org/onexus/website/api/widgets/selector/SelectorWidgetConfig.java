@@ -29,8 +29,7 @@ public class SelectorWidgetConfig extends WidgetConfig {
     private ORI collection;
     private String field;
     private String where;
-    private ORI whereCollection;
-    private String whereField;
+    private ORI mapCollection;
 
     public SelectorWidgetConfig() {
         super();
@@ -64,25 +63,17 @@ public class SelectorWidgetConfig extends WidgetConfig {
         this.where = where;
     }
 
-    public ORI getWhereCollection() {
-        return whereCollection;
+    public ORI getMapCollection() {
+        return mapCollection;
     }
 
-    public void setWhereCollection(ORI whereCollection) {
-        this.whereCollection = whereCollection;
+    public void setMapCollection(ORI mapCollection) {
+        this.mapCollection = mapCollection;
     }
 
     @Override
     public SelectorWidgetStatus createEmptyStatus() {
         return new SelectorWidgetStatus(getId());
-    }
-
-    public String getWhereField() {
-        return whereField;
-    }
-
-    public void setWhereField(String whereField) {
-        this.whereField = whereField;
     }
 
     public SelectorWidgetStatus getDefaultStatus() {
