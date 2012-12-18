@@ -113,7 +113,8 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
     public void setSelection(EntityChoice entityChoice) {
         selection = entityChoice;
-        getStatus().setSelection(entityChoice.getId());
+        String id = (entityChoice == null ? null : entityChoice.getId());
+        getStatus().setSelection(id);
     }
 
     private List<EntityChoice> getChoices() {
