@@ -46,13 +46,14 @@ public class BoxDecorator implements IDecorator {
         this.field = field;
         this.fields = parameters.get(BoxDecoratorParameters.FIELDS);
 
-        String decoParameters[] = commaPattern.split(parameters.get(BoxDecoratorParameters.DECORATORS));
+        if (parameters.containsKey(BoxDecoratorParameters.DECORATORS)) {
+            String decoParameters[] = commaPattern.split(parameters.get(BoxDecoratorParameters.DECORATORS));
 
-        for (String decoParam : decoParameters) {
-            String[] values = colonPattern.split(decoParam);
-            decorators.put(values[0], values[1]);
+            for (String decoParam : decoParameters) {
+                String[] values = colonPattern.split(decoParam);
+                decorators.put(values[0], values[1]);
+            }
         }
-
     }
 
     @Override

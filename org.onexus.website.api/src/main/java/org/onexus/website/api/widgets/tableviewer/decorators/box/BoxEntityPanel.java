@@ -78,6 +78,8 @@ public class BoxEntityPanel extends Panel {
         add(fieldsView);
 
 
+        WebMarkupContainer decoratorsContainer = new WebMarkupContainer("decoratorsContainer");
+        add(decoratorsContainer);
         RepeatingView decoratorsView = new RepeatingView("decorators");
 
         for (Map.Entry<String, String> decorator : decorators.entrySet()) {
@@ -89,7 +91,11 @@ public class BoxEntityPanel extends Panel {
             decoratorsView.add(item);
         }
 
-        add(decoratorsView);
+        if (decorators.isEmpty()) {
+            decoratorsContainer.setVisible(false);
+        }
+
+        decoratorsContainer.add(decoratorsView);
 
     }
 
