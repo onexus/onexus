@@ -78,7 +78,9 @@ public class SqlCollectionDDL {
 
                 Iterator<String> fieldIt = link.getFields().iterator();
                 while (fieldIt.hasNext()) {
-                    linkSQL.append("`").append(LinkUtils.getFromFieldName(fieldIt.next())).append("`");
+                    String fromFieldId = LinkUtils.getFromFieldName(fieldIt.next());
+                    ColumnInfo indexField = getColumnInfoByFieldName(fromFieldId);
+                    linkSQL.append("`").append(indexField.getColumnName()).append("`");
                     if (fieldIt.hasNext()) {
                         linkSQL.append(", ");
                     }

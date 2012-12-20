@@ -18,6 +18,7 @@
 package org.onexus.collection.store.sql;
 
 import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
 import org.onexus.collection.api.query.And;
 import org.onexus.collection.api.query.EqualId;
@@ -176,11 +177,16 @@ public class SqlQuery {
                             }
                             for (int i = 0; i < ids.length; i++) {
 
+                                String fromFieldName = LinkUtils.getFromFieldName(fields.get(i));
+
+                                Field field = joinCollection.getField(fromFieldName);
+                                SqlCollectionDDL.ColumnInfo fieldColumn = manager.getDDL(joinCollection.getORI()).getColumnInfoByFieldName(fromFieldName);
+
                                 leftJoin.append("`").append(collectionAlias).append("`.`")
-                                        .append(LinkUtils.getToFieldName(fields.get(i)))
+                                        .append(fieldColumn.getColumnName())
                                         .append("` = ");
 
-                                SqlAdapter adapter = manager.getSqlDialect().getAdapter(joinCollection.getField(fields.get(i)).getType());
+                                SqlAdapter adapter = manager.getSqlDialect().getAdapter(field.getType());
                                 try {
                                     adapter.append(leftJoin, ids[i]);
                                 } catch (Exception e) {
