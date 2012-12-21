@@ -156,7 +156,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                         }
                     });
                 } else if (customFilter.getType().equalsIgnoreCase("numeric")) {
-                    FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter) {
+                    FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter, FiltersWidget.this.getPageBaseOri()) {
                         @Override
                         protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
                             addCustomFilter(target, filterConfig);

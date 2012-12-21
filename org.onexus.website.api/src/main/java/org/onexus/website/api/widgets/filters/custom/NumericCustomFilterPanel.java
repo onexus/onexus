@@ -26,16 +26,15 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.onexus.collection.api.query.Equal;
-import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.GreaterThan;
-import org.onexus.collection.api.query.GreaterThanOrEqual;
-import org.onexus.collection.api.query.LessThan;
-import org.onexus.collection.api.query.LessThanOrEqual;
-import org.onexus.collection.api.query.NotEqual;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.query.*;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.exceptions.OnexusException;
 import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.widgets.filters.FilterConfig;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,14 +43,19 @@ import java.util.Random;
 public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel {
 
     private CustomFilter customFilter;
+    private ORI parentOri;
 
     private final static Random RANDOM = new Random();
     private final static List<String> OPERATIONS = Arrays.asList(new String[]{"<", ">", "<=", ">=", "=", "!="});
 
-    public NumericCustomFilterPanel(String id, CustomFilter customFilter) {
+    @PaxWicketBean(name="resourceManager")
+    private IResourceManager resourceManager;
+
+    public NumericCustomFilterPanel(String id, CustomFilter customFilter, ORI parentOri) {
         super(id);
 
         this.customFilter = customFilter;
+        this.parentOri = parentOri;
 
         final FeedbackPanel uploadFeedback = new FeedbackPanel("uploadFeedback");
         add(uploadFeedback);
@@ -104,7 +108,7 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
         send(getPage(), Broadcast.BREADTH, EventCloseModal.EVENT);
     }
 
-    private Object convertToNumber(String strValue) throws NumberFormatException {
+    private Number convertToNumber(String strValue) throws NumberFormatException {
 
         if (strValue.contains(".")) {
             return Double.valueOf(strValue);
@@ -196,7 +200,19 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
             }
 
             try {
-                convertToNumber(value);
+                Number number = convertToNumber(value);
+
+                Collection collection = resourceManager.load(Collection.class, customFilter.getCollection().toAbsolute(parentOri));
+                Field field = collection.getField(customFilter.getField());
+                if (Integer.class.isAssignableFrom(field.getType())) {
+                    if (number instanceof Integer) {
+                        return true;
+                    } else {
+                        error("Not a valid integer");
+                        return false;
+                    }
+                }
+
             } catch (NumberFormatException e) {
                 error("Not a valid number");
                 return false;
