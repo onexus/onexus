@@ -20,16 +20,11 @@ package org.onexus.website.api.widgets.tableviewer;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
-import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.NoRecordsToolbar;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.onexus.collection.api.IEntityTable;
@@ -40,6 +35,7 @@ import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
+import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
@@ -47,7 +43,7 @@ import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> implements IAjaxIndicatorAware {
+public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
 
     public static final CssResourceReference TABLE_VIEWER_CSS = new CssResourceReference(TableViewer.class,
             "TableViewer.css");
@@ -58,15 +54,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
     // Model objects
     private EntitiesRowProvider dataProvider;
 
-    private final WebMarkupContainer indicatorAppender;
-
     public TableViewer(String componentId, IModel<TableViewerStatus> status) {
         super(componentId, status);
-
-        indicatorAppender = new WebMarkupContainer("progress");
-        indicatorAppender.setOutputMarkupId(true);
-        indicatorAppender.add(new Image("image", AbstractDefaultAjaxBehavior.INDICATOR));
-        add(indicatorAppender);
 
         onEventFireUpdate(EventQueryUpdate.class, EventAddFilter.class, EventRemoveFilter.class);
 
@@ -76,8 +65,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
 
         this.getVariation();
 
-        Integer rowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
-        rowsPerPage = (rowsPerPage == null ? 30 : rowsPerPage);
+        Integer sessionRowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
+        final Integer rowsPerPage = (sessionRowsPerPage == null ? 30 : sessionRowsPerPage);
 
         this.dataProvider = new EntitiesRowProvider(status, rowsPerPage) {
 
@@ -105,7 +94,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
         // Create the columns from the config
         int ccs = getStatus().getCurrentColumnSet();
         List<IColumnConfig> columnsConfig = getConfig().getColumnSets().get(ccs).getColumns();
-        List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
+        final List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
 
         ORI parentURI = getQuery().getOn();
 
@@ -123,13 +112,12 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
             columnConfig.addColumns(columns, parentURI);
         }
 
-        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, rowsPerPage);
-        resultTable.setOutputMarkupId(true);
-        resultTable.setVersioned(false);
-        resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
-        resultTable.addBottomToolbar(new NoRecordsToolbar(resultTable));
-        resultTable.addBottomToolbar(new NavigationToolbar(resultTable));
-        add(resultTable);
+        add(new OnDomReadyPanel("datatable") {
+            @Override
+            protected Panel onDomReadyPanel(String componentId) {
+                return new DataTablePanel("datatable", columns, dataProvider, rowsPerPage);
+            }
+        });
 
     }
 
@@ -146,13 +134,6 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> im
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(TABLE_VIEWER_CSS));
-    }
-
-    /**
-     * @see org.apache.wicket.ajax.IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
-     */
-    public String getAjaxIndicatorMarkupId() {
-        return indicatorAppender.getMarkupId();
     }
 
     @Override

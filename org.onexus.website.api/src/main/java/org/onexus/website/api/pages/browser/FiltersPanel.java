@@ -81,7 +81,7 @@ public class FiltersPanel extends EventPanel {
 
                 //TODO container.add(filter.getTooltip("box", query));
 
-                BrowserPageLink<Integer> removeLink = new IndicatingBrowserPageLink<Integer>("remove", Model.of(i)) {
+                BrowserPageLink<Integer> removeLink = new BrowserPageLink<Integer>("remove", Model.of(i)) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {

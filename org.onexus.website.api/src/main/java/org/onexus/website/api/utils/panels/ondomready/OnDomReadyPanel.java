@@ -20,17 +20,19 @@ package org.onexus.website.api.utils.panels.ondomready;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 public abstract class OnDomReadyPanel extends Panel {
 
     private static CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(OnDomReadyPanel.class, "OnDomReadyPanel.css"));
+    public static ResourceReference LOADING_IMAGE = new PackageResourceReference(OnDomReadyPanel.class, "OnDomReadyLoading.gif");
 
     public OnDomReadyPanel(String id) {
         this(id, null);
@@ -54,7 +56,7 @@ public abstract class OnDomReadyPanel extends Panel {
             }
         });
 
-        add(new AttributeAppender("class", " ondomreadypanel"));
+        add(new Image("loading", LOADING_IMAGE));
 
     }
 
