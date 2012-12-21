@@ -47,21 +47,22 @@ import java.util.List;
 
 public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetStatus> {
 
-    @PaxWicketBean(name = "collectionManager")
+    @PaxWicketBean(name = "collectionManager" )
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name = "queryParser")
+    @PaxWicketBean(name = "queryParser" )
     private IQueryParser queryParser;
 
     private transient EntityChoice selection;
+    private transient List<EntityChoice> choices;
 
     public SelectorWidget(String componentId, IModel<SelectorWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
-        Form form = new Form("form");
+        Form form = new Form("form" );
         DropDownChoice<EntityChoice> dropDown = new DropDownChoice<EntityChoice>(
                 "select",
-                new PropertyModel<EntityChoice>(this, "selection"),
+                new PropertyModel<EntityChoice>(this, "selection" ),
                 getChoices()
         ) {
             @Override
@@ -77,15 +78,15 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
                 final AppendingStringBuffer buffer = new AppendingStringBuffer(64 + option.length());
 
                 // Add option tag
-                buffer.append("\n<option");
+                buffer.append("\n<option" );
 
                 // If null is selected, indicate that
                 if ("".equals(selectedValue)) {
-                    buffer.append(" selected=\"selected\"");
+                    buffer.append(" selected=\"selected\"" );
                 }
 
                 // Add body of option tag
-                buffer.append(" value=\"\">").append(option).append("</option>");
+                buffer.append(" value=\"\">" ).append(option).append("</option>" );
 
                 return buffer;
             }
@@ -108,6 +109,19 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
     }
 
     public EntityChoice getSelection() {
+
+        if (selection == null) {
+            SelectorWidgetStatus status = getStatus();
+            if (status != null && status.getSelection() != null) {
+                for (EntityChoice choice : getChoices()) {
+                    if (choice.getId().equals(status.getSelection())) {
+                        this.selection = choice;
+                        break;
+                    }
+                }
+            }
+        }
+
         return selection;
     }
 
@@ -119,31 +133,35 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
     private List<EntityChoice> getChoices() {
 
-        String field = getConfig().getField();
-        ORI collection = getConfig().getCollection();
+        if (choices == null) {
 
-        Query query = new Query();
-        query.setOn(getWebsiteOri());
+            String field = getConfig().getField();
+            ORI collection = getConfig().getCollection();
 
-        String collectionAlias = QueryUtils.newCollectionAlias(query, collection);
-        query.setFrom(collectionAlias);
-        query.addSelect(collectionAlias, null);
-        query.addOrderBy(new OrderBy(collectionAlias, field));
+            Query query = new Query();
+            query.setOn(getWebsiteOri());
 
-        String oqlWhere = getConfig().getWhere();
+            String collectionAlias = QueryUtils.newCollectionAlias(query, collection);
+            query.setFrom(collectionAlias);
+            query.addSelect(collectionAlias, null);
+            query.addOrderBy(new OrderBy(collectionAlias, field));
 
-        if (oqlWhere != null && !oqlWhere.isEmpty()) {
-            Filter where = queryParser.parseWhere(collectionAlias + "." + getConfig().getWhere().trim());
-            query.setWhere(where);
-        }
+            String oqlWhere = getConfig().getWhere();
 
-        Iterator<IEntity> choicesIt = new EntityIterator(collectionManager.load(query), collection);
+            if (oqlWhere != null && !oqlWhere.isEmpty()) {
+                Filter where = queryParser.parseWhere(collectionAlias + "." + getConfig().getWhere().trim());
+                query.setWhere(where);
+            }
 
-        List<EntityChoice> choices = new ArrayList<EntityChoice>();
+            Iterator<IEntity> choicesIt = new EntityIterator(collectionManager.load(query), collection);
 
-        while (choicesIt.hasNext()) {
-            IEntity entity = choicesIt.next();
-            choices.add(new EntityChoice(entity.getId(), String.valueOf(entity.get(field))));
+            choices = new ArrayList<EntityChoice>();
+
+            while (choicesIt.hasNext()) {
+                IEntity entity = choicesIt.next();
+                choices.add(new EntityChoice(entity.getId(), String.valueOf(entity.get(field))));
+            }
+
         }
 
         return choices;
