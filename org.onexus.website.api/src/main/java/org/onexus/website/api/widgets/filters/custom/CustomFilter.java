@@ -28,9 +28,6 @@ public class CustomFilter implements Serializable {
     private String title;
     private ORI collection;
 
-    @XStreamAlias("visible-collection")
-    private ORI visibleCollection;
-
     private String type;
 
     private String field;
@@ -60,14 +57,6 @@ public class CustomFilter implements Serializable {
 
     public void setCollection(ORI collectionURI) {
         this.collection = collectionURI;
-    }
-
-    public ORI getVisibleCollection() {
-        return visibleCollection;
-    }
-
-    public void setVisibleCollection(ORI visibleCollection) {
-        this.visibleCollection = visibleCollection;
     }
 
     public String getType() {

@@ -101,7 +101,6 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
         }
 
         filter.setWhere(where.toString());
-        filter.setVisibleCollection(customFilter.getVisibleCollection());
 
         addFilter(target, filter);
 

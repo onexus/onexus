@@ -191,9 +191,9 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
         for (IFilter filter : filters) {
             if (filter instanceof FilterEntity) {
-                parameters.add(keyPrefix + "fe", filter.toUrlParameter());
-            } else {
                 parameters.add(keyPrefix + "f", filter.toUrlParameter());
+            } else {
+                parameters.add(keyPrefix + "fc", filter.toUrlParameter());
             }
         }
 
@@ -215,7 +215,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         }
 
         this.filters = new ArrayList<IFilter>();
-        List<StringValue> values = parameters.getValues(keyPrefix + "fe");
+        List<StringValue> values = parameters.getValues(keyPrefix + "f");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
                 FilterEntity fe = new FilterEntity();
@@ -224,7 +224,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             }
         }
 
-        values = parameters.getValues(keyPrefix + "f");
+        values = parameters.getValues(keyPrefix + "fc");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
                 BrowserFilter fe = new BrowserFilter();

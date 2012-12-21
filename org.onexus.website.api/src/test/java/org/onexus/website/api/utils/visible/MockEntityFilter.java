@@ -88,11 +88,6 @@ public class MockEntityFilter implements IFilter {
     }
 
     @Override
-    public String getLabel(Query query) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String getTitle(Query query) {
         throw new UnsupportedOperationException();
     }
@@ -107,8 +102,4 @@ public class MockEntityFilter implements IFilter {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String getVisible() {
-        throw new UnsupportedOperationException();
-    }
 }

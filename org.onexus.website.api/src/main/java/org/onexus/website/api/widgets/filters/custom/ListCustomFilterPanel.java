@@ -83,7 +83,6 @@ public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
             where.addValue(value);
         }
         filter.setWhere(where.toString());
-        filter.setVisibleCollection(field.getVisibleCollection());
 
         addFilter(target, filter);
 

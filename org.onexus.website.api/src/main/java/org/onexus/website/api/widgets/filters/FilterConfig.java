@@ -19,23 +19,15 @@ package org.onexus.website.api.widgets.filters;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.utils.visible.IVisible;
 
 import java.io.Serializable;
 
 @XStreamAlias("filter-config")
-public class FilterConfig implements Serializable, IVisible {
-
-    private String id;
+public class FilterConfig implements Serializable {
 
     private String name;
 
     private boolean deletable = false;
-
-    private String visible;
-
-    @XStreamAlias("visible-collection")
-    private ORI visibleCollection;
 
     private ORI collection;
 
@@ -43,25 +35,13 @@ public class FilterConfig implements Serializable, IVisible {
 
     private String where;
 
-    private String help;
-
     public FilterConfig() {
         super();
     }
 
     public FilterConfig(String id, String name) {
         super();
-        this.id = id;
         this.name = name;
-        this.visible = "";
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -80,22 +60,6 @@ public class FilterConfig implements Serializable, IVisible {
         this.collection = collection;
     }
 
-    public ORI getVisibleCollection() {
-        return visibleCollection;
-    }
-
-    public void setVisibleCollection(ORI visibleCollection) {
-        this.visibleCollection = visibleCollection;
-    }
-
-    public String getVisible() {
-        return visible;
-    }
-
-    public void setVisible(String visible) {
-        this.visible = visible;
-    }
-
     public String getDefine() {
         return define;
     }
@@ -112,10 +76,6 @@ public class FilterConfig implements Serializable, IVisible {
         this.where = where;
     }
 
-    public String getHelp() {
-        return help;
-    }
-
     public boolean isDeletable() {
         return deletable;
     }
@@ -124,15 +84,11 @@ public class FilterConfig implements Serializable, IVisible {
         this.deletable = deletable;
     }
 
-    public void setHelp(String help) {
-        this.help = help;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
@@ -145,10 +101,10 @@ public class FilterConfig implements Serializable, IVisible {
         if (getClass() != obj.getClass())
             return false;
         FilterConfig other = (FilterConfig) obj;
-        if (id == null) {
-            if (other.id != null)
+        if (name == null) {
+            if (other.name != null)
                 return false;
-        } else if (!id.equals(other.id))
+        } else if (!name.equals(other.name))
             return false;
         return true;
     }

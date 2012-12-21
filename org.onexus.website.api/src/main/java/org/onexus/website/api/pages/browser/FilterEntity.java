@@ -93,12 +93,6 @@ public class FilterEntity implements IFilter {
         this.filteredCollection = filteredCollection;
     }
 
-    @Override
-    public String getVisible() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-
     public void setEntityId(String entityId) {
         this.entityId = entityId;
     }
@@ -155,37 +149,31 @@ public class FilterEntity implements IFilter {
         return StringUtils.equals(fieldValue, rule.getValue());
     }
 
+    private static String SEPARATOR = "::";
+    private static Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
+
     @Override
     public String toUrlParameter() {
-        return filteredCollection + "::" + entityId + "::" + (deletable ? "d" : "") + (enable ? "e" : "");
+
+        StringBuilder str = new StringBuilder();
+        str.append(filteredCollection).append(SEPARATOR);
+        str.append(entityId).append(SEPARATOR);
+        str.append((deletable ? "d" : ""));
+        str.append((enable ? "e" : ""));
+
+        return str.toString();
     }
 
     @Override
     public void loadUrlPrameter(String parameter) {
-        String[] values = parameter.split("::");
+
+        String[] values = DOUBLE_COLON.split(parameter);
 
         this.filteredCollection = new ORI(values[0]);
         this.entityId = values[1];
         String flags = values[2];
         deletable = flags.contains("d");
         enable = flags.contains("e");
-    }
-
-
-    @Override
-    public String getLabel(Query query) {
-
-        // Make collection URI absolute
-        ORI filteredCollection = getFilteredCollection().toAbsolute(query.getOn());
-        Collection collection = getResourceManager().load(Collection.class, filteredCollection);
-
-        String collectionLabel = collection.getProperty("FIXED_COLLECTION_LABEL");
-        if (collectionLabel == null) {
-            collectionLabel = collection.getName();
-        }
-
-        return collectionLabel;
-
     }
 
     @Override

@@ -20,13 +20,14 @@ package org.onexus.website.api.pages.browser;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.utils.visible.IVisible;
 import org.onexus.website.api.utils.visible.VisibleRule;
 import org.onexus.website.api.widgets.filters.FilterConfig;
 
 import java.io.Serializable;
 
-public interface IFilter extends Serializable, IVisible {
+public interface IFilter extends Serializable {
+
+    String getTitle(Query query);
 
     ORI getFilteredCollection();
 
@@ -42,13 +43,9 @@ public interface IFilter extends Serializable, IVisible {
 
     Filter buildFilter(Query query);
 
-    String getLabel(Query query);
-
-    String getTitle(Query query);
-
-    boolean match(VisibleRule rule);
-
     String toUrlParameter();
 
     void loadUrlPrameter(String parameter);
+
+    boolean match(VisibleRule rule);
 }

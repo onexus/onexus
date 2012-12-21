@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets.filters;
 
-import org.apache.commons.codec.binary.Base64;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
@@ -31,14 +30,8 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringBufferInputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+import java.util.regex.Pattern;
 
 public class BrowserFilter implements IFilter {
 
@@ -125,11 +118,6 @@ public class BrowserFilter implements IFilter {
     }
 
     @Override
-    public String getLabel(Query query) {
-        return config.getDefine();
-    }
-
-    @Override
     public String getTitle(Query query) {
         return config.getName();
     }
@@ -137,10 +125,7 @@ public class BrowserFilter implements IFilter {
     @Override
     public boolean match(VisibleRule rule) {
 
-        ORI visibleCollection = config.getVisibleCollection();
-        if (visibleCollection == null) {
-            visibleCollection = config.getCollection();
-        }
+        ORI visibleCollection = config.getCollection();
 
         //TODO
         boolean validCollection = visibleCollection.getPath().endsWith(rule.getFilteredCollection().getPath());
@@ -152,34 +137,42 @@ public class BrowserFilter implements IFilter {
         }
     }
 
+    private static String SEPARATOR = "::";
+    private static Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
+
     @Override
     public String toUrlParameter() {
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            getResourceSerializer().serialize(config, out);
-            return compress(out.toString());
-        } catch (UnsupportedEncodingException e) {
-            log.error(e.getMessage());
-            return "";
-        }
+
+        StringBuilder str = new StringBuilder();
+        str.append(config.getName()).append(SEPARATOR);
+        str.append(config.getCollection()).append(SEPARATOR);
+        str.append(config.getDefine()).append(SEPARATOR);
+        str.append(config.getWhere()).append(SEPARATOR);
+        str.append((config.isDeletable()?"d":""));
+        return str.toString();
+
     }
 
     @Override
     public void loadUrlPrameter(String parameter) {
 
-        try {
-            config = getResourceSerializer().unserialize(FilterConfig.class, new StringBufferInputStream(decompress(parameter)));
-        } catch (UnsupportedEncodingException e) {
-            log.error(e.getMessage());
+        String[] values = DOUBLE_COLON.split(parameter);
+
+        config = new FilterConfig();
+
+        config.setName(values[0]);
+        config.setCollection(new ORI(values[1]));
+        config.setDefine(values[2]);
+        config.setWhere(values[3]);
+
+        if (values.length > 4) {
+            config.setDeletable(values[4].contains("d"));
+        } else {
+            config.setDeletable(false);
         }
 
         deletable = config.isDeletable();
         enable = true;
-    }
-
-    @Override
-    public String getVisible() {
-        return config.getVisible();
     }
 
     private IQueryParser getQueryParser() {
@@ -191,82 +184,5 @@ public class BrowserFilter implements IFilter {
         return queryParser;
     }
 
-    private IResourceSerializer getResourceSerializer() {
-
-        if (resourceSerializer == null) {
-            WebsiteApplication.inject(this);
-        }
-
-        return resourceSerializer;
-    }
-
-    public static String decompress(String inputStr) throws UnsupportedEncodingException {
-
-        // Base64 decode
-        Base64 base64 = new Base64(-1, new byte[0], true);
-        byte[] bytes = base64.decode(inputStr.getBytes("UTF-8"));
-
-        // Inflater
-        Inflater decompressor = new Inflater();
-        decompressor.setInput(bytes);
-
-        // Create an expandable byte array to hold the decompressed data
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(bytes.length);
-
-        // Decompress the data
-        byte[] buf = new byte[1024];
-        while (!decompressor.finished()) {
-            try {
-                int count = decompressor.inflate(buf);
-                bos.write(buf, 0, count);
-            } catch (DataFormatException e) {
-            }
-        }
-        try {
-            bos.close();
-        } catch (IOException e) {
-        }
-
-        // Get the decompressed data
-        byte[] decompressedData = bos.toByteArray();
-
-        return new String(decompressedData, "UTF-8");
-    }
-
-    public static String compress(String inputStr) throws UnsupportedEncodingException {
-        byte[] input = inputStr.getBytes("UTF-8");
-
-        // Compressor with highest level of compression
-        Deflater compressor = new Deflater();
-        compressor.setLevel(Deflater.BEST_COMPRESSION);
-
-        // Give the compressor the data to compress
-        compressor.setInput(input);
-        compressor.finish();
-
-        // Create an expandable byte array to hold the compressed data.
-        // It is not necessary that the compressed data will be smaller than
-        // the uncompressed data.
-        ByteArrayOutputStream bos = new ByteArrayOutputStream(input.length);
-
-        // Compress the data
-        byte[] buf = new byte[1024];
-        while (!compressor.finished()) {
-            int count = compressor.deflate(buf);
-            bos.write(buf, 0, count);
-        }
-        try {
-            bos.close();
-        } catch (IOException e) {
-        }
-
-        // Get the compressed data
-        byte[] compressedData = bos.toByteArray();
-
-        // Encode Base64
-        Base64 base64 = new Base64(-1, new byte[0], true);
-        byte[] bytes = base64.encode(compressedData);
-        return new String(bytes, "UTF-8");
-    }
 
 }
