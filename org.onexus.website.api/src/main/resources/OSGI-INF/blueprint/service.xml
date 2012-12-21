@@ -21,6 +21,7 @@
         <property name="resourceType" value="org.onexus.website.api.WebsiteConfig"/>
     </bean>
 
+
     <!-- References -->
     <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager">
         <reference-listener bind-method="bind" unbind-method="unbind" ref="websiteService"/>
@@ -28,6 +29,7 @@
     <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
     <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
     <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
+    <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer" />
 
     <!-- ITagStoreManager -->
     <service interface="org.onexus.website.api.widgets.tags.tagstore.ITagStoreManager"

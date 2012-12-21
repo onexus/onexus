@@ -32,6 +32,7 @@ import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
+import org.onexus.website.api.widgets.filters.BrowserFilter;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -189,7 +190,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
 
         for (IFilter filter : filters) {
-            parameters.add(keyPrefix + "f", filter.toUrlParameter());
+            if (filter instanceof FilterEntity) {
+                parameters.add(keyPrefix + "fe", filter.toUrlParameter());
+            } else {
+                parameters.add(keyPrefix + "f", filter.toUrlParameter());
+            }
         }
 
 
@@ -209,11 +214,20 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             this.currentView = currentView.toString();
         }
 
-        List<StringValue> values = parameters.getValues(keyPrefix + "f");
+        this.filters = new ArrayList<IFilter>();
+        List<StringValue> values = parameters.getValues(keyPrefix + "fe");
         if (!values.isEmpty()) {
-            this.filters = new ArrayList<IFilter>(values.size());
             for (StringValue value : values) {
                 FilterEntity fe = new FilterEntity();
+                fe.loadUrlPrameter(value.toString());
+                this.filters.add(fe);
+            }
+        }
+
+        values = parameters.getValues(keyPrefix + "f");
+        if (!values.isEmpty()) {
+            for (StringValue value : values) {
+                BrowserFilter fe = new BrowserFilter();
                 fe.loadUrlPrameter(value.toString());
                 this.filters.add(fe);
             }

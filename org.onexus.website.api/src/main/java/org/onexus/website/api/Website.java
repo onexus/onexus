@@ -83,7 +83,7 @@ public class Website extends WebPage {
         add(headerLabel);
 
         WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
-        menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList")) {
+        menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList" )) {
 
             @Override
             protected void populateItem(ListItem<PageConfig> item) {
@@ -101,7 +101,7 @@ public class Website extends WebPage {
                 item.add(link);
 
                 if (currentPage.equals(pageConfig.getId())) {
-                    link.getParent().add(new AttributeModifier("class", "active"));
+                    link.getParent().add(new AttributeModifier("class", "active" ));
                 }
 
             }
@@ -127,7 +127,7 @@ public class Website extends WebPage {
         add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
 
         if (!Authorization.authorize(config)) {
-            WebsiteApplication.get().restartResponseAtSignInPage();
+           WebsiteApplication.get().restartResponseAtSignInPage();
         }
 
         String bottom = config.getBottom();
