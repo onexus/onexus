@@ -17,10 +17,13 @@
  */
 package org.onexus.website.api;
 
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceListener;
+import org.onexus.website.api.utils.panels.SignInPage;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.BundleContext;
@@ -38,7 +41,10 @@ public class WebsiteService implements IWebsiteService {
     public final static String MOUNT = "web";
 
     private static final Logger log = LoggerFactory.getLogger(WebsiteService.class);
+
     private IResourceManager resourceManager;
+    private List<ISignInPage> signInPages;
+
     private BundleContext context;
 
     private Map<String, ServiceRegistration> registrations = new HashMap<String, ServiceRegistration>();
@@ -124,6 +130,8 @@ public class WebsiteService implements IWebsiteService {
 
     private void registerWebsite(String name, WebsiteConfig website) {
 
+        Class<? extends WebPage> signInPageClass = getSignInPageClass(website);
+
         String projectUrl = website.getORI().getProjectUrl();
 
         Properties props = new Properties();
@@ -132,12 +140,29 @@ public class WebsiteService implements IWebsiteService {
 
         registrations.put(projectUrl, context.registerService(
                 WebApplicationFactory.class.getName(),
-                new WebsiteApplicationFactory(website.getName(), website.getORI().toString()),
+                new WebsiteApplicationFactory(website.getName(), website.getORI().toString(), signInPageClass),
                 props
         ));
 
         log.info("Registering website /web/" + name);
 
+    }
+
+    private Class<? extends WebPage> getSignInPageClass(WebsiteConfig website) {
+
+        String signInPageId = website.getSignInPage();
+
+        if (Strings.isEmpty(signInPageId) || signInPages == null || signInPageId.isEmpty()) {
+            return SignInPage.class;
+        }
+
+        for (ISignInPage signInPage : signInPages) {
+            if (signInPageId.equals((signInPage.getId()))) {
+                return signInPage.getPageClass();
+            }
+        }
+
+        return SignInPage.class;
     }
 
     public BundleContext getContext() {
@@ -154,5 +179,13 @@ public class WebsiteService implements IWebsiteService {
 
     public void setResourceManager(IResourceManager resourceManager) {
         this.resourceManager = resourceManager;
+    }
+
+    public List<ISignInPage> getSignInPages() {
+        return signInPages;
+    }
+
+    public void setSignInPages(List<ISignInPage> signInPages) {
+        this.signInPages = signInPages;
     }
 }

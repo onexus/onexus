@@ -74,9 +74,13 @@
         <property name="creators" ref="decoratorCreatorsRef"/>
     </bean>
 
+    <reference-list id="signInPages"
+                    interface="org.onexus.website.api.ISignInPage"
+                    availability="optional"/>
     <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
     <bean id="websiteService" class="org.onexus.website.api.WebsiteService" depends-on="resourceActivator">
         <property name="resourceManager" ref="resourceManager"/>
         <property name="context" ref="blueprintBundleContext"/>
+        <property name="signInPages" ref="signInPages"/>
     </bean>
 </blueprint>

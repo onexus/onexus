@@ -19,6 +19,7 @@ package org.onexus.website.api;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -32,7 +33,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.resource.api.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.utils.error.ExceptionErrorPage;
-import org.onexus.website.api.utils.panels.SignInPage;
+import org.onexus.website.api.utils.panels.SignOutPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
 
     private String webPath;
     private ORI websiteOri;
+    private Class<? extends WebPage> signInPageClass;
 
     public WebsiteApplication() {
         super();
@@ -82,6 +84,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
 
         mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
         mountPage("/login", getSignInPageClass());
+        mountPage("/logout", SignOutPage.class);
 
     }
 
@@ -92,8 +95,17 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
     }
 
     @Override
+    public void restartResponseAtSignInPage() {
+        throw new RestartResponseAtInterceptPageException(getSignInPageClass());
+    }
+
+    @Override
     protected Class<? extends WebPage> getSignInPageClass() {
-        return SignInPage.class;
+        return signInPageClass;
+    }
+
+    public void setSignInPageClass(Class<? extends WebPage> signInPageClass) {
+        this.signInPageClass = signInPageClass;
     }
 
     public static WebsiteApplication get() {
@@ -115,6 +127,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
     public void setWebPath(String webPath) {
         this.webPath = webPath;
     }
+
 
     public final static String toAbsolutePath(String relativePagePath) {
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();

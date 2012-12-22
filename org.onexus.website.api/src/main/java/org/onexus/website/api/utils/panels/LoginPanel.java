@@ -19,11 +19,11 @@ package org.onexus.website.api.utils.panels;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.resource.api.LoginContext;
 import org.onexus.website.api.WebsiteApplication;
-import org.onexus.website.api.WebsiteSession;
 
 public class LoginPanel extends Panel {
 
@@ -50,12 +50,7 @@ public class LoginPanel extends Panel {
         link.add(new AttributeModifier("title", (ctx.isAnonymous() ? "Sign in" : "Account Details")));
         link.add(new Label("username", (ctx.isAnonymous() ? "Sign in" : ctx.getUserName())));
 
-        Link<String> signOut = new Link<String>("signout") {
-            @Override
-            public void onClick() {
-                WebsiteSession.get().signOut();
-            }
-        };
+        Link<String> signOut = new BookmarkablePageLink<String>("signout", SignOutPage.class);
         signOut.setVisible(!ctx.isAnonymous());
 
         addOrReplace(signOut);

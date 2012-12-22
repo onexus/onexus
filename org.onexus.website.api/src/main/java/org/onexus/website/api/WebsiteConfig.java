@@ -36,6 +36,8 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private Boolean login;
 
+    private String signInPage;
+
     private List<PageConfig> pages;
 
     private String header;
@@ -87,6 +89,14 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     public void setBottom(String bottom) {
         this.bottom = bottom;
+    }
+
+    public String getSignInPage() {
+        return signInPage;
+    }
+
+    public void setSignInPage(String signInPage) {
+        this.signInPage = signInPage;
     }
 
     public List<PageConfig> getPages() {

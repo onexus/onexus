@@ -17,6 +17,7 @@
  */
 package org.onexus.website.api;
 
+import org.apache.wicket.markup.html.WebPage;
 import org.onexus.resource.api.ORI;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 
@@ -24,14 +25,17 @@ public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteA
 
     private String webPath;
     private String website;
+    private Class<? extends WebPage> signInPageClass;
 
     public WebsiteApplicationFactory() {
     }
 
-    public WebsiteApplicationFactory(String webPath, String website) {
+    public WebsiteApplicationFactory(String webPath, String website, Class<? extends WebPage> signInPageClass) {
         this.webPath = webPath;
         this.website = website;
+        this.signInPageClass = signInPageClass;
     }
+
 
     public String getWebPath() {
         return webPath;
@@ -49,6 +53,14 @@ public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteA
         this.website = website;
     }
 
+    public Class<? extends WebPage> getSignInPageClass() {
+        return signInPageClass;
+    }
+
+    public void setSignInPageClass(Class<? extends WebPage> signInPageClass) {
+        this.signInPageClass = signInPageClass;
+    }
+
     @Override
     public Class<WebsiteApplication> getWebApplicationClass() {
         return WebsiteApplication.class;
@@ -58,5 +70,6 @@ public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteA
     public void onInstantiation(WebsiteApplication application) {
         application.setWebsiteOri(new ORI(website));
         application.setWebPath(webPath);
+        application.setSignInPageClass(signInPageClass);
     }
 }
