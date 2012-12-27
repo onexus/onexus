@@ -54,7 +54,7 @@ public class LinkUtils {
         // Case 1: A has a direct link to B
         Map<String, FieldLink> fieldToLink = new HashMap<String, FieldLink>();
         for (Link link : linksA) {
-            ORI linkCollection = link.getCollection().toAbsolute(parentURI);
+            ORI linkCollection = link.getCollection().toAbsolute(a.getORI());
             if (linkCollection.equals(b.getORI())) {
                 for (String field : link.getFields()) {
                     String fromField = getFromFieldName(field);
@@ -82,7 +82,7 @@ public class LinkUtils {
 
         // Case 1b: B has a direct link to A
         for (Link link : linksB) {
-            if (link.getCollection().toAbsolute(parentURI).equals(a.getORI())) {
+            if (link.getCollection().toAbsolute(b.getORI()).equals(a.getORI())) {
                 for (String field : link.getFields()) {
                     String fromField = getFromFieldName(field);
                     String toField = getToFieldName(field);
