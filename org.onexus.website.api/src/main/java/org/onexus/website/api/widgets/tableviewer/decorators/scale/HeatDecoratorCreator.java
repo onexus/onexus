@@ -26,6 +26,7 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.HeatColorScale;
 import org.onexus.website.api.widgets.tableviewer.formaters.PValueFormater;
 
+import java.awt.*;
 import java.util.Map;
 
 public class HeatDecoratorCreator implements IDecoratorCreator {
@@ -73,6 +74,42 @@ public class HeatDecoratorCreator implements IDecoratorCreator {
             maxValue = Double.valueOf(parameterValue);
         }
 
-        return new ColorDecorator(columnField, columnField, new HeatColorScale(minValue, midValue, maxValue), null, showValue, PValueFormater.INSTANCE, parameters.get(HeatDecoratorParameters.URL), parameters.get(HeatDecoratorParameters.URL_TITLE));
+        Color minColor = HeatColorScale.DEFAULT_MIN_COLOR;
+        Color midColor = HeatColorScale.DEFAULT_MID_COLOR;
+        Color maxColor = HeatColorScale.DEFAULT_MAX_COLOR;
+
+        // Min color parameter
+        parameterValue = parameters.get(HeatDecoratorParameters.MIN_COLOR);
+        if (!StringUtils.isEmpty(parameterValue)) {
+            minColor = parseColor(parameterValue);
+        }
+
+        // Mid color parameter
+        parameterValue = parameters.get(HeatDecoratorParameters.MID_COLOR);
+        if (!StringUtils.isEmpty(parameterValue)) {
+            midColor = parseColor(parameterValue);
+        }
+
+        // Max color parameter
+        parameterValue = parameters.get(HeatDecoratorParameters.MAX_COLOR);
+        if (!StringUtils.isEmpty(parameterValue)) {
+            maxColor = parseColor(parameterValue);
+        }
+
+        return new ColorDecorator(columnField, columnField, new HeatColorScale(minValue, minColor, midValue, midColor, maxValue, maxColor), null, showValue, PValueFormater.INSTANCE, parameters.get(HeatDecoratorParameters.URL), parameters.get(HeatDecoratorParameters.URL_TITLE));
+    }
+
+    private static Color parseColor(String colorStr) {
+
+        colorStr = colorStr.replace("[", "");
+        colorStr = colorStr.replace("]", "");
+        String[] values = colorStr.trim().split("-");
+
+        int red = Integer.valueOf(values[0]);
+        int green = Integer.valueOf(values[1]);
+        int blue = Integer.valueOf(values[2]);
+
+        return new Color(red, green, blue);
     }
 }
+

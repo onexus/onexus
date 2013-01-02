@@ -24,6 +24,9 @@ public enum HeatDecoratorParameters implements ParameterKey {
     MIN_VALUE("min-value", "Minimum scale value", true),
     MID_VALUE("mid-value", "Medium scale value", true),
     MAX_VALUE("max-value", "Maximum scale value", true),
+    MIN_COLOR("min-color", "Minimum scale color", true),
+    MID_COLOR("mid-color", "Medium scale color", true),
+    MAX_COLOR("max-color", "Maximum scale color", true),
     SHOW_VALUE("show-value", "Print the value inside the cell. Valid values: true, false", true),
     URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false),
     URL_TITLE("url-title", "The tooltip title to show over URL link button", false);
