@@ -24,7 +24,7 @@ import org.onexus.resource.api.ParameterKey;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.HeatColorScale;
-import org.onexus.website.api.widgets.tableviewer.formaters.PValueFormater;
+import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
 
 import java.awt.*;
 import java.util.Map;
@@ -96,7 +96,7 @@ public class HeatDecoratorCreator implements IDecoratorCreator {
             maxColor = parseColor(parameterValue);
         }
 
-        return new ColorDecorator(columnField, columnField, new HeatColorScale(minValue, minColor, midValue, midColor, maxValue, maxColor), null, showValue, PValueFormater.INSTANCE, parameters.get(HeatDecoratorParameters.URL), parameters.get(HeatDecoratorParameters.URL_TITLE));
+        return new ColorDecorator(columnField, columnField, new HeatColorScale(minValue, minColor, midValue, midColor, maxValue, maxColor), null, showValue, DoubleFormater.INSTANCE, parameters.get(HeatDecoratorParameters.URL), parameters.get(HeatDecoratorParameters.URL_TITLE));
     }
 
     private static Color parseColor(String colorStr) {
