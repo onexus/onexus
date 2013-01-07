@@ -36,21 +36,10 @@ div.types br {
 }
 
 input[type="text"].search {
-    width: 280px;
+    width: 240px;
     border: 1px solid #FF7634;
 
     height: 24px;
-}
-
-#search select {
-     background: none repeat scroll 0pt 0pt transparent;
-     border: 1px solid #FF7634;
-     float: left;
-     font-size: 16px;
-     height: 34px;
-     margin: 5px;
-     padding: 5px;
-     width: 100px;
 }
 
 #search input {
@@ -59,7 +48,7 @@ input[type="text"].search {
     margin: 5px;
 }
 
-#search button {
+#search button.search {
      border: 1px solid #FF7634;
      background-color: #FF7634;
      border-radius: 3px;

@@ -35,7 +35,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
@@ -52,6 +51,9 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.pages.search.boxes.BoxesPanel;
+import org.onexus.website.api.widgets.filters.FilterConfig;
+import org.onexus.website.api.widgets.filters.FiltersWidgetConfig;
+import org.onexus.website.api.widgets.filters.FiltersWidgetStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -67,16 +69,18 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
+    private transient FiltersWidgetStatus filtersStatus;
+
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
         super(componentId, statusModel);
 
         IModel<SearchPageStatus> pageStatusModel = new PropertyModel<SearchPageStatus>(this, "status");
 
-        Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(pageStatusModel)) {
+        Form form = new Form<SearchPageStatus>("form") {
             @Override
             protected void onSubmit() {
                 ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null).setOutputMarkupId(true));
             }
         };
 
@@ -87,7 +91,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         }
 
 
-        final TextField<String> search = new TextField<String>("search");
+        final TextField<String> search = new TextField<String>("search", new PropertyModel<String>(pageStatusModel, "search"));
         search.setOutputMarkupId(true);
 
         search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
@@ -100,14 +104,66 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null).setOutputMarkupId(true));
                 target.add(SearchPage.this.get("boxes"));
             }
         });
 
         form.add(search);
 
-        RadioChoice<SearchType> typeSelect = new RadioChoice<SearchType>("type", types, new SearchTypeRenderer());
+        // Filters list modal
+        final WebMarkupContainer widgetModal = new WebMarkupContainer("widgetModal");
+        widgetModal.setOutputMarkupId(true);
+        widgetModal.add(new Label("header", ""));
+        widgetModal.add(new EmptyPanel("widget"));
+        widgetModal.add(new AjaxLink<String>("close") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
+            }
+        });
+        form.add(widgetModal);
+        final AjaxLink<String> list = new AjaxLink<String>("list") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+
+                FiltersWidgetConfig filters = getStatus().getType().getFilters();
+
+                if (filters!=null) {
+                    FiltersWidgetStatus status = filters.createEmptyStatus();
+                    status.setConfig(filters);
+                    setFiltersStatus(status);
+                    widgetModal.addOrReplace(new Label("header", filters.getTitle()));
+                    widgetModal.addOrReplace(new SearchFiltersWidget("widget", new PropertyModel<FiltersWidgetStatus>(SearchPage.this, "filtersStatus")) {
+
+                        @Override
+                        protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
+                            search.setModelValue(new String[] { filterConfig.getName() });
+                            target.add(search);
+                            ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
+                            SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, filterConfig).setOutputMarkupId(true));
+                            target.add(SearchPage.this.get("boxes"));
+                            target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
+                        }
+                    });
+                    target.add(widgetModal);
+                    target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
+                }
+            }
+        };
+        list.setOutputMarkupPlaceholderTag(true);
+        form.add(list);
+
+        if (getStatus().getType().getFilters() == null) {
+            list.setVisible(false);
+        } else {
+            list.setVisible(true);
+        }
+        setFiltersStatus(null);
+
+        // Choose type
+        RadioChoice<SearchType> typeSelect = new RadioChoice<SearchType>("type", new PropertyModel<SearchType>(pageStatusModel, "type"), types, new SearchTypeRenderer());
         typeSelect.add(new AjaxFormChoiceComponentUpdatingBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -116,12 +172,21 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 target.add(search);
                 target.add(SearchPage.this.get("form").get("examplesContainer"));
                 target.add(SearchPage.this.get("boxes"));
+
+                if (getStatus().getType().getFilters() == null) {
+                    list.setVisible(false);
+                } else {
+                    list.setVisible(true);
+                }
+                setFiltersStatus(null);
+                target.add(list);
             }
         });
         form.add(typeSelect);
 
         add(form);
 
+        // Examples
         WebMarkupContainer examples = new WebMarkupContainer("examplesContainer");
         examples.setOutputMarkupId(true);
         examples.add(new ListView<String>("examples", new ExamplesModel(new PropertyModel<SearchType>(pageStatusModel, "type"))) {
@@ -134,7 +199,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                     public void onClick(AjaxRequestTarget target) {
                         getStatus().setSearch(getModelObject());
                         ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                        SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri));
+                        SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null));
                         target.add(search);
                         target.add(SearchPage.this.get("boxes"));
                     }
@@ -154,6 +219,14 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         add(new EmptyPanel("boxes").setMarkupId("boxes"));
 
+    }
+
+    public FiltersWidgetStatus getFiltersStatus() {
+        return filtersStatus;
+    }
+
+    public void setFiltersStatus(FiltersWidgetStatus filtersStatus) {
+        this.filtersStatus = filtersStatus;
     }
 
     private Iterator<IEntity> getAutocompleteChoices(String input) {

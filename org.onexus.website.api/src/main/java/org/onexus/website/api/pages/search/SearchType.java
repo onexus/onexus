@@ -20,6 +20,7 @@ package org.onexus.website.api.pages.search;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.widgets.filters.FiltersWidgetConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class SearchType implements Serializable {
     private String keys;
     private String examples;
     private String template;
+
+    private FiltersWidgetConfig filters;
 
     @XStreamImplicit(itemFieldName = "link")
     private List<SearchLink> links = new ArrayList<SearchLink>();
@@ -84,6 +87,14 @@ public class SearchType implements Serializable {
 
     public void setTemplate(String template) {
         this.template = template;
+    }
+
+    public FiltersWidgetConfig getFilters() {
+        return filters;
+    }
+
+    public void setFilters(FiltersWidgetConfig filters) {
+        this.filters = filters;
     }
 
     public List<String> getKeysList() {

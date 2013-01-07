@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceRegister;
 import org.onexus.website.api.pages.AbstractPageCreator;
 import org.onexus.website.api.pages.Page;
+import org.onexus.website.api.widgets.filters.FiltersWidgetConfig;
 
 public class SearchPageCreator extends AbstractPageCreator<SearchPageConfig, SearchPageStatus> {
 
@@ -41,5 +42,6 @@ public class SearchPageCreator extends AbstractPageCreator<SearchPageConfig, Sea
         resourceRegister.register(SearchPageStatus.class);
         resourceRegister.register(SearchType.class);
         resourceRegister.register(SearchLink.class);
+        resourceRegister.register(FiltersWidgetConfig.class);
     }
 }

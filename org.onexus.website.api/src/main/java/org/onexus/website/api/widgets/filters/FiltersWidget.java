@@ -34,7 +34,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPage;
-import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.IFilter;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.filters.custom.CustomFilter;
@@ -61,7 +60,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             protected void populateItem(final ListItem<FilterConfig> item) {
 
                 final FilterConfig filterConfig = item.getModelObject();
-                BrowserPageStatus browserStatus = getPageStatus();
 
                 item.setOutputMarkupId(true);
 
@@ -70,7 +68,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         FiltersWidget.this.getStatus().getFilters().remove(filterConfig);
-                        unapplyFilter(filterConfig);
+                        unapplyFilter(filterConfig, target);
                         target.add(filtersForm);
                     }
 
@@ -85,7 +83,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        applyFilter(filterConfig);
+                        applyFilter(filterConfig, target);
                     }
 
                     @Override
@@ -100,7 +98,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        unapplyFilter(filterConfig);
+                        unapplyFilter(filterConfig, target);
                     }
 
                     @Override
@@ -157,7 +155,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 List<FilterConfig> filters = getStatus().getFilters();
                 filters.add(filter);
                 target.add(filtersForm);
-                applyFilter(filter);
+                applyFilter(filter, target);
             }
 
         });
@@ -171,8 +169,8 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
     }
 
 
-    private boolean isFilterApplyed(FilterConfig filterConfig) {
-        List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+    protected boolean isFilterApplyed(FilterConfig filterConfig) {
+        List<IFilter> filters = getFilters();
 
         for (IFilter filter : filters) {
             if (filterConfig.equals(filter.getFilterConfig())) {
@@ -182,9 +180,9 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         return false;
     }
 
-    private void unapplyFilter(FilterConfig filterConfig) {
+    protected void unapplyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
 
-        List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+        List<IFilter> filters = getFilters();
 
         IFilter removeMe = null;
         for (IFilter filter : filters) {
@@ -200,14 +198,10 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         }
     }
 
-    private void applyFilter(FilterConfig filterConfig) {
-        List<IFilter> filters = findParent(BrowserPage.class).getStatus().getFilters();
+    protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
+        List<IFilter> filters = getFilters();
         filters.add(new BrowserFilter(filterConfig));
         send(getPage(), Broadcast.BREADTH, EventAddFilter.EVENT);
-    }
-
-    private BrowserPageStatus getPageStatus() {
-        return findParent(BrowserPage.class).getStatus();
     }
 
     public CustomFilter getCurrentFilter() {
@@ -216,5 +210,9 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     public void setCurrentFilter(CustomFilter currentFilter) {
         this.currentFilter = currentFilter;
+    }
+
+    protected List<IFilter> getFilters() {
+        return findParent(BrowserPage.class).getStatus().getFilters();
     }
 }

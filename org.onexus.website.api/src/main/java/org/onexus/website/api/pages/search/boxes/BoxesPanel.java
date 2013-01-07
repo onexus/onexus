@@ -30,6 +30,7 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
+import org.onexus.website.api.widgets.filters.FilterConfig;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class BoxesPanel extends Panel {
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    public BoxesPanel(String id, SearchPageStatus status, ORI baseUri) {
+    public BoxesPanel(String id, SearchPageStatus status, ORI baseUri, FilterConfig filterConfig) {
         super(id);
         setMarkupId("boxes");
         add(new AttributeModifier("class", "accordion"));
@@ -47,19 +48,27 @@ public class BoxesPanel extends Panel {
         SearchType type = status.getType();
         ORI collectionUri = type.getCollection().toAbsolute(baseUri);
 
-        IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
-
         RepeatingView boxes = new RepeatingView("boxes");
 
-        int count = 0;
-        while (table.next()) {
-            boxes.add(new EntitySelectBox(boxes.newChildId(), count, status, table.getEntity(collectionUri)));
-            count++;
+        if (filterConfig == null) {
+
+            IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
+
+
+            int count = 0;
+            while (table.next()) {
+                boxes.add(new EntitySelectBox(boxes.newChildId(), count, status, table.getEntity(collectionUri)));
+                count++;
+            }
+
+            if (count == 0) {
+                boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
+            }
+
+        } else {
+            boxes.add(new EntitySelectBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
         }
 
-        if (count == 0) {
-            boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
-        }
 
         add(boxes);
 
