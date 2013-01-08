@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets.views;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -35,7 +34,6 @@ import org.onexus.website.api.pages.browser.ViewConfig;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
@@ -61,12 +59,12 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
 
             List<ViewConfig> views = browserConfig.getTab(browserStatus.getCurrentTabId()).getViews();
 
-            List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
+            //List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
             VisiblePredicate predicate = new VisiblePredicate(getPageBaseOri().getParent(), getPageStatus().getFilters());
-            CollectionUtils.select(views, predicate, filteredViews);
+            //CollectionUtils.select(views, predicate, filteredViews);
 
-            if (filteredViews != null && !filteredViews.isEmpty()) {
-                for (ViewConfig view : filteredViews) {
+            if (views != null && !views.isEmpty()) {
+                for (ViewConfig view : views) {
 
                     WebMarkupContainer item = new WebMarkupContainer(viewsContainer.newChildId());
                     viewsContainer.add(item);
@@ -85,6 +83,13 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
 
                     if (view.getTitle().equals(browserStatus.getCurrentView())) {
                         item.add(new AttributeModifier("class", "active"));
+                    }
+
+                    // Disable non-visible views
+                    if (!predicate.evaluate(view)) {
+                        item.setEnabled(false);
+                    } else {
+                        item.setEnabled(true);
                     }
                 }
                 setVisible(true);

@@ -152,3 +152,18 @@ ul.feedbackPanel {
 #toolbar div.horizontal-tool {
 	float:left; margin-right: 5px;
 }
+
+.nav-pills > li > span > em {
+	padding-right: 12px;
+	padding-left: 12px;
+	margin-right: 2px;
+	line-height: 14px;
+}
+
+.nav-pills > li > span {
+    margin-bottom: 2px;
+    margin-top: 2px;
+    padding-bottom: 8px;
+    padding-top: 6px;
+    display: block;
+}
