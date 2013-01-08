@@ -18,6 +18,7 @@
 package org.onexus.website.api.pages.search;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -155,9 +156,12 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         list.setOutputMarkupPlaceholderTag(true);
         form.add(list);
 
-        if (getStatus().getType().getFilters() == null) {
+        FiltersWidgetConfig filters = getStatus().getType().getFilters();
+        if (filters == null) {
             list.setVisible(false);
         } else {
+            list.add(new AttributeModifier("rel", "tooltip"));
+            list.add(new AttributeModifier("title", filters.getTitle()));
             list.setVisible(true);
         }
         setFiltersStatus(null);
