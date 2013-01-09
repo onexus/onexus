@@ -140,6 +140,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
                         @Override
                         protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
+                            filterConfig.setDeletable(true);
                             search.setModelValue(new String[] { filterConfig.getName() });
                             target.add(search);
                             ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
