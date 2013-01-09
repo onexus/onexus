@@ -33,6 +33,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
+import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.events.EventViewChange;
 import org.onexus.website.api.pages.browser.BrowserPage;
@@ -86,6 +87,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
                 // Clear selected tags
                 TagWidget.this.getStatus().getSelectedTags().clear();
 
+                sendEvent(EventCloseModal.EVENT);
                 sendEvent(EventViewChange.EVENT);
 
                 target.add(TagWidget.this);
@@ -103,6 +105,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 TagWidget.this.getStatus().setFilter(!getSelectedTags().isEmpty());
+                sendEvent(EventCloseModal.EVENT);
                 sendEvent(EventFiltersUpdate.EVENT);
                 target.add(TagWidget.this);
             }
@@ -151,6 +154,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
                     tagStore.removeTag(tagKey);
                 }
 
+                sendEvent(EventCloseModal.EVENT);
                 sendEvent(EventViewChange.EVENT);
 
                 target.add(TagWidget.this);
