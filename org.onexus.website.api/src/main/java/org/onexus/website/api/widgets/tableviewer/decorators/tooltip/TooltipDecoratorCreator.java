@@ -20,10 +20,9 @@ package org.onexus.website.api.widgets.tableviewer.decorators.tooltip;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
-
-import java.util.Map;
 
 public class TooltipDecoratorCreator implements IDecoratorCreator {
 
@@ -38,7 +37,7 @@ public class TooltipDecoratorCreator implements IDecoratorCreator {
     }
 
     @Override
-    public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
+    public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
         return new TooltipDecorator(columnField, parameters);
     }
 }

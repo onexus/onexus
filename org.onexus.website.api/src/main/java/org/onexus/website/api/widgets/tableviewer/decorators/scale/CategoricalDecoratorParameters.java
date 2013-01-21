@@ -21,16 +21,18 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum CategoricalDecoratorParameters implements ParameterKey {
 
-    DEFAULT("default", "Set the default color. Syntax: [r,g,b]", false),
-    MAP("map", "Set the color map. Example: [blue value]=[0,0,255] | [red value]=[255,0,0]", false);
+    DEFAULT("default", "Set the default color. Syntax: [r,g,b]", null, false),
+    MAP("map", "Set the color map. Example: [blue value]=[0,0,255] | [red value]=[255,0,0]", null, false);
 
     private final String key;
     private final String description;
+    private final String defaultValue;
     private final boolean optional;
 
-    private CategoricalDecoratorParameters(String key, String description, boolean optional) {
+    private CategoricalDecoratorParameters(String key, String description, String defaultValue, boolean optional) {
         this.key = key;
         this.description = description;
+        this.defaultValue = defaultValue;
         this.optional = optional;
     }
 
@@ -42,6 +44,11 @@ public enum CategoricalDecoratorParameters implements ParameterKey {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getDefault() {
+        return defaultValue;
     }
 
     @Override

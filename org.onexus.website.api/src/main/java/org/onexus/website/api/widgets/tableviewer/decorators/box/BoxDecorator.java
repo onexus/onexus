@@ -22,7 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class BoxDecorator implements IDecorator {
     private String fields;
     private Map<String, String> decorators = new HashMap<String, String>();
 
-    public BoxDecorator(Field field, Map<ParameterKey, String> parameters) {
+    public BoxDecorator(Field field, Parameters parameters) {
         super();
         this.field = field;
         this.fields = parameters.get(BoxDecoratorParameters.FIELDS);

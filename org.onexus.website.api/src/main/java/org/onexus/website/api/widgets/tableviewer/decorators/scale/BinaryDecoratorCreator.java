@@ -20,13 +20,13 @@ package org.onexus.website.api.widgets.tableviewer.decorators.scale;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.BinaryColorScale;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.IColorScaleHtml;
 
 import java.awt.*;
-import java.util.Map;
 
 public class BinaryDecoratorCreator implements IDecoratorCreator {
 
@@ -43,7 +43,7 @@ public class BinaryDecoratorCreator implements IDecoratorCreator {
     }
 
     @Override
-    public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
+    public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
         return new ColorDecorator(columnField, binaryScale);
     }
 }

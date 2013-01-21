@@ -25,6 +25,8 @@ public interface ParameterKey extends Serializable {
 
     String getDescription();
 
+    String getDefault();
+
     boolean isOptional();
 
 }

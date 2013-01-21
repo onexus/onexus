@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.ColorConstants;
@@ -29,8 +30,6 @@ import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.PValue
 import org.onexus.website.api.widgets.tableviewer.formaters.PValueFormater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 public class PValueDecoratorCreator implements IDecoratorCreator {
 
@@ -48,7 +47,7 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
     }
 
     @Override
-    public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
+    public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
 
         Boolean showValue = true;
 

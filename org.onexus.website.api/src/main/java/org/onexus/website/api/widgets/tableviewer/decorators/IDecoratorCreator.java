@@ -20,9 +20,9 @@ package org.onexus.website.api.widgets.tableviewer.decorators;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Creates a IDecorator for a specific Collection and Field.
@@ -35,6 +35,6 @@ public interface IDecoratorCreator extends Serializable {
 
     ParameterKey[] getParameterKeys();
 
-    IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters);
+    IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters);
 
 }

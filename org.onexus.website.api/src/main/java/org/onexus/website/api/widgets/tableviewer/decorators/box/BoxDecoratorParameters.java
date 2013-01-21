@@ -22,16 +22,18 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum BoxDecoratorParameters implements ParameterKey {
 
-    FIELDS("fields", "Field IDs to show into the box, separated by comma", true),
-    DECORATORS("decorators", "Syntax: [DECORATOR_ID]:[Title], ...", true);
+    FIELDS("fields", "Field IDs to show into the box, separated by comma", null, true),
+    DECORATORS("decorators", "Syntax: [DECORATOR_ID]:[Title], ...", null, true);
 
     private final String key;
     private final String description;
+    private final String defaultValue;
     private final boolean optional;
 
-    private BoxDecoratorParameters(String key, String description, boolean optional) {
+    private BoxDecoratorParameters(String key, String description, String defaultValue, boolean optional) {
         this.key = key;
         this.description = description;
+        this.defaultValue = defaultValue;
         this.optional = optional;
     }
 
@@ -44,6 +46,12 @@ public enum BoxDecoratorParameters implements ParameterKey {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String getDefault() {
+        return defaultValue;
+    }
+
 
     @Override
     public boolean isOptional() {

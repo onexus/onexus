@@ -21,15 +21,17 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum UniformColorDecoratorParameters implements ParameterKey {
 
-    COLOR("color", "Background color. Syntax: [r,g,b]", false);
+    COLOR("color", "Background color. Syntax: [r,g,b]", null, false);
 
     private final String key;
     private final String description;
+    private final String defaultValue;
     private final boolean optional;
 
-    private UniformColorDecoratorParameters(String key, String description, boolean optional) {
+    private UniformColorDecoratorParameters(String key, String description, String defaultValue, boolean optional) {
         this.key = key;
         this.description = description;
+        this.defaultValue = defaultValue;
         this.optional = optional;
     }
 
@@ -41,6 +43,11 @@ public enum UniformColorDecoratorParameters implements ParameterKey {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getDefault() {
+        return defaultValue;
     }
 
     @Override

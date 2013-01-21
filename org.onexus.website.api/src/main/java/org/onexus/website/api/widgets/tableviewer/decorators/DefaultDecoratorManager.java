@@ -20,15 +20,14 @@ package org.onexus.website.api.widgets.tableviewer.decorators;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class DefaultDecoratorManager implements IDecoratorManager {
@@ -47,7 +46,7 @@ public class DefaultDecoratorManager implements IDecoratorManager {
         }
 
         IDecoratorCreator creator = null;
-        Map<ParameterKey, String> parameters = new HashMap<ParameterKey, String>();
+        Parameters parameters = new Parameters();
 
         // Look for a decorator creator
         if (decorator != null) {

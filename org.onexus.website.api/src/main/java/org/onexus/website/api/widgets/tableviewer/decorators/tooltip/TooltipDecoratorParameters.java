@@ -22,15 +22,17 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum TooltipDecoratorParameters implements ParameterKey {
 
-    LENGTH("length", "Number of characters to show", false);
+    LENGTH("length", "Number of characters to show", null, false);
 
     private final String key;
     private final String description;
+    private final String defaultValue;
     private final boolean optional;
 
-    private TooltipDecoratorParameters(String key, String description, boolean optional) {
+    private TooltipDecoratorParameters(String key, String description, String defaultValue, boolean optional) {
         this.key = key;
         this.description = description;
+        this.defaultValue = defaultValue;
         this.optional = optional;
     }
 
@@ -42,6 +44,11 @@ public enum TooltipDecoratorParameters implements ParameterKey {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getDefault() {
+        return defaultValue;
     }
 
     @Override

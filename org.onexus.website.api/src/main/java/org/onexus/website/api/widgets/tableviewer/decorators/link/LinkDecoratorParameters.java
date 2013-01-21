@@ -22,20 +22,22 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum LinkDecoratorParameters implements ParameterKey {
 
-    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", false),
-    TARGET("target", "The link target", true),
-    SEPARATOR("separator", "The character separator of a list.", true),
-    LENGTH("length", "Maximum number of characters", true),
-    ICON("icon", "Use an icon to link", true),
-    ICON_TITLE("icon-title", "Title to use as icon tooltip", true);
+    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", null, false),
+    TARGET("target", "The link target", null, true),
+    SEPARATOR("separator", "The character separator of a list.", null, true),
+    LENGTH("length", "Maximum number of characters", null, true),
+    ICON("icon", "Use an icon to link", null, true),
+    ICON_TITLE("icon-title", "Title to use as icon tooltip", null, true);
 
     private final String key;
     private final String description;
+    private final String defaultValue;
     private final boolean optional;
 
-    private LinkDecoratorParameters(String key, String description, boolean optional) {
+    private LinkDecoratorParameters(String key, String description, String defaultValue, boolean optional) {
         this.key = key;
         this.description = description;
+        this.defaultValue = defaultValue;
         this.optional = optional;
     }
 
@@ -47,6 +49,11 @@ public enum LinkDecoratorParameters implements ParameterKey {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String getDefault() {
+        return defaultValue;
     }
 
     @Override
