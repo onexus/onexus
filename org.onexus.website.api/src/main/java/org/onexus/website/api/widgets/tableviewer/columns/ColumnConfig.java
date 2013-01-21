@@ -237,12 +237,14 @@ public class ColumnConfig implements IColumnConfig {
             query.addSelect(columnAlias, fieldIds);
         }
 
+        /* Don't add primary keys by default
         List<String> currentFields = query.getSelect().get(columnAlias);
         for (Field field : collection.getFields()) {
             if (field.isPrimaryKey() != null && field.isPrimaryKey() && !currentFields.contains(field.getId())) {
                 currentFields.add(field.getId());
             }
         }
+        */
 
     }
 
