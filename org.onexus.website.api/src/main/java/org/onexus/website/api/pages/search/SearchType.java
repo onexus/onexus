@@ -40,6 +40,8 @@ public class SearchType implements Serializable {
     @XStreamImplicit(itemFieldName = "link")
     private List<SearchLink> links = new ArrayList<SearchLink>();
 
+    @XStreamImplicit(itemFieldName = "fix-link")
+    private List<SearchLink> fixLinks = new ArrayList<SearchLink>();
 
     public ORI getCollection() {
         return collection;
@@ -79,6 +81,14 @@ public class SearchType implements Serializable {
 
     public void setLinks(List<SearchLink> links) {
         this.links = links;
+    }
+
+    public List<SearchLink> getFixLinks() {
+        return fixLinks;
+    }
+
+    public void setFixLinks(List<SearchLink> fixLinks) {
+        this.fixLinks = fixLinks;
     }
 
     public String getTemplate() {

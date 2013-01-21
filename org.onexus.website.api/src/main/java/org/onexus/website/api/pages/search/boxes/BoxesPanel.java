@@ -28,6 +28,7 @@ import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.pages.search.SearchLink;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.widgets.filters.FilterConfig;
@@ -45,28 +46,35 @@ public class BoxesPanel extends Panel {
         setMarkupId("boxes");
         add(new AttributeModifier("class", "accordion"));
 
-        SearchType type = status.getType();
-        ORI collectionUri = type.getCollection().toAbsolute(baseUri);
-
         RepeatingView boxes = new RepeatingView("boxes");
 
-        if (filterConfig == null) {
+        SearchType type = status.getType();
 
-            IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
-
-
-            int count = 0;
-            while (table.next()) {
-                boxes.add(new EntitySelectBox(boxes.newChildId(), count, status, table.getEntity(collectionUri)));
-                count++;
+        if (status.getSearch() == null) {
+            List<SearchLink> links = type.getFixLinks();
+            if (links != null && !links.isEmpty()) {
+                boxes.add(new MainLinksBox(boxes.newChildId(), links));
             }
-
-            if (count == 0) {
-                boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
-            }
-
         } else {
-            boxes.add(new EntitySelectBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
+            ORI collectionUri = type.getCollection().toAbsolute(baseUri);
+            if (filterConfig == null) {
+
+                IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
+
+
+                int count = 0;
+                while (table.next()) {
+                    boxes.add(new EntitySelectBox(boxes.newChildId(), count, status, table.getEntity(collectionUri)));
+                    count++;
+                }
+
+                if (count == 0) {
+                    boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
+                }
+
+            } else {
+                boxes.add(new EntitySelectBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
+            }
         }
 
 

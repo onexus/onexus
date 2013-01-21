@@ -222,7 +222,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         form.add(examples);
 
-        add(new EmptyPanel("boxes").setMarkupId("boxes"));
+        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
+        add(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null));
 
     }
 
