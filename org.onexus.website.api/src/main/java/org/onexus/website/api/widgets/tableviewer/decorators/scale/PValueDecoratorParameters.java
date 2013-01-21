@@ -23,8 +23,8 @@ public enum PValueDecoratorParameters implements ParameterKey {
 
     SHOW_VALUE("show-value", "Print the value inside the cell. Valid values: true, false", null, true),
     SIGNIFICANCE("significance", "p-value signinficance cutoff. Default '0.05'.", null, true),
-    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", null, false),
-    URL_TITLE("url-title", "The tooltip title to show over URL link button", null, false);
+    URL("url", "The URL where do you want to link, with fields values as ${[field_id]}", null, true),
+    URL_TITLE("url-title", "The tooltip title to show over URL link button", null, true);
 
     private final String key;
     private final String description;
