@@ -107,7 +107,7 @@ public class DsServlet extends HttpServlet {
             return null;
         }
 
-        String resourcePath = projectNameAndResource.replace(projectName, "");
+        String resourcePath = projectNameAndResource.replaceFirst(projectName, "");
         return new ORI(projectUrl, resourcePath);
 
     }
