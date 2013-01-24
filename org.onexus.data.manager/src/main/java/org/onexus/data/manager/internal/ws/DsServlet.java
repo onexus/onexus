@@ -24,6 +24,7 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +55,12 @@ public class DsServlet extends HttpServlet {
 
             try {
                 IDataStreams streams = dataManager.load(dataResource);
+
+                // Minimum Response header information (size and MIME type)
+                long size = dataManager.size(dataResource);
+                resp.setContentLength((int) size);
+                resp.setContentType(getServletContext().getMimeType(dataResource.getPath()));
+
                 OutputStream out = resp.getOutputStream();
                 for (InputStream in : streams) {
                     IOUtils.copy(in, out);
