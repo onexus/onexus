@@ -36,10 +36,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProjectsContainer {
 
@@ -80,7 +80,7 @@ public class ProjectsContainer {
             }
 
             this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader, monitor, listeners);
-            this.providers = new HashMap<String, AbstractProjectProvider>();
+            this.providers = new ConcurrentHashMap<String, AbstractProjectProvider>();
 
             init();
         } catch (IOException e) {
@@ -196,6 +196,7 @@ public class ProjectsContainer {
             }
         }
 
+        onProjectCreate(provider.getProject());
         return provider;
     }
 
@@ -207,28 +208,44 @@ public class ProjectsContainer {
         listeners.add(resourceListener);
     }
 
-    private void onProjectCreate(Project project) {
+    private void onProjectCreate(final Project project) {
         log.info("Project '" + project.getName() + "' created.");
 
-        for (IResourceListener listener : listeners) {
-            listener.onProjectCreate(project);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (IResourceListener listener : listeners) {
+                    listener.onProjectCreate(project);
+                }
+            }
+        }).start();
+
     }
 
-    private void onProjectChange(Project project) {
+    private void onProjectChange(final Project project) {
         log.info("Project '" + project.getName() + "' changed.");
 
-        for (IResourceListener listener : listeners) {
-            listener.onProjectChange(project);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (IResourceListener listener : listeners) {
+                    listener.onProjectChange(project);
+                }
+            }
+        }).start();
     }
 
-    private void onProjectDelete(Project project) {
+    private void onProjectDelete(final Project project) {
         log.info("Project '" + project.getName() + "' deleted.");
 
-        for (IResourceListener listener : listeners) {
-            listener.onProjectDelete(project);
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (IResourceListener listener : listeners) {
+                    listener.onProjectDelete(project);
+                }
+            }
+        }).start();
     }
 
     public void bundleCreated(long bundleId) {

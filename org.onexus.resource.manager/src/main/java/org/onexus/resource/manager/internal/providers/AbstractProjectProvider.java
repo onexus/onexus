@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractProjectProvider {
 
@@ -158,7 +159,7 @@ public abstract class AbstractProjectProvider {
         this.projectFolder = projectFolder;
     }
 
-    public void loadProject() {
+    public synchronized void loadProject() {
         File projectOnx = new File(projectFolder, ONEXUS_PROJECT_FILE);
 
         if (!projectOnx.exists()) {
@@ -184,9 +185,9 @@ public abstract class AbstractProjectProvider {
         this.resources = null;
     }
 
-    private void loadResources() {
+    private synchronized void loadResources() {
 
-        this.resources = new HashMap<ORI, Resource>();
+        this.resources = new ConcurrentHashMap<ORI, Resource>();
 
         Collection<File> files = addFilesRecursive(new ArrayList<File>(), projectFolder);
 
@@ -213,7 +214,7 @@ public abstract class AbstractProjectProvider {
     public Resource getResource(ORI resourceUri) {
 
         if (resourceUri.getPath() == null && projectUrl.equals(resourceUri.getProjectUrl())) {
-            return project;
+            return getProject();
         }
 
         if (resources == null) {

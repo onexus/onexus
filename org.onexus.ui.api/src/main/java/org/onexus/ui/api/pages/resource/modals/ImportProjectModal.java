@@ -50,7 +50,7 @@ public class ImportProjectModal extends Panel {
                     }
 
                     int lastSep = projectURL.lastIndexOf("/");
-                    String projectName = projectURL.substring(lastSep);
+                    String projectName = projectURL.substring(lastSep + 1);
                     resourceManager.importProject(projectName, projectURL);
                     PageParameters parameters = new PageParameters();
                     parameters.set(ResourcesPage.PARAMETER_RESOURCE, projectURL);
