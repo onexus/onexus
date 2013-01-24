@@ -114,13 +114,14 @@ public class ORI implements Serializable {
             return relativePath;
         }
 
+        ORI container = parent.getParent();
         String relative = ".." + ORI.SEPARATOR;
         while (relativePath.startsWith(relative)) {
-            parent = parent.getParent();
+            container = container.getParent();
             relativePath = relativePath.substring(3);
         }
 
-        return (parent.getPath() == null ? "" : parent.getPath()) + SEPARATOR + relativePath;
+        return (container.getPath() == null ? "" : container.getPath()) + SEPARATOR + relativePath;
     }
 
     public ORI getParent() {
