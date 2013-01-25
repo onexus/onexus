@@ -29,6 +29,7 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.Project;
+import org.onexus.resource.api.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,25 @@ public class DataManager implements IDataManager {
     public IDataStreams load(ORI dataURI) {
 
         Project project = resourceManager.getProject(dataURI.getProjectUrl());
-        Data data = resourceManager.load(Data.class, dataURI);
+        Data data = null;
+        boolean uncompress = false;
+
+        try {
+            data = resourceManager.load(Data.class, dataURI);
+        } catch (ResourceNotFoundException e) {
+        }
+
+        // Look for the gzip version
+        if (data == null) {
+
+            try {
+                data = resourceManager.load(Data.class, new ORI(dataURI.getProjectUrl(), dataURI.getPath() + ".gz"));
+            } catch (ResourceNotFoundException e) {
+                throw new ResourceNotFoundException(dataURI);
+            }
+
+            uncompress = true;
+        }
 
         Loader loader = data.getLoader();
         Progress progress = new Progress(Integer.toHexString(dataURI.hashCode()), "Retrive '" + dataURI.getPath() + "'");
@@ -80,7 +99,7 @@ public class DataManager implements IDataManager {
             }
 
             progress.done();
-            return new UrlDataStreams(progress, urls);
+            return new UrlDataStreams(progress, urls, uncompress);
         }
 
 

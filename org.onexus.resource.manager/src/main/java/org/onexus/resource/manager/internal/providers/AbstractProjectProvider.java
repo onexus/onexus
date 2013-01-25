@@ -26,6 +26,7 @@ import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
+import org.onexus.resource.api.exceptions.ResourceNotFoundException;
 import org.onexus.resource.api.exceptions.UnserializeException;
 import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
@@ -222,7 +223,7 @@ public abstract class AbstractProjectProvider {
         }
 
         if (!resources.containsKey(resourceUri)) {
-            throw new UnsupportedOperationException("Resource '" + resourceUri + "' is not defined in any project.");
+            throw new ResourceNotFoundException(resourceUri);
         }
 
         return resources.get(resourceUri);
