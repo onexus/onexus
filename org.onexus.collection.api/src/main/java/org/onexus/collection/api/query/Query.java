@@ -226,7 +226,7 @@ public class Query implements Serializable {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("LIMIT");
             oql.append(prettyPrint ? "\n\t" : " ");
-            oql.append(offset).append(", ").append(count);
+            oql.append("'").append(offset).append("', '").append(count).append("'");
         }
 
         return oql;
