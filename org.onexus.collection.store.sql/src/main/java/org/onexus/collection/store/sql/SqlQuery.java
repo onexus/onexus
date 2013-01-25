@@ -256,31 +256,29 @@ public class SqlQuery {
             for (FieldLink fieldLink : networkLinks.get(collectionUri)) {
 
                 ORI linkCollection = fieldLink.getToCollection().toAbsolute(query.getOn());
-                if (!collectionsFixed.contains(linkCollection)) {
 
-                    ORI aCollection = fieldLink.getFromCollection();
-                    SqlCollectionDDL aDDL = manager.getDDL(aCollection);
-                    String aAlias = QueryUtils.newCollectionAlias(query, aCollection);
-                    String aField = aDDL.getColumnInfoByFieldName(
-                            fieldLink.getFromFieldName()).getColumnName();
-                    leftJoin.append("`").append(aAlias).append("`.`")
-                            .append(aField).append("` = `");
+                ORI aCollection = fieldLink.getFromCollection();
+                SqlCollectionDDL aDDL = manager.getDDL(aCollection);
+                String aAlias = QueryUtils.newCollectionAlias(query, aCollection);
+                String aField = aDDL.getColumnInfoByFieldName(
+                        fieldLink.getFromFieldName()).getColumnName();
+                leftJoin.append("`").append(aAlias).append("`.`")
+                        .append(aField).append("` = `");
 
-                    ORI bCollection = fieldLink.getToCollection();
-                    SqlCollectionDDL bDDL = manager.getDDL(bCollection);
-                    String bAlias = QueryUtils.newCollectionAlias(query, bCollection);
+                ORI bCollection = fieldLink.getToCollection();
+                SqlCollectionDDL bDDL = manager.getDDL(bCollection);
+                String bAlias = QueryUtils.newCollectionAlias(query, bCollection);
 
-                    SqlCollectionDDL.ColumnInfo columnInfo = bDDL.getColumnInfoByFieldName(fieldLink.getToFieldName());
+                SqlCollectionDDL.ColumnInfo columnInfo = bDDL.getColumnInfoByFieldName(fieldLink.getToFieldName());
 
-                    if (columnInfo == null) {
-                        throw new UnsupportedOperationException("Malformed link '" + fieldLink.toString() + "'");
-                    }
-
-
-                    String bField = columnInfo.getColumnName();
-                    leftJoin.append(bAlias).append("`.`").append(bField)
-                            .append("` AND ");
+                if (columnInfo == null) {
+                    throw new UnsupportedOperationException("Malformed link '" + fieldLink.toString() + "'");
                 }
+
+
+                String bField = columnInfo.getColumnName();
+                leftJoin.append(bAlias).append("`.`").append(bField)
+                        .append("` AND ");
 
             }
 

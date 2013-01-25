@@ -72,14 +72,6 @@ public class LinkUtils {
             }
         }
 
-        // Check that all A primary keys are linked
-        if (!fieldToLink.isEmpty()) {
-            if (areAllPrimaryKeyLinked(a.getFields(), fieldToLink)) {
-                fieldLinks.addAll(fieldToLink.values());
-                return fieldLinks;
-            }
-        }
-
         // Case 1b: B has a direct link to A
         for (Link link : linksB) {
             if (link.getCollection().toAbsolute(b.getORI()).equals(a.getORI())) {
