@@ -17,9 +17,13 @@
  */
 package org.onexus.website.api.widgets.search;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -34,7 +38,22 @@ public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus>
         Form<SearchWidgetStatus> form = new Form<SearchWidgetStatus>("toolsForms", new CompoundPropertyModel<SearchWidgetStatus>((IModel<SearchWidgetStatus>) statusModel));
 
         // Search field & button
-        form.add(new TextField<String>("search"));
+        TextField<String> searchField = new TextField<String>("search");
+        searchField.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+
+                String search = SearchWidget.this.getStatus().getSearch();
+
+                if (StringUtils.isEmpty(search)) {
+                    sendEvent(EventFiltersUpdate.EVENT);
+                }
+
+            }
+        });
+
+        form.add(searchField);
+
         form.add(new AjaxButton("searchButton") {
 
             @Override
@@ -46,7 +65,6 @@ public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus>
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 // FIXME
             }
-
         });
 
         add(form);
