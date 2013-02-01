@@ -124,6 +124,10 @@ public class SqlEntityTable implements IEntityTable {
     @Override
     public void close() {
         try {
+            if (dataRS != null && !dataRS.isClosed())
+                dataRS.close();
+            if (dataSt != null && !dataSt.isClosed())
+                dataSt.close();
             if (dataConn != null && !dataConn.isClosed())
                 dataConn.close();
         } catch (SQLException e) {

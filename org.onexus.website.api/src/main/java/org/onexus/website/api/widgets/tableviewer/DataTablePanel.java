@@ -16,9 +16,13 @@ public class DataTablePanel extends Panel implements IAjaxIndicatorAware {
 
     private WebMarkupContainer indicator;
 
+    private transient EntitiesRowProvider dataProvider;
+
     public DataTablePanel(String id, final List<? extends IColumn<IEntityTable, String>> columns,
                           final EntitiesRowProvider dataProvider, final long rowsPerPage) {
         super(id);
+
+        this.dataProvider = dataProvider;
 
         indicator = new WebMarkupContainer("indicator");
         indicator.setOutputMarkupId(true);
@@ -37,5 +41,13 @@ public class DataTablePanel extends Panel implements IAjaxIndicatorAware {
     @Override
     public String getAjaxIndicatorMarkupId() {
         return indicator.getMarkupId();
+    }
+
+    @Override
+    protected void onAfterRender() {
+        super.onAfterRender();
+        if (dataProvider!=null) {
+            dataProvider.close();
+        }
     }
 }

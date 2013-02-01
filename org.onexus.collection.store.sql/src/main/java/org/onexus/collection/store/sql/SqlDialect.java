@@ -66,6 +66,7 @@ public class SqlDialect {
     static final String INSERT_OBJECT_SQL = "INSERT INTO system_properties (name, version) VALUES (?, ?)";
     static final String SELECT_OBJECT_SQL = "SELECT version FROM system_properties WHERE name = ?";
     static final String SELECT_PROPERTIES_KEYS = "SELECT name FROM system_properties";
+    static final String SELECT_PROPERTIES_MAP = "SELECT name, version FROM system_properties";
 
 
     private List<FilterBuilder> builders;
@@ -154,6 +155,29 @@ public class SqlDialect {
         return keys;
     }
 
+    public Map<String, String> loadPropertyMap(Connection conn) throws Exception {
+        Map<String, String> map = new HashMap<String, String>();
+
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = conn.prepareStatement(SELECT_PROPERTIES_MAP);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                map.put(rs.getString("name"), rs.getString("version"));
+            }
+
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (pstmt != null)
+                pstmt.close();
+        }
+
+        return map;
+    }
+
     public void saveProperty(Connection conn, String name, String version)
             throws Exception {
         PreparedStatement pstmt = null;
@@ -204,10 +228,10 @@ public class SqlDialect {
             String object = rs.getString(1);
             return object;
         } finally {
-            if (pstmt != null)
-                pstmt.close();
             if (rs != null)
                 rs.close();
+            if (pstmt != null)
+                pstmt.close();
         }
     }
 

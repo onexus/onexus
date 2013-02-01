@@ -9,6 +9,9 @@
             <cm:property name="database" value="onexus"/>
             <cm:property name="username" value="onexus"/>
             <cm:property name="password" value="onexus"/>
+            <cm:property name="poolMaxActive" value="8"/>
+            <cm:property name="poolWhenExhausted" value="BLOCK"/>
+            <cm:property name="poolMaxWait" value="-1"/>
         </cm:default-properties>
     </cm:property-placeholder>
 
@@ -22,6 +25,9 @@
             <property name="database" value="${database}"/>
             <property name="username" value="${username}"/>
             <property name="password" value="${password}"/>
+            <property name="poolMaxActive" value="${poolMaxActive}"/>
+            <property name="poolWhenExhausted" value="${poolWhenExhausted}"/>
+            <property name="poolMaxWait" value="${poolMaxWait}"/>
             <property name="resourceManager" ref="resourceManager"/>
         </bean>
     </service>

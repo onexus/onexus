@@ -136,9 +136,4 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         response.render(CssHeaderItem.forReference(TABLE_VIEWER_CSS));
     }
 
-    @Override
-    protected void onAfterRender() {
-        super.onAfterRender();
-        dataProvider.close();
-    }
 }

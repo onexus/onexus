@@ -51,6 +51,12 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
 
     private String password;
 
+    private String poolMaxActive;
+
+    private String poolWhenExhausted;
+
+    private String poolMaxWait;
+
     private IResourceManager resourceManager;
 
     public MysqlCollectionStore() {
@@ -65,12 +71,39 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
             log.error("Exception: " + e.getMessage());
         }
 
+        // Config parameters
+        int maxActive = 8;
+        try {
+            maxActive = Integer.valueOf(getPoolMaxActive()).intValue();
+        } catch (Exception e) {
+            log.error("Malformed config parameter 'poolMaxActive'");
+        }
+
+        byte whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_BLOCK;
+        try {
+            if (getPoolWhenExhausted().equalsIgnoreCase("FAIL")) {
+                whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_FAIL;
+            }
+            if (getPoolWhenExhausted().equalsIgnoreCase("GROW")) {
+                whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_GROW;
+            }
+        } catch (Exception e) {
+            log.error("Malformed config parameter 'poolWhenExhausted'");
+        }
+
+        long maxWait = GenericObjectPool.DEFAULT_MAX_WAIT;
+        try {
+            maxWait = Long.getLong(getPoolMaxActive());
+        } catch (Exception e) {
+            log.error("Malformed config parameter 'poolMaxActive'");
+        }
+
         // Initialize the DataSource with a connection pool
         ConnectionFactory connectionFactory = new MysqlConnectionFactory();
         ObjectPool connectionPool = new GenericObjectPool(null,
-                GenericObjectPool.DEFAULT_MAX_ACTIVE,
-                GenericObjectPool.WHEN_EXHAUSTED_GROW,
-                GenericObjectPool.DEFAULT_MAX_WAIT);
+                maxActive,
+                whenExhausted,
+                maxWait);
         @SuppressWarnings("unused")
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
                 connectionFactory, connectionPool, null, null, false, true);
@@ -138,6 +171,30 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPoolMaxActive() {
+        return poolMaxActive;
+    }
+
+    public void setPoolMaxActive(String poolMaxActive) {
+        this.poolMaxActive = poolMaxActive;
+    }
+
+    public String getPoolWhenExhausted() {
+        return poolWhenExhausted;
+    }
+
+    public void setPoolWhenExhausted(String poolWhenExhausted) {
+        this.poolWhenExhausted = poolWhenExhausted;
+    }
+
+    public String getPoolMaxWait() {
+        return poolMaxWait;
+    }
+
+    public void setPoolMaxWait(String poolMaxWait) {
+        this.poolMaxWait = poolMaxWait;
     }
 
     public IResourceManager getResourceManager() {

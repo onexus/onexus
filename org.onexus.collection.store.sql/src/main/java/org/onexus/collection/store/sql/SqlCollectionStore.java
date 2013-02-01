@@ -52,6 +52,8 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
     private SqlDialect sqlDialect;
 
+    private Map<String, String> propertiesMap;
+
     public SqlCollectionStore() {
         this(new SqlDialect());
     }
@@ -73,6 +75,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             throw new RuntimeException(e);
         }
 
+        // Load all properties
+        try {
+            propertiesMap = sqlDialect.loadPropertyMap(dataSource.getConnection());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         this.ddls = new HashMap<ORI, SqlCollectionDDL>();
     }
 
@@ -88,23 +97,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     private String getProperty(String propertyKey) {
-        String property = null;
-        Connection conn = null;
-        try {
-            conn = dataSource.getConnection();
-            property = sqlDialect.loadProperty(conn, propertyKey);
-        } catch (Exception e) {
-            LOGGER.error("Error reading property " + propertyKey, e);
-        } finally {
-            if (conn != null)
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    LOGGER.error("Closing connection", e);
-                }
-        }
-
-        return property;
+        return propertiesMap.get(propertyKey);
     }
 
 
@@ -152,6 +145,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
             sqlDialect.createSystemPropertiesTable(conn, false);
             sqlDialect.saveProperty(conn, collectionURI.toString(), ddl.getTableName());
+            propertiesMap.put(collectionURI.toString(), ddl.getTableName());
 
         } catch (Exception e) {
             String msg = String.format(
@@ -182,6 +176,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
 
             tableName = sqlDialect.loadProperty(conn, collectionURI.toString());
             sqlDialect.removeProperty(conn, collectionURI.toString());
+            propertiesMap.remove(collectionURI.toString());
             sqlDialect.execute(conn, "DROP TABLE `" + tableName + "`");
 
         } catch (Exception e) {
