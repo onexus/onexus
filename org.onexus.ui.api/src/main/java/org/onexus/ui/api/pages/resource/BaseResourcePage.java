@@ -18,7 +18,6 @@
 package org.onexus.ui.api.pages.resource;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -35,6 +34,8 @@ import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.OnexusWebSession;
+import org.onexus.ui.api.authentication.SignOutPage;
+import org.onexus.ui.api.authentication.persona.SignOutBehavior;
 import org.onexus.ui.api.pages.resource.modals.ImportProjectModal;
 import org.onexus.ui.api.pages.theme.DefaultTheme;
 import org.onexus.ui.api.progressbar.ProgressBar;
@@ -42,7 +43,6 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
 
-@AuthorizeInstantiation({"admin", "onexus-admin", "onexus-user"})
 public class BaseResourcePage extends WebPage {
 
 
@@ -70,16 +70,14 @@ public class BaseResourcePage extends WebPage {
 
             }
         };
-        link.add(new Label("username", OnexusWebSession.get().getUserToken()));
+        link.add(new Label("username", OnexusWebSession.get().getUserName()));
         add(link);
 
-        add(new Link<String>("signout") {
-            @Override
-            public void onClick() {
-                OnexusWebSession.get().invalidate();
-                setResponsePage(OnexusWebApplication.get().getHomePage());
-            }
-        });
+        if (OnexusWebApplication.get().usePersonSignIn()) {
+           add(new WebMarkupContainer("signout").add(new SignOutBehavior()));
+        } else {
+           add(new BookmarkablePageLink<String>("signout", SignOutPage.class));
+        }
 
         WebMarkupContainer menuProjects = new WebMarkupContainer("menuProjects");
 
@@ -128,6 +126,16 @@ public class BaseResourcePage extends WebPage {
             menuProjects.add(new AttributeModifier("class", "dropdown"));
         }
 
+    }
+
+    @Override
+    protected void onBeforeRender() {
+
+        if (!OnexusWebSession.get().isSignedIn()) {
+            OnexusWebApplication.get().restartResponseAtSignInPage();
+        }
+
+        super.onBeforeRender();
     }
 
     public IModel<Resource> getModel() {

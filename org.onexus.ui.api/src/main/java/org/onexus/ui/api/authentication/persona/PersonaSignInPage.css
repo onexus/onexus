@@ -1,0 +1,30 @@
+body {
+	background-color: #DADADA;
+	font: bold 12px 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
+}
+
+#outercontainer {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+#innercontainer {
+	position: absolute;
+	top: 70px;
+	left: 50%;
+	height: 190px;
+	width: 250px;
+	margin: 0px -145px;
+	padding: 20px;
+}
+
+div.signInPanel {
+	border: 1px solid black;
+	background-color: white;
+}
+
+div.signInPanel input[type=text], div.signInPanel input[type=password] {
+        width: 150px;
+}
+

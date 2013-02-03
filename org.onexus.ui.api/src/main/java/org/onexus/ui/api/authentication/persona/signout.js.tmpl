@@ -1,0 +1,16 @@
+
+var signOutButton = Wicket.$("${componentId}");
+signOutButton.style.cursor = "pointer";
+
+Wicket.Event.add(signOutButton, "click", function(event) {
+	  navigator.id.logout();
+});
+
+navigator.id.watch({
+	  loggedInUser: "${userName}",
+	  onlogin: function(assertion) {
+	  },
+	  onlogout: function() {
+			Wicket.Ajax.get({ u: "${callbackUrl}" });
+	  }
+});

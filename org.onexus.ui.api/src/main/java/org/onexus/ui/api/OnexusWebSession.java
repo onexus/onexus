@@ -21,59 +21,23 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
-import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.util.time.Duration;
 import org.onexus.resource.api.LoginContext;
 
 import javax.security.auth.Subject;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.callback.*;
 import javax.security.auth.login.LoginException;
-import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Random;
 
 public class OnexusWebSession extends AuthenticatedWebSession {
 
-    private String userToken = null;
     private LoginContext ctx = new LoginContext();
     private Roles roles = new Roles();
 
     public static final String APPLICATION_POLICY_NAME = "onexus";
-    public static final String ONEXUS_COOKIE = "onexus-user-token";
-
-
-    private final static synchronized String newUserToken() {
-        return Long.toHexString(System.currentTimeMillis() + RANDOM.nextInt());
-    }
-
-    private final static Random RANDOM = new Random();
 
     public OnexusWebSession(Request request) {
         super(request);
-
-        Cookie userTokenCookie = ((WebRequest) request).getCookie(ONEXUS_COOKIE);
-        String userToken;
-        boolean newToken = (userTokenCookie == null);
-
-        if (newToken) {
-            userToken = newUserToken();
-            userTokenCookie = new Cookie(ONEXUS_COOKIE, userToken);
-            userTokenCookie.setMaxAge((int) (50 * Duration.ONE_WEEK.seconds()));
-            userTokenCookie.setPath("/");
-
-            ((WebResponse) RequestCycle.get().getResponse()).addCookie(userTokenCookie);
-        } else {
-            userToken = userTokenCookie.getValue();
-        }
-
-        this.userToken = userToken;
     }
 
     @Override
@@ -81,9 +45,9 @@ public class OnexusWebSession extends AuthenticatedWebSession {
         return roles;
     }
 
+    public String getUserName() {
 
-    public String getUserToken() {
-        return (isSignedIn() ? ctx.getUserName() : userToken);
+        return ctx.getUserName();
     }
 
     public LoginContext getLoginContext() {

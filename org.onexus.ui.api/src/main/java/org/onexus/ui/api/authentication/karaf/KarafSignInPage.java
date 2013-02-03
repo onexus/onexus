@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.ui.api;
+package org.onexus.ui.api.authentication.karaf;
 
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -24,14 +24,14 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-public class OnexusSignInPage extends WebPage {
-    public static final CssResourceReference CSS = new CssResourceReference(OnexusSignInPage.class, "OnexusSignInPage.css");
+public class KarafSignInPage extends WebPage {
+    public static final CssResourceReference CSS = new CssResourceReference(KarafSignInPage.class, "KarafSignInPage.css");
     private static final long serialVersionUID = 1L;
 
     /**
      * Construct
      */
-    public OnexusSignInPage() {
+    public KarafSignInPage() {
         this(null);
     }
 
@@ -40,7 +40,7 @@ public class OnexusSignInPage extends WebPage {
      *
      * @param parameters The page parameters
      */
-    public OnexusSignInPage(final PageParameters parameters) {
+    public KarafSignInPage(final PageParameters parameters) {
         super(parameters);
         SignInPanel signPanel = null;
         add(signPanel = new SignInPanel("signInPanel"));

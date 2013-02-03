@@ -29,6 +29,9 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.resource.api.LoginContext;
+import org.onexus.ui.api.authentication.SignOutPage;
+import org.onexus.ui.api.authentication.karaf.KarafSignInPage;
+import org.onexus.ui.api.authentication.persona.PersonaSignInPage;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
@@ -73,13 +76,23 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
 
         // Mount pages
         mountPage("/login", getSignInPageClass());
+        mountPage("/logout", SignOutPage.class);
         mountPage("/admin", ResourcesPage.class);
 
     }
 
+    public boolean usePersonSignIn() {
+        return false;
+    }
+
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
-        return OnexusSignInPage.class;
+
+        if (usePersonSignIn()) {
+            return PersonaSignInPage.class;
+        }
+
+        return KarafSignInPage.class;
     }
 
     @Override
