@@ -10,7 +10,7 @@
             <cm:property name="username" value="onexus"/>
             <cm:property name="password" value="onexus"/>
             <cm:property name="poolMaxActive" value="8"/>
-            <cm:property name="poolWhenExhausted" value="BLOCK"/>
+            <cm:property name="poolWhenExhausted" value="GROW"/>
             <cm:property name="poolMaxWait" value="-1"/>
         </cm:default-properties>
     </cm:property-placeholder>
