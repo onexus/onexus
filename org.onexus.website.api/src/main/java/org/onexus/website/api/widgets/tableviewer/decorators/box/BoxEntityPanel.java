@@ -24,6 +24,7 @@ import org.apache.wicket.markup.head.CssReferenceHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.resource.PackageResourceReference;
@@ -67,10 +68,19 @@ public class BoxEntityPanel extends Panel {
             Object value = entity.get(field.getId());
             if (value != null && !StringUtils.isEmpty(value.toString())) {
 
+
                 WebMarkupContainer fc = new WebMarkupContainer(fieldsView.newChildId());
                 fc.setRenderBodyOnly(true);
                 fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
                 fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
+
+                String externalLink = field.getProperty("EXTERNAL_LINK");
+                if (!StringUtils.isEmpty(externalLink)) {
+                    fc.add(new ExternalLink("link", replaceEntityValues(externalLink, entity)));
+                } else {
+                    fc.add(new WebMarkupContainer("link").setVisible(false));
+                }
+
                 fieldsView.add(fc);
             }
         }
@@ -109,5 +119,16 @@ public class BoxEntityPanel extends Panel {
             WebsiteApplication.inject(this);
         }
         return decoratorManager;
+    }
+
+    private static String replaceEntityValues(String template, IEntity entity) {
+
+        Collection collection = entity.getCollection();
+
+        for (Field field : collection.getFields()) {
+            template = template.replaceAll("\\$\\{" + field.getId() + "\\}", String.valueOf(entity.get(field.getId())));
+        }
+
+        return template;
     }
 }
