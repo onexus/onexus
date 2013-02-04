@@ -56,7 +56,7 @@ public class LinearColorScale extends AbstractColorScale {
 
         double range = maxPoint - minPoint;
 
-        double f = value / range;
+        double f = (value - minPoint) / range;
 
         return f <= 0 ? ColorUtils.mix(minColor, maxColor, -f) : ColorUtils
                 .mix(maxColor, minColor, f);
