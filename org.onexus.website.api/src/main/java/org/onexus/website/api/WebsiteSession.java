@@ -41,39 +41,14 @@ import java.util.Random;
 
 public class WebsiteSession extends AuthenticatedWebSession {
 
-    private String userToken = null;
     private LoginContext ctx = new LoginContext();
     private Roles roles = new Roles();
 
     public static final String APPLICATION_POLICY_NAME = "onexus";
-    public static final String ONEXUS_COOKIE = "onexus-user-token";
-
-
-    private final static synchronized String newUserToken() {
-        return Long.toHexString(System.currentTimeMillis() + RANDOM.nextInt());
-    }
-
-    private final static Random RANDOM = new Random();
 
     public WebsiteSession(Request request) {
         super(request);
 
-        Cookie userTokenCookie = ((WebRequest) request).getCookie(ONEXUS_COOKIE);
-        String userToken;
-        boolean newToken = (userTokenCookie == null);
-
-        if (newToken) {
-            userToken = newUserToken();
-            userTokenCookie = new Cookie(ONEXUS_COOKIE, userToken);
-            userTokenCookie.setMaxAge((int) (50 * Duration.ONE_WEEK.seconds()));
-            userTokenCookie.setPath("/");
-
-            ((WebResponse) RequestCycle.get().getResponse()).addCookie(userTokenCookie);
-        } else {
-            userToken = userTokenCookie.getValue();
-        }
-
-        this.userToken = userToken;
     }
 
     @Override
@@ -82,8 +57,8 @@ public class WebsiteSession extends AuthenticatedWebSession {
     }
 
 
-    public String getUserToken() {
-        return (isSignedIn() ? ctx.getUserName() : userToken);
+    public String getUserName() {
+        return ctx.getUserName();
     }
 
     public LoginContext getLoginContext() {

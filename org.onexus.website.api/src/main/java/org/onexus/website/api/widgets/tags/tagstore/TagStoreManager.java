@@ -87,7 +87,7 @@ public class TagStoreManager implements ITagStoreManager {
     @Override
     public TagStore getUserStore(String namespace) {
 
-        String userToken = WebsiteSession.get().getUserToken();
+        String userToken = WebsiteSession.get().getUserName();
 
         return get(userToken + "_" + namespace);
 
