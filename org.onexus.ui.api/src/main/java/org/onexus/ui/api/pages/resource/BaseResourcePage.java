@@ -34,11 +34,11 @@ import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.OnexusWebSession;
-import org.onexus.ui.api.authentication.SignOutPage;
-import org.onexus.ui.api.authentication.persona.SignOutBehavior;
+import org.onexus.ui.api.pages.SignOutPage;
 import org.onexus.ui.api.pages.resource.modals.ImportProjectModal;
 import org.onexus.ui.api.pages.theme.DefaultTheme;
 import org.onexus.ui.api.progressbar.ProgressBar;
+import org.onexus.ui.authentication.persona.SignOutBehavior;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;

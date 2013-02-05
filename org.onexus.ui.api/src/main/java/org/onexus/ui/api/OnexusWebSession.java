@@ -21,7 +21,9 @@ import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.resource.api.LoginContext;
+import org.onexus.ui.authentication.persona.PersonaRoles;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
@@ -65,6 +67,11 @@ public class OnexusWebSession extends AuthenticatedWebSession {
     }
 
     public boolean authenticate(String username, String password) {
+
+        if (OnexusWebApplication.get().usePersonSignIn()) {
+            return authenticatePersona(username);
+        }
+
         boolean authenticated = false;
         LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
         try {
@@ -87,6 +94,19 @@ public class OnexusWebSession extends AuthenticatedWebSession {
             authenticated = false;
         }
         return authenticated;
+    }
+
+    private boolean authenticatePersona(String username) {
+        if (!Strings.isEmpty(username)) {
+            this.ctx = new LoginContext(username);
+            for (String role : PersonaRoles.getPersonaRoles(username)) {
+                ctx.addRole(role);
+                roles.add(role);
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private class LoginCallbackHandler implements CallbackHandler {

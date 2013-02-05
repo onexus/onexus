@@ -23,7 +23,8 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.utils.ResourceListener;
-import org.onexus.website.api.utils.panels.SignInPage;
+import org.onexus.ui.authentication.jaas.JaasSignInPage;
+import org.onexus.ui.authentication.persona.PersonaSignInPage;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.BundleContext;
@@ -152,17 +153,21 @@ public class WebsiteService implements IWebsiteService {
 
         String signInPageId = website.getSignInPage();
 
-        if (Strings.isEmpty(signInPageId) || signInPages == null || signInPageId.isEmpty()) {
-            return SignInPage.class;
-        }
-
-        for (ISignInPage signInPage : signInPages) {
-            if (signInPageId.equals((signInPage.getId()))) {
-                return signInPage.getPageClass();
+        if (!Strings.isEmpty(signInPageId) && signInPages != null) {
+            for (ISignInPage signInPage : signInPages) {
+                if (signInPageId.equals((signInPage.getId()))) {
+                    return signInPage.getPageClass();
+                }
             }
         }
 
-        return SignInPage.class;
+        boolean usePersona = Boolean.parseBoolean(System.getProperty("org.onexus.ui.authentication.persona", "false"));
+        if (usePersona) {
+            return PersonaSignInPage.class;
+        }
+
+        return JaasSignInPage.class;
+
     }
 
     public BundleContext getContext() {

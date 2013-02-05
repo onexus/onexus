@@ -29,11 +29,11 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.resource.api.LoginContext;
-import org.onexus.ui.api.authentication.SignOutPage;
-import org.onexus.ui.api.authentication.karaf.KarafSignInPage;
-import org.onexus.ui.api.authentication.persona.PersonaSignInPage;
+import org.onexus.ui.api.pages.SignOutPage;
 import org.onexus.ui.api.pages.error.ExceptionErrorPage;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
+import org.onexus.ui.authentication.jaas.JaasSignInPage;
+import org.onexus.ui.authentication.persona.PersonaSignInPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,17 +82,16 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
     }
 
     public boolean usePersonSignIn() {
-        return false;
+        return Boolean.parseBoolean(System.getProperty("org.onexus.ui.authentication.persona", "false"));
     }
 
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
-
         if (usePersonSignIn()) {
             return PersonaSignInPage.class;
         }
 
-        return KarafSignInPage.class;
+        return JaasSignInPage.class;
     }
 
     @Override
@@ -122,4 +121,6 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
             InjectorHolder.getInjector().inject(obj, obj.getClass());
         }
     }
+
+
 }

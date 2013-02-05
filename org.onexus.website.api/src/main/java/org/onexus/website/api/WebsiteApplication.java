@@ -33,6 +33,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.onexus.resource.api.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.utils.error.ExceptionErrorPage;
+import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.onexus.website.api.utils.panels.SignOutPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
@@ -57,6 +58,10 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
 
     public Class<? extends Page> getHomePage() {
         return Website.class;
+    }
+
+    public boolean usePersonSignIn() {
+        return Boolean.parseBoolean(System.getProperty("org.onexus.ui.authentication.persona", "false"));
     }
 
     @Override
@@ -85,6 +90,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
         mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
         mountPage("/login", getSignInPageClass());
         mountPage("/logout", SignOutPage.class);
+        mountPage("/forbbiden", NotAuthorizedPage.class);
 
     }
 

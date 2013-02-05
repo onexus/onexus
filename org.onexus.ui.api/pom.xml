@@ -28,6 +28,18 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.ui.authentication.persona</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.ui.authentication.jaas</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Wicket dependencies -->
         <dependency>
             <groupId>org.ops4j.pax.wicket</groupId>

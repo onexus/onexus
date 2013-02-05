@@ -18,11 +18,14 @@
 package org.onexus.website.api.utils.panels;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.resource.api.LoginContext;
+import org.onexus.ui.authentication.persona.SignOutBehavior;
 import org.onexus.website.api.WebsiteApplication;
 
 public class LoginPanel extends Panel {
@@ -50,7 +53,12 @@ public class LoginPanel extends Panel {
         link.add(new AttributeModifier("title", (ctx.isAnonymous() ? "Sign in" : "Account Details")));
         link.add(new Label("username", (ctx.isAnonymous() ? "Sign in" : ctx.getUserName())));
 
-        Link<String> signOut = new BookmarkablePageLink<String>("signout", SignOutPage.class);
+        Component signOut;
+        if (!WebsiteApplication.get().usePersonSignIn() || ctx.isAnonymous()) {
+            signOut = new BookmarkablePageLink<String>("signout", SignOutPage.class);
+        } else {
+            signOut = new WebMarkupContainer("signout").add(new SignOutBehavior());
+        }
         signOut.setVisible(!ctx.isAnonymous());
 
         addOrReplace(signOut);

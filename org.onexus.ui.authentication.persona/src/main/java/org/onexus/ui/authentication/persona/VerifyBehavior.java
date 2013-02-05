@@ -1,4 +1,4 @@
-package org.onexus.ui.api.authentication.persona;
+package org.onexus.ui.authentication.persona;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -22,8 +22,8 @@ import java.util.Map;
 
 /**
  * The behavior that should be attached to the "Sign In" button. It cares about loading the
- * authentication window and notifying the caller via {@link #onSuccess(AjaxRequestTarget)} or
- * {@link #onFailure(AjaxRequestTarget, String)}
+ * authentication window and notifying the caller via {@link #onSuccess(org.apache.wicket.ajax.AjaxRequestTarget)} or
+ * {@link #onFailure(org.apache.wicket.ajax.AjaxRequestTarget, String)}
  */
 public abstract class VerifyBehavior extends AbstractDefaultAjaxBehavior
 {

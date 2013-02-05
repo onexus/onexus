@@ -18,6 +18,7 @@
 package org.onexus.website.api;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,6 +41,7 @@ import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
 import org.onexus.website.api.utils.authorization.Authorization;
 import org.onexus.website.api.utils.panels.LoginPanel;
+import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -56,6 +58,14 @@ public class Website extends WebPage {
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
+
+        if (!Authorization.authorize(getConfig())) {
+            if (AuthenticatedWebSession.get().isSignedIn()) {
+                setResponsePage(NotAuthorizedPage.class);
+            } else {
+                WebsiteApplication.get().restartResponseAtSignInPage();
+            }
+        }
 
         add(new DefaultTheme());
 
@@ -126,10 +136,6 @@ public class Website extends WebPage {
 
         add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
 
-        if (!Authorization.authorize(config)) {
-           WebsiteApplication.get().restartResponseAtSignInPage();
-        }
-
         String bottom = config.getBottom();
         Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(parentUri, bottom));
         bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
@@ -149,7 +155,11 @@ public class Website extends WebPage {
         get("bottom").setVisible(visible);
 
         if (!Authorization.authorize(getConfig())) {
-            WebsiteApplication.get().restartResponseAtSignInPage();
+            if (AuthenticatedWebSession.get().isSignedIn()) {
+                setResponsePage(NotAuthorizedPage.class);
+            } else {
+                WebsiteApplication.get().restartResponseAtSignInPage();
+            }
         }
 
         super.onBeforeRender();
