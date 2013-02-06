@@ -93,7 +93,7 @@ public class MockEntityFilter implements IFilter {
     }
 
     @Override
-    public String toUrlParameter() {
+    public String toUrlParameter(boolean global, ORI parent) {
         throw new UnsupportedOperationException();
     }
 

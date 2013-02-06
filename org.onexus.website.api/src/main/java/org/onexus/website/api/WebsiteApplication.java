@@ -136,12 +136,18 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
 
 
     public final static String toAbsolutePath(String relativePagePath) {
-        HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
 
+        HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
         String serverUrl = SERVER_URL;
         if (serverUrl == null) {
             serverUrl = "http://" + request.getServerName() + ":" + request.getServerPort();
         }
+        return toAbsolutePath(relativePagePath, serverUrl);
+    }
+
+    public final static String toAbsolutePath(String relativePagePath, String serverUrl) {
+
+        HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
 
         if (relativePagePath.charAt(0) == '/') {
             return serverUrl + relativePagePath;

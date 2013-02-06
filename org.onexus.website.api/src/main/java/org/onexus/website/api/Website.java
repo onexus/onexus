@@ -40,6 +40,7 @@ import org.onexus.website.api.theme.DefaultTheme;
 import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
 import org.onexus.website.api.utils.authorization.Authorization;
+import org.onexus.website.api.utils.panels.ConnectionsPanel;
 import org.onexus.website.api.utils.panels.LoginPanel;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
@@ -76,7 +77,7 @@ public class Website extends WebPage {
         add(new CustomCssBehavior(parentUri, config.getCss()));
 
         // Init currentPage
-        if (status.getCurrentPage() == null) {
+        if (status.getCurrentPage() == null || config.getPage(status.getCurrentPage()) == null) {
             status.setCurrentPage(config.getPages().get(0).getId());
         }
 
@@ -129,6 +130,9 @@ public class Website extends WebPage {
         if (config.getLogin() == null || !config.getLogin()) {
             login.setVisible(false);
         }
+
+        // Projects section
+        menuSection.add( new ConnectionsPanel("connections", config.getConnections()) );
 
         add(menuSection);
 

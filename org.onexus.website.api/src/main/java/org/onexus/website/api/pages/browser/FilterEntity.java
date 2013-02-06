@@ -153,10 +153,18 @@ public class FilterEntity implements IFilter {
     private static Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
 
     @Override
-    public String toUrlParameter() {
+    public String toUrlParameter(boolean global, ORI parentUri) {
 
         StringBuilder str = new StringBuilder();
-        str.append(filteredCollection).append(SEPARATOR);
+
+        ORI uri;
+        if (global) {
+            uri = filteredCollection.toAbsolute(parentUri);
+        } else {
+            uri = filteredCollection;
+        }
+
+        str.append(uri).append(SEPARATOR);
         str.append(entityId).append(SEPARATOR);
         str.append((deletable ? "d" : ""));
         str.append((enable ? "e" : ""));

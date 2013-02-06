@@ -19,19 +19,26 @@ package org.onexus.website.api.utils.panels;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.resource.api.LoginContext;
-import org.onexus.ui.authentication.persona.SignOutBehavior;
+import org.onexus.ui.authentication.persona.*;
 import org.onexus.website.api.WebsiteApplication;
 
 public class LoginPanel extends Panel {
 
     public LoginPanel(String id) {
         super(id);
+        setOutputMarkupId(true);
     }
 
     @Override
@@ -39,16 +46,43 @@ public class LoginPanel extends Panel {
 
         LoginContext ctx = LoginContext.get();
 
-        Link<String> link = new Link<String>("account-details") {
-            @Override
-            public void onClick() {
+        WebMarkupContainer link;
 
-                if (LoginContext.get().isAnonymous()) {
+        if (!LoginContext.get().isAnonymous()) {
+            if (WebsiteApplication.get().usePersonSignIn()) {
+                link = new ExternalLink("account-details", "https://login.persona.org");
+                link.add(new AttributeModifier("target", "_tab"));
+            } else {
+                //TODO Account manager on JAAS authentication system
+                link = new WebMarkupContainer("account-details");
+            }
+        } else {
+            if (WebsiteApplication.get().usePersonSignIn()) {
+                link = new WebMarkupContainer("account-details");
+                link.add(new VerifyBehavior() {
+                    @Override
+                    protected void onSuccess(AjaxRequestTarget target) {
+                        BrowserId browserId = SessionHelper.getBrowserId(Session.get());
+                        if (browserId != null) {
+                            if (AuthenticatedWebSession.get().signIn(browserId.getEmail(), null)) {
+                                target.appendJavaScript("location.reload();");
+                            }
+                        }
+                    }
+                    @Override
+                    protected void onFailure(AjaxRequestTarget target, final String failureReason) {
+                    }
+                });
+            } else {
+                link = new Link<String>("account-details") {
+                @Override
+                public void onClick() {
                     WebsiteApplication.get().restartResponseAtSignInPage();
                 }
-
+            };
             }
-        };
+
+        }
 
         link.add(new AttributeModifier("title", (ctx.isAnonymous() ? "Sign in" : "Account Details")));
         link.add(new Label("username", (ctx.isAnonymous() ? "Sign in" : ctx.getUserName())));
@@ -65,5 +99,27 @@ public class LoginPanel extends Panel {
         addOrReplace(link);
 
         super.onBeforeRender();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response)
+    {
+        super.renderHead(response);
+
+        renderBrowserIdJavaScript(response);
+    }
+
+    /**
+     * Renders a reference for external browserid.js (loaded from browserid.org). <br/>
+     * Can be overridden with local reference to browserid.js if needed.
+     *
+     * @param response
+     *            the current header response
+     */
+    protected void renderBrowserIdJavaScript(final IHeaderResponse response)
+    {
+        if (WebsiteApplication.get().usePersonSignIn()) {
+            response.render(JavaScriptHeaderItem.forUrl(GuestPanel.BROWSER_ID_JS));
+        }
     }
 }

@@ -153,9 +153,9 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
         // Override this method if the page contributes to the query build
     }
 
-    public void encodeParameters(PageParameters parameters, String keyPrefix) {
+    public void encodeParameters(PageParameters parameters, String keyPrefix, boolean global) {
 
-        if (widgetStatuses != null) {
+        if (widgetStatuses != null && !global) {
 
             for (WidgetStatus status : widgetStatuses) {
                 status.getConfig().setPageConfig(getConfig());

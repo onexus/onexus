@@ -77,7 +77,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
 
         if (website != null) {
             WebsiteStatus status = website.getStatus();
-            status.encodeParameters(params);
+            status.encodeParameters(params, false);
         }
 
         linkURL = WebsiteApplication.toAbsolutePath(urlFor(getPage().getClass(), params).toString());

@@ -18,6 +18,7 @@
 package org.onexus.website.api;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.resource.api.Resource;
 import org.onexus.website.api.pages.PageConfig;
@@ -46,8 +47,19 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private String bottom;
 
+    @XStreamImplicit(itemFieldName = "connection")
+    private List<Connection> connections;
+
     public WebsiteConfig() {
         super();
+    }
+
+    public List<Connection> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(List<Connection> connections) {
+        this.connections = connections;
     }
 
     @Override
