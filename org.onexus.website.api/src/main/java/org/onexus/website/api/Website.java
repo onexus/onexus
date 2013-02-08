@@ -158,7 +158,7 @@ public class Website extends WebPage {
         get("header").setVisible(visible);
         get("bottom").setVisible(visible);
 
-        if (!Authorization.authorize(getConfig())) {
+        if (!Authorization.authorize(getConfig()) || !Authorization.authorize(getConfig().getPage(getStatus().getCurrentPage()))) {
             if (AuthenticatedWebSession.get().isSignedIn()) {
                 setResponsePage(NotAuthorizedPage.class);
             } else {
@@ -182,9 +182,10 @@ public class Website extends WebPage {
 
         for (PageConfig page : getConfig().getPages()) {
 
-            if (Authorization.authorize(page)) {
+            //TODO Manage optional show/hide non-authorized links
+            //if (Authorization.authorize(page)) {
                 pages.add(page);
-            }
+            //}
         }
 
         return pages;
