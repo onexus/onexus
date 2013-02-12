@@ -79,7 +79,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         List<WidgetStatus> statuses = new ArrayList<WidgetStatus>();
         for (WidgetConfig config : widgetConfigs) {
             WidgetStatus status = getWidgetStatus(config.getId());
-            if (status!=null) {
+            if (status != null) {
                 statuses.add(status);
             }
         }
@@ -172,33 +172,35 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     @Override
-    public void encodeParameters(PageParameters parameters, String keyPrefix) {
+    public void encodeParameters(PageParameters parameters, String keyPrefix, boolean global) {
 
         BrowserPageStatus defaultStatus = getConfig().getDefaultStatus();
         if (defaultStatus == null) {
             defaultStatus = getConfig().createEmptyStatus();
         }
 
-        if (!StringUtils.equals(currentTabId, defaultStatus.getCurrentTabId())) {
-            parameters.add(keyPrefix + "tab", currentTabId);
+        if (!global) {
+            if (!StringUtils.equals(currentTabId, defaultStatus.getCurrentTabId())) {
+                parameters.add(keyPrefix + "tab", currentTabId);
+            }
+
+            if (!StringUtils.equals(currentView, defaultStatus.getCurrentView()) &&
+                    getConfig().getTab(currentTabId).getViews().size() > 1) {
+                parameters.add(keyPrefix + "view", currentView);
+            }
         }
 
-        if (!StringUtils.equals(currentView, defaultStatus.getCurrentView()) &&
-                getConfig().getTab(currentTabId).getViews().size() > 1) {
-            parameters.add(keyPrefix + "view", currentView);
-        }
-
-
+        ORI parentOri = getORI();
         for (IFilter filter : filters) {
             if (filter instanceof FilterEntity) {
-                parameters.add(keyPrefix + "f", filter.toUrlParameter());
+                parameters.add(keyPrefix + "f", filter.toUrlParameter(global, parentOri));
             } else {
-                parameters.add(keyPrefix + "fc", filter.toUrlParameter());
+                parameters.add(keyPrefix + "fc", filter.toUrlParameter(global, parentOri));
             }
         }
 
 
-        super.encodeParameters(parameters, keyPrefix);    //To change body of overridden methods use File | Settings | File Templates.
+        super.encodeParameters(parameters, keyPrefix, global);
     }
 
     @Override

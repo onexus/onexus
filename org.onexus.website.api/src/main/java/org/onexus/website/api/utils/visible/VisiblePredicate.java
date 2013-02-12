@@ -52,6 +52,14 @@ public class VisiblePredicate implements Predicate {
             return true;
         }
 
+        // Remove the help message if it's present
+        int msg = visibleQuery.indexOf("::");
+        if (msg != -1) {
+            visibleQuery = visibleQuery.substring(0, msg).trim();
+        } else {
+            visibleQuery = visibleQuery.trim();
+        }
+
         if (visibleQuery.equalsIgnoreCase("true")) {
             return true;
         }
@@ -86,5 +94,17 @@ public class VisiblePredicate implements Predicate {
         };
 
         return evaluator.evaluate();
+    }
+
+    public static String getMessage(IVisible visible) {
+
+        String visibleQuery = visible.getVisible();
+
+        int msg = visibleQuery.indexOf("::");
+        if (msg != -1) {
+            return visibleQuery.substring(msg + 2).trim();
+        }
+
+        return "";
     }
 }

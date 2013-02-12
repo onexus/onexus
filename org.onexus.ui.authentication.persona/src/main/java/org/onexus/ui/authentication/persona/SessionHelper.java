@@ -1,4 +1,4 @@
-package org.onexus.ui.api.authentication.persona;
+package org.onexus.ui.authentication.persona;
 
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Session;

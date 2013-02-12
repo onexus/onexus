@@ -18,6 +18,7 @@
 package org.onexus.website.api;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -39,7 +40,9 @@ import org.onexus.website.api.theme.DefaultTheme;
 import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
 import org.onexus.website.api.utils.authorization.Authorization;
+import org.onexus.website.api.utils.panels.ConnectionsPanel;
 import org.onexus.website.api.utils.panels.LoginPanel;
+import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -57,6 +60,14 @@ public class Website extends WebPage {
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
 
+        if (!Authorization.authorize(getConfig())) {
+            if (AuthenticatedWebSession.get().isSignedIn()) {
+                setResponsePage(NotAuthorizedPage.class);
+            } else {
+                WebsiteApplication.get().restartResponseAtSignInPage();
+            }
+        }
+
         add(new DefaultTheme());
 
         final WebsiteStatus status = getStatus();
@@ -66,7 +77,7 @@ public class Website extends WebPage {
         add(new CustomCssBehavior(parentUri, config.getCss()));
 
         // Init currentPage
-        if (status.getCurrentPage() == null) {
+        if (status.getCurrentPage() == null || config.getPage(status.getCurrentPage()) == null) {
             status.setCurrentPage(config.getPages().get(0).getId());
         }
 
@@ -120,15 +131,14 @@ public class Website extends WebPage {
             login.setVisible(false);
         }
 
+        // Projects section
+        menuSection.add( new ConnectionsPanel("connections", config.getConnections()) );
+
         add(menuSection);
 
         String currentPage = status.getCurrentPage();
 
         add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
-
-        if (!Authorization.authorize(config)) {
-           WebsiteApplication.get().restartResponseAtSignInPage();
-        }
 
         String bottom = config.getBottom();
         Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(parentUri, bottom));
@@ -148,8 +158,12 @@ public class Website extends WebPage {
         get("header").setVisible(visible);
         get("bottom").setVisible(visible);
 
-        if (!Authorization.authorize(getConfig())) {
-            WebsiteApplication.get().restartResponseAtSignInPage();
+        if (!Authorization.authorize(getConfig()) || !Authorization.authorize(getConfig().getPage(getStatus().getCurrentPage()))) {
+            if (AuthenticatedWebSession.get().isSignedIn()) {
+                setResponsePage(NotAuthorizedPage.class);
+            } else {
+                WebsiteApplication.get().restartResponseAtSignInPage();
+            }
         }
 
         super.onBeforeRender();
@@ -168,9 +182,10 @@ public class Website extends WebPage {
 
         for (PageConfig page : getConfig().getPages()) {
 
-            if (Authorization.authorize(page)) {
+            //TODO Manage optional show/hide non-authorized links
+            //if (Authorization.authorize(page)) {
                 pages.add(page);
-            }
+            //}
         }
 
         return pages;

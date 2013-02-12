@@ -153,12 +153,12 @@ public class EntitySelectBox extends Panel {
 
         if (entity != null) {
             FilterEntity filterEntity = new FilterEntity(entity);
-            return "pf=" + UrlEncoder.QUERY_INSTANCE.encode(filterEntity.toUrlParameter(), "UTF-8");
+            return "pf=" + UrlEncoder.QUERY_INSTANCE.encode(filterEntity.toUrlParameter(false, null), "UTF-8");
         }
 
         if (filterConfig != null) {
             BrowserFilter browserFilter = new BrowserFilter(filterConfig);
-            return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserFilter.toUrlParameter(), "UTF-8");
+            return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserFilter.toUrlParameter(false, null), "UTF-8");
         }
 
         return "";

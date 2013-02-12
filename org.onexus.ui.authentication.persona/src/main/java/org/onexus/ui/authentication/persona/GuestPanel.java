@@ -1,4 +1,4 @@
-package org.onexus.ui.api.authentication.persona;
+package org.onexus.ui.authentication.persona;
 
 
 import org.apache.wicket.AttributeModifier;
@@ -19,7 +19,7 @@ public class GuestPanel extends Panel
 
     private static final long serialVersionUID = 1L;
 
-    public static final String BROWSER_ID_JS = "https://login.persona.org/include.orig.js";
+    public static final String BROWSER_ID_JS = "https://login.persona.org/include.js";
 
     private static final ResourceReference RED_ICON = new PackageResourceReference(
             GuestPanel.class, "sign_in_red.png");

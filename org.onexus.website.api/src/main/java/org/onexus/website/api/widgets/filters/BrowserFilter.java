@@ -141,11 +141,19 @@ public class BrowserFilter implements IFilter {
     private static Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
 
     @Override
-    public String toUrlParameter() {
+    public String toUrlParameter(boolean global, ORI parentOri) {
 
         StringBuilder str = new StringBuilder();
         str.append(config.getName()).append(SEPARATOR);
-        str.append(config.getCollection()).append(SEPARATOR);
+
+        ORI ori;
+        if (global) {
+            ori = config.getCollection().toAbsolute(parentOri);
+        } else {
+            ori = config.getCollection();
+        }
+
+        str.append(ori).append(SEPARATOR);
         str.append(config.getDefine()).append(SEPARATOR);
         str.append(config.getWhere()).append(SEPARATOR);
         str.append((config.isDeletable()?"d":""));

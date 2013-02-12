@@ -43,7 +43,7 @@ public interface IFilter extends Serializable {
 
     Filter buildFilter(Query query);
 
-    String toUrlParameter();
+    String toUrlParameter(boolean global, ORI parentOri);
 
     void loadUrlPrameter(String parameter);
 

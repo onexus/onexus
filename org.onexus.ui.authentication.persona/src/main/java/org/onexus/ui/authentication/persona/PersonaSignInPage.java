@@ -1,4 +1,4 @@
-package org.onexus.ui.api.authentication.persona;
+package org.onexus.ui.authentication.persona;
 
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
@@ -8,21 +8,24 @@ import org.apache.wicket.feedback.IFeedback;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
 
 
 public class PersonaSignInPage extends WebPage {
 
     public static final CssResourceReference CSS = new CssResourceReference(PersonaSignInPage.class, "PersonaSignInPage.css");
-    private static final String DEFAULT_PERSONA_PASSWORD = "persona";
+    private static final PackageResourceReference LOGO = new PackageResourceReference(PersonaSignInPage.class, "persona-logo.png");
 
     private static final long serialVersionUID = 1L;
 
     public PersonaSignInPage(final PageParameters parameters) {
         super(parameters);
 
+        add(new Image("logo", LOGO));
         add(new GuestPanel("browserId", GuestPanel.Style.GREEN) {
 
             private static final long serialVersionUID = 1L;
@@ -32,7 +35,7 @@ public class PersonaSignInPage extends WebPage {
                 BrowserId browserId = SessionHelper.getBrowserId(Session.get());
 
                 if (browserId != null) {
-                    if (AuthenticatedWebSession.get().signIn(browserId.getEmail(), DEFAULT_PERSONA_PASSWORD)) {
+                    if (AuthenticatedWebSession.get().signIn(browserId.getEmail(), null)) {
 
                         // logon successful. Continue to the original destination
                         continueToOriginalDestination();

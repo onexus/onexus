@@ -76,12 +76,12 @@ public class WebsiteStatus implements Serializable {
         query.setOn(getConfig().getORI());
     }
 
-    public void encodeParameters(PageParameters parameters) {
+    public void encodeParameters(PageParameters parameters, boolean global) {
 
         if (pageStatuses != null) {
             parameters.add(Website.PARAMETER_PAGE, currentPage);
             PageStatus status = getPageStatus(currentPage);
-            status.encodeParameters(parameters, "p");
+            status.encodeParameters(parameters, "p", global);
         }
 
     }

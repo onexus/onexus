@@ -96,6 +96,9 @@
     <!-- Onexus UI -->
     <feature name="org.onexus.ui" version="${project.version}">
         <bundle>mvn:org.onexus/org.onexus.ui.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.ui.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.ui.authentication.persona/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.ui.authentication.jaas/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.ui.website/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.ui.workspace/${project.version}</bundle>
 

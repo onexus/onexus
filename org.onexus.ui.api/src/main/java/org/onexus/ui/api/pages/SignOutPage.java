@@ -1,4 +1,4 @@
-package org.onexus.ui.api.authentication;
+package org.onexus.ui.api.pages;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

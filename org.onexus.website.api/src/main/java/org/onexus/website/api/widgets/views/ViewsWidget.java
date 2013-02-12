@@ -17,6 +17,7 @@
  */
 package org.onexus.website.api.widgets.views;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -59,9 +60,7 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
 
             List<ViewConfig> views = browserConfig.getTab(browserStatus.getCurrentTabId()).getViews();
 
-            //List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
             VisiblePredicate predicate = new VisiblePredicate(getPageBaseOri().getParent(), getPageStatus().getFilters());
-            //CollectionUtils.select(views, predicate, filteredViews);
 
             if (views != null && !views.isEmpty()) {
                 for (ViewConfig view : views) {
@@ -88,6 +87,14 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
                     // Disable non-visible views
                     if (!predicate.evaluate(view)) {
                         item.setEnabled(false);
+
+                        String msg = VisiblePredicate.getMessage(view);
+
+                        if (!StringUtils.isEmpty(msg)) {
+                            item.add(new AttributeModifier("rel", "tooltip"));
+                            item.add(new AttributeModifier("title", msg));
+                        }
+
                     } else {
                         item.setEnabled(true);
                     }
