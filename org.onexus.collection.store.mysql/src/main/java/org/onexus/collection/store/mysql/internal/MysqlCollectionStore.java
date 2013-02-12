@@ -93,9 +93,9 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
 
         long maxWait = GenericObjectPool.DEFAULT_MAX_WAIT;
         try {
-            maxWait = Long.getLong(getPoolMaxActive());
+            maxWait = Long.valueOf(getPoolMaxWait()).longValue();
         } catch (Exception e) {
-            log.error("Malformed config parameter 'poolMaxActive'");
+            log.error("Malformed config parameter 'poolMaxWait'");
         }
 
         // Initialize the DataSource with a connection pool
