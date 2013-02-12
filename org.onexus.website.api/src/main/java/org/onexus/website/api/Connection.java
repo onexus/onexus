@@ -6,6 +6,7 @@ public class Connection implements Serializable {
 
     private String url;
     private String title;
+    private Boolean active;
 
     public String getTitle() {
         return title;
@@ -21,5 +22,13 @@ public class Connection implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
