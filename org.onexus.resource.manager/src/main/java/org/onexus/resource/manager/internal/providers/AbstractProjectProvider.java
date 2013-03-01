@@ -32,19 +32,9 @@ import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractProjectProvider {
@@ -174,6 +164,12 @@ public abstract class AbstractProjectProvider {
 
         if (project.getPlugins() != null) {
             for (Plugin plugin : project.getPlugins()) {
+
+                //TODO Remove this property
+                if (plugin.getParameter("location") == null) {
+                    plugin.getParameters().add(new Parameter("location", projectFolder.getAbsolutePath()));
+                }
+
                 try {
                     long bundleId = pluginLoader.load(plugin);
                     bundleDependencies.add(bundleId);

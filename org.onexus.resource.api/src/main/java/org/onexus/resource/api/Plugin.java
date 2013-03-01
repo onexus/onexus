@@ -56,9 +56,11 @@ public class Plugin extends AbstractMetadata {
     }
 
     public String getParameter(String key) {
-        for (Parameter value : parameters) {
-            if (value.getKey().equals(key)) {
-                return value.getValue();
+        if (parameters != null) {
+            for (Parameter value : parameters) {
+                if (value.getKey().equals(key)) {
+                    return value.getValue();
+                }
             }
         }
         return null;
