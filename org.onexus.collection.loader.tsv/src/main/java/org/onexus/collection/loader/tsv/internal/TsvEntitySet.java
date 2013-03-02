@@ -76,7 +76,7 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
         // Read first line the headers
         try {
             String firstLine;
-            firstLine = this.fr.readLine();
+            firstLine = nextNonCommentLine();
             setHeaders(new HashMap<String, Integer>());
 
             int i = 0;
@@ -119,7 +119,7 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
                 return null;
             }
 
-            String line = fr.readLine();
+            String line = nextNonCommentLine();
 
             if (line == null) {
                 if (isIterator.hasNext()) {
@@ -143,6 +143,16 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
         return null;
 
+    }
+
+    private String nextNonCommentLine() throws IOException {
+
+        String line = fr.readLine();
+        while(line != null && !line.isEmpty() && line.charAt(0) == '#') {
+            line = fr.readLine();
+        }
+
+        return line;
     }
 
     @Override
