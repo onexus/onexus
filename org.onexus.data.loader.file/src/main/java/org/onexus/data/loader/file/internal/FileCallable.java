@@ -68,6 +68,15 @@ public class FileCallable implements Callable<IDataStreams> {
 
         String location = plugin.getParameter("location");
         String mirror = plugin.getParameter("mirror");
+        String basePath = data.getLoader().getParameter("base-path");
+
+        if (basePath == null) {
+            basePath = "";
+        }
+
+        if (!basePath.isEmpty() && !basePath.endsWith(File.separator)) {
+            basePath = basePath + File.separator;
+        }
 
 
         List<String> paths = data.getLoader().getParameterList("path");
@@ -79,7 +88,7 @@ public class FileCallable implements Callable<IDataStreams> {
             String fileName = FilenameUtils.getName(path);
 
             // Check if it is a wildcard filter
-            if (fileName.contains("*") || fileName.contains("?")) {
+            if (path.contains("*") || path.contains("?")) {
 
                 // Is recursive?
                 IOFileFilter dirFilter = null;
@@ -88,7 +97,7 @@ public class FileCallable implements Callable<IDataStreams> {
                     path = path.replace("**/", "");
                 }
 
-                String sourceContainer = location + File.separator + FilenameUtils.getFullPathNoEndSeparator(path);
+                String sourceContainer = location + File.separator + basePath + FilenameUtils.getFullPathNoEndSeparator(path);
                 File sourceFile = new File(sourceContainer);
 
                 for (File file : (Collection<File>) FileUtils.listFiles(sourceFile, new WildcardFileFilter(fileName), dirFilter)) {
@@ -100,7 +109,7 @@ public class FileCallable implements Callable<IDataStreams> {
                 }
 
             } else {
-                String sourcePath = location + File.separator + path;
+                String sourcePath = location + File.separator + basePath + path;
                 File sourceFile = new File(sourcePath);
 
                 if (sourceFile.exists()) {
