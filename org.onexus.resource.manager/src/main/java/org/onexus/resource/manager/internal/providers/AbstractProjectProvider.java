@@ -166,7 +166,7 @@ public abstract class AbstractProjectProvider {
             for (Plugin plugin : project.getPlugins()) {
 
                 //TODO Remove this property
-                if (plugin.getParameter("location") == null) {
+                if (plugin.getParameter("location") == null && plugin.getParameters() != null) {
                     plugin.getParameters().add(new Parameter("location", projectFolder.getAbsolutePath()));
                 }
 
