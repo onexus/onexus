@@ -36,6 +36,7 @@ public class TsvEntity implements IEntity {
     private String line;
     private Map<String, Integer> headers;
     private Map<String, Field> fields;
+    private Map<String, String> staticFieldsValues;
 
     protected String NULL_CHAR = "-";
     protected String SEPARATOR = "\t";
@@ -89,6 +90,10 @@ public class TsvEntity implements IEntity {
         if (headers.containsKey(field.getId())) {
             Integer position = headers.get(field.getId());
             value = parseField(line, position);
+        } else {
+            if (staticFieldsValues.containsKey(field.getId())) {
+                value = staticFieldsValues.get(field.getId());
+            }
         }
 
         if (value == null) {
@@ -141,6 +146,14 @@ public class TsvEntity implements IEntity {
 
     public void setHeaders(Map<String, Integer> headers) {
         this.headers = headers;
+    }
+
+    public Map<String, String> getStaticFieldsValues() {
+        return staticFieldsValues;
+    }
+
+    public void setStaticFieldsValues(Map<String, String> staticFieldsValues) {
+        this.staticFieldsValues = staticFieldsValues;
     }
 
     protected String parseField(String str, int num) {

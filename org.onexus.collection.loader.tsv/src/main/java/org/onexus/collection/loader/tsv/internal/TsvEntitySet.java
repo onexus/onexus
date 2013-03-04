@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
@@ -73,23 +74,48 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
             throw new RuntimeException(e);
         }
 
-        // Read first line the headers
         try {
-            String firstLine;
-            firstLine = nextNonCommentLine();
+            String line = fr.readLine();
+
+            // Extract static fields
+            Map<String, String> staticFields = new HashMap<String, String>();
+            while(line != null && (line.isEmpty() || line.charAt(0) == '#')) {
+
+                if (line.length() > 2 && line.charAt(1) == '#') {
+                    addStaticField(staticFields, line.substring(2));
+                }
+
+                line = fr.readLine();
+            }
+            setStaticFieldsValues(staticFields);
+
+            // Extract header
             setHeaders(new HashMap<String, Integer>());
 
             int i = 0;
-            String header = parseField(firstLine, i);
+            String header = parseField(line, i);
             while (header != null) {
                 getHeaders().put(header, i);
                 i++;
-                header = parseField(firstLine, i);
+                header = parseField(line, i);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private static void addStaticField(Map<String, String> staticFields, String line) {
+
+        int equal = line.indexOf('=');
+        if (equal == -1) {
+            return;
+        }
+
+        String key = line.substring(0,equal).trim();
+        String value = line.substring(equal+1).trim();
+
+        staticFields.put(key, value);
     }
 
     @Override
@@ -148,7 +174,7 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
     private String nextNonCommentLine() throws IOException {
 
         String line = fr.readLine();
-        while(line != null && !line.isEmpty() && line.charAt(0) == '#') {
+        while(line != null && (line.isEmpty() || line.charAt(0) == '#')) {
             line = fr.readLine();
         }
 
