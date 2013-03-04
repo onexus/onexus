@@ -46,6 +46,16 @@ public abstract class AbstractPageCreator<C extends PageConfig, S extends PageSt
         resourceRegister.register(configType);
     }
 
+    private IResourceRegister resourceRegister;
+
+    public IResourceRegister getResourceRegister() {
+        return resourceRegister;
+    }
+
+    public void setResourceRegister(IResourceRegister resourceRegister) {
+        this.resourceRegister = resourceRegister;
+    }
+
     @Override
     public boolean canCreate(PageConfig config) {
         return configType.equals(config.getClass());

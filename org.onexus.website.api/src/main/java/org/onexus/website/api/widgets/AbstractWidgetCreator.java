@@ -39,6 +39,16 @@ public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends Wi
         resourceRegister.register(configType);
     }
 
+    private IResourceRegister resourceRegister;
+
+    public IResourceRegister getResourceRegister() {
+        return resourceRegister;
+    }
+
+    public void setResourceRegister(IResourceRegister resourceRegister) {
+        this.resourceRegister = resourceRegister;
+    }
+
     @Override
     public boolean canCreate(WidgetConfig config) {
         return configType.equals(config.getClass());

@@ -2,6 +2,16 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         >
 
+    <!-- Default decorator manager -->
+    <reference-list id="decoratorCreatorsRef"
+                    interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator"
+                    availability="optional"/>
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager"
+             ref="decoratorManager"/>
+    <bean id="decoratorManager" class="org.onexus.website.api.widgets.tableviewer.decorators.DefaultDecoratorManager">
+        <property name="creators" ref="decoratorCreatorsRef"/>
+    </bean>
+
     <!-- Default decorators -->
     <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.onexus.website.api.widgets.tableviewer.decorators.scale.BinaryDecoratorCreator"/>
