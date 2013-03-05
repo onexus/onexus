@@ -91,7 +91,6 @@ public class FiltersPanel extends EventPanel {
                     }
 
                 };
-                removeLink.setVisible(filter.isDeletable());
 
                 if (filter.isEnable()) {
                     container.add(new AttributeModifier("class", "btn btn-large"));
