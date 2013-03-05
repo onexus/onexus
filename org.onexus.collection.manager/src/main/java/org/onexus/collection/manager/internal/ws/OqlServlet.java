@@ -117,6 +117,7 @@ public class OqlServlet extends HttpServlet {
             writeRow(pw, result);
         }
 
+        result.close();
         pw.close();
         resp.flushBuffer();
     }

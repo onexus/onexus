@@ -18,10 +18,7 @@
 package org.onexus.website.api.pages.browser;
 
 import org.h2.util.StringUtils;
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.ICollectionManager;
-import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
@@ -194,7 +191,9 @@ public class FilterEntity implements IFilter {
         String entityField = collection.getProperty("FIXED_ENTITY_FIELD");
         String entityLabel = getEntityId();
         if (entityField != null) {
-            IEntity entity = new EntityIterator(getCollectionManager().load(new SingleEntityQuery(filteredCollection, getEntityId())), filteredCollection).next();
+            IEntityTable entityTable = getCollectionManager().load(new SingleEntityQuery(filteredCollection, getEntityId()));
+
+            IEntity entity = new EntityIterator(entityTable, filteredCollection).next();
 
             entityLabel = String.valueOf(entity.get(entityField));
 
@@ -202,15 +201,20 @@ public class FilterEntity implements IFilter {
                 entityLabel = getEntityId();
             }
 
+            entityTable.close();
         }
 
         String entityPattern = collection.getProperty("FIXED_ENTITY_PATTERN");
         if (entityPattern != null) {
-            IEntity entity = new EntityIterator(getCollectionManager().load(new SingleEntityQuery(filteredCollection, getEntityId())), filteredCollection).next();
+            IEntityTable entityTable = getCollectionManager().load(new SingleEntityQuery(filteredCollection, getEntityId()));
+
+            IEntity entity = new EntityIterator(entityTable, filteredCollection).next();
 
             if (entity != null) {
                 entityLabel = parseTemplate(entityPattern, entity);
             }
+
+            entityTable.close();
         }
 
         return entityLabel;
