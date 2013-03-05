@@ -24,6 +24,8 @@ public class Project extends Resource {
 
     private String name;
 
+    private String alias;
+
     private List<Plugin> plugins;
 
     public Project() {
@@ -36,6 +38,14 @@ public class Project extends Resource {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getURL() {

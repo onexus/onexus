@@ -28,6 +28,7 @@ import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.ResourceNotFoundException;
 import org.onexus.resource.api.exceptions.UnserializeException;
+import org.onexus.resource.api.utils.string.MapVariableInterpolator;
 import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,7 @@ public abstract class AbstractProjectProvider {
     private FileAlterationObserver observer;
 
     private Project project;
+    private Properties projectAlias;
     private Map<ORI, Resource> resources;
 
     private List<IResourceListener> listeners = new ArrayList<IResourceListener>();
@@ -179,6 +181,17 @@ public abstract class AbstractProjectProvider {
             }
         }
 
+        if (project.getAlias() != null && !project.getAlias().isEmpty()) {
+
+            this.projectAlias = new Properties();
+            try {
+                this.projectAlias.load(new StringReader(project.getAlias()));
+            } catch (IOException e) {
+                log.error("Malformed project alias", e);
+                this.projectAlias = null;
+            }
+        }
+
         this.resources = null;
     }
 
@@ -266,7 +279,14 @@ public abstract class AbstractProjectProvider {
 
             try {
 
-                resource = serializer.unserialize(Resource.class, new FileInputStream(resourceFile));
+                InputStream input = new FileInputStream(resourceFile);
+
+                if (this.projectAlias != null) {
+                    String content = MapVariableInterpolator.interpolate(convertStreamToString(input, "UTF-8"), this.projectAlias);
+                    input = new ByteArrayInputStream(content.getBytes("UTF-8"));
+                }
+
+                resource = serializer.unserialize(Resource.class, input);
 
             } catch (FileNotFoundException e) {
                 resource = createErrorResource(resourceFile, "File '" + resourceFile.getPath() + "' not found.");
@@ -293,6 +313,11 @@ public abstract class AbstractProjectProvider {
         resource.setORI(convertFileToORI(resourceFile));
         return resource;
 
+    }
+
+    public static String convertStreamToString(java.io.InputStream is, String charsetName) {
+        java.util.Scanner s = new java.util.Scanner(is, charsetName).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     private ORI convertFileToORI(File file) {
