@@ -39,20 +39,17 @@ Karaf distribution on a folder.
 
         karaf@root> features:install -v onexus-h2
 
-   The MySQL version:
+   The MySQL version (first configure the database, check the above configuration section):
 
         karaf@root> features:install -v onexus-mysql
 
-4. MySQL version needs to be configured, check the above configuration
-   section.
-
-5. Point your browser to the Onexus web interface on
+4. Point your browser to the Onexus web interface on
    [http://localhost:8181/ws](http://localhost:8181/ws).
    If you are using the default Karaf user configuration you'll be able to login
    with username "karaf" and password "karaf" (See users configuration section if you want to add,
    remove or change users and passwords).
 
-6. You can stop Onexus closing the Karaf console by pressing Ctrl + D.
+5. You can stop Onexus closing the Karaf console by pressing Ctrl + D.
 
 ## Configuration
 
