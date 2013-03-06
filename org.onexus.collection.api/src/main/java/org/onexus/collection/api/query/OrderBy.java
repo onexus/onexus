@@ -27,6 +27,9 @@ public class OrderBy implements Serializable {
 
     private boolean ascendent = true;
 
+    public OrderBy() {
+    }
+
     public OrderBy(String collection, String field) {
         this(collection, field, true);
     }
