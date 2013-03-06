@@ -80,6 +80,11 @@ public class SqlCollectionDDL {
                 while (fieldIt.hasNext()) {
                     String fromFieldId = LinkUtils.getFromFieldName(fieldIt.next());
                     ColumnInfo indexField = getColumnInfoByFieldName(fromFieldId);
+
+                    if (indexField == null) {
+                        throw new UnsupportedOperationException("Impossible to link field '" + fromFieldId + "' at '" + collection.getORI() + "'.");
+                    }
+
                     linkSQL.append("`").append(indexField.getColumnName()).append("`");
                     if (fieldIt.hasNext()) {
                         linkSQL.append(", ");
