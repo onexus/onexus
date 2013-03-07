@@ -22,14 +22,13 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.data.api.IDataStreams;
+import org.onexus.resource.api.Loader;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
@@ -40,15 +39,26 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
     public TsvEntitySet(IDataStreams dataStreams, Collection collection) {
         super(collection, "", -1);
 
-        NULL_CHAR = collection.getLoader().getParameter("NULL_VALUE");
-        SEPARATOR = collection.getLoader().getParameter("SEPARATOR");
+        Loader loader = collection.getLoader();
 
+        NULL_CHAR = loader.getParameter("NULL_VALUE");
         if (NULL_CHAR == null) {
             NULL_CHAR = "-";
         }
 
+        SEPARATOR = loader.getParameter("SEPARATOR");
         if (SEPARATOR == null) {
             SEPARATOR = "\t";
+        }
+
+        String FIELD_MAP = loader.getParameter("FIELD_MAP");
+        if (FIELD_MAP != null) {
+            Properties fieldMap = new Properties();
+            try {
+                fieldMap.load(new StringReader(FIELD_MAP));
+                setFieldIdToHeader(fieldMap);
+            } catch (IOException e) {
+            }
         }
 
         isIterator = dataStreams.iterator();

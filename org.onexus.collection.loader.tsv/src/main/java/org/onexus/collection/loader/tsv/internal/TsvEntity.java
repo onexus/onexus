@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class TsvEntity implements IEntity {
 
@@ -35,6 +36,7 @@ public class TsvEntity implements IEntity {
 
     private String line;
     private Map<String, Integer> headers;
+    private Properties fieldIdToHeader;
     private Map<String, Field> fields;
     private Map<String, String> staticFieldsValues;
 
@@ -87,12 +89,13 @@ public class TsvEntity implements IEntity {
 
         Field field = fields.get(fieldId);
         String value = null;
-        if (headers.containsKey(field.getId())) {
-            Integer position = headers.get(field.getId());
+        String header = getHeader( field.getId() );
+        if (headers.containsKey( header )) {
+            Integer position = headers.get( header );
             value = parseField(line, position);
         } else {
-            if (staticFieldsValues.containsKey(field.getId())) {
-                value = staticFieldsValues.get(field.getId());
+            if (staticFieldsValues.containsKey( header )) {
+                value = staticFieldsValues.get( header );
             }
         }
 
@@ -156,6 +159,14 @@ public class TsvEntity implements IEntity {
         this.staticFieldsValues = staticFieldsValues;
     }
 
+    public Properties getFieldIdToHeader() {
+        return fieldIdToHeader;
+    }
+
+    public void setFieldIdToHeader(Properties fieldIdToHeader) {
+        this.fieldIdToHeader = fieldIdToHeader;
+    }
+
     protected String parseField(String str, int num) {
 
         int start = -1;
@@ -177,6 +188,15 @@ public class TsvEntity implements IEntity {
 
         return result.replace('"', ' ').trim();
 
+    }
+
+    private String getHeader(String fieldId) {
+
+        if (fieldIdToHeader != null && fieldIdToHeader.containsKey(fieldId)) {
+            return fieldIdToHeader.getProperty(fieldId);
+        }
+
+        return fieldId;
     }
 
     @Override
