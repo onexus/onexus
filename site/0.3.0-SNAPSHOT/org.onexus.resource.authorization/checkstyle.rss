@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>org.onexus.resource.authorization - Checkstyle report</title>
+    <link>http://www.onexus.org/org.onexus.resource.authorization</link>
+    <description>org.onexus.resource.authorization - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2013 Onexus</copyright>
+    <item>
+      <title>File: 1,
+             Errors: 28,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://www.onexus.org/org.onexus.resource.authorization/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://www.onexus.org/org.onexus.resource.authorization/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.authorization/checkstyle.html#org.onexus.resource.authorization.internal.AuthorizationManager.java">org/onexus/resource/authorization/internal/AuthorizationManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  28
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
