@@ -41,6 +41,7 @@
 
         <!-- Project properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
 
     <packaging>pom</packaging>
@@ -60,10 +61,15 @@
         </license>
     </licenses>
 
+    <issueManagement>
+        <url>https://github.com/onexus/onexus/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
     <scm>
-        <connection>scm:git:git@github.com:onexus/onexus.git</connection>
+        <url>https://github.com/onexus/onexus</url>
+        <connection>scm:git:git://github.com/onexus/onexus.git</connection>
         <developerConnection>scm:git:git@github.com:onexus/onexus.git</developerConnection>
-        <url>git@github.com:onexus/onexus.git</url>
     </scm>
 
     <modules>
@@ -88,7 +94,7 @@
         <module>org.onexus.ui.api</module>
         <module>org.onexus.ui.workspace</module>
         <module>org.onexus.ui.website</module>
-	    <module>onexus-archetypes/widget</module>
+        <module>onexus-archetypes/widget</module>
         <module>onexus-features</module>
     </modules>
 
@@ -194,8 +200,9 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <skipDeploy>true</skipDeploy>
                     <reportPlugins>
-                        <plugin>
+                        <!--plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-surefire-report-plugin</artifactId>
                             <version>2.12.4</version>
@@ -228,17 +235,21 @@
                         </plugin>
 
                         <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>findbugs-maven-plugin</artifactId>
                             <version>2.3.1</version>
-                            <reportSets>
-                                <reportSet>
-                                    <reports>
-                                        <report>summary</report>
-                                        <report>license</report>
-                                    </reports>
-                                </reportSet>
-                            </reportSets>
+                        </plugin>
+
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>cobertura-maven-plugin</artifactId>
+                            <version>2.5.2</version>
+                        </plugin>
+
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-checkstyle-plugin</artifactId>
+                            <version>2.6</version>
                         </plugin>
 
                         <plugin>
@@ -272,28 +283,44 @@
                                     </reports>
                                 </reportSet>
                             </reportSets>
-                        </plugin>
-
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>findbugs-maven-plugin</artifactId>
-                            <version>2.3.1</version>
-                        </plugin>
-
-                        <plugin>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>cobertura-maven-plugin</artifactId>
-                            <version>2.5.2</version>
-                        </plugin>
+                        </plugin-->
 
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-checkstyle-plugin</artifactId>
-                            <version>2.6</version>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.3.1</version>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>summary</report>
+                                        <report>license</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
                         </plugin>
 
                     </reportPlugins>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.7</version>
+                <configuration>
+                    <message>Creating site for ${project.artifactId}, ${project.version}</message>
+                    <path>${project.distributionManagement.site.url}</path>
+                    <merge>true</merge>
+                    <server>github</server>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site-deploy</phase>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
@@ -429,18 +456,10 @@
 
     <distributionManagement>
         <site>
-            <id>website</id>
-            <url>scp://www.onexus.org/site</url>
+            <id>github-pages-site</id>
+            <name>Deployment through GitHub's site deployment plugin</name>
+            <url>site/${project.version}</url>
         </site>
-        <snapshotRepository>
-            <id>onexus-snapshots</id>
-            <url>http://repo.onexus.org/nexus/content/repositories/snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-        <repository>
-            <id>onexus-releases</id>
-            <url>http://repo.onexus.org/nexus/content/repositories/releases</url>
-        </repository>
     </distributionManagement>
 
 </project>
