@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>org.onexus.collection.api - Checkstyle report</title>
+    <link>http://www.onexus.org/org.onexus.collection.api</link>
+    <description>org.onexus.collection.api - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2013 Onexus</copyright>
+    <item>
+      <title>File: 34,
+             Errors: 722,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://www.onexus.org/org.onexus.collection.api/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.IQueryParser.java">org/onexus/collection/api/query/IQueryParser.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.NotEqual.java">org/onexus/collection/api/query/NotEqual.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.Not.java">org/onexus/collection/api/query/Not.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.ICollectionManager.java">org/onexus/collection/api/ICollectionManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.ICollectionStore.java">org/onexus/collection/api/ICollectionStore.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.types.Text.java">org/onexus/collection/api/types/Text.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.Query.java">org/onexus/collection/api/query/Query.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  93
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.Equal.java">org/onexus/collection/api/query/Equal.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.OrderBy.java">org/onexus/collection/api/query/OrderBy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  58
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.GreaterThanOrEqual.java">org/onexus/collection/api/query/GreaterThanOrEqual.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.Contains.java">org/onexus/collection/api/query/Contains.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.And.java">org/onexus/collection/api/query/And.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  6
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.utils.QueryUtils.java">org/onexus/collection/api/utils/QueryUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  26
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.utils.EntityIterator.java">org/onexus/collection/api/utils/EntityIterator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.Link.java">org/onexus/collection/api/Link.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.EqualId.java">org/onexus/collection/api/query/EqualId.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.BinaryFilter.java">org/onexus/collection/api/query/BinaryFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  32
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.Filter.java">org/onexus/collection/api/query/Filter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  22
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.IEntity.java">org/onexus/collection/api/IEntity.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.Field.java">org/onexus/collection/api/Field.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  54
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.In.java">org/onexus/collection/api/query/In.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.utils.EmptyEntitySet.java">org/onexus/collection/api/utils/EmptyEntitySet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.IsNull.java">org/onexus/collection/api/query/IsNull.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.Or.java">org/onexus/collection/api/query/Or.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.AtomicFilter.java">org/onexus/collection/api/query/AtomicFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  34
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.utils.FieldLink.java">org/onexus/collection/api/utils/FieldLink.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  56
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.LessThan.java">org/onexus/collection/api/query/LessThan.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.Collection.java">org/onexus/collection/api/Collection.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.IEntitySet.java">org/onexus/collection/api/IEntitySet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.utils.LinkUtils.java">org/onexus/collection/api/utils/LinkUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  33
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.LessThanOrEqual.java">org/onexus/collection/api/query/LessThanOrEqual.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.IEntityTable.java">org/onexus/collection/api/IEntityTable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.query.GreaterThan.java">org/onexus/collection/api/query/GreaterThan.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.api/checkstyle.html#org.onexus.collection.api.ICollectionLoader.java">org/onexus/collection/api/ICollectionLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
