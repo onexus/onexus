@@ -78,9 +78,6 @@
                                                                                       <li class="collapsed">
                           <a href="../project-info.html" title="Project Information">Project Information</a>
                   </li>
-                                                                                                                                                                                <li class="collapsed">
-                          <a href="../project-reports.html" title="Project Reports">Project Reports</a>
-                  </li>
           </ul>
                         <h3>Modules</h3>
                   <ul>
@@ -174,13 +171,9 @@
                                   
             <h1>Onexus installation</h1>
 
-<h2>Note</h2>
-
 <p>Onexus is under development and we still haven't released any final
 version, so you first need to <a href="compilation.html">compile</a> the source
 code.</p>
-
-<h2>Requirements</h2>
 
 <p>You need to install Karaf server from <a href="http://karaf.apache.org">http://karaf.apache.org</a>:</p>
 
@@ -193,8 +186,6 @@ install <strong>Java SE Development Kit 6</strong> from <a href="http://www.orac
 <p>Once you java Java installed to install  Karaf you only need to extract the
 Karaf distribution on a folder.</p>
 
-<h2>Installation</h2>
-
 <ol>
 <li><p>Start Karaf console:</p>
 
@@ -202,7 +193,7 @@ Karaf distribution on a folder.</p>
 </code></pre></li>
 <li><p>Install the Onexus features repository:</p>
 
-<pre><code>karaf@root&gt; features:addurl mvn:org.onexus/onexus-features/${project.version}/xml/features
+<pre><code>karaf@root&gt; features:addurl mvn:org.onexus/onexus-features/0.3.0-SNAPSHOT/xml/features
 </code></pre></li>
 <li><p>Now you can choose between H2 version and MySQL version. The H2
 version uses an embedded database so you won't need to do any extra
@@ -226,10 +217,6 @@ with username "karaf" and password "karaf" (See users configuration section if y
 remove or change users and passwords).</p></li>
 <li><p>You can stop Onexus closing the Karaf console by pressing Ctrl + D.</p></li>
 </ol>
-
-<h2>Configuration</h2>
-
-<h3>Config MySQL collection store</h3>
 
 <p>Follow this steps to install <a href="http://www.mysql.com">MySQL</a> as default
 data store.</p>
@@ -258,8 +245,6 @@ password = onexus
 </code></pre></li>
 <li><p>Start Karaf.</p></li>
 </ol>
-
-<h3>Users authentication system</h3>
 
 <p>The default configuration stores the users, passwords and roles into
 <strong>/etc/users.properties</strong> file. If you want to use other systems (like
