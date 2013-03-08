@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2013-03-08T08:22:33.657">
+<pmd version="4.3" timestamp="2013-03-08T10:30:49.697">
 <file name="/home/jordi/workspace-2013/onexus/org.onexus.collection.api/src/main/java/org/onexus/collection/api/utils/LinkUtils.java">
 <violation beginline="88" endline="91" begincolumn="13" endcolumn="13" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.onexus.collection.api.utils" class="LinkUtils" method="getLinkFields" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
@@ -60,15 +60,15 @@ Avoid using java.lang.ThreadGroup; it is not thread safe
 </violation>
 </file>
 <file name="/home/jordi/workspace-2013/onexus/org.onexus.ui.api/src/main/java/org/onexus/ui/api/pages/SignOutPage.java">
-<violation beginline="23" endline="27" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.onexus.ui.api.pages" class="SignOutPage" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+<violation beginline="40" endline="44" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.onexus.ui.api.pages" class="SignOutPage" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused constructor parameters such as 'parameters'.
 </violation>
 </file>
 <file name="/home/jordi/workspace-2013/onexus/org.onexus.ui.authentication.persona/src/main/java/org/onexus/ui/authentication/persona/SessionHelper.java">
-<violation beginline="59" endline="59" begincolumn="9" endcolumn="9" rule="EmptyStatementNotInLoop" ruleset="Basic Rules" package="org.onexus.ui.authentication.persona" class="SessionHelper" method="logIn" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyStatementNotInLoop" priority="3">
+<violation beginline="76" endline="76" begincolumn="9" endcolumn="9" rule="EmptyStatementNotInLoop" ruleset="Basic Rules" package="org.onexus.ui.authentication.persona" class="SessionHelper" method="logIn" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyStatementNotInLoop" priority="3">
 An empty statement (semicolon) not part of a loop
 </violation>
-<violation beginline="73" endline="73" begincolumn="9" endcolumn="9" rule="EmptyStatementNotInLoop" ruleset="Basic Rules" package="org.onexus.ui.authentication.persona" class="SessionHelper" method="logOut" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyStatementNotInLoop" priority="3">
+<violation beginline="90" endline="90" begincolumn="9" endcolumn="9" rule="EmptyStatementNotInLoop" ruleset="Basic Rules" package="org.onexus.ui.authentication.persona" class="SessionHelper" method="logOut" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyStatementNotInLoop" priority="3">
 An empty statement (semicolon) not part of a loop
 </violation>
 </file>
@@ -88,12 +88,12 @@ These nested if statements could be combined
 </violation>
 </file>
 <file name="/home/jordi/workspace-2013/onexus/org.onexus.website.api/src/main/java/org/onexus/website/api/utils/panels/NotAuthorizedPage.java">
-<violation beginline="27" endline="36" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.onexus.website.api.utils.panels" class="NotAuthorizedPage" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+<violation beginline="44" endline="53" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.onexus.website.api.utils.panels" class="NotAuthorizedPage" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused constructor parameters such as 'parameters'.
 </violation>
 </file>
 <file name="/home/jordi/workspace-2013/onexus/org.onexus.website.api/src/main/java/org/onexus/website/api/utils/panels/SignOutPage.java">
-<violation beginline="23" endline="27" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.onexus.website.api.utils.panels" class="SignOutPage" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+<violation beginline="40" endline="44" begincolumn="12" endcolumn="5" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.onexus.website.api.utils.panels" class="SignOutPage" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused constructor parameters such as 'parameters'.
 </violation>
 </file>
