@@ -25,13 +25,8 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
-import org.onexus.resource.api.IProgressManager;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.Loader;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Progress;
-import org.onexus.resource.api.Project;
+import org.onexus.resource.api.*;
+import org.onexus.resource.api.utils.ResourceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,11 +62,37 @@ public class CollectionManager implements ICollectionManager {
         this.executorService = Executors.newFixedThreadPool(maxThreads);
     }
 
-    public void init() {		/* TODO
-        if (executorService instanceof ThreadPoolExecutor) {
-            ((ThreadPoolExecutor) executorService).setMaximumPoolSize(maxThreads);
+    public void init() {
+
+        resourceManager.addResourceListener(new ResourceListener() {
+            @Override
+            public void onProjectDelete(Project project) {
+
+                // Unload all the collections
+                unloadCollections(project.getORI());
+
+            }
+        });
+
+    }
+
+    /**
+     * Unload recursively all the collections inside the given ORI.
+     *
+     * @param container The ORI url of the root container
+     */
+    private void unloadCollections(ORI container) {
+
+        List<Collection> collections = resourceManager.loadChildren(Collection.class, container);
+        for (Collection collection : collections) {
+            unload(collection.getORI());
         }
-        */
+
+        List<Folder> folders = resourceManager.loadChildren(Folder.class, container);
+        for(Folder folder : folders) {
+            unloadCollections(folder.getORI());
+        }
+
     }
 
     @Override
@@ -194,8 +215,6 @@ public class CollectionManager implements ICollectionManager {
     public void unload(ORI collectionURI) {
 
         if (collectionStore.isRegistered(collectionURI)) {
-            // If in future exist multiple collectionStores this action makes
-            // not sense!
             collectionStore.deregister(collectionURI);
         }
     }

@@ -24,12 +24,15 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.Project;
 import org.onexus.website.api.Connection;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteSession;
 import org.onexus.website.api.WebsiteStatus;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventQueryUpdate;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +40,9 @@ import java.util.List;
 public class ConnectionsPanel extends EventPanel {
 
     private List<Connection> connections;
+
+    @PaxWicketBean(name = "resourceManager")
+    private IResourceManager resourceManager;
 
     public ConnectionsPanel(String id, List<Connection> connections) {
         super(id);
@@ -92,18 +98,37 @@ public class ConnectionsPanel extends EventPanel {
         RepeatingView userProjects = new RepeatingView("user");
         addOrReplace(userProjects);
 
-        //TODO Use an user projects manager
-        if (WebsiteSession.get().getRoles().hasRole("tester")) {
-            WebMarkupContainer connectionItem = new WebMarkupContainer(userProjects.newChildId());
-            if (website.getConfig().getORI().getProjectUrl().endsWith("snp_hopkins_breast")) {
-                connectionItem.add(new AttributeModifier("class", "active"));
+        // Add private projects
+        divider.setVisible(false);
+        if (WebsiteSession.get().isSignedIn()) {
+
+            List<Project> projects = resourceManager.getProjects();
+
+            for (Project project : projects) {
+
+                String projectUrl = project.getURL();
+                String userName = WebsiteSession.get().getUserName();
+
+                if (projectUrl.startsWith("private://" + userName)) {
+
+                    WebMarkupContainer connectionItem = new WebMarkupContainer(userProjects.newChildId());
+                    if (website.getConfig().getORI().getProjectUrl().equals(projectUrl)) {
+                        connectionItem.add(new AttributeModifier("class", "active"));
+                    }
+
+                    String projectName = project.getName();
+                    String projectTitle = projectName.substring(projectName.indexOf('/')+1);
+
+                    ExternalLink link = new ExternalLink("url", "/web/"+ projectName + "/v01" + urlPath);
+                    link.add(new Label("title", projectTitle));
+                    connectionItem.add(link);
+                    userProjects.add(connectionItem);
+                    divider.setVisible(true);
+                }
+
+
             }
-            ExternalLink link = new ExternalLink("url", "/web/snp_hopkins_breast/website" + urlPath);
-            link.add(new Label("title", "Breast and colorectal cancer"));
-            connectionItem.add(link);
-            userProjects.add(connectionItem);
-        } else {
-            divider.setVisible(false);
+
         }
 
     }

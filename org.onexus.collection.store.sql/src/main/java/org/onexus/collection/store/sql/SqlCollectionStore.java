@@ -17,12 +17,7 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.ICollectionStore;
-import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntitySet;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
@@ -97,7 +92,9 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     }
 
     private String getProperty(String propertyKey) {
-        return propertiesMap.get(propertyKey);
+        synchronized (propertiesMap) {
+            return propertiesMap.get(propertyKey);
+        }
     }
 
 
@@ -106,46 +103,49 @@ public abstract class SqlCollectionStore implements ICollectionStore {
         LOGGER.debug("Registering collection {}", collectionURI);
 
         // Rebuild always the DDL before registering
-        ddls.put(collectionURI, new SqlCollectionDDL(sqlDialect,
-                getCollection(collectionURI), getProperty(collectionURI.toString())));
+        ddls.put(collectionURI, new SqlCollectionDDL(sqlDialect, getCollection(collectionURI), getProperty(collectionURI.toString())));
 
         SqlCollectionDDL ddl = getDDL(collectionURI);
+
         Connection conn = null;
         try {
-            conn = dataSource.getConnection();
+            synchronized (propertiesMap) {
+                conn = dataSource.getConnection();
 
-            String dropTable = ddl.getDropTable();
-            LOGGER.debug(dropTable);
-            try {
-                sqlDialect.execute(conn, dropTable);
-            } catch (Exception e) {
-                LOGGER.debug("Error droping table '" + dropTable + "' at register()", e);
-            }
-
-            List<String> dropIndex = ddl.getDropIndex();
-            for (String indexSQL : dropIndex) {
-                LOGGER.debug(indexSQL);
+                String dropTable = ddl.getDropTable();
+                LOGGER.debug(dropTable);
                 try {
-                    sqlDialect.execute(conn, indexSQL);
+                    sqlDialect.execute(conn, dropTable);
                 } catch (Exception e) {
-                    LOGGER.debug("Error creating index for table '" + dropTable + "' at register()", e);
+                    LOGGER.debug("Error droping table '" + dropTable + "' at register()", e);
                 }
+
+                List<String> dropIndex = ddl.getDropIndex();
+                for (String indexSQL : dropIndex) {
+                    LOGGER.debug(indexSQL);
+                    try {
+                        sqlDialect.execute(conn, indexSQL);
+                    } catch (Exception e) {
+                        LOGGER.debug("Error creating index for table '" + dropTable + "' at register()", e);
+                    }
+                }
+
+
+                String createTable = ddl.getCreateTable();
+                LOGGER.debug(createTable);
+                sqlDialect.execute(conn, createTable);
+
+                List<String> createIndex = ddl.getCreateIndex();
+                for (String indexSQL : createIndex) {
+                    LOGGER.debug(indexSQL);
+                    sqlDialect.execute(conn, indexSQL);
+                }
+
+                sqlDialect.createSystemPropertiesTable(conn, false);
+                sqlDialect.saveProperty(conn, collectionURI.toString(), ddl.getTableName());
+                propertiesMap.put(collectionURI.toString(), ddl.getTableName());
             }
 
-
-            String createTable = ddl.getCreateTable();
-            LOGGER.debug(createTable);
-            sqlDialect.execute(conn, createTable);
-
-            List<String> createIndex = ddl.getCreateIndex();
-            for (String indexSQL : createIndex) {
-                LOGGER.debug(indexSQL);
-                sqlDialect.execute(conn, indexSQL);
-            }
-
-            sqlDialect.createSystemPropertiesTable(conn, false);
-            sqlDialect.saveProperty(conn, collectionURI.toString(), ddl.getTableName());
-            propertiesMap.put(collectionURI.toString(), ddl.getTableName());
 
         } catch (Exception e) {
             String msg = String.format(
@@ -172,12 +172,15 @@ public abstract class SqlCollectionStore implements ICollectionStore {
         String tableName = null;
         try {
 
-            conn = dataSource.getConnection();
+            synchronized (propertiesMap) {
+                conn = dataSource.getConnection();
 
-            tableName = sqlDialect.loadProperty(conn, collectionURI.toString());
-            sqlDialect.removeProperty(conn, collectionURI.toString());
-            propertiesMap.remove(collectionURI.toString());
-            sqlDialect.execute(conn, "DROP TABLE `" + tableName + "`");
+                tableName = sqlDialect.loadProperty(conn, collectionURI.toString());
+                sqlDialect.removeProperty(conn, collectionURI.toString());
+
+                sqlDialect.execute(conn, "DROP TABLE `" + tableName + "`");
+                propertiesMap.remove(collectionURI.toString());
+            }
 
         } catch (Exception e) {
             String msg = String.format(

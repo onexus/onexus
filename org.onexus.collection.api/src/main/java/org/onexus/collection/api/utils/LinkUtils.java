@@ -84,11 +84,9 @@ public class LinkUtils {
         }
 
         // Check that all A primary keys are linked
-        if (!fieldToLink.isEmpty()) {
-            if (areAllPrimaryKeyLinked(a.getFields(), fieldToLink)) {
-                fieldLinks.addAll(fieldToLink.values());
-                return fieldLinks;
-            }
+        if (!fieldToLink.isEmpty() && areAllPrimaryKeyLinked(a.getFields(), fieldToLink)) {
+            fieldLinks.addAll(fieldToLink.values());
+            return fieldLinks;
         }
 
         // Case 2: All the primary fields of A has a link to collections linked

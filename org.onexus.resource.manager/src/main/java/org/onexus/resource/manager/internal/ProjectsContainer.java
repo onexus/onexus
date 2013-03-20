@@ -238,14 +238,9 @@ public class ProjectsContainer {
     private void onProjectDelete(final Project project) {
         log.info("Project '" + project.getName() + "' deleted.");
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (IResourceListener listener : listeners) {
-                    listener.onProjectDelete(project);
-                }
-            }
-        }).start();
+        for (IResourceListener listener : listeners) {
+            listener.onProjectDelete(project);
+        }
     }
 
     public void bundleCreated(long bundleId) {

@@ -11,6 +11,7 @@
     <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
     <bean id="websiteService" class="org.onexus.website.api.WebsiteService">
         <property name="resourceManager" ref="resourceManager"/>
+        <property name="collectionManager" ref="collectionManager"/>
         <property name="context" ref="blueprintBundleContext"/>
         <property name="signInPages" ref="signInPages"/>
     </bean>

@@ -19,6 +19,10 @@ package org.onexus.website.api;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.Folder;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
@@ -44,6 +48,8 @@ public class WebsiteService implements IWebsiteService {
     private static final Logger log = LoggerFactory.getLogger(WebsiteService.class);
 
     private IResourceManager resourceManager;
+    private ICollectionManager collectionManager;
+
     private List<ISignInPage> signInPages;
 
     private BundleContext context;
@@ -147,6 +153,33 @@ public class WebsiteService implements IWebsiteService {
 
         log.info("Registering website /web/" + name);
 
+        // Force to load all the collections inside the website project
+        loadCollections(new ORI(website.getORI().getProjectUrl()));
+
+    }
+
+    /**
+     * Load recursively all the collections inside the given ORI.
+     *
+     * @param container The ORI url of the root container
+     */
+    private void loadCollections(ORI container) {
+
+        List<Collection> collections = resourceManager.loadChildren(Collection.class, container);
+        for (Collection collection : collections) {
+            Query emptyQuery = new Query();
+            emptyQuery.addDefine("c", collection.getORI());
+            emptyQuery.setFrom("c");
+            emptyQuery.setOffset(0);
+            emptyQuery.setCount(0);
+            collectionManager.load(emptyQuery);
+        }
+
+        List<Folder> folders = resourceManager.loadChildren(Folder.class, container);
+        for(Folder folder : folders) {
+            loadCollections(folder.getORI());
+        }
+
     }
 
     private Class<? extends WebPage> getSignInPageClass(WebsiteConfig website) {
@@ -184,6 +217,14 @@ public class WebsiteService implements IWebsiteService {
 
     public void setResourceManager(IResourceManager resourceManager) {
         this.resourceManager = resourceManager;
+    }
+
+    public ICollectionManager getCollectionManager() {
+        return collectionManager;
+    }
+
+    public void setCollectionManager(ICollectionManager collectionManager) {
+        this.collectionManager = collectionManager;
     }
 
     public List<ISignInPage> getSignInPages() {
