@@ -74,17 +74,17 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
         // Config parameters
         int maxActive = 8;
         try {
-            maxActive = Integer.valueOf(getPoolMaxActive()).intValue();
+            maxActive = Integer.valueOf(getPoolMaxActive().trim()).intValue();
         } catch (Exception e) {
             log.error("Malformed config parameter 'poolMaxActive'");
         }
 
         byte whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_BLOCK;
         try {
-            if (getPoolWhenExhausted().equalsIgnoreCase("FAIL")) {
+            if (getPoolWhenExhausted().trim().equalsIgnoreCase("FAIL")) {
                 whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_FAIL;
             }
-            if (getPoolWhenExhausted().equalsIgnoreCase("GROW")) {
+            if (getPoolWhenExhausted().trim().equalsIgnoreCase("GROW")) {
                 whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_GROW;
             }
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
 
         long maxWait = GenericObjectPool.DEFAULT_MAX_WAIT;
         try {
-            maxWait = Long.valueOf(getPoolMaxWait()).longValue();
+            maxWait = Long.valueOf(getPoolMaxWait().trim()).longValue();
         } catch (Exception e) {
             log.error("Malformed config parameter 'poolMaxWait'");
         }
