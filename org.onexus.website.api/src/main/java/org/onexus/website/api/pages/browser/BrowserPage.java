@@ -92,15 +92,21 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                     link.add(new AttributeModifier("class", "dropdown-toggle"));
                     link.add(new AttributeModifier("data-toggle", "dropdown"));
                     link.add(new AttributeModifier("href", "#"));
-                    link.add(new Label("label", tabGroup.getGroupLabel() + "<b class='caret'></b>").setEscapeModelStrings(false));
-
-                    item.add(link);
+                    link.add(new AttributeModifier("style", "min-width:80px;"));
 
                     if (tabGroup.containsTab(getStatus().getCurrentTabId())) {
                         item.add(new AttributeModifier("class", "dropdown active"));
+
+                        TabConfig currentTab = getConfig().getTab(getStatus().getCurrentTabId());
+                        String currentLabel = "<div style=\"position:relative;\"><div style=\"white-space: nowrap; position:absolute; left:13px; top: 13px; font-size: 9px;\"><em>" + currentTab.getTitle() + "</em></div></div>";
+                        link.add(new Label("label", currentLabel + "<b class='caret'></b>&nbsp;" + tabGroup.getGroupLabel()).setEscapeModelStrings(false));
+
                     } else {
                         item.add(new AttributeModifier("class", "dropdown"));
+                        link.add(new Label("label", "<b class='caret'></b>&nbsp;" + tabGroup.getGroupLabel()).setEscapeModelStrings(false));
                     }
+                    item.add(link);
+
 
                     WebMarkupContainer submenu = new WebMarkupContainer("submenu");
                     submenu.add(new ListView<TabConfig>("item", tabGroup.getTabConfigs()) {
