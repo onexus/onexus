@@ -19,6 +19,7 @@ package org.onexus.website.api.pages.browser;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -92,13 +93,13 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                     link.add(new AttributeModifier("class", "dropdown-toggle"));
                     link.add(new AttributeModifier("data-toggle", "dropdown"));
                     link.add(new AttributeModifier("href", "#"));
-                    link.add(new AttributeModifier("style", "min-width:80px;"));
 
                     if (tabGroup.containsTab(getStatus().getCurrentTabId())) {
                         item.add(new AttributeModifier("class", "dropdown active"));
 
                         TabConfig currentTab = getConfig().getTab(getStatus().getCurrentTabId());
-                        String currentLabel = "<div style=\"position:relative;\"><div style=\"white-space: nowrap; position:absolute; left:13px; top: 13px; font-size: 9px;\"><em>" + currentTab.getTitle() + "</em></div></div>";
+                        String tabTitle = StringUtils.abbreviate(currentTab.getTitle(), 14);
+                        String currentLabel = "<div style=\"position:relative;\"><div style=\"white-space: nowrap; position:absolute; left:13px; top: 13px; font-size: 9px;\"><em>" + tabTitle + "</em></div></div>";
                         link.add(new Label("label", currentLabel + "<b class='caret'></b>&nbsp;" + tabGroup.getGroupLabel()).setEscapeModelStrings(false));
 
                     } else {

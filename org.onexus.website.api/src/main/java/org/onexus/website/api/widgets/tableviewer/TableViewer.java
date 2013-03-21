@@ -27,6 +27,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
@@ -36,11 +37,13 @@ import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
+import org.onexus.website.api.utils.visible.IVisible;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
@@ -77,16 +80,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
 
             @Override
             protected void addTaskStatus(Progress progressStatus) {
-
-                /*TODO
-                ActiveProgress activeProgress = Session.get().getMetaData(ProgressBar.TASKS);
-                if (activeProgress == null) {
-                    activeProgress = new ActiveProgress();
-                    Session.get().setMetaData(ProgressBar.TASKS, activeProgress);
-                }
-                for (Progress progress : progressStatus.getSubProgresses()) {
-                    activeProgress.addTask(progress);
-                } */
+                //TODO
             }
 
         };
@@ -101,15 +95,26 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         List<IColumnConfig> visibleColumnsConfig = new ArrayList<IColumnConfig>(columnsConfig.size());
         BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
 
+        Predicate sortablePredicate;
         if (pageStatus != null) {
+            sortablePredicate = new VisiblePredicate(getPageBaseOri(), pageStatus.getFilters());
             Predicate filter = new VisiblePredicate(getPageBaseOri(), pageStatus.getFilters());
             CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
         } else {
+            sortablePredicate = new VisiblePredicate(getPageBaseOri(), Collections.EMPTY_LIST);
             visibleColumnsConfig = columnsConfig;
         }
 
+        boolean tableSort = sortablePredicate.evaluate(getConfig().getSortable());
         for (IColumnConfig columnConfig : visibleColumnsConfig) {
-            columnConfig.addColumns(columns, parentURI);
+            String columnSortStr = columnConfig.getSortable();
+            boolean columnSort = sortablePredicate.evaluate(columnSortStr);
+            columnConfig.addColumns(columns, parentURI, (Strings.isEmpty(columnSortStr) ? tableSort : columnSort));
+        }
+
+        // Disable default status order if the table is not sortable.
+        if (!tableSort) {
+            getStatus().setOrder(null);
         }
 
         add(new OnDomReadyPanel("datatable") {
@@ -134,6 +139,20 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(TABLE_VIEWER_CSS));
+    }
+
+    private static class VisibleWrapper implements IVisible {
+
+        private String value;
+
+        private VisibleWrapper(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String getVisible() {
+            return value;
+        }
     }
 
 }

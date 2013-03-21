@@ -30,14 +30,16 @@ public class FieldHeader extends ElementHeader {
     private String defaultTitle;
     private Collection collection;
     private Field field;
+    private boolean sortable;
 
-    public FieldHeader(String defaultLabel, String defaultTitle, Collection collection, Field field, IHeader parentHeader) {
+    public FieldHeader(String defaultLabel, String defaultTitle, Collection collection, Field field, IHeader parentHeader, boolean sortable) {
         super(field, parentHeader, new StringFormater(getMaxLength(field),
                 false));
         this.defaultLabel = defaultLabel;
         this.defaultTitle = defaultTitle;
         this.field = field;
         this.collection = collection;
+        this.sortable = sortable;
     }
 
     @Override
@@ -72,8 +74,7 @@ public class FieldHeader extends ElementHeader {
 
     @Override
     public boolean isSortable() {
-        String annotation = field.getProperty("SORTABLE");
-        return (annotation == null ? true : annotation.equalsIgnoreCase("TRUE"));
+        return sortable;
     }
 
     public static int getMaxLength(Field attribute) {

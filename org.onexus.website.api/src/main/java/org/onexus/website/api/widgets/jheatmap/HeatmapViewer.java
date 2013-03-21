@@ -75,13 +75,13 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
         ORI parentUri = getPageBaseOri();
         for (ColumnConfig column : getConfig().getColumns()) {
-            column.addColumns(columns, parentUri);
+            column.addColumns(columns, parentUri, false);
         }
         int lastColumnFields = columns.size();
         columns.clear();
 
         for (ColumnConfig row : getConfig().getRows()) {
-            row.addColumns(columns, parentUri);
+            row.addColumns(columns, parentUri, false);
         }
         int lastRowFields = lastColumnFields + columns.size();
         columns.clear();

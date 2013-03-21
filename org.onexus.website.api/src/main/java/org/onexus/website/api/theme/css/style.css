@@ -106,6 +106,13 @@ ul.breadcrumb {
    font-weight: bold;
 }
 
+#tabs ul.nav > li > a {
+    border-top: 1px dotted #EEE;
+    border-left: 1px dotted #EEE;
+    border-right: 1px dotted #EEE;
+    min-width: 80px;
+}
+
 #tabs ul.nav > li.open > a {
    color: black;
 }

@@ -28,8 +28,10 @@ import java.util.List;
 
 public interface IColumnConfig extends IVisible, Serializable {
 
+    public String getSortable();
+
     public void buildQuery(Query query);
 
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI);
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI, boolean sortable);
 
 }

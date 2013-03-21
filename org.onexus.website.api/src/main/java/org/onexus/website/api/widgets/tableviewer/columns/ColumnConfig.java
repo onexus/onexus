@@ -58,6 +58,8 @@ public class ColumnConfig implements IColumnConfig {
 
     private String visible;
 
+    private String sortable;
+
     public ColumnConfig() {
         super();
     }
@@ -135,7 +137,16 @@ public class ColumnConfig implements IColumnConfig {
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI) {
+    public String getSortable() {
+        return sortable;
+    }
+
+    public void setSortable(String sortable) {
+        this.sortable = sortable;
+    }
+
+    @Override
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI, boolean sortable) {
 
         ORI collectionURI = collection.toAbsolute(parentURI);
         Collection collection = getResourceManager().load(Collection.class, collectionURI);
@@ -148,7 +159,7 @@ public class ColumnConfig implements IColumnConfig {
                     IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                     List<IDecorator> actionsImpl = createActions(collection, field);
 
-                    columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
+                    columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection), sortable), decoratorImpl, actionsImpl));
                 }
             } else {
                 Field field = fields.get(0);
@@ -157,7 +168,7 @@ public class ColumnConfig implements IColumnConfig {
                 List<IDecorator> actionsImpl = createActions(collection, field);
                 decoratorImpl.setTemplate(template);
 
-                columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection)), decoratorImpl, actionsImpl));
+                columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection), sortable), decoratorImpl, actionsImpl));
             }
         }
     }

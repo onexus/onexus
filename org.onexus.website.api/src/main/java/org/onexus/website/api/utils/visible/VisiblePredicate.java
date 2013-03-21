@@ -40,13 +40,16 @@ public class VisiblePredicate implements Predicate {
     @Override
     public boolean evaluate(Object object) {
 
-        IVisible visible = (IVisible) object;
-
         if (object == null) {
             return true;
         }
 
-        String visibleQuery = visible.getVisible();
+        String visibleQuery;
+        if (object instanceof IVisible) {
+            visibleQuery = ((IVisible) object).getVisible();
+        } else {
+            visibleQuery = object.toString();
+        }
 
         if (StringUtils.isEmpty(visibleQuery)) {
             return true;

@@ -32,6 +32,8 @@ public class TableViewerConfig extends WidgetConfig {
 
     private TableViewerStatus defaultStatus;
 
+    private String sortable;
+
     @XStreamImplicit(itemFieldName = "columnset")
     private List<ColumnSet> columnSets = new ArrayList<ColumnSet>();
 
@@ -58,6 +60,14 @@ public class TableViewerConfig extends WidgetConfig {
 
     public void setColumnSets(List<ColumnSet> columnSets) {
         this.columnSets = columnSets;
+    }
+
+    public String getSortable() {
+        return sortable;
+    }
+
+    public void setSortable(String sortable) {
+        this.sortable = sortable;
     }
 
     @Override

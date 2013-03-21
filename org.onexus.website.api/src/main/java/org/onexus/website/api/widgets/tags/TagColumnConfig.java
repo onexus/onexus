@@ -33,6 +33,8 @@ public class TagColumnConfig implements IColumnConfig {
 
     private String visible;
 
+    private String sortable;
+
     public TagColumnConfig() {
         super();
     }
@@ -60,12 +62,21 @@ public class TagColumnConfig implements IColumnConfig {
     }
 
     @Override
+    public String getSortable() {
+        return sortable;
+    }
+
+    public void setSortable(String sortable) {
+        this.sortable = sortable;
+    }
+
+    @Override
     public void buildQuery(Query query) {
         // Nothing to add
     }
 
     @Override
-    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI) {
+    public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI, boolean sortable) {
         columns.add(new TagColumn(collection));
     }
 
