@@ -30,6 +30,7 @@ public class TabConfig implements Serializable, IVisible {
 
     private String id;
     private String title;
+    private String help;
     private String visible;
     private String group;
 
@@ -53,6 +54,14 @@ public class TabConfig implements Serializable, IVisible {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getHelp() {
+        return help;
+    }
+
+    public void setHelp(String help) {
+        this.help = help;
     }
 
     public String getVisible() {

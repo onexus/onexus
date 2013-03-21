@@ -32,6 +32,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventRemoveFilter;
@@ -120,6 +121,12 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
                             };
 
+                            if (!Strings.isEmpty(tab.getHelp())) {
+                                item.add(new AttributeModifier("rel", "tooltip"));
+                                item.add(new AttributeModifier("data-placement", "right"));
+                                item.add(new AttributeModifier("title", tab.getHelp()));
+                            }
+
                             link.add(new Label("label", tab.getTitle()));
                             item.add(link);
 
@@ -143,6 +150,11 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                         }
 
                     };
+
+                    if (!Strings.isEmpty(tab.getHelp())) {
+                        link.add(new AttributeModifier("rel", "tooltip"));
+                        link.add(new AttributeModifier("title", tab.getHelp()));
+                    }
 
                     link.add(new Label("label", tab.getTitle()));
                     item.add(link);
