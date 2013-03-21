@@ -36,6 +36,8 @@ import org.onexus.website.api.widgets.filters.BrowserFilter;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
@@ -179,7 +181,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             defaultStatus = getConfig().createEmptyStatus();
         }
 
-        if (!global) {
+        //if (!global) {
             if (!StringUtils.equals(currentTabId, defaultStatus.getCurrentTabId())) {
                 parameters.add(keyPrefix + "tab", currentTabId);
             }
@@ -188,7 +190,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
                     getConfig().getTab(currentTabId).getViews().size() > 1) {
                 parameters.add(keyPrefix + "view", currentView);
             }
-        }
+        //}
 
         ORI parentOri = getORI();
         for (IFilter filter : filters) {
@@ -209,6 +211,23 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         StringValue currentTabId = parameters.get(keyPrefix + "tab");
         if (!currentTabId.isEmpty()) {
             this.currentTabId = currentTabId.toString();
+
+            // Check that is a valid tabId
+            if (getConfig().getTab(this.currentTabId) == null) {
+
+                // Look for the more similar tab id
+                List<TabConfig> tabs = new ArrayList<TabConfig>(getConfig().getTabs());
+                Collections.sort(tabs, new Comparator<TabConfig>() {
+                    @Override
+                    public int compare(TabConfig o1, TabConfig o2) {
+                           Integer v1 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentTabId, o1.getId());
+                           Integer v2 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentTabId, o2.getId());
+
+                           return v1.compareTo(v2);
+                    }
+                });
+                this.currentTabId = tabs.get(0).getId();
+            }
         }
 
         StringValue currentView = parameters.get(keyPrefix + "view");
