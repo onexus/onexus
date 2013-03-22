@@ -36,7 +36,8 @@ public class GuestPanel extends Panel
 
     private static final long serialVersionUID = 1L;
 
-    public static JavaScriptHeaderItem INCLUDE = JavaScriptHeaderItem.forReference(new PackageResourceReference(GuestPanel.class, "include.js"));
+    //public static JavaScriptHeaderItem INCLUDE = JavaScriptHeaderItem.forReference(new PackageResourceReference(GuestPanel.class, "include.js"));
+    public static JavaScriptHeaderItem INCLUDE = JavaScriptHeaderItem.forUrl("https://login.persona.org/include.js");
 
     private static final ResourceReference RED_ICON = new PackageResourceReference(
             GuestPanel.class, "sign_in_red.png");
