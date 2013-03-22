@@ -37,7 +37,7 @@ import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.PageStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import java.util.List;
+import java.util.Collection;
 
 public class FiltersPanel extends EventPanel {
 
@@ -61,15 +61,13 @@ public class FiltersPanel extends EventPanel {
 
         RepeatingView filterRules = new RepeatingView("filter");
 
-        List<IFilter> filters = getBrowserPage().getFilters();
+        Collection<IFilter> filters = getBrowserPage().getFilters();
 
         if (filters != null && !filters.isEmpty()) {
 
             Query query = getQuery();
 
-            for (int i = 0; i < filters.size(); i++) {
-
-                IFilter filter = filters.get(i);
+            for (IFilter filter : filters) {
 
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
@@ -81,12 +79,11 @@ public class FiltersPanel extends EventPanel {
 
                 //TODO container.add(filter.getTooltip("box", query));
 
-                BrowserPageLink<Integer> removeLink = new BrowserPageLink<Integer>("remove", Model.of(i)) {
+                BrowserPageLink<ORI> removeLink = new BrowserPageLink<ORI>("remove", Model.of(filter.getFilteredCollection())) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        Integer pos = getModelObject();
-                        getBrowserPageStatus().getFilters().remove(pos.intValue());
+                        getBrowserPageStatus().removeFilter(getModelObject());
                         sendEvent(EventRemoveFilter.EVENT);
                     }
 

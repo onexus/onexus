@@ -51,12 +51,14 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
         if (selection != null) {
             SelectorWidgetConfig config = getConfig();
 
-            String collectionAlias = QueryUtils.newCollectionAlias(query, config.getCollection());
-            QueryUtils.and(query, new EqualId(collectionAlias, selection));
+            if (config.getSelection() == null || !config.getSelection()) {
+                String collectionAlias = QueryUtils.newCollectionAlias(query, config.getCollection());
+                QueryUtils.and(query, new EqualId(collectionAlias, selection));
 
-            ORI mapCollection = config.getMapCollection();
-            if (mapCollection!=null) {
-                QueryUtils.newCollectionAlias(query, mapCollection);
+                ORI mapCollection = config.getMapCollection();
+                if (mapCollection!=null) {
+                    QueryUtils.newCollectionAlias(query, mapCollection);
+                }
             }
         }
 

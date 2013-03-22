@@ -30,6 +30,7 @@ public class SelectorWidgetConfig extends WidgetConfig {
     private String field;
     private String where;
     private ORI mapCollection;
+    private Boolean selection;
 
     public SelectorWidgetConfig() {
         super();
@@ -69,6 +70,14 @@ public class SelectorWidgetConfig extends WidgetConfig {
 
     public void setMapCollection(ORI mapCollection) {
         this.mapCollection = mapCollection;
+    }
+
+    public Boolean getSelection() {
+        return selection;
+    }
+
+    public void setSelection(Boolean selection) {
+        this.selection = selection;
     }
 
     @Override

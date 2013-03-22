@@ -32,9 +32,8 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.onexus.website.api.events.EventAddFilter;
-import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPage;
-import org.onexus.website.api.pages.browser.IFilter;
+import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.filters.custom.CustomFilter;
 import org.onexus.website.api.widgets.filters.custom.ListCustomFilterPanel;
@@ -46,15 +45,15 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     private CustomFilter currentFilter;
 
-    private final static Component EMPTY_CUSTOM_PANEL = new EmptyPanel("customPanel" ).setOutputMarkupId(true);
+    private final static Component EMPTY_CUSTOM_PANEL = new EmptyPanel("customPanel").setOutputMarkupId(true);
 
     public FiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
         // Filters list
-        final Form<String> filtersForm = new Form<String>("filtersForm" );
+        final Form<String> filtersForm = new Form<String>("filtersForm");
         filtersForm.setOutputMarkupId(true);
-        filtersForm.add(new ListView<FilterConfig>("filters", new PropertyModel<List<? extends FilterConfig>>(statusModel, "filters" )) {
+        filtersForm.add(new ListView<FilterConfig>("filters", new PropertyModel<List<? extends FilterConfig>>(statusModel, "filters")) {
 
             @Override
             protected void populateItem(final ListItem<FilterConfig> item) {
@@ -63,7 +62,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 item.setOutputMarkupId(true);
 
-                item.add(new AjaxLink<String>("remove" ) {
+                item.add(new AjaxLink<String>("remove") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -79,7 +78,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 });
 
                 // Add button
-                item.add(new AjaxLink<String>("apply" ) {
+                item.add(new AjaxLink<String>("apply") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -94,7 +93,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 });
 
                 // Remove button
-                item.add(new AjaxLink<String>("unapply" ) {
+                item.add(new AjaxLink<String>("unapply") {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -116,14 +115,14 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         add(filtersForm);
 
         // Add custom filter select
-        Form<String> selectForm = new Form<String>("selectForm" );
+        Form<String> selectForm = new Form<String>("selectForm");
         DropDownChoice<CustomFilter> selector = new DropDownChoice<CustomFilter>(
                 "select",
-                new PropertyModel<CustomFilter>(this, "currentFilter" ),
+                new PropertyModel<CustomFilter>(this, "currentFilter"),
                 getConfig().getCustomFilters(),
-                new ChoiceRenderer<CustomFilter>("title" ));
+                new ChoiceRenderer<CustomFilter>("title"));
 
-        selector.add(new AjaxFormComponentUpdatingBehavior("onchange" ) {
+        selector.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
 
@@ -131,14 +130,14 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
                 if (customFilter == null || customFilter.getType() == null) {
                     FiltersWidget.this.addOrReplace(EMPTY_CUSTOM_PANEL);
-                } else if (customFilter.getType().equalsIgnoreCase("list" )) {
+                } else if (customFilter.getType().equalsIgnoreCase("list")) {
                     FiltersWidget.this.addOrReplace(new ListCustomFilterPanel("customPanel", customFilter) {
                         @Override
                         protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
                             addCustomFilter(target, filterConfig);
                         }
                     });
-                } else if (customFilter.getType().equalsIgnoreCase("numeric" )) {
+                } else if (customFilter.getType().equalsIgnoreCase("numeric")) {
                     FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter, FiltersWidget.this.getPageBaseOri()) {
                         @Override
                         protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
@@ -147,7 +146,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                     });
                 }
 
-                target.add(FiltersWidget.this.get("customPanel" ));
+                target.add(FiltersWidget.this.get("customPanel"));
 
             }
 
@@ -168,39 +167,16 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     }
 
-
     protected boolean isFilterApplyed(FilterConfig filterConfig) {
-        List<IFilter> filters = getFilters();
-
-        for (IFilter filter : filters) {
-            if (filterConfig.equals(filter.getFilterConfig())) {
-                return true;
-            }
-        }
-        return false;
+        return getPageStatus().getFilteredCollections().contains(filterConfig.getCollection());
     }
 
     protected void unapplyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
-
-        List<IFilter> filters = getFilters();
-
-        IFilter removeMe = null;
-        for (IFilter filter : filters) {
-            if (filterConfig.equals(filter.getFilterConfig())) {
-                removeMe = filter;
-                break;
-            }
-        }
-
-        if (removeMe != null) {
-            filters.remove(removeMe);
-            send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
-        }
+        getPageStatus().removeFilter(filterConfig.getCollection());
     }
 
     protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
-        List<IFilter> filters = getFilters();
-        filters.add(new BrowserFilter(filterConfig));
+        getPageStatus().addFilter(new BrowserFilter(filterConfig));
         send(getPage(), Broadcast.BREADTH, EventAddFilter.EVENT);
     }
 
@@ -212,7 +188,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         this.currentFilter = currentFilter;
     }
 
-    protected List<IFilter> getFilters() {
-        return findParent(BrowserPage.class).getStatus().getFilters();
+    protected BrowserPageStatus getPageStatus() {
+        return findParent(BrowserPage.class).getStatus();
     }
 }

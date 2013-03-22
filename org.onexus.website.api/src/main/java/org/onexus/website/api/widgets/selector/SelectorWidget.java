@@ -19,7 +19,6 @@ package org.onexus.website.api.widgets.selector;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -36,7 +35,10 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFiltersUpdate;
+import org.onexus.website.api.pages.browser.BrowserPageStatus;
+import org.onexus.website.api.pages.browser.FilterEntity;
 import org.onexus.website.api.widgets.Widget;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -95,7 +97,21 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
         dropDown.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                send(getPage(), Broadcast.BREADTH, EventFiltersUpdate.EVENT);
+
+                Boolean selection = getConfig().getSelection();
+
+                if (selection == null || !selection) {
+                    sendEvent(EventFiltersUpdate.EVENT);
+                } else {
+                    EntityChoice choice = getSelection();
+
+                    if (choice != null) {
+                        BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
+                        pageStatus.addFilter(new FilterEntity(getConfig().getCollection(), getSelection().getId()));
+                        setSelection(null);
+                        sendEvent(EventAddFilter.EVENT);
+                    }
+                }
             }
         });
 

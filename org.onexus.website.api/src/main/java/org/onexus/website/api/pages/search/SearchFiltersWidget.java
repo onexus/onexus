@@ -24,12 +24,11 @@ import org.onexus.website.api.widgets.filters.FilterConfig;
 import org.onexus.website.api.widgets.filters.FiltersWidget;
 import org.onexus.website.api.widgets.filters.FiltersWidgetStatus;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public abstract class SearchFiltersWidget extends FiltersWidget {
 
-    private transient List<IFilter> filters;
+    private transient Set<IFilter> filters;
 
     public SearchFiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
@@ -48,12 +47,4 @@ public abstract class SearchFiltersWidget extends FiltersWidget {
     @Override
     protected abstract void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target);
 
-    @Override
-    protected List<IFilter> getFilters() {
-        if (filters == null) {
-            filters = new ArrayList<IFilter>();
-        }
-
-        return filters;
-    }
 }

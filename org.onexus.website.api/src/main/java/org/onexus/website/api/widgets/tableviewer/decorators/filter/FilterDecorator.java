@@ -98,7 +98,7 @@ public class FilterDecorator extends FieldDecorator {
     protected AbstractEvent[] onClick(FilterEntity rowEntity, BrowserPageStatus status) {
 
         // Fix current row entity
-        status.getFilters().add(rowEntity);
+        status.addFilter(rowEntity);
 
         return new AbstractEvent[]{EventAddFilter.EVENT};
     }

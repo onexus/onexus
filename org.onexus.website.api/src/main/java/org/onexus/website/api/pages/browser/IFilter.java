@@ -48,4 +48,6 @@ public interface IFilter extends Serializable {
     void loadUrlPrameter(String parameter);
 
     boolean match(VisibleRule rule);
+
+    int hashCode();
 }

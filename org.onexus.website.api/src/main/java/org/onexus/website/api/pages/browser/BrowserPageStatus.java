@@ -35,10 +35,7 @@ import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.filters.BrowserFilter;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
@@ -48,7 +45,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private String currentView;
 
-    private List<IFilter> filters = new ArrayList<IFilter>();
+    private Map<ORI, IFilter> filtersMap = new LinkedHashMap<ORI, IFilter>();
 
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
@@ -68,7 +65,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         ViewConfig viewConfig = tabConfig.getView(currentView);
 
         List<WidgetConfig> widgetConfigs = new ArrayList<WidgetConfig>();
-        Predicate visible = new VisiblePredicate(parentOri, filters);
+        Predicate visible = new VisiblePredicate(parentOri, getFilters());
         CollectionUtils.select(ViewConfig.getSelectedWidgetConfigs(
                 pageConfig,
                 viewConfig.getLeft(),
@@ -125,12 +122,20 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         this.base = baseURI;
     }
 
-    public List<IFilter> getFilters() {
-        return filters;
+    public Set<ORI> getFilteredCollections() {
+        return filtersMap.keySet();
     }
 
-    public void setFilters(List<IFilter> filters) {
-        this.filters = filters;
+    public Collection<IFilter> getFilters() {
+        return filtersMap.values();
+    }
+
+    public void addFilter(IFilter filter) {
+        filtersMap.put(filter.getFilteredCollection(), filter);
+    }
+
+    public void removeFilter(ORI filteredCollection) {
+        filtersMap.remove(filteredCollection);
     }
 
     @Override
@@ -145,8 +150,8 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     @Override
     public void afterQueryBuild(Query query) {
 
-        if (filters != null) {
-            for (IFilter fe : filters) {
+        if (getFilters() != null) {
+            for (IFilter fe : getFilters()) {
                 if (getCollectionManager().isLinkable(query, fe.getFilteredCollection().toAbsolute(query.getOn()))) {
                     Filter filter = fe.buildFilter(query);
                     QueryUtils.and(query, filter);
@@ -193,7 +198,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         //}
 
         ORI parentOri = getORI();
-        for (IFilter filter : filters) {
+        for (IFilter filter : getFilters()) {
             if (filter instanceof FilterEntity) {
                 parameters.add(keyPrefix + "f", filter.toUrlParameter(global, parentOri));
             } else {
@@ -235,13 +240,13 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             this.currentView = currentView.toString();
         }
 
-        this.filters = new ArrayList<IFilter>();
+        filtersMap = new LinkedHashMap<ORI, IFilter>();
         List<StringValue> values = parameters.getValues(keyPrefix + "f");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
                 FilterEntity fe = new FilterEntity();
                 fe.loadUrlPrameter(value.toString());
-                this.filters.add(fe);
+                addFilter(fe);
             }
         }
 
@@ -250,7 +255,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             for (StringValue value : values) {
                 BrowserFilter fe = new BrowserFilter();
                 fe.loadUrlPrameter(value.toString());
-                this.filters.add(fe);
+                addFilter(fe);
             }
         }
 
