@@ -20,17 +20,17 @@ package org.onexus.ui.authentication.persona;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.feedback.IFeedback;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.PackageResourceReference;
-
+import org.onexus.resource.api.session.IAuthenticatedSession;
 
 public class PersonaSignInPage extends WebPage {
 
@@ -52,7 +52,7 @@ public class PersonaSignInPage extends WebPage {
                 BrowserId browserId = SessionHelper.getBrowserId(Session.get());
 
                 if (browserId != null) {
-                    if (AuthenticatedWebSession.get().signIn(browserId.getEmail(), null)) {
+                    if (((IAuthenticatedSession)WebSession.get()).authenticate(browserId.getEmail(), null)) {
 
                         // logon successful. Continue to the original destination
                         continueToOriginalDestination();

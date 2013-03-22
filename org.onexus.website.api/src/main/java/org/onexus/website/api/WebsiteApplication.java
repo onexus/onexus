@@ -30,7 +30,7 @@ import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.onexus.resource.api.LoginContext;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.utils.error.ExceptionErrorPage;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
@@ -38,6 +38,7 @@ import org.onexus.website.api.utils.panels.SignOutPage;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class WebsiteApplication extends AuthenticatedWebApplication {
 
@@ -83,7 +84,14 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
         getRequestCycleListeners().add(new AbstractRequestCycleListener() {
             @Override
             public void onBeginRequest(RequestCycle cycle) {
-                LoginContext.set(WebsiteSession.get().getLoginContext());
+                HttpServletRequest webRequest = (HttpServletRequest) cycle.getRequest().getContainerRequest();
+                HttpSession session = webRequest.getSession();
+
+                if (session!=null && LoginContext.get(session.getId())!=null) {
+                    LoginContext.set(LoginContext.get(session.getId()), null);
+                } else {
+                    LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
+                }
             }
         });
 

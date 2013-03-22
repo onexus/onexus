@@ -15,18 +15,25 @@
  *
  *
  */
-package org.onexus.resource.api;
+package org.onexus.resource.api.session;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class LoginContext implements Serializable {
 
+    private static Map<String, LoginContext> contexts = new HashMap<String,LoginContext>();
+
+    public static LoginContext ANONYMOUS_CONTEXT = new LoginContext();
+    public static LoginContext SERVICE_CONTEXT = new LoginContext("service");
+
     private static ThreadLocal<LoginContext> loginContext = new ThreadLocal<LoginContext>() {
         @Override
         protected LoginContext initialValue() {
-            return new LoginContext();
+            return ANONYMOUS_CONTEXT;
         }
     };
 
@@ -34,8 +41,16 @@ public class LoginContext implements Serializable {
         return loginContext.get();
     }
 
-    public static void set(LoginContext ctx) {
+    public static LoginContext get(String sessionId) {
+        return contexts.get(sessionId);
+    }
+
+    public static void set(LoginContext ctx, String sessionId) {
         loginContext.set(ctx);
+
+        if (sessionId!=null) {
+            contexts.put(sessionId, ctx);
+        }
     }
 
     private String userName;

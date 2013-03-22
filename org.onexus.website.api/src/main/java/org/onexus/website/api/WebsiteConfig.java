@@ -156,12 +156,14 @@ public class WebsiteConfig extends Resource implements IAuthorization {
         status.setConfig(this);
 
         // Add page status
-        List<PageStatus> pageStatuses = new ArrayList<PageStatus>();
-        for (PageConfig page : getPages()) {
-            page.setWebsiteConfig(this);
-            pageStatuses.add(page.newStatus());
+        if (getPages() != null) {
+            List<PageStatus> pageStatuses = new ArrayList<PageStatus>();
+            for (PageConfig page : getPages()) {
+                page.setWebsiteConfig(this);
+                pageStatuses.add(page.newStatus());
+            }
+            status.setPageStatuses(pageStatuses);
         }
-        status.setPageStatuses(pageStatuses);
 
         return status;
     }

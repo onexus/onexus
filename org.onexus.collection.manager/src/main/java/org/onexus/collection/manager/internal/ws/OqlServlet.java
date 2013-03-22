@@ -17,15 +17,12 @@
  */
 package org.onexus.collection.manager.internal.ws;
 
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.ICollectionManager;
-import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.exceptions.OnexusException;
 import org.slf4j.Logger;
@@ -35,6 +32,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,6 +51,8 @@ public class OqlServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        initLoginContext(req);
+
         String oqlQuery = req.getParameter("query");
         String filename = req.getParameter("filename");
 
@@ -65,6 +65,8 @@ public class OqlServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        initLoginContext(req);
 
         try {
             BufferedReader reader = new BufferedReader(req.getReader());
@@ -197,5 +199,15 @@ public class OqlServlet extends HttpServlet {
 
     public void setQueryParser(IQueryParser queryParser) {
         this.queryParser = queryParser;
+    }
+
+    private void initLoginContext(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        if (session != null && LoginContext.get(session.getId()) != null) {
+            LoginContext ctx = LoginContext.get(session.getId());
+            LoginContext.set(ctx, null);
+        } else {
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
+        }
     }
 }

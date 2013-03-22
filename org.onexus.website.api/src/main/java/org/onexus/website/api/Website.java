@@ -18,7 +18,6 @@
 package org.onexus.website.api;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,6 +32,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.website.api.pages.IPageManager;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageModel;
@@ -61,12 +61,15 @@ public class Website extends WebPage {
         super(new WebsiteModel(pageParameters));
 
         if (!Authorization.authorize(getConfig())) {
-            if (AuthenticatedWebSession.get().isSignedIn()) {
+            if (WebsiteSession.get().isSignedIn()) {
                 setResponsePage(NotAuthorizedPage.class);
             } else {
                 WebsiteApplication.get().restartResponseAtSignInPage();
             }
         }
+
+        LoginContext ctx = LoginContext.get();
+        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
         add(new DefaultTheme());
 
@@ -78,7 +81,9 @@ public class Website extends WebPage {
 
         // Init currentPage
         if (status.getCurrentPage() == null || config.getPage(status.getCurrentPage()) == null) {
-            status.setCurrentPage(config.getPages().get(0).getId());
+            if (config.getPages()!=null && !config.getPages().isEmpty()) {
+                status.setCurrentPage(config.getPages().get(0).getId());
+            }
         }
 
         add(new Label("windowTitle", config.getTitle()));
@@ -146,6 +151,7 @@ public class Website extends WebPage {
         bottomLabel.setEscapeModelStrings(false);
         add(bottomLabel);
 
+        LoginContext.set(ctx, null);
 
     }
 
@@ -159,7 +165,7 @@ public class Website extends WebPage {
         get("bottom").setVisible(visible);
 
         if (!Authorization.authorize(getConfig()) || !Authorization.authorize(getConfig().getPage(getStatus().getCurrentPage()))) {
-            if (AuthenticatedWebSession.get().isSignedIn()) {
+            if (WebsiteSession.get().isSignedIn()) {
                 setResponsePage(NotAuthorizedPage.class);
             } else {
                 WebsiteApplication.get().restartResponseAtSignInPage();

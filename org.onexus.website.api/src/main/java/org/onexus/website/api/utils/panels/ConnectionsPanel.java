@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.Project;
 import org.onexus.website.api.Connection;
 import org.onexus.website.api.Website;
@@ -108,7 +109,7 @@ public class ConnectionsPanel extends EventPanel {
             for (Project project : projects) {
 
                 String projectUrl = project.getURL();
-                String userName = WebsiteSession.get().getUserName();
+                String userName = LoginContext.get().getUserName();
 
                 if (projectUrl.startsWith("private://" + userName)) {
 

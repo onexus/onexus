@@ -20,6 +20,7 @@ package org.onexus.website.api;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
@@ -69,7 +70,9 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
             ORI websiteUri = WebsiteApplication.get().getWebsiteOri();
 
             // Attach website config
+            LoginContext ctx = LoginContext.get();
             try {
+                LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
                 websiteConfig = getResourceManager().load(WebsiteConfig.class, websiteUri);
             } catch (ClassCastException e) {
 
@@ -78,6 +81,8 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
 
                 // Try again
                 websiteConfig = getResourceManager().load(WebsiteConfig.class, websiteUri);
+            } finally {
+                LoginContext.set(ctx, null);
             }
 
         }

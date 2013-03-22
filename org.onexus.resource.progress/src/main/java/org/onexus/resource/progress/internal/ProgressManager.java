@@ -18,7 +18,7 @@
 package org.onexus.resource.progress.internal;
 
 import org.onexus.resource.api.IProgressManager;
-import org.onexus.resource.api.LoginContext;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.Progress;
 
 import java.util.ArrayList;

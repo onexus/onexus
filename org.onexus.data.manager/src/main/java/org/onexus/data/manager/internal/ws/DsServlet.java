@@ -21,14 +21,15 @@ import org.apache.commons.io.IOUtils;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,6 +50,15 @@ public class DsServlet extends HttpServlet {
     }
 
     public void response(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        HttpSession session = req.getSession();
+        if (session != null && LoginContext.get(session.getId()) != null) {
+            LoginContext ctx = LoginContext.get(session.getId());
+            LoginContext.set(ctx, null);
+        } else {
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
+        }
+
         ORI dataResource = requestToORI(req);
 
         if (dataResource != null) {
@@ -66,6 +76,8 @@ public class DsServlet extends HttpServlet {
                     IOUtils.copy(in, out);
                 }
                 out.close();
+            } catch (SecurityException e) {
+                resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             } catch (Exception e) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
             }
@@ -92,6 +104,9 @@ public class DsServlet extends HttpServlet {
 
     private ORI requestToORI(HttpServletRequest req) {
 
+        LoginContext ctx = LoginContext.get();
+        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+
         String uri = req.getRequestURI();
         String servletPath = req.getServletPath();
 
@@ -113,6 +128,8 @@ public class DsServlet extends HttpServlet {
         if (projectUrl == null) {
             return null;
         }
+
+        LoginContext.set(ctx, null);
 
         String resourcePath = projectNameAndResource.replaceFirst(projectName, "");
         return new ORI(projectUrl, resourcePath);

@@ -21,7 +21,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,9 +28,10 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.onexus.resource.api.LoginContext;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.ui.authentication.persona.*;
 import org.onexus.website.api.WebsiteApplication;
+import org.onexus.website.api.WebsiteSession;
 
 public class LoginPanel extends Panel {
 
@@ -63,7 +63,7 @@ public class LoginPanel extends Panel {
                     protected void onSuccess(AjaxRequestTarget target) {
                         BrowserId browserId = SessionHelper.getBrowserId(Session.get());
                         if (browserId != null) {
-                            if (AuthenticatedWebSession.get().signIn(browserId.getEmail(), null)) {
+                            if (WebsiteSession.get().authenticate(browserId.getEmail(), null)) {
                                 target.appendJavaScript("location.reload();");
                             }
                         }

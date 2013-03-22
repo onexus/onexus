@@ -21,7 +21,7 @@ import org.eclipse.jgit.util.Base64;
 import org.eclipse.jgit.util.StringUtils;
 import org.onexus.resource.api.IAuthorizationManager;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.LoginContext;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.slf4j.Logger;
@@ -199,7 +199,7 @@ public class GitSecurityFilter implements Filter {
                     ctx.addRole(p.getName());
                 }
             }
-            LoginContext.set(ctx);
+            LoginContext.set(ctx, null);
 
         } catch (LoginException e) {
             authenticated = false;

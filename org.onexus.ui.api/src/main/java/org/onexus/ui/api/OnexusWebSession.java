@@ -18,52 +18,53 @@
 package org.onexus.ui.api;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.Strings;
-import org.onexus.resource.api.LoginContext;
+import org.onexus.resource.api.session.IAuthenticatedSession;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.ui.authentication.persona.PersonaRoles;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.*;
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 
-public class OnexusWebSession extends AuthenticatedWebSession {
-
-    private LoginContext ctx = new LoginContext();
-    private Roles roles = new Roles();
+public class OnexusWebSession extends AbstractAuthenticatedWebSession implements IAuthenticatedSession {
 
     public static final String APPLICATION_POLICY_NAME = "onexus";
 
     public OnexusWebSession(Request request) {
         super(request);
+
+        HttpServletRequest webRequest = (HttpServletRequest) request.getContainerRequest();
+        HttpSession session = webRequest.getSession();
+
+        if (session!=null && LoginContext.get(session.getId())!=null) {
+            LoginContext.set(LoginContext.get(session.getId()), null);
+        } else {
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
+        }
     }
 
     @Override
     public Roles getRoles() {
+        Roles roles = new Roles();
+        roles.addAll( LoginContext.get().getRoles() );
         return roles;
     }
 
-    public String getUserName() {
-
-        return ctx.getUserName();
-    }
-
-    public LoginContext getLoginContext() {
-        return ctx;
+    @Override
+    public boolean isSignedIn() {
+        return (LoginContext.get().getUserName() != null);
     }
 
     public static OnexusWebSession get() {
         return (OnexusWebSession) Session.get();
-    }
-
-    @Override
-    public void signOut() {
-        super.signOut();
-        this.ctx.logout();
     }
 
     public boolean authenticate(String username, String password) {
@@ -79,15 +80,16 @@ public class OnexusWebSession extends AuthenticatedWebSession {
             javaCtx.login();
             authenticated = true;
 
-            this.ctx = new LoginContext(username);
+            LoginContext ctx = new LoginContext(username);
 
             Subject subject = javaCtx.getSubject();
             if (subject != null) {
                 for (Principal p : subject.getPrincipals()) {
                     ctx.addRole(p.getName());
-                    roles.add(p.getName());
                 }
             }
+
+            LoginContext.set(ctx, getId());
 
         } catch (LoginException e) {
             // You'll get a LoginException on a failed username/password combo.
@@ -98,11 +100,12 @@ public class OnexusWebSession extends AuthenticatedWebSession {
 
     private boolean authenticatePersona(String username) {
         if (!Strings.isEmpty(username)) {
-            this.ctx = new LoginContext(username);
+            LoginContext ctx = new LoginContext(username);
             for (String role : PersonaRoles.getPersonaRoles(username)) {
                 ctx.addRole(role);
-                roles.add(role);
             }
+            LoginContext.set(ctx, getId());
+
             return true;
         }
 

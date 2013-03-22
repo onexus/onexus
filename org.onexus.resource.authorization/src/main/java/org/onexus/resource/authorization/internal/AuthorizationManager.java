@@ -18,7 +18,7 @@
 package org.onexus.resource.authorization.internal;
 
 import org.onexus.resource.api.IAuthorizationManager;
-import org.onexus.resource.api.LoginContext;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 
 import java.io.File;
@@ -39,6 +39,29 @@ public class AuthorizationManager implements IAuthorizationManager {
 
     @Override
     public boolean check(String privilege, ORI resourceOri) {
+
+        // Service context always have read-only privilege
+        LoginContext ctx = LoginContext.get();
+        if (ctx==LoginContext.SERVICE_CONTEXT && READ.equals(privilege)) {
+            return true;
+        }
+
+        // Check private projects
+        String projectUrl = resourceOri.getProjectUrl();
+        if (projectUrl.startsWith("private://")) {
+
+            int end = projectUrl.indexOf('/',10);
+            if (end == -1) {
+                return false;
+            }
+
+            String userName = projectUrl.substring(10, end);
+            if (userName==null || !userName.equals(ctx.getUserName())) {
+                return false;
+            }
+        }
+
+        // Check privileges
         return getPrivileges(resourceOri).contains(privilege);
     }
 

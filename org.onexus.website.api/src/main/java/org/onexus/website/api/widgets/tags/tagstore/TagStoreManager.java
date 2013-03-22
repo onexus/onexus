@@ -23,7 +23,7 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.h2.Driver;
-import org.onexus.website.api.WebsiteSession;
+import org.onexus.resource.api.session.LoginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +87,7 @@ public class TagStoreManager implements ITagStoreManager {
     @Override
     public TagStore getUserStore(String namespace) {
 
-        String userToken = WebsiteSession.get().getUserName();
+        String userToken = LoginContext.get().getUserName();
 
         return get(userToken + "_" + namespace);
 

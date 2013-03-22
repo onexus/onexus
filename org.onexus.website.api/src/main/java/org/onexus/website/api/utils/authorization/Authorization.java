@@ -18,8 +18,10 @@
 package org.onexus.website.api.utils.authorization;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.Roles;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.website.api.utils.parser.BooleanExpressionEvaluator;
+
+import java.util.Set;
 
 public class Authorization {
 
@@ -28,7 +30,8 @@ public class Authorization {
     public static boolean authorize(IAuthorization target) {
         if (target != null && target.getAuthorization() != null) {
 
-            final Roles roles = AuthenticatedWebSession.get().getRoles();
+            final Set<String> roles = LoginContext.get().getRoles();
+            final String userName = LoginContext.get().getUserName();
             BooleanExpressionEvaluator evaluator = new BooleanExpressionEvaluator(target.getAuthorization()) {
                 @Override
                 protected boolean evaluateToken(String token) {
@@ -37,7 +40,7 @@ public class Authorization {
                         return !AuthenticatedWebSession.get().isSignedIn();
                     }
 
-                    return roles.hasRole(token);
+                    return token.equals(userName) || roles.contains(token);
                 }
             };
             return evaluator.evaluate();

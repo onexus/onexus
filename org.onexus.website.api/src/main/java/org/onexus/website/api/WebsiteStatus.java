@@ -42,9 +42,11 @@ public class WebsiteStatus implements Serializable {
     }
 
     public PageStatus getPageStatus(String id) {
-        for (PageStatus status : getPageStatuses()) {
-            if (status.getId().equals(id)) {
-                return status;
+        if (getPageStatuses() != null) {
+            for (PageStatus status : getPageStatuses()) {
+                if (status.getId().equals(id)) {
+                    return status;
+                }
             }
         }
         return null;

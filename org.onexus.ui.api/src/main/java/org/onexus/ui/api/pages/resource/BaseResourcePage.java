@@ -28,10 +28,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Project;
-import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.*;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.OnexusWebSession;
 import org.onexus.ui.api.pages.SignOutPage;
@@ -70,7 +68,7 @@ public class BaseResourcePage extends WebPage {
 
             }
         };
-        link.add(new Label("username", OnexusWebSession.get().getUserName()));
+        link.add(new Label("username", LoginContext.get().getUserName()));
         add(link);
 
         if (OnexusWebApplication.get().usePersonSignIn()) {

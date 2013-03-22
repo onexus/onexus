@@ -20,11 +20,19 @@
     <packaging>bundle</packaging>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Wicket dependencies -->
         <dependency>
             <groupId>org.ops4j.pax.wicket</groupId>
             <artifactId>org.ops4j.pax.wicket.service</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>
