@@ -22,7 +22,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebSession;
@@ -58,7 +57,7 @@ public class SignOutBehavior extends AbstractDefaultAjaxBehavior {
         final TextTemplate verifyTemplate = new PackageTextTemplate(VerifyBehavior.class, "signout.js.tmpl");
         String asString = verifyTemplate.asString(variables);
 
-        response.render(JavaScriptHeaderItem.forUrl(GuestPanel.BROWSER_ID_JS));
+        response.render(GuestPanel.INCLUDE);
         response.render(OnDomReadyHeaderItem.forScript(asString));
 
     }

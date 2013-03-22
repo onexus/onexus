@@ -23,7 +23,6 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -119,7 +118,7 @@ public class LoginPanel extends Panel {
     protected void renderBrowserIdJavaScript(final IHeaderResponse response)
     {
         if (WebsiteApplication.get().usePersonSignIn()) {
-            response.render(JavaScriptHeaderItem.forUrl(GuestPanel.BROWSER_ID_JS));
+            response.render(GuestPanel.INCLUDE);
         }
     }
 }
