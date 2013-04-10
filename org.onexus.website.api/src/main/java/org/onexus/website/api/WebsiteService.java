@@ -124,6 +124,8 @@ public class WebsiteService implements IWebsiteService {
 
     private void registerProject(Project project) {
 
+        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+
         List<WebsiteConfig> websites = resourceManager.loadChildren(WebsiteConfig.class, new ORI(project.getURL(), null));
 
         for (WebsiteConfig website : websites) {

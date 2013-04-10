@@ -42,7 +42,7 @@ public class AuthorizationManager implements IAuthorizationManager {
 
         // Service context always have read-only privilege
         LoginContext ctx = LoginContext.get();
-        if (ctx==LoginContext.SERVICE_CONTEXT && READ.equals(privilege)) {
+        if (ctx==LoginContext.SERVICE_CONTEXT) {
             return true;
         }
 

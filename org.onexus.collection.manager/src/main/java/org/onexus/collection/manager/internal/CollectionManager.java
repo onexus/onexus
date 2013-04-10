@@ -26,6 +26,7 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.resource.api.*;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,8 @@ public class CollectionManager implements ICollectionManager {
         resourceManager.addResourceListener(new ResourceListener() {
             @Override
             public void onProjectDelete(Project project) {
+
+                LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
                 // Unload all the collections
                 unloadCollections(project.getORI());
@@ -165,7 +168,7 @@ public class CollectionManager implements ICollectionManager {
                         Plugin plugin = project.getPlugin(loader.getPlugin());
                         ICollectionLoader collectionLoader = resourceManager.getLoader(ICollectionLoader.class, plugin, loader);
 
-                        Runnable command = new InsertCollectionRunnable(runningCollections, plugin, collection, collectionLoader, collectionStore);
+                        Runnable command = new InsertCollectionRunnable(LoginContext.get(), runningCollections, plugin, collection, collectionLoader, collectionStore);
                         executorService.submit(command);
 
                     }

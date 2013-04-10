@@ -23,6 +23,7 @@ import org.onexus.collection.api.ICollectionStore;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Progress;
+import org.onexus.resource.api.session.LoginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +38,11 @@ class InsertCollectionRunnable implements Runnable {
     private Collection collection;
     private ICollectionLoader loader;
     private ICollectionStore store;
+    private LoginContext loginContext;
 
-    public InsertCollectionRunnable(Map<String, Progress> tasks, Plugin plugin, Collection collection, ICollectionLoader loader, ICollectionStore collectionStore) {
+    public InsertCollectionRunnable(LoginContext loginContext, Map<String, Progress> tasks, Plugin plugin, Collection collection, ICollectionLoader loader, ICollectionStore collectionStore) {
 
+        this.loginContext = loginContext;
         this.tasks = tasks;
         this.plugin = plugin;
         this.collection = collection;
@@ -51,6 +54,8 @@ class InsertCollectionRunnable implements Runnable {
     public void run() {
 
         String taskId = Integer.toHexString(collection.getORI().hashCode());
+
+        LoginContext.set(loginContext, null);
 
         Progress progress = tasks.get(taskId);
 
