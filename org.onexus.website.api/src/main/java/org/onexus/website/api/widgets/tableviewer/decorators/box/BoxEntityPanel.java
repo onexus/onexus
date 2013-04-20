@@ -63,11 +63,13 @@ public class BoxEntityPanel extends Panel {
         }
 
         RepeatingView fieldsView = new RepeatingView("fields");
+        boolean allValuesAreNull = true;
         for (Field field : fields) {
 
             Object value = entity.get(field.getId());
             if (value != null && !StringUtils.isEmpty(value.toString())) {
 
+                allValuesAreNull = false;
 
                 WebMarkupContainer fc = new WebMarkupContainer(fieldsView.newChildId());
                 fc.setRenderBodyOnly(true);
@@ -83,6 +85,11 @@ public class BoxEntityPanel extends Panel {
 
                 fieldsView.add(fc);
             }
+        }
+
+        // Hide the box if it is empty
+        if (allValuesAreNull) {
+            setVisible(false);
         }
 
         add(fieldsView);
