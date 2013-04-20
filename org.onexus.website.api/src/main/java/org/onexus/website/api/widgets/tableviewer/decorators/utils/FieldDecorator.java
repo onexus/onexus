@@ -72,6 +72,42 @@ public class FieldDecorator implements IDecorator {
         this.cssClass = cssClass;
     }
 
+    @Deprecated
+    private static ITextFormater getTextFormater(Field field) {
+        if (field.getType().equals(String.class)) {
+            int maxLength;
+            String value = field.getProperty("MAX_LENGTH");
+
+            try {
+                maxLength = Integer.valueOf(value);
+            } catch (Exception e) {
+                maxLength = 20;
+            }
+
+            return new StringFormater(maxLength, true);
+        }
+
+        if (field.getType().equals(Text.class)) {
+            int maxLength;
+            String value = field.getProperty("MAX_LENGTH");
+
+            try {
+                maxLength = Integer.valueOf(value);
+            } catch (Exception e) {
+                maxLength = 50;
+            }
+            return new StringFormater(maxLength, true);
+        }
+
+        if (field.getType().equals(Double.class)
+                || field.getType().equals(Long.class)
+                || field.getType().equals(Integer.class)) {
+            return DoubleFormater.INSTANCE;
+        }
+
+        return null;
+    }
+
     protected Object getValue(IEntity data) {
         return getValue(data, field.getId());
     }
@@ -110,7 +146,6 @@ public class FieldDecorator implements IDecorator {
 
     }
 
-
     @Override
     public String getColor(final IEntity data) {
         return "#000000";
@@ -131,58 +166,19 @@ public class FieldDecorator implements IDecorator {
     }
 
     @Override
-    public void populateCell(WebMarkupContainer cellContainer,
-                             String componentId, IModel<IEntity> data) {
+    public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> data) {
         Object value = getValue(data.getObject());
-        cellContainer.add(new Label(componentId, getFormatValue(data
-                .getObject())));
-        cellContainer.add(new AttributeModifier("title", new Model<String>(
-                (value == null ? "No data" : value.toString()))));
+
+        cellContainer.add(new Label(componentId, getFormatValue(data.getObject())).setEscapeModelStrings(false));
+        cellContainer.add(new AttributeModifier("title", new Model<String>((value == null ? "No data" : value.toString()))));
 
         if (cssClass != null) {
-            cellContainer.add(new AttributeModifier("class", new Model<String>(
-                    cssClass)));
+            cellContainer.add(new AttributeModifier("class", new Model<String>(cssClass)));
         }
     }
 
     public Field getField() {
         return field;
-    }
-
-    @Deprecated
-    private static ITextFormater getTextFormater(Field field) {
-        if (field.getType().equals(String.class)) {
-            int maxLength;
-            String value = field.getProperty("MAX_LENGTH");
-
-            try {
-                maxLength = Integer.valueOf(value);
-            } catch (Exception e) {
-                maxLength = 20;
-            }
-
-            return new StringFormater(maxLength, true);
-        }
-
-        if (field.getType().equals(Text.class)) {
-            int maxLength;
-            String value = field.getProperty("MAX_LENGTH");
-
-            try {
-                maxLength = Integer.valueOf(value);
-            } catch (Exception e) {
-                maxLength = 50;
-            }
-            return new StringFormater(maxLength, true);
-        }
-
-        if (field.getType().equals(Double.class)
-                || field.getType().equals(Long.class)
-                || field.getType().equals(Integer.class)) {
-            return DoubleFormater.INSTANCE;
-        }
-
-        return null;
     }
 
     protected String replaceParameters(IEntity entity, String template) {
