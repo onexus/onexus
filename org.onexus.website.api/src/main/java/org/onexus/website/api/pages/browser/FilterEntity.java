@@ -129,14 +129,21 @@ public class FilterEntity implements IFilter {
 
         //TODO Check projects
 
+        if (rule.getType() == VisibleRule.SelectionType.LIST) {
+            return false;
+        }
+
         String filterPath = filteredCollection.getPath();
         String rulePath = rule.getFilteredCollection().getPath();
 
         boolean validCollection = (filterPath == null || rulePath == null) ? false : filterPath.endsWith(rulePath);
 
+
+
         if (rule.getField() == null) {
             return validCollection;
         }
+
 
         ORI collectionUri = filteredCollection.toAbsolute(rule.getParentURI());
         IEntity entity = (new EntityModel(collectionUri, entityId)).getObject();

@@ -125,6 +125,10 @@ public class BrowserFilter implements IFilter {
     @Override
     public boolean match(VisibleRule rule) {
 
+        if (rule.getType() == VisibleRule.SelectionType.SINGLE) {
+            return false;
+        }
+
         ORI visibleCollection = config.getCollection();
 
         //TODO

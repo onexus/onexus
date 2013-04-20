@@ -129,12 +129,15 @@ public class EntitySelectBox extends Panel {
         if (searchType.getLinks() != null) {
 
             List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
+
+            VisiblePredicate predicate;
             if (entity!=null) {
-                VisiblePredicate predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IFilter[]{new FilterEntity(entity)}));
-                CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
+                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IFilter[]{new FilterEntity(entity)}));
             } else {
-                filteredLinks.addAll(searchType.getLinks());
+                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IFilter[]{new BrowserFilter(filterConfig)}));
             }
+
+            CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
 
             for (SearchLink searchLink : filteredLinks) {
                 WebMarkupContainer item = new WebMarkupContainer(links.newChildId());

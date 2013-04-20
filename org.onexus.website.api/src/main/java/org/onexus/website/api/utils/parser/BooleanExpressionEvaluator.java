@@ -132,7 +132,7 @@ public class BooleanExpressionEvaluator {
     }
 
     protected String getSingleOperands() {
-        return "!(),|";
+        return "!(),|#";
     }
 
 

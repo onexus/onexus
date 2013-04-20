@@ -23,8 +23,11 @@ import java.io.Serializable;
 
 public class VisibleRule implements Serializable {
 
+    public enum SelectionType { SINGLE, LIST, ANY }
+
     private ORI parentURI;
     private ORI filteredCollection;
+    private SelectionType type = SelectionType.ANY;
     private String field = null;
     private String value = null;
 
@@ -40,11 +43,19 @@ public class VisibleRule implements Serializable {
             filteredCollection = new ORI(rule.substring(0, ini));
 
             int end = rule.indexOf("]");
-            String values[] = rule.substring(ini + 1, end).split("=");
 
-            if (values.length > 0) field = values[0].trim();
-            if (values.length > 1) value = values[1].trim();
+            String restriction = rule.substring(ini + 1, end).trim();
 
+            if (restriction.equalsIgnoreCase("LIST")) {
+                type = SelectionType.LIST;
+            } else if (restriction.equalsIgnoreCase("SINGLE")) {
+                type = SelectionType.SINGLE;
+            } else {
+                String values[] = restriction.split("=");
+
+                if (values.length > 0) field = values[0].trim();
+                if (values.length > 1) value = values[1].trim();
+            }
         } else {
             filteredCollection = new ORI(rule);
         }
@@ -67,4 +78,7 @@ public class VisibleRule implements Serializable {
         return value;
     }
 
+    public SelectionType getType() {
+        return type;
+    }
 }
