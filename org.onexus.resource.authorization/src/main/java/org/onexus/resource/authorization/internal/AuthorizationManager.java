@@ -17,9 +17,15 @@
  */
 package org.onexus.resource.authorization.internal;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
+import org.apache.commons.io.monitor.FileAlterationMonitor;
+import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.onexus.resource.api.IAuthorizationManager;
-import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.session.LoginContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,10 +38,12 @@ import java.util.Set;
 
 public class AuthorizationManager implements IAuthorizationManager {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthorizationManager.class);
     public static String ANONYMOUS_USER = "anonymous";
 
     private String authorizationFile;
     private Properties properties;
+    private FileAlterationMonitor monitor;
 
     @Override
     public boolean check(String privilege, ORI resourceOri) {
@@ -119,23 +127,55 @@ public class AuthorizationManager implements IAuthorizationManager {
     }
 
     public void load() {
-        this.properties = new Properties();
 
         try {
-
-            File file = new File(authorizationFile);
-
-            if (!file.exists()) {
-                this.properties.setProperty("role-admin", ".*||read|write|load|unload|grant");
-                this.properties.setProperty(ANONYMOUS_USER, ".*||read");
-                this.properties.setProperty("role-registered", ".*||read");
-                this.properties.store(new FileOutputStream(file), "Syntax: username = [regular expression to match against ORI] || [privilege 1] | [privilege 2] | ... , more...");
-            } else {
-                properties.load(new FileInputStream(authorizationFile));
-            }
+            this.properties = loadProperties();
         } catch (IOException e) {
-            throw new IllegalStateException(e);
+            log.error("Loading authorization config file", e);
         }
+
+        // Watch file changes and fire a reload
+        monitor = new FileAlterationMonitor(2000);
+        File file = new File(authorizationFile);
+        FileAlterationObserver observer = new FileAlterationObserver(file.getParent(), FileFilterUtils.nameFileFilter(file.getName()));
+        observer.addListener(new FileAlterationListenerAdaptor() {
+            @Override
+            public void onFileChange(File file) {
+                try {
+                    properties = AuthorizationManager.this.loadProperties();
+                } catch (IOException e) {
+                    log.error("Loading authorization config file", e);
+                }
+            }
+        });
+        monitor.addObserver(observer);
+        try {
+            monitor.start();
+        } catch (Exception e) {
+            log.error("On start authorization config file monitor", e);
+        }
+
+    }
+
+    private synchronized Properties loadProperties() throws IOException {
+
+        log.info("Loading authorization config file");
+
+        Properties properties = new Properties();
+
+        File file = new File(authorizationFile);
+
+        if (!file.exists()) {
+            this.properties.setProperty("role-admin", ".*||read|write|load|unload|grant");
+            this.properties.setProperty(ANONYMOUS_USER, ".*||read");
+            this.properties.setProperty("role-registered", ".*||read");
+            this.properties.store(new FileOutputStream(file), "Syntax: username = [regular expression to match against ORI] || [privilege 1] | [privilege 2] | ... , more...");
+        } else {
+            properties.load(new FileInputStream(authorizationFile));
+        }
+
+
+        return properties;
     }
 
     public String getAuthorizationFile() {
