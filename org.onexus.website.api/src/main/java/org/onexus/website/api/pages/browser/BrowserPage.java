@@ -192,7 +192,8 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
                 // Init currentPage
                 //TODO This is not a good solution
                 PageParameters pageParameters = getPage().getPageParameters();
-                pageParameters.add("ptab", currentTabId);
+                pageParameters.set(Website.PARAMETER_CURRENT_PAGE, getConfig().getId());
+                pageParameters.set("ptab", currentTabId);
                 setResponsePage(Website.class, pageParameters);
             }
 

@@ -81,7 +81,7 @@ public class WebsiteStatus implements Serializable {
     public void encodeParameters(PageParameters parameters, boolean global) {
 
         if (pageStatuses != null) {
-            parameters.add(Website.PARAMETER_PAGE, currentPage);
+            parameters.add(Website.PARAMETER_CURRENT_PAGE, currentPage);
             PageStatus status = getPageStatus(currentPage);
             status.encodeParameters(parameters, "p", global);
         }
@@ -92,7 +92,7 @@ public class WebsiteStatus implements Serializable {
 
         if (pageStatuses != null) {
 
-            StringValue c = parameters.get(Website.PARAMETER_PAGE);
+            StringValue c = parameters.get(Website.PARAMETER_CURRENT_PAGE);
             if (!c.isEmpty()) {
                 currentPage = c.toString();
             }

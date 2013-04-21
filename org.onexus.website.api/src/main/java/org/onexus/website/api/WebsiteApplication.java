@@ -95,7 +95,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
             }
         });
 
-        mountPage(webPath + "/${" + Website.PARAMETER_PAGE + "}/#{ptab}", Website.class);
+        mountPage(webPath + "/${" + Website.PARAMETER_CURRENT_PAGE + "}/#{ptab}", Website.class);
         mountPage("/login", getSignInPageClass());
         mountPage("/logout", SignOutPage.class);
         mountPage("/forbbiden", NotAuthorizedPage.class);

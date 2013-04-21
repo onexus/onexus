@@ -43,16 +43,17 @@ import org.onexus.website.api.utils.authorization.Authorization;
 import org.onexus.website.api.utils.panels.ConnectionsPanel;
 import org.onexus.website.api.utils.panels.LoginPanel;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
+import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Website extends WebPage {
 
     // Parameters
-    public final static String PARAMETER_WEBSITE = "ori";
-    public final static String PARAMETER_PAGE = "c";
+    public final static String PARAMETER_CURRENT_PAGE = "c";
 
     @PaxWicketBean(name = "pageManager")
     private IPageManager pageManager;
@@ -80,9 +81,15 @@ public class Website extends WebPage {
         add(new CustomCssBehavior(parentUri, config.getCss()));
 
         // Init currentPage
-        if (status.getCurrentPage() == null || config.getPage(status.getCurrentPage()) == null) {
-            if (config.getPages()!=null && !config.getPages().isEmpty()) {
-                status.setCurrentPage(config.getPages().get(0).getId());
+        VisiblePredicate visiblePredicate = new VisiblePredicate(getConfig().getORI(), Collections.EMPTY_LIST);
+        if (status.getCurrentPage() == null ||
+                config.getPage(status.getCurrentPage()) == null ||
+                !visiblePredicate.evaluate(config.getPage(status.getCurrentPage())
+           )) {
+            List<PageConfig> visiblePages = getPageConfigList();
+            if (!visiblePages.isEmpty()) {
+                String currentPage = visiblePages.get(0).getId();
+                status.setCurrentPage(currentPage);
             }
         }
 
@@ -107,7 +114,7 @@ public class Website extends WebPage {
                 PageConfig pageConfig = item.getModelObject();
 
                 PageParameters parameters = new PageParameters();
-                parameters.add(PARAMETER_PAGE, pageConfig.getId());
+                parameters.add(PARAMETER_CURRENT_PAGE, pageConfig.getId());
 
                 Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
                 link.add(new Label("name", pageConfig.getLabel()));
@@ -186,12 +193,13 @@ public class Website extends WebPage {
     public List<PageConfig> getPageConfigList() {
         List<PageConfig> pages = new ArrayList<PageConfig>();
 
+        VisiblePredicate visiblePredicate = new VisiblePredicate(getConfig().getORI(), Collections.EMPTY_LIST);
+
         for (PageConfig page : getConfig().getPages()) {
 
-            //TODO Manage optional show/hide non-authorized links
-            //if (Authorization.authorize(page)) {
+            if (Authorization.authorize(page) && visiblePredicate.evaluate(page)) {
                 pages.add(page);
-            //}
+            }
         }
 
         return pages;

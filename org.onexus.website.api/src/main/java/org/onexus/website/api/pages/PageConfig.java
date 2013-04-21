@@ -20,6 +20,7 @@ package org.onexus.website.api.pages;
 import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.utils.authorization.IAuthorization;
+import org.onexus.website.api.utils.visible.IVisible;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
@@ -27,13 +28,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PageConfig implements Serializable, IAuthorization {
+public abstract class PageConfig implements IVisible, Serializable, IAuthorization {
 
     private String id;
     private String label;
     private String title;
     private String description;
     private String authorization;
+    private String visible;
 
     private String css;
 
@@ -90,6 +92,14 @@ public abstract class PageConfig implements Serializable, IAuthorization {
 
     public void setAuthorization(String authorization) {
         this.authorization = authorization;
+    }
+
+    public String getVisible() {
+        return visible;
+    }
+
+    public void setVisible(String visible) {
+        this.visible = visible;
     }
 
     public WebsiteConfig getWebsiteConfig() {
