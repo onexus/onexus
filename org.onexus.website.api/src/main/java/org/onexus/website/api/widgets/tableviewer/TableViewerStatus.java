@@ -132,7 +132,13 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
         if (!o.isEmpty()) {
             String[] values = o.toString().split("::");
-            order = new OrderBy(values[0], values[1], (values[2].contains("a")));
+
+            String collection = values[0];
+            if (collection.charAt(0) == '/') {
+                collection = collection.substring(1);
+            }
+
+            order = new OrderBy(collection, values[1], (values[2].contains("a")));
         }
 
         super.decodeParameters(parameters, keyPrefix);
