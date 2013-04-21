@@ -72,6 +72,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
     private transient FiltersWidgetStatus filtersStatus;
 
+    private transient FilterConfig userFilter;
+
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
         super(componentId, statusModel);
 
@@ -81,9 +83,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             @Override
             protected void onSubmit() {
                 ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null).setOutputMarkupId(true));
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, userFilter).setOutputMarkupId(true));
             }
         };
+        form.setMultiPart(true);
 
         // By default use the first search type
         List<SearchType> types = getConfig().getTypes();
@@ -104,8 +107,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         search.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                userFilter = null;
                 ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null).setOutputMarkupId(true));
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, userFilter).setOutputMarkupId(true));
                 target.add(SearchPage.this.get("boxes"));
             }
         });
@@ -144,6 +148,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                             search.setModelValue(new String[] { filterConfig.getName() });
                             target.add(search);
                             ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
+                            userFilter = filterConfig;
                             SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, filterConfig).setOutputMarkupId(true));
                             target.add(SearchPage.this.get("boxes"));
                             target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
