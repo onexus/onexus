@@ -74,6 +74,7 @@ public class DsServlet extends HttpServlet {
                 OutputStream out = resp.getOutputStream();
                 for (InputStream in : streams) {
                     IOUtils.copy(in, out);
+                    in.close();
                 }
                 out.close();
             } catch (SecurityException e) {
