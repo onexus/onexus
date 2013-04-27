@@ -42,8 +42,15 @@ public class DoubleFormater implements ITextFormater {
 
         if (value instanceof Double) {
             NumberFormat f = NumberFormat.getNumberInstance();
+
+            double v = ((Double) value).doubleValue();
+            double limit = Math.pow(10, -digits);
+            if (v > 0 && v < limit) {
+                return "< " + f.format(limit);
+            }
+
             f.setMaximumFractionDigits(digits);
-            return f.format(value);
+            return f.format(v);
         }
 
         return value.toString();
