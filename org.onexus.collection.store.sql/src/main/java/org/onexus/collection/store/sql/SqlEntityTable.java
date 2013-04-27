@@ -68,7 +68,16 @@ public class SqlEntityTable implements IEntityTable {
             LOGGER.debug(sql);
             dataRS = dataSt.executeQuery(sql);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            try {
+                // Give a second change (Broken pipe exception)
+                dataSt = store.createReadStatement(dataConn);
+
+                sql = mysqlQuery.toSelectSQL();
+                dataRS = dataSt.executeQuery(sql);
+            } catch (Exception e2) {
+                throw new RuntimeException(e2);
+            }
         }
     }
 
