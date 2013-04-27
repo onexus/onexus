@@ -39,8 +39,6 @@ import org.onexus.website.api.widgets.filters.custom.CustomFilter;
 import org.onexus.website.api.widgets.filters.custom.ListCustomFilterPanel;
 import org.onexus.website.api.widgets.filters.custom.NumericCustomFilterPanel;
 
-import java.util.List;
-
 public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStatus> {
 
     private CustomFilter currentFilter;
@@ -53,7 +51,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         // Filters list
         final Form<String> filtersForm = new Form<String>("filtersForm");
         filtersForm.setOutputMarkupId(true);
-        filtersForm.add(new ListView<FilterConfig>("filters", new PropertyModel<List<? extends FilterConfig>>(statusModel, "filters")) {
+        filtersForm.add(new ListView<FilterConfig>("filters", getConfig().getFilters()) {
 
             @Override
             protected void populateItem(final ListItem<FilterConfig> item) {
@@ -61,21 +59,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                 final FilterConfig filterConfig = item.getModelObject();
 
                 item.setOutputMarkupId(true);
-
-                item.add(new AjaxLink<String>("remove") {
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        FiltersWidget.this.getStatus().getFilters().remove(filterConfig);
-                        unapplyFilter(filterConfig, target);
-                        target.add(filtersForm);
-                    }
-
-                    @Override
-                    public boolean isVisible() {
-                        return filterConfig.isDeletable();
-                    }
-                });
 
                 // Add button
                 item.add(new AjaxLink<String>("apply") {
@@ -85,25 +68,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                         applyFilter(filterConfig, target);
                     }
 
-                    @Override
-                    public boolean isVisible() {
-                        return !isFilterApplyed(filterConfig);
-                    }
-
-                });
-
-                // Remove button
-                item.add(new AjaxLink<String>("unapply") {
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        unapplyFilter(filterConfig, target);
-                    }
-
-                    @Override
-                    public boolean isVisible() {
-                        return isFilterApplyed(filterConfig);
-                    }
                 });
 
                 // Title
@@ -151,9 +115,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
             }
 
             private void addCustomFilter(AjaxRequestTarget target, FilterConfig filter) {
-                List<FilterConfig> filters = getStatus().getFilters();
-                filters.add(filter);
-                target.add(filtersForm);
                 applyFilter(filter, target);
             }
 
@@ -165,14 +126,6 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
         add(EMPTY_CUSTOM_PANEL);
 
 
-    }
-
-    protected boolean isFilterApplyed(FilterConfig filterConfig) {
-        return getPageStatus().getFilteredCollections().contains(filterConfig.getCollection());
-    }
-
-    protected void unapplyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
-        getPageStatus().removeFilter(filterConfig.getCollection());
     }
 
     protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {

@@ -19,29 +19,14 @@ package org.onexus.website.api.pages.search;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
-import org.onexus.website.api.pages.browser.IFilter;
 import org.onexus.website.api.widgets.filters.FilterConfig;
 import org.onexus.website.api.widgets.filters.FiltersWidget;
 import org.onexus.website.api.widgets.filters.FiltersWidgetStatus;
 
-import java.util.Set;
-
 public abstract class SearchFiltersWidget extends FiltersWidget {
-
-    private transient Set<IFilter> filters;
 
     public SearchFiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);
-    }
-
-    @Override
-    protected boolean isFilterApplyed(FilterConfig filterConfig) {
-        return false;
-    }
-
-    @Override
-    protected void unapplyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
-        // Nothing to do
     }
 
     @Override

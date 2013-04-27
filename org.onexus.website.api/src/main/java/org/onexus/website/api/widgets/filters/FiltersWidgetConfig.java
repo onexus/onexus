@@ -19,7 +19,6 @@ package org.onexus.website.api.widgets.filters;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.filters.custom.CustomFilter;
 
@@ -89,16 +88,7 @@ public class FiltersWidgetConfig extends WidgetConfig {
 
     @Override
     public FiltersWidgetStatus createEmptyStatus() {
-
-        FiltersWidgetStatus status = new FiltersWidgetStatus(getId());
-        if (filters != null) {
-            for (FilterConfig filter : filters) {
-                status.getFilters().add(SerializationUtils.clone(filter));
-            }
-        }
-
-        return status;
-
+        return new FiltersWidgetStatus(getId());
     }
 
     public FiltersWidgetStatus getDefaultStatus() {

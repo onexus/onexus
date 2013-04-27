@@ -19,12 +19,7 @@ package org.onexus.website.api.widgets.filters;
 
 import org.onexus.website.api.widgets.WidgetStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
-
-    private List<FilterConfig> filters = new ArrayList<FilterConfig>();
 
     public FiltersWidgetStatus() {
         super();
@@ -32,14 +27,6 @@ public class FiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
 
     public FiltersWidgetStatus(String widgetId) {
         super(widgetId);
-    }
-
-    public List<FilterConfig> getFilters() {
-        return filters;
-    }
-
-    public void setFilters(List<FilterConfig> filters) {
-        this.filters = filters;
     }
 
 }
