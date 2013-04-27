@@ -75,6 +75,15 @@ public class CollectionManager implements ICollectionManager {
                 unloadCollections(project.getORI());
 
             }
+
+            @Override
+            public void onResourceDelete(Resource resource) {
+
+                if (resource instanceof Collection) {
+                    unload(resource.getORI());
+                }
+
+            }
         });
 
     }
