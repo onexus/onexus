@@ -94,6 +94,7 @@ public class WebsiteSession extends AbstractAuthenticatedWebSession implements I
         } catch (LoginException e) {
             // You'll get a LoginException on a failed username/password combo.
             authenticated = false;
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         }
         return authenticated;
     }
@@ -108,6 +109,7 @@ public class WebsiteSession extends AbstractAuthenticatedWebSession implements I
             return true;
         }
 
+        LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         return false;
     }
 

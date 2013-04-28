@@ -18,7 +18,6 @@ package org.onexus.ui.authentication.jaas;
  */
 
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.Session;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -28,7 +27,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.onexus.resource.api.session.IAuthenticatedSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -217,11 +215,7 @@ public class SignInPanel extends Panel
      */
     private boolean signIn(String username, String password)
     {
-        return getAuthenticatedSession().authenticate(username, password);
-    }
-
-    private static IAuthenticatedSession getAuthenticatedSession() {
-        return (IAuthenticatedSession) Session.get();
+        return JaasSignInPage.getAuthenticatedSession().authenticate(username, password);
     }
 
     /**
@@ -229,7 +223,7 @@ public class SignInPanel extends Panel
      */
     private boolean isSignedIn()
     {
-        return getAuthenticatedSession().isSignedIn();
+        return JaasSignInPage.getAuthenticatedSession().isSignedIn();
     }
 
     /**

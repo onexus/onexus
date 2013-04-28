@@ -94,6 +94,7 @@ public class OnexusWebSession extends AbstractAuthenticatedWebSession implements
         } catch (LoginException e) {
             // You'll get a LoginException on a failed username/password combo.
             authenticated = false;
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         }
         return authenticated;
     }
@@ -109,6 +110,7 @@ public class OnexusWebSession extends AbstractAuthenticatedWebSession implements
             return true;
         }
 
+        LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         return false;
     }
 

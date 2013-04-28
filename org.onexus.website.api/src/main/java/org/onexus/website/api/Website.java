@@ -70,95 +70,99 @@ public class Website extends WebPage {
         }
 
         LoginContext ctx = LoginContext.get();
-        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+        try {
 
-        add(new DefaultTheme());
+            LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
-        final WebsiteStatus status = getStatus();
-        final WebsiteConfig config = getConfig();
+            add(new DefaultTheme());
 
-        ORI parentUri = config.getORI().getParent();
-        add(new CustomCssBehavior(parentUri, config.getCss()));
+            final WebsiteStatus status = getStatus();
+            final WebsiteConfig config = getConfig();
 
-        // Init currentPage
-        VisiblePredicate visiblePredicate = new VisiblePredicate(getConfig().getORI(), Collections.EMPTY_LIST);
-        if (status.getCurrentPage() == null ||
-                config.getPage(status.getCurrentPage()) == null ||
-                !visiblePredicate.evaluate(config.getPage(status.getCurrentPage())
-           )) {
-            List<PageConfig> visiblePages = getPageConfigList();
-            if (!visiblePages.isEmpty()) {
-                String currentPage = visiblePages.get(0).getId();
-                status.setCurrentPage(currentPage);
-            }
-        }
+            ORI parentUri = config.getORI().getParent();
+            add(new CustomCssBehavior(parentUri, config.getCss()));
 
-        add(new Label("windowTitle", config.getTitle()));
-
-        add(new EmptyPanel("progressbar"));
-        //TODO add(new ProgressBar("progressbar", false));
-
-        String header = config.getHeader();
-
-        Label headerLabel = new Label("header", new HtmlDataResourceModel(parentUri, header));
-        headerLabel.setVisible(header != null && !header.isEmpty());
-        headerLabel.setEscapeModelStrings(false);
-        add(headerLabel);
-
-        WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
-        menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList" )) {
-
-            @Override
-            protected void populateItem(ListItem<PageConfig> item) {
-
-                PageConfig pageConfig = item.getModelObject();
-
-                PageParameters parameters = new PageParameters();
-                parameters.add(PARAMETER_CURRENT_PAGE, pageConfig.getId());
-
-                Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
-                link.add(new Label("name", pageConfig.getLabel()));
-
-                String currentPage = status.getCurrentPage();
-
-                item.add(link);
-
-                if (currentPage.equals(pageConfig.getId())) {
-                    link.getParent().add(new AttributeModifier("class", "active" ));
+            // Init currentPage
+            VisiblePredicate visiblePredicate = new VisiblePredicate(getConfig().getORI(), Collections.EMPTY_LIST);
+            if (status.getCurrentPage() == null ||
+                    config.getPage(status.getCurrentPage()) == null ||
+                    !visiblePredicate.evaluate(config.getPage(status.getCurrentPage())
+               )) {
+                List<PageConfig> visiblePages = getPageConfigList();
+                if (!visiblePages.isEmpty()) {
+                    String currentPage = visiblePages.get(0).getId();
+                    status.setCurrentPage(currentPage);
                 }
-
             }
-        });
 
-        if (pageParameters.get("embed").toBoolean(false)) {
-            menuSection.setVisible(false);
-        } else {
-            menuSection.setVisible(true);
+            add(new Label("windowTitle", config.getTitle()));
+
+            add(new EmptyPanel("progressbar"));
+            //TODO add(new ProgressBar("progressbar", false));
+
+            String header = config.getHeader();
+
+            Label headerLabel = new Label("header", new HtmlDataResourceModel(parentUri, header));
+            headerLabel.setVisible(header != null && !header.isEmpty());
+            headerLabel.setEscapeModelStrings(false);
+            add(headerLabel);
+
+            WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
+            menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList" )) {
+
+                @Override
+                protected void populateItem(ListItem<PageConfig> item) {
+
+                    PageConfig pageConfig = item.getModelObject();
+
+                    PageParameters parameters = new PageParameters();
+                    parameters.add(PARAMETER_CURRENT_PAGE, pageConfig.getId());
+
+                    Link<String> link = new BookmarkablePageLink<String>("link", Website.class, parameters);
+                    link.add(new Label("name", pageConfig.getLabel()));
+
+                    String currentPage = status.getCurrentPage();
+
+                    item.add(link);
+
+                    if (currentPage.equals(pageConfig.getId())) {
+                        link.getParent().add(new AttributeModifier("class", "active" ));
+                    }
+
+                }
+            });
+
+            if (pageParameters.get("embed").toBoolean(false)) {
+                menuSection.setVisible(false);
+            } else {
+                menuSection.setVisible(true);
+            }
+
+            // Login section
+            Panel login = new LoginPanel("login");
+            menuSection.add(login);
+            if (config.getLogin() == null || !config.getLogin()) {
+                login.setVisible(false);
+            }
+
+            // Projects section
+            menuSection.add( new ConnectionsPanel("connections", config.getConnections()) );
+
+            add(menuSection);
+
+            String currentPage = status.getCurrentPage();
+
+            add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
+
+            String bottom = config.getBottom();
+            Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(parentUri, bottom));
+            bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
+            bottomLabel.setEscapeModelStrings(false);
+            add(bottomLabel);
+
+        } finally {
+            LoginContext.set(ctx, null);
         }
-
-        // Login section
-        Panel login = new LoginPanel("login");
-        menuSection.add(login);
-        if (config.getLogin() == null || !config.getLogin()) {
-            login.setVisible(false);
-        }
-
-        // Projects section
-        menuSection.add( new ConnectionsPanel("connections", config.getConnections()) );
-
-        add(menuSection);
-
-        String currentPage = status.getCurrentPage();
-
-        add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
-
-        String bottom = config.getBottom();
-        Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(parentUri, bottom));
-        bottomLabel.setVisible(bottom != null && !bottom.isEmpty());
-        bottomLabel.setEscapeModelStrings(false);
-        add(bottomLabel);
-
-        LoginContext.set(ctx, null);
 
     }
 

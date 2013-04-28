@@ -17,11 +17,15 @@
  */
 package org.onexus.ui.authentication.jaas;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.util.string.StringValue;
+import org.onexus.resource.api.session.IAuthenticatedSession;
 
 public class JaasSignInPage extends WebPage {
     public static final CssResourceReference CSS = new CssResourceReference(JaasSignInPage.class, "JaasSignInPage.css");
@@ -41,6 +45,21 @@ public class JaasSignInPage extends WebPage {
      */
     public JaasSignInPage(final PageParameters parameters) {
         super(parameters);
+
+        if (parameters!=null) {
+            StringValue userName = parameters.get("username");
+            StringValue password = parameters.get("password");
+            StringValue redirect = parameters.get("redirect");
+
+            if (!userName.isEmpty()) {
+                boolean valid = getAuthenticatedSession().authenticate(userName.toString(), password.toString());
+
+                if (valid) {
+                    throw new RedirectToUrlException(redirect.toString());
+                }
+            }
+        }
+
         SignInPanel signPanel = null;
         add(signPanel = new SignInPanel("signInPanel"));
         signPanel.setRememberMe(false);
@@ -49,5 +68,9 @@ public class JaasSignInPage extends WebPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.render(CssHeaderItem.forReference(CSS));
+    }
+
+    public static IAuthenticatedSession getAuthenticatedSession() {
+        return (IAuthenticatedSession) Session.get();
     }
 }

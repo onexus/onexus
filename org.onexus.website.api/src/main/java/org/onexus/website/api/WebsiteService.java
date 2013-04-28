@@ -65,11 +65,17 @@ public class WebsiteService implements IWebsiteService {
         if (!registrations.isEmpty()) {
             destroy();
         }
-        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
-        for (Project project : resourceManager.getProjects()) {
-            registerProject(project);
+        try {
+            LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+
+            for (Project project : resourceManager.getProjects()) {
+                registerProject(project);
+            }
+
+        } finally {
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         }
-        LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
+
 
         resourceManager.addResourceListener(new ResourceListener() {
 
@@ -124,15 +130,19 @@ public class WebsiteService implements IWebsiteService {
 
     private void registerProject(Project project) {
 
-        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+        try {
+            LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
-        List<WebsiteConfig> websites = resourceManager.loadChildren(WebsiteConfig.class, new ORI(project.getURL(), null));
+            List<WebsiteConfig> websites = resourceManager.loadChildren(WebsiteConfig.class, new ORI(project.getURL(), null));
 
-        for (WebsiteConfig website : websites) {
-            registerWebsite(project.getName(), website);
+            for (WebsiteConfig website : websites) {
+                registerWebsite(project.getName(), website);
 
-            //TODO Allow multiple websites per project
-            break;
+                //TODO Allow multiple websites per project
+                break;
+            }
+        } finally {
+            LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         }
     }
 

@@ -69,10 +69,14 @@ public class CollectionManager implements ICollectionManager {
             @Override
             public void onProjectDelete(Project project) {
 
-                LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+                try {
+                    LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
-                // Unload all the collections
-                unloadCollections(project.getORI());
+                    // Unload all the collections
+                    unloadCollections(project.getORI());
+                } finally {
+                    LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
+                }
 
             }
 

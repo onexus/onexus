@@ -106,34 +106,38 @@ public class DsServlet extends HttpServlet {
     private ORI requestToORI(HttpServletRequest req) {
 
         LoginContext ctx = LoginContext.get();
-        LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
+        try {
+            LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
-        String uri = req.getRequestURI();
-        String servletPath = req.getServletPath();
+            String uri = req.getRequestURI();
+            String servletPath = req.getServletPath();
 
-        if (uri.length() == servletPath.length()) {
-            return null;
-        }
-
-        String projectNameAndResource = uri.substring(servletPath.length() + 1);
-        String projectUrl = null;
-        String projectName = null;
-        for (Project project : resourceManager.getProjects()) {
-            projectName = project.getName();
-            if (projectNameAndResource.startsWith(projectName)) {
-                projectUrl = project.getURL();
-                break;
+            if (uri.length() == servletPath.length()) {
+                return null;
             }
+
+            String projectNameAndResource = uri.substring(servletPath.length() + 1);
+            String projectUrl = null;
+            String projectName = null;
+            for (Project project : resourceManager.getProjects()) {
+                projectName = project.getName();
+                if (projectNameAndResource.startsWith(projectName)) {
+                    projectUrl = project.getURL();
+                    break;
+                }
+            }
+
+            if (projectUrl == null) {
+                return null;
+            }
+
+            String resourcePath = projectNameAndResource.replaceFirst(projectName, "");
+
+            return new ORI(projectUrl, resourcePath);
+
+        } finally {
+            LoginContext.set(ctx, null);
         }
-
-        if (projectUrl == null) {
-            return null;
-        }
-
-        LoginContext.set(ctx, null);
-
-        String resourcePath = projectNameAndResource.replaceFirst(projectName, "");
-        return new ORI(projectUrl, resourcePath);
 
     }
 }
