@@ -56,7 +56,7 @@ public class LinksNetworkComparator implements Comparator<ORI> {
                 }
                 return compare(a, b);
             } else {
-                throw new RuntimeException("Mutually dependency on different depth level");
+                return Integer.valueOf(a_b).compareTo(Integer.valueOf(b_a));
             }
         }
 
