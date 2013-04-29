@@ -34,6 +34,7 @@ import org.onexus.website.api.WebsiteStatus;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventTabSelected;
+import org.onexus.website.api.events.EventViewChange;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collections;
@@ -49,7 +50,7 @@ public class ConnectionsPanel extends EventPanel {
     public ConnectionsPanel(String id, List<Connection> connections) {
         super(id);
 
-        onEventFireUpdate(EventQueryUpdate.class, EventTabSelected.class);
+        onEventFireUpdate(EventQueryUpdate.class, EventTabSelected.class, EventViewChange.class);
 
         if (connections == null) {
             this.connections = Collections.emptyList();

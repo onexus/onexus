@@ -105,7 +105,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     public void setCurrentTabId(String currentTabId) {
         if (currentTabId != null && !currentTabId.equals(this.currentTabId)) {
-            this.currentView = null;
+            BrowserPageStatus defaultStatus = getConfig().getDefaultStatus();
+            if (defaultStatus == null) {
+                defaultStatus = getConfig().createEmptyStatus();
+            }
+            this.currentView = defaultStatus.getCurrentView();
         }
         this.currentTabId = currentTabId;
     }
@@ -186,16 +190,28 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             defaultStatus = getConfig().createEmptyStatus();
         }
 
-        //if (!global) {
-            if (!StringUtils.equals(currentTabId, defaultStatus.getCurrentTabId())) {
-                parameters.add(keyPrefix + "tab", currentTabId);
+        if (global || !StringUtils.equals(currentTabId, defaultStatus.getCurrentTabId())) {
+            if (currentTabId == null) {
+                currentTabId = defaultStatus.getCurrentTabId();
             }
 
-            if (!StringUtils.equals(currentView, defaultStatus.getCurrentView()) &&
-                    getConfig().getTab(currentTabId).getViews().size() > 1) {
+            if (currentTabId != null) {
+                parameters.add(keyPrefix + "tab", currentTabId);
+            }
+        }
+
+        if (global || !StringUtils.equals(currentView, defaultStatus.getCurrentView()) &&
+                getConfig().getTab(currentTabId).getViews().size() > 1) {
+
+            if (currentView == null) {
+                currentView = defaultStatus.getCurrentView();
+            }
+
+            if (currentView != null) {
                 parameters.add(keyPrefix + "view", currentView);
             }
-        //}
+
+        }
 
         ORI parentOri = getORI();
         for (IFilter filter : getFilters()) {
@@ -238,6 +254,28 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         StringValue currentView = parameters.get(keyPrefix + "view");
         if (!currentView.isEmpty()) {
             this.currentView = currentView.toString();
+
+            // Check that is a valid currentView
+            if (getConfig().getTab(this.currentTabId).getView(this.currentView) == null) {
+
+                // Look for the more similar view id
+                List<ViewConfig> views = new ArrayList<ViewConfig>(getConfig().getTab(this.currentTabId).getViews());
+
+                if (views.size() > 1) {
+                    Collections.sort(views, new Comparator<ViewConfig>() {
+                        @Override
+                        public int compare(ViewConfig o1, ViewConfig o2) {
+                            Integer v1 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentView, o1.getTitle());
+                            Integer v2 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentView, o2.getTitle());
+
+                            return v1.compareTo(v2);
+                        }
+                    });
+                }
+
+                this.currentView = views.get(0).getTitle();
+
+            }
         }
 
         filtersMap = new LinkedHashMap<ORI, IFilter>();
