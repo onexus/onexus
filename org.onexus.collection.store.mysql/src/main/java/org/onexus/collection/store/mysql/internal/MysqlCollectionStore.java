@@ -107,8 +107,8 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
         @SuppressWarnings("unused")
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
                 connectionFactory, connectionPool, null, null, false, true);
+        poolableConnectionFactory.setValidationQuery("SELECT 1");
         return new PoolingDataSource(connectionPool);
-
 
     }
 
