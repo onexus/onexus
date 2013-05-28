@@ -21,23 +21,21 @@ import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceRegister;
 import org.onexus.website.api.widgets.AbstractWidgetCreator;
 import org.onexus.website.api.widgets.Widget;
-import org.onexus.website.api.widgets.filters.custom.CustomFilter;
 
-public class FiltersWidgetCreator extends AbstractWidgetCreator<FiltersWidgetConfig, FiltersWidgetStatus> {
+public class FixFiltersWidgetCreator extends AbstractWidgetCreator<FixFiltersWidgetConfig, FixFiltersWidgetStatus> {
 
-    public FiltersWidgetCreator() {
-        super(FiltersWidgetConfig.class, "filters-widget", "Add predefined filters");
+    public FixFiltersWidgetCreator() {
+        super(FixFiltersWidgetConfig.class, "widget-fix-filters", "Add predefined filters");
     }
 
     @Override
-    protected Widget<?, ?> build(String componentId, IModel<FiltersWidgetStatus> statusModel) {
-        return new FiltersWidget(componentId, statusModel);
+    protected Widget<?, ?> build(String componentId, IModel<FixFiltersWidgetStatus> statusModel) {
+        return new FixFiltersWidget(componentId, statusModel);
     }
 
     @Override
     public void register(IResourceRegister resourceRegister) {
-        resourceRegister.register(FiltersWidgetConfig.class);
-        resourceRegister.register(CustomFilter.class);
+        resourceRegister.register(FixFiltersWidgetConfig.class);
         resourceRegister.register(FilterConfig.class);
     }
 

@@ -20,6 +20,7 @@
         <reference-listener bind-method="register" ref="PlotWidget"/>
         <reference-listener bind-method="register" ref="ShareWidget"/>
         <reference-listener bind-method="register" ref="FiltersWidget"/>
+        <reference-listener bind-method="register" ref="FixFiltersWidget"/>
         <reference-listener bind-method="register" ref="SelectorFiltersWidget"/>
         <reference-listener bind-method="register" ref="SearchWidget"/>
         <reference-listener bind-method="register" ref="SelectorWidget"/>
