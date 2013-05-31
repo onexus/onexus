@@ -47,12 +47,16 @@ public class FilterDecorator extends FieldDecorator {
     public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> data) {
         Object value = getValue(data.getObject());
 
-        //TODO String label = getFormatValue(data.getObject());
-        //TODO String tooltip = (value == null ? "No data" : value.toString());
         String label = "<i class=\"icon-hand-up\"></i>";
         String tooltip = "Filter results by " + getField().getLabel() + " = " + String.valueOf(value);
 
-        cellContainer.add(new LinkPanel(componentId, label, getLink(collectionId, data, tooltip)));
+        LinkPanel linkPanel = new LinkPanel(componentId, label, getLink(collectionId, data, tooltip));
+
+        if (value == null) {
+            linkPanel.setVisible(false);
+        }
+
+        cellContainer.add(linkPanel);
     }
 
     protected WebMarkupContainer getLink(ORI collectionId, IModel<IEntity> data, String tooltip) {
