@@ -33,12 +33,12 @@ public class FilterDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public ParameterKey[] getParameterKeys() {
-        return new ParameterKey[0];
+        return FilterDecoratorParameters.values();
     }
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
-        return new FilterDecorator(collection.getORI(), columnField);
+        return new FilterDecorator(collection.getORI(), columnField, parameters);
     }
 
 }

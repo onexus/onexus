@@ -20,11 +20,15 @@ package org.onexus.website.api.widgets.tableviewer.decorators.filter;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.events.AbstractEvent;
 import org.onexus.website.api.events.EventAddFilter;
@@ -38,24 +42,32 @@ public class FilterDecorator extends FieldDecorator {
 
     private ORI collectionId;
 
-    public FilterDecorator(ORI collectionId, Field field) {
+    private String emptyValue;
+
+    public FilterDecorator(ORI collectionId, Field field, Parameters parameters) {
         super(field);
         this.collectionId = collectionId;
+        this.emptyValue = parameters.get(FilterDecoratorParameters.EMPTY_VALUE);
     }
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> data) {
+
         Object value = getValue(data.getObject());
+
+        if (value == null) {
+            if (Strings.isEmpty(emptyValue)) {
+                cellContainer.add(new EmptyPanel(componentId));
+            } else {
+                cellContainer.add(new Label(componentId, emptyValue));
+            }
+
+            return;
+        }
 
         String label = "<i class=\"icon-hand-up\"></i>";
         String tooltip = "Filter results by " + getField().getLabel() + " = " + String.valueOf(value);
-
         LinkPanel linkPanel = new LinkPanel(componentId, label, getLink(collectionId, data, tooltip));
-
-        if (value == null) {
-            linkPanel.setVisible(false);
-        }
-
         cellContainer.add(linkPanel);
     }
 
