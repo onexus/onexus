@@ -118,6 +118,12 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         add(new OnDomReadyPanel("datatable") {
             @Override
             protected Panel onDomReadyPanel(String componentId) {
+
+                Boolean forceCount = getConfig().getForceCount();
+                if (forceCount != null && forceCount.booleanValue()) {
+                    dataProvider.forceCount();
+                }
+
                 return new DataTablePanel("datatable", columns, dataProvider, rowsPerPage);
             }
         });

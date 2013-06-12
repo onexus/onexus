@@ -34,6 +34,9 @@ public class TableViewerConfig extends WidgetConfig {
 
     private String sortable;
 
+    @XStreamAlias("force-count")
+    private Boolean forceCount;
+
     @XStreamImplicit(itemFieldName = "columnset")
     private List<ColumnSet> columnSets = new ArrayList<ColumnSet>();
 
@@ -68,6 +71,14 @@ public class TableViewerConfig extends WidgetConfig {
 
     public void setSortable(String sortable) {
         this.sortable = sortable;
+    }
+
+    public Boolean getForceCount() {
+        return forceCount;
+    }
+
+    public void setForceCount(Boolean forceCount) {
+        this.forceCount = forceCount;
     }
 
     @Override
