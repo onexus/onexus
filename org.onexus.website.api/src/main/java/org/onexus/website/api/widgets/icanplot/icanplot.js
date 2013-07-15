@@ -897,6 +897,9 @@ viz = {
 		switch (selectionType) {
 			case 'rectangle': 
 				var idx = this.getPointsInRect();
+				if (idx.length == 0) {
+				    alert('Draw a box around the points that you want to select');
+				}
 				break;
 			case 'polygon': 
 				var idx = this.getPointsInPoly();
