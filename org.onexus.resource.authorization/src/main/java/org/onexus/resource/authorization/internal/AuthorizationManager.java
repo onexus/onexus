@@ -166,10 +166,10 @@ public class AuthorizationManager implements IAuthorizationManager {
         File file = new File(authorizationFile);
 
         if (!file.exists()) {
-            this.properties.setProperty("role-admin", ".*||read|write|load|unload|grant");
-            this.properties.setProperty(ANONYMOUS_USER, ".*||read");
-            this.properties.setProperty("role-registered", ".*||read");
-            this.properties.store(new FileOutputStream(file), "Syntax: username = [regular expression to match against ORI] || [privilege 1] | [privilege 2] | ... , more...");
+            properties.setProperty("role-admin", ".*||read|write|load|unload|grant");
+            properties.setProperty(ANONYMOUS_USER, ".*||read");
+            properties.setProperty("role-registered", ".*||read");
+            properties.store(new FileOutputStream(file), "Syntax: username = [regular expression to match against ORI] || [privilege 1] | [privilege 2] | ... , more...");
         } else {
             properties.load(new FileInputStream(authorizationFile));
         }
