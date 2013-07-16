@@ -22,8 +22,10 @@ import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EmptyEntitySet;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
+import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Progress;
+import org.onexus.resource.api.exceptions.ResourceNotFoundException;
 
 import java.util.concurrent.Callable;
 
@@ -56,26 +58,37 @@ public class TsvCallable implements Callable<IEntitySet> {
         }
 
         ORI absDataUri = new ORI(dataUri).toAbsolute(collection.getORI());
-        IDataStreams dataStreams = dataManager.load(absDataUri);
 
-        if (dataStreams.getProgress() != null) {
-            Progress subProgress = dataStreams.getProgress();
-            progress.addSubTask(subProgress);
+        IDataStreams dataStreams = null;
+        try {
 
-            // Wait sub task finish
-            while (!subProgress.isDone()) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
+            dataStreams = dataManager.load(absDataUri);
+
+            if (dataStreams.getProgress() != null) {
+                Progress subProgress = dataStreams.getProgress();
+                progress.addSubTask(subProgress);
+
+                // Wait sub task finish
+                while (!subProgress.isDone()) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                    }
+                }
+
+                if (subProgress.isAborted()) {
+                    progress.setStatus(subProgress.getStatus());
+                } else {
+                    dataStreams = dataManager.load(absDataUri);
                 }
             }
 
-            if (subProgress.isAborted()) {
-                progress.setStatus(subProgress.getStatus());
-            } else {
-                dataStreams = dataManager.load(absDataUri);
-            }
+        } catch (ResourceNotFoundException e) {
+            dataStreams = new EmptyDataStreams(progress);
+            progress.warning(e.getMessage());
         }
+
+
 
         return new TsvEntitySet(dataStreams, collection);
 
