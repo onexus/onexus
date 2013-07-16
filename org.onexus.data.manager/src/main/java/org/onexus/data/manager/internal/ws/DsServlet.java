@@ -117,11 +117,12 @@ public class DsServlet extends HttpServlet {
             }
 
             String projectNameAndResource = uri.substring(servletPath.length() + 1);
+            String projectNameUrl = projectNameAndResource.substring(0, projectNameAndResource.indexOf('/'));
             String projectUrl = null;
             String projectName = null;
             for (Project project : resourceManager.getProjects()) {
                 projectName = project.getName();
-                if (projectNameAndResource.equals(projectName)) {
+                if (projectNameUrl.equals(projectName)) {
                     projectUrl = project.getURL();
                     break;
                 }
