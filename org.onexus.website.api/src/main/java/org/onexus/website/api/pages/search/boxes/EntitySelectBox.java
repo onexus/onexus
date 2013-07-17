@@ -30,6 +30,8 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.Website;
+import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.browser.FilterEntity;
 import org.onexus.website.api.pages.browser.IFilter;
 import org.onexus.website.api.pages.search.SearchLink;
@@ -139,10 +141,12 @@ public class EntitySelectBox extends Panel {
 
             CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
 
+            String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
+
             for (SearchLink searchLink : filteredLinks) {
                 WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
                 WebMarkupContainer link = new WebMarkupContainer("link");
-                link.add(new AttributeModifier("href", createLink(searchLink.getUrl(), searchType.getCollection(), varEntity, varFilter)));
+                link.add(new AttributeModifier("href", prefix + createLink(searchLink.getUrl(), searchType.getCollection(), varEntity, varFilter)));
                 link.add(new Label("label", searchLink.getTitle()).setEscapeModelStrings(false));
                 item.add(link);
                 links.add(item);

@@ -22,6 +22,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.onexus.website.api.Website;
+import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.search.SearchLink;
 
 import java.util.List;
@@ -53,12 +55,14 @@ public class MainLinksBox extends Panel {
         // Label
         accordionToggle.add(new Label("label", "General links"));
 
+        String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
+
         // Links
         RepeatingView linksContainer = new RepeatingView("links");
         for (SearchLink searchLink : links) {
             WebMarkupContainer item = new WebMarkupContainer(linksContainer.newChildId());
             WebMarkupContainer link = new WebMarkupContainer("link");
-            link.add(new AttributeModifier("href", searchLink.getUrl()));
+            link.add(new AttributeModifier("href", prefix + searchLink.getUrl()));
             link.add(new Label("label", searchLink.getTitle()).setEscapeModelStrings(false));
             item.add(link);
             linksContainer.add(item);
