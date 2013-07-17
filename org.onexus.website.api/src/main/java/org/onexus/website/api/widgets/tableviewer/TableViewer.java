@@ -67,7 +67,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         }
 
         Integer sessionRowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
-        final Integer rowsPerPage = (sessionRowsPerPage == null ? 30 : sessionRowsPerPage);
+        final Integer rowsPerPage = (sessionRowsPerPage == null ? 20 : sessionRowsPerPage);
 
         this.dataProvider = new EntitiesRowProvider(status, rowsPerPage) {
 
