@@ -80,7 +80,7 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
         String filterId = "user-filter-" + Integer.toHexString(filterName.hashCode()) + "-" + Integer.toHexString(RANDOM.nextInt());
 
         // Create the filter
-        FilterConfig filter = new FilterConfig(filterId, filterName);
+        FilterConfig filter = new FilterConfig(filterName);
         filter.setDeletable(true);
         filter.setCollection(customFilter.getCollection());
         filter.setDefine("fc='" + customFilter.getCollection() + "'");

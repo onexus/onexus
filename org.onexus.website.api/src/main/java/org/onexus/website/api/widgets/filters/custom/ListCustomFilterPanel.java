@@ -74,7 +74,7 @@ public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
         String filterId = "user-filter-" + Integer.toHexString(filterName.hashCode()) + "-" + Integer.toHexString(RANDOM.nextInt());
 
         // Create the filter
-        FilterConfig filter = new FilterConfig(filterId, filterName);
+        FilterConfig filter = new FilterConfig(filterName);
         filter.setDeletable(true);
         filter.setCollection(field.getCollection());
         filter.setDefine("fc='" + field.getCollection() + "'");

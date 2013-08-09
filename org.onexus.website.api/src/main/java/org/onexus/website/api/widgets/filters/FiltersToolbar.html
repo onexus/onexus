@@ -1,0 +1,27 @@
+<html xmlns:wicket="">
+<wicket:panel>
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <button class="btn btn-primary btn-small"><strong>Filters</strong></button>
+            <button class="btn btn-small">
+                <span wicket:id="filters"><span class="label label-important">
+                    <span wicket:id="title">My filter</span>&nbsp;&nbsp;
+                    <a href="#" wicket:id="remove"><i style="margin: 1px 0px; height: 13px;" class="icon-remove icon-white"></i></a>
+                </span>&nbsp;&nbsp;</span>
+            </button>
+            <button wicket:id="add" class="btn btn-small btn-primary"><i class="icon-plus-sign icon-white"></i></button>
+
+            <div class="modal hide" wicket:id="widgetModal">
+                <div class="modal-header">
+                    <h3 wicket:id="modalHeader"></h3>
+                </div>
+                <div wicket:id="widget" class="modal-body"></div>
+                <div class="modal-footer">
+                    <a href="#" wicket:id="close" class="btn">Close</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</wicket:panel>
+</html>

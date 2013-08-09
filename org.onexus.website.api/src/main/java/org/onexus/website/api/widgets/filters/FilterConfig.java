@@ -39,7 +39,7 @@ public class FilterConfig implements Serializable {
         super();
     }
 
-    public FilterConfig(String id, String name) {
+    public FilterConfig(String name) {
         super();
         this.name = name;
     }

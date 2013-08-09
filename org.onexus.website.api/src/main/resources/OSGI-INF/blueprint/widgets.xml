@@ -50,6 +50,11 @@
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FiltersToolbar" />
+    <bean id="FiltersToolbar" class="org.onexus.website.api.widgets.filters.FiltersToolbarCreator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+    </bean>
+
     <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FixFiltersWidget" />
     <bean id="FixFiltersWidget" class="org.onexus.website.api.widgets.filters.FixFiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
