@@ -23,6 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.ViewConfig;
+import org.onexus.website.api.pages.browser.filters.FiltersToolbar;
 import org.onexus.website.api.pages.browser.layouts.AbstractLayout;
 import org.onexus.website.api.pages.browser.layouts.HorizontalWidgetBar;
 
@@ -40,6 +41,9 @@ public class TopmainLayout extends AbstractLayout {
 
         // Add main widgets
         add(new HorizontalWidgetBar("main", filterWidgets(viewConfig.getMain()), statusModel));
+
+        // Filters
+        add(new FiltersToolbar("filters", statusModel));
 
     }
 

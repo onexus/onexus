@@ -66,7 +66,7 @@ public class CustomCssBehavior extends Behavior {
                 Project project = getResourceManager().getProject(resourceUri.getProjectUrl());
 
                 String url;
-                if (project!=null) {
+                if (project != null) {
                     url = WebsiteApplication.toAbsolutePath('/' + dataService + '/' + project.getName() + resourceUri.getPath());
                 } else {
                     url = resourceUri.toString();

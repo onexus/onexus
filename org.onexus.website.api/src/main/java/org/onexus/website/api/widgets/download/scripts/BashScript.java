@@ -17,7 +17,7 @@
  */
 package org.onexus.website.api.widgets.download.scripts;
 
-public class    BashScript implements IQueryScript {
+public class BashScript implements IQueryScript {
     @Override
     public String getContent(String query, CharSequence url) {
         return

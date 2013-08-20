@@ -47,7 +47,7 @@ public class AbstractLayout extends Panel {
 
     public List<WidgetConfig> filterWidgets(String selectedWidgets) {
         List<WidgetConfig> widgets = ViewConfig.getSelectedWidgetConfigs(getPageConfig(), selectedWidgets);
-        VisiblePredicate predicate = new VisiblePredicate(getPageStatus().getORI(), getPageStatus().getFilters());
+        VisiblePredicate predicate = new VisiblePredicate(getPageStatus().getORI(), getPageStatus().getEntitySelections());
         List<WidgetConfig> visibleWidgets = new ArrayList<WidgetConfig>();
         CollectionUtils.select(widgets, predicate, visibleWidgets);
         return visibleWidgets;

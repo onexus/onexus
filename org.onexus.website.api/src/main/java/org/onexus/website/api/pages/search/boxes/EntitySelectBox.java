@@ -32,14 +32,14 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteApplication;
-import org.onexus.website.api.pages.browser.FilterEntity;
-import org.onexus.website.api.pages.browser.IFilter;
+import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.SearchLink;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
-import org.onexus.website.api.widgets.filters.BrowserFilter;
-import org.onexus.website.api.widgets.filters.FilterConfig;
+import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
+import org.onexus.website.api.widgets.selection.FilterConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -133,10 +133,10 @@ public class EntitySelectBox extends Panel {
             List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
 
             VisiblePredicate predicate;
-            if (entity!=null) {
-                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IFilter[]{new FilterEntity(entity)}));
+            if (entity != null) {
+                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new SingleEntitySelection(entity)}));
             } else {
-                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IFilter[]{new BrowserFilter(filterConfig)}));
+                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new BrowserEntitySelection(filterConfig)}));
             }
 
             CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
@@ -159,13 +159,13 @@ public class EntitySelectBox extends Panel {
     private String createVarFilter() {
 
         if (entity != null) {
-            FilterEntity filterEntity = new FilterEntity(entity);
-            return "pf=" + UrlEncoder.QUERY_INSTANCE.encode(filterEntity.toUrlParameter(false, null), "UTF-8");
+            SingleEntitySelection singleEntitySelection = new SingleEntitySelection(entity);
+            return "pf=" + UrlEncoder.QUERY_INSTANCE.encode(singleEntitySelection.toUrlParameter(false, null), "UTF-8");
         }
 
         if (filterConfig != null) {
-            BrowserFilter browserFilter = new BrowserFilter(filterConfig);
-            return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserFilter.toUrlParameter(false, null), "UTF-8");
+            BrowserEntitySelection browserSelection = new BrowserEntitySelection(filterConfig);
+            return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserSelection.toUrlParameter(false, null), "UTF-8");
         }
 
         return "";

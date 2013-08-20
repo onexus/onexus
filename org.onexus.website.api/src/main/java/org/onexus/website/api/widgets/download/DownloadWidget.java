@@ -72,21 +72,25 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
     private ICollectionManager collectionManager;
 
     public final static Map<String, IQueryScript> scriptsMap = new LinkedHashMap<String, IQueryScript>();
+
     static {
-            addScript(new RScript());
-            addScript(new PythonScript());
-            addScript(new PerlScript());
-            addScript(new BashScript());
+        addScript(new RScript());
+        addScript(new PythonScript());
+        addScript(new PerlScript());
+        addScript(new BashScript());
     }
+
     private static void addScript(IQueryScript queryScript) {
         scriptsMap.put(queryScript.getLabel().toLowerCase(), queryScript);
     }
 
     private final static Map<String, IDownloadFormat> formatsMap = new LinkedHashMap<String, IDownloadFormat>();
+
     static {
-            addFormat(new TsvFormat());
-            addFormat(new ExcelFormat());
+        addFormat(new TsvFormat());
+        addFormat(new ExcelFormat());
     }
+
     private static void addFormat(IDownloadFormat format) {
         formatsMap.put(format.getLabel().toLowerCase(), format);
     }

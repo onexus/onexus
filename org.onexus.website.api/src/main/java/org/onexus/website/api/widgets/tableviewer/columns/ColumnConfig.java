@@ -60,6 +60,8 @@ public class ColumnConfig implements IColumnConfig {
 
     private String sortable;
 
+    private String filter;
+
     public ColumnConfig() {
         super();
     }
@@ -145,6 +147,14 @@ public class ColumnConfig implements IColumnConfig {
         this.sortable = sortable;
     }
 
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+    }
+
     @Override
     public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI, boolean sortable) {
 
@@ -159,7 +169,7 @@ public class ColumnConfig implements IColumnConfig {
                     IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                     List<IDecorator> actionsImpl = createActions(collection, field);
 
-                    columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection), sortable), decoratorImpl, actionsImpl));
+                    columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection), filter, sortable), decoratorImpl, actionsImpl));
                 }
             } else {
                 Field field = fields.get(0);
@@ -168,7 +178,7 @@ public class ColumnConfig implements IColumnConfig {
                 List<IDecorator> actionsImpl = createActions(collection, field);
                 decoratorImpl.setTemplate(template);
 
-                columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection), sortable), decoratorImpl, actionsImpl));
+                columns.add(new CollectionColumn(collectionURI, new FieldHeader(label, title, collection, field, new CollectionHeader(collection), filter, sortable), decoratorImpl, actionsImpl));
             }
         }
     }

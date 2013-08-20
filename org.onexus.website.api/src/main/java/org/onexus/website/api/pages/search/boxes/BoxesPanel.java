@@ -24,6 +24,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Contains;
+import org.onexus.collection.api.query.In;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
@@ -31,7 +32,7 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.search.SearchLink;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
-import org.onexus.website.api.widgets.filters.FilterConfig;
+import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class BoxesPanel extends Panel {
             }
         } else {
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
-            if (filterConfig == null) {
+            if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
                 IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
 
@@ -73,6 +74,22 @@ public class BoxesPanel extends Panel {
                 }
 
             } else {
+
+                if (filterConfig == null) {
+                    filterConfig = new FilterConfig(status.getSearch());
+
+                    filterConfig.setCollection(collectionUri);
+                    filterConfig.setDefine("fc='" + collectionUri + "'");
+                    String mainKey = type.getKeysList().get(0);
+                    In where = new In("fc", mainKey);
+                    String[] values = status.getSearch().split(",");
+                    for (String value : values) {
+                        where.addValue(value.trim());
+                    }
+                    filterConfig.setWhere(where.toString());
+
+                }
+
                 boxes.add(new EntitySelectBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
             }
         }

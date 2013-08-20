@@ -22,7 +22,10 @@ import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Project;
 import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.onexus.ui.authentication.jaas.JaasSignInPage;
@@ -187,7 +190,7 @@ public class WebsiteService implements IWebsiteService {
         }
 
         List<Folder> folders = resourceManager.loadChildren(Folder.class, container);
-        for(Folder folder : folders) {
+        for (Folder folder : folders) {
             loadCollections(folder.getORI());
         }
 

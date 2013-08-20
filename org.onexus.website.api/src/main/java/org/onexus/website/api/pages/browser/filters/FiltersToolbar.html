@@ -1,0 +1,22 @@
+<html xmlns:wicket="">
+<wicket:panel>
+    <div style="margin: 4px 5px;">
+                <span wicket:id="filters"><span class="label label-important">
+                    <span wicket:id="title">My filter</span>&nbsp;&nbsp;
+                    <a href="#" wicket:id="remove"><i style="margin: 1px 0px; height: 13px;"
+                                                      class="icon-remove icon-white"></i></a>
+                </span>&nbsp;&nbsp;</span>
+
+            <div class="modal hide" wicket:id="widgetModal">
+                <div class="modal-header">
+                    <h3 wicket:id="modalHeader"></h3>
+                </div>
+                <div wicket:id="widget" class="modal-body"></div>
+                <div class="modal-footer">
+                    <a href="#" wicket:id="close" class="btn">Close</a>
+                </div>
+            </div>
+
+    </div>
+</wicket:panel>
+</html>

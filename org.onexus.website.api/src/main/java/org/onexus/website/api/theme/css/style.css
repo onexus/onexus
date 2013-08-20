@@ -5,7 +5,7 @@ body {
 
 }
 
-#filters div.row-fluid {
+#selection div.row-fluid {
     min-height: 50px;
 }
 
@@ -44,24 +44,24 @@ ul.breadcrumb {
     min-height: 500px;
 }
 
-#filters .btn.active {
+#selection .btn.active {
    background-color: #FF7634;
 }
 
-#filters .btn {
+#selection .btn {
     background-color:#ffa83f;
     background-image:none;
 }
 
-#filters .btn-large {
+#selection .btn-large {
     margin-right: 5px;
 }
 
-#filters .btn a {
+#selection .btn a {
     color: white;
 }
 
-#filters .btn i {
+#selection .btn i {
     margin-left: 5px;
 }
 
@@ -121,13 +121,17 @@ ul.breadcrumb {
     color: black;
 }
 
-#toolbar div.row-fluid {
-    margin-top: -18px;
+#toolbar div.widgets {
     height: 44px;
-    border-bottom: 1px dotted #cccccc;
     border-left: 1px dotted #cccccc;
+    border-bottom: 1px dotted #CCCCCC;
     border-right: 1px dotted #cccccc;
     background-color: #F2F6F8;
+    margin-top: -18px;
+}
+
+#filters div.filters {
+    height: 10px;
 }
 
 #toolbar .nav {

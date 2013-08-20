@@ -87,7 +87,7 @@ public class Website extends WebPage {
             if (status.getCurrentPage() == null ||
                     config.getPage(status.getCurrentPage()) == null ||
                     !visiblePredicate.evaluate(config.getPage(status.getCurrentPage())
-               )) {
+                    )) {
                 List<PageConfig> visiblePages = getPageConfigList();
                 if (!visiblePages.isEmpty()) {
                     String currentPage = visiblePages.get(0).getId();
@@ -108,7 +108,7 @@ public class Website extends WebPage {
             add(headerLabel);
 
             WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
-            menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList" )) {
+            menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList")) {
 
                 @Override
                 protected void populateItem(ListItem<PageConfig> item) {
@@ -126,7 +126,7 @@ public class Website extends WebPage {
                     item.add(link);
 
                     if (currentPage.equals(pageConfig.getId())) {
-                        link.getParent().add(new AttributeModifier("class", "active" ));
+                        link.getParent().add(new AttributeModifier("class", "active"));
                     }
 
                 }
@@ -146,7 +146,7 @@ public class Website extends WebPage {
             }
 
             // Projects section
-            menuSection.add( new ConnectionsPanel("connections", config.getConnections()) );
+            menuSection.add(new ConnectionsPanel("connections", config.getConnections()));
 
             add(menuSection);
 

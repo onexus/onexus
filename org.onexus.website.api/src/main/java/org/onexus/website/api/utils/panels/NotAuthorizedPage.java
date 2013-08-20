@@ -30,19 +30,16 @@ public class NotAuthorizedPage extends WebPage {
     /**
      * Construct.
      */
-    public NotAuthorizedPage()
-    {
+    public NotAuthorizedPage() {
         this(null);
     }
 
     /**
      * Constructor
      *
-     * @param parameters
-     *            Page parameters (ignored since this is the home page)
+     * @param parameters Page parameters (ignored since this is the home page)
      */
-    public NotAuthorizedPage(final PageParameters parameters)
-    {
+    public NotAuthorizedPage(final PageParameters parameters) {
         add(new DefaultTheme());
 
         if (WebsiteApplication.get().usePersonSignIn()) {

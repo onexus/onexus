@@ -20,7 +20,7 @@ package org.onexus.website.api.utils.visible;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.pages.browser.IFilter;
+import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.utils.parser.BooleanExpressionEvaluator;
 
 import java.util.Collection;
@@ -28,9 +28,9 @@ import java.util.Collection;
 public class VisiblePredicate implements Predicate {
 
     private ORI parentURI;
-    private Collection<IFilter> filters;
+    private Collection<IEntitySelection> filters;
 
-    public VisiblePredicate(ORI parentURI, Collection<IFilter> filters) {
+    public VisiblePredicate(ORI parentURI, Collection<IEntitySelection> filters) {
         super();
 
         this.parentURI = parentURI;
@@ -85,7 +85,7 @@ public class VisiblePredicate implements Predicate {
                 VisibleRule rule = new VisibleRule(parentURI, token);
 
                 boolean matchAnyFilter = false;
-                for (IFilter filter : filters) {
+                for (IEntitySelection filter : filters) {
                     if (filter.match(rule)) {
                         matchAnyFilter = true;
                         break;

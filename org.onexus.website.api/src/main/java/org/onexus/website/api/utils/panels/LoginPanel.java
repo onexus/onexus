@@ -29,7 +29,11 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.resource.api.session.LoginContext;
-import org.onexus.ui.authentication.persona.*;
+import org.onexus.ui.authentication.persona.BrowserId;
+import org.onexus.ui.authentication.persona.GuestPanel;
+import org.onexus.ui.authentication.persona.SessionHelper;
+import org.onexus.ui.authentication.persona.SignOutBehavior;
+import org.onexus.ui.authentication.persona.VerifyBehavior;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteSession;
 
@@ -68,17 +72,18 @@ public class LoginPanel extends Panel {
                             }
                         }
                     }
+
                     @Override
                     protected void onFailure(AjaxRequestTarget target, final String failureReason) {
                     }
                 });
             } else {
                 link = new Link<String>("account-details") {
-                @Override
-                public void onClick() {
-                    WebsiteApplication.get().restartResponseAtSignInPage();
-                }
-            };
+                    @Override
+                    public void onClick() {
+                        WebsiteApplication.get().restartResponseAtSignInPage();
+                    }
+                };
             }
 
         }
@@ -101,8 +106,7 @@ public class LoginPanel extends Panel {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response)
-    {
+    public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
         renderBrowserIdJavaScript(response);
@@ -112,11 +116,9 @@ public class LoginPanel extends Panel {
      * Renders a reference for external browserid.js (loaded from browserid.org). <br/>
      * Can be overridden with local reference to browserid.js if needed.
      *
-     * @param response
-     *            the current header response
+     * @param response the current header response
      */
-    protected void renderBrowserIdJavaScript(final IHeaderResponse response)
-    {
+    protected void renderBrowserIdJavaScript(final IHeaderResponse response) {
         if (WebsiteApplication.get().usePersonSignIn()) {
             response.render(GuestPanel.INCLUDE);
         }

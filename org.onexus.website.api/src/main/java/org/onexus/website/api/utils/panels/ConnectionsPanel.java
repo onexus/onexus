@@ -25,8 +25,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.Project;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.website.api.Connection;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteSession;
@@ -120,9 +120,9 @@ public class ConnectionsPanel extends EventPanel {
                     }
 
                     String projectName = project.getName();
-                    String projectTitle = projectName.substring(projectName.indexOf('/')+1);
+                    String projectTitle = projectName.substring(projectName.indexOf('/') + 1);
 
-                    ExternalLink link = new ExternalLink("url", "/web/"+ projectName + "/v01" + urlPath);
+                    ExternalLink link = new ExternalLink("url", "/web/" + projectName + "/v01" + urlPath);
                     link.add(new Label("title", projectTitle));
                     connectionItem.add(link);
                     userProjects.add(connectionItem);

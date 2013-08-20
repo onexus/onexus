@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 public class VisibleRule implements Serializable {
 
-    public enum SelectionType { SINGLE, LIST, ANY }
+    public enum SelectionType {SINGLE, LIST, ANY}
 
     private ORI parentURI;
     private ORI filteredCollection;

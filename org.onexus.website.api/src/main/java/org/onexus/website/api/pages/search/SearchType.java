@@ -20,7 +20,7 @@ package org.onexus.website.api.pages.search;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.widgets.filters.FiltersWidgetConfig;
+import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;

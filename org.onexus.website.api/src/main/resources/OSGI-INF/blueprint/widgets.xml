@@ -46,22 +46,17 @@
     </bean>
 
     <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FiltersWidget" />
-    <bean id="FiltersWidget" class="org.onexus.website.api.widgets.filters.FiltersWidgetCreator">
-        <property name="resourceRegister" ref="resourceRegister"/>
-    </bean>
-
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FiltersToolbar" />
-    <bean id="FiltersToolbar" class="org.onexus.website.api.widgets.filters.FiltersToolbarCreator">
+    <bean id="FiltersWidget" class="org.onexus.website.api.widgets.selection.FiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
     <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FixFiltersWidget" />
-    <bean id="FixFiltersWidget" class="org.onexus.website.api.widgets.filters.FixFiltersWidgetCreator">
+    <bean id="FixFiltersWidget" class="org.onexus.website.api.widgets.selection.FixFiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
     <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SelectorFiltersWidget" />
-    <bean id="SelectorFiltersWidget" class="org.onexus.website.api.widgets.filters.SelectorFiltersWidgetCreator">
+    <bean id="SelectorFiltersWidget" class="org.onexus.website.api.widgets.selection.SelectorFiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 

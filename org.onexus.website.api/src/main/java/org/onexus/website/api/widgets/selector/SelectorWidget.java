@@ -38,7 +38,7 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.pages.browser.FilterEntity;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.widgets.Widget;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -49,10 +49,10 @@ import java.util.List;
 
 public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetStatus> {
 
-    @PaxWicketBean(name = "collectionManager" )
+    @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name = "queryParser" )
+    @PaxWicketBean(name = "queryParser")
     private IQueryParser queryParser;
 
     private transient EntityChoice selection;
@@ -61,10 +61,10 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
     public SelectorWidget(String componentId, IModel<SelectorWidgetStatus> statusModel) {
         super(componentId, statusModel);
 
-        Form form = new Form("form" );
+        Form form = new Form("form");
         DropDownChoice<EntityChoice> dropDown = new DropDownChoice<EntityChoice>(
                 "select",
-                new PropertyModel<EntityChoice>(this, "selection" ),
+                new PropertyModel<EntityChoice>(this, "selection"),
                 getChoices()
         ) {
             @Override
@@ -80,15 +80,15 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
                 final AppendingStringBuffer buffer = new AppendingStringBuffer(64 + option.length());
 
                 // Add option tag
-                buffer.append("\n<option" );
+                buffer.append("\n<option");
 
                 // If null is selected, indicate that
                 if ("".equals(selectedValue)) {
-                    buffer.append(" selected=\"selected\"" );
+                    buffer.append(" selected=\"selected\"");
                 }
 
                 // Add body of option tag
-                buffer.append(" value=\"\">" ).append(option).append("</option>" );
+                buffer.append(" value=\"\">").append(option).append("</option>");
 
                 return buffer;
             }
@@ -107,7 +107,7 @@ public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetS
 
                     if (choice != null) {
                         BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
-                        pageStatus.addFilter(new FilterEntity(getConfig().getCollection(), getSelection().getId()));
+                        pageStatus.addEntitySelection(new SingleEntitySelection(getConfig().getCollection(), getSelection().getId()));
                         setSelection(null);
                         sendEvent(EventAddFilter.EVENT);
                     }

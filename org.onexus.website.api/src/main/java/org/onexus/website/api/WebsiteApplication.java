@@ -30,8 +30,8 @@ import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.session.LoginContext;
 import org.onexus.website.api.utils.error.ExceptionErrorPage;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.onexus.website.api.utils.panels.SignOutPage;
@@ -87,7 +87,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
                 HttpServletRequest webRequest = (HttpServletRequest) cycle.getRequest().getContainerRequest();
                 HttpSession session = webRequest.getSession();
 
-                if (session!=null && LoginContext.get(session.getId())!=null) {
+                if (session != null && LoginContext.get(session.getId()) != null) {
                     LoginContext.set(LoginContext.get(session.getId()), null);
                 } else {
                     LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);

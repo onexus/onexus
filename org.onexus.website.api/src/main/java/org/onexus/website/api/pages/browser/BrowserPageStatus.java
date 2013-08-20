@@ -32,10 +32,18 @@ import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.onexus.website.api.widgets.filters.BrowserFilter;
+import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
+import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
@@ -45,7 +53,9 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private String currentView;
 
-    private Map<ORI, IFilter> filtersMap = new LinkedHashMap<ORI, IFilter>();
+    private Map<ORI, IEntitySelection> selectionMap = new LinkedHashMap<ORI, IEntitySelection>();
+
+    private List<FilterConfig> currentFilters = new ArrayList<FilterConfig>();
 
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
@@ -65,7 +75,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         ViewConfig viewConfig = tabConfig.getView(currentView);
 
         List<WidgetConfig> widgetConfigs = new ArrayList<WidgetConfig>();
-        Predicate visible = new VisiblePredicate(parentOri, getFilters());
+        Predicate visible = new VisiblePredicate(parentOri, getEntitySelections());
         CollectionUtils.select(ViewConfig.getSelectedWidgetConfigs(
                 pageConfig,
                 viewConfig.getLeft(),
@@ -110,6 +120,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
                 defaultStatus = getConfig().createEmptyStatus();
             }
             this.currentView = defaultStatus.getCurrentView();
+            this.currentFilters = new ArrayList<FilterConfig>();
         }
         this.currentTabId = currentTabId;
     }
@@ -127,19 +138,23 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     public Set<ORI> getFilteredCollections() {
-        return filtersMap.keySet();
+        return selectionMap.keySet();
     }
 
-    public Collection<IFilter> getFilters() {
-        return filtersMap.values();
+    public Collection<IEntitySelection> getEntitySelections() {
+        return selectionMap.values();
     }
 
-    public void addFilter(IFilter filter) {
-        filtersMap.put(filter.getFilteredCollection(), filter);
+    public List<FilterConfig> getCurrentFilters() {
+        return currentFilters;
     }
 
-    public void removeFilter(ORI filteredCollection) {
-        filtersMap.remove(filteredCollection);
+    public void addEntitySelection(IEntitySelection selection) {
+        selectionMap.put(selection.getSelectionCollection(), selection);
+    }
+
+    public void removeEntitySelection(ORI selectionCollection) {
+        selectionMap.remove(selectionCollection);
     }
 
     @Override
@@ -154,9 +169,10 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     @Override
     public void afterQueryBuild(Query query) {
 
-        if (getFilters() != null) {
-            for (IFilter fe : getFilters()) {
-                if (getCollectionManager().isLinkable(query, fe.getFilteredCollection().toAbsolute(query.getOn()))) {
+        // General entity selections
+        if (getEntitySelections() != null) {
+            for (IEntitySelection fe : getEntitySelections()) {
+                if (getCollectionManager().isLinkable(query, fe.getSelectionCollection().toAbsolute(query.getOn()))) {
                     Filter filter = fe.buildFilter(query);
                     QueryUtils.and(query, filter);
                     fe.setEnable(true);
@@ -164,6 +180,14 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
                     fe.setEnable(false);
                 }
             }
+        }
+
+        // Current tab filters
+        BrowserEntitySelection filterCompiler = new BrowserEntitySelection();
+        for (FilterConfig filterConfig : getCurrentFilters()) {
+            filterCompiler.setFilterConfig(filterConfig);
+            Filter filter = filterCompiler.buildFilter(query);
+            QueryUtils.and(query, filter);
         }
 
     }
@@ -214,8 +238,8 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         }
 
         ORI parentOri = getORI();
-        for (IFilter filter : getFilters()) {
-            if (filter instanceof FilterEntity) {
+        for (IEntitySelection filter : getEntitySelections()) {
+            if (filter instanceof SingleEntitySelection) {
                 parameters.add(keyPrefix + "f", filter.toUrlParameter(global, parentOri));
             } else {
                 parameters.add(keyPrefix + "fc", filter.toUrlParameter(global, parentOri));
@@ -241,10 +265,10 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
                 Collections.sort(tabs, new Comparator<TabConfig>() {
                     @Override
                     public int compare(TabConfig o1, TabConfig o2) {
-                           Integer v1 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentTabId, o1.getId());
-                           Integer v2 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentTabId, o2.getId());
+                        Integer v1 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentTabId, o1.getId());
+                        Integer v2 = StringUtils.getLevenshteinDistance(BrowserPageStatus.this.currentTabId, o2.getId());
 
-                           return v1.compareTo(v2);
+                        return v1.compareTo(v2);
                     }
                 });
                 this.currentTabId = tabs.get(0).getId();
@@ -278,22 +302,22 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             }
         }
 
-        filtersMap = new LinkedHashMap<ORI, IFilter>();
+        selectionMap = new LinkedHashMap<ORI, IEntitySelection>();
         List<StringValue> values = parameters.getValues(keyPrefix + "f");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
-                FilterEntity fe = new FilterEntity();
+                SingleEntitySelection fe = new SingleEntitySelection();
                 fe.loadUrlPrameter(value.toString());
-                addFilter(fe);
+                addEntitySelection(fe);
             }
         }
 
         values = parameters.getValues(keyPrefix + "fc");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
-                BrowserFilter fe = new BrowserFilter();
+                BrowserEntitySelection fe = new BrowserEntitySelection();
                 fe.loadUrlPrameter(value.toString());
-                addFilter(fe);
+                addEntitySelection(fe);
             }
         }
 

@@ -60,7 +60,7 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
 
             List<ViewConfig> views = browserConfig.getTab(browserStatus.getCurrentTabId()).getViews();
 
-            VisiblePredicate predicate = new VisiblePredicate(getPageBaseOri().getParent(), getPageStatus().getFilters());
+            VisiblePredicate predicate = new VisiblePredicate(getPageBaseOri().getParent(), getPageStatus().getEntitySelections());
 
             if (views != null && !views.isEmpty()) {
                 for (ViewConfig view : views) {

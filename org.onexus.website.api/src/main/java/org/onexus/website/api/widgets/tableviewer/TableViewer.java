@@ -95,8 +95,8 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
 
         Predicate sortablePredicate;
         if (pageStatus != null) {
-            sortablePredicate = new VisiblePredicate(getPageBaseOri(), pageStatus.getFilters());
-            Predicate filter = new VisiblePredicate(getPageBaseOri(), pageStatus.getFilters());
+            sortablePredicate = new VisiblePredicate(getPageBaseOri(), pageStatus.getEntitySelections());
+            Predicate filter = new VisiblePredicate(getPageBaseOri(), pageStatus.getEntitySelections());
             CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
         } else {
             sortablePredicate = new VisiblePredicate(getPageBaseOri(), Collections.EMPTY_LIST);

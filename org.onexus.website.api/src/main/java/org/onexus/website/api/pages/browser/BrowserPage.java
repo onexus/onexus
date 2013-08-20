@@ -58,9 +58,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super(componentId, statusModel);
         onEventFireUpdate(EventTabSelected.class, EventAddFilter.class, EventRemoveFilter.class);
 
-        add(new FiltersPanel("filters", statusModel));
-
-        add(new EmptyPanel("maps").setVisible(false));
+        add(new SelectionPanel("selection", statusModel));
 
         onEventFireUpdate(EventViewChange.class);
     }
@@ -227,7 +225,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
 
         // Check that the current view is visible
         List<ViewConfig> filteredViews = new ArrayList<ViewConfig>();
-        VisiblePredicate predicate = new VisiblePredicate(getStatus().getORI().getParent(), getStatus().getFilters());
+        VisiblePredicate predicate = new VisiblePredicate(getStatus().getORI().getParent(), getStatus().getEntitySelections());
         CollectionUtils.select(getCurrentTab().getViews(), predicate, filteredViews);
 
         boolean visibleView = false;
@@ -268,7 +266,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         }
 
         boolean visible = !isEmbed();
-        get("filters").setVisible(visible);
+        get("selection").setVisible(visible);
         get("tabs").setVisible(visible);
         //TODO viewSelector.setVisible(visible && views.size() > 1);
 
@@ -283,7 +281,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
             List<TabConfig> allTabs = getConfig().getTabs();
 
             // A predicate that filters the visible views
-            Predicate filter = new VisiblePredicate(getStatus().getORI().getParent(), getStatus().getFilters());
+            Predicate filter = new VisiblePredicate(getStatus().getORI().getParent(), getStatus().getEntitySelections());
 
             // Return a new collection with only the visible tabs
             List<TabConfig> tabs = new ArrayList<TabConfig>();

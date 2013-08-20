@@ -34,7 +34,7 @@ import org.onexus.website.api.events.AbstractEvent;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.pages.browser.BrowserPageLink;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.pages.browser.FilterEntity;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.LinkPanel;
 
@@ -82,18 +82,18 @@ public class FilterDecorator extends FieldDecorator {
             entityId = String.valueOf(entity.get(getField().getId()));
         }
 
-        WebMarkupContainer link = new BrowserPageLink<FilterEntity>(LinkPanel.LINK_ID, Model.of(new FilterEntity(collectionId, entityId))) {
+        WebMarkupContainer link = new BrowserPageLink<SingleEntitySelection>(LinkPanel.LINK_ID, Model.of(new SingleEntitySelection(collectionId, entityId))) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 BrowserPageStatus status = getBrowserPageStatus();
-                FilterEntity rowEntity = getModelObject();
+                SingleEntitySelection rowEntity = getModelObject();
 
                 // Try to make the link relative to the current website project
                 Website website = findParent(Website.class);
                 if (website != null) {
                     ORI projectUri = website.getConfig().getORI().getParent();
-                    ORI relativeUri = rowEntity.getFilteredCollection().toRelative(projectUri);
+                    ORI relativeUri = rowEntity.getSelectionCollection().toRelative(projectUri);
                     rowEntity.setFilteredCollection(relativeUri);
                 }
 
@@ -111,10 +111,10 @@ public class FilterDecorator extends FieldDecorator {
         return link;
     }
 
-    protected AbstractEvent[] onClick(FilterEntity rowEntity, BrowserPageStatus status) {
+    protected AbstractEvent[] onClick(SingleEntitySelection rowEntity, BrowserPageStatus status) {
 
         // Fix current row entity
-        status.addFilter(rowEntity);
+        status.addEntitySelection(rowEntity);
 
         return new AbstractEvent[]{EventAddFilter.EVENT};
     }

@@ -22,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.pages.browser.IFilter;
+import org.onexus.website.api.pages.browser.IEntitySelection;
 
 import java.util.Arrays;
 
@@ -32,8 +32,8 @@ public class VisibleTest {
     public void testVisiblePredicate() {
 
         Predicate emptyPredicate = createPredicate();
-        Predicate otherVariantSelected = createPredicate(new MockEntityFilter(new ORI("/data/variants"), "other-value"));
-        Predicate myVariantSelected = createPredicate(new MockEntityFilter(new ORI("/data/variants"), "9834yt908008"));
+        Predicate otherVariantSelected = createPredicate(new MockEntitySelection(new ORI("/data/variants"), "other-value"));
+        Predicate myVariantSelected = createPredicate(new MockEntitySelection(new ORI("/data/variants"), "9834yt908008"));
 
         assertTrue(emptyPredicate.evaluate(new MockVisible("(data/variants[VARIANT=9834yt908008] OR !data/variants)")));
         assertTrue(emptyPredicate.evaluate(new MockVisible("NOT data/variants OR data/variants[VARIANT=9834yt908008]")));
@@ -45,7 +45,7 @@ public class VisibleTest {
 
     }
 
-    private static Predicate createPredicate(IFilter... filter) {
+    private static Predicate createPredicate(IEntitySelection... filter) {
         return new VisiblePredicate(new ORI("http://tests.onexus.org"), Arrays.asList(filter));
     }
 }

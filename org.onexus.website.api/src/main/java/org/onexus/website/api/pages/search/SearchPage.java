@@ -52,9 +52,9 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.pages.search.boxes.BoxesPanel;
-import org.onexus.website.api.widgets.filters.FilterConfig;
-import org.onexus.website.api.widgets.filters.FiltersWidgetConfig;
-import org.onexus.website.api.widgets.filters.FiltersWidgetStatus;
+import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
+import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -135,7 +135,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
                 FiltersWidgetConfig filters = getStatus().getType().getFilters();
 
-                if (filters!=null) {
+                if (filters != null) {
                     FiltersWidgetStatus status = filters.createEmptyStatus();
                     status.setConfig(filters);
                     setFiltersStatus(status);
@@ -145,7 +145,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                         @Override
                         protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
                             filterConfig.setDeletable(true);
-                            search.setModelValue(new String[] { filterConfig.getName() });
+                            search.setModelValue(new String[]{filterConfig.getName()});
                             target.add(search);
                             ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
                             userFilter = filterConfig;
@@ -240,7 +240,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         this.filtersStatus = filtersStatus;
     }
 
-    private Iterator<IEntity> getAutocompleteChoices(String input) {
+    private Iterator<IEntity> getAutocompleteChoices(String in) {
+
+        int lastComma = in.lastIndexOf(',');
+        String input = (lastComma > -1 ? in.substring(lastComma+1).trim() : in.trim());
 
         Query query = new Query();
         SearchType type = getStatus().getType();
@@ -319,7 +322,11 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             response.write("</li>");
         }
 
-        private String getTextValue(IEntity object, String criteria) {
+        private String getTextValue(IEntity object, String in) {
+
+            int lastComma = in.lastIndexOf(',');
+            String criteria = (lastComma > -1 ? in.substring(lastComma+1).trim() : in.trim());
+            String previous = (lastComma > -1 ? in.substring(0, lastComma) + ", " : "");
 
 
             SearchType type = getStatus().getType();
@@ -329,11 +336,11 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 String value = String.valueOf(object.get(field));
 
                 if (StringUtils.containsIgnoreCase(value, criteria)) {
-                    return value;
+                    return previous + value;
                 }
             }
 
-            return String.valueOf(object.get(fields.get(0)));
+            return previous + String.valueOf(object.get(fields.get(0)));
         }
 
         public final void renderHeader(final Response response) {

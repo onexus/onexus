@@ -63,7 +63,7 @@ public class DataTablePanel extends Panel implements IAjaxIndicatorAware {
     @Override
     protected void onAfterRender() {
         super.onAfterRender();
-        if (dataProvider!=null) {
+        if (dataProvider != null) {
             dataProvider.close();
         }
     }

@@ -18,7 +18,7 @@
 package org.onexus.website.api.widgets.selector;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
@@ -56,7 +56,7 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
                 QueryUtils.and(query, new EqualId(collectionAlias, selection));
 
                 ORI mapCollection = config.getMapCollection();
-                if (mapCollection!=null) {
+                if (mapCollection != null) {
                     QueryUtils.newCollectionAlias(query, mapCollection);
                 }
             }
@@ -66,7 +66,7 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
 
     @Override
     public void decodeParameters(PageParameters parameters, String keyPrefix) {
-        StringValue s = parameters.get(keyPrefix+"s");
+        StringValue s = parameters.get(keyPrefix + "s");
 
         if (!s.isEmpty()) {
             selection = s.toString();
@@ -75,6 +75,6 @@ public class SelectorWidgetStatus extends WidgetStatus<SelectorWidgetConfig> {
 
     @Override
     public void encodeParameters(PageParameters parameters, String keyPrefix) {
-        parameters.set(keyPrefix+"s", selection);
+        parameters.set(keyPrefix + "s", selection);
     }
 }

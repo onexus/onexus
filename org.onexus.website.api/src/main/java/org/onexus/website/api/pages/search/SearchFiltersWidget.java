@@ -19,9 +19,9 @@ package org.onexus.website.api.pages.search;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
-import org.onexus.website.api.widgets.filters.FilterConfig;
-import org.onexus.website.api.widgets.filters.FiltersWidget;
-import org.onexus.website.api.widgets.filters.FiltersWidgetStatus;
+import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.FiltersWidget;
+import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
 
 public abstract class SearchFiltersWidget extends FiltersWidget {
 

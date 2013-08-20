@@ -27,7 +27,11 @@ import org.onexus.resource.api.session.LoginContext;
 import org.onexus.ui.authentication.persona.PersonaRoles;
 
 import javax.security.auth.Subject;
-import javax.security.auth.callback.*;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,7 +48,7 @@ public class WebsiteSession extends AbstractAuthenticatedWebSession implements I
         HttpServletRequest webRequest = (HttpServletRequest) request.getContainerRequest();
         HttpSession session = webRequest.getSession();
 
-        if (session!=null && LoginContext.get(session.getId())!=null) {
+        if (session != null && LoginContext.get(session.getId()) != null) {
             LoginContext.set(LoginContext.get(session.getId()), null);
         } else {
             LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
@@ -54,7 +58,7 @@ public class WebsiteSession extends AbstractAuthenticatedWebSession implements I
     @Override
     public Roles getRoles() {
         Roles roles = new Roles();
-        roles.addAll( LoginContext.get().getRoles() );
+        roles.addAll(LoginContext.get().getRoles());
         return roles;
     }
 

@@ -17,6 +17,8 @@
  */
 package org.onexus.website.api.widgets.tableviewer.headers;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.website.api.widgets.tableviewer.formaters.StringFormater;
@@ -30,9 +32,10 @@ public class FieldHeader extends ElementHeader {
     private String defaultTitle;
     private Collection collection;
     private Field field;
+    private String filter;
     private boolean sortable;
 
-    public FieldHeader(String defaultLabel, String defaultTitle, Collection collection, Field field, IHeader parentHeader, boolean sortable) {
+    public FieldHeader(String defaultLabel, String defaultTitle, Collection collection, Field field, IHeader parentHeader, String filter, boolean sortable) {
         super(field, parentHeader, new StringFormater(getMaxLength(field),
                 false));
         this.defaultLabel = defaultLabel;
@@ -40,6 +43,17 @@ public class FieldHeader extends ElementHeader {
         this.field = field;
         this.collection = collection;
         this.sortable = sortable;
+        this.filter = filter;
+    }
+
+    @Override
+    public Component getHeader(String componentId) {
+
+        if (Strings.isEmpty(filter)) {
+            return super.getHeader(componentId);
+        }
+
+        return new FilteredHeader(componentId, super.getHeader(FilteredHeader.CHILD_ID), this);
     }
 
     @Override
@@ -95,4 +109,11 @@ public class FieldHeader extends ElementHeader {
         return collection;
     }
 
+    public Field getField() {
+        return field;
+    }
+
+    public String getFilter() {
+        return filter;
+    }
 }
