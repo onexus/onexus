@@ -18,9 +18,12 @@
 package org.onexus.website.api.pages.browser;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
@@ -29,12 +32,18 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.WebsiteStatus;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventRemoveFilter;
+import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.pages.search.SearchPage;
+import org.onexus.website.api.pages.search.SearchPageConfig;
+import org.onexus.website.api.pages.search.SearchPageStatus;
+import org.onexus.website.api.widgets.Widget;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collection;
@@ -47,12 +56,34 @@ public class SelectionPanel extends EventPanel {
     @PaxWicketBean(name = "collectionManager")
     public transient ICollectionManager collectionManager;
 
+    private WebMarkupContainer widgetModal;
 
     public SelectionPanel(String id, IModel<BrowserPageStatus> pageModel) {
         super(id, pageModel);
 
         // Update this component if this events are fired.
         onEventFireUpdate(EventAddFilter.class, EventRemoveFilter.class, EventFiltersUpdate.class);
+
+        widgetModal = new WebMarkupContainer("widgetModal");
+        widgetModal.setOutputMarkupId(true);
+
+        widgetModal.add(new EmptyPanel("widget"));
+
+        widgetModal.add(new AjaxLink<String>("close") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                Component widget = widgetModal.get("widget");
+                if (widget instanceof Widget) {
+                    ((Widget) widget).onClose(target);
+                }
+                target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
+            }
+        });
+
+        add(widgetModal);
+
+        widgetModal.add(new Label("modalHeader", "Selection details"));
     }
 
     @Override
@@ -71,13 +102,40 @@ public class SelectionPanel extends EventPanel {
 
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
-                // Add new fixed entity
-                //TODO container.add(new Label("collectionLabel", filter.getLabel(query)));
-                Label labelComponent = new Label("title", filter.getTitle(query));
-                labelComponent.setEscapeModelStrings(false);
-                container.add(labelComponent);
+                final String title = filter.getTitle(query);
 
-                //TODO container.add(filter.getTooltip("box", query));
+                // Add new fixed entity
+                BrowserPageLink<ORI> editLink = new BrowserPageLink<ORI>("edit") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+
+                        SearchPageStatus status = new SearchPageStatus();
+                        WebsiteStatus websiteStatus = getWebsiteStatus();
+                        WebsiteConfig websiteConfig = websiteStatus.getConfig();
+
+                        SearchPageConfig searchPageConfig = null;
+                        for (PageConfig config : websiteConfig.getPages()) {
+                            if (config instanceof SearchPageConfig) {
+                                searchPageConfig = (SearchPageConfig) config;
+                            }
+                        }
+
+                        status.setSearch(title);
+                        status.setConfig(searchPageConfig);
+
+                        widgetModal.addOrReplace(new SearchPage("widget", new Model<SearchPageStatus>(status), false, false));
+
+                        target.add(widgetModal);
+
+                        target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
+                    }
+                };
+
+                Label labelComponent = new Label("title", title);
+                labelComponent.setEscapeModelStrings(false);
+                editLink.add(labelComponent);
+                container.add(editLink);
+
 
                 BrowserPageLink<ORI> removeLink = new BrowserPageLink<ORI>("remove", Model.of(filter.getSelectionCollection())) {
 
@@ -114,8 +172,12 @@ public class SelectionPanel extends EventPanel {
     }
 
     protected ORI getBaseUri() {
-        WebsiteStatus websiteStatus = findParentStatus(getDefaultModel(), WebsiteStatus.class);
+        WebsiteStatus websiteStatus = getWebsiteStatus();
         return (websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent());
+    }
+
+    protected WebsiteStatus getWebsiteStatus() {
+        return findParentStatus(getDefaultModel(), WebsiteStatus.class);
     }
 
     private static <T> T findParentStatus(IModel<?> model, Class<T> statusClass) {

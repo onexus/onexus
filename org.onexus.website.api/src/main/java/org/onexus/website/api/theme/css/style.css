@@ -48,7 +48,7 @@ ul.breadcrumb {
    background-color: #FF7634;
 }
 
-#selection .btn {
+#selection > div > div.btn {
     background-color:#ffa83f;
     background-image:none;
 }

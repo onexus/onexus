@@ -75,9 +75,16 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     private transient FilterConfig userFilter;
 
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
+        this(componentId, statusModel, true, true);
+    }
+
+    public SearchPage(String componentId, IModel<SearchPageStatus> statusModel, boolean showTypes, boolean showLogo) {
         super(componentId, statusModel);
 
         IModel<SearchPageStatus> pageStatusModel = new PropertyModel<SearchPageStatus>(this, "status");
+
+        WebMarkupContainer container = new WebMarkupContainer("container");
+        container.add(new AttributeModifier("class", (showLogo ? "show-logo" : "hide-logo")));
 
         Form form = new Form<SearchPageStatus>("form") {
             @Override
@@ -193,8 +200,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             }
         });
         form.add(typeSelect);
+        typeSelect.setVisible(showTypes);
 
-        add(form);
+        container.add(form);
+        add(container);
 
         // Examples
         WebMarkupContainer examples = new WebMarkupContainer("examplesContainer");

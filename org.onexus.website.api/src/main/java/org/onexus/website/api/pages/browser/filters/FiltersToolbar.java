@@ -41,7 +41,7 @@ public class FiltersToolbar extends Panel {
 
     private WebMarkupContainer widgetModal;
 
-    IModel<BrowserPageStatus> statusModel;
+    private IModel<BrowserPageStatus> statusModel;
 
     public FiltersToolbar(String componentId, IModel<BrowserPageStatus> statusModel) {
         super(componentId);
