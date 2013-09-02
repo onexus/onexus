@@ -48,12 +48,7 @@ public class FieldHeader extends ElementHeader {
 
     @Override
     public Component getHeader(String componentId) {
-
-        if (Strings.isEmpty(filter)) {
-            return super.getHeader(componentId);
-        }
-
-        return new FilteredHeader(componentId, super.getHeader(FilteredHeader.CHILD_ID), this);
+        return super.getHeader(componentId);
     }
 
     @Override
@@ -89,6 +84,10 @@ public class FieldHeader extends ElementHeader {
     @Override
     public boolean isSortable() {
         return sortable;
+    }
+
+    public boolean isFilterable() {
+        return !Strings.isEmpty(filter);
     }
 
     public static int getMaxLength(Field attribute) {

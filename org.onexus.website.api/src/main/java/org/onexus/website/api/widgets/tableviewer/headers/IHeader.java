@@ -35,6 +35,8 @@ public interface IHeader extends Serializable {
 
     public boolean isSortable();
 
+    public boolean isFilterable();
+
     public Component getHelp(String componentId);
 
 }

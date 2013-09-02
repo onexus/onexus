@@ -16,6 +16,10 @@
     margin: 15px; padding: 10px 15px 2px 15px;
 }
 
+#boxes .figure {
+    margin: 15px; padding: 10px 15px 2px 15px;
+}
+
 div.types input {
     float: left;
 }

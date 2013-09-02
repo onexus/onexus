@@ -89,6 +89,10 @@ public class ElementHeader implements IHeader {
         return (sortProperty != null);
     }
 
+    public boolean isFilterable() {
+        return false;
+    }
+
     @Override
     public Component getHelp(String componentId) {
         return new EmptyPanel(componentId);

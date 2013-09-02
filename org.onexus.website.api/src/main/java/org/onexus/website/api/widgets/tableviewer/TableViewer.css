@@ -3,7 +3,7 @@ table.table-viewer {
    white-space: nowrap;
 }
 
-table.table-viewer tr.headers th.wicket_orderDown a {
+table.table-viewer tr.headers div.wicket_orderDown a {
       background-image: url('images/orderdown.gif');
       background-position: center left;
       background-repeat: no-repeat;
@@ -11,7 +11,7 @@ table.table-viewer tr.headers th.wicket_orderDown a {
       
 }
 
-table.table-viewer tr.headers th.wicket_orderNone a {
+table.table-viewer tr.headers div.wicket_orderNone a {
       background-image: url('images/ordernone.gif');
       background-position: center left;
       background-repeat: no-repeat;
@@ -20,7 +20,7 @@ table.table-viewer tr.headers th.wicket_orderNone a {
 }
 
 
-table.table-viewer tr.headers th.wicket_orderUp a {
+table.table-viewer tr.headers div.wicket_orderUp a {
       background-image: url('images/orderup.gif');
       background-position: center left;
       background-repeat: no-repeat;

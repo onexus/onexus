@@ -5,11 +5,11 @@
         <a href="#" rel="tooltip" title="Remove this filter" wicket:id="remove"><i
                 class="icon-remove icon-white"></i></a>
     </div>
-    <div class="modal hide" wicket:id="widgetModal" style="width: 700px; margin-left: -350px;">
+    <div class="modal hide" wicket:id="widgetModal" style="width: 700px; margin: 0px 0px 0px -350px; position:absolute; top:100px;">
         <div class="modal-header">
             <h3 wicket:id="modalHeader"></h3>
         </div>
-        <div wicket:id="widget" class="modal-body"></div>
+        <div wicket:id="widget" class="modal-body" style="max-height: none;"></div>
         <div class="modal-footer">
             <a href="#" wicket:id="close" class="btn">Close</a>
         </div>

@@ -73,6 +73,10 @@ public class CollectionColumn extends AbstractColumn {
         return headerDecorator;
     }
 
+    public boolean isFilterable() {
+        return headerDecorator.isFilterable();
+    }
+
     @Override
     public String getSortProperty() {
         return headerDecorator.getSortProperty();

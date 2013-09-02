@@ -54,6 +54,11 @@ public class EmptyHeader implements IHeader {
     }
 
     @Override
+    public boolean isFilterable() {
+        return false;
+    }
+
+    @Override
     public Component getHelp(String componentId) {
         return new EmptyPanel(componentId);
     }

@@ -17,11 +17,14 @@
  */
 package org.onexus.website.api.pages.search.boxes;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.In;
@@ -29,9 +32,12 @@ import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.pages.search.FigureConfig;
 import org.onexus.website.api.pages.search.SearchLink;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
+import org.onexus.website.api.pages.search.figures.FigureBox;
+import org.onexus.website.api.pages.search.figures.LinksBox;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -52,28 +58,60 @@ public class BoxesPanel extends Panel {
         SearchType type = status.getType();
 
         if (status.getSearch() == null) {
+
+            // Nothing selected
+            add(new EmptyPanel("disambiguation").setVisible(false));
             List<SearchLink> links = type.getFixLinks();
             if (links != null && !links.isEmpty()) {
                 boxes.add(new MainLinksBox(boxes.newChildId(), links));
             }
+
         } else {
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
+                // Single entity selection
                 IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
 
+                if (table.next()) {
 
-                int count = 0;
-                while (table.next()) {
-                    boxes.add(new EntitySelectBox(boxes.newChildId(), count, status, table.getEntity(collectionUri)));
-                    count++;
-                }
+                    IEntity entity = table.getEntity(collectionUri);
 
-                if (count == 0) {
+                    boxes.add(new LinksBox(boxes.newChildId(), 0, status, entity));
+
+                    for (FigureConfig figure : type.getFigures()) {
+                        boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, entity));
+                    }
+
+                    if (table.next()) {
+                        StringBuilder disambiguation = new StringBuilder();
+                        disambiguation.append("<strong>Did you mean...</strong>&nbsp;");
+
+                        disambiguation.append("<a href=''>");
+                        disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
+                        disambiguation.append("</a>");
+                        while (table.next()) {
+                            disambiguation.append(", <a href=''>");
+                            disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
+                            disambiguation.append("</a>");
+                        }
+
+                        add(new Label("disambiguation", disambiguation.toString()).setEscapeModelStrings(false));
+                    } else {
+                        add(new EmptyPanel("disambiguation").setVisible(false));
+                    }
+
+                } else {
+                    add(new EmptyPanel("disambiguation"));
                     boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
                 }
+                table.close();
 
             } else {
+
+                // Multiple entities selection
+
+                add(new EmptyPanel("disambiguation").setVisible(false));
 
                 if (filterConfig == null) {
                     filterConfig = new FilterConfig(status.getSearch());
@@ -90,13 +128,19 @@ public class BoxesPanel extends Panel {
 
                 }
 
-                boxes.add(new EntitySelectBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
+                boxes.add(new LinksBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
             }
         }
 
 
         add(boxes);
 
+    }
+
+    private String getEntityLabel(IEntity entity) {
+        String labelField = entity.getCollection().getProperty("FIXED_ENTITY_FIELD");
+        String label = (labelField == null ? StringUtils.replace(entity.getId(), "\t", "-") : String.valueOf(entity.get(labelField)));
+        return label;
     }
 
     private IEntityTable getEntityTable(SearchType type, ORI collectionUri, String search) {

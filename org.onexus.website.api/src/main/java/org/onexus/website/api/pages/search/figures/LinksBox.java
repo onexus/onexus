@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.website.api.pages.search.boxes;
+package org.onexus.website.api.pages.search.figures;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +37,7 @@ import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.SearchLink;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
+import org.onexus.website.api.pages.search.boxes.FieldsPanel;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EntitySelectBox extends Panel {
+public class LinksBox extends Panel {
 
     private transient int position;
     private transient IEntity entity;
@@ -53,7 +54,7 @@ public class EntitySelectBox extends Panel {
     private transient FilterConfig filterConfig;
     private transient SearchPageStatus status;
 
-    public EntitySelectBox(String id, int position, SearchPageStatus status, IEntity entity) {
+    public LinksBox(String id, int position, SearchPageStatus status, IEntity entity) {
         super(id);
 
         this.position = position;
@@ -64,7 +65,7 @@ public class EntitySelectBox extends Panel {
 
     }
 
-    public EntitySelectBox(String id, int position, SearchPageStatus status, ORI collection, FilterConfig filterConfig) {
+    public LinksBox(String id, int position, SearchPageStatus status, ORI collection, FilterConfig filterConfig) {
         super(id);
 
         this.position = position;

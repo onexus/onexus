@@ -35,6 +35,7 @@ import org.onexus.website.api.utils.panels.HelpMark;
 import org.onexus.website.api.widgets.tableviewer.columns.AbstractColumn;
 import org.onexus.website.api.widgets.tableviewer.columns.CollectionColumn;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
+import org.onexus.website.api.widgets.tableviewer.headers.FilteredHeader;
 import org.onexus.website.api.widgets.tableviewer.headers.IHeader;
 
 import java.util.List;
@@ -150,16 +151,25 @@ public class HeadersToolbar extends AbstractToolbar {
             headers.add(item);
 
             WebMarkupContainer firstHeaderContainer = null;
-            if (column.isSortable()) {
-                firstHeaderContainer = newSortableHeader("header",
-                        column.getSortProperty(), stateLocator);
+            if (column.isFilterable()) {
+                firstHeaderContainer = new FilteredHeader("header", (FieldHeader) column.getHeaderDecorator());
             } else {
                 firstHeaderContainer = new WebMarkupContainer("header");
             }
 
+
+            WebMarkupContainer innerHeader;
+            if (column.isSortable()) {
+                innerHeader = newSortableHeader("filter",
+                        column.getSortProperty(), stateLocator);
+            } else {
+                innerHeader = new WebMarkupContainer("filter");
+            }
+            firstHeaderContainer.add(innerHeader);
+
             item.add(firstHeaderContainer);
             item.setRenderBodyOnly(true);
-            firstHeaderContainer.add(firstHeader.getHeader("label"));
+            innerHeader.add(firstHeader.getHeader("label"));
             if (firstHeader.getLabel() == null) {
                 firstHeaderContainer.add(new AttributeModifier("class",
                         new Model<String>("empty")));

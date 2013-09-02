@@ -111,15 +111,6 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 return getAutocompleteChoices(input);
             }
         });
-        search.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                userFilter = null;
-                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, userFilter).setOutputMarkupId(true));
-                target.add(SearchPage.this.get("boxes"));
-            }
-        });
 
         form.add(search);
 
