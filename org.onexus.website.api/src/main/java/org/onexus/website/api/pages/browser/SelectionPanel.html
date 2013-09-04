@@ -1,9 +1,13 @@
 <html xmlns:wicket>
 <wicket:panel>
+
     <div class="btn btn-large" wicket:id="filter">
-        <a href="#" wicket:id="edit"><span wicket:id="title">ENSG00000163161</span></a>
-        <a href="#" rel="tooltip" title="Remove this filter" wicket:id="remove"><i
+        <a href="#" wicket:id="edit" rel="tooltip" data-placement="right" title="Edit and view selection details" ><span wicket:id="title">ENSG00000163161</span></a>
+        <a href="#" rel="tooltip" title="Remove this selection" wicket:id="remove"><i
                 class="icon-remove icon-white"></i></a>
+    </div>
+    <div style="background-color: #fafafa; border: 1px solid #ddd;" class="btn btn-large">
+        <a href="#" wicket:id="new" rel="tooltip" data-placement="right" title="Create a new selection"><span style="color: #999;">New selection...</span></a>
     </div>
     <div class="modal hide" wicket:id="widgetModal" style="width: 700px; margin: 0px 0px 0px -350px; position:absolute; top:100px;">
         <div class="modal-header">

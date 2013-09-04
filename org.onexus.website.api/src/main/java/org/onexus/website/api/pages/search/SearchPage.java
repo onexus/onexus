@@ -89,8 +89,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         Form form = new Form<SearchPageStatus>("form") {
             @Override
             protected void onSubmit() {
-                ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, userFilter).setOutputMarkupId(true));
+                SearchPage.this.onSubmit(SearchPage.this.getStatus(), SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent(), userFilter);
             }
         };
         form.setMultiPart(true);
@@ -178,7 +177,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 SearchPage.this.addOrReplace(new EmptyPanel("boxes"));
                 getStatus().setSearch("");
                 target.add(search);
-                target.add(SearchPage.this.get("form").get("examplesContainer"));
+                target.add(SearchPage.this.get("container").get("form").get("examplesContainer"));
                 target.add(SearchPage.this.get("boxes"));
 
                 if (getStatus().getType().getFilters() == null) {
@@ -230,6 +229,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
         add(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null));
 
+    }
+
+    protected void onSubmit(SearchPageStatus status, ORI baseUri, FilterConfig filter) {
+        addOrReplace(new BoxesPanel("boxes", status, baseUri, filter).setOutputMarkupId(true));
     }
 
     public FiltersWidgetStatus getFiltersStatus() {

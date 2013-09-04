@@ -19,10 +19,12 @@ package org.onexus.website.api.pages.search.boxes;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
@@ -71,7 +73,7 @@ public class BoxesPanel extends Panel {
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
                 // Single entity selection
-                IEntityTable table = getEntityTable(type, collectionUri, status.getSearch());
+                IEntityTable table = getEntityTable(collectionManager, type, collectionUri, status.getSearch());
 
                 if (table.next()) {
 
@@ -80,23 +82,13 @@ public class BoxesPanel extends Panel {
                     boxes.add(new LinksBox(boxes.newChildId(), 0, status, entity));
 
                     for (FigureConfig figure : type.getFigures()) {
-                        boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, entity));
+                        if (Strings.isEmpty(figure.getVisible()) || "SINGLE".equalsIgnoreCase(figure.getVisible())) {
+                            boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, entity));
+                        }
                     }
 
                     if (table.next()) {
-                        StringBuilder disambiguation = new StringBuilder();
-                        disambiguation.append("<strong>Did you mean...</strong>&nbsp;");
-
-                        disambiguation.append("<a href=''>");
-                        disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
-                        disambiguation.append("</a>");
-                        while (table.next()) {
-                            disambiguation.append(", <a href=''>");
-                            disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
-                            disambiguation.append("</a>");
-                        }
-
-                        add(new Label("disambiguation", disambiguation.toString()).setEscapeModelStrings(false));
+                        add(newDisambiguationBox("disambiguation", table, collectionUri));
                     } else {
                         add(new EmptyPanel("disambiguation").setVisible(false));
                     }
@@ -129,6 +121,12 @@ public class BoxesPanel extends Panel {
                 }
 
                 boxes.add(new LinksBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
+
+                for (FigureConfig figure : type.getFigures()) {
+                    if (Strings.isEmpty(figure.getVisible()) || "LIST".equalsIgnoreCase(figure.getVisible())) {
+                        boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, collectionUri, filterConfig));
+                    }
+                }
             }
         }
 
@@ -137,13 +135,29 @@ public class BoxesPanel extends Panel {
 
     }
 
+    private Component newDisambiguationBox(String componentId, IEntityTable table, ORI collectionUri) {
+        StringBuilder disambiguation = new StringBuilder();
+        disambiguation.append("<strong>Did you mean...</strong>&nbsp;");
+
+        disambiguation.append("<a href=''>");
+        disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
+        disambiguation.append("</a>");
+        while (table.next()) {
+            disambiguation.append(", <a href=''>");
+            disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
+            disambiguation.append("</a>");
+        }
+
+        return new Label(componentId, disambiguation.toString()).setEscapeModelStrings(false);
+    }
+
     private String getEntityLabel(IEntity entity) {
         String labelField = entity.getCollection().getProperty("FIXED_ENTITY_FIELD");
         String label = (labelField == null ? StringUtils.replace(entity.getId(), "\t", "-") : String.valueOf(entity.get(labelField)));
         return label;
     }
 
-    private IEntityTable getEntityTable(SearchType type, ORI collectionUri, String search) {
+    public static IEntityTable getEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search) {
 
         Query query = new Query();
 

@@ -29,11 +29,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.query.In;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.WebsiteStatus;
+import org.onexus.website.api.events.AbstractEvent;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.events.EventPanel;
@@ -43,7 +47,11 @@ import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.pages.search.SearchPage;
 import org.onexus.website.api.pages.search.SearchPageConfig;
 import org.onexus.website.api.pages.search.SearchPageStatus;
+import org.onexus.website.api.pages.search.SearchType;
+import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
+import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collection;
@@ -63,6 +71,41 @@ public class SelectionPanel extends EventPanel {
 
         // Update this component if this events are fired.
         onEventFireUpdate(EventAddFilter.class, EventRemoveFilter.class, EventFiltersUpdate.class);
+
+        // Create a new selection
+        add(new BrowserPageLink<ORI>("new") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+
+                SearchPageStatus status = new SearchPageStatus();
+                WebsiteStatus websiteStatus = getWebsiteStatus();
+                WebsiteConfig websiteConfig = websiteStatus.getConfig();
+
+                SearchPageConfig searchPageConfig = null;
+                for (PageConfig config : websiteConfig.getPages()) {
+                    if (config instanceof SearchPageConfig) {
+                        searchPageConfig = (SearchPageConfig) config;
+                    }
+                }
+
+                status.setConfig(searchPageConfig);
+
+                widgetModal.addOrReplace(new Label("modalHeader", "New selection"));
+                widgetModal.addOrReplace(
+                        new SearchPage("widget", new Model<SearchPageStatus>(status), true, false) {
+                            @Override
+                            protected void onSubmit(SearchPageStatus status, ORI baseUri, FilterConfig filterConfig) {
+                                SelectionPanel.this.onSubmit(status, baseUri, filterConfig);
+                            }
+                        }
+                );
+
+                target.add(widgetModal);
+
+                target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
+            }
+        });
+
 
         widgetModal = new WebMarkupContainer("widgetModal");
         widgetModal.setOutputMarkupId(true);
@@ -86,11 +129,56 @@ public class SelectionPanel extends EventPanel {
         widgetModal.add(new Label("modalHeader", "Selection details"));
     }
 
+    protected void onSubmit(SearchPageStatus status, ORI baseUri, FilterConfig filterConfig) {
+
+        SearchType type = status.getType();
+
+        if (status.getSearch() != null) {
+
+            ORI collectionUri = type.getCollection().toAbsolute(baseUri);
+            if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
+                IEntityTable table = BoxesPanel.getEntityTable(collectionManager, type, collectionUri, status.getSearch());
+                if (table.next()) {
+
+                    // Single entity selection
+                    IEntity entity = table.getEntity(collectionUri);
+                    getBrowserPage().addEntitySelection(new SingleEntitySelection(entity));
+
+                }
+                table.close();
+            } else {
+
+                // Multiple entities selection
+                if (filterConfig == null) {
+                    filterConfig = new FilterConfig(status.getSearch());
+
+                    filterConfig.setCollection(collectionUri);
+                    filterConfig.setDefine("fc='" + collectionUri + "'");
+                    String mainKey = type.getKeysList().get(0);
+                    In where = new In("fc", mainKey);
+                    String[] values = status.getSearch().split(",");
+                    for (String value : values) {
+                        where.addValue(value.trim());
+                    }
+                    filterConfig.setWhere(where.toString());
+
+                }
+
+                getBrowserPage().addEntitySelection(new BrowserEntitySelection(filterConfig));
+
+            }
+        }
+
+        sendEvent(EventAddFilter.EVENT);
+
+    }
+
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
 
         RepeatingView filterRules = new RepeatingView("filter");
+        filterRules.setOutputMarkupId(true);
 
         Collection<IEntitySelection> filters = getBrowserPage().getEntitySelections();
 
@@ -102,9 +190,11 @@ public class SelectionPanel extends EventPanel {
 
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
-                final String title = filter.getTitle(query);
 
-                // Add new fixed entity
+                final ORI filterORI = filter.getSelectionCollection();
+                final String filterTitle = filter.getTitle(query);
+
+                // Edit a selection
                 BrowserPageLink<ORI> editLink = new BrowserPageLink<ORI>("edit") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -120,10 +210,23 @@ public class SelectionPanel extends EventPanel {
                             }
                         }
 
-                        status.setSearch(title);
+                        for (SearchType searchType : searchPageConfig.getTypes()) {
+                            if (searchType.getCollection().equals(filterORI)) {
+                                status.setType(searchType);
+                                break;
+                            }
+                        }
+
+                        status.setSearch(filterTitle);
                         status.setConfig(searchPageConfig);
 
-                        widgetModal.addOrReplace(new SearchPage("widget", new Model<SearchPageStatus>(status), false, false));
+                        widgetModal.addOrReplace(new Label("modalHeader", "Selection details"));
+                        widgetModal.addOrReplace(new SearchPage("widget", new Model<SearchPageStatus>(status), false, false) {
+                            @Override
+                            protected void onSubmit(SearchPageStatus status, ORI baseUri, FilterConfig filterConfig) {
+                                SelectionPanel.this.onSubmit(status, baseUri, filterConfig);
+                            }
+                        });
 
                         target.add(widgetModal);
 
@@ -131,12 +234,12 @@ public class SelectionPanel extends EventPanel {
                     }
                 };
 
-                Label labelComponent = new Label("title", title);
+                Label labelComponent = new Label("title", filterTitle);
                 labelComponent.setEscapeModelStrings(false);
                 editLink.add(labelComponent);
                 container.add(editLink);
 
-
+                // Remove link
                 BrowserPageLink<ORI> removeLink = new BrowserPageLink<ORI>("remove", Model.of(filter.getSelectionCollection())) {
 
                     @Override
@@ -160,6 +263,12 @@ public class SelectionPanel extends EventPanel {
 
         addOrReplace(filterRules);
 
+
+    }
+
+    @Override
+    protected void onRegisteredEvent(AjaxRequestTarget target, AbstractEvent event) {
+        target.add(this.get("filters"));
     }
 
     private BrowserPageStatus getBrowserPage() {
