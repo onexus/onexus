@@ -32,8 +32,9 @@ import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -183,7 +184,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         }
 
         // Current tab filters
-        BrowserEntitySelection filterCompiler = new BrowserEntitySelection();
+        MultipleEntitySelection filterCompiler = new MultipleEntitySelection();
         for (FilterConfig filterConfig : getCurrentFilters()) {
             filterCompiler.setFilterConfig(filterConfig);
             Filter filter = filterCompiler.buildFilter(query);
@@ -315,7 +316,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         values = parameters.getValues(keyPrefix + "fc");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
-                BrowserEntitySelection fe = new BrowserEntitySelection();
+                MultipleEntitySelection fe = new MultipleEntitySelection();
                 fe.loadUrlPrameter(value.toString());
                 addEntitySelection(fe);
             }

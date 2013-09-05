@@ -36,7 +36,7 @@ public class FixFiltersWidgetStatus extends WidgetStatus<FixFiltersWidgetConfig>
     @Override
     public void onQueryBuild(Query query) {
         for (FilterConfig filterConfig : getConfig().getFilters()) {
-            IEntitySelection filter = new BrowserEntitySelection(filterConfig);
+            IEntitySelection filter = new MultipleEntitySelection(filterConfig);
             Filter filterQuery = filter.buildFilter(query);
             QueryUtils.and(query, filterQuery);
         }

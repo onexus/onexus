@@ -4,11 +4,13 @@ import org.onexus.website.api.utils.visible.IVisible;
 
 import java.io.Serializable;
 
-public class FigureConfig implements Serializable, IVisible {
+public abstract class FigureConfig implements Serializable, IVisible {
 
     private String title;
 
-    private String text;
+    private String description;
+
+    private SearchLink link;
 
     private String visible;
 
@@ -20,12 +22,12 @@ public class FigureConfig implements Serializable, IVisible {
         this.title = title;
     }
 
-    public String getText() {
-        return text;
+    public String getDescription() {
+        return description;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -35,5 +37,13 @@ public class FigureConfig implements Serializable, IVisible {
 
     public void setVisible(String visible) {
         this.visible = visible;
+    }
+
+    public SearchLink getLink() {
+        return link;
+    }
+
+    public void setLink(SearchLink link) {
+        this.link = link;
     }
 }

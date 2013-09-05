@@ -36,6 +36,7 @@ import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
+import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.utils.visible.IVisible;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
@@ -43,6 +44,7 @@ import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

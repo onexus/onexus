@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class BrowserEntitySelection implements IEntitySelection {
+public class MultipleEntitySelection implements IEntitySelection {
 
-    private static final Logger log = LoggerFactory.getLogger(BrowserEntitySelection.class);
+    private static final Logger log = LoggerFactory.getLogger(MultipleEntitySelection.class);
     private FilterConfig config;
     private boolean enable;
     private boolean deletable;
@@ -46,10 +46,10 @@ public class BrowserEntitySelection implements IEntitySelection {
     @PaxWicketBean(name = "resourceSerializer")
     private IResourceSerializer resourceSerializer;
 
-    public BrowserEntitySelection() {
+    public MultipleEntitySelection() {
     }
 
-    public BrowserEntitySelection(FilterConfig config) {
+    public MultipleEntitySelection(FilterConfig config) {
         this.config = config;
         this.enable = true;
         this.deletable = true;

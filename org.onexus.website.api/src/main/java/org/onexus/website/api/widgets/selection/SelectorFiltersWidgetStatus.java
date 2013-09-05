@@ -60,7 +60,7 @@ public class SelectorFiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfi
         if (selectedFilters != null && !selectedFilters.isEmpty()) {
             List<Filter> orFilters = new ArrayList<Filter>();
             for (FilterConfig selectedFilter : selectedFilters) {
-                BrowserEntitySelection browserSelection = new BrowserEntitySelection(selectedFilter);
+                MultipleEntitySelection browserSelection = new MultipleEntitySelection(selectedFilter);
                 orFilters.add(browserSelection.buildFilter(query));
             }
             Filter allFilters = QueryUtils.joinOr(orFilters);

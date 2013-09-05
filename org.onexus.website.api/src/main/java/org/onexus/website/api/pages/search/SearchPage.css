@@ -17,7 +17,22 @@
 }
 
 #boxes .figure {
-    margin: 15px; padding: 10px 15px 2px 15px;
+    margin: 10px 15px 0px 15px;
+    padding: 10px 15px 0px 15px;
+}
+
+#boxes .description {
+    margin: 10px 15px;
+    padding: 0px 15px 0px;
+    font-size: 15px;
+    color: #333;
+    text-align: justify;
+}
+
+#boxes .link {
+    margin: 0px 15px 15px 15px;
+    padding: 0px 15px 0px 15px;
+    float: right;
 }
 
 div.types input {

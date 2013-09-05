@@ -39,8 +39,9 @@ import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.pages.search.boxes.FieldsPanel;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
-import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,7 +121,7 @@ public class LinksBox extends Panel {
         // Prepare links variables
         SearchType searchType = status.getType();
         String varEntity = (entity != null ? entity.getId() : "");
-        String varFilter = createVarFilter();
+        String varFilter = createVarFilter(entity, filterConfig);
 
         // Links
         accordionBody.add(createLinks(collection, searchType, varEntity, varFilter));
@@ -137,7 +138,7 @@ public class LinksBox extends Panel {
             if (entity != null) {
                 predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new SingleEntitySelection(entity)}));
             } else {
-                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new BrowserEntitySelection(filterConfig)}));
+                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new MultipleEntitySelection(filterConfig)}));
             }
 
             CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
@@ -157,7 +158,7 @@ public class LinksBox extends Panel {
         return links;
     }
 
-    private String createVarFilter() {
+    public static String createVarFilter(IEntity entity, FilterConfig filterConfig) {
 
         if (entity != null) {
             SingleEntitySelection singleEntitySelection = new SingleEntitySelection(entity);
@@ -165,7 +166,7 @@ public class LinksBox extends Panel {
         }
 
         if (filterConfig != null) {
-            BrowserEntitySelection browserSelection = new BrowserEntitySelection(filterConfig);
+            MultipleEntitySelection browserSelection = new MultipleEntitySelection(filterConfig);
             return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserSelection.toUrlParameter(false, null), "UTF-8");
         }
 
@@ -173,7 +174,7 @@ public class LinksBox extends Panel {
     }
 
 
-    private String createLink(String url, ORI collection, String varEntity, String varFilter) {
+    public static String createLink(String url, ORI collection, String varEntity, String varFilter) {
 
         String link = url;
         link = link.replace("$collection", collection.toString());

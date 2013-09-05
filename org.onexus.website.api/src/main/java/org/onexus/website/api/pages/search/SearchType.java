@@ -43,7 +43,6 @@ public class SearchType implements Serializable {
     @XStreamImplicit(itemFieldName = "fix-link")
     private List<SearchLink> fixLinks = new ArrayList<SearchLink>();
 
-    @XStreamImplicit(itemFieldName = "figure")
     private List<FigureConfig> figures = new ArrayList<FigureConfig>();
 
     public ORI getCollection() {

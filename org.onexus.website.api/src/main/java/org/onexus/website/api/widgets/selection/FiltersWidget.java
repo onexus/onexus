@@ -130,7 +130,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
     }
 
     protected void applyFilter(FilterConfig filterConfig, AjaxRequestTarget target) {
-        getPageStatus().addEntitySelection(new BrowserEntitySelection(filterConfig));
+        getPageStatus().addEntitySelection(new MultipleEntitySelection(filterConfig));
         send(getPage(), Broadcast.BREADTH, EventAddFilter.EVENT);
         send(getPage(), Broadcast.BREADTH, EventCloseModal.EVENT);
     }

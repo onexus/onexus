@@ -33,7 +33,7 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Iterator;
 
-public abstract class EntitiesRowProvider implements
+public class EntitiesRowProvider implements
         ISortableDataProvider<IEntityTable, String> {
 
     @PaxWicketBean(name = "collectionManager")
@@ -45,6 +45,7 @@ public abstract class EntitiesRowProvider implements
     private int rowsPerPage;
     private long knownSize;
     private long realSize;
+    private Query query;
 
     public EntitiesRowProvider(IModel<TableViewerStatus> status, int rowsPerPage) {
         WebsiteApplication.inject(this);
@@ -53,6 +54,12 @@ public abstract class EntitiesRowProvider implements
         this.knownSize = rowsPerPage + 2;
         this.realSize = -1;
     }
+
+    public EntitiesRowProvider(Query query, IModel<TableViewerStatus> status, int rowsPerPage) {
+        this(status, rowsPerPage);
+        this.query = query;
+    }
+
 
     protected TableViewerStatus getTableViewerStatus() {
         return statusModel.getObject();
@@ -155,9 +162,13 @@ public abstract class EntitiesRowProvider implements
         this.knownSize = knownSize;
     }
 
-    protected abstract Query getQuery();
+    protected Query getQuery() {
+        return this.query;
+    }
 
-    protected abstract void addTaskStatus(Progress progressStatus);
+    protected void addTaskStatus(Progress progressStatus) {
+
+    }
 
     private Iterator<IEntityTable> loadIterator(Query query) {
         if (rows == null) {

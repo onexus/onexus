@@ -34,13 +34,16 @@ import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.FigureConfig;
 import org.onexus.website.api.pages.search.SearchLink;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.pages.search.figures.FigureBox;
 import org.onexus.website.api.pages.search.figures.LinksBox;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
@@ -83,7 +86,7 @@ public class BoxesPanel extends Panel {
 
                     for (FigureConfig figure : type.getFigures()) {
                         if (Strings.isEmpty(figure.getVisible()) || "SINGLE".equalsIgnoreCase(figure.getVisible())) {
-                            boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, entity));
+                            boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, new SingleEntitySelection(entity)));
                         }
                     }
 
@@ -124,7 +127,7 @@ public class BoxesPanel extends Panel {
 
                 for (FigureConfig figure : type.getFigures()) {
                     if (Strings.isEmpty(figure.getVisible()) || "LIST".equalsIgnoreCase(figure.getVisible())) {
-                        boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, collectionUri, filterConfig));
+                        boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, new MultipleEntitySelection(filterConfig)));
                     }
                 }
             }

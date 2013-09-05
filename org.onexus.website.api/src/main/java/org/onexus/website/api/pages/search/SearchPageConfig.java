@@ -19,8 +19,12 @@ package org.onexus.website.api.pages.search;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.annotations.XStreamInclude;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.pages.search.figures.bar.BarFigureConfig;
+import org.onexus.website.api.pages.search.figures.html.HtmlFigureConfig;
+import org.onexus.website.api.pages.search.figures.table.TableFigureConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 @XStreamAlias("search")
+@XStreamInclude({ HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class })
 public class SearchPageConfig extends PageConfig {
 
     private SearchPageStatus defaultStatus;
