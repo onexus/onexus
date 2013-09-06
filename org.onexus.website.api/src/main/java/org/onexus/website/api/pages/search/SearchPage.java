@@ -69,6 +69,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
+    private transient FiltersWidgetStatus filtersStatus;
+
     private transient FilterConfig userFilter;
 
     private TextField<String> search;
@@ -134,6 +136,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 if (filters != null) {
                     FiltersWidgetStatus status = filters.createEmptyStatus();
                     status.setConfig(filters);
+                    setFiltersStatus(status);
                     widgetModal.addOrReplace(new Label("header", filters.getTitle()));
                     widgetModal.addOrReplace(new SearchFiltersWidget("widget", new PropertyModel<FiltersWidgetStatus>(SearchPage.this, "filtersStatus")) {
 
@@ -164,6 +167,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             list.add(new AttributeModifier("title", filters.getTitle()));
             list.setVisible(true);
         }
+        setFiltersStatus(null);
 
         // Choose type
         RadioChoice<SearchType> typeSelect = new RadioChoice<SearchType>("type", new PropertyModel<SearchType>(pageStatusModel, "type"), types, new SearchTypeRenderer());
@@ -181,6 +185,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 } else {
                     list.setVisible(true);
                 }
+                setFiltersStatus(null);
                 target.add(list);
             }
         });
@@ -220,6 +225,15 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         add(internalBoxesPanel());
 
     }
+
+    public FiltersWidgetStatus getFiltersStatus() {
+        return filtersStatus;
+    }
+
+    public void setFiltersStatus(FiltersWidgetStatus filtersStatus) {
+        this.filtersStatus = filtersStatus;
+    }
+
 
     private BoxesPanel internalBoxesPanel(FilterConfig filter) {
         return newBoxesPanel(getStatus(), getConfig().getWebsiteConfig().getORI().getParent(), filter);
