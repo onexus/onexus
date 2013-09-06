@@ -14,6 +14,8 @@ import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.FigureConfig;
 import org.onexus.website.api.pages.search.SearchLink;
+import org.onexus.website.api.pages.search.figures.bar.BarFigureConfig;
+import org.onexus.website.api.pages.search.figures.bar.BarFigurePanel;
 import org.onexus.website.api.pages.search.figures.html.HtmlFigureConfig;
 import org.onexus.website.api.pages.search.figures.html.HtmlFigurePanel;
 import org.onexus.website.api.pages.search.figures.table.TableFigureConfig;
@@ -57,6 +59,8 @@ public class FigureBox extends Panel {
             body.add(new HtmlFigurePanel("content", parentUri, (HtmlFigureConfig) config));
         } else if (config instanceof TableFigureConfig) {
             body.add(new TableFigurePanel("content", parentUri, selection, (TableFigureConfig) config));
+        } else if (config instanceof BarFigureConfig) {
+            body.add(new BarFigurePanel("content", parentUri, selection, (BarFigureConfig) config));
         } else {
             body.add(new Label("content", "Unknown figure type"));
         }

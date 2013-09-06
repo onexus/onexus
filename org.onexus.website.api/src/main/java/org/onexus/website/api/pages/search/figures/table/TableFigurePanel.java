@@ -31,11 +31,13 @@ public class TableFigurePanel extends Panel {
     public TableFigurePanel(String id, ORI parentOri, IEntitySelection selection, TableFigureConfig config) {
         super(id);
 
+        int limit = (config.getLimit() == null ? Integer.MAX_VALUE : config.getLimit());
+
         // Create data provider
         dataProvider = new EntitiesRowProvider(
                 createQuery(parentOri, config, selection),
                 STATUS,
-                config.getLimit()
+                limit
         );
 
         // Create columns
@@ -47,7 +49,7 @@ public class TableFigurePanel extends Panel {
         }
 
         // Create table
-        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, config.getLimit());
+        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, limit);
         resultTable.setOutputMarkupId(true);
         resultTable.setVersioned(false);
         resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));
@@ -59,7 +61,10 @@ public class TableFigurePanel extends Panel {
     private Query createQuery(ORI parentOri, TableFigureConfig config, IEntitySelection selection) {
         Query query = new Query();
         query.setOn(parentOri);
-        query.setCount(config.getLimit());
+
+        if (config.getLimit() != null) {
+            query.setCount(config.getLimit());
+        }
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, config.getCollection());
         query.setFrom(collectionAlias);

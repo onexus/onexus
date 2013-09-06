@@ -1,21 +1,23 @@
 package org.onexus.website.api.pages.search.figures.bar;
 
+import org.onexus.resource.api.ORI;
+
 import java.io.Serializable;
 
 public class CollectionField implements Serializable {
 
-    private String collection;
+    private ORI collection;
 
     private String field;
 
     public CollectionField() {
     }
 
-    public String getCollection() {
+    public ORI getCollection() {
         return collection;
     }
 
-    public void setCollection(String collection) {
+    public void setCollection(ORI collection) {
         this.collection = collection;
     }
 
