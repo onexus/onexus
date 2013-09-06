@@ -138,7 +138,7 @@ public class SelectionPanel extends EventPanel {
 
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
-                IEntityTable table = BoxesPanel.getEntityTable(collectionManager, type, collectionUri, status.getSearch());
+                IEntityTable table = BoxesPanel.getEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
                 if (table.next()) {
 
                     // Single entity selection

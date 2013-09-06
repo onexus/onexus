@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSettings;
@@ -70,9 +69,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
 
-    private transient FiltersWidgetStatus filtersStatus;
-
     private transient FilterConfig userFilter;
+
+    private TextField<String> search;
 
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
         this(componentId, statusModel, true, true);
@@ -101,7 +100,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         }
 
 
-        final TextField<String> search = new TextField<String>("search", new PropertyModel<String>(pageStatusModel, "search"));
+        search = new TextField<String>("search", new PropertyModel<String>(pageStatusModel, "search"));
         search.setOutputMarkupId(true);
 
         search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
@@ -135,7 +134,6 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 if (filters != null) {
                     FiltersWidgetStatus status = filters.createEmptyStatus();
                     status.setConfig(filters);
-                    setFiltersStatus(status);
                     widgetModal.addOrReplace(new Label("header", filters.getTitle()));
                     widgetModal.addOrReplace(new SearchFiltersWidget("widget", new PropertyModel<FiltersWidgetStatus>(SearchPage.this, "filtersStatus")) {
 
@@ -144,9 +142,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                             filterConfig.setDeletable(true);
                             search.setModelValue(new String[]{filterConfig.getName()});
                             target.add(search);
-                            ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
                             userFilter = filterConfig;
-                            SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, filterConfig).setOutputMarkupId(true));
+                            SearchPage.this.addOrReplace(internalBoxesPanel(filterConfig));
                             target.add(SearchPage.this.get("boxes"));
                             target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('hide')");
                         }
@@ -167,7 +164,6 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             list.add(new AttributeModifier("title", filters.getTitle()));
             list.setVisible(true);
         }
-        setFiltersStatus(null);
 
         // Choose type
         RadioChoice<SearchType> typeSelect = new RadioChoice<SearchType>("type", new PropertyModel<SearchType>(pageStatusModel, "type"), types, new SearchTypeRenderer());
@@ -185,7 +181,6 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 } else {
                     list.setVisible(true);
                 }
-                setFiltersStatus(null);
                 target.add(list);
             }
         });
@@ -206,11 +201,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 AjaxLink<String> link = new AjaxLink<String>("link", item.getModel()) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        getStatus().setSearch(getModelObject());
-                        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-                        SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null));
-                        target.add(search);
-                        target.add(SearchPage.this.get("boxes"));
+                        onSearch(target, getModelObject());
                     }
                 };
 
@@ -226,21 +217,36 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         form.add(examples);
 
-        ORI baseUri = SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent();
-        add(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri, null));
+        add(internalBoxesPanel());
 
+    }
+
+    private BoxesPanel internalBoxesPanel(FilterConfig filter) {
+        return newBoxesPanel(getStatus(), getConfig().getWebsiteConfig().getORI().getParent(), filter);
+    }
+
+    private BoxesPanel internalBoxesPanel() {
+        return newBoxesPanel(getStatus(), getConfig().getWebsiteConfig().getORI().getParent(), null);
+    }
+
+    private BoxesPanel newBoxesPanel(SearchPageStatus status, ORI baseUri, FilterConfig filter) {
+        return new BoxesPanel("boxes", status, baseUri, filter) {
+            @Override
+            protected void onDisambiguation(AjaxRequestTarget target, String query) {
+                onSearch(target, query);
+            }
+        };
+    }
+
+    protected void onSearch(AjaxRequestTarget target, String query) {
+        getStatus().setSearch(query);
+        addOrReplace(internalBoxesPanel());
+        target.add(search);
+        target.add(SearchPage.this.get("boxes"));
     }
 
     protected void onSubmit(SearchPageStatus status, ORI baseUri, FilterConfig filter) {
-        addOrReplace(new BoxesPanel("boxes", status, baseUri, filter).setOutputMarkupId(true));
-    }
-
-    public FiltersWidgetStatus getFiltersStatus() {
-        return filtersStatus;
-    }
-
-    public void setFiltersStatus(FiltersWidgetStatus filtersStatus) {
-        this.filtersStatus = filtersStatus;
+        addOrReplace(newBoxesPanel(status, baseUri, filter));
     }
 
     private Iterator<IEntity> getAutocompleteChoices(String in) {

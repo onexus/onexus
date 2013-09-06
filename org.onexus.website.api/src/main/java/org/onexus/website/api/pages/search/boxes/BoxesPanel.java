@@ -20,6 +20,7 @@ package org.onexus.website.api.pages.search.boxes;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -29,6 +30,7 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Contains;
+import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.In;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
@@ -56,6 +58,8 @@ public class BoxesPanel extends Panel {
     public BoxesPanel(String id, SearchPageStatus status, ORI baseUri, FilterConfig filterConfig) {
         super(id);
         setMarkupId("boxes");
+        setOutputMarkupId(true);
+
         add(new AttributeModifier("class", "accordion"));
 
         RepeatingView boxes = new RepeatingView("boxes");
@@ -76,9 +80,20 @@ public class BoxesPanel extends Panel {
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
                 // Single entity selection
-                IEntityTable table = getEntityTable(collectionManager, type, collectionUri, status.getSearch());
+                IEntityTable table = getEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
 
+                boolean found;
                 if (table.next()) {
+                    found = true;
+                } else {
+
+                    // If we don't found an exact match, look for a similar one
+                    table.close();
+                    table = getEntityTable(collectionManager, type, collectionUri, status.getSearch(), false);
+                    found = table.next();
+                }
+
+                if (found) {
 
                     IEntity entity = table.getEntity(collectionUri);
 
@@ -91,13 +106,19 @@ public class BoxesPanel extends Panel {
                     }
 
                     if (table.next()) {
-                        add(newDisambiguationBox("disambiguation", table, collectionUri));
+                        add(new DisambiguationPanel("disambiguation", table, collectionUri) {
+
+                            @Override
+                            protected void onSelection(AjaxRequestTarget target, String newSearch) {
+                                 onDisambiguation(target, newSearch);
+                            }
+                        });
                     } else {
                         add(new EmptyPanel("disambiguation").setVisible(false));
                     }
 
                 } else {
-                    add(new EmptyPanel("disambiguation"));
+                    add(new EmptyPanel("disambiguation").setVisible(false));
                     boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
                 }
                 table.close();
@@ -138,29 +159,10 @@ public class BoxesPanel extends Panel {
 
     }
 
-    private Component newDisambiguationBox(String componentId, IEntityTable table, ORI collectionUri) {
-        StringBuilder disambiguation = new StringBuilder();
-        disambiguation.append("<strong>Did you mean...</strong>&nbsp;");
-
-        disambiguation.append("<a href=''>");
-        disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
-        disambiguation.append("</a>");
-        while (table.next()) {
-            disambiguation.append(", <a href=''>");
-            disambiguation.append(getEntityLabel(table.getEntity(collectionUri)));
-            disambiguation.append("</a>");
-        }
-
-        return new Label(componentId, disambiguation.toString()).setEscapeModelStrings(false);
+    protected void onDisambiguation(AjaxRequestTarget target, String query) {
     }
 
-    private String getEntityLabel(IEntity entity) {
-        String labelField = entity.getCollection().getProperty("FIXED_ENTITY_FIELD");
-        String label = (labelField == null ? StringUtils.replace(entity.getId(), "\t", "-") : String.valueOf(entity.get(labelField)));
-        return label;
-    }
-
-    public static IEntityTable getEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search) {
+    public static IEntityTable getEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search, boolean equal) {
 
         Query query = new Query();
 
@@ -171,7 +173,11 @@ public class BoxesPanel extends Panel {
         query.addSelect(collectionAlias, null);
 
         for (String field : fieldList) {
-            QueryUtils.or(query, new Contains(collectionAlias, field, search));
+            if (equal) {
+                QueryUtils.or(query, new Equal(collectionAlias, field, search));
+            } else {
+                QueryUtils.or(query, new Contains(collectionAlias, field, search));
+            }
         }
 
         query.addOrderBy(new OrderBy(collectionAlias, fieldList.get(0)));
