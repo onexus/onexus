@@ -142,11 +142,12 @@ public class BarFigurePanel extends Panel {
                 "    yAxis: {\n" +
                 "    min: 0,\n" +
                 "    title: {\n" +
-                "    text: 'Aggregated mutation frequency'\n" +
+                "    text: 'mutated samples'\n" +
                 "    }\n" +
                 "    },\n" +
                 "    tooltip: {\n" +
-                "    valueSuffix: ' frequency'\n" +
+                "    valueDecimals: 0,\n" +
+                "    valueSuffix: ' samples'\n" +
                 "    },\n" +
                 "    plotOptions: {\n" +
                 "    series: {\n" +

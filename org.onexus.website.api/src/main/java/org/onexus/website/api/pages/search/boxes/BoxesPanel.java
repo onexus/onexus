@@ -17,9 +17,7 @@
  */
 package org.onexus.website.api.pages.search.boxes;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -31,11 +29,14 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Equal;
+import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.In;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.FigureConfig;
 import org.onexus.website.api.pages.search.SearchLink;
@@ -45,10 +46,10 @@ import org.onexus.website.api.pages.search.figures.FigureBox;
 import org.onexus.website.api.pages.search.figures.LinksBox;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
+import java.util.Set;
 
 public class BoxesPanel extends Panel {
 
@@ -80,7 +81,7 @@ public class BoxesPanel extends Panel {
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
                 // Single entity selection
-                IEntityTable table = getEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
+                IEntityTable table = getSingleEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
 
                 boolean found;
                 if (table.next()) {
@@ -89,7 +90,7 @@ public class BoxesPanel extends Panel {
 
                     // If we don't found an exact match, look for a similar one
                     table.close();
-                    table = getEntityTable(collectionManager, type, collectionUri, status.getSearch(), false);
+                    table = getSingleEntityTable(collectionManager, type, collectionUri, status.getSearch(), false);
                     found = table.next();
                 }
 
@@ -97,7 +98,7 @@ public class BoxesPanel extends Panel {
 
                     IEntity entity = table.getEntity(collectionUri);
 
-                    boxes.add(new LinksBox(boxes.newChildId(), 0, status, entity));
+                    boxes.add(new LinksBox(boxes.newChildId(), status, entity));
 
                     for (FigureConfig figure : type.getFigures()) {
                         if (Strings.isEmpty(figure.getVisible()) || "SINGLE".equalsIgnoreCase(figure.getVisible())) {
@@ -141,10 +142,20 @@ public class BoxesPanel extends Panel {
                         where.addValue(value.trim());
                     }
                     filterConfig.setWhere(where.toString());
-
                 }
 
-                boxes.add(new LinksBox(boxes.newChildId(), 0, status, collectionUri, filterConfig));
+                IEntityTable table = getMultipleEntityTable(collectionManager, type, collectionUri, filterConfig);
+                boxes.add(new LinksBox(boxes.newChildId(),status, collectionUri, filterConfig, new EntityIterator(table, collectionUri)) {
+                    @Override
+                    protected void onNotFound(Set<String> valuesNotFound) {
+                        BoxesPanel.this.addOrReplace(new DisambiguationPanel("disambiguation", valuesNotFound) {
+                            @Override
+                            protected void onSelection(AjaxRequestTarget target, String newSearch) {
+                                onDisambiguation(target, newSearch);
+                            }
+                        });
+                    }
+                });
 
                 for (FigureConfig figure : type.getFigures()) {
                     if (Strings.isEmpty(figure.getVisible()) || "LIST".equalsIgnoreCase(figure.getVisible())) {
@@ -162,7 +173,28 @@ public class BoxesPanel extends Panel {
     protected void onDisambiguation(AjaxRequestTarget target, String query) {
     }
 
-    public static IEntityTable getEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search, boolean equal) {
+    private static IEntityTable getMultipleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, FilterConfig filter) {
+
+        Query query = new Query();
+
+        String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
+        query.setFrom(collectionAlias);
+
+        query.addSelect(collectionAlias, null);
+
+        IEntitySelection selection = new MultipleEntitySelection(filter);
+        query.setWhere( selection.buildFilter(query) );
+
+        List<String> fieldList = type.getFieldsList();
+        query.addOrderBy(new OrderBy(collectionAlias, fieldList.get(0)));
+
+        return collectionManager.load(query);
+    }
+
+
+
+
+    public static IEntityTable getSingleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search, boolean equal) {
 
         Query query = new Query();
 

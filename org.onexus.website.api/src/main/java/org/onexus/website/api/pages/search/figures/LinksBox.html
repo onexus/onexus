@@ -2,13 +2,13 @@
 <wicket:panel>
 
     <div class="accordion-heading">
-        <a href="#box0" class="accordion-toggle" data-toggle="collapse"
-           wicket:id="accordion-toggle"><span
-                wicket:id="label">TP53INP1</span></a>
+        <ul class="accordion-toggle nav nav-pills">
+            <li wicket:id="links"><a href="#box0" wicket:id="link"><span wicket:id="label">TP53INP1</span></a></li>
+        </ul>
     </div>
-    <div wicket:id="accordion-body" id="box0" class="accordion-body collapse">
+    <div wicket:id="accordion-body" id="box0" class="accordion-body in collapse">
         <div wicket:id="fields"></div>
-        <div class="well">
+        <div class="well" wicket:id="linksContainer">
             <ul class="unstyled">
                 <li wicket:id="links"><a wicket:id="link" href="#"><span wicket:id="label">High impact mutations</span></a>
                 </li>

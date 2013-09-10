@@ -52,7 +52,6 @@ import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collection;
@@ -138,7 +137,7 @@ public class SelectionPanel extends EventPanel {
 
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
-                IEntityTable table = BoxesPanel.getEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
+                IEntityTable table = BoxesPanel.getSingleEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
                 if (table.next()) {
 
                     // Single entity selection
@@ -178,8 +177,11 @@ public class SelectionPanel extends EventPanel {
     protected void onBeforeRender() {
         super.onBeforeRender();
 
+        WebMarkupContainer filtersContainer = new WebMarkupContainer("container");
+        filtersContainer.setOutputMarkupId(true);
+
         RepeatingView filterRules = new RepeatingView("filter");
-        filterRules.setOutputMarkupId(true);
+        filtersContainer.add(filterRules);
 
         Collection<IEntitySelection> filters = getBrowserPage().getEntitySelections();
 
@@ -262,14 +264,14 @@ public class SelectionPanel extends EventPanel {
             }
         }
 
-        addOrReplace(filterRules);
+        addOrReplace(filtersContainer);
 
 
     }
 
     @Override
     protected void onRegisteredEvent(AjaxRequestTarget target, AbstractEvent event) {
-        target.add(this.get("filters"));
+        target.add(this.get("container"));
     }
 
     private BrowserPageStatus getBrowserPage() {

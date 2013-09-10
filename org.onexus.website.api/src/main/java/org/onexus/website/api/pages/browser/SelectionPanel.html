@@ -1,11 +1,12 @@
 <html xmlns:wicket>
 <wicket:panel>
-
-    <div class="btn btn-large" wicket:id="filter">
-        <a href="#" wicket:id="edit" rel="tooltip" data-placement="right" title="Edit and view selection details" ><span wicket:id="title">ENSG00000163161</span></a>
-        <a href="#" rel="tooltip" title="Remove this selection" wicket:id="remove"><i
-                class="icon-remove icon-white"></i></a>
-    </div>
+    <span wicket:id="container">
+        <div class="btn btn-large" wicket:id="filter">
+            <a href="#" wicket:id="edit" rel="tooltip" data-placement="right" title="Edit and view selection details" ><span wicket:id="title">ENSG00000163161</span></a>
+            <a href="#" rel="tooltip" title="Remove this selection" wicket:id="remove"><i
+                    class="icon-remove icon-white"></i></a>
+        </div>
+    </span>
     <div style="background-color: #fafafa; border: 1px solid #ddd;" class="btn btn-large">
         <a href="#" wicket:id="new" rel="tooltip" data-placement="right" title="Create a new selection"><span style="color: #999;">New selection...</span></a>
     </div>

@@ -8,11 +8,39 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.resource.api.ORI;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public abstract class DisambiguationPanel extends Panel {
+
+    public DisambiguationPanel(String id, Set<String> notFoundValues) {
+        super(id);
+
+        RepeatingView links = new RepeatingView("links");
+
+        WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
+        WebMarkupContainer comma = new WebMarkupContainer("comma");
+        item.add(comma);
+        comma.setVisible(false);
+
+        AjaxLink<String> link = new AjaxLink<String>("link") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+
+            }
+        };
+
+        link.add(new Label("label", Strings.join(", ", new ArrayList<String>(notFoundValues))));
+        item.add(link);
+        links.add(item);
+
+        add(links);
+    }
 
     public DisambiguationPanel(String id, IEntityTable table, ORI collectionUri) {
         super(id);
@@ -27,9 +55,9 @@ public abstract class DisambiguationPanel extends Panel {
         add(links);
     }
 
+
     private void addLink(RepeatingView links, IEntity entity, boolean showComma) {
         WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
-
         WebMarkupContainer comma = new WebMarkupContainer("comma");
         item.add(comma);
         comma.setVisible(showComma);
