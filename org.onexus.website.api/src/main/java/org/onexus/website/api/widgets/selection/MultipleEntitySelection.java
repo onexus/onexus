@@ -95,6 +95,7 @@ public class MultipleEntitySelection implements IEntitySelection {
     }
 
     private static Filter compileFilter(FilterConfig config, Query query, IQueryParser queryParser) {
+
         String oqlDefine = config.getDefine();
         String oqlWhere = config.getWhere();
 

@@ -76,6 +76,12 @@ public class BoxesPanel extends Panel {
                 boxes.add(new MainLinksBox(boxes.newChildId(), links));
             }
 
+            for (FigureConfig figure : type.getFigures()) {
+                if (!Strings.isEmpty(figure.getVisible()) && "NONE".equalsIgnoreCase(figure.getVisible())) {
+                    boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, null));
+                }
+            }
+
         } else {
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {

@@ -17,6 +17,8 @@
  */
 package org.onexus.website.api.widgets.download.formats;
 
+import org.apache.wicket.util.string.Strings;
+
 public abstract class AbstractFormat implements IDownloadFormat {
 
     private String contentType;
@@ -49,8 +51,8 @@ public abstract class AbstractFormat implements IDownloadFormat {
     }
 
     @Override
-    public String getFileName() {
-        return "datafile." + extension;
+    public String getFileName(String label) {
+        return (Strings.isEmpty(label)? "datafile" : label.trim()) + "." + extension;
     }
 
     public String toString() {

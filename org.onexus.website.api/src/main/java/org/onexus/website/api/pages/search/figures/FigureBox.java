@@ -72,9 +72,11 @@ public class FigureBox extends Panel {
             // Create link url
             String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
             String url = searchLink.getUrl();
-            String parameter = (selection instanceof SingleEntitySelection ? "pf=" : "pfc=");
-            String varFilter = parameter + UrlEncoder.QUERY_INSTANCE.encode(selection.toUrlParameter(false, null), "UTF-8");
-            url = url.replace("$filter", varFilter);
+            if (selection!=null) {
+                String parameter = (selection instanceof SingleEntitySelection ? "pf=" : "pfc=");
+                String varFilter = parameter + UrlEncoder.QUERY_INSTANCE.encode(selection.toUrlParameter(false, null), "UTF-8");
+                url = url.replace("$filter", varFilter);
+            }
 
             WebMarkupContainer link = new WebMarkupContainer("link");
             link.add(new AttributeModifier("href", prefix + url));

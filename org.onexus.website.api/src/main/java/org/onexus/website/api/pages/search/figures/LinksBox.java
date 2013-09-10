@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.util.encoding.UrlEncoder;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.ICollectionManager;
@@ -191,24 +192,26 @@ public class LinksBox extends Panel {
 
         if (searchType.getLinks() != null) {
 
-            List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
-
-            VisiblePredicate predicate;
-            if (entity != null) {
-                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new SingleEntitySelection(entity)}));
-            } else {
-                predicate = new VisiblePredicate(collectionORI.getParent(), Arrays.asList(new IEntitySelection[]{new MultipleEntitySelection(filterConfig)}));
-            }
-
-            CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
-
             String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
 
-            if (filteredLinks.isEmpty()) {
-                linksContainer.setVisible(false);
-            }
+            linksContainer.setVisible(false);
+            boolean isList = (entityIterator != null || filterConfig != null);
 
-            for (SearchLink searchLink : filteredLinks) {
+            for (SearchLink searchLink : searchType.getLinks()) {
+
+                String visible = searchLink.getVisible();
+                if (!Strings.isEmpty(visible)) {
+
+                    if (isList && !"LIST".equalsIgnoreCase(visible)) {
+                        continue;
+                    }
+
+                    if (!isList && !"SINGLE".equalsIgnoreCase(visible)) {
+                        continue;
+                    }
+                }
+
+                linksContainer.setVisible(true);
                 WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
                 WebMarkupContainer link = new WebMarkupContainer("link");
                 link.add(new AttributeModifier("href", prefix + createLink(searchLink.getUrl(), searchType.getCollection(), varEntity, varFilter)));

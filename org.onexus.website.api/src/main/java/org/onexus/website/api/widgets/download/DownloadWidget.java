@@ -43,6 +43,7 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.events.EventQueryUpdate;
+import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.download.formats.ExcelFormat;
 import org.onexus.website.api.widgets.download.formats.IDownloadFormat;
@@ -127,7 +128,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         final AjaxDownloadBehavior ajaxDownloadBehavior = new AjaxDownloadBehavior() {
             @Override
             protected String getFileName() {
-                return getFormat().getFileName();
+                 return DownloadWidget.this.getFileName();
             }
 
             @Override
@@ -174,6 +175,16 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         }
         add(scriptsView);
 
+    }
+
+    private String getFileName() {
+        BrowserPageStatus status = DownloadWidget.this.findParentStatus(BrowserPageStatus.class);
+
+        if (status == null) {
+            return getFormat().getFileName("datafile");
+        }
+
+        return getFormat().getFileName(status.getCurrentTabId());
     }
 
     private List<IDownloadFormat> getFormats() {
@@ -259,7 +270,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
 
             resourceResponse.setContentDisposition(ContentDisposition.ATTACHMENT);
             resourceResponse.setContentType(getFormat().getContentType());
-            resourceResponse.setFileName(getFormat().getFileName());
+            resourceResponse.setFileName(getFileName());
             resourceResponse.setWriteCallback(new WriteCallback() {
                 @Override
                 public void writeData(Attributes attributes) throws IOException {

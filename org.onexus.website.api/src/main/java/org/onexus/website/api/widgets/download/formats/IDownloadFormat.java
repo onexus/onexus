@@ -29,7 +29,7 @@ public interface IDownloadFormat extends Serializable {
 
     public String getTitle();
 
-    public String getFileName();
+    public String getFileName(String label);
 
     public String getContentType();
 

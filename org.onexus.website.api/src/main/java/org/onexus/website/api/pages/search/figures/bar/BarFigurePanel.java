@@ -73,8 +73,10 @@ public class BarFigurePanel extends Panel {
         query.addSelect(xAxisAlias, Arrays.asList(xAxis.getField()));
         query.addSelect(yAxisAlias, Arrays.asList(yAxis.getField()));
 
-        Filter filter = selection.buildFilter(query);
-        QueryUtils.and(query, filter);
+        if (selection!=null) {
+            Filter filter = selection.buildFilter(query);
+            QueryUtils.and(query, filter);
+        }
 
         return query;
     }

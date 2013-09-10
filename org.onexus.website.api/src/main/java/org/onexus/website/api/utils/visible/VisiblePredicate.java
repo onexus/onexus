@@ -67,8 +67,16 @@ public class VisiblePredicate implements Predicate {
             return true;
         }
 
+        if (visibleQuery.equalsIgnoreCase("NOT true")) {
+            return false;
+        }
+
         if (visibleQuery.equalsIgnoreCase("false")) {
             return false;
+        }
+
+        if (visibleQuery.equalsIgnoreCase("NOT false")) {
+            return true;
         }
 
         // Use only single character operators.
@@ -77,6 +85,7 @@ public class VisiblePredicate implements Predicate {
                 .replace("AND", ",")
                 .replace("OR", "|")
                 .replaceAll("\\s", "");
+
 
         BooleanExpressionEvaluator evaluator = new BooleanExpressionEvaluator(normalizedQuery) {
             @Override
