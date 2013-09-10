@@ -57,7 +57,7 @@ public class OqlServlet extends HttpServlet {
         String filename = req.getParameter("filename");
 
         try {
-            response(resp, oqlQuery, filename);
+            response(resp, oqlQuery, filename, true);
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
@@ -79,7 +79,7 @@ public class OqlServlet extends HttpServlet {
             }
             reader.close();
             if (sb.length() > 0) {
-                response(resp, sb.toString(), null);
+                response(resp, sb.toString(), null, false);
             } else {
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Missing query");
             }
@@ -91,7 +91,7 @@ public class OqlServlet extends HttpServlet {
 
     }
 
-    public void response(HttpServletResponse resp, String oqlQuery, String filename) throws ServletException, IOException {
+    public void response(HttpServletResponse resp, String oqlQuery, String filename, boolean useLabels) throws ServletException, IOException {
 
         if (filename != null) {
             resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
@@ -113,7 +113,7 @@ public class OqlServlet extends HttpServlet {
             throw new OnexusException("Error loading OQL. " + oqlQuery, e);
         }
 
-        writeHeader(pw, result);
+        writeHeader(pw, result, useLabels);
 
         while (result.next()) {
             writeRow(pw, result);
@@ -124,7 +124,7 @@ public class OqlServlet extends HttpServlet {
         resp.flushBuffer();
     }
 
-    private void writeHeader(PrintWriter response, IEntityTable table) {
+    private void writeHeader(PrintWriter response, IEntityTable table, boolean useLabels) {
 
         Iterator<Map.Entry<String, List<String>>> selectIt = table.getQuery().getSelect().entrySet().iterator();
         while (selectIt.hasNext()) {
@@ -140,7 +140,17 @@ public class OqlServlet extends HttpServlet {
                     continue;
                 }
 
-                response.write(select.getKey() + "." + field.getId());
+                String label;
+                if (useLabels) {
+                    label = field.getLabel();
+                    if (label == null) {
+                        label = field.getId();
+                    }
+                } else {
+                    label = select.getKey() + "." + field.getId();
+                }
+
+                response.write(label);
 
                 if (fieldId.hasNext() || selectIt.hasNext()) {
                     response.write("\t");
