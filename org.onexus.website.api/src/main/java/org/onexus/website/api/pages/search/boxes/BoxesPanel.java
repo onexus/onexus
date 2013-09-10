@@ -148,12 +148,16 @@ public class BoxesPanel extends Panel {
                 boxes.add(new LinksBox(boxes.newChildId(),status, collectionUri, filterConfig, new EntityIterator(table, collectionUri)) {
                     @Override
                     protected void onNotFound(Set<String> valuesNotFound) {
-                        BoxesPanel.this.addOrReplace(new DisambiguationPanel("disambiguation", valuesNotFound) {
-                            @Override
-                            protected void onSelection(AjaxRequestTarget target, String newSearch) {
-                                onDisambiguation(target, newSearch);
-                            }
-                        });
+                        if (valuesNotFound.isEmpty()) {
+                            BoxesPanel.this.addOrReplace(new EmptyPanel("disambiguation").setVisible(false));
+                        } else {
+                            BoxesPanel.this.addOrReplace(new DisambiguationPanel("disambiguation", valuesNotFound) {
+                                @Override
+                                protected void onSelection(AjaxRequestTarget target, String newSearch) {
+                                    onDisambiguation(target, newSearch);
+                                }
+                            });
+                        }
                     }
                 });
 
