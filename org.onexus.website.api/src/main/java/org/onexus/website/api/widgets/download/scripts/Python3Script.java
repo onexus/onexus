@@ -17,22 +17,23 @@
  */
 package org.onexus.website.api.widgets.download.scripts;
 
-public class PythonScript implements IQueryScript {
+public class Python3Script implements IQueryScript {
     @Override
     public String getContent(String query, CharSequence url) {
         return
-                "import urllib2\n" +
+                "import urllib.request, urllib.error, urllib.parse\n" +
                         "\n" +
                         "query=\"\"\"\n" + query + "\"\"\"\n" +
                         "\n" +
-                        "req = urllib2.Request(\"" + url + "\")\n" +
-                        "res = urllib2.urlopen(req, query)\n" +
-                        "print res.read()";
+                        "binary_data = query.encode(\"utf-8\")\n" +
+                        "req = urllib.request.Request(\"" + url + "\")\n" +
+                        "res = urllib.request.urlopen(req, binary_data)\n" +
+                        "print(res.read().decode('utf-8'))";
     }
 
     @Override
     public String getLabel() {
-        return "python";
+        return "Python 3";
     }
 
 

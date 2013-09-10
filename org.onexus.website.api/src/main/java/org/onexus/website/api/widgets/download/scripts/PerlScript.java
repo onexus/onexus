@@ -40,7 +40,7 @@ public class PerlScript implements IQueryScript {
 
     @Override
     public String getLabel() {
-        return "perl";
+        return "Perl";
     }
 
 

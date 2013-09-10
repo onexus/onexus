@@ -51,7 +51,8 @@ import org.onexus.website.api.widgets.download.formats.TsvFormat;
 import org.onexus.website.api.widgets.download.scripts.BashScript;
 import org.onexus.website.api.widgets.download.scripts.IQueryScript;
 import org.onexus.website.api.widgets.download.scripts.PerlScript;
-import org.onexus.website.api.widgets.download.scripts.PythonScript;
+import org.onexus.website.api.widgets.download.scripts.Python2Script;
+import org.onexus.website.api.widgets.download.scripts.Python3Script;
 import org.onexus.website.api.widgets.download.scripts.RScript;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -76,7 +77,8 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
 
     static {
         addScript(new RScript());
-        addScript(new PythonScript());
+        addScript(new Python2Script());
+        addScript(new Python3Script());
         addScript(new PerlScript());
         addScript(new BashScript());
     }

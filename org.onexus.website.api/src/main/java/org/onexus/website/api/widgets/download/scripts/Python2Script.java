@@ -17,20 +17,22 @@
  */
 package org.onexus.website.api.widgets.download.scripts;
 
-public class BashScript implements IQueryScript {
+public class Python2Script implements IQueryScript {
     @Override
     public String getContent(String query, CharSequence url) {
         return
-                "#!/bin/bash\n" +
+                "import urllib2\n" +
                         "\n" +
-                        "query=\"" + query + "\"\n" +
+                        "query=\"\"\"\n" + query + "\"\"\"\n" +
                         "\n" +
-                        "echo $query | curl -X POST -d @- " + url;
+                        "req = urllib2.Request(\"" + url + "\")\n" +
+                        "res = urllib2.urlopen(req, query)\n" +
+                        "print res.read()";
     }
 
     @Override
     public String getLabel() {
-        return "Bash";
+        return "Python 2";
     }
 
 

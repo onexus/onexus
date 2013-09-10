@@ -139,11 +139,8 @@ public class OqlServlet extends HttpServlet {
                 if (field == null) {
                     continue;
                 }
-                String label = field.getLabel();
-                if (label == null) {
-                    label = field.getId();
-                }
-                response.write(label);
+
+                response.write(select.getKey() + "." + field.getId());
 
                 if (fieldId.hasNext() || selectIt.hasNext()) {
                     response.write("\t");
