@@ -6,7 +6,9 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.resource.JQueryPluginResourceReference;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Filter;
@@ -14,6 +16,7 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.utils.HtmlDataResourceModel;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
@@ -116,87 +119,98 @@ public class BarFigurePanel extends Panel {
 
         code.append(chart.getMarkupId());
 
-        code.append("').highcharts({\n" +
-                "    chart: {\n" +
-                "    type: 'bar'\n" +
-                "    },\n" +
-                "\n" +
-                "    title: {\n" +
-                "    text: null\n" +
-                "    },\n" +
-                "\n" +
-                "    xAxis: {\n" +
-                "    labels: {\n" +
-                "                    enabled: " + (categories.size() > 30 ? "false" : "true") + "\n" +
-                "                }," +
-                "    categories: [");
+        String initUrl = config.getInit();
+        String init;
 
+        if (Strings.isEmpty(initUrl)) {
+            init = "   chart: {\n" +
+                    "    type: 'bar'\n" +
+                    "    },\n" +
+                    "\n" +
+                    "    title: {\n" +
+                    "    text: null\n" +
+                    "    },\n" +
+                    "\n" +
+                    "    xAxis: {\n" +
+                    "    labels: {\n" +
+                    "                    enabled: " + (categories.size() > 30 ? "false" : "true") + "\n" +
+                    "                }," +
+                    "    categories: [ ${categories} ]\n" +
+                    "    },\n" +
+                    "    yAxis: {\n" +
+                    "    min: 0,\n" +
+                    "    title: {\n" +
+                    "    text: 'mutated samples'\n" +
+                    "    }\n" +
+                    "    },\n" +
+                    "    tooltip: {\n" +
+                    "    valueDecimals: 0,\n" +
+                    "    valueSuffix: ' samples'\n" +
+                    "    },\n" +
+                    "    plotOptions: {\n" +
+                    "    series: {\n" +
+                    "    stacking: 'normal'\n" +
+                    "    }\n" +
+                    "    },\n" +
+                    "    legend: {\n" +
+                    "    layout: 'vertical',\n" +
+                    "    align: 'right',\n" +
+                    "    verticalAlign: 'top',\n" +
+                    "    x: 0,\n" +
+                    "    y: 30,\n" +
+                    "    floating: false,\n" +
+                    "    borderWidth: 1,\n" +
+                    "    backgroundColor: '#FFFFFF',\n" +
+                    "    shadow: true,\n" +
+                    "    labelFormatter: function() {\n" +
+                    "                return this.name.length>20 ? this.name.substr(0,19)+'...' : this.name;\n" +
+                    "            }" +
+                    "    },\n" +
+                    "    credits: {\n" +
+                    "    enabled: false\n" +
+                    "    },\n" +
+                    "    series: [ ${series} ] ";
+        } else {
+            IModel<String> initModel = new HtmlDataResourceModel(parentOri, initUrl);
+            init = initModel.getObject();
+        }
+
+        // Build categories
+        StringBuilder categoriesText = new StringBuilder();
         Iterator<String> categoriesIterator = categories.iterator();
         while (categoriesIterator.hasNext()) {
-            code.append("'").append(categoriesIterator.next()).append("'");
+            categoriesText.append("'").append(categoriesIterator.next()).append("'");
             if (categoriesIterator.hasNext()) {
-                code.append(", ");
+                categoriesText.append(", ");
             }
         }
 
-        code.append("]\n" +
-                "    },\n" +
-                "    yAxis: {\n" +
-                "    min: 0,\n" +
-                "    title: {\n" +
-                "    text: 'mutated samples'\n" +
-                "    }\n" +
-                "    },\n" +
-                "    tooltip: {\n" +
-                "    valueDecimals: 0,\n" +
-                "    valueSuffix: ' samples'\n" +
-                "    },\n" +
-                "    plotOptions: {\n" +
-                "    series: {\n" +
-                "    stacking: 'normal'\n" +
-                "    }\n" +
-                "    },\n" +
-                "    legend: {\n" +
-                "    layout: 'vertical',\n" +
-                "    align: 'right',\n" +
-                "    verticalAlign: 'top',\n" +
-                "    x: 0,\n" +
-                "    y: 30,\n" +
-                "    floating: false,\n" +
-                "    borderWidth: 1,\n" +
-                "    backgroundColor: '#FFFFFF',\n" +
-                "    shadow: true,\n" +
-                "    labelFormatter: function() {\n" +
-                "                return this.name.length>20 ? this.name.substr(0,19)+'...' : this.name;\n" +
-                "            }" +
-                "    },\n" +
-                "    credits: {\n" +
-                "    enabled: false\n" +
-                "    },\n" +
-                "    series: [");
+        init = init.replace("${categories}", categoriesText.toString());
 
+        // Build series
+        StringBuilder seriesText = new StringBuilder();
         Iterator<String> seriesIterator = values.keySet().iterator();
         while (seriesIterator.hasNext()) {
             String serieName = seriesIterator.next();
-            code.append("{ name: '").append(serieName).append("'\n, data: [");
+            seriesText.append("{ name: '").append(serieName).append("'\n, data: [");
 
             categoriesIterator = categories.iterator();
             while (categoriesIterator.hasNext()) {
-                code.append(values.get(serieName).get(categoriesIterator.next()));
+                seriesText.append(values.get(serieName).get(categoriesIterator.next()));
                 if (categoriesIterator.hasNext()) {
-                    code.append(", ");
+                    seriesText.append(", ");
                 }
             }
 
             if (seriesIterator.hasNext()) {
-                code.append("] }, \n");
+                seriesText.append("] }, \n");
             } else {
-                code.append("] }]\n");
+                seriesText.append("] }\n");
             }
-
         }
+        init = init.replace("${series}", seriesText.toString());
 
-        code.append("});});");
+        code.append("').highcharts({" + init + "});})");
 
         return code.toString();
     }

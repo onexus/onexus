@@ -14,7 +14,17 @@ public class BarFigureConfig extends FigureConfig {
     @XStreamAlias("y-axis")
     private CollectionField yAxis;
 
+    private String init;
+
     public BarFigureConfig() {
+    }
+
+    public String getInit() {
+        return init;
+    }
+
+    public void setInit(String init) {
+        this.init = init;
     }
 
     public CollectionField getValue() {
