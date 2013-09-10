@@ -56,10 +56,12 @@ import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
@@ -198,19 +200,19 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         // Examples
         WebMarkupContainer examples = new WebMarkupContainer("examplesContainer");
         examples.setOutputMarkupId(true);
-        examples.add(new ListView<String>("examples", new ExamplesModel(new PropertyModel<SearchType>(pageStatusModel, "type"))) {
+        examples.add(new ListView<SearchExample>("examples", new ExamplesModel(new PropertyModel<SearchType>(pageStatusModel, "type"))) {
 
             @Override
-            protected void populateItem(ListItem<String> item) {
+            protected void populateItem(ListItem<SearchExample> item) {
 
-                AjaxLink<String> link = new AjaxLink<String>("link", item.getModel()) {
+                AjaxLink<SearchExample> link = new AjaxLink<SearchExample>("link", item.getModel()) {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        onSearch(target, getModelObject());
+                        onSearch(target, getModelObject().getQuery());
                     }
                 };
 
-                link.add(new Label("label", item.getModel()));
+                link.add(new Label("label", new PropertyModel<String>(item.getModel(), "label")));
                 item.add(link);
 
                 WebMarkupContainer sep = new WebMarkupContainer("sep");
@@ -413,7 +415,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     }
 
 
-    private class ExamplesModel extends AbstractReadOnlyModel<List<String>> {
+    private class ExamplesModel extends AbstractReadOnlyModel<List<SearchExample>> {
 
         private IModel<SearchType> model;
 
@@ -422,7 +424,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         }
 
         @Override
-        public List<String> getObject() {
+        public List<SearchExample> getObject() {
 
             SearchType searchType = model.getObject();
 
@@ -430,11 +432,51 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 return Collections.EMPTY_LIST;
             }
 
-            List<String> values = new ArrayList<String>();
+            List<SearchExample> values = new ArrayList<SearchExample>();
             for (String value : searchType.getExamples().split(",")) {
-                values.add(value.trim());
+
+                String label = value.trim();
+                String query = label;
+
+                if (label.contains("|")) {
+                    String[] split = label.split("\\|");
+                    label = split[0].trim();
+                    query = split[1].replace(';', ',');
+                }
+
+                values.add(new SearchExample(label, query));
             }
             return values;
+        }
+    }
+
+    private static class SearchExample implements Serializable {
+
+        private String label;
+        private String query;
+
+        public SearchExample() {
+        }
+
+        public SearchExample(String label, String query) {
+            this.label = label;
+            this.query = query;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public String getQuery() {
+            return query;
+        }
+
+        public void setQuery(String query) {
+            this.query = query;
         }
     }
 
