@@ -48,6 +48,7 @@ import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.SearchLink;
+import org.onexus.website.api.pages.search.SearchPage;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.pages.search.boxes.FieldsPanel;
@@ -188,6 +189,7 @@ public class LinksBox extends Panel {
         // Prepare links variables
         SearchType searchType = status.getType();
         String varEntity = (filterConfig == null ? entity.getId() : "");
+
         String varFilter = createVarFilter(entity, filterConfig);
 
         // Links
@@ -210,6 +212,21 @@ public class LinksBox extends Panel {
         box.setMarkupId(entity.getId());
         return box;
 
+    }
+
+    private static String createVarFilter(IEntity entity, FilterConfig filterConfig) {
+
+        if (filterConfig != null) {
+            MultipleEntitySelection browserSelection = new MultipleEntitySelection(filterConfig);
+            return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserSelection.toUrlParameter(false, null), "UTF-8");
+        }
+
+        if (entity != null) {
+            SingleEntitySelection singleEntitySelection = new SingleEntitySelection(entity);
+            return "pf=" + UrlEncoder.QUERY_INSTANCE.encode(singleEntitySelection.toUrlParameter(false, null), "UTF-8");
+        }
+
+        return "";
     }
 
     protected void onNotFound(Set<String> valuesNotFound) {
@@ -263,22 +280,6 @@ public class LinksBox extends Panel {
         linksContainer.add(links);
         return linksContainer;
     }
-
-    public static String createVarFilter(IEntity entity, FilterConfig filterConfig) {
-
-        if (filterConfig != null) {
-            MultipleEntitySelection browserSelection = new MultipleEntitySelection(filterConfig);
-            return "pfc=" + UrlEncoder.QUERY_INSTANCE.encode(browserSelection.toUrlParameter(false, null), "UTF-8");
-        }
-
-        if (entity != null) {
-            SingleEntitySelection singleEntitySelection = new SingleEntitySelection(entity);
-            return "pf=" + UrlEncoder.QUERY_INSTANCE.encode(singleEntitySelection.toUrlParameter(false, null), "UTF-8");
-        }
-
-        return "";
-    }
-
 
     public static String createLink(String url, ORI collection, String varEntity, String varFilter) {
 

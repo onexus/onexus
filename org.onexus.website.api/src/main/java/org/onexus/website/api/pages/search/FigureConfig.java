@@ -14,6 +14,8 @@ public abstract class FigureConfig implements Serializable, IVisible {
 
     private String visible;
 
+    private boolean open;
+
     public String getTitle() {
         return title;
     }
@@ -45,5 +47,13 @@ public abstract class FigureConfig implements Serializable, IVisible {
 
     public void setLink(SearchLink link) {
         this.link = link;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 }

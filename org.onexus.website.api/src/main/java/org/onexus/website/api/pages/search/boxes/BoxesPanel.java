@@ -69,7 +69,7 @@ public class BoxesPanel extends Panel {
 
         SearchType type = status.getType();
 
-        if (status.getSearch() == null) {
+        if (Strings.isEmpty(status.getSearch())) {
 
             // Nothing selected
             add(new EmptyPanel("disambiguation").setVisible(false));

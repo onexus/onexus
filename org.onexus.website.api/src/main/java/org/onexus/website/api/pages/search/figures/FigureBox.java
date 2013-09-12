@@ -1,6 +1,7 @@
 package org.onexus.website.api.pages.search.figures;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -44,6 +45,11 @@ public class FigureBox extends Panel {
 
         WebMarkupContainer toggle = new WebMarkupContainer("accordion-toggle");
         WebMarkupContainer body = new WebMarkupContainer("accordion-body");
+
+        if (config.isOpen()) {
+            body.add(new AttributeAppender("class", " in"));
+        }
+
         String bodyId = getMarkupId() + "-body";
         body.setMarkupId(bodyId);
         toggle.add(new AttributeModifier("href", "#" + bodyId));

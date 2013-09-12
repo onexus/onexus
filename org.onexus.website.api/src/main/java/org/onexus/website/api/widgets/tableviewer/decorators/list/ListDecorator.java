@@ -68,6 +68,7 @@ public class ListDecorator extends FieldDecorator {
                 String href = parameters.get(ListDecoratorParameters.URL);
 
                 if (href != null) {
+                    href = fixLinkUrl(href);
                     href = replaceParameters(getField(), columnValue, entity, href, false);
                     content.append("<a href=\"").append(href).append("\"");
 

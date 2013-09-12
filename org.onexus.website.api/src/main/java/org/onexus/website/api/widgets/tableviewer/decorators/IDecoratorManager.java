@@ -21,6 +21,5 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 
 public interface IDecoratorManager {
-    IDecorator getDecorator(String decoratorId,
-                            Collection collection, Field field);
+    IDecorator getDecorator(String decoratorId, Collection collection, Field field);
 }

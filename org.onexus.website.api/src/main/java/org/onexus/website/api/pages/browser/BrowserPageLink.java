@@ -35,7 +35,7 @@ public abstract class BrowserPageLink<T> extends AjaxLink<T> {
 
     protected BrowserPageStatus getBrowserPageStatus() {
         BrowserPage browser = findParent(BrowserPage.class);
-        return browser.getModel().getObject();
+        return (browser == null ? null : browser.getModel().getObject());
     }
 
     protected void sendEvent(AbstractEvent event) {

@@ -27,6 +27,7 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Property;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
@@ -61,6 +62,8 @@ public class ColumnConfig implements IColumnConfig {
     private String sortable;
 
     private String filter;
+
+    private Integer length;
 
     public ColumnConfig() {
         super();
@@ -155,6 +158,14 @@ public class ColumnConfig implements IColumnConfig {
         this.filter = filter;
     }
 
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
+    }
+
     @Override
     public void addColumns(List<IColumn<IEntityTable, String>> columns, ORI parentURI, boolean sortable) {
 
@@ -166,6 +177,24 @@ public class ColumnConfig implements IColumnConfig {
 
             if (Strings.isEmpty(template)) {
                 for (Field field : fields) {
+
+                    if (length != null) {
+                        if (field.getProperty("MAX_LENGTH")!=null) {
+                            for (Property property : field.getProperties()) {
+                                if (property.getKey().equalsIgnoreCase("MAX_LENGTH")) {
+                                    property.setValue(length.toString());
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (field.getProperties() == null) {
+                                field.setProperties(new ArrayList<Property>());
+                            }
+
+                            field.getProperties().add(new Property("MAX_LENGTH", length.toString()));
+                        }
+                    }
+
                     IDecorator decoratorImpl = getDecoratorManager().getDecorator(decorator, collection, field);
                     List<IDecorator> actionsImpl = createActions(collection, field);
 

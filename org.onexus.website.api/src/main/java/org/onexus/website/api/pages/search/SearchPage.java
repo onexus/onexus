@@ -19,6 +19,7 @@ package org.onexus.website.api.pages.search;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -38,6 +39,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
@@ -50,10 +52,12 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.Page;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.Serializable;
@@ -178,8 +182,11 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         typeSelect.add(new AjaxFormChoiceComponentUpdatingBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                SearchPage.this.addOrReplace(new EmptyPanel("boxes"));
+
                 getStatus().setSearch("");
+
+                SearchPage.this.addOrReplace(internalBoxesPanel());
+
                 target.add(search);
                 target.add(SearchPage.this.get("container").get("form").get("examplesContainer"));
                 target.add(SearchPage.this.get("boxes"));

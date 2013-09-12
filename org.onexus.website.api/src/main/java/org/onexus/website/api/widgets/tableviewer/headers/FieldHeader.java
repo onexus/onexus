@@ -36,8 +36,7 @@ public class FieldHeader extends ElementHeader {
     private boolean sortable;
 
     public FieldHeader(String defaultLabel, String defaultTitle, Collection collection, Field field, IHeader parentHeader, String filter, boolean sortable) {
-        super(field, parentHeader, new StringFormater(getMaxLength(field),
-                false));
+        super(field, parentHeader, new StringFormater(getMaxLength(field, DEFAULT_MAX_LENGTH), false));
         this.defaultLabel = defaultLabel;
         this.defaultTitle = defaultTitle;
         this.field = field;
@@ -90,17 +89,19 @@ public class FieldHeader extends ElementHeader {
         return !Strings.isEmpty(filter);
     }
 
-    public static int getMaxLength(Field attribute) {
-        int maxLength;
+    public static int getMaxLength(Field attribute, int defaultLength) {
+
         String value = attribute.getProperty("MAX_LENGTH");
 
-        try {
-            maxLength = Integer.valueOf(value);
-        } catch (Exception e) {
-            maxLength = DEFAULT_MAX_LENGTH;
+        if (value == null) {
+            return defaultLength;
         }
 
-        return maxLength;
+        try {
+            return Integer.valueOf(value);
+        } catch (Exception e) {
+            return defaultLength;
+        }
 
     }
 

@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
@@ -30,7 +31,9 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
 import org.onexus.website.api.widgets.tableviewer.formaters.ITextFormater;
 import org.onexus.website.api.widgets.tableviewer.formaters.StringFormater;
+import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -60,12 +63,13 @@ public class FieldDecorator implements IDecorator {
         this(field, null, cssClass);
     }
 
+
     public FieldDecorator(Field field, ITextFormater textFormater) {
         this(field, textFormater, null);
     }
 
-    public FieldDecorator(Field field, ITextFormater textFormater,
-                          String cssClass) {
+
+    public FieldDecorator(Field field, ITextFormater textFormater, String cssClass) {
         super();
         this.field = field;
         this.textFormater = (textFormater == null ? getTextFormater(field) : textFormater);
@@ -75,28 +79,11 @@ public class FieldDecorator implements IDecorator {
     @Deprecated
     private static ITextFormater getTextFormater(Field field) {
         if (field.getType().equals(String.class)) {
-            int maxLength;
-            String value = field.getProperty("MAX_LENGTH");
-
-            try {
-                maxLength = Integer.valueOf(value);
-            } catch (Exception e) {
-                maxLength = 20;
-            }
-
-            return new StringFormater(maxLength, true);
+            return new StringFormater(FieldHeader.getMaxLength(field, 20), true);
         }
 
         if (field.getType().equals(Text.class)) {
-            int maxLength;
-            String value = field.getProperty("MAX_LENGTH");
-
-            try {
-                maxLength = Integer.valueOf(value);
-            } catch (Exception e) {
-                maxLength = 50;
-            }
-            return new StringFormater(maxLength, true);
+            return new StringFormater(FieldHeader.getMaxLength(field, 50), true);
         }
 
         if (field.getType().equals(Double.class)
@@ -181,11 +168,24 @@ public class FieldDecorator implements IDecorator {
         return field;
     }
 
+    protected String fixLinkUrl(String url) {
+        List<String> segments = RequestCycle.get().getRequest().getUrl().getSegments();
+        String lastSegment = segments.get(segments.size() - 1);
+
+        if (segments.size() == 2) {
+            url = lastSegment + '/' + url;
+        }
+
+        return url;
+    }
+
     protected String replaceParameters(IEntity entity, String template) {
         return replaceParameters(null, null, entity, template, true);
     }
 
     protected String replaceParameters(Field columnField, String columnValue, IEntity entity, String template, boolean format) {
+
+
 
         String columnPattern = "#{column.id}";
         if (template.contains(columnPattern)) {
