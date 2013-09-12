@@ -69,7 +69,8 @@ public class TableFigurePanel extends Panel {
         resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, limit) {
             @Override
             public boolean isVisible() {
-                return dataProvider.getKnownSize() != 0;
+                //return (dataProvider == null ? false : dataProvider.getKnownSize() != 0);
+                return getItemCount() != 0;
             }
         };
         resultTable.setOutputMarkupId(true);
@@ -81,7 +82,8 @@ public class TableFigurePanel extends Panel {
         add(new Label("empty", config.getEmpty()) {
             @Override
             public boolean isVisible() {
-                return dataProvider.getKnownSize() == 0;
+                //return (dataProvider == null ? false : dataProvider.getKnownSize() == 0);
+                return resultTable.getItemCount() == 0;
             }
         });
 
