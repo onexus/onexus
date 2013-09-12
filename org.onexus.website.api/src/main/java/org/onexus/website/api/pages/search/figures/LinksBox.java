@@ -20,10 +20,13 @@ package org.onexus.website.api.pages.search.figures;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -63,6 +66,7 @@ import java.util.Set;
 public class LinksBox extends Panel {
 
 
+    private static final int MAX_LABELS = 6;
     private transient IEntity entity;
     private transient Iterator<IEntity> entityIterator;
     private transient ORI collection;
@@ -111,48 +115,63 @@ public class LinksBox extends Panel {
         String labelField = entity.getCollection().getProperty("FIXED_ENTITY_FIELD");
 
         WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
+        item.add(new AttributeModifier("class", "active"));
         links.add(item);
 
-        AjaxLink<String> activeLink = new AjaxLink<String>("link") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        };
+        WebMarkupContainer activeLink = new WebMarkupContainer("link");
+        activeLink.add(new AttributeModifier("href", "#" + entity.getId()));
+        activeLink.add(new AttributeModifier("data-toggle", "pill"));
         item.add(activeLink);
 
         String label = getLabel(entity, labelField);
         labels.add(label.toUpperCase());
-        activeLink.add(new Label("label", "<strong>" + label + "</strong>").setEscapeModelStrings(false));
+        activeLink.add(new Label("label", label).setEscapeModelStrings(false));
 
-        // Fields value
-        if (status.getType().getTemplate() == null || status.getType().getTemplate().isEmpty()) {
-            accordionBody.add(new FieldsPanel("fields", labelField, entity));
-        } else {
-            accordionBody.add(new Label("fields", replaceEntityValues(status.getType().getTemplate(), entity)).setEscapeModelStrings(false));
-        }
+        // Fields values
+        RepeatingView fields = new RepeatingView("fields");
+        accordionBody.add(fields);
+
+        Component first = newFieldsBox(fields.newChildId(), labelField, entity, true);
+        fields.add(first);
 
         // Complete the label
         if (entityIterator != null) {
+            int count = 1;
+            int remaining = 0;
             while (entityIterator.hasNext()) {
 
                 entity = entityIterator.next();
 
+                count++;
+
+                label = getLabel(entity, labelField);
+                labels.add(label.toUpperCase());
+                
+                if (count > MAX_LABELS) {
+                    remaining++;
+                    continue;
+                }
+
                 item = new WebMarkupContainer(links.newChildId());
                 links.add(item);
 
-                activeLink = new AjaxLink<String>("link") {
-
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-                };
+                activeLink = new WebMarkupContainer("link");
+                activeLink.add(new AttributeModifier("href", "#" + entity.getId()));
+                activeLink.add(new AttributeModifier("data-toggle", "pill"));
                 item.add(activeLink);
-                label = getLabel(entity, labelField);
-                labels.add(label.toUpperCase());
                 activeLink.add(new Label("label", label));
+
+                fields.add(newFieldsBox(fields.newChildId(), labelField, entity, false));
+
+            }
+
+            if (remaining > 0) {
+                item = new WebMarkupContainer(links.newChildId());
+                links.add(item);
+                activeLink = new ExternalLink("link", "");
+                activeLink.add(new Label("label", "and "+ remaining + " more"));
+                activeLink.setEnabled(false);
+                item.add(activeLink);
             }
         }
 
@@ -173,6 +192,24 @@ public class LinksBox extends Panel {
 
         // Links
         accordionBody.add(createLinks(collection, searchType, varEntity, varFilter));
+    }
+
+    private Component newFieldsBox(String componentId, String labelField, IEntity entity, boolean active) {
+
+        Component box;
+        if (status.getType().getTemplate() == null || status.getType().getTemplate().isEmpty()) {
+            box = new FieldsPanel(componentId, labelField, entity);
+        } else {
+            box = new Label(componentId, replaceEntityValues(status.getType().getTemplate(), entity)).setEscapeModelStrings(false);
+        }
+
+        if (active) {
+            box.add(new AttributeAppender("class", " active"));
+        }
+
+        box.setMarkupId(entity.getId());
+        return box;
+
     }
 
     protected void onNotFound(Set<String> valuesNotFound) {

@@ -21,6 +21,8 @@ public abstract class DisambiguationPanel extends Panel {
     public DisambiguationPanel(String id, Set<String> notFoundValues) {
         super(id);
 
+        add(new Label("message", "Unknown entries: "));
+
         RepeatingView links = new RepeatingView("links");
 
         WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
@@ -44,6 +46,8 @@ public abstract class DisambiguationPanel extends Panel {
 
     public DisambiguationPanel(String id, IEntityTable table, ORI collectionUri) {
         super(id);
+
+        add(new Label("message", "Did you mean..."));
 
         RepeatingView links = new RepeatingView("links");
 

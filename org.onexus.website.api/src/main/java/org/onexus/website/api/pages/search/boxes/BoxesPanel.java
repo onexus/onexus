@@ -56,6 +56,8 @@ public class BoxesPanel extends Panel {
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
+    private boolean quickList;
+
     public BoxesPanel(String id, SearchPageStatus status, ORI baseUri, FilterConfig filterConfig) {
         super(id);
         setMarkupId("boxes");
@@ -136,7 +138,9 @@ public class BoxesPanel extends Panel {
 
                 add(new EmptyPanel("disambiguation").setVisible(false));
 
+                quickList = false;
                 if (filterConfig == null) {
+                    quickList = true;
                     filterConfig = new FilterConfig(status.getSearch());
 
                     filterConfig.setCollection(collectionUri);
@@ -154,7 +158,7 @@ public class BoxesPanel extends Panel {
                 boxes.add(new LinksBox(boxes.newChildId(),status, collectionUri, filterConfig, new EntityIterator(table, collectionUri)) {
                     @Override
                     protected void onNotFound(Set<String> valuesNotFound) {
-                        if (valuesNotFound.isEmpty()) {
+                        if (valuesNotFound.isEmpty() || !quickList) {
                             BoxesPanel.this.addOrReplace(new EmptyPanel("disambiguation").setVisible(false));
                         } else {
                             BoxesPanel.this.addOrReplace(new DisambiguationPanel("disambiguation", valuesNotFound) {

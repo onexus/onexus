@@ -92,6 +92,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         Form form = new Form<SearchPageStatus>("form") {
             @Override
             protected void onSubmit() {
+                setFiltersStatus(null);
+                userFilter = null;
                 SearchPage.this.onSubmit(SearchPage.this.getStatus(), SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent(), userFilter);
             }
         };
