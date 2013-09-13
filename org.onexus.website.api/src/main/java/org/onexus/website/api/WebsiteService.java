@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.Folder;
 import org.onexus.resource.api.IResourceManager;
@@ -186,7 +187,8 @@ public class WebsiteService implements IWebsiteService {
             emptyQuery.setFrom("c");
             emptyQuery.setOffset(0);
             emptyQuery.setCount(0);
-            collectionManager.load(emptyQuery);
+            IEntityTable table = collectionManager.load(emptyQuery);
+            table.close();
         }
 
         List<Folder> folders = resourceManager.loadChildren(Folder.class, container);
