@@ -24,6 +24,7 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -32,7 +33,8 @@ import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFilterHeader;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.pages.browser.filters.panels.NumericFilterPanel;
+import org.onexus.website.api.pages.browser.filters.panels.DoubleFilterPanel;
+import org.onexus.website.api.pages.browser.filters.panels.IntegerFilterPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.pages.browser.filters.panels.StringFilterPanel;
 import org.onexus.website.api.widgets.selection.FilterConfig;
@@ -85,12 +87,23 @@ public class FiltersToolbar extends Panel {
                         FiltersToolbar.this.addFilter(target, filterConfig);
                     }
                 });
-            } else if ("NUMERIC".equalsIgnoreCase(e.getHeader().getFilter())) {
-                widgetModal.addOrReplace(new NumericFilterPanel("widget", e.getHeader()) {
+            } else if ("DOUBLE".equalsIgnoreCase(e.getHeader().getFilter())) {
+                widgetModal.addOrReplace(new DoubleFilterPanel("widget", e.getHeader()) {
+
                     @Override
                     protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
                         FiltersToolbar.this.addFilter(target, filterConfig);
                     }
+
+                });
+            } else if ("INTEGER".equalsIgnoreCase(e.getHeader().getFilter())) {
+                widgetModal.addOrReplace(new IntegerFilterPanel("widget", e.getHeader()) {
+
+                    @Override
+                    protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
+                        FiltersToolbar.this.addFilter(target, filterConfig);
+                    }
+
                 });
             }
 

@@ -5,16 +5,18 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.validation.validator.StringValidator;
-import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.website.api.pages.browser.filters.FiltersToolbarStatus;
+import org.onexus.collection.api.query.GreaterThan;
+import org.onexus.collection.api.query.GreaterThanOrEqual;
+import org.onexus.collection.api.query.LessThan;
+import org.onexus.collection.api.query.LessThanOrEqual;
+import org.onexus.collection.api.query.NotEqual;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
@@ -22,50 +24,71 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class StringFilterPanel extends Panel {
+public abstract class IntegerFilterPanel<T extends Number> extends Panel {
 
-    private static String EQUAL = "equal";
-    private static String CONTAINS = "contains";
+    private static String EQ = "=";
+    private static String NOT_EQ = "<>";
+    private static String GT_EQ = ">=";
+    private static String LT_EQ = "<=";
+    private static String GT = ">";
+    private static String LT = "<";
 
-    private static List<String> OPERATIONS = Arrays.asList(new String[]{ EQUAL, CONTAINS });
+    private static List<String> OPERATIONS = Arrays.asList(new String[]{ EQ, NOT_EQ, GT, GT_EQ, LT, LT_EQ });
 
     private IModel<FilterOption> option;
     private FieldHeader header;
 
-    public StringFilterPanel(String id, FieldHeader fieldHeader) {
+    public IntegerFilterPanel(String id, FieldHeader fieldHeader) {
         super(id);
 
         this.header = fieldHeader;
-        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(new FilterOption(EQUAL)));
+        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(new FilterOption(EQ)));
 
         Form<FilterOption> form = new Form("form", option);
 
+        final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        form.add(feedbackPanel);
+
         form.add(new DropDownChoice<String>("operation", OPERATIONS).setNullValid(false));
-        form.add(new TextField<String>("value").add(new StringValidator(1, 200)));
+        form.add(new TextField<Integer>("value"));
 
         form.add(new AjaxSubmitLink("submit") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
                 FilterOption fo = option.getObject();
-                String value = fo.getValue();
-
-                String title = header.getLabel() + " " + fo.getOperation() + " '" + value + "'";
+                String title = header.getLabel() + " " + fo.getOperation() + " '" + fo.getValue() + "'";
                 FilterConfig fc = new FilterConfig(title);
 
                 fc.setCollection(header.getCollection().getORI());
                 fc.setDefine("fc='" + fc.getCollection() + "'");
 
                 Filter where;
-                if (EQUAL.equals(fo.getOperation())) {
-                    where = new Equal("fc", header.getField().getId(), value);
+                String operation = fo.getOperation();
+
+                if (EQ.equals(operation)) {
+                    where = new Equal("fc", header.getField().getId(), fo.getValue());
+                } else if (NOT_EQ.equals(operation)) {
+                    where = new NotEqual("fc", header.getField().getId(), fo.getValue());
+                } else if (GT_EQ.equals(operation)) {
+                    where = new GreaterThanOrEqual("fc", header.getField().getId(), fo.getValue());
+                } else if (LT_EQ.equals(operation)) {
+                    where = new LessThanOrEqual("fc", header.getField().getId(), fo.getValue());
+                } else if (GT.equals(operation)) {
+                    where = new GreaterThan("fc", header.getField().getId(), fo.getValue());
                 } else {
-                    where = new Contains("fc", header.getField().getId(), value);
+                    where = new LessThan("fc", header.getField().getId(), fo.getValue());
                 }
 
                 fc.setWhere(where.toString());
 
                 addFilter(target, fc);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(feedbackPanel);
             }
         });
 
@@ -76,9 +99,11 @@ public abstract class StringFilterPanel extends Panel {
 
     public static class FilterOption implements Serializable {
         private String operation;
-        private String value;
+        private Integer value;
 
         public FilterOption(String operation) {
+            super();
+
             this.operation = operation;
         }
 
@@ -90,11 +115,11 @@ public abstract class StringFilterPanel extends Panel {
             this.operation = operation;
         }
 
-        public String getValue() {
+        public Integer getValue() {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(Integer value) {
             this.value = value;
         }
 

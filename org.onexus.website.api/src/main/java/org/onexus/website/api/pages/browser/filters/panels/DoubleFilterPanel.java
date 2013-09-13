@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -23,7 +24,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class NumericFilterPanel extends Panel {
+public abstract class DoubleFilterPanel<T extends Number> extends Panel {
 
     private static String EQ = "=";
     private static String NOT_EQ = "<>";
@@ -37,16 +38,20 @@ public abstract class NumericFilterPanel extends Panel {
     private IModel<FilterOption> option;
     private FieldHeader header;
 
-    public NumericFilterPanel(String id, FieldHeader fieldHeader) {
+    public DoubleFilterPanel(String id, FieldHeader fieldHeader) {
         super(id);
 
         this.header = fieldHeader;
-        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(new FilterOption()));
+        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(new FilterOption(EQ)));
 
         Form<FilterOption> form = new Form("form", option);
 
-        form.add(new DropDownChoice<String>("operation", OPERATIONS));
-        form.add(new TextField<String>("value"));
+        final FeedbackPanel feedbackPanel = new FeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        form.add(feedbackPanel);
+
+        form.add(new DropDownChoice<String>("operation", OPERATIONS).setNullValid(false));
+        form.add(new TextField<Double>("value"));
 
         form.add(new AjaxSubmitLink("submit") {
             @Override
@@ -80,6 +85,11 @@ public abstract class NumericFilterPanel extends Panel {
 
                 addFilter(target, fc);
             }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(feedbackPanel);
+            }
         });
 
         add(form);
@@ -89,8 +99,13 @@ public abstract class NumericFilterPanel extends Panel {
 
     public static class FilterOption implements Serializable {
         private String operation;
-        private String value;
+        private Double value;
 
+        public FilterOption(String operation) {
+            super();
+
+            this.operation = operation;
+        }
 
         public String getOperation() {
             return operation;
@@ -100,11 +115,11 @@ public abstract class NumericFilterPanel extends Panel {
             this.operation = operation;
         }
 
-        public String getValue() {
+        public Double getValue() {
             return value;
         }
 
-        public void setValue(String value) {
+        public void setValue(Double value) {
             this.value = value;
         }
 

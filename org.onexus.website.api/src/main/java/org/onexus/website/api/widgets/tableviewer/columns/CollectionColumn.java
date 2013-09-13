@@ -56,7 +56,8 @@ public class CollectionColumn extends AbstractColumn {
         if (cellActions == null || cellActions.isEmpty()) {
             cellDecorator.populateCell(cellItem, componentId, getModelAdapter(rowModel));
         } else {
-            cellItem.add(new ActionPanel(componentId, cellDecorator, cellActions, getModelAdapter(rowModel)));
+            cellDecorator.populateCell(cellItem, componentId, getModelAdapter(rowModel));
+            cellItem.addOrReplace(new ActionPanel(componentId, cellDecorator, cellActions, getModelAdapter(rowModel)));
         }
     }
 

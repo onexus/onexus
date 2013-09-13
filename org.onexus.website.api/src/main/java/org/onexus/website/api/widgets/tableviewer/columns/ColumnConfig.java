@@ -219,7 +219,7 @@ public class ColumnConfig implements IColumnConfig {
         }
 
         List<IDecorator> actionsImpl = new ArrayList<IDecorator>();
-        for (String action : actions.split(",")) {
+        for (String action : actions.split("::")) {
             IDecorator actionImpl = getDecoratorManager().getDecorator(action.trim(), collection, field);
             if (actionImpl != null) {
                 actionsImpl.add(actionImpl);
