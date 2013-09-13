@@ -1,6 +1,11 @@
 var moveFooter = function(e) {
         var dH = $(document).height();
         var wH = $(window).height();
+
+        if (e) {
+           dH = dH + e;
+        }
+
         if (dH <= wH) {
             $('.footer').css( 'position', 'fixed');
             $('.footer').css( 'bottom', 0);

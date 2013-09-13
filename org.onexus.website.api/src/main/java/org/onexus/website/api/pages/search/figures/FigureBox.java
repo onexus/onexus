@@ -2,8 +2,13 @@ package org.onexus.website.api.pages.search.figures;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.apache.wicket.util.string.Strings;
@@ -31,6 +36,8 @@ public class FigureBox extends Panel {
     private FigureConfig config;
     private IEntitySelection selection;
 
+    private WebMarkupContainer toggle;
+
     public FigureBox(String id, FigureConfig config, ORI parentUri, IEntitySelection selection) {
         super(id);
 
@@ -43,7 +50,8 @@ public class FigureBox extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
-        WebMarkupContainer toggle = new WebMarkupContainer("accordion-toggle");
+        toggle = new WebMarkupContainer("accordion-toggle");
+        toggle.setOutputMarkupId(true);
         WebMarkupContainer body = new WebMarkupContainer("accordion-body");
 
         if (config.isOpen()) {
