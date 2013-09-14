@@ -169,6 +169,11 @@ public class FieldDecorator implements IDecorator {
     }
 
     protected String fixLinkUrl(String url) {
+
+        if (Strings.isEmpty(url) || url.contains("://")) {
+            return url;
+        }
+
         List<String> segments = RequestCycle.get().getRequest().getUrl().getSegments();
         String lastSegment = segments.get(segments.size() - 1);
 
