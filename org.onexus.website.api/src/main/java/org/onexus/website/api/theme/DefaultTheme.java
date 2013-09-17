@@ -57,8 +57,8 @@ public class DefaultTheme extends Behavior {
                 getModalJavascript() +
                 getPopoverJavascript() +
                 getMoveFooter() +
-                getColorBoxJavascript() +
-                getSkipDoubleClickOnIPadAndIPhone())
+                getColorBoxJavascript()
+                )
         );
     }
 
@@ -84,14 +84,6 @@ public class DefaultTheme extends Behavior {
 
     private static String getColorBoxJavascript() {
         return "$(\".iframe\").colorbox({iframe:true, width:\"80%\", height:\"80%\"});";
-    }
-
-    private static String getSkipDoubleClickOnIPadAndIPhone() {
-        return "$('a').on('click touchend', function(e) {\n" +
-                "    var el = $(this);\n" +
-                "    var link = el.attr('href');\n" +
-                "    window.location = link;\n" +
-                "});";
     }
 
     @Override
