@@ -61,7 +61,7 @@ public class SearchWidget extends Widget<SearchWidgetConfig, SearchWidgetStatus>
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                // FIXME
+
             }
         });
 

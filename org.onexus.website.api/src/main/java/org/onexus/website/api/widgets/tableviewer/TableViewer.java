@@ -147,18 +147,4 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         response.render(CssHeaderItem.forReference(TABLE_VIEWER_CSS));
     }
 
-    private static class VisibleWrapper implements IVisible {
-
-        private String value;
-
-        private VisibleWrapper(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String getVisible() {
-            return value;
-        }
-    }
-
 }

@@ -1,4 +1,4 @@
-/**
+    /**
  *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,8 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSettings;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
@@ -32,6 +34,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -52,9 +55,11 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
+import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.boxes.BoxesPanel;
+import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
@@ -68,7 +73,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
+public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> implements IAjaxIndicatorAware {
 
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
@@ -82,6 +87,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
     private TextField<String> search;
 
+    private WebMarkupContainer indicator;
+
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
         this(componentId, statusModel, true, true);
     }
@@ -91,17 +98,30 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         IModel<SearchPageStatus> pageStatusModel = new PropertyModel<SearchPageStatus>(this, "status");
 
+        indicator = new WebMarkupContainer("indicator");
+        indicator.setOutputMarkupId(true);
+        indicator.add(new Image("loading", OnDomReadyPanel.LOADING_IMAGE));
+        add(indicator);
+
         WebMarkupContainer container = new WebMarkupContainer("container");
         container.add(new AttributeModifier("class", (showLogo ? "show-logo" : "hide-logo")));
 
-        Form form = new Form<SearchPageStatus>("form") {
+        Form form = new Form<SearchPageStatus>("form");
+        form.add(new AjaxButton("submit") {
+
             @Override
-            protected void onSubmit() {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 setFiltersStatus(null);
                 userFilter = null;
                 SearchPage.this.onSubmit(SearchPage.this.getStatus(), SearchPage.this.getConfig().getWebsiteConfig().getORI().getParent(), userFilter);
+                target.add(SearchPage.this.get("boxes"));
             }
-        };
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+
+            }
+        });
         form.setMultiPart(true);
 
         // By default use the first search type
@@ -122,6 +142,11 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             @Override
             protected Iterator<IEntity> getChoices(String input) {
                 return getAutocompleteChoices(input);
+            }
+
+            @Override
+            protected String findIndicatorId() {
+                return null;
             }
         });
 
@@ -246,6 +271,11 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         add(internalBoxesPanel());
 
+    }
+
+    @Override
+    public String getAjaxIndicatorMarkupId() {
+        return indicator.getMarkupId();
     }
 
     public FiltersWidgetStatus getFiltersStatus() {
