@@ -190,6 +190,12 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
                 getStatus().setSearch("");
 
+                if (!Strings.isEmpty(getStatus().getType().getPlaceholder())) {
+                    search.add( new AttributeModifier("placeholder", getStatus().getType().getPlaceholder()));
+                } else {
+                    search.add(new AttributeModifier("placeholder", ""));
+                }
+
                 SearchPage.this.addOrReplace(internalBoxesPanel());
 
                 target.add(search);
