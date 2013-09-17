@@ -54,10 +54,12 @@ public class DefaultTheme extends Behavior {
 
         response.render(OnLoadHeaderItem.forScript(
                 getTooltipJavascript() +
-                        getModalJavascript() +
-                        getPopoverJavascript() +
-                        getMoveFooter() +
-                        getColorBoxJavascript()));
+                getModalJavascript() +
+                getPopoverJavascript() +
+                getMoveFooter() +
+                getColorBoxJavascript() +
+                getSkipDoubleClickOnIPadAndIPhone())
+        );
     }
 
     private static String getTooltipJavascript() {
@@ -82,6 +84,14 @@ public class DefaultTheme extends Behavior {
 
     private static String getColorBoxJavascript() {
         return "$(\".iframe\").colorbox({iframe:true, width:\"80%\", height:\"80%\"});";
+    }
+
+    private static String getSkipDoubleClickOnIPadAndIPhone() {
+        return "$('a').on('click touchend', function(e) {\n" +
+                "    var el = $(this);\n" +
+                "    var link = el.attr('href');\n" +
+                "    window.location = link;\n" +
+                "});";
     }
 
     @Override
