@@ -40,6 +40,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.util.encoding.UrlEncoder;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
@@ -112,6 +113,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         search = new TextField<String>("search", new PropertyModel<String>(pageStatusModel, "search"));
         search.setOutputMarkupId(true);
+
+        if (!Strings.isEmpty(getStatus().getType().getPlaceholder())) {
+            search.add( new AttributeModifier("placeholder", getStatus().getType().getPlaceholder()));
+        }
 
         search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
             @Override

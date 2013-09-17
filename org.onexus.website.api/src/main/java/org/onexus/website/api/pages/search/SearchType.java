@@ -34,6 +34,7 @@ public class SearchType implements Serializable {
     private String keys;
     private String examples;
     private String template;
+    private String placeholder;
 
     private FiltersWidgetConfig filters;
 
@@ -67,6 +68,14 @@ public class SearchType implements Serializable {
 
     public void setKeys(String keys) {
         this.keys = keys;
+    }
+
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
     }
 
     public String getExamples() {
