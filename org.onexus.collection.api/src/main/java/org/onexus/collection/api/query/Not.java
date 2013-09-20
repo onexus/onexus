@@ -43,7 +43,9 @@ public class Not extends Filter {
         oql.append("NOT");
         oql.append(binaryFilter ? "\n" + prevTabs : " ");
 
-        if (negatedFilter != null) negatedFilter.toString(oql, prettyPrint);
+        if (negatedFilter != null) {
+            negatedFilter.toString(oql, prettyPrint);
+        }
 
         return oql;
     }

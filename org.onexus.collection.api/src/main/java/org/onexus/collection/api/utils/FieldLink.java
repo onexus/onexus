@@ -88,15 +88,32 @@ public class FieldLink {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         FieldLink fieldLink = (FieldLink) o;
 
-        if (!fromCollection.equals(fieldLink.fromCollection)) return false;
-        if (!fromFieldName.equals(fieldLink.fromFieldName)) return false;
-        if (!toCollection.equals(fieldLink.toCollection)) return false;
-        if (!toFieldName.equals(fieldLink.toFieldName)) return false;
+        if (!fromCollection.equals(fieldLink.fromCollection)) {
+            return false;
+        }
+
+        if (!fromFieldName.equals(fieldLink.fromFieldName)) {
+            return false;
+        }
+
+        if (!toCollection.equals(fieldLink.toCollection)) {
+            return false;
+        }
+
+        if (!toFieldName.equals(fieldLink.toFieldName)) {
+            return false;
+        }
 
         return true;
     }

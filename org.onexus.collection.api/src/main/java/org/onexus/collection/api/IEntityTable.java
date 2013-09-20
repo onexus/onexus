@@ -23,14 +23,14 @@ import org.onexus.resource.api.ORI;
 
 public interface IEntityTable extends IProgressable {
 
-    public Query getQuery();
+    Query getQuery();
 
-    public IEntity getEntity(ORI collectionOri);
+    IEntity getEntity(ORI collectionOri);
 
-    public boolean next();
+    boolean next();
 
-    public void close();
+    void close();
 
-    public long size();
+    long size();
 
 }

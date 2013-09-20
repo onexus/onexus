@@ -52,11 +52,11 @@ public class EntityIterator implements Iterator<IEntity> {
 
     @Override
     public boolean hasNext() {
-        if (_lastNext == false) {
+        if (!_lastNext) {
             return false;
         }
 
-        if (_movedToNext == true) {
+        if (_movedToNext) {
             return true;
         }
 

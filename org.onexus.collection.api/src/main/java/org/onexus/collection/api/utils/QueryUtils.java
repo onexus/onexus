@@ -26,7 +26,10 @@ import org.onexus.resource.api.ORI;
 import java.util.Iterator;
 import java.util.Map;
 
-public class QueryUtils {
+public final class QueryUtils {
+
+    private QueryUtils() {
+    }
 
     public static String newCollectionAlias(Query query, ORI collectionUri) {
 

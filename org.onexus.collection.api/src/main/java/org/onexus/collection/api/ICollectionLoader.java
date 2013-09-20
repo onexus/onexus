@@ -23,6 +23,5 @@ import org.onexus.resource.api.Progress;
 import java.util.concurrent.Callable;
 
 public interface ICollectionLoader {
-
-    public Callable<IEntitySet> newCallable(Progress progress, Plugin plugin, Collection collection);
+    Callable<IEntitySet> newCallable(Progress progress, Plugin plugin, Collection collection);
 }

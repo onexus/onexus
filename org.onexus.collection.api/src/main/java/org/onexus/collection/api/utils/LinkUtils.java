@@ -28,9 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LinkUtils {
+public final class LinkUtils {
 
-    public final static String FIELDS_SEPARATOR = "==";
+    private final static String FIELDS_SEPARATOR = "==";
+
+    private LinkUtils() {
+    }
 
     public static List<FieldLink> getLinkFields(ORI parentURI, Collection a, Collection b) {
         return getLinkFields(parentURI, a, b, Collections.EMPTY_LIST);

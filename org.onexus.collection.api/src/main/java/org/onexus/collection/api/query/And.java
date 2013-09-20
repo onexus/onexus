@@ -28,7 +28,7 @@ public class And extends BinaryFilter {
     }
 
     @Override
-    public String getOperandSymbol() {
+    public final String getOperandSymbol() {
         return "AND";
     }
 

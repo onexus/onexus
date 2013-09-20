@@ -35,41 +35,41 @@ public interface ICollectionStore {
      * @param collectionOri The Collection URI.
      * @return Returns true if it's stored and false if not.
      */
-    public boolean isRegistered(ORI collectionOri);
+    boolean isRegistered(ORI collectionOri);
 
     /**
      * Prepare the store to be able to insert entities of this collection.
      *
      * @param collectionOri The Collection URI
      */
-    public void register(ORI collectionOri);
+    void register(ORI collectionOri);
 
     /**
      * Remove the collection from the store.
      *
      * @param collectionOri
      */
-    public void deregister(ORI collectionOri);
+    void deregister(ORI collectionOri);
 
 
     /**
      * @return A list with all the registered collections URIs
      */
-    public List<String> getRegistered();
+    List<String> getRegistered();
 
     /**
      * Insert one entity.
      *
      * @param entity The entity to be inserted
      */
-    public void insert(IEntity entity);
+    void insert(IEntity entity);
 
     /**
      * Insert a entity set.
      *
      * @param dataSet The entity set to be inserted
      */
-    public void insert(IEntitySet dataSet);
+    void insert(IEntitySet dataSet);
 
     /**
      * Query the store
@@ -77,6 +77,6 @@ public interface ICollectionStore {
      * @param query The {@link Query} of interest
      * @return The result {@link IEntityTable} for the query.
      */
-    public IEntityTable load(Query query);
+    IEntityTable load(Query query);
 
 }

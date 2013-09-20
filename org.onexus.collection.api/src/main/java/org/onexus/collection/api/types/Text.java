@@ -45,12 +45,20 @@ public class Text implements CharSequence {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Text text = (Text) o;
 
-        if (value != null ? !value.equals(text.value) : text.value != null) return false;
+        if (value != null ? !value.equals(text.value) : text.value != null) {
+            return false;
+        }
 
         return true;
     }

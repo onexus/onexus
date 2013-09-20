@@ -78,15 +78,25 @@ public class OrderBy implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         OrderBy orderBy = (OrderBy) o;
 
-        if (ascendent != orderBy.ascendent) return false;
-        if (collection != null ? !collection.equals(orderBy.collection) : orderBy.collection != null)
+        if (ascendent != orderBy.ascendent) {
             return false;
-        if (field != null ? !field.equals(orderBy.field) : orderBy.field != null) return false;
+        }
+        if (collection != null ? !collection.equals(orderBy.collection) : orderBy.collection != null) {
+            return false;
+        }
+
+        if (field != null ? !field.equals(orderBy.field) : orderBy.field != null) {
+            return false;
+        }
 
         return true;
     }

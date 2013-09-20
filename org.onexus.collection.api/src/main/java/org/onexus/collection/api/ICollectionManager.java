@@ -46,14 +46,14 @@ public interface ICollectionManager extends IResourceService {
      * @return The result of the query. If it's not a blocking ICollectionManager
      *         it can return a partial result but with a {@link org.onexus.resource.api.Progress} under process.
      */
-    public IEntityTable load(Query query);
+    IEntityTable load(Query query);
 
     /**
      * Unload the collection from origin store.
      *
      * @param collectionOri
      */
-    public void unload(ORI collectionOri);
+    void unload(ORI collectionOri);
 
     boolean isLinkable(Query query, ORI collectionOri);
 }

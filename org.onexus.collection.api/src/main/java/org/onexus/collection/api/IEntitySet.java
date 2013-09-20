@@ -37,7 +37,7 @@ public interface IEntitySet extends IEntity, Iterable<IEntity> {
      *
      * @return Returns true if there is a next value, false otherwise.
      */
-    public boolean next();
+    boolean next();
 
 
     /**
@@ -46,18 +46,18 @@ public interface IEntitySet extends IEntity, Iterable<IEntity> {
      * @return The number of entities into this set.
      * @throws UnsupportedOperationException If it is not supported.
      */
-    public long size();
+    long size();
 
     /**
      * The user must close the IEntitySet when it's not needed anymore.
      */
-    public void close();
+    void close();
 
     /**
      * Clones the current cursor entity
      *
      * @return A new Entity instance detached of the EntitySet
      */
-    public IEntity detachedEntity();
+    IEntity detachedEntity();
 
 }

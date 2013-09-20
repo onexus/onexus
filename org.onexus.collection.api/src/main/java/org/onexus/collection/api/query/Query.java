@@ -28,6 +28,8 @@ import java.util.Map;
 
 public class Query implements Serializable {
 
+    public static final String END_LINE_AND_TAB = "\n\t";
+
     private Map<String, ORI> define = new LinkedHashMap<String, ORI>();
 
     private ORI on;
@@ -140,7 +142,7 @@ public class Query implements Serializable {
 
             Iterator<Map.Entry<String, ORI>> itDefine = define.entrySet().iterator();
             while (itDefine.hasNext()) {
-                oql.append(prettyPrint ? "\n\t" : " ");
+                oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
 
                 Map.Entry<String, ORI> entry = itDefine.next();
                 oql.append(entry.getKey()).append("=").append(escapeString(entry.getValue().toString()));
@@ -155,7 +157,7 @@ public class Query implements Serializable {
         if (on != null) {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("ON");
-            oql.append(prettyPrint ? "\n\t" : " ");
+            oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
             oql.append(escapeString(on.toString()));
         }
 
@@ -166,7 +168,7 @@ public class Query implements Serializable {
             oql.append("SELECT");
             Iterator<Map.Entry<String, List<String>>> itSelect = select.entrySet().iterator();
             while (itSelect.hasNext()) {
-                oql.append(prettyPrint ? "\n\t" : " ");
+                oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
                 Map.Entry<String, List<String>> entry = itSelect.next();
                 oql.append(entry.getKey());
                 if (entry.getValue() != null) {
@@ -193,7 +195,7 @@ public class Query implements Serializable {
         if (from != null && !from.isEmpty()) {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("FROM");
-            oql.append(prettyPrint ? "\n\t" : " ");
+            oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
             oql.append(from);
         }
 
@@ -201,7 +203,7 @@ public class Query implements Serializable {
         if (where != null) {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("WHERE");
-            oql.append(prettyPrint ? "\n\t" : " ");
+            oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
             where.toString(oql, prettyPrint);
         }
 
@@ -212,7 +214,7 @@ public class Query implements Serializable {
 
             Iterator<OrderBy> itOrders = orders.iterator();
             while (itOrders.hasNext()) {
-                oql.append(prettyPrint ? "\n\t" : " ");
+                oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
                 OrderBy orderBy = itOrders.next();
                 orderBy.toString(oql, prettyPrint);
                 if (itOrders.hasNext()) {
@@ -225,7 +227,7 @@ public class Query implements Serializable {
         if (offset != null && count != null) {
             oql.append(prettyPrint ? "\n" : " ");
             oql.append("LIMIT");
-            oql.append(prettyPrint ? "\n\t" : " ");
+            oql.append(prettyPrint ? END_LINE_AND_TAB : " ");
             oql.append("'").append(offset).append("', '").append(count).append("'");
         }
 

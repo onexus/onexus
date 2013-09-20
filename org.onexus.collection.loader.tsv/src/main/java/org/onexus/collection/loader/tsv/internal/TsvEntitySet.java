@@ -23,6 +23,8 @@ import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.data.api.IDataStreams;
 import org.onexus.resource.api.Loader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.HashMap;
@@ -32,6 +34,7 @@ import java.util.Properties;
 
 public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
+    private static final Logger log = LoggerFactory.getLogger(TsvEntitySet.class);
     private String currentLine;
     private BufferedReader fr;
     private Iterator<InputStream> isIterator;
@@ -58,6 +61,7 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
                 fieldMap.load(new StringReader(FIELD_MAP));
                 setFieldIdToHeader(fieldMap);
             } catch (IOException e) {
+                log.warn("Malformed loader FIELD_MAP at " + collection.getORI(), e);
             }
         }
 

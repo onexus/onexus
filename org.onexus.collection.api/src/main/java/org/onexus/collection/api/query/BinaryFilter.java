@@ -55,9 +55,13 @@ public abstract class BinaryFilter extends Filter {
         String prevTabs = (prettyPrint ? endingTabs(oql) : "");
         oql.append('(');
         oql.append(prettyPrint ? "\n\t" + prevTabs : " ");
-        if (left != null) left.toString(oql, prettyPrint);
+        if (left != null) {
+            left.toString(oql, prettyPrint);
+        }
         oql.append(prettyPrint ? "\n" + prevTabs + getOperandSymbol() + "\n" + prevTabs + "\t" : " " + getOperandSymbol() + " ");
-        if (right != null) right.toString(oql, prettyPrint);
+        if (right != null) {
+            right.toString(oql, prettyPrint);
+        }
         oql.append(prettyPrint ? "\n" + prevTabs : " ");
         oql.append(')');
 

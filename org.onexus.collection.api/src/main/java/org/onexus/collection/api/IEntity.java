@@ -29,25 +29,25 @@ public interface IEntity {
     /**
      * @return The unique identifier of this entity.
      */
-    public String getId();
+    String getId();
 
 
     /**
      * @return The owner collection.
      */
-    public Collection getCollection();
+    Collection getCollection();
 
     /**
      * @param fieldId The ID of the field.
      * @return The value associated to this field.
      */
-    public Object get(String fieldId);
+    Object get(String fieldId);
 
 
     /**
      * @param fieldName The name of the field.
      * @param value     The value to put into this field.
      */
-    public void put(String fieldName, Object value);
+    void put(String fieldName, Object value);
 
 }
