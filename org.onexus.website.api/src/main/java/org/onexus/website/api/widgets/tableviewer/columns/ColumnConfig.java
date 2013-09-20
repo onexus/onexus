@@ -179,7 +179,7 @@ public class ColumnConfig implements IColumnConfig {
                 for (Field field : fields) {
 
                     if (length != null) {
-                        if (field.getProperty("MAX_LENGTH")!=null) {
+                        if (field.getProperty("MAX_LENGTH") != null) {
                             for (Property property : field.getProperties()) {
                                 if (property.getKey().equalsIgnoreCase("MAX_LENGTH")) {
                                     property.setValue(length.toString());
@@ -244,7 +244,7 @@ public class ColumnConfig implements IColumnConfig {
             for (String fieldName : this.fields.split(",")) {
                 if (fieldName.trim().startsWith("*{")) {
                     String regExp = fieldName.trim().substring(2);
-                    regExp = regExp.substring(0, regExp.lastIndexOf("}"));
+                    regExp = regExp.substring(0, regExp.lastIndexOf('}'));
                     Pattern pattern = Pattern.compile(regExp);
                     for (Field field : collection.getFields()) {
                         if (pattern.matcher(field.getId()).matches()) {

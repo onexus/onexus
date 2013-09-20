@@ -28,7 +28,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.session.LoginContext;
 import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.OnexusWebSession;
@@ -72,9 +75,9 @@ public class BaseResourcePage extends WebPage {
         add(link);
 
         if (OnexusWebApplication.get().usePersonSignIn()) {
-           add(new WebMarkupContainer("signout").add(new SignOutBehavior()));
+            add(new WebMarkupContainer("signout").add(new SignOutBehavior()));
         } else {
-           add(new BookmarkablePageLink<String>("signout", SignOutPage.class));
+            add(new BookmarkablePageLink<String>("signout", SignOutPage.class));
         }
 
         WebMarkupContainer menuProjects = new WebMarkupContainer("menuProjects");

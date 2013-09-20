@@ -23,8 +23,8 @@ import org.onexus.resource.api.ORI;
 
 public interface IDataManager extends IResourceService {
 
-    public IDataStreams load(ORI dataOri);
+    IDataStreams load(ORI dataOri);
 
-    public long size(ORI dataOri);
+    long size(ORI dataOri);
 
 }

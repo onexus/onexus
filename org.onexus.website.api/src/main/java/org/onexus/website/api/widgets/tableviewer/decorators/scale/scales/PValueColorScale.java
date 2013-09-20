@@ -21,7 +21,7 @@ import java.awt.*;
 
 public class PValueColorScale extends CompositeColorScale {
 
-    private static final double epsilon = 1e-16;
+    private static final double EPSILON = 1e-16;
 
     private double significanceLevel;
 
@@ -42,13 +42,13 @@ public class PValueColorScale extends CompositeColorScale {
 
         nonSigScale = new UniformColorScale(nonSignificantColor);
 
-        nonSigScaleRange = new ScaleRange(significanceLevel + epsilon, 1.0,
+        nonSigScaleRange = new ScaleRange(significanceLevel + EPSILON, 1.0,
                 nonSigScale);
 
-        scale = new LogColorScale(0.0, significanceLevel + epsilon, minColor,
+        scale = new LogColorScale(0.0, significanceLevel + EPSILON, minColor,
                 maxColor);
 
-        scaleRange = new ScaleRange(0.0, significanceLevel + epsilon, scale);
+        scaleRange = new ScaleRange(0.0, significanceLevel + EPSILON, scale);
 
         ScaleRange[] scaleRanges = new ScaleRange[]{nonSigScaleRange,
                 scaleRange};
@@ -57,9 +57,9 @@ public class PValueColorScale extends CompositeColorScale {
     }
 
     public PValueColorScale() {
-        this(0.05, ColorConstants.pvalueMinColor,
-                ColorConstants.pvalueMaxColor,
-                ColorConstants.nonSignificantColor);
+        this(0.05, ColorConstants.PVALUE_MIN_COLOR,
+                ColorConstants.PVALUE_MAX_COLOR,
+                ColorConstants.NON_SIGNIFICANT_COLOR);
     }
 
     public double getSignificanceLevel() {
@@ -68,9 +68,9 @@ public class PValueColorScale extends CompositeColorScale {
 
     public void setSignificanceLevel(double significanceLevel) {
         this.significanceLevel = significanceLevel;
-        nonSigScaleRange.setMinPoint(significanceLevel + epsilon);
-        scaleRange.setMaxPoint(significanceLevel + epsilon);
-        scale.setMaxPoint(significanceLevel + epsilon);
+        nonSigScaleRange.setMinPoint(significanceLevel + EPSILON);
+        scaleRange.setMaxPoint(significanceLevel + EPSILON);
+        scale.setMaxPoint(significanceLevel + EPSILON);
     }
 
     @Override

@@ -8,7 +8,7 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager" />
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
     <reference id="progressManager" interface="org.onexus.resource.api.IProgressManager"/>
     <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
     <reference id="collectionStore" interface="org.onexus.collection.api.ICollectionStore"/>

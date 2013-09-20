@@ -32,7 +32,8 @@ import java.util.concurrent.Callable;
 
 class InsertCollectionRunnable implements Runnable {
 
-    private static final Logger log = LoggerFactory.getLogger(InsertCollectionRunnable.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(InsertCollectionRunnable.class);
+
     private Map<String, Progress> tasks;
     private Plugin plugin;
     private Collection collection;
@@ -68,7 +69,7 @@ class InsertCollectionRunnable implements Runnable {
 
             progress.run();
             progress.info(msg);
-            log.info(msg);
+            LOGGER.info(msg);
 
             store.insert(entitySet);
 
@@ -76,12 +77,12 @@ class InsertCollectionRunnable implements Runnable {
             progress.info(msg);
             progress.done();
 
-            log.info(msg);
+            LOGGER.info(msg);
 
         } catch (Exception e) {
 
             progress.error(e.getMessage());
-            log.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
 
             progress.fail();
             store.deregister(collection.getORI());

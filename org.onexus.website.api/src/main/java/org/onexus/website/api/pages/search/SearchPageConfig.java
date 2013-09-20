@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 @XStreamAlias("search")
-@XStreamInclude({ HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class })
+@XStreamInclude({HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class})
 public class SearchPageConfig extends PageConfig {
 
     private SearchPageStatus defaultStatus;

@@ -39,16 +39,17 @@ public class VerticalWidgetBar extends Panel {
     private IWidgetManager widgetManager;
 
     private RepeatingView boxesView;
-    private WebMarkupContainer boxesshowContainer;
-    private WebMarkupContainer boxesContainer;
 
     public VerticalWidgetBar(final String componentId, final Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {
         super(componentId);
         setOutputMarkupId(true);
 
         // Create the containers
-        add(boxesshowContainer = new WebMarkupContainer("boxesshowContainer"));
-        boxesshowContainer.add(boxesContainer = new WebMarkupContainer("boxesContainer"));
+        WebMarkupContainer boxesshowContainer = new WebMarkupContainer("boxesshowContainer");
+        add(boxesshowContainer);
+
+        WebMarkupContainer boxesContainer = new WebMarkupContainer("boxesContainer");
+        boxesshowContainer.add(boxesContainer);
 
         boxesView = new RepeatingView("boxes");
         boxesContainer.setMarkupId("leftboxes");
@@ -60,15 +61,13 @@ public class VerticalWidgetBar extends Panel {
                 WebMarkupContainer item = new WebMarkupContainer(boxesView.newChildId());
                 boxesView.add(item);
 
-                Link<String> boxLink;
-                item.add(boxLink = new Link<String>("cross") {
-
+                Link<String> boxLink = new Link<String>("cross") {
                     @Override
                     public void onClick() {
-
                     }
+                };
 
-                });
+                item.add(boxLink);
                 boxLink.setVisible(false);
                 boxLink.add(new Image("image", Icons.CROSS) {
 

@@ -116,33 +116,33 @@ public abstract class CutoffCmp implements Serializable {
         }
     };
 
-    public static final CutoffCmp[] comparators = new CutoffCmp[]{LT, LE, GT,
+    public static final CutoffCmp[] COMPARATORS = new CutoffCmp[]{LT, LE, GT,
             GE, EQ, NE, ABS_LT, ABS_LE, ABS_GT, ABS_GE, ABS_EQ, ABS_NE};
 
-    public static final Map<String, CutoffCmp> abbreviatedNameMap = new HashMap<String, CutoffCmp>();
-    public static final Map<String, CutoffCmp> shortNameMap = new HashMap<String, CutoffCmp>();
-    public static final Map<String, CutoffCmp> longNameMap = new HashMap<String, CutoffCmp>();
-    public static final Map<String, CutoffCmp> nameMap = new HashMap<String, CutoffCmp>();
+    public static final Map<String, CutoffCmp> ABBREVIATED_NAME_MAP = new HashMap<String, CutoffCmp>();
+    public static final Map<String, CutoffCmp> SHORT_NAME_MAP = new HashMap<String, CutoffCmp>();
+    public static final Map<String, CutoffCmp> LONG_NAME_MAP = new HashMap<String, CutoffCmp>();
+    public static final Map<String, CutoffCmp> NAME_MAP = new HashMap<String, CutoffCmp>();
 
     static {
-        abbreviatedNameMap.put("lt", CutoffCmp.LT);
-        abbreviatedNameMap.put("le", CutoffCmp.LE);
-        abbreviatedNameMap.put("gt", CutoffCmp.GT);
-        abbreviatedNameMap.put("ge", CutoffCmp.GE);
-        abbreviatedNameMap.put("eq", CutoffCmp.EQ);
-        abbreviatedNameMap.put("ne", CutoffCmp.NE);
-        abbreviatedNameMap.put("alt", CutoffCmp.ABS_LT);
-        abbreviatedNameMap.put("ale", CutoffCmp.ABS_LE);
-        abbreviatedNameMap.put("agt", CutoffCmp.ABS_GT);
-        abbreviatedNameMap.put("age", CutoffCmp.ABS_GE);
-        abbreviatedNameMap.put("aeq", CutoffCmp.ABS_EQ);
-        abbreviatedNameMap.put("ane", CutoffCmp.ABS_NE);
+        ABBREVIATED_NAME_MAP.put("lt", CutoffCmp.LT);
+        ABBREVIATED_NAME_MAP.put("le", CutoffCmp.LE);
+        ABBREVIATED_NAME_MAP.put("gt", CutoffCmp.GT);
+        ABBREVIATED_NAME_MAP.put("ge", CutoffCmp.GE);
+        ABBREVIATED_NAME_MAP.put("eq", CutoffCmp.EQ);
+        ABBREVIATED_NAME_MAP.put("ne", CutoffCmp.NE);
+        ABBREVIATED_NAME_MAP.put("alt", CutoffCmp.ABS_LT);
+        ABBREVIATED_NAME_MAP.put("ale", CutoffCmp.ABS_LE);
+        ABBREVIATED_NAME_MAP.put("agt", CutoffCmp.ABS_GT);
+        ABBREVIATED_NAME_MAP.put("age", CutoffCmp.ABS_GE);
+        ABBREVIATED_NAME_MAP.put("aeq", CutoffCmp.ABS_EQ);
+        ABBREVIATED_NAME_MAP.put("ane", CutoffCmp.ABS_NE);
 
-        for (CutoffCmp cmp : comparators) {
-            shortNameMap.put(cmp.getShortName(), cmp);
-            longNameMap.put(cmp.getLongName(), cmp);
-            nameMap.put(cmp.getShortName(), cmp);
-            nameMap.put(cmp.getLongName(), cmp);
+        for (CutoffCmp cmp : COMPARATORS) {
+            SHORT_NAME_MAP.put(cmp.getShortName(), cmp);
+            LONG_NAME_MAP.put(cmp.getLongName(), cmp);
+            NAME_MAP.put(cmp.getShortName(), cmp);
+            NAME_MAP.put(cmp.getLongName(), cmp);
         }
     }
 

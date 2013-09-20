@@ -38,11 +38,11 @@ public class VisibleRule implements Serializable {
 
         rule = rule.trim();
 
-        int ini = rule.indexOf("[");
+        int ini = rule.indexOf('[');
         if (ini != -1) {
             filteredCollection = new ORI(rule.substring(0, ini));
 
-            int end = rule.indexOf("]");
+            int end = rule.indexOf(']');
 
             String restriction = rule.substring(ini + 1, end).trim();
 
@@ -53,8 +53,12 @@ public class VisibleRule implements Serializable {
             } else {
                 String values[] = restriction.split("=");
 
-                if (values.length > 0) field = values[0].trim();
-                if (values.length > 1) value = values[1].trim();
+                if (values.length > 0) {
+                    field = values[0].trim();
+                }
+                if (values.length > 1) {
+                    value = values[1].trim();
+                }
             }
         } else {
             filteredCollection = new ORI(rule);

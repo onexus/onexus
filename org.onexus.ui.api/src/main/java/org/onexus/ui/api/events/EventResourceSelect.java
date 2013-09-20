@@ -19,9 +19,9 @@ package org.onexus.ui.api.events;
 
 import java.io.Serializable;
 
-public class EventResourceSelect implements Serializable {
+public final class EventResourceSelect implements Serializable {
 
-    public final static EventResourceSelect EVENT = new EventResourceSelect();
+    public static final EventResourceSelect EVENT = new EventResourceSelect();
 
     private EventResourceSelect() {
         super();

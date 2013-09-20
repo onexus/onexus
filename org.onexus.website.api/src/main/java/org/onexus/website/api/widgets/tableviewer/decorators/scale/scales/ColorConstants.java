@@ -19,16 +19,19 @@ package org.onexus.website.api.widgets.tableviewer.decorators.scale.scales;
 
 import java.awt.*;
 
-public class ColorConstants {
+public final class ColorConstants {
 
-    public static final Color notANumberColor = Color.WHITE;
-    public static final Color posInfinityColor = Color.GREEN;
-    public static final Color negInfinityColor = Color.CYAN;
-    public static final Color undefinedColor = Color.BLACK;
-    public static final Color emptyColor = Color.WHITE;
+    public static final Color NOT_A_NUMBER_COLOR = Color.WHITE;
+    public static final Color POS_INFINITY_COLOR = Color.GREEN;
+    public static final Color NEG_INFINITY_COLOR = Color.CYAN;
+    public static final Color UNDEFINED_COLOR = Color.BLACK;
+    public static final Color EMPTY_COLOR = Color.WHITE;
 
-    public static final Color nonSignificantColor = new Color(187, 187, 187);
+    public static final Color NON_SIGNIFICANT_COLOR = new Color(187, 187, 187);
 
-    public static final Color pvalueMinColor = new Color(255, 0, 0);
-    public static final Color pvalueMaxColor = new Color(255, 255, 0);
+    public static final Color PVALUE_MIN_COLOR = new Color(255, 0, 0);
+    public static final Color PVALUE_MAX_COLOR = new Color(255, 255, 0);
+
+    private ColorConstants() {
+    }
 }

@@ -24,16 +24,16 @@ import java.util.List;
 
 public interface IDataStore {
 
-    public void cancel(Progress progress);
+    void cancel(Progress progress);
 
-    public boolean isRegistered(ORI dataUri);
+    boolean isRegistered(ORI dataUri);
 
-    public void register(ORI dataUri);
+    void register(ORI dataUri);
 
-    public void deregister(ORI dataUri);
+    void deregister(ORI dataUri);
 
-    public List<String> getRegistered();
+    List<String> getRegistered();
 
-    public IDataStreams load(ORI dataUri);
+    IDataStreams load(ORI dataUri);
 
 }

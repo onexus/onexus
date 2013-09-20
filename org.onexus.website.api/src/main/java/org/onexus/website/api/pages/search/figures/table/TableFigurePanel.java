@@ -47,23 +47,20 @@ import java.util.Map;
 
 public class TableFigurePanel extends Panel {
 
-    private static final Logger log = LoggerFactory.getLogger(TableFigurePanel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TableFigurePanel.class);
 
     private transient EntitiesRowProvider dataProvider;
 
     private DataTable<IEntityTable, String> resultTable;
 
-    private TableFigureConfig config;
 
-    private final static IModel<TableViewerStatus> STATUS = new Model<TableViewerStatus>(new TableViewerStatus());
+    private static final IModel<TableViewerStatus> STATUS = new Model<TableViewerStatus>(new TableViewerStatus());
 
     @PaxWicketBean(name = "queryParser")
     private IQueryParser queryParser;
 
     public TableFigurePanel(String id, ORI parentOri, IEntitySelection selection, TableFigureConfig config) {
         super(id);
-
-        this.config = config;
 
         int limit = (config.getLimit() == null ? Integer.MAX_VALUE : config.getLimit());
 
@@ -128,7 +125,7 @@ public class TableFigurePanel extends Panel {
             Map<String, ORI> define = queryParser.parseDefine(oqlDefine);
 
             if (define == null) {
-                log.error("Malformed filter definition\n DEFINE: " + config.getDefine() + "\n");
+                LOGGER.error("Malformed filter definition\n DEFINE: " + config.getDefine() + "\n");
             } else {
 
                 for (Map.Entry<String, ORI> entry : define.entrySet()) {
@@ -140,12 +137,12 @@ public class TableFigurePanel extends Panel {
                 QueryUtils.and(query, where);
 
                 if (where == null) {
-                    log.error("Malformed figure-table WHERE: " + oqlWhere + "\n");
+                    LOGGER.error("Malformed figure-table WHERE: " + oqlWhere + "\n");
                 }
             }
         }
 
-        if (selection!=null) {
+        if (selection != null) {
             Filter filter = selection.buildFilter(query);
             QueryUtils.and(query, filter);
         }

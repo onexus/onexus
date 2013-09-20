@@ -29,79 +29,79 @@ public final class Icons {
     /**
      * Cross icon.
      */
-    public static ResourceReference CROSS = new PackageResourceReference(
+    public static final ResourceReference CROSS = new PackageResourceReference(
             Icons.class, "cross.png");
 
     /**
      * Question mark icon.
      */
-    public static ResourceReference HELP = new PackageResourceReference(
+    public static final ResourceReference HELP = new PackageResourceReference(
             Icons.class, "b_help.png");
 
     /**
      * Thin delete icon.
      */
-    public static ResourceReference THIN_DELETE = new PackageResourceReference(
+    public static final ResourceReference THIN_DELETE = new PackageResourceReference(
             Icons.class, "thin_delete.png");
 
     /**
      * Rounded informative icon (i).
      */
-    public static ResourceReference INFORMATION = new PackageResourceReference(
+    public static final ResourceReference INFORMATION = new PackageResourceReference(
             Icons.class, "information.png");
 
     /**
      * Arrow right (usually to uncollapse).
      */
-    public static ResourceReference ARROW_RIGHT = new PackageResourceReference(
+    public static final ResourceReference ARROW_RIGHT = new PackageResourceReference(
             Icons.class, "arrow-right.png");
 
     /**
      * Arrow right (usually to collapse).
      */
-    public static ResourceReference ARROW_DOWN = new PackageResourceReference(
+    public static final ResourceReference ARROW_DOWN = new PackageResourceReference(
             Icons.class, "arrow-down.png");
 
     /**
      * Disk icon
      */
-    public static ResourceReference DISK = new PackageResourceReference(
+    public static final ResourceReference DISK = new PackageResourceReference(
             Icons.class, "disk.png");
 
     /**
      * Add icon
      */
-    public static ResourceReference ADDITION = new PackageResourceReference(Icons.class, "addition.png");
+    public static final ResourceReference ADDITION = new PackageResourceReference(Icons.class, "addition.png");
 
     /**
      * Edit page
      */
-    public static ResourceReference EDIT_PAGE = new PackageResourceReference(Icons.class, "page-white_edit.png");
+    public static final ResourceReference EDIT_PAGE = new PackageResourceReference(Icons.class, "page-white_edit.png");
 
 
     /**
      * Eye icon
      */
-    public static ResourceReference EYE = new PackageResourceReference(
+    public static final ResourceReference EYE = new PackageResourceReference(
             Icons.class, "eye.png");
 
 
     /**
      * Dark eye icon
      */
-    public static ResourceReference EYE_DARK = new PackageResourceReference(
+    public static final ResourceReference EYE_DARK = new PackageResourceReference(
             Icons.class, "eye-dark.png");
 
     /**
      * Done mark
      */
-    public static ResourceReference DONE = new PackageResourceReference(
+    public static final ResourceReference DONE = new PackageResourceReference(
             Icons.class, "done.gif");
 
     /**
      * Loading icon
      */
-    public static ResourceReference LOADING = new PackageResourceReference(
+    public static final ResourceReference LOADING = new PackageResourceReference(
             Icons.class, "loading.gif");
 
 

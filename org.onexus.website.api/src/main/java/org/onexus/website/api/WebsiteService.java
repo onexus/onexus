@@ -45,9 +45,9 @@ import java.util.Properties;
 
 public class WebsiteService implements IWebsiteService {
 
-    public final static String MOUNT = "web";
+    public static final String MOUNT = "web";
 
-    private static final Logger log = LoggerFactory.getLogger(WebsiteService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WebsiteService.class);
 
     private IResourceManager resourceManager;
     private ICollectionManager collectionManager;
@@ -112,7 +112,7 @@ public class WebsiteService implements IWebsiteService {
 
                     ServiceRegistration registration = registrations.get(projectUrl);
 
-                    log.info("Unregistering website /web/" + project.getName());
+                    LOGGER.info("Unregistering website /web/" + project.getName());
                     registration.unregister();
                 }
 
@@ -125,7 +125,7 @@ public class WebsiteService implements IWebsiteService {
     }
 
     public void destroy() {
-        log.info("Unregistering all websites.");
+        LOGGER.info("Unregistering all websites.");
         for (ServiceRegistration registration : registrations.values()) {
             registration.unregister();
         }
@@ -166,7 +166,7 @@ public class WebsiteService implements IWebsiteService {
                 props
         ));
 
-        log.info("Registering website /web/" + name);
+        LOGGER.info("Registering website /web/" + name);
 
         // Force to load all the collections inside the website project
         loadCollections(new ORI(website.getORI().getProjectUrl()));

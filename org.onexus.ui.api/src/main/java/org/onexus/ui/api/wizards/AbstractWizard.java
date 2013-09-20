@@ -73,7 +73,7 @@ public abstract class AbstractWizard extends Wizard {
      *
      * @author Jordi Deu-Pons
      */
-    public final static class MyWizardButtonBar extends WizardButtonBar implements IDefaultButtonProvider {
+    public static final class MyWizardButtonBar extends WizardButtonBar implements IDefaultButtonProvider {
 
         public MyWizardButtonBar(String id, IWizard wizard) {
             super(id, wizard);

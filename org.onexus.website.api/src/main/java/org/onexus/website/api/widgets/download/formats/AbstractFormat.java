@@ -52,7 +52,7 @@ public abstract class AbstractFormat implements IDownloadFormat {
 
     @Override
     public String getFileName(String label) {
-        return (Strings.isEmpty(label)? "datafile" : label.trim()) + "." + extension;
+        return (Strings.isEmpty(label) ? "datafile" : label.trim()) + "." + extension;
     }
 
     public String toString() {

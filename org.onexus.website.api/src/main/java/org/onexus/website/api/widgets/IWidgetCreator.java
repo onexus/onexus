@@ -22,14 +22,14 @@ import org.onexus.resource.api.IResourceRegister;
 
 public interface IWidgetCreator {
 
-    public void register(IResourceRegister resourceRegister);
+    void register(IResourceRegister resourceRegister);
 
-    public boolean canCreate(WidgetConfig config);
+    boolean canCreate(WidgetConfig config);
 
-    public String getTitle();
+    String getTitle();
 
-    public String getDescription();
+    String getDescription();
 
-    public Widget<?, ?> create(String componentId, IModel<?> widgetModel);
+    Widget<?, ?> create(String componentId, IModel<?> widgetModel);
 
 }

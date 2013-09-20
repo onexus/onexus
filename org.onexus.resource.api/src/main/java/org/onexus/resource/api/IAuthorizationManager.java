@@ -21,14 +21,14 @@ import java.util.Set;
 
 public interface IAuthorizationManager {
 
-    static String READ = "read";
-    static String WRITE = "write";
-    static String LOAD = "load";
-    static String UNLOAD = "unload";
-    static String GRANT = "grant";
+    String READ = "read";
+    String WRITE = "write";
+    String LOAD = "load";
+    String UNLOAD = "unload";
+    String GRANT = "grant";
 
-    public boolean check(String privilege, ORI resourceOri);
+    boolean check(String privilege, ORI resourceOri);
 
-    public Set<String> getPrivileges(ORI resourceOri);
+    Set<String> getPrivileges(ORI resourceOri);
 
 }

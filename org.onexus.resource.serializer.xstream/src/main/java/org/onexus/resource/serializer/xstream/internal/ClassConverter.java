@@ -25,8 +25,8 @@ import java.util.Map;
 
 public class ClassConverter implements SingleValueConverter {
 
-    private final static Map<String, Class> stringToClass = new HashMap<String, Class>();
-    private final static Map<Class, String> classToString = new HashMap<Class, String>();
+    private static final Map<String, Class> STRING_TO_CLASS = new HashMap<String, Class>();
+    private static final Map<Class, String> CLASS_TO_STRING = new HashMap<Class, String>();
 
     static {
         registerType("integer", Integer.class);
@@ -37,8 +37,8 @@ public class ClassConverter implements SingleValueConverter {
     }
 
     public static void registerType(String text, Class type) {
-        stringToClass.put(text, type);
-        classToString.put(type, text);
+        STRING_TO_CLASS.put(text, type);
+        CLASS_TO_STRING.put(type, text);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class ClassConverter implements SingleValueConverter {
             return null;
         }
 
-        if (classToString.containsKey(obj)) {
-            return classToString.get(obj);
+        if (CLASS_TO_STRING.containsKey(obj)) {
+            return CLASS_TO_STRING.get(obj);
         }
 
         return ((Class) obj).getCanonicalName();
@@ -65,8 +65,8 @@ public class ClassConverter implements SingleValueConverter {
             return null;
         }
 
-        if (stringToClass.containsKey(str)) {
-            return stringToClass.get(str);
+        if (STRING_TO_CLASS.containsKey(str)) {
+            return STRING_TO_CLASS.get(str);
         }
 
         try {

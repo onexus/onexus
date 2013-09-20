@@ -30,7 +30,7 @@ import java.awt.*;
 
 public class BinaryDecoratorCreator implements IDecoratorCreator {
 
-    private final static IColorScaleHtml binaryScale = new BinaryColorScale(0.0, 1.0, 1.0, Color.LIGHT_GRAY, Color.RED);
+    private static final IColorScaleHtml BINARY_SCALE = new BinaryColorScale(0.0, 1.0, 1.0, Color.LIGHT_GRAY, Color.RED);
 
     @Override
     public String getDecoratorId() {
@@ -44,6 +44,6 @@ public class BinaryDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
-        return new ColorDecorator(columnField, binaryScale);
+        return new ColorDecorator(columnField, BINARY_SCALE);
     }
 }

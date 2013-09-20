@@ -41,7 +41,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
     @PaxWicketBean(name = "resourceManager")
     public IResourceManager resourceManager;
 
-    private final static Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
+    private static final Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
 
     public ResourceTreeProvider(IModel<? extends Resource> resource) {
         super();
@@ -112,7 +112,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
     public void detach() {
     }
 
-    private final static ResourceComparator RESOURCE_COMPARATOR = new ResourceComparator();
+    private static final ResourceComparator RESOURCE_COMPARATOR = new ResourceComparator();
 
     private static class ResourceComparator implements Comparator<Resource> {
 

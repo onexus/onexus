@@ -33,9 +33,10 @@ import java.util.Properties;
 
 public class ProfileManager implements IProfileManager {
 
-    private static final Logger log = LoggerFactory.getLogger(ProfileManager.class);
-    public final static String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
-    public final static String ONEXUS_PROFILES_FOLDER = ONEXUS_FOLDER + File.separator + "profiles";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileManager.class);
+
+    public static final String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
+    public static final String ONEXUS_PROFILES_FOLDER = ONEXUS_FOLDER + File.separator + "profiles";
 
 
     @Override
@@ -44,7 +45,7 @@ public class ProfileManager implements IProfileManager {
         try {
             properties = loadProperties(getUserName());
         } catch (IOException e) {
-            log.error("Loading '"+getUserName()+"' profile properties file.", e);
+            LOGGER.error("Loading '" + getUserName() + "' profile properties file.", e);
             return Collections.EMPTY_LIST;
         }
         return properties.stringPropertyNames();
@@ -56,7 +57,7 @@ public class ProfileManager implements IProfileManager {
         try {
             properties = loadProperties(getUserName());
         } catch (IOException e) {
-            log.error("Loading '" + getUserName() + "' profile properties file.", e);
+            LOGGER.error("Loading '" + getUserName() + "' profile properties file.", e);
             return null;
         }
         return properties.getProperty(key);
@@ -75,7 +76,7 @@ public class ProfileManager implements IProfileManager {
         try {
             properties = loadProperties(userName);
         } catch (IOException e) {
-            log.error("Loading '"+getUserName()+"' profile properties file.", e);
+            LOGGER.error("Loading '" + getUserName() + "' profile properties file.", e);
             return;
         }
 
@@ -83,7 +84,7 @@ public class ProfileManager implements IProfileManager {
         try {
             storeProperties(userName, properties);
         } catch (IOException e) {
-            log.error("Storing '" + getUserName() + "' profile properties file.", e);
+            LOGGER.error("Storing '" + getUserName() + "' profile properties file.", e);
         }
     }
 
@@ -107,9 +108,9 @@ public class ProfileManager implements IProfileManager {
 
         File file = new File(ONEXUS_PROFILES_FOLDER + File.separator + userName);
 
-        if (!file.exists()) {
-            //TODO
-        }
+        //TODO
+        //if (!file.exists()) {
+        //}
 
         properties.load(new FileReader(file));
 

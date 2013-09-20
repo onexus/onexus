@@ -33,7 +33,7 @@ import java.util.zip.ZipInputStream;
 
 public class ZipProjectProvider extends AbstractProjectProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(ZipProjectProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZipProjectProvider.class);
 
     public ZipProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) throws InvalidParameterException {
         super(projectName, projectUrl, projectFolder, monitor, listeners);
@@ -78,7 +78,7 @@ public class ZipProjectProvider extends AbstractProjectProvider {
 
         } catch (Exception e) {
 
-            log.error("Importing project '" + getProjectUrl() + "'", e);
+            LOGGER.error("Importing project '" + getProjectUrl() + "'", e);
             throw new InvalidParameterException("Invalid Onexus URL project");
         }
 

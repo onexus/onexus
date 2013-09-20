@@ -26,12 +26,14 @@ import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 
 public class TsvCallable implements Callable<IEntitySet> {
 
-    private final static String PARAMETER_DATA_URI = "data";
+    private static String PARAMETER_DATA_URI = "data";
 
     private IDataManager dataManager;
     private Progress progress;
@@ -59,7 +61,7 @@ public class TsvCallable implements Callable<IEntitySet> {
 
         ORI absDataUri = new ORI(dataUri).toAbsolute(collection.getORI());
 
-        IDataStreams dataStreams = null;
+        IDataStreams dataStreams;
         try {
 
             dataStreams = dataManager.load(absDataUri);
@@ -88,10 +90,7 @@ public class TsvCallable implements Callable<IEntitySet> {
             progress.warning(e.getMessage());
         }
 
-
-
         return new TsvEntitySet(dataStreams, collection);
-
 
     }
 

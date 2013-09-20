@@ -22,14 +22,14 @@ import org.onexus.resource.api.IResourceRegister;
 
 public interface IPageCreator {
 
-    public void register(IResourceRegister resourceRegister);
+    void register(IResourceRegister resourceRegister);
 
-    public boolean canCreate(PageConfig config);
+    boolean canCreate(PageConfig config);
 
-    public String getTitle();
+    String getTitle();
 
-    public String getDescription();
+    String getDescription();
 
-    public Page<?, ?> create(String componentId, IModel<?> statusModel);
+    Page<?, ?> create(String componentId, IModel<?> statusModel);
 
 }

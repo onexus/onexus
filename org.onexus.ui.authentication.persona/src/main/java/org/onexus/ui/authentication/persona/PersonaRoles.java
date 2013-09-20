@@ -25,16 +25,19 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 @Deprecated
-public class PersonaRoles {
+public final class PersonaRoles {
 
-    public final static String PERSONA_FILE = System.getProperty("user.home") + File.separator + ".onexus" + File.separator + "usersPersona.properties";
-    private static final Logger log = LoggerFactory.getLogger(PersonaRoles.class);
+    public static final String PERSONA_FILE = System.getProperty("user.home") + File.separator + ".onexus" + File.separator + "usersPersona.properties";
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonaRoles.class);
 
     private static Properties personaRoles;
     private static FileAlterationMonitor monitor;
@@ -44,7 +47,7 @@ public class PersonaRoles {
         try {
             personaRoles = loadProperties();
         } catch (IOException e) {
-            log.error("Error loading persona roles config file", e);
+            LOGGER.error("Error loading persona roles config file", e);
         }
 
         // Watch file changes and fire a reload
@@ -57,7 +60,7 @@ public class PersonaRoles {
                 try {
                     personaRoles = loadProperties();
                 } catch (IOException e) {
-                    log.error("Error loading persona roles config file", e);
+                    LOGGER.error("Error loading persona roles config file", e);
                 }
             }
         });
@@ -65,16 +68,18 @@ public class PersonaRoles {
         try {
             monitor.start();
         } catch (Exception e) {
-            log.error("On start persona roles config file monitor", e);
+            LOGGER.error("On start persona roles config file monitor", e);
         }
 
 
     }
 
+    private PersonaRoles() {
+    }
 
     public static synchronized Properties loadProperties() throws IOException {
 
-        log.info("Loading persona roles config file");
+        LOGGER.info("Loading persona roles config file");
 
         Properties properties = new Properties();
 
@@ -99,7 +104,7 @@ public class PersonaRoles {
             try {
                 personaRoles.store(new FileWriter(PERSONA_FILE), "Users registered using Persona");
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Storing persona file", e);
             }
 
         }

@@ -273,10 +273,13 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
                 }
             }
         }
-
         return store;
+    }
 
-
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
     private class TagsModel extends AbstractReadOnlyModel<List<String>> {
@@ -287,11 +290,4 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
         }
 
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(CssHeaderItem.forReference(CSS));
-    }
-
 }

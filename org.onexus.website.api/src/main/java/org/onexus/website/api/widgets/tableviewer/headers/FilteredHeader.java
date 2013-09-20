@@ -17,12 +17,10 @@
  */
 package org.onexus.website.api.widgets.tableviewer.headers;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.border.Border;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.website.api.events.EventFilterHeader;
 
 public class FilteredHeader extends Border {

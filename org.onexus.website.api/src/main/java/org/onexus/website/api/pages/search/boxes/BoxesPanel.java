@@ -29,7 +29,6 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Equal;
-import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.In;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
@@ -44,8 +43,8 @@ import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.pages.search.figures.FigureBox;
 import org.onexus.website.api.pages.search.figures.LinksBox;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.List;
@@ -80,7 +79,7 @@ public class BoxesPanel extends Panel {
 
             for (FigureConfig figure : type.getFigures()) {
                 if (!Strings.isEmpty(figure.getVisible()) && "NONE".equalsIgnoreCase(figure.getVisible())) {
-                    boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, null));
+                    boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, null));
                 }
             }
 
@@ -110,7 +109,7 @@ public class BoxesPanel extends Panel {
 
                     for (FigureConfig figure : type.getFigures()) {
                         if (Strings.isEmpty(figure.getVisible()) || "SINGLE".equalsIgnoreCase(figure.getVisible())) {
-                            boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, new SingleEntitySelection(entity)));
+                            boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, new SingleEntitySelection(entity)));
                         }
                     }
 
@@ -119,7 +118,7 @@ public class BoxesPanel extends Panel {
 
                             @Override
                             protected void onSelection(AjaxRequestTarget target, String newSearch) {
-                                 onDisambiguation(target, newSearch);
+                                onDisambiguation(target, newSearch);
                             }
                         });
                     } else {
@@ -155,7 +154,7 @@ public class BoxesPanel extends Panel {
                 }
 
                 IEntityTable table = getMultipleEntityTable(collectionManager, type, collectionUri, filterConfig);
-                boxes.add(new LinksBox(boxes.newChildId(),status, collectionUri, filterConfig, new EntityIterator(table, collectionUri)) {
+                boxes.add(new LinksBox(boxes.newChildId(), status, collectionUri, filterConfig, new EntityIterator(table, collectionUri)) {
                     @Override
                     protected void onNotFound(Set<String> valuesNotFound) {
                         if (valuesNotFound.isEmpty() || !quickList) {
@@ -173,7 +172,7 @@ public class BoxesPanel extends Panel {
 
                 for (FigureConfig figure : type.getFigures()) {
                     if (Strings.isEmpty(figure.getVisible()) || "LIST".equalsIgnoreCase(figure.getVisible())) {
-                        boxes.add(new FigureBox(boxes.newChildId(), figure,  baseUri, new MultipleEntitySelection(filterConfig)));
+                        boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, new MultipleEntitySelection(filterConfig)));
                     }
                 }
             }
@@ -197,15 +196,13 @@ public class BoxesPanel extends Panel {
         query.addSelect(collectionAlias, null);
 
         IEntitySelection selection = new MultipleEntitySelection(filter);
-        query.setWhere( selection.buildFilter(query) );
+        query.setWhere(selection.buildFilter(query));
 
         List<String> fieldList = type.getFieldsList();
         query.addOrderBy(new OrderBy(collectionAlias, fieldList.get(0)));
 
         return collectionManager.load(query);
     }
-
-
 
 
     public static IEntityTable getSingleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search, boolean equal) {

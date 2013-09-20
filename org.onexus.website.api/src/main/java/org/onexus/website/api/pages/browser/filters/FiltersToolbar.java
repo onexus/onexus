@@ -24,7 +24,6 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -35,8 +34,8 @@ import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.filters.panels.DoubleFilterPanel;
 import org.onexus.website.api.pages.browser.filters.panels.IntegerFilterPanel;
-import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.pages.browser.filters.panels.StringFilterPanel;
+import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 
 public class FiltersToolbar extends Panel {

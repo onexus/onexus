@@ -62,15 +62,16 @@ public class HelpMark extends Panel {
         add(container);
 
         // Add question mark icon
-        Image img = null;
-        container.add(img = new Image("imageHelp", Icons.HELP) {
+        Image img = new Image("imageHelp", Icons.HELP) {
 
             @Override
             protected boolean shouldAddAntiCacheParameter() {
                 return false;
             }
 
-        });
+        };
+
+        container.add(img);
         img.add(new AjaxEventBehavior("onclick") {
 
             @Override

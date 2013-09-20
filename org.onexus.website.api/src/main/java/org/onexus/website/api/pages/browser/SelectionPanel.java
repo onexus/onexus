@@ -50,8 +50,8 @@ import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.widgets.Widget;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collection;

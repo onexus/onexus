@@ -26,8 +26,7 @@ import org.apache.wicket.markup.html.panel.Panel;
  * This is the main panel which loads specific panels depending on whether there is a logged in user
  * or not.
  */
-public class BrowserIdPanel extends Panel
-{
+public class BrowserIdPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,13 +37,11 @@ public class BrowserIdPanel extends Panel
      */
     private final GuestPanel.Style style;
 
-    public BrowserIdPanel(String id)
-    {
+    public BrowserIdPanel(String id) {
         this(id, GuestPanel.Style.BLUE);
     }
 
-    public BrowserIdPanel(String id, GuestPanel.Style style)
-    {
+    public BrowserIdPanel(String id, GuestPanel.Style style) {
         super(id);
 
         this.style = style;
@@ -53,38 +50,30 @@ public class BrowserIdPanel extends Panel
     }
 
     @Override
-    protected void onConfigure()
-    {
+    protected void onConfigure() {
         super.onConfigure();
 
-        if (SessionHelper.isLoggedIn(getSession()))
-        {
+        if (SessionHelper.isLoggedIn(getSession())) {
             addOrReplace(getLoggedInPanel(CONTENT_ID));
-        }
-        else
-        {
+        } else {
             addOrReplace(getGuestPanel(CONTENT_ID));
         }
     }
 
-    protected Component getGuestPanel(String componentId)
-    {
-        return new GuestPanel(componentId, style)
-        {
+    protected Component getGuestPanel(String componentId) {
+        return new GuestPanel(componentId, style) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSuccess(AjaxRequestTarget target)
-            {
+            protected void onSuccess(AjaxRequestTarget target) {
                 super.onSuccess(target);
 
                 target.add(BrowserIdPanel.this);
             }
 
             @Override
-            protected void onFailure(AjaxRequestTarget target, final String failureReason)
-            {
+            protected void onFailure(AjaxRequestTarget target, final String failureReason) {
                 super.onFailure(target, failureReason);
 
                 error("The authentication failed: " + failureReason);
@@ -93,16 +82,13 @@ public class BrowserIdPanel extends Panel
         };
     }
 
-    protected Component getLoggedInPanel(String componentId)
-    {
-        return new LoggedInPanel(componentId)
-        {
+    protected Component getLoggedInPanel(String componentId) {
+        return new LoggedInPanel(componentId) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onLoggedOut(AjaxRequestTarget target)
-            {
+            protected void onLoggedOut(AjaxRequestTarget target) {
                 super.onLoggedOut(target);
                 target.add(BrowserIdPanel.this);
             }

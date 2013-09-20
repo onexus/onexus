@@ -30,7 +30,7 @@ import java.awt.*;
 
 public class RankDecoratorCreator implements IDecoratorCreator {
 
-    private final static IColorScaleHtml rankScale = new LinearColorScale(0.0, 1.0, new Color(255, 255, 255), new Color(0, 255, 0));
+    private static final IColorScaleHtml RANK_SCALE = new LinearColorScale(0.0, 1.0, new Color(255, 255, 255), new Color(0, 255, 0));
 
     @Override
     public String getDecoratorId() {
@@ -44,6 +44,6 @@ public class RankDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
-        return new ColorDecorator(columnField, rankScale, null, true);
+        return new ColorDecorator(columnField, RANK_SCALE, null, true);
     }
 }

@@ -26,19 +26,16 @@ public class SignOutPage extends WebPage {
     /**
      * Construct.
      */
-    public SignOutPage()
-    {
+    public SignOutPage() {
         this(null);
     }
 
     /**
      * Constructor
      *
-     * @param parameters
-     *            Page parameters (ignored since this is the home page)
+     * @param parameters Page parameters (ignored since this is the home page)
      */
-    public SignOutPage(final PageParameters parameters)
-    {
+    public SignOutPage(final PageParameters parameters) {
         getSession().invalidate();
         setResponsePage(OnexusWebApplication.get().getHomePage());
     }

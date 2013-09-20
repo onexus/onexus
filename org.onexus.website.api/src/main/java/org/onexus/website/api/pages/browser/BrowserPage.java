@@ -273,6 +273,15 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         super.onBeforeRender();
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        if (isEmbed()) {
+            response.render(CssHeaderItem.forCSS("div.tab-row { display: none; }", "embed-browser-page"));
+        }
+    }
+
     private class VisibleTabs extends AbstractReadOnlyModel<List<TabGroup>> {
 
         @Override
@@ -354,12 +363,5 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         }
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
 
-        if (isEmbed()) {
-            response.render(CssHeaderItem.forCSS("div.tab-row { display: none; }", "embed-browser-page"));
-        }
-    }
 }

@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
 
 public class ResourcesPage extends BaseResourcePage {
 
-    public final static String PARAMETER_RESOURCE = "ori";
+    public static final String PARAMETER_RESOURCE = "ori";
 
     @PaxWicketBean(name = "viewersManager")
     private IViewersManager viewersManager;

@@ -42,7 +42,7 @@ import javax.servlet.http.HttpSession;
 
 public class WebsiteApplication extends AuthenticatedWebApplication {
 
-    private final static String SERVER_URL = System.getProperty("onexus.server.url");
+    private static final String SERVER_URL = System.getProperty("onexus.server.url");
 
     private String webPath;
     private ORI websiteOri;
@@ -143,7 +143,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
     }
 
 
-    public final static String toAbsolutePath(String relativePagePath) {
+    public static String toAbsolutePath(String relativePagePath) {
 
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
         String serverUrl = SERVER_URL;
@@ -153,7 +153,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
         return toAbsolutePath(relativePagePath, serverUrl);
     }
 
-    public final static String toAbsolutePath(String relativePagePath, String serverUrl) {
+    public static String toAbsolutePath(String relativePagePath, String serverUrl) {
 
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
 
@@ -161,7 +161,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
             return serverUrl + relativePagePath;
         }
 
-        String fullPath = RequestUtils.toAbsolutePath(request.getRequestURI(), relativePagePath.toString());
+        String fullPath = RequestUtils.toAbsolutePath(request.getRequestURI(), relativePagePath);
         return serverUrl + fullPath;
     }
 

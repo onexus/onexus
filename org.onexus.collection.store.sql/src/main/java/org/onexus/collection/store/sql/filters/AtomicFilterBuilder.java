@@ -67,7 +67,7 @@ public class AtomicFilterBuilder extends AbstractFilterBuilder<AtomicFilter> {
 
         where.append(' ').append(operator).append(' ');
         if (filter instanceof Contains) {
-            encodeValue(where, String.class, "%" + String.valueOf(filter.getValue()) + "%");
+            encodeValue(where, String.class, "%" + filter.getValue() + "%");
         } else {
             encodeValue(where, column.getField().getType(), filter.getValue());
         }

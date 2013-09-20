@@ -38,8 +38,9 @@ import java.util.Set;
 
 public class AuthorizationManager implements IAuthorizationManager {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthorizationManager.class);
-    public static String ANONYMOUS_USER = "anonymous";
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthorizationManager.class);
+
+    public static final String ANONYMOUS_USER = "anonymous";
 
     private String authorizationFile;
     private Properties properties;
@@ -50,7 +51,7 @@ public class AuthorizationManager implements IAuthorizationManager {
 
         // Service context always have read-only privilege
         LoginContext ctx = LoginContext.get();
-        if (ctx==LoginContext.SERVICE_CONTEXT) {
+        if (ctx == LoginContext.SERVICE_CONTEXT) {
             return true;
         }
 
@@ -58,13 +59,13 @@ public class AuthorizationManager implements IAuthorizationManager {
         String projectUrl = resourceOri.getProjectUrl();
         if (projectUrl.startsWith("private://")) {
 
-            int end = projectUrl.indexOf('/',10);
+            int end = projectUrl.indexOf('/', 10);
             if (end == -1) {
                 return false;
             }
 
             String userName = projectUrl.substring(10, end);
-            if (userName==null || !userName.equals(ctx.getUserName())) {
+            if (userName == null || !userName.equals(ctx.getUserName())) {
                 return false;
             }
         }
@@ -131,7 +132,7 @@ public class AuthorizationManager implements IAuthorizationManager {
         try {
             this.properties = loadProperties();
         } catch (IOException e) {
-            log.error("Loading authorization config file", e);
+            LOGGER.error("Loading authorization config file", e);
         }
 
         // Watch file changes and fire a reload
@@ -144,7 +145,7 @@ public class AuthorizationManager implements IAuthorizationManager {
                 try {
                     properties = AuthorizationManager.this.loadProperties();
                 } catch (IOException e) {
-                    log.error("Loading authorization config file", e);
+                    LOGGER.error("Loading authorization config file", e);
                 }
             }
         });
@@ -152,14 +153,14 @@ public class AuthorizationManager implements IAuthorizationManager {
         try {
             monitor.start();
         } catch (Exception e) {
-            log.error("On start authorization config file monitor", e);
+            LOGGER.error("On start authorization config file monitor", e);
         }
 
     }
 
     private synchronized Properties loadProperties() throws IOException {
 
-        log.info("Loading authorization config file");
+        LOGGER.info("Loading authorization config file");
 
         Properties properties = new Properties();
 

@@ -25,15 +25,15 @@ import java.io.Serializable;
 
 public interface IDownloadFormat extends Serializable {
 
-    public String getLabel();
+    String getLabel();
 
-    public String getTitle();
+    String getTitle();
 
-    public String getFileName(String label);
+    String getFileName(String label);
 
-    public String getContentType();
+    String getContentType();
 
-    public Long getMaxRowsLimit();
+    Long getMaxRowsLimit();
 
-    public void write(IEntityTable table, OutputStream ouputStream) throws IOException;
+    void write(IEntityTable table, OutputStream ouputStream) throws IOException;
 }

@@ -34,8 +34,8 @@ import java.util.regex.Pattern;
 
 public class BoxDecorator implements IDecorator {
 
-    private final static Pattern commaPattern = Pattern.compile(",");
-    private final static Pattern colonPattern = Pattern.compile(":");
+    private static final Pattern COMMA_PATTERN = Pattern.compile(",");
+    private static final Pattern COLON_PATTERN = Pattern.compile(":");
 
     private Field field;
     private String fields;
@@ -47,10 +47,10 @@ public class BoxDecorator implements IDecorator {
         this.fields = parameters.get(BoxDecoratorParameters.FIELDS);
 
         if (parameters.containsKey(BoxDecoratorParameters.DECORATORS)) {
-            String decoParameters[] = commaPattern.split(parameters.get(BoxDecoratorParameters.DECORATORS));
+            String decoParameters[] = COMMA_PATTERN.split(parameters.get(BoxDecoratorParameters.DECORATORS));
 
             for (String decoParam : decoParameters) {
-                String[] values = colonPattern.split(decoParam);
+                String[] values = COLON_PATTERN.split(decoParam);
                 decorators.put(values[0], values[1]);
             }
         }

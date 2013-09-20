@@ -39,7 +39,7 @@ public class CollectionViewer extends Panel {
 
         Resource resource = model.getObject();
 
-        if (resource != null && resource instanceof Collection) {
+        if (resource instanceof Collection) {
 
             Collection collection = (Collection) resource;
 

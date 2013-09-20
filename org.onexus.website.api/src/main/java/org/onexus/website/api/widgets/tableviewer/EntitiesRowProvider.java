@@ -80,42 +80,6 @@ public class EntitiesRowProvider implements
         return new SpyIterator<IEntityTable>(first, total, loadIterator(query));
     }
 
-    public class SpyIterator<T> implements Iterator<T> {
-
-        private long first, total;
-        private Iterator<T> it;
-
-        private long currentPos;
-
-        public SpyIterator(long first, long total, Iterator<T> it) {
-            this.first = first;
-            this.it = it;
-            this.total = total;
-            this.currentPos = first - 1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            boolean hasNext = it.hasNext();
-            if (!hasNext && (currentPos - first < total)) {
-                EntitiesRowProvider.this.knownSize = currentPos + 1;
-                EntitiesRowProvider.this.realSize = currentPos + 1;
-            }
-            return hasNext;
-        }
-
-        @Override
-        public T next() {
-            currentPos++;
-            return it.next();
-        }
-
-        @Override
-        public void remove() {
-            it.remove();
-        }
-    }
-
     @Override
     public long size() {
         if (realSize != -1) {
@@ -190,6 +154,19 @@ public class EntitiesRowProvider implements
         return new EntityMatrixModel(object);
     }
 
+    @Override
+    public void detach() {
+        if (rows != null) {
+            statusModel.detach();
+            rows = null;
+        }
+    }
+
+    @Override
+    public ISortState getSortState() {
+        return sortState;
+    }
+
     @Deprecated
     public class EntityMatrixModel extends
             LoadableDetachableModel<IEntityTable> {
@@ -208,18 +185,6 @@ public class EntitiesRowProvider implements
 
     }
 
-    @Override
-    public void detach() {
-        if (rows != null) {
-            statusModel.detach();
-            rows = null;
-        }
-    }
-
-    @Override
-    public ISortState getSortState() {
-        return sortState;
-    }
 
     public class SortState implements ISortState<String> {
 
@@ -251,6 +216,42 @@ public class EntitiesRowProvider implements
             return SortOrder.NONE;
         }
 
+    }
+
+    public class SpyIterator<T> implements Iterator<T> {
+
+        private long first, total;
+        private Iterator<T> it;
+
+        private long currentPos;
+
+        public SpyIterator(long first, long total, Iterator<T> it) {
+            this.first = first;
+            this.it = it;
+            this.total = total;
+            this.currentPos = first - 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            boolean hasNext = it.hasNext();
+            if (!hasNext && (currentPos - first < total)) {
+                EntitiesRowProvider.this.knownSize = currentPos + 1;
+                EntitiesRowProvider.this.realSize = currentPos + 1;
+            }
+            return hasNext;
+        }
+
+        @Override
+        public T next() {
+            currentPos++;
+            return it.next();
+        }
+
+        @Override
+        public void remove() {
+            it.remove();
+        }
     }
 
 }

@@ -23,7 +23,7 @@ import org.onexus.resource.api.ORI;
 
 public class SingleEntityQuery extends Query {
 
-    public final static String COLLECTION_ALIAS = "c";
+    public static final String COLLECTION_ALIAS = "c";
 
     public SingleEntityQuery(ORI collectionURI, String entityId) {
         super();

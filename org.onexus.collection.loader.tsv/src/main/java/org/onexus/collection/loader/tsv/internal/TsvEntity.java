@@ -30,7 +30,8 @@ import java.util.Properties;
 
 public class TsvEntity implements IEntity {
 
-    private static final Logger log = LoggerFactory.getLogger(TsvEntity.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TsvEntity.class);
+
     private long position;
     private Collection collection;
 
@@ -89,13 +90,13 @@ public class TsvEntity implements IEntity {
 
         Field field = fields.get(fieldId);
         String value = null;
-        String header = getHeader( field.getId() );
-        if (headers.containsKey( header )) {
-            Integer position = headers.get( header );
+        String header = getHeader(field.getId());
+        if (headers.containsKey(header)) {
+            Integer position = headers.get(header);
             value = parseField(line, position);
         } else {
-            if (staticFieldsValues.containsKey( header )) {
-                value = staticFieldsValues.get( header );
+            if (staticFieldsValues.containsKey(header)) {
+                value = staticFieldsValues.get(header);
             }
         }
 
@@ -129,7 +130,7 @@ public class TsvEntity implements IEntity {
 
             return constructor.newInstance(value);
         } catch (Exception e) {
-            log.warn("The value '" + value
+            LOGGER.warn("The value '" + value
                     + "' for the field '" + fieldId
                     + "' is malformed on line '" + line + "'. Loading as NULL value.");
 
@@ -172,13 +173,15 @@ public class TsvEntity implements IEntity {
         int start = -1;
         for (int i = 0; i < num; i++) {
             start = str.indexOf(SEPARATOR, start + 1);
-            if (start == -1)
+            if (start == -1) {
                 return null;
+            }
         }
 
         int end = str.indexOf(SEPARATOR, start + 1);
-        if (end == -1)
+        if (end == -1) {
             end = str.length();
+        }
 
         String result = str.substring(start + 1, end);
 

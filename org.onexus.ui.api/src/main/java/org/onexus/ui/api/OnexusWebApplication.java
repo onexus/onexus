@@ -41,7 +41,7 @@ import javax.servlet.http.HttpSession;
 
 public class OnexusWebApplication extends AuthenticatedWebApplication {
 
-    private final static String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
+    private static final String SERVER_URL = System.getenv("ONEXUS_SERVER_URL");
 
     public Class<? extends Page> getHomePage() {
         return ResourcesPage.class;
@@ -74,7 +74,7 @@ public class OnexusWebApplication extends AuthenticatedWebApplication {
                 HttpServletRequest webRequest = (HttpServletRequest) cycle.getRequest().getContainerRequest();
                 HttpSession session = webRequest.getSession();
 
-                if (session!=null && LoginContext.get(session.getId())!=null) {
+                if (session != null && LoginContext.get(session.getId()) != null) {
                     LoginContext.set(LoginContext.get(session.getId()), null);
                 } else {
                     LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);

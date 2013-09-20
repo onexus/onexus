@@ -31,13 +31,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 /**
  * A panel that is used for non-authenticated users
  */
-public class GuestPanel extends Panel
-{
+public class GuestPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    //public static JavaScriptHeaderItem INCLUDE = JavaScriptHeaderItem.forReference(new PackageResourceReference(GuestPanel.class, "include.js"));
-    public static JavaScriptHeaderItem INCLUDE = JavaScriptHeaderItem.forUrl("https://login.persona.org/include.js");
+    public static final JavaScriptHeaderItem INCLUDE = JavaScriptHeaderItem.forUrl("https://login.persona.org/include.js");
 
     private static final ResourceReference RED_ICON = new PackageResourceReference(
             GuestPanel.class, "sign_in_red.png");
@@ -53,34 +51,29 @@ public class GuestPanel extends Panel
     /**
      * The possible styles of the default "Sign In" image button provided by https://browserid.org
      */
-    public enum Style
-    {
+    public enum Style {
         RED, BLUE, GREEN, ORANGE, GREY
     }
 
     private final Style style;
 
-    public GuestPanel(String id, Style style)
-    {
+    public GuestPanel(String id, Style style) {
         super(id);
 
         this.style = style;
 
         Component signInImage = createSignInButton("signInImage");
-        signInImage.add(new VerifyBehavior()
-        {
+        signInImage.add(new VerifyBehavior() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSuccess(AjaxRequestTarget target)
-            {
+            protected void onSuccess(AjaxRequestTarget target) {
                 GuestPanel.this.onSuccess(target);
             }
 
             @Override
-            protected void onFailure(AjaxRequestTarget target, String failureReason)
-            {
+            protected void onFailure(AjaxRequestTarget target, String failureReason) {
                 GuestPanel.this.onFailure(target, failureReason);
             }
 
@@ -88,32 +81,29 @@ public class GuestPanel extends Panel
         add(signInImage);
     }
 
-    protected Component createSignInButton(String componentId)
-    {
+    protected Component createSignInButton(String componentId) {
         Image image = new Image(componentId, getImage(style));
         image.add(AttributeModifier.replace("alt", "Sign In"));
         return image;
     }
 
-    protected ResourceReference getImage(final Style style)
-    {
+    protected ResourceReference getImage(final Style style) {
         final ResourceReference imageIcon;
-        switch (style)
-        {
-            case RED :
+        switch (style) {
+            case RED:
                 imageIcon = RED_ICON;
                 break;
-            case GREEN :
+            case GREEN:
                 imageIcon = GREEN_ICON;
                 break;
-            case ORANGE :
+            case ORANGE:
                 imageIcon = ORANGE_ICON;
                 break;
-            case GREY :
+            case GREY:
                 imageIcon = GREY_ICON;
                 break;
-            case BLUE :
-            default :
+            case BLUE:
+            default:
                 imageIcon = BLUE_ICON;
                 break;
         }
@@ -122,8 +112,7 @@ public class GuestPanel extends Panel
     }
 
     @Override
-    public void renderHead(IHeaderResponse response)
-    {
+    public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
         renderBrowserIdJavaScript(response);
@@ -133,35 +122,29 @@ public class GuestPanel extends Panel
      * Renders a reference for external browserid.js (loaded from browserid.org). <br/>
      * Can be overridden with local reference to browserid.js if needed.
      *
-     * @param response
-     *            the current header response
+     * @param response the current header response
      */
-    protected void renderBrowserIdJavaScript(final IHeaderResponse response)
-    {
+    protected void renderBrowserIdJavaScript(final IHeaderResponse response) {
         response.render(INCLUDE);
     }
 
     /**
      * A callback called when the authentication is successful
      *
-     * @param target
-     *            the current request target
+     * @param target the current request target
      */
-    protected void onSuccess(final AjaxRequestTarget target)
-    {
+    protected void onSuccess(final AjaxRequestTarget target) {
 
     }
 
     /**
      * A callback called when the authentication has failed
      *
-     * @param target
-     *            the current request target
+     * @param target        the current request target
      * @param target
      * @param failureReason
      */
-    protected void onFailure(final AjaxRequestTarget target, final String failureReason)
-    {
+    protected void onFailure(final AjaxRequestTarget target, final String failureReason) {
 
     }
 }

@@ -170,7 +170,7 @@ public class ORI implements Serializable {
             if (path != null) {
                 return projectUrl + ONEXUS_TAG + path.substring(1);
             } else {
-                return projectUrl.toString();
+                return projectUrl;
             }
         } else {
             return path;
@@ -179,13 +179,23 @@ public class ORI implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ORI)) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof ORI)) {
+            return false;
+        }
 
         ORI ori = (ORI) o;
 
-        if (projectUrl != null ? !projectUrl.equals(ori.projectUrl) : ori.projectUrl != null) return false;
-        if (path != null ? !path.equals(ori.path) : ori.path != null) return false;
+        if (projectUrl != null ? !projectUrl.equals(ori.projectUrl) : ori.projectUrl != null) {
+            return false;
+        }
+
+        if (path != null ? !path.equals(ori.path) : ori.path != null) {
+            return false;
+        }
 
         return true;
     }

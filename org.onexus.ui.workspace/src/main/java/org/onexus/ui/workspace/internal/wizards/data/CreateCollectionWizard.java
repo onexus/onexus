@@ -64,13 +64,13 @@ public class CreateCollectionWizard extends AbstractWizard {
     public transient IResourceManager resourceManager;
 
     // Formats
-    private static String CSV = "Comma separated values";
-    private static String TSV = "Tab separated values";
+    private static final String CSV = "Comma separated values";
+    private static final String TSV = "Tab separated values";
     private static final List<String> FORMATS = Arrays.asList(new String[]{TSV, CSV});
 
     // Maximum lines to load to deduce the datatype
-    private final static int MAXIMUM_LINES = 10000;
-    private final static int MAXIMUM_UNIQUE_VALUES = 1500;
+    private static final int MAXIMUM_LINES = 10000;
+    private static final int MAXIMUM_UNIQUE_VALUES = 1500;
 
     private String selected = TSV;
     private List<String> primaryKeys = new ArrayList<String>();
@@ -79,10 +79,10 @@ public class CreateCollectionWizard extends AbstractWizard {
     // Data information
     private String headers[];
     private Map<String, Set<String>> sampleData;
-    int nullEmpty = 0;
-    int nullDash = 0;
-    int nullString = 0;
-    int nullNA = 0;
+    private int nullEmpty = 0;
+    private int nullDash = 0;
+    private int nullString = 0;
+    private int nullNA = 0;
 
     public CreateCollectionWizard(String id, IModel<? extends Resource> model) {
         super(id);
@@ -297,8 +297,8 @@ public class CreateCollectionWizard extends AbstractWizard {
         String sourceName = sourceURI.getPath();
         String collectionName;
 
-        int punt;
-        if ((punt = sourceName.lastIndexOf(".")) != -1) {
+        int punt = sourceName.lastIndexOf('.');
+        if (punt != -1) {
             collectionName = sourceName.substring(0, punt);
         } else {
             collectionName = sourceName + ".col";
@@ -379,6 +379,13 @@ public class CreateCollectionWizard extends AbstractWizard {
         }
     }
 
+    public List<String> getPrimaryKeys() {
+        return primaryKeys;
+    }
+
+    public void setPrimaryKeys(List<String> primaryKeys) {
+        this.primaryKeys = primaryKeys;
+    }
 
     private final class ChooseFormat extends WizardStep {
 
@@ -413,11 +420,4 @@ public class CreateCollectionWizard extends AbstractWizard {
         }
     }
 
-    public List<String> getPrimaryKeys() {
-        return primaryKeys;
-    }
-
-    public void setPrimaryKeys(List<String> primaryKeys) {
-        this.primaryKeys = primaryKeys;
-    }
 }

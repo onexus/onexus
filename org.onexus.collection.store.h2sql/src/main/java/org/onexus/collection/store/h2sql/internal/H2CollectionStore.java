@@ -40,7 +40,7 @@ import java.util.Map;
 
 public class H2CollectionStore extends SqlCollectionStore {
 
-    private static final Logger log = LoggerFactory.getLogger(H2CollectionStore.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(H2CollectionStore.class);
     private String database = "onexus-h2-database;LOG=0;CACHE_SIZE=65536;LOCK_MODE=0"; // ;TRACE_LEVEL_FILE=3;TRACE_LEVEL_SYSTEM_OUT=3";
 
     private String username = "sa";
@@ -80,25 +80,14 @@ public class H2CollectionStore extends SqlCollectionStore {
 
                 stat.execute("SHUTDOWN");
                 stat.close();
+                conn.close();
             }
 
         } catch (SQLException e) {
-            log.error("At H2CollectionStore close", e);
+            LOGGER.error("At H2CollectionStore close", e);
         }
 
     }
-
-    public class H2ConnectionFactory implements ConnectionFactory {
-
-        @Override
-        public Connection createConnection() throws SQLException {
-            return DriverManager.getConnection(
-                    "jdbc:h2:" + database,
-                    username,
-                    password);
-        }
-    }
-
 
     public String getDatabase() {
         return database;
@@ -131,5 +120,19 @@ public class H2CollectionStore extends SqlCollectionStore {
     public void setResourceManager(IResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }
+
+    public class H2ConnectionFactory implements ConnectionFactory {
+
+        @Override
+        public Connection createConnection() throws SQLException {
+            return DriverManager.getConnection(
+                    "jdbc:h2:" + database,
+                    username,
+                    password);
+        }
+    }
+
+
+
 
 }

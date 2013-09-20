@@ -1,4 +1,4 @@
-    /**
+/**
  *  Copyright 2012 Universitat Pompeu Fabra.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@ package org.onexus.website.api.pages.search;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -42,7 +41,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
-import org.apache.wicket.util.encoding.UrlEncoder;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionManager;
@@ -55,15 +53,12 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
-import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.pages.Page;
-import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.io.Serializable;
@@ -71,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> implements IAjaxIndicatorAware {
 
@@ -135,7 +129,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
         search.setOutputMarkupId(true);
 
         if (!Strings.isEmpty(getStatus().getType().getPlaceholder())) {
-            search.add( new AttributeModifier("placeholder", getStatus().getType().getPlaceholder()));
+            search.add(new AttributeModifier("placeholder", getStatus().getType().getPlaceholder()));
         }
 
         search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
@@ -216,7 +210,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
                 getStatus().setSearch("");
 
                 if (!Strings.isEmpty(getStatus().getType().getPlaceholder())) {
-                    search.add( new AttributeModifier("placeholder", getStatus().getType().getPlaceholder()));
+                    search.add(new AttributeModifier("placeholder", getStatus().getType().getPlaceholder()));
                 } else {
                     search.add(new AttributeModifier("placeholder", ""));
                 }
@@ -318,7 +312,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
     private Iterator<IEntity> getAutocompleteChoices(String in) {
 
         int lastComma = in.lastIndexOf(',');
-        String input = (lastComma > -1 ? in.substring(lastComma+1).trim() : in.trim());
+        String input = (lastComma > -1 ? in.substring(lastComma + 1).trim() : in.trim());
 
         Query query = new Query();
         SearchType type = getStatus().getType();
@@ -400,7 +394,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
         private String getTextValue(IEntity object, String in) {
 
             int lastComma = in.lastIndexOf(',');
-            String criteria = (lastComma > -1 ? in.substring(lastComma+1).trim() : in.trim());
+            String criteria = (lastComma > -1 ? in.substring(lastComma + 1).trim() : in.trim());
             String previous = (lastComma > -1 ? in.substring(0, lastComma) + ", " : "");
 
 
@@ -415,7 +409,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
                 }
             }
 
-            return previous + String.valueOf(object.get(fields.get(0)));
+            return previous + object.get(fields.get(0));
         }
 
         public final void renderHeader(final Response response) {
@@ -465,7 +459,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
     }
 
 
-    private class ExamplesModel extends AbstractReadOnlyModel<List<SearchExample>> {
+    private final class ExamplesModel extends AbstractReadOnlyModel<List<SearchExample>> {
 
         private IModel<SearchType> model;
 

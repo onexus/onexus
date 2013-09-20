@@ -54,52 +54,51 @@ import org.slf4j.LoggerFactory;
  * passing the username and password submitted. The signIn() method should authenticate the user's
  * session.
  *
- * @see {@link org.apache.wicket.authentication.IAuthenticationStrategy}
- * @see {@link org.apache.wicket.settings.ISecuritySettings#getAuthenticationStrategy()}
- * @see {@link org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy}
- *
  * @author Jonathan Locke
  * @author Juergen Donnerstag
  * @author Eelco Hillenius
+ * @see {@link org.apache.wicket.authentication.IAuthenticationStrategy}
+ * @see {@link org.apache.wicket.settings.ISecuritySettings#getAuthenticationStrategy()}
+ * @see {@link org.apache.wicket.authentication.strategy.DefaultAuthenticationStrategy}
  */
-public class SignInPanel extends Panel
-{
+public class SignInPanel extends Panel {
+
     private static final long serialVersionUID = 1L;
-
-    /** Log. */
-    private static final Logger log = LoggerFactory.getLogger(SignInPanel.class);
-
     private static final String SIGN_IN_FORM = "signInForm";
 
-    /** True if the panel should display a remember-me checkbox */
+    /**
+     * True if the panel should display a remember-me checkbox
+     */
     private boolean includeRememberMe = true;
 
-    /** True if the user should be remembered via form persistence (cookies) */
+    /**
+     * True if the user should be remembered via form persistence (cookies)
+     */
     private boolean rememberMe = true;
 
-    /** password. */
+    /**
+     * password.
+     */
     private String password;
 
-    /** user name. */
+    /**
+     * user name.
+     */
     private String username;
 
     /**
      * @see org.apache.wicket.Component#Component(String)
      */
-    public SignInPanel(final String id)
-    {
+    public SignInPanel(final String id) {
         this(id, true);
     }
 
     /**
-     * @param id
-     *            See Component constructor
-     * @param includeRememberMe
-     *            True if form should include a remember-me checkbox
+     * @param id                See Component constructor
+     * @param includeRememberMe True if form should include a remember-me checkbox
      * @see org.apache.wicket.Component#Component(String)
      */
-    public SignInPanel(final String id, final boolean includeRememberMe)
-    {
+    public SignInPanel(final String id, final boolean includeRememberMe) {
         super(id);
 
         this.includeRememberMe = includeRememberMe;
@@ -113,33 +112,27 @@ public class SignInPanel extends Panel
     }
 
     /**
-     *
      * @return signin form
      */
-    protected SignInForm getForm()
-    {
-        return (SignInForm)get(SIGN_IN_FORM);
+    protected SignInForm getForm() {
+        return (SignInForm) get(SIGN_IN_FORM);
     }
 
     /**
      * @see org.apache.wicket.Component#onBeforeRender()
      */
     @Override
-    protected void onBeforeRender()
-    {
+    protected void onBeforeRender() {
         // logged in already?
-        if (isSignedIn() == false)
-        {
+        if (!isSignedIn()) {
             IAuthenticationStrategy authenticationStrategy = getApplication().getSecuritySettings()
                     .getAuthenticationStrategy();
             // get username and password from persistence store
             String[] data = authenticationStrategy.load();
 
-            if ((data != null) && (data.length > 1))
-            {
+            if ((data != null) && (data.length > 1)) {
                 // try to sign in the user
-                if (signIn(data[0], data[1]))
-                {
+                if (signIn(data[0], data[1])) {
                     username = data[0];
                     password = data[1];
 
@@ -148,9 +141,7 @@ public class SignInPanel extends Panel
                     // Ups, no original destination. Go to the home page
                     throw new RestartResponseException(getSession().getPageFactory().newPage(
                             getApplication().getHomePage()));
-                }
-                else
-                {
+                } else {
                     // the loaded credentials are wrong. erase them.
                     authenticationStrategy.remove();
                 }
@@ -166,8 +157,7 @@ public class SignInPanel extends Panel
      *
      * @return The password
      */
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
@@ -176,8 +166,7 @@ public class SignInPanel extends Panel
      *
      * @param password
      */
-    public void setPassword(final String password)
-    {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -186,8 +175,7 @@ public class SignInPanel extends Panel
      *
      * @return The user name
      */
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
@@ -196,8 +184,7 @@ public class SignInPanel extends Panel
      *
      * @param username
      */
-    public void setUsername(final String username)
-    {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -206,48 +193,40 @@ public class SignInPanel extends Panel
      *
      * @return True if user should be remembered in the future
      */
-    public boolean getRememberMe()
-    {
+    public boolean getRememberMe() {
         return rememberMe;
     }
 
     /**
-     * @param rememberMe
-     *            If true, rememberMe will be enabled (username and password will be persisted
-     *            somewhere)
+     * @param rememberMe If true, rememberMe will be enabled (username and password will be persisted
+     *                   somewhere)
      */
-    public void setRememberMe(final boolean rememberMe)
-    {
+    public void setRememberMe(final boolean rememberMe) {
         this.rememberMe = rememberMe;
     }
 
     /**
      * Sign in user if possible.
      *
-     * @param username
-     *            The username
-     * @param password
-     *            The password
+     * @param username The username
+     * @param password The password
      * @return True if signin was successful
      */
-    private boolean signIn(String username, String password)
-    {
+    private boolean signIn(String username, String password) {
         return JaasSignInPage.getAuthenticatedSession().authenticate(username, password);
     }
 
     /**
      * @return true, if signed in
      */
-    private boolean isSignedIn()
-    {
+    private boolean isSignedIn() {
         return JaasSignInPage.getAuthenticatedSession().isSignedIn();
     }
 
     /**
      * Called when sign in failed
      */
-    protected void onSignInFailed()
-    {
+    protected void onSignInFailed() {
         // Try the component based localizer first. If not found try the
         // application localizer. Else use the default
         error(getLocalizer().getString("signInFailed", this, "Sign in failed"));
@@ -256,8 +235,7 @@ public class SignInPanel extends Panel
     /**
      * Called when sign in was successful
      */
-    protected void onSignInSucceeded()
-    {
+    protected void onSignInSucceeded() {
         // If login has been called because the user was not yet logged in, than continue to the
         // original destination, otherwise to the Home page
         continueToOriginalDestination();
@@ -267,18 +245,15 @@ public class SignInPanel extends Panel
     /**
      * Sign in form.
      */
-    public final class SignInForm extends StatelessForm<SignInPanel>
-    {
+    public final class SignInForm extends StatelessForm<SignInPanel> {
         private static final long serialVersionUID = 1L;
 
         /**
          * Constructor.
          *
-         * @param id
-         *            id of the form component
+         * @param id id of the form component
          */
-        public SignInForm(final String id)
-        {
+        public SignInForm(final String id) {
             super(id);
 
             setModel(new CompoundPropertyModel<SignInPanel>(SignInPanel.this));
@@ -302,26 +277,19 @@ public class SignInPanel extends Panel
          * @see org.apache.wicket.markup.html.form.Form#onSubmit()
          */
         @Override
-        public final void onSubmit()
-        {
+        public final void onSubmit() {
             IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
                     .getAuthenticationStrategy();
 
-            if (signIn(getUsername(), getPassword()))
-            {
-                if (rememberMe == true)
-                {
+            if (signIn(getUsername(), getPassword())) {
+                if (rememberMe) {
                     strategy.save(username, password);
-                }
-                else
-                {
+                } else {
                     strategy.remove();
                 }
 
                 onSignInSucceeded();
-            }
-            else
-            {
+            } else {
                 onSignInFailed();
                 strategy.remove();
             }

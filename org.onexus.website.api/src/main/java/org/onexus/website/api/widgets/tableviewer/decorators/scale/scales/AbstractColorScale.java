@@ -23,10 +23,10 @@ import java.io.Serializable;
 public abstract class AbstractColorScale implements IColorScale,
         IColorScaleHtml, Serializable {
 
-    protected Color notANumberColor = ColorConstants.notANumberColor;
-    protected Color posInfinityColor = ColorConstants.posInfinityColor;
-    protected Color negInfinityColor = ColorConstants.negInfinityColor;
-    protected Color emptyColor = ColorConstants.emptyColor;
+    protected Color notANumberColor = ColorConstants.NOT_A_NUMBER_COLOR;
+    protected Color posInfinityColor = ColorConstants.POS_INFINITY_COLOR;
+    protected Color negInfinityColor = ColorConstants.NEG_INFINITY_COLOR;
+    protected Color emptyColor = ColorConstants.EMPTY_COLOR;
 
     protected Color minColor;
     protected Color maxColor;
@@ -36,8 +36,8 @@ public abstract class AbstractColorScale implements IColorScale,
 
     public AbstractColorScale(double minPoint, double maxPoint) {
 
-        this(minPoint, maxPoint, ColorConstants.negInfinityColor,
-                ColorConstants.posInfinityColor);
+        this(minPoint, maxPoint, ColorConstants.NEG_INFINITY_COLOR,
+                ColorConstants.POS_INFINITY_COLOR);
     }
 
     public AbstractColorScale(double minPoint, double maxPoint, Color minColor,

@@ -32,7 +32,7 @@ import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class CustomCssBehavior extends Behavior {
 
-    private transient CssHeaderItem CSS;
+    private transient CssHeaderItem cssHeaderItem;
 
     private ORI resourceUri;
 
@@ -58,7 +58,7 @@ public class CustomCssBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
 
-        if (CSS == null) {
+        if (cssHeaderItem == null) {
 
             if (resourceUri != null) {
 
@@ -71,14 +71,14 @@ public class CustomCssBehavior extends Behavior {
                 } else {
                     url = resourceUri.toString();
                 }
-                CSS = CssHeaderItem.forUrl(url);
+                cssHeaderItem = CssHeaderItem.forUrl(url);
 
             } else {
-                CSS = CssHeaderItem.forReference(new CssResourceReference(component.getClass(), component.getClass().getSimpleName() + ".css"));
+                cssHeaderItem = CssHeaderItem.forReference(new CssResourceReference(component.getClass(), component.getClass().getSimpleName() + ".css"));
             }
         }
 
-        response.render(CSS);
+        response.render(cssHeaderItem);
     }
 
     private IDataManager getDataManager() {

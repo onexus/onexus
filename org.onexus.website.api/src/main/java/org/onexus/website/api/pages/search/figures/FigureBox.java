@@ -19,17 +19,11 @@ package org.onexus.website.api.pages.search.figures;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.apache.wicket.util.string.Strings;
-import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteApplication;
@@ -43,17 +37,12 @@ import org.onexus.website.api.pages.search.figures.html.HtmlFigureConfig;
 import org.onexus.website.api.pages.search.figures.html.HtmlFigurePanel;
 import org.onexus.website.api.pages.search.figures.table.TableFigureConfig;
 import org.onexus.website.api.pages.search.figures.table.TableFigurePanel;
-import org.onexus.website.api.utils.HtmlDataResourceModel;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.onexus.website.api.widgets.selection.FilterConfig;
 
 public class FigureBox extends Panel {
 
     private ORI parentUri;
     private FigureConfig config;
     private IEntitySelection selection;
-
-    private WebMarkupContainer toggle;
 
     public FigureBox(String id, FigureConfig config, ORI parentUri, IEntitySelection selection) {
         super(id);
@@ -67,7 +56,7 @@ public class FigureBox extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
-        toggle = new WebMarkupContainer("accordion-toggle");
+        WebMarkupContainer toggle = new WebMarkupContainer("accordion-toggle");
         toggle.setOutputMarkupId(true);
         WebMarkupContainer body = new WebMarkupContainer("accordion-body");
 
@@ -83,7 +72,7 @@ public class FigureBox extends Panel {
 
         Label description = new Label("description", config.getDescription());
         description.setEscapeModelStrings(false);
-        description.setVisible( !Strings.isEmpty(config.getDescription()) );
+        description.setVisible(!Strings.isEmpty(config.getDescription()));
         body.add(description);
 
         if (config instanceof HtmlFigureConfig) {
@@ -103,7 +92,7 @@ public class FigureBox extends Panel {
             // Create link url
             String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
             String url = searchLink.getUrl();
-            if (selection!=null) {
+            if (selection != null) {
                 String parameter = (selection instanceof SingleEntitySelection ? "pf=" : "pfc=");
                 String varFilter = parameter + UrlEncoder.QUERY_INSTANCE.encode(selection.toUrlParameter(false, null), "UTF-8");
                 url = url.replace("$filter", varFilter);

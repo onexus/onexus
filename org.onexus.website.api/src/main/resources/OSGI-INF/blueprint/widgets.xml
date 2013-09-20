@@ -15,77 +15,77 @@
     </bean>
 
     <!-- Default widget resource -->
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ViewsWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ViewsWidget"/>
     <bean id="ViewsWidget" class="org.onexus.website.api.widgets.views.ViewsWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="TableWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="TableWidget"/>
     <bean id="TableWidget" class="org.onexus.website.api.widgets.tableviewer.TableViewerCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="HeatmapWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="HeatmapWidget"/>
     <bean id="HeatmapWidget" class="org.onexus.website.api.widgets.jheatmap.HeatmapViewerCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="PlotWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="PlotWidget"/>
     <bean id="PlotWidget" class="org.onexus.website.api.widgets.icanplot.PlotViewerCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ShareWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ShareWidget"/>
     <bean id="ShareWidget" class="org.onexus.website.api.widgets.share.ShareWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="DownloadWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="DownloadWidget"/>
     <bean id="DownloadWidget" class="org.onexus.website.api.widgets.download.DownloadWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FiltersWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FiltersWidget"/>
     <bean id="FiltersWidget" class="org.onexus.website.api.widgets.selection.FiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FixFiltersWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="FixFiltersWidget"/>
     <bean id="FixFiltersWidget" class="org.onexus.website.api.widgets.selection.FixFiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SelectorFiltersWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SelectorFiltersWidget"/>
     <bean id="SelectorFiltersWidget" class="org.onexus.website.api.widgets.selection.SelectorFiltersWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SearchWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SearchWidget"/>
     <bean id="SearchWidget" class="org.onexus.website.api.widgets.search.SearchWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SelectorWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="SelectorWidget"/>
     <bean id="SelectorWidget" class="org.onexus.website.api.widgets.selector.SelectorWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="TagWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="TagWidget"/>
     <bean id="TagWidget" class="org.onexus.website.api.widgets.tags.TagWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="TextWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="TextWidget"/>
     <bean id="TextWidget" class="org.onexus.website.api.widgets.text.TextWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ColumnsetsWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ColumnsetsWidget"/>
     <bean id="ColumnsetsWidget" class="org.onexus.website.api.widgets.columnsets.ColumnsetsWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="MapWidget" />
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="MapWidget"/>
     <bean id="MapWidget" class="org.onexus.website.api.widgets.map.MapWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>

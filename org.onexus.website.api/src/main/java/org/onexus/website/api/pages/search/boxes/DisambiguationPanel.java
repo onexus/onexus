@@ -98,8 +98,7 @@ public abstract class DisambiguationPanel extends Panel {
 
     private String getEntityLabel(IEntity entity) {
         String labelField = entity.getCollection().getProperty("FIXED_ENTITY_FIELD");
-        String label = (labelField == null ? StringUtils.replace(entity.getId(), "\t", "-") : String.valueOf(entity.get(labelField)));
-        return label;
+        return (labelField == null ? StringUtils.replace(entity.getId(), "\t", "-") : String.valueOf(entity.get(labelField)));
     }
 
     protected abstract void onSelection(AjaxRequestTarget target, String newSearch);

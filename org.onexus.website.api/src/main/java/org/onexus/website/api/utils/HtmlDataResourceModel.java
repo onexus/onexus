@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 
 public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
-    private static final Logger log = LoggerFactory.getLogger(HtmlDataResourceModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HtmlDataResourceModel.class);
 
     @PaxWicketBean(name = "dataManager")
     private IDataManager dataManager;
@@ -70,7 +70,7 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
             IDataStreams stream = getDataManager().load(contentUri);
             return filterRelativeUrls(IOUtils.toString(stream.iterator().next()));
         } catch (Exception e) {
-            log.error("Error loading HTML source '" + contentUri + "'");
+            LOGGER.error("Error loading HTML source '" + contentUri + "'");
             return "";
         }
     }
@@ -93,9 +93,9 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
         return resourceManager;
     }
 
-    private final static Pattern PATTERN_HREF = Pattern.compile("(<a\\s+href\\s*=\\s*[\"|']?)(.*?)([\"|'])", Pattern.CASE_INSENSITIVE);
-    private final static Pattern PATTERN_SRC = Pattern.compile("(src\\s*=\\s*\"?)(.*?)(\")", Pattern.CASE_INSENSITIVE);
-    private final static Pattern PATTERN_ANTICACHE = Pattern.compile("\\$\\{anticache\\}", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_HREF = Pattern.compile("(<a\\s+href\\s*=\\s*[\"|']?)(.*?)([\"|'])", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_SRC = Pattern.compile("(src\\s*=\\s*\"?)(.*?)(\")", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_ANTICACHE = Pattern.compile("\\$\\{anticache\\}", Pattern.CASE_INSENSITIVE);
 
 
     private String filterRelativeUrls(String html) {

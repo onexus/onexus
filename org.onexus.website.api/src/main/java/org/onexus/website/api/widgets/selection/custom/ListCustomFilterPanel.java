@@ -47,8 +47,6 @@ public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
     private IModel<String> filterNameModel;
     private CustomFilter customFilter;
 
-    private final static Random RANDOM = new Random();
-
     public ListCustomFilterPanel(String id, CustomFilter customFilter) {
         super(id);
 
@@ -69,9 +67,6 @@ public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
     }
 
     private void recuperateFormValues(AjaxRequestTarget target, String filterName, CustomFilter field, Collection<String> values) {
-
-        // Generate a pseudo random identifier
-        String filterId = "user-filter-" + Integer.toHexString(filterName.hashCode()) + "-" + Integer.toHexString(RANDOM.nextInt());
 
         // Create the filter
         FilterConfig filter = new FilterConfig(filterName);
@@ -129,7 +124,8 @@ public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
             add(new TextArea<String>("textarea", textArea));
 
             // Add one file input field
-            add(fileUploadField = new FileUploadField("fileInput"));
+            fileUploadField = new FileUploadField("fileInput");
+            add(fileUploadField);
 
             final FeedbackPanel pfeedback = new FeedbackPanel("p-feedback");
             add(pfeedback);

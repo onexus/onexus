@@ -51,8 +51,8 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
     private CustomFilter customFilter;
     private ORI parentOri;
 
-    private final static Random RANDOM = new Random();
-    private final static List<String> OPERATIONS = Arrays.asList(new String[]{"<", ">", "<=", ">=", "=", "!="});
+    private static final Random RANDOM = new Random();
+    private static final List<String> OPERATIONS = Arrays.asList(new String[]{"<", ">", "<=", ">=", "=", "!="});
 
     @PaxWicketBean(name = "resourceManager")
     private IResourceManager resourceManager;
@@ -79,11 +79,8 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
         try {
             value = convertToNumber(strValue);
         } catch (NumberFormatException e) {
-            throw new OnexusException(e.getMessage());
+            throw new OnexusException(e.getMessage(), e);
         }
-
-        // Generate a pseudo random identifier
-        String filterId = "user-filter-" + Integer.toHexString(filterName.hashCode()) + "-" + Integer.toHexString(RANDOM.nextInt());
 
         // Create the filter
         FilterConfig filter = new FilterConfig(filterName);

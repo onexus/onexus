@@ -43,14 +43,14 @@ import java.util.List;
 
 public abstract class IntegerFilterPanel<T extends Number> extends Panel {
 
-    private static String EQ = "=";
-    private static String NOT_EQ = "<>";
-    private static String GT_EQ = ">=";
-    private static String LT_EQ = "<=";
-    private static String GT = ">";
-    private static String LT = "<";
+    private static final String EQ = "=";
+    private static final String NOT_EQ = "<>";
+    private static final String GT_EQ = ">=";
+    private static final String LT_EQ = "<=";
+    private static final String GT = ">";
+    private static final String LT = "<";
 
-    private static List<String> OPERATIONS = Arrays.asList(new String[]{ EQ, NOT_EQ, GT, GT_EQ, LT, LT_EQ });
+    private static final List<String> OPERATIONS = Arrays.asList(new String[]{EQ, NOT_EQ, GT, GT_EQ, LT, LT_EQ});
 
     private IModel<FilterOption> option;
     private FieldHeader header;

@@ -23,20 +23,20 @@ import java.io.Serializable;
 
 public interface IHeader extends Serializable {
 
-    public String getLabel();
+    String getLabel();
 
-    public String getTitle();
+    String getTitle();
 
-    public Component getHeader(String componentId);
+    Component getHeader(String componentId);
 
-    public IHeader getParentHeader();
+    IHeader getParentHeader();
 
-    public String getSortProperty();
+    String getSortProperty();
 
-    public boolean isSortable();
+    boolean isSortable();
 
-    public boolean isFilterable();
+    boolean isFilterable();
 
-    public Component getHelp(String componentId);
+    Component getHelp(String componentId);
 
 }

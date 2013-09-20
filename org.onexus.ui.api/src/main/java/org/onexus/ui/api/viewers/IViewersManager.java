@@ -23,6 +23,6 @@ import java.util.List;
 
 public interface IViewersManager {
 
-    public List<IViewerCreator> getViewerCreators(Resource resource);
+    List<IViewerCreator> getViewerCreators(Resource resource);
 
 }

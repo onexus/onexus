@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 
 public class DefaultDecoratorManager implements IDecoratorManager {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultDecoratorManager.class);
-    private final static String annotationKey = "BROWSER_DECORATOR";
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDecoratorManager.class);
+    private static final String ANNOTATION_KEY = "BROWSER_DECORATOR";
 
     private List<IDecoratorCreator> creators;
 
@@ -42,7 +42,7 @@ public class DefaultDecoratorManager implements IDecoratorManager {
     public IDecorator getDecorator(String decorator, Collection collection, Field field) {
 
         if (decorator == null && field != null) {
-            decorator = field.getProperty(annotationKey);
+            decorator = field.getProperty(ANNOTATION_KEY);
         }
 
         IDecoratorCreator creator = null;
@@ -70,7 +70,7 @@ public class DefaultDecoratorManager implements IDecoratorManager {
                     creator = getCreator(decoratorId);
 
                     if (creator == null) {
-                        log.warn("Unknown decorator '" + decorator + "'");
+                        LOGGER.warn("Unknown decorator '" + decorator + "'");
                     } else {
                         for (int i = 0; i < parametersNonTrim.length; i++) {
                             String keyAndValue[] = parametersNonTrim[i].split(Pattern.quote("=\""));
@@ -96,7 +96,7 @@ public class DefaultDecoratorManager implements IDecoratorManager {
                 } catch (UnsupportedOperationException e) {
                     throw e;
                 } catch (Exception e) {
-                    throw new UnsupportedOperationException("Malformed decorator parameters on '" + decorator + "'");
+                    throw new UnsupportedOperationException("Malformed decorator parameters on '" + decorator + "'", e);
                 }
             } else {
                 // Get creator

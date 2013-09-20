@@ -33,7 +33,8 @@ import org.onexus.website.api.widgets.tableviewer.formaters.ITextFormater;
 import java.awt.*;
 
 public class ColorDecorator extends FieldDecorator {
-    private static final Color emptyColor = new Color(255, 255, 255);
+
+    private static final Color EMPTY_COLOR = new Color(255, 255, 255);
     private static final String DEFAULT_URL_TITLE = "Click to see more details about this value";
 
     private boolean showValue = false;
@@ -108,7 +109,7 @@ public class ColorDecorator extends FieldDecorator {
         Object value = getValue(entity);
 
         if (value == null) {
-            return emptyColor;
+            return EMPTY_COLOR;
         }
 
         return colorScale.valueColor(value);

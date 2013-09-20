@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 
 public class PValueDecoratorCreator implements IDecoratorCreator {
 
-    private static final Logger log = LoggerFactory.getLogger(PValueDecoratorCreator.class);
-    private final static IColorScaleHtml pvalueScale = new PValueColorScale();
+    private static final Logger LOGGER = LoggerFactory.getLogger(PValueDecoratorCreator.class);
+    private static final IColorScaleHtml PVALUE_SCALE = new PValueColorScale();
 
     @Override
     public String getDecoratorId() {
@@ -56,7 +56,7 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
             showValue = Boolean.valueOf(parameterValue);
         }
 
-        IColorScaleHtml scale = pvalueScale;
+        IColorScaleHtml scale = PVALUE_SCALE;
 
         if (parameters.containsKey(PValueDecoratorParameters.SIGNIFICANCE)) {
             double significance = 0.05;
@@ -64,12 +64,12 @@ public class PValueDecoratorCreator implements IDecoratorCreator {
             try {
                 significance = Double.valueOf(parameters.get(PValueDecoratorParameters.SIGNIFICANCE)).doubleValue();
             } catch (Exception e) {
-                log.error("Impossible to convert 'significance' PVALUE decorator parameter to a double");
+                LOGGER.error("Impossible to convert 'significance' PVALUE decorator parameter to a double");
             }
 
-            scale = new PValueColorScale(significance, ColorConstants.pvalueMinColor,
-                    ColorConstants.pvalueMaxColor,
-                    ColorConstants.nonSignificantColor);
+            scale = new PValueColorScale(significance, ColorConstants.PVALUE_MIN_COLOR,
+                    ColorConstants.PVALUE_MAX_COLOR,
+                    ColorConstants.NON_SIGNIFICANT_COLOR);
         }
 
 

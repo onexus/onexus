@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 public class ImportProjectModal extends Panel {
 
-    private static final Logger log = LoggerFactory.getLogger(ImportProjectModal.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImportProjectModal.class);
 
     @PaxWicketBean(name = "resourceManager")
     public IResourceManager resourceManager;
@@ -49,7 +49,7 @@ public class ImportProjectModal extends Panel {
                         projectURL = "file://" + projectURL;
                     }
 
-                    int lastSep = projectURL.lastIndexOf("/");
+                    int lastSep = projectURL.lastIndexOf('/');
                     String projectName = projectURL.substring(lastSep + 1);
                     resourceManager.importProject(projectName, projectURL);
                     PageParameters parameters = new PageParameters();
@@ -58,7 +58,7 @@ public class ImportProjectModal extends Panel {
 
                 } catch (Exception e) {
                     error("Invalid Onexus project");
-                    log.error("Invalid Onexus project", e);
+                    LOGGER.error("Invalid Onexus project", e);
                 }
 
             }

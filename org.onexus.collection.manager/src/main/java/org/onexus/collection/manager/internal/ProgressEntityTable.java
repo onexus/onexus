@@ -25,9 +25,9 @@ import org.onexus.resource.api.Progress;
 
 public class ProgressEntityTable implements IEntityTable {
 
-    Progress progress;
+    private Progress progress;
 
-    IEntityTable entityTable;
+    private IEntityTable entityTable;
 
     public ProgressEntityTable(Progress progress, IEntityTable entityTable) {
         this.progress = progress;

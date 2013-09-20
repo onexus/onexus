@@ -31,8 +31,8 @@ import org.apache.wicket.request.resource.ResourceReference;
 
 public abstract class OnDomReadyPanel extends Panel {
 
-    private static CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(OnDomReadyPanel.class, "OnDomReadyPanel.css"));
-    public static ResourceReference LOADING_IMAGE = new PackageResourceReference(OnDomReadyPanel.class, "OnDomReadyLoading.gif");
+    private static final CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(OnDomReadyPanel.class, "OnDomReadyPanel.css"));
+    public static final ResourceReference LOADING_IMAGE = new PackageResourceReference(OnDomReadyPanel.class, "OnDomReadyLoading.gif");
 
     public OnDomReadyPanel(String id) {
         this(id, null);

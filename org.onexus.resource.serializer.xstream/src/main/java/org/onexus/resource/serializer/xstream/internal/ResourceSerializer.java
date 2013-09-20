@@ -40,7 +40,8 @@ import java.util.Set;
 
 public class ResourceSerializer implements IResourceSerializer {
 
-    private static final Logger log = LoggerFactory.getLogger(ResourceSerializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceSerializer.class);
+
     private Set<ClassLoader> registeredLoaders = new HashSet<ClassLoader>();
 
     private XStream xstream;
@@ -55,7 +56,7 @@ public class ResourceSerializer implements IResourceSerializer {
                     public boolean shouldSerializeMember(Class definedIn,
                                                          String fieldName) {
                         if (definedIn == Object.class) {
-                            log.warn("Tag '" + fieldName + "' not defined.");
+                            LOGGER.warn("Tag '" + fieldName + "' not defined.");
                             return false;
                         }
                         return super.shouldSerializeMember(definedIn, fieldName);

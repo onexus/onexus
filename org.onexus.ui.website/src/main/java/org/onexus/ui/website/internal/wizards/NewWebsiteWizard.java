@@ -325,14 +325,6 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
     }
 
-    private final class AddTabCondition implements WizardModel.ICondition {
-
-        @Override
-        public boolean evaluate() {
-            return getAddTab();
-        }
-    }
-
     public Boolean getAddTab() {
         return addTab;
     }
@@ -371,5 +363,12 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
     }
 
+    private final class AddTabCondition implements WizardModel.ICondition {
+
+        @Override
+        public boolean evaluate() {
+            return getAddTab();
+        }
+    }
 
 }

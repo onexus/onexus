@@ -30,7 +30,7 @@ import java.awt.*;
 
 public class QualityDecoratorCreator implements IDecoratorCreator {
 
-    private final static IColorScaleHtml qualityScale = new LinearColorScale(
+    private static final IColorScaleHtml QUALITY_SCALE = new LinearColorScale(
             0.0, 2500.0, new Color(255, 255, 255), new Color(0, 255, 0));
 
     @Override
@@ -45,6 +45,6 @@ public class QualityDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
-        return new ColorDecorator(columnField, qualityScale, "st", true);
+        return new ColorDecorator(columnField, QUALITY_SCALE, "st", true);
     }
 }

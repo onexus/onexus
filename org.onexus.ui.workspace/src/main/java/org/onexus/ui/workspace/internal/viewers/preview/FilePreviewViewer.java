@@ -25,6 +25,8 @@ import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.workspace.internal.viewers.utils.PrettifyBehavior;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,10 +36,11 @@ import java.util.Iterator;
 
 public class FilePreviewViewer extends Panel {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilePreviewViewer.class);
     @PaxWicketBean(name = "dataManager")
     private IDataManager dataManager;
 
-    public final static int MAXIMUM_LINES = 100;
+    public static final int MAXIMUM_LINES = 100;
 
     public FilePreviewViewer(String containerId, IModel<? extends Resource> model) {
         super(containerId, model);
@@ -78,7 +81,7 @@ public class FilePreviewViewer extends Panel {
                 return str.toString();
 
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Reading input", e);
             }
 
             return null;

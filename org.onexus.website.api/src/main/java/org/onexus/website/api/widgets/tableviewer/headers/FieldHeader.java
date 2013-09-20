@@ -25,8 +25,8 @@ import org.onexus.website.api.widgets.tableviewer.formaters.StringFormater;
 
 public class FieldHeader extends ElementHeader {
 
-    private final static int DEFAULT_MAX_LENGTH = 25;
-    public final static String SORT_PROPERTY_SEPARATOR = "::::";
+    private static final int DEFAULT_MAX_LENGTH = 25;
+    public static final String SORT_PROPERTY_SEPARATOR = "::::";
 
     private String defaultLabel;
     private String defaultTitle;
@@ -43,11 +43,6 @@ public class FieldHeader extends ElementHeader {
         this.collection = collection;
         this.sortable = sortable;
         this.filter = filter;
-    }
-
-    @Override
-    public Component getHeader(String componentId) {
-        return super.getHeader(componentId);
     }
 
     @Override

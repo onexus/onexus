@@ -60,13 +60,9 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
         return findParent(BrowserPage.class).getStatus();
     }
 
-    ;
-
     private BrowserPageConfig getPageConfig() {
         return (BrowserPageConfig) getPageStatus().getConfig();
     }
-
-    ;
 
     private TableViewerStatus getTableViewerStatus() {
 
@@ -89,7 +85,7 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
         return null;
     }
 
-    private class AjaxColumnSetSelector extends DropDownChoice<ColumnSet> {
+    private final class AjaxColumnSetSelector extends DropDownChoice<ColumnSet> {
 
         private AjaxColumnSetSelector(String id, final IModel<ColumnSet> selectItemModel, List<ColumnSet> listFilters) {
             super(id, selectItemModel, listFilters);

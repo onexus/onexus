@@ -14,12 +14,12 @@
     </bean>
 
     <!-- Pages -->
-    <service interface="org.onexus.website.api.pages.IPageCreator" ref="browserPage" />
+    <service interface="org.onexus.website.api.pages.IPageCreator" ref="browserPage"/>
     <bean id="browserPage" class="org.onexus.website.api.pages.browser.BrowserPageCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
-    <service interface="org.onexus.website.api.pages.IPageCreator" ref="htmlPage" />
+    <service interface="org.onexus.website.api.pages.IPageCreator" ref="htmlPage"/>
     <bean id="htmlPage" class="org.onexus.website.api.pages.html.HtmlPageCreator">
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>

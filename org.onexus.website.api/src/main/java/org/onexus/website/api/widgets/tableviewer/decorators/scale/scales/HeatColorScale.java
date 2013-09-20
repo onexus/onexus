@@ -21,13 +21,13 @@ import java.awt.*;
 
 public class HeatColorScale extends CompositeColorScale {
 
-    public final static Color DEFAULT_MIN_COLOR = new Color(0, 0, 255);
-    public final static Color DEFAULT_MID_COLOR = new Color(255, 255, 0);
-    public final static Color DEFAULT_MAX_COLOR = new Color(255, 0, 0);
+    public static final Color DEFAULT_MIN_COLOR = new Color(0, 0, 255);
+    public static final Color DEFAULT_MID_COLOR = new Color(255, 255, 0);
+    public static final Color DEFAULT_MAX_COLOR = new Color(255, 0, 0);
 
-    public final static double DEFAULT_MIN_VALUE = -1;
-    public final static double DEFAULT_MID_VALUE = 0;
-    public final static double DEFAULT_MAX_VALUE = 1;
+    public static final double DEFAULT_MIN_VALUE = -1;
+    public static final double DEFAULT_MID_VALUE = 0;
+    public static final double DEFAULT_MAX_VALUE = 1;
 
 
     public HeatColorScale(double minValue, Color minColor, double midValue, Color midColor, double maxValue, Color maxColor) {

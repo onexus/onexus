@@ -17,7 +17,7 @@
  */
 package org.onexus.website.api.events;
 
-public class EventTabSelected extends AbstractEvent {
+public final class EventTabSelected extends AbstractEvent {
 
     public static final EventTabSelected EVENT = new EventTabSelected();
 

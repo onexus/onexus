@@ -32,7 +32,6 @@ import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;

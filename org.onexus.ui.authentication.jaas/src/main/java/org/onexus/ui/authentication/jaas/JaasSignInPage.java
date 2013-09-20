@@ -46,7 +46,7 @@ public class JaasSignInPage extends WebPage {
     public JaasSignInPage(final PageParameters parameters) {
         super(parameters);
 
-        if (parameters!=null) {
+        if (parameters != null) {
             StringValue userName = parameters.get("username");
             StringValue password = parameters.get("password");
             StringValue redirect = parameters.get("redirect");
@@ -60,9 +60,10 @@ public class JaasSignInPage extends WebPage {
             }
         }
 
-        SignInPanel signPanel = null;
-        add(signPanel = new SignInPanel("signInPanel"));
+        SignInPanel signPanel = new SignInPanel("signInPanel");
         signPanel.setRememberMe(false);
+        add(signPanel);
+
     }
 
     @Override

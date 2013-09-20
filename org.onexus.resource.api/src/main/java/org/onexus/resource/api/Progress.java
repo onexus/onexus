@@ -32,7 +32,7 @@ public class Progress implements Serializable {
     private String title;
     private Status status;
 
-    private LinkedList<LogMsg> logs = new LinkedList<LogMsg>();
+    private List<LogMsg> logs = new LinkedList<LogMsg>();
     private LinkedList<Progress> subProgresses = new LinkedList<Progress>();
 
     public Progress(String id, String title) {

@@ -44,10 +44,10 @@ import java.util.List;
 
 public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStatus> {
 
-    private final static HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
-    private final static HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
+    private static final HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
+    private static final HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
 
-    private final static ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
+    private static final ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
 
 
     @PaxWicketBean(name = "collectionManager")

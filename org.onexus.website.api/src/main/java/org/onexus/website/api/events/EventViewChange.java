@@ -18,7 +18,7 @@
 package org.onexus.website.api.events;
 
 
-public class EventViewChange extends AbstractEvent {
+public final class EventViewChange extends AbstractEvent {
 
     public static final EventViewChange EVENT = new EventViewChange();
 

@@ -24,13 +24,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ParameterKey;
-import org.onexus.website.api.pages.search.SearchPage;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 
 import java.util.ArrayList;

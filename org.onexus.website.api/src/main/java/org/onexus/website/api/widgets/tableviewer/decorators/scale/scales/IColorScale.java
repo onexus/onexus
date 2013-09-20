@@ -21,5 +21,5 @@ import java.awt.*;
 
 public interface IColorScale {
 
-    public Color valueColor(Object value);
+    Color valueColor(Object value);
 }

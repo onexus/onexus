@@ -72,18 +72,6 @@ public class TagStoreManager implements ITagStoreManager {
 
     }
 
-    public class H2ConnectionFactory implements ConnectionFactory {
-
-        @Override
-        public Connection createConnection() throws SQLException {
-            return DriverManager.getConnection(
-                    "jdbc:h2:" + database,
-                    username,
-                    password);
-        }
-    }
-
-
     @Override
     public TagStore getUserStore(String namespace) {
 
@@ -111,9 +99,10 @@ public class TagStoreManager implements ITagStoreManager {
 
                 stat.execute("SHUTDOWN");
                 stat.close();
+                conn.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Closing tag store connection", e);
         }
 
     }
@@ -150,13 +139,24 @@ public class TagStoreManager implements ITagStoreManager {
 
                 stat.execute("SHUTDOWN");
                 stat.close();
+                conn.close();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Closing tag store connection", e);
         }
 
     }
 
+    public class H2ConnectionFactory implements ConnectionFactory {
+
+        @Override
+        public Connection createConnection() throws SQLException {
+            return DriverManager.getConnection(
+                    "jdbc:h2:" + database,
+                    username,
+                    password);
+        }
+    }
 
 }

@@ -66,14 +66,14 @@ import java.util.regex.Pattern;
 
 public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetStatus> {
 
-    public final static ResourceReference CSS = new CssResourceReference(DownloadWidget.class, "prettify/prettify.css");
-    public final static ResourceReference JS = new JavaScriptResourceReference(DownloadWidget.class, "prettify/prettify.js");
-    private static Pattern commaPattern = Pattern.compile(",");
+    public static final ResourceReference CSS = new CssResourceReference(DownloadWidget.class, "prettify/prettify.css");
+    public static final ResourceReference JS = new JavaScriptResourceReference(DownloadWidget.class, "prettify/prettify.js");
+    private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    public final static Map<String, IQueryScript> scriptsMap = new LinkedHashMap<String, IQueryScript>();
+    public static final Map<String, IQueryScript> SCRIPTS_MAP = new LinkedHashMap<String, IQueryScript>();
 
     static {
         addScript(new RScript());
@@ -84,10 +84,10 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
     }
 
     private static void addScript(IQueryScript queryScript) {
-        scriptsMap.put(queryScript.getLabel().toLowerCase(), queryScript);
+        SCRIPTS_MAP.put(queryScript.getLabel().toLowerCase(), queryScript);
     }
 
-    private final static Map<String, IDownloadFormat> formatsMap = new LinkedHashMap<String, IDownloadFormat>();
+    private static final Map<String, IDownloadFormat> FORMATS_MAP = new LinkedHashMap<String, IDownloadFormat>();
 
     static {
         addFormat(new TsvFormat());
@@ -95,7 +95,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
     }
 
     private static void addFormat(IDownloadFormat format) {
-        formatsMap.put(format.getLabel().toLowerCase(), format);
+        FORMATS_MAP.put(format.getLabel().toLowerCase(), format);
     }
 
 
@@ -130,7 +130,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         final AjaxDownloadBehavior ajaxDownloadBehavior = new AjaxDownloadBehavior() {
             @Override
             protected String getFileName() {
-                 return DownloadWidget.this.getFileName();
+                return DownloadWidget.this.getFileName();
             }
 
             @Override
@@ -195,11 +195,11 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         String formatsStr = getConfig().getFormats();
 
         if (formatsStr == null) {
-            formats.addAll(formatsMap.values());
+            formats.addAll(FORMATS_MAP.values());
         } else {
-            String[] values = commaPattern.split(formatsStr);
+            String[] values = COMMA_PATTERN.split(formatsStr);
             for (String value : values) {
-                IDownloadFormat format = formatsMap.get(value.trim().toLowerCase());
+                IDownloadFormat format = FORMATS_MAP.get(value.trim().toLowerCase());
                 if (format != null) {
                     formats.add(format);
                 }
@@ -216,11 +216,11 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
         String scriptsStr = getConfig().getScripts();
 
         if (scriptsStr == null) {
-            scripts.addAll(scriptsMap.values());
+            scripts.addAll(SCRIPTS_MAP.values());
         } else {
-            String[] values = commaPattern.split(scriptsStr);
+            String[] values = COMMA_PATTERN.split(scriptsStr);
             for (String value : values) {
-                IQueryScript script = scriptsMap.get(value.trim().toLowerCase());
+                IQueryScript script = SCRIPTS_MAP.get(value.trim().toLowerCase());
                 if (script != null) {
                     scripts.add(script);
                 }

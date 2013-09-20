@@ -25,8 +25,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class VerticalTextResource extends DynamicImageResource {
-    private final static Font DEFAULT_FONT = new Font("Arial", Font.BOLD, 12);
 
+    private static final Font DEFAULT_FONT = new Font("Arial", Font.BOLD, 12);
     private static final IResourceCachingStrategy CACHING_STRATEGY = new NoOpResourceCachingStrategy();
 
     private String text;

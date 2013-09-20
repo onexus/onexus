@@ -19,6 +19,6 @@ package org.onexus.website.api.utils.visible;
 
 public interface IVisible {
 
-    public String getVisible();
+    String getVisible();
 
 }

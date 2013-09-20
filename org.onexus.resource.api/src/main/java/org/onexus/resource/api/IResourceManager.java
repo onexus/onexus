@@ -21,24 +21,24 @@ import java.util.List;
 
 public interface IResourceManager {
 
-    public List<Project> getProjects();
+    List<Project> getProjects();
 
-    public Project getProject(String projectUrl);
+    Project getProject(String projectUrl);
 
-    public void importProject(String projectName, String projectUrl);
+    void importProject(String projectName, String projectUrl);
 
-    public void syncProject(String projectUrl);
+    void syncProject(String projectUrl);
 
-    public void updateProject(String projectUrl);
+    void updateProject(String projectUrl);
 
-    public <T extends Resource> T load(Class<T> resourceType, ORI resourceOri);
+    <T extends Resource> T load(Class<T> resourceType, ORI resourceOri);
 
-    public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentResourceOri);
+    <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentResourceOri);
 
-    public void save(Resource resource);
+    void save(Resource resource);
 
     <T> T getLoader(Class<T> serviceClass, Plugin plugin, Loader loader);
 
-    public void addResourceListener(IResourceListener resourceListener);
+    void addResourceListener(IResourceListener resourceListener);
 
 }

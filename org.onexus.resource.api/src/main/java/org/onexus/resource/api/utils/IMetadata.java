@@ -24,14 +24,14 @@ import java.util.List;
 
 public interface IMetadata extends Serializable {
 
-    public String getLabel();
+    String getLabel();
 
-    public String getTitle();
+    String getTitle();
 
-    public String getDescription();
+    String getDescription();
 
-    public String getProperty(String propertyKey);
+    String getProperty(String propertyKey);
 
-    public List<Property> getProperties();
+    List<Property> getProperties();
 
 }

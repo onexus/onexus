@@ -29,7 +29,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 
 public class TagColumnHeader extends Panel {
 
-    public final static PackageResourceReference JAVA_SCRIPT = new PackageResourceReference(TagColumn.class, "tagcolumn.js");
+    public static final PackageResourceReference JAVA_SCRIPT = new PackageResourceReference(TagColumn.class, "tagcolumn.js");
 
     private WebMarkupContainer checkbox;
 

@@ -53,7 +53,7 @@ public class BarFigurePanel extends Panel {
     private BarFigureConfig config;
 
     private WebMarkupContainer chart;
-    private final static HeaderItem JS_HIGHCHARTS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(BarFigurePanel.class, "highcharts.js"));
+    private static final HeaderItem JS_HIGHCHARTS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(BarFigurePanel.class, "highcharts.js"));
 
     public BarFigurePanel(String id, ORI parentOri, IEntitySelection selection, BarFigureConfig config) {
         super(id);
@@ -93,7 +93,7 @@ public class BarFigurePanel extends Panel {
         query.addSelect(xAxisAlias, Arrays.asList(xAxis.getField()));
         query.addSelect(yAxisAlias, Arrays.asList(yAxis.getField()));
 
-        if (selection!=null) {
+        if (selection != null) {
             Filter filter = selection.buildFilter(query);
             QueryUtils.and(query, filter);
         }
@@ -114,7 +114,7 @@ public class BarFigurePanel extends Panel {
 
         List<String> categories = new ArrayList<String>();
         Map<String, Map<String, String>> values = new HashMap<String, Map<String, String>>();
-        while(table.next()) {
+        while (table.next()) {
 
             String xAxisData = String.valueOf(table.getEntity(xAxis.getCollection()).get(xAxis.getField()));
             String yAxisData = String.valueOf(table.getEntity(yAxis.getCollection()).get(yAxis.getField()));

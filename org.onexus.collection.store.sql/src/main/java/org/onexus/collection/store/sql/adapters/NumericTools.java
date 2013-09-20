@@ -17,13 +17,16 @@
  */
 package org.onexus.collection.store.sql.adapters;
 
-public class NumericTools {
+public final class NumericTools {
 
     private static int mask = 15;
-    private final static char[] digits = {'0', '1', '2', '3', '4', '5', '6',
+    private static final char[] digits = {'0', '1', '2', '3', '4', '5', '6',
             '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
             'x', 'y', 'z'};
+
+    private NumericTools() {
+    }
 
     public static void toHexString(StringBuilder str, int i) {
         char[] buf = new char[10];

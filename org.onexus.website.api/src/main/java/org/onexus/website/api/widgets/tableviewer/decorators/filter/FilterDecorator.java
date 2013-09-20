@@ -66,7 +66,7 @@ public class FilterDecorator extends FieldDecorator {
         }
 
         String label = "<i class=\"icon-hand-up\"></i>";
-        String tooltip = "Filter results by " + getField().getLabel() + " = " + String.valueOf(value);
+        String tooltip = "Filter results by " + getField().getLabel() + " = " + value;
         LinkPanel linkPanel = new LinkPanel(componentId, label, getLink(collectionId, data, tooltip));
         cellContainer.add(linkPanel);
     }

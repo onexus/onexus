@@ -40,6 +40,8 @@ public class NotAuthorizedPage extends WebPage {
      * @param parameters Page parameters (ignored since this is the home page)
      */
     public NotAuthorizedPage(final PageParameters parameters) {
+        super(parameters);
+
         add(new DefaultTheme());
 
         if (WebsiteApplication.get().usePersonSignIn()) {

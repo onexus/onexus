@@ -36,6 +36,8 @@ public class SignOutPage extends WebPage {
      * @param parameters Page parameters (ignored since this is the home page)
      */
     public SignOutPage(final PageParameters parameters) {
+        super(parameters);
+
         getSession().invalidate();
         setResponsePage(WebsiteApplication.get().getHomePage());
     }

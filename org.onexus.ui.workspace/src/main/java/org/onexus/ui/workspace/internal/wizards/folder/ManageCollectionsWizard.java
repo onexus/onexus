@@ -38,8 +38,8 @@ import java.util.List;
 public class ManageCollectionsWizard extends AbstractWizard {
 
     // Commands
-    private static String LOAD = "Load all the collections";
-    private static String UNLOAD = "Unload all the collections";
+    private static final String LOAD = "Load all the collections";
+    private static final String UNLOAD = "Unload all the collections";
     private static final List<String> COMMANDS = Arrays.asList(new String[]{LOAD, UNLOAD});
 
     private String selected;

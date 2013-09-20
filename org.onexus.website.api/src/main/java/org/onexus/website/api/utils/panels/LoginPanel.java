@@ -66,10 +66,8 @@ public class LoginPanel extends Panel {
                     @Override
                     protected void onSuccess(AjaxRequestTarget target) {
                         BrowserId browserId = SessionHelper.getBrowserId(Session.get());
-                        if (browserId != null) {
-                            if (WebsiteSession.get().authenticate(browserId.getEmail(), null)) {
-                                target.appendJavaScript("location.reload();");
-                            }
+                        if (browserId != null && WebsiteSession.get().authenticate(browserId.getEmail(), null)) {
+                            target.appendJavaScript("location.reload();");
                         }
                     }
 

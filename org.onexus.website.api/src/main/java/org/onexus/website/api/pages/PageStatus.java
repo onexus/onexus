@@ -36,7 +36,6 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
     private List<WidgetStatus> widgetStatuses = new ArrayList<WidgetStatus>();
 
-
     public PageStatus() {
         super();
     }
@@ -95,12 +94,12 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
         this.widgetStatuses = widgetStatuses;
     }
 
-    public MetaDataKey<Query> QUERY = new MetaDataKey<Query>() {
+    public MetaDataKey<Query> queryKey = new MetaDataKey<Query>() {
     };
 
     public Query buildQuery(ORI resourceUri) {
 
-        Query query = RequestCycle.get().getMetaData(QUERY);
+        Query query = RequestCycle.get().getMetaData(queryKey);
 
         if (query != null) {
             return query;
@@ -136,7 +135,7 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
             }
         }
 
-        RequestCycle.get().setMetaData(QUERY, query);
+        RequestCycle.get().setMetaData(queryKey, query);
 
         return query;
     }

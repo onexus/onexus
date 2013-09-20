@@ -57,7 +57,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class ProgressBar extends Panel {
-    public final static PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
+
+    public static final PackageResourceReference CSS = new PackageResourceReference(ProgressBar.class, "ProgressBar.css");
 
     private List<IColumn<Progress, String>> columns;
     private ProgressTreeProvider provider;
@@ -218,14 +219,6 @@ public class ProgressBar extends Panel {
 
     }
 
-    private class ProgressExpansionModel extends AbstractReadOnlyModel<Set<Progress>> {
-        @Override
-        public Set<Progress> getObject() {
-            return ProgressExpansion.get();
-        }
-    }
-
-
     public static <T extends IProgressable> T show(T progressable) {
 
         Progress progress = progressable.getProgress();
@@ -238,6 +231,13 @@ public class ProgressBar extends Panel {
         }
 
         return progressable;
+    }
+
+    private class ProgressExpansionModel extends AbstractReadOnlyModel<Set<Progress>> {
+        @Override
+        public Set<Progress> getObject() {
+            return ProgressExpansion.get();
+        }
     }
 
     public static class ActiveProgress implements Serializable {

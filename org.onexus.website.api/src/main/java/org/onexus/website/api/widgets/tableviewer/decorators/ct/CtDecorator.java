@@ -31,65 +31,65 @@ import java.util.Map;
 
 public class CtDecorator extends FieldDecorator {
 
-    private static final String emptyColor = "#FFFFFF";
+    private static final String EMPTY_COLOR = "#FFFFFF";
 
-    public static final Map<String, String> colors = new HashMap<String, String>();
+    public static final Map<String, String> COLORS = new HashMap<String, String>();
 
     static {
 
         // NSSNP - #FFCCE6
-        colors.put("NON_SYNONYMOUS_CODING", "#FFCCE6");
+        COLORS.put("NON_SYNONYMOUS_CODING", "#FFCCE6");
 
         // RSNP - #002EB8 (#cdddff)
-        colors.put("REGULATORY_REGION", "#cdddff");
-        colors.put("DOWNSTREAM", "#cdddff");
-        colors.put("UPSTREAM", "#cdddff");
+        COLORS.put("REGULATORY_REGION", "#cdddff");
+        COLORS.put("DOWNSTREAM", "#cdddff");
+        COLORS.put("UPSTREAM", "#cdddff");
 
         // SSNP - #F5B800
-        colors.put("SYNONYMOUS_CODING", "#F5B800");
+        COLORS.put("SYNONYMOUS_CODING", "#F5B800");
 
         // STOP_SNP - #CCFF33
-        colors.put("STOP_GAINED", "#CCFF33");
-        colors.put("STOP_LOST", "#CCFF33");
+        COLORS.put("STOP_GAINED", "#CCFF33");
+        COLORS.put("STOP_LOST", "#CCFF33");
 
         // SPLICE_SNP - #FF6633
-        colors.put("SPLICE_SITE", "#FF6633");
-        colors.put("ESSENTIAL_SPLICE_SITE", "#FF6633");
+        COLORS.put("SPLICE_SITE", "#FF6633");
+        COLORS.put("ESSENTIAL_SPLICE_SITE", "#FF6633");
 
         // OTRSNP - #FFFFCC
-        colors.put("3PRIME_UTR", "#FFFFCC");
-        colors.put("WITHIN_NON_CODING_GENE", "#FFFFCC");
-        colors.put("NMD_TRANSCRIPT", "#FFFFCC");
-        colors.put("5PRIME_UTR", "#FFFFCC");
+        COLORS.put("3PRIME_UTR", "#FFFFCC");
+        COLORS.put("WITHIN_NON_CODING_GENE", "#FFFFCC");
+        COLORS.put("NMD_TRANSCRIPT", "#FFFFCC");
+        COLORS.put("5PRIME_UTR", "#FFFFCC");
 
-        colors.put("INTRONIC", "#FFFFCC");
-        colors.put("INTERGENIC", "#FFFFCC");
-        colors.put("FRAMESHIFT_CODING", "#FFFFCC");
-        colors.put("WITHIN_MATURE_MIRNA", "#FFFFCC");
+        COLORS.put("INTRONIC", "#FFFFCC");
+        COLORS.put("INTERGENIC", "#FFFFCC");
+        COLORS.put("FRAMESHIFT_CODING", "#FFFFCC");
+        COLORS.put("WITHIN_MATURE_MIRNA", "#FFFFCC");
 
     }
 
-    public static final Map<String, String> shortNames = new HashMap<String, String>();
+    public static final Map<String, String> SHORT_NAMES = new HashMap<String, String>();
 
     static {
-        shortNames.put("3PRIME_UTR", "3-UTR");
-        shortNames.put("NON_SYNONYMOUS_CODING", "NS-SNP");
-        shortNames.put("SYNONYMOUS_CODING", "S-SNP");
-        shortNames.put("WITHIN_NON_CODING_GENE", "non-Cod");
-        shortNames.put("STOP_GAINED", "stp-gain");
-        shortNames.put("STOP_LOST", "stp-lost");
-        shortNames.put("NMD_TRANSCRIPT", "NMD");
-        shortNames.put("SPLICE_SITE", "splice");
-        shortNames.put("5PRIME_UTR", "5-UTR");
-        shortNames.put("DOWNSTREAM", "downst");
-        shortNames.put("REGULATORY_REGION", "Reg-SNP");
-        shortNames.put("ESSENTIAL_SPLICE_SITE", "e-splice");
-        shortNames.put("UPSTREAM", "upst");
-        shortNames.put("INTRONIC", "intro");
-        shortNames.put("INTERGENIC", "intergen");
-        shortNames.put("FRAMESHIFT_CODING", "frameshift");
-        shortNames.put("WITHIN_MATURE_MIRNA", "mature miRNA");
-        shortNames.put("NONCODING_RNA", "non-rna");
+        SHORT_NAMES.put("3PRIME_UTR", "3-UTR");
+        SHORT_NAMES.put("NON_SYNONYMOUS_CODING", "NS-SNP");
+        SHORT_NAMES.put("SYNONYMOUS_CODING", "S-SNP");
+        SHORT_NAMES.put("WITHIN_NON_CODING_GENE", "non-Cod");
+        SHORT_NAMES.put("STOP_GAINED", "stp-gain");
+        SHORT_NAMES.put("STOP_LOST", "stp-lost");
+        SHORT_NAMES.put("NMD_TRANSCRIPT", "NMD");
+        SHORT_NAMES.put("SPLICE_SITE", "splice");
+        SHORT_NAMES.put("5PRIME_UTR", "5-UTR");
+        SHORT_NAMES.put("DOWNSTREAM", "downst");
+        SHORT_NAMES.put("REGULATORY_REGION", "Reg-SNP");
+        SHORT_NAMES.put("ESSENTIAL_SPLICE_SITE", "e-splice");
+        SHORT_NAMES.put("UPSTREAM", "upst");
+        SHORT_NAMES.put("INTRONIC", "intro");
+        SHORT_NAMES.put("INTERGENIC", "intergen");
+        SHORT_NAMES.put("FRAMESHIFT_CODING", "frameshift");
+        SHORT_NAMES.put("WITHIN_MATURE_MIRNA", "mature miRNA");
+        SHORT_NAMES.put("NONCODING_RNA", "non-rna");
 
     }
 
@@ -109,7 +109,7 @@ public class CtDecorator extends FieldDecorator {
     public String getColor(IEntity data) {
         Object value = getValue(data);
 
-        return (value == null ? emptyColor : colors.get(value.toString()
+        return (value == null ? EMPTY_COLOR : COLORS.get(value.toString()
                 .toUpperCase()));
     }
 
@@ -130,7 +130,7 @@ public class CtDecorator extends FieldDecorator {
 
         Object value = (entity != null ? entity.get(getField()
                 .getId()) : null);
-        String shortName = (value != null ? shortNames.get(value.toString()
+        String shortName = (value != null ? SHORT_NAMES.get(value.toString()
                 .toUpperCase()) : "");
         shortName = (shortName == null ? value.toString().toLowerCase()
                 : shortName);

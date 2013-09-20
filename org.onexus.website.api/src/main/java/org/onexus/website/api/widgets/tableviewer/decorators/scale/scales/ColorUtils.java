@@ -66,13 +66,13 @@ public class ColorUtils {
             tmpcolor = tmpcolor.substring(1, tmpcolor.length() - 1);
             String rgb[] = tmpcolor.split(",");
 
-            r = (new Integer(rgb[0])).intValue();
-            g = (new Integer(rgb[1])).intValue();
-            b = (new Integer(rgb[2])).intValue();
+            r = (Integer.valueOf(rgb[0])).intValue();
+            g = (Integer.valueOf(rgb[1])).intValue();
+            b = (Integer.valueOf(rgb[2])).intValue();
 
             return new Color(r, g, b);
         } catch (Exception e) {
-            throw new UnsupportedOperationException("The color '" + color + "' is malformed. Syntax: [r,g,b] Example: \"[128,12,34]\"");
+            throw new UnsupportedOperationException("The color '" + color + "' is malformed. Syntax: [r,g,b] Example: \"[128,12,34]\"", e);
         }
     }
 }

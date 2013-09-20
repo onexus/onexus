@@ -25,7 +25,15 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.Folder;
+import org.onexus.resource.api.IProgressManager;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.Loader;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Progress;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.slf4j.Logger;
@@ -42,7 +50,7 @@ import java.util.concurrent.Executors;
 
 public class CollectionManager implements ICollectionManager {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CollectionManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectionManager.class);
 
     private IResourceManager resourceManager;
 
@@ -105,7 +113,7 @@ public class CollectionManager implements ICollectionManager {
         }
 
         List<Folder> folders = resourceManager.loadChildren(Folder.class, container);
-        for(Folder folder : folders) {
+        for (Folder folder : folders) {
             unloadCollections(folder.getORI());
         }
 

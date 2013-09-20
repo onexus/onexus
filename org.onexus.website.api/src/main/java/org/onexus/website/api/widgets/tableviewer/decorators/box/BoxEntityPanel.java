@@ -43,7 +43,7 @@ import java.util.Map;
 
 public class BoxEntityPanel extends Panel {
 
-    public static CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(BoxEntityPanel.class, "BoxEntityPanel.css"));
+    public static final CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(BoxEntityPanel.class, "BoxEntityPanel.css"));
 
     @PaxWicketBean(name = "decoratorManager")
     private IDecoratorManager decoratorManager;

@@ -35,16 +35,14 @@ import java.util.regex.Pattern;
 
 public class MultipleEntitySelection implements IEntitySelection {
 
-    private static final Logger log = LoggerFactory.getLogger(MultipleEntitySelection.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultipleEntitySelection.class);
+
     private FilterConfig config;
     private boolean enable;
     private boolean deletable;
 
     @PaxWicketBean(name = "queryParser")
     private IQueryParser queryParser;
-
-    @PaxWicketBean(name = "resourceSerializer")
-    private IResourceSerializer resourceSerializer;
 
     public MultipleEntitySelection() {
     }
@@ -91,7 +89,7 @@ public class MultipleEntitySelection implements IEntitySelection {
 
     @Override
     public Filter buildFilter(Query query) {
-         return compileFilter(this.config, query, getQueryParser());
+        return compileFilter(this.config, query, getQueryParser());
     }
 
     private static Filter compileFilter(FilterConfig config, Query query, IQueryParser queryParser) {
@@ -104,7 +102,7 @@ public class MultipleEntitySelection implements IEntitySelection {
 
 
             if (define == null) {
-                log.error("Malformed filter definition\n DEFINE: " + config.getDefine() + "\n");
+                LOGGER.error("Malformed filter definition\n DEFINE: " + config.getDefine() + "\n");
             } else {
 
                 for (Map.Entry<String, ORI> entry : define.entrySet()) {
@@ -115,7 +113,7 @@ public class MultipleEntitySelection implements IEntitySelection {
                 Filter where = queryParser.parseWhere(oqlWhere);
 
                 if (where == null) {
-                    log.error("Malformed filter WHERE: " + oqlWhere + "\n");
+                    LOGGER.error("Malformed filter WHERE: " + oqlWhere + "\n");
                 } else {
                     return where;
                 }
@@ -149,8 +147,8 @@ public class MultipleEntitySelection implements IEntitySelection {
         }
     }
 
-    private static String SEPARATOR = "::";
-    private static Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
+    private static final String SEPARATOR = "::";
+    private static final Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
 
     @Override
     public String toUrlParameter(boolean global, ORI parentOri) {

@@ -42,15 +42,14 @@ public class SignOutBehavior extends AbstractDefaultAjaxBehavior {
     }
 
     @Override
-    public void renderHead(final Component component, final IHeaderResponse response)
-    {
+    public void renderHead(final Component component, final IHeaderResponse response) {
         component.setOutputMarkupId(true);
         super.renderHead(component, response);
 
         final Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("componentId", component.getMarkupId());
         BrowserId personaId = SessionHelper.getBrowserId(Session.get());
-        String userName = (personaId == null ? "" : personaId.getEmail() );
+        String userName = (personaId == null ? "" : personaId.getEmail());
         variables.put("userName", userName);
         variables.put("callbackUrl", getCallbackUrl());
 

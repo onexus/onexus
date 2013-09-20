@@ -44,7 +44,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
 
     private CustomFilter currentFilter;
 
-    private final static Component EMPTY_CUSTOM_PANEL = new EmptyPanel("customPanel").setOutputMarkupId(true);
+    private static final Component EMPTY_CUSTOM_PANEL = new EmptyPanel("customPanel").setOutputMarkupId(true);
 
     public FiltersWidget(String componentId, IModel<FiltersWidgetStatus> statusModel) {
         super(componentId, statusModel);

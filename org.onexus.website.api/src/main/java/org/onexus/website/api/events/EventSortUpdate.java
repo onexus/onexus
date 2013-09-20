@@ -20,7 +20,7 @@ package org.onexus.website.api.events;
 
 public class EventSortUpdate extends EventQueryUpdate {
 
-    public final static EventSortUpdate EVENT = new EventSortUpdate();
+    public static final EventSortUpdate EVENT = new EventSortUpdate();
 
     protected EventSortUpdate() {
         super();

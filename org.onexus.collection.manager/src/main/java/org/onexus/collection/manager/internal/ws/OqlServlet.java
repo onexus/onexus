@@ -17,14 +17,18 @@
  */
 package org.onexus.collection.manager.internal.ws;
 
-import org.onexus.collection.api.*;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.exceptions.OnexusException;
+import org.onexus.resource.api.session.LoginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +46,7 @@ import java.util.Map;
 
 public class OqlServlet extends HttpServlet {
 
-    private static final Logger log = LoggerFactory.getLogger(OqlServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OqlServlet.class);
     private IResourceManager resourceManager;
     private ICollectionManager collectionManager;
     private IQueryParser queryParser;
@@ -74,7 +78,7 @@ public class OqlServlet extends HttpServlet {
             StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
                 line = reader.readLine();
             }
             reader.close();
@@ -85,7 +89,7 @@ public class OqlServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            log.error("Query service", e);
+            LOGGER.error("Query service", e);
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
 

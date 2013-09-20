@@ -24,38 +24,32 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
-public class LoggedInPanel extends Panel
-{
+public class LoggedInPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public LoggedInPanel(String id)
-    {
+    public LoggedInPanel(String id) {
         super(id);
 
         BrowserId browserId = SessionHelper.getBrowserId(getSession());
-        if (browserId == null)
-        {
+        if (browserId == null) {
             throw new IllegalStateException("The user must be authenticated!");
         }
 
         add(new Label("emailLabel", new PropertyModel<String>(browserId, "email")));
-        add(new AjaxLink<Void>("logoutLink")
-        {
+        add(new AjaxLink<Void>("logoutLink") {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 SessionHelper.logOut(getSession());
                 onLoggedOut(target);
             }
         });
     }
 
-    protected void onLoggedOut(AjaxRequestTarget target)
-    {
+    protected void onLoggedOut(AjaxRequestTarget target) {
 
     }
 

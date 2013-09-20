@@ -52,7 +52,7 @@ public class PersonaSignInPage extends WebPage {
                 BrowserId browserId = SessionHelper.getBrowserId(Session.get());
 
                 if (browserId != null) {
-                    if (((IAuthenticatedSession)WebSession.get()).authenticate(browserId.getEmail(), null)) {
+                    if (((IAuthenticatedSession) WebSession.get()).authenticate(browserId.getEmail(), null)) {
 
                         // logon successful. Continue to the original destination
                         continueToOriginalDestination();

@@ -43,10 +43,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ProjectsContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(ProjectsContainer.class);
-    public final static String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
-    public final static String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
-    public final static String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsContainer.class);
+
+    public static final String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
+    public static final String ONEXUS_PROJECTS_SETTINGS = "projects.ini";
+    public static final String ONEXUS_PROJECTS_FOLDER = ONEXUS_FOLDER + File.separator + "projects";
 
     private File propertiesFile;
     private FileAlterationMonitor monitor;
@@ -95,7 +96,7 @@ public class ProjectsContainer {
                 try {
                     ProjectsContainer.this.init();
                 } catch (IOException e) {
-                    log.error("Loading projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
+                    LOGGER.error("Loading projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
                 }
             }
         });
@@ -104,7 +105,7 @@ public class ProjectsContainer {
         try {
             monitor.start();
         } catch (Exception e) {
-            log.error("On start projects file monitor", e);
+            LOGGER.error("On start projects file monitor", e);
         }
 
     }
@@ -115,7 +116,7 @@ public class ProjectsContainer {
 
 
         } catch (Exception e) {
-            log.error("On stop projects file monitor", e);
+            LOGGER.error("On stop projects file monitor", e);
         }
     }
 
@@ -156,7 +157,7 @@ public class ProjectsContainer {
                     onProjectChange(provider.getProject());
                 }
             } catch (Exception e) {
-                log.error("Loading project '" + projectUrl + "' named '" + projectName + "' at " + projectPath, e);
+                LOGGER.error("Loading project '" + projectUrl + "' named '" + projectName + "' at " + projectPath, e);
             }
         }
 
@@ -190,9 +191,9 @@ public class ProjectsContainer {
             try {
                 properties.store(new FileOutputStream(new File(new File(ONEXUS_FOLDER), ONEXUS_PROJECTS_SETTINGS)), null);
             } catch (FileNotFoundException e) {
-                log.error(e.getMessage());
+                LOGGER.error(e.getMessage());
             } catch (IOException e) {
-                log.error(e.getMessage());
+                LOGGER.error(e.getMessage());
             }
         }
 
@@ -209,7 +210,7 @@ public class ProjectsContainer {
     }
 
     private void onProjectCreate(final Project project) {
-        log.info("Project '" + project.getName() + "' created.");
+        LOGGER.info("Project '" + project.getName() + "' created.");
 
         new Thread(new Runnable() {
             @Override
@@ -223,7 +224,7 @@ public class ProjectsContainer {
     }
 
     private void onProjectChange(final Project project) {
-        log.info("Project '" + project.getName() + "' changed.");
+        LOGGER.info("Project '" + project.getName() + "' changed.");
 
         new Thread(new Runnable() {
             @Override
@@ -236,7 +237,7 @@ public class ProjectsContainer {
     }
 
     private void onProjectDelete(final Project project) {
-        log.info("Project '" + project.getName() + "' deleted.");
+        LOGGER.info("Project '" + project.getName() + "' deleted.");
 
         for (IResourceListener listener : listeners) {
             listener.onProjectDelete(project);

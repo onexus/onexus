@@ -53,7 +53,7 @@ import java.util.List;
 public class Website extends WebPage {
 
     // Parameters
-    public final static String PARAMETER_CURRENT_PAGE = "c";
+    public static final String PARAMETER_CURRENT_PAGE = "c";
 
     @PaxWicketBean(name = "pageManager")
     private IPageManager pageManager;

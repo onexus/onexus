@@ -43,7 +43,7 @@ import java.util.concurrent.Callable;
 
 public class DataManager implements IDataManager {
 
-    private static final Logger log = LoggerFactory.getLogger(DataManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataManager.class);
 
     private IResourceManager resourceManager;
 
@@ -114,7 +114,7 @@ public class DataManager implements IDataManager {
         try {
             dataStreams = callable.call();
         } catch (Exception e) {
-            log.error("Error loading '" + dataURI.toString() + "'", e);
+            LOGGER.error("Error loading '" + dataURI.toString() + "'", e);
             progress.error(e.getMessage());
             progress.fail();
             return new EmptyDataStreams(progress);
@@ -152,7 +152,7 @@ public class DataManager implements IDataManager {
                     URL url = new URL(dataUrl);
                     urls.add(url);
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Malformed URL '" + dataUrl + "'", e);
                 }
             }
 

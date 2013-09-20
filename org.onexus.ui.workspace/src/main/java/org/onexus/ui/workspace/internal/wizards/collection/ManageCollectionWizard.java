@@ -36,8 +36,8 @@ import java.util.List;
 public class ManageCollectionWizard extends AbstractWizard {
 
     // Commands
-    private static String LOAD = "Load collection";
-    private static String UNLOAD = "Unload collection";
+    private static final String LOAD = "Load collection";
+    private static final String UNLOAD = "Unload collection";
     private static final List<String> COMMANDS = Arrays.asList(new String[]{LOAD, UNLOAD});
 
     private String selected;

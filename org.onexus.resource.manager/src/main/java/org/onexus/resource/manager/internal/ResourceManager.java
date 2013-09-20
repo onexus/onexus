@@ -46,7 +46,7 @@ import java.util.List;
 
 public class ResourceManager implements IResourceManager, BlueprintListener, BundleListener {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
 
     // Injected OSGi services
     private IResourceSerializer serializer;

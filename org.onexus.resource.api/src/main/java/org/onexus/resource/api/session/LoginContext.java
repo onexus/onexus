@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class LoginContext implements Serializable {
 
-    private static Map<String, LoginContext> contexts = new HashMap<String,LoginContext>();
+    private static Map<String, LoginContext> contexts = new HashMap<String, LoginContext>();
 
     public static LoginContext ANONYMOUS_CONTEXT = new LoginContext();
     public static LoginContext SERVICE_CONTEXT = new LoginContext("service");
@@ -48,7 +48,7 @@ public class LoginContext implements Serializable {
     public static void set(LoginContext ctx, String sessionId) {
         loginContext.set(ctx);
 
-        if (sessionId!=null) {
+        if (sessionId != null) {
             contexts.put(sessionId, ctx);
         }
     }

@@ -30,8 +30,6 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.website.api.pages.browser.filters.FiltersToolbarStatus;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
@@ -41,10 +39,10 @@ import java.util.List;
 
 public abstract class StringFilterPanel extends Panel {
 
-    private static String EQUAL = "equal";
-    private static String CONTAINS = "contains";
+    private static final String EQUAL = "equal";
+    private static final String CONTAINS = "contains";
 
-    private static List<String> OPERATIONS = Arrays.asList(new String[]{ EQUAL, CONTAINS });
+    private static final List<String> OPERATIONS = Arrays.asList(new String[]{EQUAL, CONTAINS});
 
     private IModel<FilterOption> option;
     private FieldHeader header;

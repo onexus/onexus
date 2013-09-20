@@ -31,23 +31,23 @@ import java.util.zip.Inflater;
 
 public class StatusEncoder {
 
-    private static final Logger log = LoggerFactory.getLogger(StatusEncoder.class);
-    private XStream XSTREAM;
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatusEncoder.class);
+    private XStream xStream;
 
     public StatusEncoder(ClassLoader classLoader) {
-        this.XSTREAM = new XStream();
-        this.XSTREAM.setClassLoader(classLoader);
+        this.xStream = new XStream();
+        this.xStream.setClassLoader(classLoader);
     }
 
     public String encodeStatus(Object status)
             throws UnsupportedEncodingException {
-        return compress(XSTREAM.toXML(status));
+        return compress(xStream.toXML(status));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T decodeStatus(String strStatus)
             throws UnsupportedEncodingException {
-        return (T) XSTREAM.fromXML(decompress(strStatus));
+        return (T) xStream.fromXML(decompress(strStatus));
     }
 
     private static String decompress(String inputStr)
@@ -71,14 +71,14 @@ public class StatusEncoder {
                 int count = decompressor.inflate(buf);
                 bos.write(buf, 0, count);
             } catch (DataFormatException e) {
-                log.error("Decompressing '" + inputStr + "'", e);
+                LOGGER.error("Decompressing '" + inputStr + "'", e);
             }
         }
 
         try {
             bos.close();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         // Get the decompressed data
@@ -113,7 +113,7 @@ public class StatusEncoder {
         try {
             bos.close();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         // Get the compressed data

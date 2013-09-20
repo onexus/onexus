@@ -26,7 +26,7 @@ import java.util.Collection;
 
 public class BooleanExpressionEvaluator {
 
-    private static final Logger log = LoggerFactory.getLogger(BooleanExpressionEvaluator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BooleanExpressionEvaluator.class);
 
     private Collection<String> trueValues;
     private StringTokenizer tokenizer;
@@ -46,7 +46,7 @@ public class BooleanExpressionEvaluator {
 
         if (tokenizer.hasNext()) {
             String msg = "Malformed logical expression: '" + tokenizer.getExpression() + "'";
-            log.warn(msg);
+            LOGGER.warn(msg);
         }
 
         return value;

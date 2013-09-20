@@ -36,15 +36,12 @@ import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
-import org.onexus.website.api.utils.visible.IVisible;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     public static final CssResourceReference TABLE_VIEWER_CSS = new CssResourceReference(TableViewer.class,
             "TableViewer.css");
 
-    private final static MetaDataKey<Integer> DEFAULT_ROWS_PER_PAGE = new MetaDataKey<Integer>() {
+    private static final MetaDataKey<Integer> DEFAULT_ROWS_PER_PAGE = new MetaDataKey<Integer>() {
     };
 
     // Model objects

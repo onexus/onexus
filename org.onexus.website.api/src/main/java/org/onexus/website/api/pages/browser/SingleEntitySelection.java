@@ -156,8 +156,8 @@ public class SingleEntitySelection implements IEntitySelection {
         return StringUtils.equals(fieldValue, rule.getValue());
     }
 
-    private static String SEPARATOR = "::";
-    private static Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
+    private static final String SEPARATOR = "::";
+    private static final Pattern DOUBLE_COLON = Pattern.compile(SEPARATOR);
 
     @Override
     public String toUrlParameter(boolean global, ORI parentUri) {
@@ -285,23 +285,34 @@ public class SingleEntitySelection implements IEntitySelection {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+
+        if (getClass() != obj.getClass()) {
             return false;
+        }
+
         SingleEntitySelection other = (SingleEntitySelection) obj;
         if (filteredCollection == null) {
-            if (other.filteredCollection != null)
+            if (other.filteredCollection != null) {
                 return false;
-        } else if (!filteredCollection.equals(other.filteredCollection))
+            }
+        } else if (!filteredCollection.equals(other.filteredCollection)) {
             return false;
+        }
+
         if (entityId == null) {
-            if (other.entityId != null)
+            if (other.entityId != null) {
                 return false;
-        } else if (!entityId.equals(other.entityId))
+            }
+        } else if (!entityId.equals(other.entityId)) {
             return false;
+        }
         return true;
     }
 

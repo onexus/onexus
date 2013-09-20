@@ -22,6 +22,89 @@ import java.io.Serializable;
 
 public class CompositeColorScale extends AbstractColorScale {
 
+    protected Color undefinedColor;
+
+    protected ScaleRange[] scaleRanges;
+
+    public CompositeColorScale(double minPoint, double maxPoint,
+                               Color minColor, Color maxColor, Color undefinedColor,
+                               ScaleRange[] scales) {
+
+        super(minPoint, maxPoint, minColor, maxColor);
+
+        this.undefinedColor = undefinedColor;
+        this.scaleRanges = scales;
+    }
+
+    public CompositeColorScale(double minPoint, double maxPoint,
+                               Color minColor, Color maxColor, Color undefinedColor) {
+        this(minPoint, maxPoint, minColor, maxColor, undefinedColor,
+                new ScaleRange[0]);
+    }
+
+    public CompositeColorScale(double minPoint, double maxPoint,
+                               Color minColor, Color maxColor) {
+        this(minPoint, maxPoint, minColor, maxColor,
+                ColorConstants.UNDEFINED_COLOR, new ScaleRange[0]);
+    }
+
+    public CompositeColorScale(double minPoint, double maxPoint) {
+        this(minPoint, maxPoint, ColorConstants.NEG_INFINITY_COLOR,
+                ColorConstants.POS_INFINITY_COLOR, ColorConstants.UNDEFINED_COLOR,
+                new ScaleRange[0]);
+    }
+
+    public Color getUndefinedColor() {
+        return undefinedColor;
+    }
+
+    public void setUndefinedColor(Color undefinedColor) {
+        this.undefinedColor = undefinedColor;
+    }
+
+    public ScaleRange[] getScaleRanges() {
+        return scaleRanges;
+    }
+
+    public void setScaleRanges(ScaleRange[] scales) {
+        this.scaleRanges = scales;
+    }
+
+    @Override
+    public Color valueColor(Object obj) {
+
+        double value;
+        if (obj instanceof Double) {
+            value = (Double) obj;
+        } else {
+            value = Double.valueOf(String.valueOf(obj));
+        }
+
+        if (Double.isNaN(value)){
+            return notANumberColor;
+        }
+        else if (value == Double.POSITIVE_INFINITY){
+            return posInfinityColor;
+        }
+        else if (value == Double.NEGATIVE_INFINITY){
+            return negInfinityColor;
+        }
+        else if (value > maxPoint){
+            return maxColor;
+        }
+        else if (value < minPoint){
+            return minColor;
+        }
+
+        for (ScaleRange range : scaleRanges) {
+            if (range.minPoint <= value && value <= range.maxPoint) {
+                return range.scale.valueColor(value);
+            }
+        }
+
+        return undefinedColor;
+    }
+
     public static class ScaleRange implements Serializable {
         public double minPoint;
         public double maxPoint;
@@ -56,82 +139,6 @@ public class CompositeColorScale extends AbstractColorScale {
         public void setScale(IColorScale scale) {
             this.scale = scale;
         }
-    }
-
-    protected Color undefinedColor;
-
-    protected ScaleRange[] scaleRanges;
-
-    public CompositeColorScale(double minPoint, double maxPoint,
-                               Color minColor, Color maxColor, Color undefinedColor,
-                               ScaleRange[] scales) {
-
-        super(minPoint, maxPoint, minColor, maxColor);
-
-        this.undefinedColor = undefinedColor;
-        this.scaleRanges = scales;
-    }
-
-    public CompositeColorScale(double minPoint, double maxPoint,
-                               Color minColor, Color maxColor, Color undefinedColor) {
-        this(minPoint, maxPoint, minColor, maxColor, undefinedColor,
-                new ScaleRange[0]);
-    }
-
-    public CompositeColorScale(double minPoint, double maxPoint,
-                               Color minColor, Color maxColor) {
-        this(minPoint, maxPoint, minColor, maxColor,
-                ColorConstants.undefinedColor, new ScaleRange[0]);
-    }
-
-    public CompositeColorScale(double minPoint, double maxPoint) {
-        this(minPoint, maxPoint, ColorConstants.negInfinityColor,
-                ColorConstants.posInfinityColor, ColorConstants.undefinedColor,
-                new ScaleRange[0]);
-    }
-
-    public Color getUndefinedColor() {
-        return undefinedColor;
-    }
-
-    public void setUndefinedColor(Color undefinedColor) {
-        this.undefinedColor = undefinedColor;
-    }
-
-    public ScaleRange[] getScaleRanges() {
-        return scaleRanges;
-    }
-
-    public void setScaleRanges(ScaleRange[] scales) {
-        this.scaleRanges = scales;
-    }
-
-    @Override
-    public Color valueColor(Object obj) {
-
-        double value;
-        if (obj instanceof Double) {
-            value = (Double) obj;
-        } else {
-            value = Double.valueOf(String.valueOf(obj));
-        }
-
-        if (Double.isNaN(value))
-            return notANumberColor;
-        else if (value == Double.POSITIVE_INFINITY)
-            return posInfinityColor;
-        else if (value == Double.NEGATIVE_INFINITY)
-            return negInfinityColor;
-        else if (value > maxPoint)
-            return maxColor;
-        else if (value < minPoint)
-            return minColor;
-
-        for (ScaleRange range : scaleRanges)
-            if (range.minPoint <= value && value <= range.maxPoint)
-                return range.scale.valueColor(value);
-
-        return undefinedColor;
     }
 
 }

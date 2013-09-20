@@ -21,7 +21,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.search.FigureConfig;
-import org.onexus.website.api.pages.search.figures.bar.CollectionField;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;

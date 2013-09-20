@@ -34,7 +34,7 @@ import java.util.List;
 
 public class GitProjectProvider extends AbstractProjectProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(GitProjectProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitProjectProvider.class);
 
     public GitProjectProvider(String projectName, String projectUrl, File projectFolder, FileAlterationMonitor monitor, List<IResourceListener> listeners) throws InvalidParameterException {
         super(projectName, projectUrl, projectFolder, monitor, listeners);
@@ -77,7 +77,7 @@ public class GitProjectProvider extends AbstractProjectProvider {
             }
 
         } catch (Exception e) {
-            log.error("Importing project '" + getProjectUrl() + "'", e);
+            LOGGER.error("Importing project '" + getProjectUrl() + "'", e);
             throw new InvalidParameterException("Error importing project. " + e.getMessage());
         }
     }
@@ -90,7 +90,7 @@ public class GitProjectProvider extends AbstractProjectProvider {
 
         @Override
         public void beginTask(String title, int totalWork) {
-            log.info(title + " #" + totalWork);
+            LOGGER.info(title + " #" + totalWork);
         }
 
         @Override

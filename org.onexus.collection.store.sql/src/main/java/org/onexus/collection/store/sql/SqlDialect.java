@@ -23,14 +23,38 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.types.Text;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.collection.store.sql.SqlCollectionDDL.ColumnInfo;
-import org.onexus.collection.store.sql.adapters.*;
-import org.onexus.collection.store.sql.filters.*;
+import org.onexus.collection.store.sql.adapters.BooleanAdapter;
+import org.onexus.collection.store.sql.adapters.DoubleAdapter;
+import org.onexus.collection.store.sql.adapters.IntegerAdapter;
+import org.onexus.collection.store.sql.adapters.LongAdapter;
+import org.onexus.collection.store.sql.adapters.SqlAdapter;
+import org.onexus.collection.store.sql.adapters.StringAdapter;
+import org.onexus.collection.store.sql.adapters.TextAdapter;
+import org.onexus.collection.store.sql.filters.AtomicFilterBuilder;
+import org.onexus.collection.store.sql.filters.BinaryFilterBuilder;
+import org.onexus.collection.store.sql.filters.EqualIdFilterBuilder;
+import org.onexus.collection.store.sql.filters.FilterBuilder;
+import org.onexus.collection.store.sql.filters.InFilterBuilder;
+import org.onexus.collection.store.sql.filters.IsNullFilterBuilder;
+import org.onexus.collection.store.sql.filters.NotFilterBuilder;
+import org.onexus.collection.store.sql.filters.UnknownFilterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SqlDialect {
 
@@ -201,8 +225,8 @@ public class SqlDialect {
                 return null;
             }
 
-            String object = rs.getString(1);
-            return object;
+            return rs.getString(1);
+
         } finally {
             if (rs != null)
                 rs.close();

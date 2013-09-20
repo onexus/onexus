@@ -120,7 +120,7 @@ public class ShareWidget extends Widget<ShareWidgetConfig, ShareWidgetStatus> {
         this.height = height;
     }
 
-    private final static String getEmbedHTML(String embedURL, String browseURL, String width, String height) {
+    private static String getEmbedHTML(String embedURL, String browseURL, String width, String height) {
 
         StringBuilder code = new StringBuilder();
 

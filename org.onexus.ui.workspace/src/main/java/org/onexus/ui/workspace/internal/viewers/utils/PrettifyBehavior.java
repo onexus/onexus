@@ -30,8 +30,8 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 public class PrettifyBehavior extends Behavior {
 
-    private final static HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(PrettifyBehavior.class, "prettify.css"));
-    private final static HeaderItem JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PrettifyBehavior.class, "prettify.js"));
+    private static final HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(PrettifyBehavior.class, "prettify.css"));
+    private static final HeaderItem JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PrettifyBehavior.class, "prettify.js"));
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {

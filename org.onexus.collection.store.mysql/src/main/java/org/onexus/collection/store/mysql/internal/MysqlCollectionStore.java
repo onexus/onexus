@@ -39,7 +39,7 @@ import java.sql.Statement;
 
 public class MysqlCollectionStore extends SqlCollectionStore implements ICollectionStore {
 
-    private static final Logger log = LoggerFactory.getLogger(MysqlCollectionStore.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MysqlCollectionStore.class);
 
     private String server;
 
@@ -68,7 +68,7 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
         try {
             Class.forName(Driver.class.getName());
         } catch (Exception e) {
-            log.error("Exception: " + e.getMessage());
+            LOGGER.error("Exception: " + e.getMessage());
         }
 
         // Config parameters
@@ -76,7 +76,7 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
         try {
             maxActive = Integer.valueOf(getPoolMaxActive().trim()).intValue();
         } catch (Exception e) {
-            log.error("Malformed config parameter 'poolMaxActive'");
+            LOGGER.error("Malformed config parameter 'poolMaxActive'");
         }
 
         byte whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_BLOCK;
@@ -88,14 +88,14 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
                 whenExhausted = GenericObjectPool.WHEN_EXHAUSTED_GROW;
             }
         } catch (Exception e) {
-            log.error("Malformed config parameter 'poolWhenExhausted'");
+            LOGGER.error("Malformed config parameter 'poolWhenExhausted'");
         }
 
         long maxWait = GenericObjectPool.DEFAULT_MAX_WAIT;
         try {
             maxWait = Long.valueOf(getPoolMaxWait().trim()).longValue();
         } catch (Exception e) {
-            log.error("Malformed config parameter 'poolMaxWait'");
+            LOGGER.error("Malformed config parameter 'poolMaxWait'");
         }
 
         // Initialize the DataSource with a connection pool
@@ -120,17 +120,6 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
         st.setFetchSize(Integer.MIN_VALUE);
 
         return st;
-    }
-
-    public class MysqlConnectionFactory implements ConnectionFactory {
-
-        @Override
-        public Connection createConnection() throws SQLException {
-            return DriverManager.getConnection(
-                    "jdbc:mysql://" + server + ":" + port + "/" + database,
-                    username,
-                    password);
-        }
     }
 
     public String getDatabase() {
@@ -204,4 +193,16 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
     public void setResourceManager(IResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }
+
+    public class MysqlConnectionFactory implements ConnectionFactory {
+
+        @Override
+        public Connection createConnection() throws SQLException {
+            return DriverManager.getConnection(
+                    "jdbc:mysql://" + server + ":" + port + "/" + database,
+                    username,
+                    password);
+        }
+    }
+
 }

@@ -75,10 +75,9 @@ public class TagWidgetStatus extends WidgetStatus<TagWidgetConfig> {
             Set<String> selectedValues = new HashSet<String>();
 
             //TODO TagStore tagStore = getTagStore();
-
-            for (String tagKey : getSelectedTags()) {
-                // selectedValues.addAll(tagStore.getTagValues(tagKey));
-            }
+            //for (String tagKey : getSelectedTags()) {
+            //    selectedValues.addAll(tagStore.getTagValues(tagKey));
+            //}
 
             if (!selectedValues.isEmpty()) {
 

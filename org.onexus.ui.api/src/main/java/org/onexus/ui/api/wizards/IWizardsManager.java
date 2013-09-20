@@ -23,6 +23,6 @@ import java.util.List;
 
 public interface IWizardsManager {
 
-    public List<IWizardCreator> getWizardCreators(Resource resource);
+    List<IWizardCreator> getWizardCreators(Resource resource);
 
 }

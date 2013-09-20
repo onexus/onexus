@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 public interface IQueryScript extends Serializable {
 
-    public String toString();
+    String toString();
 
     String getContent(String query, CharSequence url);
 

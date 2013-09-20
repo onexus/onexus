@@ -30,7 +30,7 @@ import java.awt.*;
 
 public class DepthDecoratorCreator implements IDecoratorCreator {
 
-    private final static IColorScaleHtml depthScale = new LinearColorScale(10.0, 100.0, new Color(255, 255, 255), new Color(0, 255, 0));
+    private static final IColorScaleHtml DEPTH_SCALE = new LinearColorScale(10.0, 100.0, new Color(255, 255, 255), new Color(0, 255, 0));
 
     @Override
     public String getDecoratorId() {
@@ -44,6 +44,6 @@ public class DepthDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
-        return new ColorDecorator(columnField, depthScale, "st", true);
+        return new ColorDecorator(columnField, DEPTH_SCALE, "st", true);
     }
 }

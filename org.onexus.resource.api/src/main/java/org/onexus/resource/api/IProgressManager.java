@@ -21,7 +21,7 @@ import java.util.Collection;
 
 public interface IProgressManager {
 
-    public Collection<Progress> getProgresses();
+    Collection<Progress> getProgresses();
 
-    public void addProgress(Progress progress);
+    void addProgress(Progress progress);
 }

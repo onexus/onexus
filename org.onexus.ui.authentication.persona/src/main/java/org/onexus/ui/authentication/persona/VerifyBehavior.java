@@ -42,14 +42,12 @@ import java.util.Map;
  * authentication window and notifying the caller via {@link #onSuccess(org.apache.wicket.ajax.AjaxRequestTarget)} or
  * {@link #onFailure(org.apache.wicket.ajax.AjaxRequestTarget, String)}
  */
-public abstract class VerifyBehavior extends AbstractDefaultAjaxBehavior
-{
+public abstract class VerifyBehavior extends AbstractDefaultAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void renderHead(final Component component, final IHeaderResponse response)
-    {
+    public void renderHead(final Component component, final IHeaderResponse response) {
         component.setOutputMarkupId(true);
         super.renderHead(component, response);
 
@@ -64,32 +62,25 @@ public abstract class VerifyBehavior extends AbstractDefaultAjaxBehavior
     }
 
     @Override
-    protected void respond(AjaxRequestTarget target)
-    {
+    protected void respond(AjaxRequestTarget target) {
         RequestCycle cycle = RequestCycle.get();
         Request request = cycle.getRequest();
         StringValue assertionParam = request.getQueryParameters().getParameterValue("assertion");
         StringValue audienceParam = request.getQueryParameters().getParameterValue("audience");
 
-        if (assertionParam.isEmpty() == false && audienceParam.isEmpty() == false)
-        {
+        if (!assertionParam.isEmpty() && !audienceParam.isEmpty()) {
             String failureReason = verify(assertionParam.toString(), audienceParam.toString());
-            if (failureReason == null)
-            {
+            if (failureReason == null) {
                 onSuccess(target);
-            }
-            else
-            {
+            } else {
                 onFailure(target, failureReason);
             }
         }
     }
 
-    private String verify(final String assertion, final String audience)
-    {
+    private String verify(final String assertion, final String audience) {
         String failureReason = null;
-        try
-        {
+        try {
             URL verifyUrl = new URL("https://verifier.login.persona.org/verify");
             URLConnection urlConnection = verifyUrl.openConnection();
             urlConnection.setDoOutput(true);
@@ -101,20 +92,14 @@ public abstract class VerifyBehavior extends AbstractDefaultAjaxBehavior
             String response = IOUtils.toString(urlConnection.getInputStream(), "UTF-8");
 
             BrowserId browserId = BrowserId.of(response);
-            if (browserId != null)
-            {
-                if (BrowserId.Status.OK.equals(browserId.getStatus()))
-                {
+            if (browserId != null) {
+                if (BrowserId.Status.OK.equals(browserId.getStatus())) {
                     SessionHelper.logIn(Session.get(), browserId);
-                }
-                else
-                {
+                } else {
                     failureReason = browserId.getReason();
                 }
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             failureReason = e.getMessage();
         }
 

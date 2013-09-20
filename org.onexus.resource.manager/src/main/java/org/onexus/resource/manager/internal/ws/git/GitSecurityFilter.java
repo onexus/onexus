@@ -21,9 +21,9 @@ import org.eclipse.jgit.util.Base64;
 import org.eclipse.jgit.util.StringUtils;
 import org.onexus.resource.api.IAuthorizationManager;
 import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
+import org.onexus.resource.api.session.LoginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,7 @@ import java.text.MessageFormat;
 
 public class GitSecurityFilter implements Filter {
 
-    private static final Logger log = LoggerFactory.getLogger(GitSecurityFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitSecurityFilter.class);
 
     private static final String BASIC = "Basic";
     private static final String CHALLENGE = BASIC + " realm=\"karaf\"";
@@ -65,7 +65,7 @@ public class GitSecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.debug("FilterConfig: " + filterConfig);
+        LOGGER.debug("FilterConfig: " + filterConfig);
     }
 
     @Override
@@ -93,12 +93,13 @@ public class GitSecurityFilter implements Filter {
         try {
             project = resourceManager.getProject(resource.getProjectUrl());
         } catch (Exception e) {
-            log.error("At git serving '" + resource + "'", e);
+            LOGGER.error("At git serving '" + resource + "'", e);
         }
 
-        if (project == null && requestPrivilege.equals(IAuthorizationManager.WRITE)) {
-            //TODO automatic project creation on push
-        }
+        //TODO automatic project creation on push
+        // if (project == null && requestPrivilege.equals(IAuthorizationManager.WRITE)) {
+        //
+        // }
 
         if (project == null) {
             httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -135,7 +136,7 @@ public class GitSecurityFilter implements Filter {
                     return username;
                 }
             }
-            log.info(MessageFormat.format("AUTH: invalid credentials ({0})", credentials));
+            LOGGER.info(MessageFormat.format("AUTH: invalid credentials ({0})", credentials));
         }
         return null;
     }
@@ -151,8 +152,8 @@ public class GitSecurityFilter implements Filter {
         if (url.length() > 0 && url.charAt(0) == '/') {
             url = url.substring(1);
         }
-        String fullUrl = url + (StringUtils.isEmptyOrNull(params) ? "" : ("?" + params));
-        return fullUrl;
+
+        return url + (StringUtils.isEmptyOrNull(params) ? "" : ("?" + params));
     }
 
     private String extractRepositoryName(String url) {

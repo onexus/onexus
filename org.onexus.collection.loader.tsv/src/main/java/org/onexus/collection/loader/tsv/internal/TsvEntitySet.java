@@ -26,7 +26,11 @@ import org.onexus.resource.api.Loader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,9 +38,9 @@ import java.util.Properties;
 
 public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
-    private static final Logger log = LoggerFactory.getLogger(TsvEntitySet.class);
-    private String currentLine;
-    private BufferedReader fr;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TsvEntitySet.class);
+
+    private BufferedReader bufferedReader;
     private Iterator<InputStream> isIterator;
 
     public TsvEntitySet(IDataStreams dataStreams, Collection collection) {
@@ -54,14 +58,14 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
             SEPARATOR = "\t";
         }
 
-        String FIELD_MAP = loader.getParameter("FIELD_MAP");
-        if (FIELD_MAP != null) {
+        String field_map = loader.getParameter("FIELD_MAP");
+        if (field_map != null) {
             Properties fieldMap = new Properties();
             try {
-                fieldMap.load(new StringReader(FIELD_MAP));
+                fieldMap.load(new StringReader(field_map));
                 setFieldIdToHeader(fieldMap);
             } catch (IOException e) {
-                log.warn("Malformed loader FIELD_MAP at " + collection.getORI(), e);
+                LOGGER.warn("Malformed loader FIELD_MAP at " + collection.getORI(), e);
             }
         }
 
@@ -77,29 +81,29 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
         try {
             // Close previous file channel
-            if (this.fr != null) {
-                this.fr.close();
+            if (this.bufferedReader != null) {
+                this.bufferedReader.close();
             }
 
             InputStream is = isIterator.next();
-            this.fr = new BufferedReader(new InputStreamReader(is));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(is));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         try {
-            String line = fr.readLine();
+            String line = bufferedReader.readLine();
 
             // Extract static fields
             Map<String, String> staticFields = new HashMap<String, String>();
-            while(line != null && (line.isEmpty() || line.charAt(0) == '#')) {
+            while (line != null && (line.isEmpty() || line.charAt(0) == '#')) {
 
                 if (line.length() > 2 && line.charAt(1) == '#') {
                     addStaticField(staticFields, line.substring(2));
                 }
 
-                line = fr.readLine();
+                line = bufferedReader.readLine();
             }
             setStaticFieldsValues(staticFields);
 
@@ -126,8 +130,8 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
             return;
         }
 
-        String key = line.substring(0,equal).trim();
-        String value = line.substring(equal+1).trim();
+        String key = line.substring(0, equal).trim();
+        String value = line.substring(equal + 1).trim();
 
         staticFields.put(key, value);
     }
@@ -136,11 +140,11 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
     public boolean next() {
 
         // Read first row of data
-        if (fr == null) {
+        if (bufferedReader == null) {
             return false;
         }
 
-        currentLine = nextLine();
+        String currentLine = nextLine();
 
         if (currentLine == null) {
             return false;
@@ -155,7 +159,7 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
         try {
 
-            if (fr == null) {
+            if (bufferedReader == null) {
                 return null;
             }
 
@@ -166,18 +170,18 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
                     nextInputStream();
                     return nextLine();
                 } else {
-                    fr.close();
+                    bufferedReader.close();
                 }
             } else {
                 return line;
             }
 
         } catch (IOException e) {
-            if (fr != null)
+            if (bufferedReader != null)
                 try {
-                    fr.close();
+                    bufferedReader.close();
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    LOGGER.error("Error closing the reader", e1);
                 }
         }
 
@@ -187,9 +191,9 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
     private String nextNonCommentLine() throws IOException {
 
-        String line = fr.readLine();
-        while(line != null && (line.isEmpty() || line.charAt(0) == '#')) {
-            line = fr.readLine();
+        String line = bufferedReader.readLine();
+        while (line != null && (line.isEmpty() || line.charAt(0) == '#')) {
+            line = bufferedReader.readLine();
         }
 
         return line;
@@ -212,11 +216,11 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
 
     @Override
     public void close() {
-        if (fr != null) {
+        if (bufferedReader != null) {
             try {
-                fr.close();
+                bufferedReader.close();
             } catch (IOException e1) {
-                e1.printStackTrace();
+                LOGGER.error("Error closing the reader", e1);
             }
         }
     }

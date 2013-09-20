@@ -24,8 +24,8 @@ import java.util.concurrent.Callable;
 
 public interface IDataLoader {
 
-    public Callable<IDataStreams> newCallable(Progress progress, Plugin plugin, Data data);
+    Callable<IDataStreams> newCallable(Progress progress, Plugin plugin, Data data);
 
-    public long size();
+    long size();
 
 }

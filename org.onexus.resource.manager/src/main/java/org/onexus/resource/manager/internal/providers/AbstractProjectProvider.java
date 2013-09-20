@@ -33,16 +33,30 @@ import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractProjectProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractProjectProvider.class);
-    public final static String ONEXUS_EXTENSION = "onx";
-    public final static String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractProjectProvider.class);
+
+    public static final String ONEXUS_EXTENSION = "onx";
+    public static final String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
     private IResourceSerializer serializer;
 
@@ -86,32 +100,32 @@ public abstract class AbstractProjectProvider {
 
             @Override
             public void onDirectoryCreate(File directory) {
-                log.info("Creating folder '" + directory.getName() + "'");
+                LOGGER.info("Creating folder '" + directory.getName() + "'");
                 onResourceCreate(loadFile(directory));
             }
 
             @Override
             public void onDirectoryDelete(File directory) {
-                log.info("Deleting folder '" + directory.getName() + "'");
+                LOGGER.info("Deleting folder '" + directory.getName() + "'");
                 ORI resourceOri = convertFileToORI(directory);
                 onResourceDelete(resources.remove(resourceOri));
             }
 
             @Override
             public void onFileChange(File file) {
-                log.info("Reloading file '" + file.getName() + "'");
+                LOGGER.info("Reloading file '" + file.getName() + "'");
                 onResourceChange(loadFile(file));
             }
 
             @Override
             public void onFileCreate(File file) {
-                log.info("Creating file '" + file.getName() + "'");
+                LOGGER.info("Creating file '" + file.getName() + "'");
                 onResourceCreate(loadFile(file));
             }
 
             @Override
             public void onFileDelete(File file) {
-                log.info("Deleting file '" + file.getName() + "'");
+                LOGGER.info("Deleting file '" + file.getName() + "'");
                 ORI resourceOri = convertFileToORI(file);
                 onResourceDelete(resources.remove(resourceOri));
             }
@@ -176,7 +190,7 @@ public abstract class AbstractProjectProvider {
                     long bundleId = pluginLoader.load(plugin);
                     bundleDependencies.add(bundleId);
                 } catch (InvalidParameterException e) {
-                    log.error(e.getMessage());
+                    LOGGER.error(e.getMessage());
                 }
             }
         }
@@ -187,7 +201,7 @@ public abstract class AbstractProjectProvider {
             try {
                 this.projectAlias.load(new StringReader(project.getAlias()));
             } catch (IOException e) {
-                log.error("Malformed project alias", e);
+                LOGGER.error("Malformed project alias", e);
                 this.projectAlias = null;
             }
         }
@@ -337,7 +351,7 @@ public abstract class AbstractProjectProvider {
     }
 
     private Resource createErrorResource(File resourceFile, String msg) {
-        log.error(msg);
+        LOGGER.error(msg);
         Resource errorResource = createDataResource(resourceFile);
         errorResource.setDescription("ERROR: " + msg);
         return errorResource;
@@ -404,7 +418,7 @@ public abstract class AbstractProjectProvider {
             os.close();
 
         } catch (IOException e) {
-            log.error("Saving resource '" + resource.getORI() + "' in file '" + file.getAbsolutePath() + "'", e);
+            LOGGER.error("Saving resource '" + resource.getORI() + "' in file '" + file.getAbsolutePath() + "'", e);
         }
 
         observer.checkAndNotify();
@@ -437,7 +451,7 @@ public abstract class AbstractProjectProvider {
             return;
         }
 
-        log.info("Resource '" + resource.getName() + "' created.");
+        LOGGER.info("Resource '" + resource.getName() + "' created.");
 
         for (IResourceListener listener : listeners) {
             listener.onResourceCreate(resource);
@@ -450,7 +464,7 @@ public abstract class AbstractProjectProvider {
             return;
         }
 
-        log.info("Resource '" + resource.getName() + "' changed.");
+        LOGGER.info("Resource '" + resource.getName() + "' changed.");
 
         for (IResourceListener listener : listeners) {
             listener.onResourceChange(resource);
@@ -463,7 +477,7 @@ public abstract class AbstractProjectProvider {
             return;
         }
 
-        log.info("Resource '" + resource.getName() + "' deleted.");
+        LOGGER.info("Resource '" + resource.getName() + "' deleted.");
 
         for (IResourceListener listener : listeners) {
             listener.onResourceDelete(resource);

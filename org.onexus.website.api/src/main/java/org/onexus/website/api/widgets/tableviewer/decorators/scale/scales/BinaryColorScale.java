@@ -46,12 +46,15 @@ public class BinaryColorScale extends AbstractColorScale {
             value = Double.valueOf(String.valueOf(obj));
         }
 
-        if (Double.isNaN(value))
+        if (Double.isNaN(value)) {
             return notANumberColor;
-        else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
+        }
+        else if (value > maxPoint || value == Double.POSITIVE_INFINITY){
             return posInfinityColor;
-        else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
+        }
+        else if (value < minPoint || value == Double.NEGATIVE_INFINITY) {
             return negInfinityColor;
+        }
 
         boolean isSig = cutoffCmp.compare(value, cutoff);
         return isSig ? maxColor : minColor;

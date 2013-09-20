@@ -17,51 +17,33 @@
  */
 package org.onexus.website.api.pages.search.figures;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
-import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntitySet;
-import org.onexus.collection.api.IEntityTable;
-import org.onexus.collection.api.query.OrderBy;
-import org.onexus.collection.api.query.Query;
-import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteApplication;
-import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.pages.search.SearchLink;
-import org.onexus.website.api.pages.search.SearchPage;
 import org.onexus.website.api.pages.search.SearchPageStatus;
 import org.onexus.website.api.pages.search.SearchType;
 import org.onexus.website.api.pages.search.boxes.FieldsPanel;
-import org.onexus.website.api.utils.visible.VisiblePredicate;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 public class LinksBox extends Panel {
@@ -147,7 +129,7 @@ public class LinksBox extends Panel {
 
                 label = getLabel(entity, labelField);
                 labels.add(label.toUpperCase());
-                
+
                 if (count > MAX_LABELS) {
                     remaining++;
                     continue;
@@ -170,7 +152,7 @@ public class LinksBox extends Panel {
                 item = new WebMarkupContainer(links.newChildId());
                 links.add(item);
                 activeLink = new ExternalLink("link", "");
-                activeLink.add(new Label("label", "and "+ remaining + " more"));
+                activeLink.add(new Label("label", "and " + remaining + " more"));
                 activeLink.setEnabled(false);
                 item.add(activeLink);
             }
@@ -273,7 +255,7 @@ public class LinksBox extends Panel {
                 item.add(link);
                 links.add(item);
             }
-        }  else {
+        } else {
             linksContainer.setVisible(false);
         }
 

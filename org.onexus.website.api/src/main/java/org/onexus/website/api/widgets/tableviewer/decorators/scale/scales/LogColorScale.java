@@ -21,7 +21,7 @@ import java.awt.*;
 
 public class LogColorScale extends AbstractColorScale {
 
-    public static final double defaultLogFactor = 0.25;
+    public static final double DEFAULT_LOG_FACTOR = 0.25;
 
     protected Color nonSignificantColor;
 
@@ -35,11 +35,11 @@ public class LogColorScale extends AbstractColorScale {
 
     public LogColorScale(double minPoint, double maxPoint) {
 
-        this(minPoint, maxPoint, defaultLogFactor);
+        this(minPoint, maxPoint, DEFAULT_LOG_FACTOR);
     }
 
     public LogColorScale() {
-        this(0.0, 1.0, defaultLogFactor);
+        this(0.0, 1.0, DEFAULT_LOG_FACTOR);
     }
 
     public LogColorScale(double minPoint, double maxPoint, Color minColor,
@@ -68,12 +68,15 @@ public class LogColorScale extends AbstractColorScale {
         }
 
 
-        if (Double.isNaN(value))
+        if (Double.isNaN(value)) {
             return notANumberColor;
-        else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
+        }
+        else if (value > maxPoint || value == Double.POSITIVE_INFINITY) {
             return posInfinityColor;
-        else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
+        }
+        else if (value < minPoint || value == Double.NEGATIVE_INFINITY) {
             return negInfinityColor;
+        }
 
         double range = maxPoint - minPoint;
 

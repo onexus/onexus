@@ -47,12 +47,15 @@ public class LinearColorScale extends AbstractColorScale {
         }
 
 
-        if (Double.isNaN(value))
+        if (Double.isNaN(value)) {
             return notANumberColor;
-        else if (value > maxPoint || value == Double.POSITIVE_INFINITY)
+        }
+        else if (value > maxPoint || value == Double.POSITIVE_INFINITY) {
             return posInfinityColor;
-        else if (value < minPoint || value == Double.NEGATIVE_INFINITY)
+        }
+        else if (value < minPoint || value == Double.NEGATIVE_INFINITY) {
             return negInfinityColor;
+        }
 
         double range = maxPoint - minPoint;
 

@@ -20,7 +20,7 @@ package org.onexus.website.api.events;
 
 public class EventFiltersUpdate extends EventQueryUpdate {
 
-    public final static EventFiltersUpdate EVENT = new EventFiltersUpdate();
+    public static final EventFiltersUpdate EVENT = new EventFiltersUpdate();
 
     protected EventFiltersUpdate() {
         super();

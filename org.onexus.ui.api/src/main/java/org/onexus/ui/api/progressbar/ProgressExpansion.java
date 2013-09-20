@@ -30,7 +30,7 @@ import java.util.Set;
 public class ProgressExpansion implements Set<Progress>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static MetaDataKey<ProgressExpansion> KEY = new MetaDataKey<ProgressExpansion>() {
+    private static final MetaDataKey<ProgressExpansion> KEY = new MetaDataKey<ProgressExpansion>() {
         private static final long serialVersionUID = 1L;
     };
 

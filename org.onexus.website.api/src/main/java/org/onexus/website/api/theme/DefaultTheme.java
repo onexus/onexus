@@ -31,14 +31,14 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 public class DefaultTheme extends Behavior {
 
-    private final static HeaderItem BOOTSTRAP_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "css/bootstrap.min.css"));
-    private final static HeaderItem BOOTSTRAP_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "js/bootstrap.min.js"));
-    private final static HeaderItem STYLE_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "css/style.css"));
+    private static final HeaderItem BOOTSTRAP_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "css/bootstrap.min.css"));
+    private static final HeaderItem BOOTSTRAP_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "js/bootstrap.min.js"));
+    private static final HeaderItem STYLE_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "css/style.css"));
 
-    private final static HeaderItem COLORBOX_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "colorbox/jquery.colorbox-min.js"));
-    private final static HeaderItem COLORBOX_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "colorbox/colorbox.css"));
+    private static final HeaderItem COLORBOX_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "colorbox/jquery.colorbox-min.js"));
+    private static final HeaderItem COLORBOX_CSS = CssHeaderItem.forReference(new CssResourceReference(DefaultTheme.class, "colorbox/colorbox.css"));
 
-    private final static HeaderItem THEME_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "defaulttheme.js"));
+    private static final HeaderItem THEME_JS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(DefaultTheme.class, "defaulttheme.js"));
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
@@ -54,11 +54,11 @@ public class DefaultTheme extends Behavior {
 
         response.render(OnLoadHeaderItem.forScript(
                 getTooltipJavascript() +
-                getModalJavascript() +
-                getPopoverJavascript() +
-                getMoveFooter() +
-                getColorBoxJavascript()
-                )
+                        getModalJavascript() +
+                        getPopoverJavascript() +
+                        getMoveFooter() +
+                        getColorBoxJavascript()
+        )
         );
     }
 

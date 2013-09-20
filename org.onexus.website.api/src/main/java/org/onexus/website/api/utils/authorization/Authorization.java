@@ -23,9 +23,12 @@ import org.onexus.website.api.utils.parser.BooleanExpressionEvaluator;
 
 import java.util.Set;
 
-public class Authorization {
+public final class Authorization {
 
-    public static String ANONYMOUS = "anonymous";
+    public static final String ANONYMOUS = "anonymous";
+
+    private Authorization() {
+    }
 
     public static boolean authorize(IAuthorization target) {
         if (target != null && target.getAuthorization() != null) {

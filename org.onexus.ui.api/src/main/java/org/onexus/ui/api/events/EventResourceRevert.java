@@ -19,9 +19,9 @@ package org.onexus.ui.api.events;
 
 import java.io.Serializable;
 
-public class EventResourceRevert implements Serializable {
+public final class EventResourceRevert implements Serializable {
 
-    public final static EventResourceRevert EVENT = new EventResourceRevert();
+    public static final EventResourceRevert EVENT = new EventResourceRevert();
 
     private EventResourceRevert() {
         super();
