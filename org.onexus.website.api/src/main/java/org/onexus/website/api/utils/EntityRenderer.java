@@ -40,7 +40,7 @@ public class EntityRenderer implements IChoiceRenderer<IEntity> {
 
     @Override
     public Object getDisplayValue(IEntity entity) {
-        return (entity == null ? nullValue : entity.get(displayField));
+        return entity == null ? nullValue : entity.get(displayField);
     }
 
     @Override

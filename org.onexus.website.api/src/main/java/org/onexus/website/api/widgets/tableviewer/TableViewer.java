@@ -66,7 +66,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         }
 
         Integer sessionRowsPerPage = getSession().getMetaData(DEFAULT_ROWS_PER_PAGE);
-        final Integer rowsPerPage = (sessionRowsPerPage == null ? 20 : sessionRowsPerPage);
+        final Integer rowsPerPage = sessionRowsPerPage == null ? 20 : sessionRowsPerPage;
 
         this.dataProvider = new EntitiesRowProvider(status, rowsPerPage) {
 
@@ -106,7 +106,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
         for (IColumnConfig columnConfig : visibleColumnsConfig) {
             String columnSortStr = columnConfig.getSortable();
             boolean columnSort = sortablePredicate.evaluate(columnSortStr);
-            columnConfig.addColumns(columns, parentURI, (Strings.isEmpty(columnSortStr) ? tableSort : columnSort));
+            columnConfig.addColumns(columns, parentURI, Strings.isEmpty(columnSortStr) ? tableSort : columnSort);
         }
 
         // Disable default status order if the table is not sortable.

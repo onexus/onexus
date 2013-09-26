@@ -38,7 +38,7 @@ public class Not extends Filter {
     public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
 
         boolean binaryFilter = prettyPrint && (negatedFilter instanceof BinaryFilter);
-        String prevTabs = (binaryFilter ? endingTabs(oql) : "");
+        String prevTabs = binaryFilter ? endingTabs(oql) : "";
 
         oql.append("NOT");
         oql.append(binaryFilter ? "\n" + prevTabs : " ");

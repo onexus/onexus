@@ -64,7 +64,7 @@ public class WebsiteSession extends AbstractAuthenticatedWebSession implements I
 
     @Override
     public boolean isSignedIn() {
-        return (LoginContext.get().getUserName() != null);
+        return LoginContext.get().getUserName() != null;
     }
 
     public static WebsiteSession get() {

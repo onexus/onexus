@@ -126,7 +126,7 @@ public class ExceptionErrorPage extends AbstractErrorPage {
         List<Throwable> al = Generics.newArrayList();
         Throwable cause = throwable;
         al.add(cause);
-        while ((cause.getCause() != null) && (cause != cause.getCause())) {
+        while (cause.getCause()!= null && cause!= cause.getCause()) {
             cause = cause.getCause();
             al.add(cause);
         }

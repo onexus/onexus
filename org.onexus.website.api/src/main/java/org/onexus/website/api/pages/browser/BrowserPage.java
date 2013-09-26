@@ -338,7 +338,7 @@ public class BrowserPage extends Page<BrowserPageConfig, BrowserPageStatus> {
         }
 
         public boolean hasSubMenu() {
-            return (groupLabel != null);
+            return groupLabel != null;
         }
 
         public void add(TabConfig tabConfig) {

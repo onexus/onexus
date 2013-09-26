@@ -251,11 +251,8 @@ public class SqlQuery {
         for (ORI collectionUri : keys) {
 
             StringBuilder leftJoin = networkFixedJoins.get(collectionUri);
-            List<ORI> collectionsFixed = networkFixedCollection.get(collectionUri);
 
             for (FieldLink fieldLink : networkLinks.get(collectionUri)) {
-
-                ORI linkCollection = fieldLink.getToCollection().toAbsolute(query.getOn());
 
                 ORI aCollection = fieldLink.getFromCollection();
                 SqlCollectionDDL aDDL = manager.getDDL(aCollection);

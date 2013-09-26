@@ -100,8 +100,8 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
     public void encodeParameters(PageParameters parameters, String keyPrefix) {
 
         PageConfig pageConfig = getConfig().getPageConfig();
-        WebsiteConfig websiteConfig = (pageConfig == null ? null : pageConfig.getWebsiteConfig());
-        ORI projectUri = (websiteConfig == null ? null : websiteConfig.getORI().getParent());
+        WebsiteConfig websiteConfig = pageConfig == null ? null : pageConfig.getWebsiteConfig();
+        ORI projectUri = websiteConfig == null ? null : websiteConfig.getORI().getParent();
 
         TableViewerStatus defaultStatus = getConfig().getDefaultStatus();
         if (defaultStatus == null) {
@@ -138,7 +138,7 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
                 collection = collection.substring(1);
             }
 
-            order = new OrderBy(collection, values[1], (values[2].contains("a")));
+            order = new OrderBy(collection, values[1], values[2].contains("a"));
         }
 
         super.decodeParameters(parameters, keyPrefix);

@@ -55,7 +55,7 @@ public class MainLinksBox extends Panel {
         // Label
         accordionToggle.add(new Label("label", "General links"));
 
-        String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
+        String prefix = getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty() ? WebsiteApplication.get().getWebPath() + "/" : "";
 
         // Links
         RepeatingView linksContainer = new RepeatingView("links");

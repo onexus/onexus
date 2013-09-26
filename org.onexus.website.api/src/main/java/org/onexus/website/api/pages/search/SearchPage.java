@@ -98,7 +98,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
         add(indicator);
 
         WebMarkupContainer container = new WebMarkupContainer("container");
-        container.add(new AttributeModifier("class", (showLogo ? "show-logo" : "hide-logo")));
+        container.add(new AttributeModifier("class", showLogo ? "show-logo" : "hide-logo"));
 
         Form form = new Form<SearchPageStatus>("form");
         form.add(new AjaxButton("submit") {
@@ -312,7 +312,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
     private Iterator<IEntity> getAutocompleteChoices(String in) {
 
         int lastComma = in.lastIndexOf(',');
-        String input = (lastComma > -1 ? in.substring(lastComma + 1).trim() : in.trim());
+        String input = lastComma > -1 ? in.substring(lastComma + 1).trim() : in.trim();
 
         Query query = new Query();
         SearchType type = getStatus().getType();
@@ -362,7 +362,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
             }
 
             String title = collection.getTitle();
-            return (title == null ? collection.getName() : title);
+            return title == null ? collection.getName() : title;
         }
 
         @Override
@@ -394,8 +394,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
         private String getTextValue(IEntity object, String in) {
 
             int lastComma = in.lastIndexOf(',');
-            String criteria = (lastComma > -1 ? in.substring(lastComma + 1).trim() : in.trim());
-            String previous = (lastComma > -1 ? in.substring(0, lastComma) + ", " : "");
+            String criteria = lastComma > -1 ? in.substring(lastComma + 1).trim() : in.trim();
+            String previous = lastComma > -1 ? in.substring(0, lastComma) + ", " : "";
 
 
             SearchType type = getStatus().getType();

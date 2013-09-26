@@ -24,4 +24,5 @@ public class ResourceNotFoundException extends OnexusException {
     public ResourceNotFoundException(ORI resourceOri) {
         super("Resource '" + resourceOri + "' is not defined in any project.");
     }
+
 }

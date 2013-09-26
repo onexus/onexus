@@ -170,7 +170,7 @@ public class LinksBox extends Panel {
 
         // Prepare links variables
         SearchType searchType = status.getType();
-        String varEntity = (filterConfig == null ? entity.getId() : "");
+        String varEntity = filterConfig == null ? entity.getId() : "";
 
         String varFilter = createVarFilter(entity, filterConfig);
 
@@ -217,9 +217,9 @@ public class LinksBox extends Panel {
 
 
     private String getLabel(IEntity entity, String labelField) {
-        return (labelField == null ?
+        return labelField == null ?
                 StringUtils.replace(entity.getId(), "\t", "-") :
-                String.valueOf(entity.get(labelField)));
+                String.valueOf(entity.get(labelField));
     }
 
     private WebMarkupContainer createLinks(ORI collectionORI, SearchType searchType, String varEntity, String varFilter) {
@@ -228,10 +228,10 @@ public class LinksBox extends Panel {
 
         if (searchType.getLinks() != null) {
 
-            String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
+            String prefix = getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty() ? WebsiteApplication.get().getWebPath() + "/" : "";
 
             linksContainer.setVisible(false);
-            boolean isList = (entityIterator != null || filterConfig != null);
+            boolean isList = entityIterator != null || filterConfig != null;
 
             for (SearchLink searchLink : searchType.getLinks()) {
 

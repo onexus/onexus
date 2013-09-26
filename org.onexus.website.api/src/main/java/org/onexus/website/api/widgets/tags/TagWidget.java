@@ -216,7 +216,7 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
         TagWidgetStatus status = getStatus();
         String selection = status.getSelection();
 
-        return (selection == null ? Collections.EMPTY_LIST : Arrays.asList(selection.split(":::")));
+        return selection == null ? Collections.EMPTY_LIST : Arrays.asList(selection.split(":::"));
     }
 
     private CharSequence createDownload() {

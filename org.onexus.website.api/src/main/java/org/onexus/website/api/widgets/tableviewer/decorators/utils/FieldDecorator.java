@@ -72,7 +72,7 @@ public class FieldDecorator implements IDecorator {
     public FieldDecorator(Field field, ITextFormater textFormater, String cssClass) {
         super();
         this.field = field;
-        this.textFormater = (textFormater == null ? getTextFormater(field) : textFormater);
+        this.textFormater = textFormater== null ? getTextFormater(field) : textFormater;
         this.cssClass = cssClass;
     }
 
@@ -100,7 +100,7 @@ public class FieldDecorator implements IDecorator {
     }
 
     protected Object getValue(IEntity data, String fieldId) {
-        return (data == null ? null : data.get(fieldId));
+        return data == null ? null : data.get(fieldId);
     }
 
     public String getFormatValue(final IEntity entity) {
@@ -157,7 +157,7 @@ public class FieldDecorator implements IDecorator {
         Object value = getValue(data.getObject());
 
         cellContainer.add(new Label(componentId, getFormatValue(data.getObject())).setEscapeModelStrings(false));
-        cellContainer.add(new AttributeModifier("title", new Model<String>((value == null ? "No data" : value.toString()))));
+        cellContainer.add(new AttributeModifier("title", new Model<String>(value == null ? "No data" : value.toString())));
 
         if (cssClass != null) {
             cellContainer.add(new AttributeModifier("class", new Model<String>(cssClass)));

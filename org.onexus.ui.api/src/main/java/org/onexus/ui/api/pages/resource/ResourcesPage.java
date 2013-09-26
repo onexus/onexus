@@ -192,7 +192,7 @@ public class ResourcesPage extends BaseResourcePage {
 
                     links = new ArrayList<String>(oriItems.size());
                     Resource resource = model.getWrappedModel().getObject();
-                    String projectUri = (resource == null ? null : resource.getORI().getProjectUrl().toString());
+                    String projectUri = resource == null ? null : resource.getORI().getProjectUrl().toString();
 
                     links.add(projectUri);
                     for (int i = 1; i < oriItems.size(); i++) {
@@ -225,7 +225,7 @@ public class ResourcesPage extends BaseResourcePage {
 
                     // Divider
                     boolean showDivider = !(getModelObject().size() - 1 == item.getIndex());
-                    Label divider = new Label("divider", (item.getIndex() == 0 ? "?" : "/"));
+                    Label divider = new Label("divider", item.getIndex() == 0 ? "?" : "/");
                     item.add(divider.setVisible(showDivider));
                     item.add(link);
 

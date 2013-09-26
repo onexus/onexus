@@ -172,7 +172,7 @@ public final class LinkUtils {
 
     public static String getToFieldName(String fieldLink) {
         String values[] = fieldLink.split(FIELDS_SEPARATOR);
-        return (values.length == 2 ? values[1].trim() : values[0].trim());
+        return values.length == 2 ? values[1].trim() : values[0].trim();
     }
 
     public static String getFromFieldName(String fieldLink) {

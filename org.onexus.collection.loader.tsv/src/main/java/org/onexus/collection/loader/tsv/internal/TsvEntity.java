@@ -118,7 +118,7 @@ public class TsvEntity implements IEntity {
 
             // TODO use adapter factory as in SQL manager
             if (fieldClass.equals(Boolean.class)) {
-                return Boolean.valueOf((value.trim().equalsIgnoreCase("1")));
+                return Boolean.valueOf(value.trim().equalsIgnoreCase("1"));
             }
 
             // For number types return null if the value is empty

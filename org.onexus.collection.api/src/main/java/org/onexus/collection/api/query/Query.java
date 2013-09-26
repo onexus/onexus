@@ -82,7 +82,7 @@ public class Query implements Serializable {
         if (select.containsKey(key) && select.get(key) != null) {
             select.get(key).addAll(fieldNames);
         } else {
-            select.put(key, (fieldNames == null ? null : new ArrayList<String>(fieldNames)));
+            select.put(key, fieldNames == null ? null : new ArrayList<String>(fieldNames));
         }
     }
 

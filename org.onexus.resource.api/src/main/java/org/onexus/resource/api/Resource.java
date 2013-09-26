@@ -48,7 +48,7 @@ public abstract class Resource implements IMetadata, Serializable {
         String oriStr = ori.toString();
         int lsep = oriStr.lastIndexOf('/');
         int lquestion = oriStr.indexOf('?');
-        int last = (lquestion != -1 && lquestion > lsep ? lquestion : lsep);
+        int last = lquestion != -1 && lquestion > lsep ? lquestion : lsep;
         return oriStr.substring(last + 1);
     }
 

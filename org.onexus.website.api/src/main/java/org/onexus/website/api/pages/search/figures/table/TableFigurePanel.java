@@ -62,7 +62,7 @@ public class TableFigurePanel extends Panel {
     public TableFigurePanel(String id, ORI parentOri, IEntitySelection selection, TableFigureConfig config) {
         super(id);
 
-        int limit = (config.getLimit() == null ? Integer.MAX_VALUE : config.getLimit());
+        int limit = config.getLimit() == null ? Integer.MAX_VALUE : config.getLimit();
 
         // Create data provider
         dataProvider = new EntitiesRowProvider(

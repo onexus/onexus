@@ -67,17 +67,16 @@ public class StringHeader implements IHeader {
 
     @Override
     public String getTitle() {
-        return (title == null ? getLabel() : title);
+        return title == null ? getLabel() : title;
     }
 
     public String getFormatedLabel() {
-        return (textFormater == null ? getLabel() : textFormater
-                .format(getLabel()));
+        return textFormater == null ? getLabel() : textFormater.format(getLabel());
     }
 
     @Override
     public IHeader getParentHeader() {
-        return (parentHeader == null ? new EmptyHeader() : parentHeader);
+        return parentHeader == null ? new EmptyHeader() : parentHeader;
     }
 
     @Override

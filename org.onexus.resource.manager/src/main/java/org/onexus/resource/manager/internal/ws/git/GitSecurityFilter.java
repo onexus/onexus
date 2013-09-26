@@ -153,7 +153,7 @@ public class GitSecurityFilter implements Filter {
             url = url.substring(1);
         }
 
-        return url + (StringUtils.isEmptyOrNull(params) ? "" : ("?" + params));
+        return url + (StringUtils.isEmptyOrNull(params) ? "" : "?" + params);
     }
 
     private String extractRepositoryName(String url) {

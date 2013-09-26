@@ -38,7 +38,7 @@ public final class NumericTools {
         buf[--charPos] = 'x';
         buf[--charPos] = '0';
 
-        str.append(buf, charPos, (10 - charPos));
+        str.append(buf, charPos, 10 - charPos);
     }
 
     public static void toHexString(StringBuilder str, long i) {
@@ -51,6 +51,6 @@ public final class NumericTools {
         buf[--charPos] = 'x';
         buf[--charPos] = '0';
 
-        str.append(buf, charPos, (18 - charPos));
+        str.append(buf, charPos, 18 - charPos);
     }
 }

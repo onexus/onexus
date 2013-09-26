@@ -28,8 +28,12 @@ public class CollectionHeader extends ElementHeader {
     private Collection collection;
 
     public CollectionHeader(Collection dataType) {
-        super((dataType == null ? null : dataType), (dataType == null ? null
-                : new StringHeader(null)), new StringFormater(30, false));
+        super(
+                dataType == null ? null : dataType,
+                dataType == null ? null : new StringHeader(null),
+                new StringFormater(30, false)
+        );
+
         this.collection = dataType;
     }
 

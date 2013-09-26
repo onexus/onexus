@@ -26,8 +26,6 @@ import org.onexus.data.api.utils.EmptyDataStreams;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.exceptions.ResourceNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 

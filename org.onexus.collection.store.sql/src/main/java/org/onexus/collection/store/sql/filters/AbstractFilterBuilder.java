@@ -66,7 +66,7 @@ public abstract class AbstractFilterBuilder<T extends Filter> implements FilterB
             String msg = "Error encoding value '" + value + "' as " + type.getSimpleName() + "";
             log.error(msg);
             log.error(e.getMessage());
-            throw new RuntimeException(msg);
+            throw new RuntimeException(msg, e);
         }
 
     }

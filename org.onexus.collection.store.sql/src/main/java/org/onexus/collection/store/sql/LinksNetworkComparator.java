@@ -123,7 +123,7 @@ public class LinksNetworkComparator implements Comparator<ORI> {
         // Check derived dependencies
         int minDerived = -1;
         for (FieldLink link : links) {
-            ORI nextCollection = (link.getToCollection().equals(a) ? link.getFromCollection() : link.getToCollection());
+            ORI nextCollection = link.getToCollection().equals(a) ? link.getFromCollection() : link.getToCollection();
             int derived = depend(nextCollection, b, depth + 1, visitedNodes);
             if (derived != -1 && (minDerived == -1 || derived < minDerived)) {
                 minDerived = derived;

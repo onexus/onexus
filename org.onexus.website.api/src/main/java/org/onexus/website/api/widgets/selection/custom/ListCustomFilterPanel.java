@@ -40,7 +40,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 
 public abstract class ListCustomFilterPanel extends AbstractCustomFilterPanel {
 

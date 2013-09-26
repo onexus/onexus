@@ -82,7 +82,7 @@ public abstract class AbstractWizard extends Wizard {
                 @Override
                 public boolean isEnabled() {
                     IWizardStep activeStep = getWizardModel().getActiveStep();
-                    return ((activeStep != null) && getWizardModel().isLastStep(activeStep) && activeStep.isComplete());
+                    return activeStep!=null && getWizardModel().isLastStep(activeStep) && activeStep.isComplete();
                 }
 
             });

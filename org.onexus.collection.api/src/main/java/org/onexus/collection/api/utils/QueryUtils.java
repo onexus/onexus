@@ -66,7 +66,7 @@ public final class QueryUtils {
 
     public static ORI getCollectionOri(Query query, String collectionAlias) {
         ORI collectionUri = query.getDefine().get(collectionAlias);
-        return (collectionUri == null ? null : collectionUri.toAbsolute(query.getOn()));
+        return collectionUri == null ? null : collectionUri.toAbsolute(query.getOn());
 
     }
 
@@ -99,7 +99,7 @@ public final class QueryUtils {
     }
 
     public static Filter joinAnd(Iterable<Filter> filters) {
-        return (filters == null ? null : joinAnd(filters.iterator()));
+        return filters == null ? null : joinAnd(filters.iterator());
     }
 
     public static void or(Query query, Filter newFilter) {
@@ -131,7 +131,7 @@ public final class QueryUtils {
     }
 
     public static Filter joinOr(Iterable<Filter> filters) {
-        return (filters == null ? null : joinOr(filters.iterator()));
+        return filters == null ? null : joinOr(filters.iterator());
     }
 
 

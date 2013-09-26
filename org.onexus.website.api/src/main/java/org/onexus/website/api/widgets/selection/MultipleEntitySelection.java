@@ -21,7 +21,6 @@ import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
-import org.onexus.resource.api.IResourceSerializer;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.browser.IEntitySelection;
@@ -166,7 +165,7 @@ public class MultipleEntitySelection implements IEntitySelection {
         str.append(ori).append(SEPARATOR);
         str.append(config.getDefine()).append(SEPARATOR);
         str.append(config.getWhere()).append(SEPARATOR);
-        str.append((config.isDeletable() ? "d" : ""));
+        str.append(config.isDeletable() ? "d" : "");
         return str.toString();
 
     }

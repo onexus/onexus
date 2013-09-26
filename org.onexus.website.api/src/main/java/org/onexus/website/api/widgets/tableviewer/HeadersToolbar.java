@@ -83,7 +83,7 @@ public class HeadersToolbar extends AbstractToolbar {
         int col = 0;
         for (final IColumn<T, S> c : columns) {
 
-            String placement = (col == 0 ? "right" : (col + 1 == columns.size() ? "left" : "top"));
+            String placement = col == 0 ? "right" : (col + 1 == columns.size() ? "left" : "top");
 
             // Process only Track columns
             CollectionColumn column = null;
@@ -141,10 +141,10 @@ public class HeadersToolbar extends AbstractToolbar {
             }
 
             IHeader firstHeader = column.getHeaderDecorator();
-            IHeader secondHeader = (firstHeader == null ? null : firstHeader
-                    .getParentHeader());
-            IHeader thirdHeader = (secondHeader == null ? null : secondHeader
-                    .getParentHeader());
+            IHeader secondHeader = firstHeader == null ? null : firstHeader
+                    .getParentHeader();
+            IHeader thirdHeader = secondHeader == null ? null : secondHeader
+                    .getParentHeader();
 
             WebMarkupContainer item = new WebMarkupContainer(
                     headers.newChildId());
@@ -194,7 +194,7 @@ public class HeadersToolbar extends AbstractToolbar {
                 thirdTitle = thirdHeader.getLabel();
             }
 
-            if ((secondHeaderContainer != null)
+            if (secondHeaderContainer!=null
                     && ((lastSecondHeaderTitle == null && secondTitle == null) || (lastSecondHeaderTitle != null
                     && secondTitle != null && lastSecondHeaderTitle
                     .equals(secondTitle)))) {
@@ -204,14 +204,12 @@ public class HeadersToolbar extends AbstractToolbar {
                                 .toString(lastSecondHeaderColspan))));
 
             } else {
+
                 // Add parentItem
                 WebMarkupContainer parentItem = new WebMarkupContainer(
                         headersParents.newChildId());
                 headersParents.add(parentItem);
                 secondHeaderContainer = new WebMarkupContainer("header");
-                // secondHeaderContainer.add(secondHeader.getHeader("label"));
-                // secondHeaderContainer.add(secondHeader.getHelp("help"));
-                // //secondHeader.getHeader("label").getDefaultModelObjectAsString()
                 decorateSecondParentHeader(secondHeaderContainer, secondHeader,
                         column);
 
@@ -237,7 +235,7 @@ public class HeadersToolbar extends AbstractToolbar {
             }
 
             // GrandParents
-            if ((thirdHeaderContainer != null)
+            if (thirdHeaderContainer!=null
                     && ((lastThirdHeaderTitle == null && thirdTitle == null) || (lastThirdHeaderTitle != null
                     && thirdTitle != null && lastThirdHeaderTitle
                     .equals(thirdTitle)))) {

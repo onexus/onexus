@@ -103,7 +103,7 @@ public class ListDecorator extends FieldDecorator {
             cellContainer.add(new EmptyPanel(componentId));
         }
 
-        cellContainer.add(new AttributeModifier("title", new Model<String>((description == null ? "No data" : description.toString()))));
+        cellContainer.add(new AttributeModifier("title", new Model<String>(description == null ? "No data" : description.toString())));
     }
 
 

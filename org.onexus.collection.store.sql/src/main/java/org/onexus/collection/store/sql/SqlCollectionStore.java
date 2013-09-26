@@ -91,8 +91,7 @@ public abstract class SqlCollectionStore implements ICollectionStore {
     public boolean isRegistered(ORI collectionURI) {
 
         String tableName = getProperty(collectionURI.toString());
-
-        return (tableName != null);
+        return tableName != null;
 
     }
 
@@ -159,12 +158,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             LOGGER.error(msg, e);
             throw new RuntimeException(msg, e);
         } finally {
-            if (conn != null)
+            if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
                     LOGGER.error("Closing connection", e);
                 }
+            }
         }
 
     }
@@ -194,12 +194,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             LOGGER.error(msg, e);
             throw new RuntimeException(msg, e);
         } finally {
-            if (conn != null)
+            if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
                     LOGGER.error("Closing connection", e);
                 }
+            }
         }
 
     }
@@ -215,12 +216,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             LOGGER.error("Error getRegistered()", e);
             return Collections.EMPTY_LIST;
         } finally {
-            if (conn != null)
+            if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
                     LOGGER.error("Closing connection", e);
                 }
+            }
         }
 
     }
@@ -301,12 +303,13 @@ public abstract class SqlCollectionStore implements ICollectionStore {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (conn != null)
+            if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
                     LOGGER.error("Closing connection", e);
                 }
+            }
         }
 
     }
@@ -337,14 +340,14 @@ public abstract class SqlCollectionStore implements ICollectionStore {
             LOGGER.error(msg, e);
             throw new RuntimeException(msg, e);
         } finally {
-            if (conn != null)
+            if (conn != null) {
                 try {
                     conn.close();
                 } catch (SQLException e) {
                     LOGGER.error("Closing connection", e);
                 }
+            }
         }
-
     }
 
     public Collection getCollection(ORI collectionURI) {

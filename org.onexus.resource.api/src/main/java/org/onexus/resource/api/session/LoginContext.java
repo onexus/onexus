@@ -69,7 +69,7 @@ public class LoginContext implements Serializable {
     }
 
     public boolean isAnonymous() {
-        return (userName == null);
+        return userName==null;
     }
 
     public String getUserName() {

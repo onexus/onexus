@@ -27,7 +27,6 @@ import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.pages.resource.ResourceModel;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,7 +40,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
     @PaxWicketBean(name = "resourceManager")
     public IResourceManager resourceManager;
 
-    private static final Iterator<Resource> EMPTY_ITERATOR = (new ArrayList<Resource>(0)).iterator();
+    private static final Iterator<Resource> EMPTY_ITERATOR = Collections.emptyIterator();
 
     public ResourceTreeProvider(IModel<? extends Resource> resource) {
         super();
@@ -128,8 +127,8 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
             }
 
             // First folders
-            boolean f1 = (o1 instanceof Folder);
-            boolean f2 = (o2 instanceof Folder);
+            boolean f1 = o1 instanceof Folder;
+            boolean f2 = o2 instanceof Folder;
 
             if (f1 && !f2) {
                 return -1;
@@ -145,7 +144,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
 
         @Override
         public boolean equals(Object obj) {
-            return (obj instanceof ResourceComparator);
+            return obj instanceof ResourceComparator;
         }
     }
 }

@@ -177,12 +177,13 @@ public class TsvEntitySet extends TsvEntity implements IEntitySet {
             }
 
         } catch (IOException e) {
-            if (bufferedReader != null)
+            if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e1) {
                     LOGGER.error("Error closing the reader", e1);
                 }
+            }
         }
 
         return null;

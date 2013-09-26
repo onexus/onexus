@@ -37,12 +37,12 @@ public class TextFormaterPropertyModel extends PropertyModel<String> {
     @Override
     public String getObject() {
         Object value = super.getObject();
-        return (value == null ? null : format(value, maxLength, addDots));
+        return value == null ? null : format(value, maxLength, addDots);
     }
 
     public static String format(final Object value, int maxLength, boolean addDots) {
 
-        String formatedValue = (value == null ? "" : value.toString());
+        String formatedValue = value == null ? "" : value.toString();
 
         if (formatedValue.length() > maxLength) {
             formatedValue = formatedValue.substring(0, maxLength)

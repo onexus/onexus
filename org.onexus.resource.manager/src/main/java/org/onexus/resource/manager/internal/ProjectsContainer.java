@@ -133,7 +133,7 @@ public class ProjectsContainer {
 
                 String projectProperty[] = properties.getProperty(projectUrl).split(",");
                 projectPath = projectProperty[0];
-                projectName = (projectProperty.length == 2 ? projectProperty[1] : Integer.toHexString(projectUrl.hashCode()));
+                projectName = projectProperty.length == 2 ? projectProperty[1] : Integer.toHexString(projectUrl.hashCode());
 
                 File projectFolder = new File(projectPath);
 

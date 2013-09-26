@@ -64,7 +64,7 @@ public class OnexusWebSession extends AbstractAuthenticatedWebSession implements
 
     @Override
     public boolean isSignedIn() {
-        return (LoginContext.get().getUserName() != null);
+        return LoginContext.get().getUserName() != null;
     }
 
     public static OnexusWebSession get() {

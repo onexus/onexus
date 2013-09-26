@@ -86,7 +86,7 @@ public class ElementHeader implements IHeader {
 
     @Override
     public boolean isSortable() {
-        return (sortProperty != null);
+        return sortProperty != null;
     }
 
     public boolean isFilterable() {

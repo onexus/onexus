@@ -47,17 +47,17 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     protected Query getQuery() {
         PageStatus pageStatus = findParentStatus(statusModel, PageStatus.class);
-        return (pageStatus == null ? null : pageStatus.buildQuery(getWebsiteOri()));
+        return pageStatus == null ? null : pageStatus.buildQuery(getWebsiteOri());
     }
 
     protected ORI getWebsiteOri() {
         WebsiteStatus websiteStatus = findParentStatus(WebsiteStatus.class);
-        return (websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent());
+        return websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent();
     }
 
     protected ORI getPageBaseOri() {
         BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
-        return (pageStatus == null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase()));
+        return pageStatus == null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase());
     }
 
     protected <T> T findParentStatus(Class<T> statusClass) {

@@ -52,7 +52,7 @@ public abstract class BinaryFilter extends Filter {
     @Override
     public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
 
-        String prevTabs = (prettyPrint ? endingTabs(oql) : "");
+        String prevTabs = prettyPrint ? endingTabs(oql) : "";
         oql.append('(');
         oql.append(prettyPrint ? "\n\t" + prevTabs : " ");
         if (left != null) {

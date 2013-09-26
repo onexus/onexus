@@ -44,8 +44,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -130,7 +128,7 @@ public class SignInPanel extends Panel {
             // get username and password from persistence store
             String[] data = authenticationStrategy.load();
 
-            if ((data != null) && (data.length > 1)) {
+            if (data!=null && data.length>1) {
                 // try to sign in the user
                 if (signIn(data[0], data[1])) {
                     username = data[0];
@@ -277,7 +275,7 @@ public class SignInPanel extends Panel {
          * @see org.apache.wicket.markup.html.form.Form#onSubmit()
          */
         @Override
-        public final void onSubmit() {
+        public void onSubmit() {
             IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
                     .getAuthenticationStrategy();
 

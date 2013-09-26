@@ -86,8 +86,8 @@ public class LoginPanel extends Panel {
 
         }
 
-        link.add(new AttributeModifier("title", (ctx.isAnonymous() ? "Sign in" : "Account Details")));
-        link.add(new Label("username", (ctx.isAnonymous() ? "Sign in" : ctx.getUserName())));
+        link.add(new AttributeModifier("title", ctx.isAnonymous() ? "Sign in" : "Account Details"));
+        link.add(new Label("username", ctx.isAnonymous() ? "Sign in" : ctx.getUserName()));
 
         Component signOut;
         if (!WebsiteApplication.get().usePersonSignIn() || ctx.isAnonymous()) {

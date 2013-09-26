@@ -66,9 +66,9 @@ public class ColorUtils {
             tmpcolor = tmpcolor.substring(1, tmpcolor.length() - 1);
             String rgb[] = tmpcolor.split(",");
 
-            r = (Integer.valueOf(rgb[0])).intValue();
-            g = (Integer.valueOf(rgb[1])).intValue();
-            b = (Integer.valueOf(rgb[2])).intValue();
+            r = Integer.valueOf(rgb[0]).intValue();
+            g = Integer.valueOf(rgb[1]).intValue();
+            b = Integer.valueOf(rgb[2]).intValue();
 
             return new Color(r, g, b);
         } catch (Exception e) {

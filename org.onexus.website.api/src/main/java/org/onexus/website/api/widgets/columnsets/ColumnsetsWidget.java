@@ -49,7 +49,7 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
         final IModel<ColumnSet> csModel = new Model<ColumnSet>();
         TableViewerStatus status = getTableViewerStatus();
 
-        int cs = (status == null ? 0 : status.getCurrentColumnSet());
+        int cs = status == null ? 0 : status.getCurrentColumnSet();
         csModel.setObject(getTableViewerConfig().getColumnSets().get(cs));
 
         form.add(new AjaxColumnSetSelector("columnsets", csModel, getTableViewerConfig().getColumnSets()));

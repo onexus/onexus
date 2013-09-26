@@ -77,9 +77,11 @@ public class BoxesPanel extends Panel {
                 boxes.add(new MainLinksBox(boxes.newChildId(), links));
             }
 
-            for (FigureConfig figure : type.getFigures()) {
-                if (!Strings.isEmpty(figure.getVisible()) && "NONE".equalsIgnoreCase(figure.getVisible())) {
-                    boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, null));
+            if (type.getFigures() != null) {
+                for (FigureConfig figure : type.getFigures()) {
+                    if (!Strings.isEmpty(figure.getVisible()) && "NONE".equalsIgnoreCase(figure.getVisible())) {
+                        boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, null));
+                    }
                 }
             }
 
@@ -88,7 +90,7 @@ public class BoxesPanel extends Panel {
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
                 // Single entity selection
-                IEntityTable table = getSingleEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
+                IEntityTable table = getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), true);
 
                 boolean found;
                 if (table.next()) {
@@ -97,7 +99,7 @@ public class BoxesPanel extends Panel {
 
                     // If we don't found an exact match, look for a similar one
                     table.close();
-                    table = getSingleEntityTable(collectionManager, type, collectionUri, status.getSearch(), false);
+                    table = getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), false);
                     found = table.next();
                 }
 
@@ -107,9 +109,11 @@ public class BoxesPanel extends Panel {
 
                     boxes.add(new LinksBox(boxes.newChildId(), status, entity));
 
-                    for (FigureConfig figure : type.getFigures()) {
-                        if (Strings.isEmpty(figure.getVisible()) || "SINGLE".equalsIgnoreCase(figure.getVisible())) {
-                            boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, new SingleEntitySelection(entity)));
+                    if (type.getFigures() != null) {
+                        for (FigureConfig figure : type.getFigures()) {
+                            if (Strings.isEmpty(figure.getVisible()) || "SINGLE".equalsIgnoreCase(figure.getVisible())) {
+                                boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, new SingleEntitySelection(entity)));
+                            }
                         }
                     }
 
@@ -153,7 +157,7 @@ public class BoxesPanel extends Panel {
                     filterConfig.setWhere(where.toString());
                 }
 
-                IEntityTable table = getMultipleEntityTable(collectionManager, type, collectionUri, filterConfig);
+                IEntityTable table = getMultipleEntityTable(collectionManager, type, collectionUri, baseUri, filterConfig);
                 boxes.add(new LinksBox(boxes.newChildId(), status, collectionUri, filterConfig, new EntityIterator(table, collectionUri)) {
                     @Override
                     protected void onNotFound(Set<String> valuesNotFound) {
@@ -170,14 +174,15 @@ public class BoxesPanel extends Panel {
                     }
                 });
 
-                for (FigureConfig figure : type.getFigures()) {
-                    if (Strings.isEmpty(figure.getVisible()) || "LIST".equalsIgnoreCase(figure.getVisible())) {
-                        boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, new MultipleEntitySelection(filterConfig)));
+                if (type.getFigures() != null) {
+                    for (FigureConfig figure : type.getFigures()) {
+                        if (Strings.isEmpty(figure.getVisible()) || "LIST".equalsIgnoreCase(figure.getVisible())) {
+                            boxes.add(new FigureBox(boxes.newChildId(), figure, baseUri, new MultipleEntitySelection(filterConfig)));
+                        }
                     }
                 }
             }
         }
-
 
         add(boxes);
 
@@ -186,12 +191,14 @@ public class BoxesPanel extends Panel {
     protected void onDisambiguation(AjaxRequestTarget target, String query) {
     }
 
-    private static IEntityTable getMultipleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, FilterConfig filter) {
+    private static IEntityTable getMultipleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, ORI baseOri, FilterConfig filter) {
 
         Query query = new Query();
+        query.setOn(baseOri);
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
         query.setFrom(collectionAlias);
+
 
         query.addSelect(collectionAlias, null);
 
@@ -205,9 +212,10 @@ public class BoxesPanel extends Panel {
     }
 
 
-    public static IEntityTable getSingleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, String search, boolean equal) {
+    public static IEntityTable getSingleEntityTable(ICollectionManager collectionManager, SearchType type, ORI collectionUri, ORI baseUri, String search, boolean equal) {
 
         Query query = new Query();
+        query.setOn(baseUri);
 
         String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
         query.setFrom(collectionAlias);

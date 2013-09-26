@@ -90,10 +90,10 @@ public class FigureBox extends Panel {
         if (searchLink != null) {
 
             // Create link url
-            String prefix = (getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty()) ? WebsiteApplication.get().getWebPath() + "/" : "";
+            String prefix = getPage().getPageParameters().get(Website.PARAMETER_CURRENT_PAGE).isEmpty() ? WebsiteApplication.get().getWebPath() + "/" : "";
             String url = searchLink.getUrl();
             if (selection != null) {
-                String parameter = (selection instanceof SingleEntitySelection ? "pf=" : "pfc=");
+                String parameter = selection instanceof SingleEntitySelection ? "pf=" : "pfc=";
                 String varFilter = parameter + UrlEncoder.QUERY_INSTANCE.encode(selection.toUrlParameter(false, null), "UTF-8");
                 url = url.replace("$filter", varFilter);
             }

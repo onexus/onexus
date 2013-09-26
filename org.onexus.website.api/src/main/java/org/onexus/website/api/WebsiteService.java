@@ -204,7 +204,7 @@ public class WebsiteService implements IWebsiteService {
 
         if (!Strings.isEmpty(signInPageId) && signInPages != null) {
             for (ISignInPage signInPage : signInPages) {
-                if (signInPageId.equals((signInPage.getId()))) {
+                if (signInPageId.equals(signInPage.getId())) {
                     return signInPage.getPageClass();
                 }
             }

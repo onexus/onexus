@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets.tableviewer.headers;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
@@ -61,7 +60,7 @@ public class FieldHeader extends ElementHeader {
             return defaultLabel;
         }
         String label = field.getLabel();
-        return (label == null ? field.getId() : label);
+        return label == null ? field.getId() : label;
     }
 
     @Override
@@ -72,7 +71,7 @@ public class FieldHeader extends ElementHeader {
         }
 
         String title = field.getTitle();
-        return (title == null ? field.getId() : title);
+        return title == null ? field.getId() : title;
     }
 
     @Override

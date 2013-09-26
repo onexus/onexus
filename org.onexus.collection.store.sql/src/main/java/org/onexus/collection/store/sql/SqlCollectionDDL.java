@@ -51,7 +51,7 @@ public class SqlCollectionDDL {
         this.sqlDialect = sqlDialect;
         this.collection = collection;
         this.columnInfos = new HashMap<String, ColumnInfo>();
-        this.tableName = (tableName == null ? convertURItoTableName(collection) : tableName);
+        this.tableName = tableName == null ? convertURItoTableName(collection) : tableName;
 
         prepareFieldInfoMap(collection);
         prepareCreateTable(collection);

@@ -39,19 +39,19 @@ public abstract class Filter implements Serializable {
     }
 
     public static Long convertToLong(String oqlValue) {
-        return (oqlValue == null ? null : Long.decode(oqlValue));
+        return oqlValue == null ? null : Long.decode(oqlValue);
     }
 
     public static String convertToString(String oqlValue) {
-        return (oqlValue == null ? null : oqlValue);
+        return oqlValue == null ? null : oqlValue;
     }
 
     public static Date convertToDate(String oqlValue) {
-        return (oqlValue == null ? null : Date.valueOf(oqlValue));
+        return oqlValue == null ? null : Date.valueOf(oqlValue);
     }
 
     public static Double convertToDouble(String oqlValue) {
-        return (oqlValue == null ? null : Double.valueOf(oqlValue));
+        return oqlValue == null ? null : Double.valueOf(oqlValue);
     }
 
     public static String endingTabs(StringBuilder oql) {

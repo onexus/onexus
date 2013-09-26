@@ -51,7 +51,6 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
     private CustomFilter customFilter;
     private ORI parentOri;
 
-    private static final Random RANDOM = new Random();
     private static final List<String> OPERATIONS = Arrays.asList(new String[]{"<", ">", "<=", ">=", "=", "!="});
 
     @PaxWicketBean(name = "resourceManager")

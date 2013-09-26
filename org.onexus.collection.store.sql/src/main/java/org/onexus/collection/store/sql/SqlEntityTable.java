@@ -89,7 +89,7 @@ public class SqlEntityTable implements IEntityTable {
         }
 
         try {
-            boolean hasNext = (dataRS == null ? false : dataRS.next());
+            boolean hasNext = dataRS == null ? false : dataRS.next();
 
             if (!hasNext) {
                 close();
@@ -133,12 +133,15 @@ public class SqlEntityTable implements IEntityTable {
     @Override
     public void close() {
         try {
-            if (dataRS != null && !dataRS.isClosed())
+            if (dataRS != null && !dataRS.isClosed()) {
                 dataRS.close();
-            if (dataSt != null && !dataSt.isClosed())
+            }
+            if (dataSt != null && !dataSt.isClosed()) {
                 dataSt.close();
-            if (dataConn != null && !dataConn.isClosed())
+            }
+            if (dataConn != null && !dataConn.isClosed()) {
                 dataConn.close();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

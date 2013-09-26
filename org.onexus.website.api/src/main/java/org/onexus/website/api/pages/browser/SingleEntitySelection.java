@@ -173,8 +173,8 @@ public class SingleEntitySelection implements IEntitySelection {
 
         str.append(uri).append(SEPARATOR);
         str.append(entityId).append(SEPARATOR);
-        str.append((deletable ? "d" : ""));
-        str.append((enable ? "e" : ""));
+        str.append(deletable ? "d" : "");
+        str.append(enable ? "e" : "");
 
         return str.toString();
     }

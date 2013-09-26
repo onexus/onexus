@@ -137,7 +137,7 @@ public class SelectionPanel extends EventPanel {
 
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
-                IEntityTable table = BoxesPanel.getSingleEntityTable(collectionManager, type, collectionUri, status.getSearch(), true);
+                IEntityTable table = BoxesPanel.getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), true);
                 if (table.next()) {
 
                     // Single entity selection
@@ -280,12 +280,12 @@ public class SelectionPanel extends EventPanel {
 
     protected Query getQuery() {
         PageStatus pageStatus = findParentStatus(getDefaultModel(), PageStatus.class);
-        return (pageStatus == null ? null : pageStatus.buildQuery(getBaseUri()));
+        return pageStatus == null ? null : pageStatus.buildQuery(getBaseUri());
     }
 
     protected ORI getBaseUri() {
         WebsiteStatus websiteStatus = getWebsiteStatus();
-        return (websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent());
+        return websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent();
     }
 
     protected WebsiteStatus getWebsiteStatus() {

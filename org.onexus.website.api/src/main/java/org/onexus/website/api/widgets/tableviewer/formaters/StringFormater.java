@@ -35,7 +35,7 @@ public class StringFormater implements ITextFormater {
 
     public static String format(final Object value, int maxLength, boolean addDots) {
 
-        String formatedValue = (value == null ? "" : value.toString());
+        String formatedValue = value == null ? "" : value.toString();
 
         if (formatedValue.length() > maxLength) {
             formatedValue = formatedValue.substring(0, maxLength)

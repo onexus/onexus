@@ -48,7 +48,7 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
 
     public C getConfig() {
         S status = getStatus();
-        return (status == null ? null : (C) status.getConfig());
+        return status == null ? null : (C) status.getConfig();
     }
 
     protected boolean isEmbed() {

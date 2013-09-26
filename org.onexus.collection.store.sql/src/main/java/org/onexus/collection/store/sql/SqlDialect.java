@@ -126,10 +126,14 @@ public class SqlDialect {
             st = conn.createStatement();
             st.execute(CREATE_TABLE_SQL);
         } finally {
-            if (st != null)
+
+            if (st != null) {
                 st.close();
-            if (conn != null && closeConnection)
+            }
+
+            if (conn != null && closeConnection) {
                 conn.close();
+            }
         }
     }
 
@@ -146,10 +150,13 @@ public class SqlDialect {
             }
 
         } finally {
-            if (rs != null)
+            if (rs != null){
                 rs.close();
-            if (pstmt != null)
+            }
+
+            if (pstmt != null) {
                 pstmt.close();
+            }
 
         }
         return keys;
@@ -169,10 +176,12 @@ public class SqlDialect {
             }
 
         } finally {
-            if (rs != null)
+            if (rs != null){
                 rs.close();
-            if (pstmt != null)
+            }
+            if (pstmt != null){
                 pstmt.close();
+            }
         }
 
         return map;
@@ -192,8 +201,9 @@ public class SqlDialect {
             pstmt.setString(2, version);
             pstmt.executeUpdate();
         } finally {
-            if (pstmt != null)
+            if (pstmt != null) {
                 pstmt.close();
+            }
         }
     }
 
@@ -206,8 +216,9 @@ public class SqlDialect {
             pstmt.execute();
             pstmt.close();
         } finally {
-            if (pstmt != null)
+            if (pstmt != null) {
                 pstmt.close();
+            }
         }
     }
 
@@ -228,10 +239,13 @@ public class SqlDialect {
             return rs.getString(1);
 
         } finally {
-            if (rs != null)
+            if (rs != null) {
                 rs.close();
-            if (pstmt != null)
+            }
+
+            if (pstmt != null) {
                 pstmt.close();
+            }
         }
     }
 
@@ -243,8 +257,9 @@ public class SqlDialect {
             st = conn.createStatement();
             st.execute(query);
         } finally {
-            if (st != null)
+            if (st != null) {
                 st.close();
+            }
         }
     }
 

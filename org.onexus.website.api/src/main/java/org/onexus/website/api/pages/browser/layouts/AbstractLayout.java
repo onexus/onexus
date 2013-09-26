@@ -38,7 +38,7 @@ public class AbstractLayout extends Panel {
 
     public PageConfig getPageConfig() {
         BrowserPageStatus status = getPageStatus();
-        return (status == null ? null : status.getConfig());
+        return status == null ? null : status.getConfig();
     }
 
     public BrowserPageStatus getPageStatus() {

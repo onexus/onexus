@@ -102,15 +102,14 @@ public class CtDecorator extends FieldDecorator {
 
     protected String getTooltip(IEntity data) {
         Object value = data.get(getField().getId());
-        return (value == null ? "" : value.toString());
+        return value == null ? "" : value.toString();
     }
 
     @Override
     public String getColor(IEntity data) {
         Object value = getValue(data);
 
-        return (value == null ? EMPTY_COLOR : COLORS.get(value.toString()
-                .toUpperCase()));
+        return value == null ? EMPTY_COLOR : COLORS.get(value.toString().toUpperCase());
     }
 
     @Override
@@ -128,12 +127,9 @@ public class CtDecorator extends FieldDecorator {
                              String componentId, IModel<IEntity> data) {
         IEntity entity = data.getObject();
 
-        Object value = (entity != null ? entity.get(getField()
-                .getId()) : null);
-        String shortName = (value != null ? SHORT_NAMES.get(value.toString()
-                .toUpperCase()) : "");
-        shortName = (shortName == null ? value.toString().toLowerCase()
-                : shortName);
+        Object value = entity != null ? entity.get(getField().getId()) : null;
+        String shortName = value != null ? SHORT_NAMES.get(value.toString().toUpperCase()) : "";
+        shortName = shortName == null ? value.toString().toLowerCase() : shortName;
         Label empty = new Label(componentId, shortName);
         // empty.setVisible(false);
 

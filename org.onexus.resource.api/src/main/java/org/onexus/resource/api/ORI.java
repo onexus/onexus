@@ -40,7 +40,7 @@ public class ORI implements Serializable {
 
     public ORI(String projectUrl, String path) {
         this.projectUrl = projectUrl;
-        this.path = (path == null || path.isEmpty()) ? null : path;
+        this.path = path == null || path.isEmpty() ? null : path;
 
         if (projectUrl != null && this.path != null && this.path.charAt(0) != SEPARATOR) {
             this.path = '/' + this.path;
@@ -125,8 +125,8 @@ public class ORI implements Serializable {
     }
 
     public ORI getParent() {
-        int sMark = (path == null ? -1 : path.lastIndexOf(ORI.SEPARATOR));
-        return new ORI(projectUrl, (sMark < 1 ? null : path.substring(0, sMark)));
+        int sMark = path == null ? -1 : path.lastIndexOf(ORI.SEPARATOR);
+        return new ORI(projectUrl, sMark < 1 ? null : path.substring(0, sMark));
     }
 
 
@@ -149,7 +149,7 @@ public class ORI implements Serializable {
         }
 
         if (path == null) {
-            return (childResource.path.lastIndexOf(SEPARATOR) <= 0);
+            return childResource.path.lastIndexOf(SEPARATOR) <= 0;
         }
 
         if (!childResource.path.startsWith(path)) {
