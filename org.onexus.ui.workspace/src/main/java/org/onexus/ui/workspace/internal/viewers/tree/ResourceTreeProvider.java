@@ -17,6 +17,7 @@
  */
 package org.onexus.ui.workspace.internal.viewers.tree;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.Folder;
@@ -40,7 +41,7 @@ public class ResourceTreeProvider implements ITreeProvider<Resource> {
     @PaxWicketBean(name = "resourceManager")
     public IResourceManager resourceManager;
 
-    private static final Iterator<Resource> EMPTY_ITERATOR = Collections.emptyIterator();
+    private static final Iterator<Resource> EMPTY_ITERATOR = CollectionUtils.EMPTY_COLLECTION.iterator();
 
     public ResourceTreeProvider(IModel<? extends Resource> resource) {
         super();
