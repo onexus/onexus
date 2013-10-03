@@ -24,6 +24,10 @@ public class DefaultResourceRegister implements IResourceRegister {
     public DefaultResourceRegister() {
     }
 
+    public DefaultResourceRegister(IResourceSerializer serializer) {
+        this.serializer = serializer;
+    }
+
     @Override
     public void register(Class<?> resourceType) {
         serializer.register(resourceType);

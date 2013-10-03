@@ -1,0 +1,36 @@
+<website>
+    <pages>
+        <browser>
+            <id>browser</id>
+            <label>Browser page</label>
+            <tabs>
+                <tab>
+                    <id>test</id>
+                    <title>Test tab</title>
+                    <view>
+                        <title>view1</title>
+                        <topRight>button</topRight>
+                        <top>button</top>
+                        <main>text</main>
+                        <left>button</left>
+                    </view>
+                </tab>
+            </tabs>
+            <widgets>
+                <widget-text>
+                    <id>text</id>
+                    <title>Title</title>
+                    <text>This is the text</text>
+                    <details>This are the details</details>
+                </widget-text>
+                <widget-text>
+                    <id>button</id>
+                    <button>button</button>
+                    <title>Title</title>
+                    <text>This is the text</text>
+                    <details>This are the details</details>
+                </widget-text>
+            </widgets>
+        </browser>
+    </pages>
+</website>

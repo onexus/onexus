@@ -30,6 +30,15 @@ public class DefaultPageManager implements IPageManager {
 
     private List<IPageCreator> creators;
 
+    public DefaultPageManager() {
+    }
+
+    public DefaultPageManager(List<? extends IPageCreator> creators, IResourceRegister resourceRegister) {
+        this.creators = (List<IPageCreator>) creators;
+        this.resourceRegister = resourceRegister;
+        bindCreators(null);
+    }
+
     public Page<?, ?> create(String componentId, IModel<? extends PageStatus> statusModel) {
 
         PageStatus status = statusModel.getObject();

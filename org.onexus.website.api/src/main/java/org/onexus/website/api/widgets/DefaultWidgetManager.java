@@ -29,6 +29,16 @@ public class DefaultWidgetManager implements IWidgetManager {
 
     private List<IWidgetCreator> creators;
 
+    public DefaultWidgetManager() {
+        super();
+    }
+
+    public DefaultWidgetManager(List<? extends IWidgetCreator> creators, IResourceRegister resourceRegister) {
+        this.creators = (List<IWidgetCreator>) creators;
+        this.resourceRegister = resourceRegister;
+        bindCreators(null);
+    }
+
     @Override
     public Widget<?, ?> create(String componentId, IModel<? extends WidgetStatus> statusModel) {
 
