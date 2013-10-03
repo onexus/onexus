@@ -17,6 +17,7 @@
  */
 package org.onexus.website.api.pages.browser;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,6 +29,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
@@ -197,6 +199,19 @@ public class SelectionPanel extends EventPanel {
                 final ORI filterORI = filter.getSelectionCollection();
                 final String filterTitle = filter.getTitle(query);
 
+                // Abbreviate at the 3th comma
+                String abbreviateFilterTitle = filterTitle;
+                int pos = filterTitle.indexOf(',');
+                if (pos > -1) {
+                    pos = filterTitle.indexOf(',', pos+1);
+                    if (pos > -1) {
+                        pos = filterTitle.indexOf(',', pos+1);
+                        if (pos > -1) {
+                            abbreviateFilterTitle = filterTitle.substring(0, pos) + "...";
+                        }
+                    }
+                }
+
                 // Edit a selection
                 BrowserPageLink<ORI> editLink = new BrowserPageLink<ORI>("edit") {
                     @Override
@@ -237,7 +252,7 @@ public class SelectionPanel extends EventPanel {
                     }
                 };
 
-                Label labelComponent = new Label("title", filterTitle);
+                Label labelComponent = new Label("title", abbreviateFilterTitle);
                 labelComponent.setEscapeModelStrings(false);
                 editLink.add(labelComponent);
                 container.add(editLink);
