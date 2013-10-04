@@ -32,6 +32,7 @@ import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFilterHeader;
 import org.onexus.website.api.events.EventRemoveFilter;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
+import org.onexus.website.api.pages.browser.filters.panels.CategoricalFilterPanel;
 import org.onexus.website.api.pages.browser.filters.panels.DoubleFilterPanel;
 import org.onexus.website.api.pages.browser.filters.panels.IntegerFilterPanel;
 import org.onexus.website.api.pages.browser.filters.panels.StringFilterPanel;
@@ -79,14 +80,34 @@ public class FiltersToolbar extends Panel {
         if (event.getPayload() instanceof EventFilterHeader) {
             EventFilterHeader e = ((EventFilterHeader) event.getPayload());
 
-            if ("STRING".equalsIgnoreCase(e.getHeader().getFilter())) {
+            String filter = e.getHeader().getFilter();
+            String filterType;
+            String options;
+
+            int separator = filter.indexOf('[');
+            if (separator != -1) {
+                filterType = filter.substring(0, separator).trim();
+
+                int endSeparator = filter.indexOf(']', separator);
+                if (endSeparator != -1) {
+                    options = filter.substring(separator+1, endSeparator).trim();
+                } else {
+                    options = filter.substring(separator+1).trim();
+                }
+            } else {
+                filterType = filter.trim();
+                options = "";
+            }
+
+
+            if ("STRING".equalsIgnoreCase(filterType)) {
                 widgetModal.addOrReplace(new StringFilterPanel("widget", e.getHeader()) {
                     @Override
                     protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
                         FiltersToolbar.this.addFilter(target, filterConfig);
                     }
                 });
-            } else if ("DOUBLE".equalsIgnoreCase(e.getHeader().getFilter())) {
+            } else if ("DOUBLE".equalsIgnoreCase(filterType)) {
                 widgetModal.addOrReplace(new DoubleFilterPanel("widget", e.getHeader()) {
 
                     @Override
@@ -95,7 +116,7 @@ public class FiltersToolbar extends Panel {
                     }
 
                 });
-            } else if ("INTEGER".equalsIgnoreCase(e.getHeader().getFilter())) {
+            } else if ("INTEGER".equalsIgnoreCase(filterType)) {
                 widgetModal.addOrReplace(new IntegerFilterPanel("widget", e.getHeader()) {
 
                     @Override
@@ -104,6 +125,17 @@ public class FiltersToolbar extends Panel {
                     }
 
                 });
+            } else if ("CATEGORICAL".equalsIgnoreCase(filterType)) {
+
+                widgetModal.addOrReplace(new CategoricalFilterPanel("widget", e.getHeader(), options) {
+
+                    @Override
+                    protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
+                        FiltersToolbar.this.addFilter(target, filterConfig);
+                    }
+
+                });
+
             }
 
             widgetModal.addOrReplace(new Label("modalHeader", "Filter column '" + e.getHeader().getLabel() + "'"));
