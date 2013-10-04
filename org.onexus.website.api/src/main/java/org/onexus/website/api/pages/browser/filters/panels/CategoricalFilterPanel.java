@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.onexus.collection.api.query.Contains;
 import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.NotEqual;
@@ -40,8 +41,9 @@ public abstract class CategoricalFilterPanel extends Panel {
 
     private static final String EQUAL = "equal";
     private static final String NOT_EQUAL = "not equal";
+    private static final String CONTAINS = "contains";
 
-    private static final List<String> OPERATIONS = Arrays.asList(new String[]{EQUAL, NOT_EQUAL});
+    private static final List<String> OPERATIONS = Arrays.asList(new String[]{EQUAL, NOT_EQUAL, CONTAINS});
 
     private IModel<FilterOption> option;
     private FieldHeader header;
@@ -75,8 +77,10 @@ public abstract class CategoricalFilterPanel extends Panel {
                 Filter where;
                 if (EQUAL.equals(fo.getOperation())) {
                     where = new Equal("fc", header.getField().getId(), value.trim());
-                } else {
+                } else if (NOT_EQUAL.equals(fo.getOperation())) {
                     where = new NotEqual("fc", header.getField().getId(), value.trim());
+                } else {
+                    where = new Contains("fc", header.getField().getId(), value.trim());
                 }
 
                 fc.setWhere(where.toString());
