@@ -111,7 +111,9 @@ public class HeadersToolbar extends AbstractToolbar {
                     WebMarkupContainer firstHeaderContainer = new WebMarkupContainer(
                             "header");
 
-                    firstHeaderContainer.add(c.getHeader("label"));
+                    WebMarkupContainer innerHeader = new WebMarkupContainer("filter");
+                    innerHeader.add(c.getHeader("label"));
+                    firstHeaderContainer.add(innerHeader);
                     firstHeaderContainer
                             .add(new AttributeModifier(
                                     "style",
