@@ -148,7 +148,10 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
         HttpServletRequest request = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
         String serverUrl = SERVER_URL;
         if (serverUrl == null) {
-            serverUrl = "http://" + request.getServerName() + ":" + request.getServerPort();
+            serverUrl = request.getScheme() + "://" + request.getServerName();
+            if (request.getServerPort() != 80) {
+                serverUrl = serverUrl + ":" + request.getServerPort();
+            }
         }
         return toAbsolutePath(relativePagePath, serverUrl);
     }
