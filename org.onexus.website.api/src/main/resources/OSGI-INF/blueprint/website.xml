@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        >
+
+    <!-- SignInPages -->
+    <reference-list id="signInPages"
+                    interface="org.onexus.website.api.ISignInPage"
+                    availability="optional"/>
+
+    <!-- WebsiteService -->
+    <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
+    <bean id="websiteService" class="org.onexus.website.api.WebsiteService">
+        <property name="resourceManager" ref="resourceManager"/>
+        <property name="collectionManager" ref="collectionManager"/>
+        <property name="context" ref="blueprintBundleContext"/>
+        <property name="signInPages" ref="signInPages"/>
+    </bean>
+</blueprint>

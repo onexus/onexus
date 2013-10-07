@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-        >
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <service id="org.onexus.resource.serializer.xstream" interface="org.onexus.core.IResourceSerializer">
-        <bean class="org.onexus.resource.serializer.xstream.ResourceSerializer"/>
+    <service id="org.onexus.resource.serializer.xstream" interface="org.onexus.resource.api.IResourceSerializer">
+        <bean class="org.onexus.resource.serializer.xstream.internal.ResourceSerializer"/>
     </service>
 
 </blueprint>

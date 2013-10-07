@@ -1,0 +1,26 @@
+var signInButton = Wicket.$("${componentId}");
+signInButton.style.cursor = "pointer";
+
+Wicket.Event.add(signInButton, "click", function(event) {
+	navigator.id.request();
+});
+
+navigator.id.watch({
+          loggedInUser: null,
+          onlogin: function(assertion) {
+          	var callbackUrl = "${callbackUrl}";
+          	if (assertion) {
+				if (callbackUrl.indexOf('?') > -1) {
+					callbackUrl += '&';
+				} else {
+					callbackUrl += '?';
+				}
+				callbackUrl += "assertion="+assertion;
+				callbackUrl += "&audience="+window.location.host;
+				Wicket.Ajax.get({ u: callbackUrl });
+            }
+
+          },
+          onlogout: function() {
+          }
+});

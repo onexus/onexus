@@ -1,0 +1,21 @@
+body {
+    height: 99%;
+}
+.main-container {
+    min-height: 100%;
+    position: relative;
+}
+.footer {
+    bottom: 0;
+    height: 27px;
+    position: absolute;
+    width: 96%;
+}
+
+#content {
+    padding-bottom: 100px;
+}
+
+span.wicket-ajax-indicator {
+   position: absolute;
+}

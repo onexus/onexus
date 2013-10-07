@@ -1,0 +1,53 @@
+<html xmlns:wicket>
+<wicket:head>
+
+</wicket:head>
+<wicket:panel>
+
+    <div class="accordion" id="accordion-download">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-download"
+                   href="#export-data">
+                    Download
+                </a>
+            </div>
+            <div id="export-data" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                    <div class="well" style="border: 1px solid #888;">
+                        <form class="form-horizontal" wicket:id="form">
+                            <div class="control-group">
+                                <label class="control-label" for="fileFormat"><strong>File format</strong></label>
+
+                                <div class="controls">
+                                    <select wicket:id="format" id="fileFormat"></select>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <input type="submit" class="btn btn-primary" wicket:id="download" value="Download"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div wicket:id="scripts" class="accordion-group">
+            <div class="accordion-heading">
+                <a wicket:id="toggle" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-download"
+                   href="#collapseOne">
+                    Download file
+                </a>
+            </div>
+            <div wicket:id="body" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <pre wicket:id="code" class="prettyprint"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</wicket:panel>
+</html>
+  

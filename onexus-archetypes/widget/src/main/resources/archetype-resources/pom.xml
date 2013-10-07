@@ -3,18 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>${groupId}</groupId>
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
     <packaging>bundle</packaging>
 
-    #literal()
-
     <properties>
+        <onexus.version>${version}</onexus.version>
+        #literal()
         <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
-        <onexus.version>0.2.1</onexus.version>
     </properties>
 
     <name>${bundle.symbolicName}</name>
@@ -23,13 +21,7 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.core</artifactId>
-            <version>${onexus.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.ui</artifactId>
+            <artifactId>org.onexus.ui.website</artifactId>
             <version>${onexus.version}</version>
         </dependency>
 
@@ -74,8 +66,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
-                        <Bundle-Version>${pom.version}</Bundle-Version>
-                        <Require-Bundle>org.wicketstuff.ioc-bundle</Require-Bundle>
+                        <Bundle-Version>${project.version}</Bundle-Version>
                     </instructions>
                 </configuration>
             </plugin>

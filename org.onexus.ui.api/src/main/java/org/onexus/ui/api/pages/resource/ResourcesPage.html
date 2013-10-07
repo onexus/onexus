@@ -1,0 +1,46 @@
+<wicket:extend>
+
+    <section id="toolbar">
+        <div class="row">
+            <div class="span12">
+                <div class="btn-toolbar">
+                    <div class="btn-group">
+                        <a wicket:id="projectSync" class="btn" href="" rel="tooltip" title="Sync project files"><i
+                                class="icon-refresh"></i></a>
+                        <a wicket:id="projectUpdate" class="btn" href="" rel="tooltip" title="Update project"><i
+                                class="icon-download"></i></a>
+                    </div>
+                    <div class="btn-group">
+                        <a wicket:id="copyURI" class="btn" href="" rel="tooltip" title="Link to the resource URI"
+                           target="tab"><i class="icon-share"></i></a>
+                        <ul wicket:id="oriBreadCrumb" class="btn breadcrumb">
+                            <li wicket:id="ori">
+                                <a wicket:id="link" href="#"><span wicket:id="name">www.onexus.org</span></a> <span
+                                    wicket:id="divider" class="divider">/</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tabs">
+        <div class="row">
+            <div class="span12">
+                <ul wicket:id="tabs" class="nav nav-tabs">
+                    <li wicket:id="tab"><a wicket:id="link" href="#"><span wicket:id="label">Files</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="main">
+        <div class="row minh750">
+            <div class="span12">
+                <div wicket:id="main"></div>
+            </div>
+        </div>
+    </section>
+
+</wicket:extend>

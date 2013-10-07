@@ -1,0 +1,26 @@
+.boxentity {
+	float: left;
+	position: absolute;
+	z-index: 1000;
+	padding: 1px 7px 1px 1px;
+	display: none;
+	background-color: rgb(255, 255, 255);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 10px;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 10px;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+}
+
+.boxentity dl {
+    margin: 20px 20px;
+}    
+    
+
+.boxentity .close {
+     margin-top: 5px;
+}

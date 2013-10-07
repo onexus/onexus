@@ -8,16 +8,28 @@
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
-    <reference id="collectionStoreRef" interface="org.onexus.core.ICollectionStore" filter="(status=enabled)"/>
-    <reference id="taskManagerRef" interface="org.onexus.core.ITaskManager"/>
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="progressManager" interface="org.onexus.resource.api.IProgressManager"/>
+    <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
+    <reference id="collectionStore" interface="org.onexus.collection.api.ICollectionStore"/>
 
-    <service id="org.onexus.collection.manager" interface="org.onexus.core.ICollectionManager">
-        <bean class="org.onexus.collection.manager.CollectionManager" init-method="init">
-            <property name="maxThreads" value="${maxThreads}"/>
-            <property name="resourceManager" ref="resourceManagerRef"/>
-            <property name="collectionStore" ref="collectionStoreRef"/>
-            <property name="taskManager" ref="taskManagerRef"/>
+    <service interface="org.onexus.collection.api.ICollectionManager" ref="collectionManager"/>
+    <bean id="collectionManager" class="org.onexus.collection.manager.internal.CollectionManager" init-method="init">
+        <property name="maxThreads" value="${maxThreads}"/>
+        <property name="resourceManager" ref="resourceManager"/>
+        <property name="progressManager" ref="progressManager"/>
+        <property name="collectionStore" ref="collectionStore"/>
+    </bean>
+
+    <service interface="javax.servlet.http.HttpServlet">
+        <service-properties>
+            <entry key="alias" value="/oql"/>
+        </service-properties>
+        <bean class="org.onexus.collection.manager.internal.ws.OqlServlet">
+            <property name="collectionManager" ref="collectionManager"/>
+            <property name="resourceManager" ref="resourceManager"/>
+            <property name="queryParser" ref="queryParser"/>
         </bean>
     </service>
+
 </blueprint>

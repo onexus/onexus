@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+    <cm:property-placeholder persistent-id="org.onexus.ui.workspace" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="database" value="onexus-h2-tags"/>
+            <cm:property name="username" value="sa"/>
+            <cm:property name="password" value=""/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!-- Default Viewers manager -->
+    <reference-list id="viewerCreatorsRef" interface="org.onexus.ui.api.viewers.IViewerCreator"
+                    availability="optional"/>
+    <service interface="org.onexus.ui.api.viewers.IViewersManager" ref="viewersManager"/>
+    <bean id="viewersManager" class="org.onexus.ui.api.viewers.DefaultViewersManager">
+        <property name="viewerCreators" ref="viewerCreatorsRef"/>
+    </bean>
+
+    <!-- Default wizard manager -->
+    <reference-list id="wizardCreatorsRef" interface="org.onexus.ui.api.wizards.IWizardCreator"
+                    availability="optional"/>
+    <service interface="org.onexus.ui.api.wizards.IWizardsManager" ref="wizardsManager"/>
+    <bean id="wizardsManager" class="org.onexus.ui.api.wizards.DefaultWizardsManager">
+        <property name="wizardCreators" ref="wizardCreatorsRef"/>
+    </bean>
+
+    <!-- Mount wicket application -->
+    <service interface="org.ops4j.pax.wicket.api.WebApplicationFactory">
+        <service-properties>
+            <entry key="pax.wicket.applicationname" value="onexus.ui"/>
+            <entry key="pax.wicket.mountpoint" value="ws"/>
+        </service-properties>
+        <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory">
+            <property name="wicketApplication" value="org.onexus.ui.api.OnexusWebApplication"/>
+        </bean>
+    </service>
+
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="progressManager" interface="org.onexus.resource.api.IProgressManager"/>
+
+</blueprint>

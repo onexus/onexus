@@ -1,0 +1,32 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <form class="form-horizontal" wicket:id="form">
+        <input wicket:id="selection" type="hidden"/>
+
+        <script>
+            var rows = document.getElementById("rows-selection-container");
+            var modal = document.getElementById("modal-selection-container");
+            modal.value = rows.value;
+        </script>
+
+        <div class="control-group">
+            <input wicket:id="newlabel" type="text"/><input class="btn" wicket:id="newbutton" type="button"
+                                                            value="Add"/>
+        </div>
+
+        <div class="control-group">
+            <div class="checkbox" wicket:id="tags"></div>
+        </div>
+
+        <div class="control-group btn-toolbar">
+            <div class="btn-group">
+                <a class="btn" wicket:id="apply">Apply</a>
+                <a class="btn" wicket:id="remove">Remove</a>
+                <a class="btn" wicket:id="download">Download</a>
+            </div>
+        </div>
+
+    </form>
+</wicket:panel>
+</html>
+  

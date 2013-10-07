@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0">
+
+    <cm:property-placeholder persistent-id="org.onexus.ui.workspace" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="database" value="onexus-h2-tags"/>
+            <cm:property name="username" value="sa"/>
+            <cm:property name="password" value=""/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!-- ViewersCreators -->
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.workspace.internal.viewers.wizards.WizardViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.workspace.internal.viewers.definition.DefinitionViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.workspace.internal.viewers.tree.ProjectTreeViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.workspace.internal.viewers.preview.FilePreviewViewerCreator"/>
+    </service>
+
+    <!-- Wizards -->
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.workspace.internal.wizards.folder.NewFolderWizardCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.workspace.internal.wizards.data.CreateCollectionWizardCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.workspace.internal.wizards.collection.NewCollectionWizardCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.workspace.internal.wizards.collection.ManageCollectionWizardCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.workspace.internal.wizards.folder.ManageCollectionsWizardCreator"/>
+    </service>
+
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+    <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
+    <reference id="wizardsManager" interface="org.onexus.ui.api.wizards.IWizardsManager"/>
+    <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
+    <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer"/>
+
+</blueprint>

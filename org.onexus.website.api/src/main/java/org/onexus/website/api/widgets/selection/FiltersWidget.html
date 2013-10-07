@@ -1,0 +1,44 @@
+<html xmlns:wicket="">
+<wicket:panel>
+    <form style="width:100%;" wicket:id="filtersForm">
+
+
+        <ul class="unstyled">
+            <li wicket:id="filters">
+                <div style="width: 96%; margin-bottom: 5px;" class="btn-group btn">
+                    <a class="btn btn-primary" wicket:id="apply"><i class="icon-plus icon-white"></i></a>
+                    <strong class="btn" wicket:id="name">Filter label</strong>
+                </div>
+            </li>
+        </ul>
+
+    </form>
+
+    <div>&nbsp;</div>
+
+    <div id="cf-container" class="accordion-group">
+        <div class="accordion-heading">
+            <a data-parent="#cf-container" data-toggle="collapse" class="accordion-toggle" href="#cf-body"><span>Create custom filter</span></a>
+        </div>
+        <div class="accordion-body collapse" id="cf-body">
+            <div style="margin: 5% 5%;">
+                <form class="form-horizontal" wicket:id="selectForm">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label" for="column">Select column</label>
+
+                            <div class="controls">
+                                <select wicket:id="select" id="column"></select>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div style="margin: 5% 5%;" wicket:id="customPanel">
+
+            </div>
+        </div>
+    </div>
+
+</wicket:panel>
+</html>

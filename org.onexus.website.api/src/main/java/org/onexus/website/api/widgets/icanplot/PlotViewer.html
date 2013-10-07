@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xml:lang="en"
+      lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../../theme/css/bootstrap.min.css"/>
+
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="../../theme/js/bootstrap.min.js"></script>
+
+    <script src="data.js"></script>
+    <script src="icanplot.js"></script>
+    <script src="icanplot-onexus.js"></script>
+    <script type="text/javascript">
+
+        window.onload = function() {
+        icanplot_init('sample-data3.tsv', [3, 4, 0, 0], 'ilinear', 'ilinear');
+        };
+    </script>
+</head>
+<body>
+<wicket:panel>
+
+    <div id="control" class="pull-right">
+        <div id="params" class="alert">
+            <div id="param-columns">
+            </div>
+        </div>
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Tip!</strong> draw a box around the<br/>points that you want to select
+        </div>
+    </div>
+
+    <div id="plot-modal" class="modal hide">
+        <div class="modal-header">
+            <button data-dismiss="modal" class="close" type="button">&times;</button>
+            <h3>Current selection</h3>
+        </div>
+        <div class="modal-body">
+            <textarea style="width: 100%;" rows="10" cols="100">
+
+            </textarea>
+        </div>
+        <div class="modal-footer">
+            <a data-dismiss="modal" class="btn" href="#">Close</a>
+        </div>
+    </div>
+
+    <div id="canvas-container">
+        <canvas id="plot-area" width="700" height="500">
+            <div class="error">
+                <p>This application requires a browser which supports
+                    the HTML5 Canvas element. Here are a few recommendations:
+                <ul>
+                    <li><a href="http://www.mozilla.com">Firefox 4+</a></li>
+                    <li><a href="http://www.apple.com/safari/">Safari 5+</a></li>
+                    <li><a href="http://www.google.com/chrome/">Chrome 11+</a></li>
+                    <li><a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home">Internet
+                        Explorer 9+</a></li>
+                </ul>
+                </p>
+            </div>
+        </canvas>
+    </div>
+
+
+</wicket:panel>
+</body>
+</html>

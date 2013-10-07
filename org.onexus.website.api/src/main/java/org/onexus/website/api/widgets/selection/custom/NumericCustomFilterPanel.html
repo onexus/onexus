@@ -1,0 +1,34 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <form class="form-horizontal" wicket:id="form">
+        <fieldset>
+
+            <div class="control-group">
+                <label class="control-label" for="operation">Operation</label>
+
+                <div class="controls">
+                    <select wicket:id="operation" id="operation"></select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="value">Value</label>
+
+                <div class="controls">
+                    <input type="text" class="input-xlarge" id="value" wicket:id="value">
+                </div>
+            </div>
+
+            <span wicket:id="p-feedback"></span>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" wicket:id="okButton">Create filter</button>
+                <button class="btn" wicket:id="cancelButton">Cancel</button>
+            </div>
+        </fieldset>
+
+    </form>
+
+    <div><span wicket:id="uploadFeedback"/></div>
+</wicket:panel>
+</html>

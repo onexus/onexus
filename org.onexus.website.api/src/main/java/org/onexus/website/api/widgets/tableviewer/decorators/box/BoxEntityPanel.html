@@ -1,0 +1,23 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <div style="float:left;" onclick="$(this).next('div').show('fast');">
+        <div style="cursor: pointer;"><i class="icon-chevron-down"></i></div>
+    </div>
+    <div onclick="$(this).hide('fast');" class="boxentity">
+        <button type="button" class="close">&times;</button>
+        <dl class="dl-horizontal">
+		    <span wicket:id="fields">
+		        <dt rel="tooltip" data-placement="left" title="field title" wicket:id="label">symbol</dt>
+		        <dd><span wicket:id="value">PTPRJ</span><a href="" wicket:id="link" target="_blank"><i
+                        class="icon-share"></i></a></dd>
+		    </span>
+        </dl>
+        <div wicket:id="decoratorsContainer" class="well" style="margin:10px;">
+            <ul class="unstyled">
+                <li wicket:id="decorators"><span wicket:id="decorator"></span>&nbsp;<strong wicket:id="label">High
+                    impact mutations</strong></li>
+            </ul>
+        </div>
+    </div>
+</wicket:panel>
+</html>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.onexus</groupId>
+        <artifactId>onexus</artifactId>
+        <version>0.3.0</version>
+    </parent>
+
+    <properties>
+        <bundle.symbolicName>org.onexus.ui.workspace</bundle.symbolicName>
+        <bundle.namespace>org.onexus.ui.workspace</bundle.namespace>
+    </properties>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.onexus</groupId>
+    <artifactId>org.onexus.ui.workspace</artifactId>
+    <name>${bundle.symbolicName}</name>
+    <packaging>bundle</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.ui.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Import-Package>
+                            org.apache.wicket,
+                            org.apache.wicket.util,
+                            org.apache.wicket.event,
+                            org.apache.wicket.page,
+                            org.apache.wicket.request.resource,
+                            org.apache.wicket.request.mapper,
+                            org.apache.wicket.request.cycle,
+                            org.apache.wicket.markup.html,
+                            org.apache.wicket.markup.html.basic,
+                            org.apache.wicket.protocol.http,
+                            org.apache.wicket.request.http,
+                            org.ops4j.pax.wicket.api,
+                            org.ops4j.pax.wicket.util,
+                            org.ops4j.pax.wicket.util.proxy,
+                            org.osgi.framework,
+                            net.sf.cglib.proxy;version="[2,3)",
+                            net.sf.cglib.core;version="[2,3)",
+                            net.sf.cglib.reflect;version="[2,3)",
+                            javax.servlet,
+                            org.apache.wicket.settings,
+                            org.apache.wicket.session,
+                            org.apache.wicket.util.file,
+                            org.apache.wicket.request,
+                            javax.servlet.http,
+                            org.apache.wicket.ajax,
+                            org.osgi.service.blueprint,
+                            org.apache.wicket.core.request.mapper
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>

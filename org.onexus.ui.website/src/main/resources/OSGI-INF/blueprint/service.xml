@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        >
+
+    <reference id="websiteService" interface="org.onexus.website.api.IWebsiteService"/>
+    <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
+
+    <!-- Default ViewersCreators -->
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.website.internal.workspace.WebsiteViewerCreator"/>
+    </service>
+    <service interface="org.onexus.ui.api.viewers.IViewerCreator">
+        <bean class="org.onexus.ui.website.internal.workspace.CollectionViewerCreator"/>
+    </service>
+
+    <!-- Default wizards -->
+    <service interface="org.onexus.ui.api.wizards.IWizardCreator">
+        <bean class="org.onexus.ui.website.internal.wizards.NewWebsiteWizardCreator"/>
+    </service>
+
+</blueprint>

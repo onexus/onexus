@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        >
+
+
+    <!-- Resource activation -->
+    <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister">
+        <reference-listener bind-method="bind" unbind-method="unbind" ref="resourceActivator"/>
+    </reference>
+    <bean id="resourceActivator" class="org.onexus.resource.api.ResourceActivator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+        <property name="resourceType" value="org.onexus.collection.api.Collection"/>
+    </bean>
+
+
+</blueprint>

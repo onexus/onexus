@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xml:lang="en" lang="en">
+<body>
+<wicket:panel>
+
+    <div class="modal hide" wicket:id="modal">
+
+        <div class="modal-header">
+            <h3>Task manager</h3>
+        </div>
+
+        <div class="modal-body">
+
+            <h4>Tasks tree</h4>
+
+            <div wicket:id="tree" class="tree"></div>
+
+            <br/>
+
+            <div wicket:id="log-details">
+                <h4>Log details</h4>
+                <textarea wicket:id="logs" class="logs" wrap="off"></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" wicket:id="refresh">Refresh</a>
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+
+    </div>
+
+    <div class="progress-bar" wicket:id="minimized">
+        <a href="#" wicket:id="show">Task manager</a>
+    </div>
+</wicket:panel>
+</body>
+</html>

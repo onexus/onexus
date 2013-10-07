@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd"
+      xml:lang="en"
+      lang="en">
+<head>
+    <!-- meta name="viewport" content="width=device-width, initial-scale=1" / -->
+
+    <!-- link href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" rel="stylesheet" type="text/css" / -->
+    <link rel="stylesheet" type="text/css" href="../../theme/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jheatmap-1.0.0-alpha.css"/>
+
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <!-- script type="text/javascript" src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script -->
+
+    <script src="../../theme/js/bootstrap.min.js"></script>
+    <script src="js/jheatmap-1.0.0-alpha.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+
+        $('#heatmap').heatmap({
+
+        data : {
+        type : "tdm",
+        values : 'sample-data.tsv',
+
+        rows_annotations : [1, 0],
+        cols_annotations : [2, 3]
+        },
+
+        init : function(heatmap) {
+
+        var top = $('#heatmap').offset().top;
+        var wHeight = $(window).height();
+
+        // Size
+        heatmap.size.width = $('#heatmap').width() - 290;
+        heatmap.size.height = wHeight - top - 230;
+
+        if (heatmap.size.width < 200) {
+        heatmap.size.width = 200;
+        }
+
+        if (heatmap.size.height < 200) {
+        if (wHeight > 250) {
+        heatmap.size.height = wHeight - 50;
+        } else {
+        heatmap.size.height = 200;
+        }
+        }
+
+        // Default cell value
+        heatmap.cells.selectedValue = 4;
+
+        // Configure decorators and aggregators
+        heatmap.cells.decorators[4] = new jheatmap.decorators.PValue( { cutoff: 0.05 } );
+        heatmap.cells.aggregators[4] = new jheatmap.aggregators.PValue( { cutoff: 0.05 } );
+        heatmap.cells.decorators[7] = new jheatmap.decorators.PValue( { cutoff: 0.05 } );
+        heatmap.cells.aggregators[7] = new jheatmap.aggregators.PValue( { cutoff: 0.05 } );
+        heatmap.cells.decorators[8] = new jheatmap.decorators.PValue( { cutoff: 0.05 } );
+        heatmap.cells.aggregators[8] = new jheatmap.aggregators.PValue( { cutoff: 0.05 } );
+
+        // Setup default zoom
+        heatmap.cols.zoom = 6;
+        heatmap.rows.zoom = 6;
+        }
+
+        });
+        };
+    </script>
+</head>
+<body>
+<wicket:panel>
+    <div id="heatmap-loader">
+        <div class="background"></div>
+        <div class="loader"><img wicket:id="loading" src="images/loading.gif"></div>
+    </div>
+    <div id="heatmap">
+    </div>
+</wicket:panel>
+</body>
+</html>

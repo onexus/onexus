@@ -3,10 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <relativePath>../poms/compiled/</relativePath>
-        <groupId>org.onexus.build</groupId>
-        <artifactId>compiled-bundle-settings</artifactId>
-        <version>0.2.1</version>
+        <groupId>org.onexus</groupId>
+        <artifactId>onexus</artifactId>
+        <version>0.3.0</version>
     </parent>
 
     <properties>
@@ -30,12 +29,20 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.core</artifactId>
+            <artifactId>org.onexus.resource.api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>com.springsource.org.apache.commons.dbcp</artifactId>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.store.sql</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

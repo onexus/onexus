@@ -1,0 +1,132 @@
+#logo {
+     margin: 50px auto;
+     width: 360px;
+}
+
+#logo img {
+     margin: 15px 18px;
+}
+
+#boxes {
+     margin: 100px auto;
+     width: 600px;
+}
+
+#boxes .well {
+    margin: 15px; padding: 10px 15px 2px 15px;
+}
+
+#boxes .figure {
+    margin: 10px 15px 0px 15px;
+    padding: 10px 15px 0px 15px;
+}
+
+#boxes .description {
+    margin: 10px 15px;
+    padding: 0px 15px 0px;
+    font-size: 15px;
+    color: #333;
+    text-align: justify;
+}
+
+#boxes .link {
+    margin: 0px 15px 15px 15px;
+    padding: 0px 15px 0px 15px;
+    float: right;
+}
+
+div.types input {
+    float: left;
+}
+
+div.types label {
+    float: left;
+    margin-right: 10px;
+}
+
+div.types br {
+    display: none;
+}
+
+.examples {
+    font-size: 11px;
+    margin: 0px 0 0 120px;
+    padding: 0;
+}
+
+input[type="text"].search {
+    width: 240px;
+    border: 1px solid #FF7634;
+
+    height: 24px;
+}
+
+#search input {
+    background: none repeat scroll 0pt 0pt transparent;
+    float: left;
+    margin: 5px;
+}
+
+#search button.search {
+     border: 1px solid #FF7634;
+     background-color: #FF7634;
+     border-radius: 3px;
+     float: left;
+     height: 34px;
+     margin: 5px;
+     padding: 5px;
+     width: 40px;
+}
+
+div.wicket-aa {
+     background-color: white;
+     border-color: #CCCCCC;
+     border-style: solid;
+     border-width: 1px;
+     margin: 1px 0pt 0pt;
+     padding: 2px;
+     text-align: left;
+}
+
+div.wicket-aa ul {
+     list-style: none outside none;
+     margin: 0pt;
+     padding: 2px;
+}
+
+div.wicket-aa li {
+     padding: 4px;
+}
+
+div.wicket-aa li span.f {
+     color: #666666;
+}
+
+div.wicket-aa ul li.selected {
+     background-color: #FFFF00;
+     margin: 0pt;
+     padding: 2px;
+}
+#boxes {
+   padding-bottom: 100px;
+}
+
+.footer {
+   position: fixed;
+   bottom: 0px;
+   width: 96%;
+   background-color: white;
+   height: 30px;
+
+}
+
+div.accordion-heading ul.nav-pills > li {
+	float: none;
+	display: inline-block;
+}
+
+div.accordion-heading {
+	overflow: hidden;
+	white-space: nowrap;
+}
+

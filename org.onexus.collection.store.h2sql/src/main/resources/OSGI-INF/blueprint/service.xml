@@ -7,25 +7,23 @@
             <cm:property name="database" value="onexus-h2-database"/>
             <cm:property name="username" value="sa"/>
             <cm:property name="password" value=""/>
-            <cm:property name="status" value="enabled"/>
         </cm:default-properties>
     </cm:property-placeholder>
 
-    <reference id="resourceManagerRef" interface="org.onexus.core.IResourceManager"/>
+    <reference id="resourceManagerRef" interface="org.onexus.resource.api.IResourceManager"/>
 
-    <service interface="org.onexus.core.ICollectionStore" ref="org.onexus.collection.store.h2sql">
+    <service interface="org.onexus.collection.api.ICollectionStore" ref="org.onexus.collection.store.h2sql">
         <service-properties>
             <entry key="status" value="${status}"/>
         </service-properties>
         <registration-listener unregistration-method="stop" ref="org.onexus.collection.store.h2sql"/>
     </service>
 
-    <bean id="org.onexus.collection.store.h2sql" class="org.onexus.collection.store.h2sql.CollectionStore"
+    <bean id="org.onexus.collection.store.h2sql" class="org.onexus.collection.store.h2sql.internal.H2CollectionStore"
           init-method="init">
         <property name="database" value="${database}"/>
         <property name="username" value="${username}"/>
         <property name="password" value="${password}"/>
-        <property name="status" value="${status}"/>
         <property name="resourceManager" ref="resourceManagerRef"/>
     </bean>
 </blueprint>
