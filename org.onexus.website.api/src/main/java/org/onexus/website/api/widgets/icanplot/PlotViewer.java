@@ -29,8 +29,9 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.Widget;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.net.URLEncoder;
 
 
@@ -45,7 +46,7 @@ public class PlotViewer extends Widget<PlotViewerConfig, PlotViewerStatus> {
     private static final HeaderItem JS_ICANPLOT_ONEXUS = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PlotViewer.class, "icanplot-onexus.js"));
     private static final HeaderItem JS_ICANPLOT_DATA = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(PlotViewer.class, "data.js"));
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     @Override

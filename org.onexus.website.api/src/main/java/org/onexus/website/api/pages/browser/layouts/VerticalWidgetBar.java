@@ -28,14 +28,15 @@ import org.onexus.website.api.utils.panels.icons.Icons;
 import org.onexus.website.api.widgets.IWidgetManager;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetModel;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 
 public class VerticalWidgetBar extends Panel {
     private static final long serialVersionUID = 1L;
 
-    @PaxWicketBean(name = "widgetManager")
+    @Inject
     private IWidgetManager widgetManager;
 
     private RepeatingView boxesView;

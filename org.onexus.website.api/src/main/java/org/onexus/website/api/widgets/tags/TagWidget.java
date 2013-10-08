@@ -41,8 +41,9 @@ import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.website.api.widgets.tags.tagstore.TagStore;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,8 +55,8 @@ public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 
     public static final CssResourceReference CSS = new CssResourceReference(TagWidget.class, "TagWidget.css");
 
-    @PaxWicketBean(name = "tagStoreManager")
-    public transient ITagStoreManager tagStoreManager;
+    @Inject
+    private ITagStoreManager tagStoreManager;
 
 
     public TagWidget(String componentId, IModel<TagWidgetStatus> statusModel) {

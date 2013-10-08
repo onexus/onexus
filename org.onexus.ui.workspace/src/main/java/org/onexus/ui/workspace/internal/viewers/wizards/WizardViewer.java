@@ -32,13 +32,14 @@ import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.utils.panels.HelpMark;
 import org.onexus.ui.api.wizards.IWizardCreator;
 import org.onexus.ui.api.wizards.IWizardsManager;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 public class WizardViewer extends Panel {
 
-    @PaxWicketBean(name = "wizardsManager")
+    @Inject
     private IWizardsManager wizardsManager;
 
     private IModel<? extends Resource> resourceModel;

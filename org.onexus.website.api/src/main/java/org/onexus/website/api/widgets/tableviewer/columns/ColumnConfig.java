@@ -33,8 +33,9 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
 import org.onexus.website.api.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -298,10 +299,10 @@ public class ColumnConfig implements IColumnConfig {
 
     }
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
-    @PaxWicketBean(name = "decoratorManager")
+    @Inject
     private IDecoratorManager decoratorManager;
 
     protected IResourceManager getResourceManager() {

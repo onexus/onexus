@@ -42,8 +42,9 @@ import org.onexus.resource.api.IProgressable;
 import org.onexus.resource.api.Progress;
 import org.onexus.ui.api.progressbar.columns.LogsColumn;
 import org.onexus.ui.api.progressbar.columns.StatusColumn;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class ProgressBar extends Panel {
     private ProgressTreeProvider provider;
     private ProgressExpansionModel treeState;
 
-    @PaxWicketBean(name = "progressManager")
+    @Inject
     private IProgressManager progressManager;
 
     public ProgressBar(String id) {

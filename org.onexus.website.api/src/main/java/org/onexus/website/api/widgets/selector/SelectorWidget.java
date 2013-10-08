@@ -40,8 +40,9 @@ import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.widgets.Widget;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,10 +50,10 @@ import java.util.List;
 
 public class SelectorWidget extends Widget<SelectorWidgetConfig, SelectorWidgetStatus> {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name = "queryParser")
+    @Inject
     private IQueryParser queryParser;
 
     private transient EntityChoice selection;

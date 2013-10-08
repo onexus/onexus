@@ -35,8 +35,9 @@ import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.utils.EntityModel;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class BoxEntityPanel extends Panel {
 
     public static final CssReferenceHeaderItem CSS = CssHeaderItem.forReference(new PackageResourceReference(BoxEntityPanel.class, "BoxEntityPanel.css"));
 
-    @PaxWicketBean(name = "decoratorManager")
+    @Inject
     private IDecoratorManager decoratorManager;
 
     public BoxEntityPanel(String id, Field columnField, IEntity entity, List<String> fieldIds, Map<String, String> decorators) {

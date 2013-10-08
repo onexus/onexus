@@ -36,8 +36,9 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +50,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
     private static final ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
 
-
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {

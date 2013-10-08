@@ -22,13 +22,15 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebApplication;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class ResourceModel extends LoadableDetachableModel<Resource> {
 
     private ORI resourceURI;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public ResourceModel() {

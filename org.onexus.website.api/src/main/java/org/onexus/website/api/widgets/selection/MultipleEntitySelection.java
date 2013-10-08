@@ -25,10 +25,12 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.utils.visible.VisibleRule;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -40,7 +42,7 @@ public class MultipleEntitySelection implements IEntitySelection {
     private boolean enable;
     private boolean deletable;
 
-    @PaxWicketBean(name = "queryParser")
+    @Inject
     private IQueryParser queryParser;
 
     public MultipleEntitySelection() {

@@ -81,7 +81,7 @@
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <DynamicImport-Package>*</DynamicImport-Package>
-                        <Import-Package>
+                        <!-- Import-Package>
                             org.apache.wicket,
                             org.apache.wicket.util,
                             org.apache.wicket.event,
@@ -109,7 +109,7 @@
                             org.apache.wicket.ajax,
                             org.osgi.service.blueprint,
                             org.apache.wicket.core.request.mapper
-                        </Import-Package>
+                        </Import-Package -->
                     </instructions>
                 </configuration>
             </plugin>

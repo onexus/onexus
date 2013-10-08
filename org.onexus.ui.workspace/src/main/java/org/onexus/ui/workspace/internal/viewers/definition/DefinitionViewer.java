@@ -23,14 +23,15 @@ import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceSerializer;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.workspace.internal.viewers.utils.PrettifyBehavior;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.ByteArrayOutputStream;
 
 
 public class DefinitionViewer extends Panel {
 
-    @PaxWicketBean(name = "resourceSerializer")
+    @Inject
     private IResourceSerializer resourceSerializer;
 
     public DefinitionViewer(String id, IModel<? extends Resource> model) {

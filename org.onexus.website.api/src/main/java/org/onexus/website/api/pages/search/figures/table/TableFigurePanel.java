@@ -37,10 +37,11 @@ import org.onexus.website.api.widgets.tableviewer.EntitiesRowProvider;
 import org.onexus.website.api.widgets.tableviewer.HeadersToolbar;
 import org.onexus.website.api.widgets.tableviewer.TableViewerStatus;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class TableFigurePanel extends Panel {
 
     private static final IModel<TableViewerStatus> STATUS = new Model<TableViewerStatus>(new TableViewerStatus());
 
-    @PaxWicketBean(name = "queryParser")
+    @Inject
     private IQueryParser queryParser;
 
     public TableFigurePanel(String id, ORI parentOri, IEntitySelection selection, TableFigureConfig config) {

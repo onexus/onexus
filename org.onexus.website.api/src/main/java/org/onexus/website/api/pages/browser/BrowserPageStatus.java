@@ -34,8 +34,9 @@ import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,7 +58,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private List<FilterConfig> currentFilters = new ArrayList<FilterConfig>();
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public BrowserPageStatus() {

@@ -38,7 +38,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -156,15 +158,15 @@ public class WebsiteService implements IWebsiteService {
 
         String projectUrl = website.getORI().getProjectUrl();
 
-        Properties props = new Properties();
+        Dictionary<String, String> props = new Hashtable<String, String>();
         props.put(Constants.APPLICATION_NAME, "web_" + name.replace('/', '_'));
         props.put(Constants.MOUNTPOINT, "web/" + name);
 
         registrations.put(projectUrl, context.registerService(
                 WebApplicationFactory.class.getName(),
                 new WebsiteApplicationFactory(website.getName(), website.getORI().toString(), signInPageClass),
-                props
-        ));
+                props)
+        );
 
         LOGGER.info("Registering website /web/" + name);
 

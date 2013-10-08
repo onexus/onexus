@@ -27,14 +27,16 @@ import org.onexus.resource.api.Resource;
 import org.onexus.website.api.IWebsiteService;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class WebsiteViewer extends Panel {
 
-    @PaxWicketBean(name = "websiteService")
+    @Inject
     private IWebsiteService websiteService;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public WebsiteViewer(String id, final IModel<? extends Resource> model) {

@@ -59,8 +59,9 @@ import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,10 +70,10 @@ import java.util.List;
 
 public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> implements IAjaxIndicatorAware {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     private transient FiltersWidgetStatus filtersStatus;

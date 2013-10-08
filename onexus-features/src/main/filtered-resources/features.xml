@@ -125,17 +125,15 @@
         <bundle>mvn:org.apache.wicket/wicket-core/${wicket.version}</bundle>
         <bundle>mvn:org.apache.wicket/wicket-auth-roles/${wicket.version}</bundle>
         <bundle>mvn:org.apache.wicket/wicket-extensions/${wicket.version}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.junit/4.10_1</bundle>
-        <bundle>mvn:org.codehaus.jackson/jackson-core-lgpl/1.9.9</bundle>
-        <bundle>mvn:org.codehaus.jackson/jackson-mapper-lgpl/1.9.9</bundle>
     </feature>
 
-    <!-- Pax-Wicket Core Feature; loading all required features. Do a feature:install paxwicket and you're ready to go -->
     <feature name="onexus-pax-wicket" version="${project.version}">
-        <feature>http</feature>
+        <feature>onexus-wicket</feature>
         <feature>eventadmin</feature>
         <bundle>mvn:org.ops4j.base/ops4j-base/${ops4j.base.version}</bundle>
+        <bundle>mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/${geronimo.inject.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${aopalliance.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${cglib.version}</bundle>
         <bundle>mvn:org.ops4j.pax.wicket/org.ops4j.pax.wicket.service/${pax-wicket.version}</bundle>
     </feature>
 

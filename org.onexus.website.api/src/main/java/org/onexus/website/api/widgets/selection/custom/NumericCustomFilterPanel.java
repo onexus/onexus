@@ -40,11 +40,11 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.exceptions.OnexusException;
 import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.widgets.selection.FilterConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel {
 
@@ -53,7 +53,7 @@ public abstract class NumericCustomFilterPanel extends AbstractCustomFilterPanel
 
     private static final List<String> OPERATIONS = Arrays.asList(new String[]{"<", ">", "<=", ">=", "=", "!="});
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public NumericCustomFilterPanel(String id, CustomFilter customFilter, ORI parentOri) {

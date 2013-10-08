@@ -28,7 +28,9 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.website.api.WebsiteApplication;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class CustomCssBehavior extends Behavior {
 
@@ -36,10 +38,10 @@ public class CustomCssBehavior extends Behavior {
 
     private ORI resourceUri;
 
-    @PaxWicketBean(name = "dataManager")
+    @Inject
     private IDataManager dataManager;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public CustomCssBehavior(ORI parentOri, String cssTag) {

@@ -54,17 +54,18 @@ import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 
 public class SelectionPanel extends EventPanel {
 
-    @PaxWicketBean(name = "resourceManager")
-    public transient IResourceManager resourceManager;
+    @Inject
+    private IResourceManager resourceManager;
 
-    @PaxWicketBean(name = "collectionManager")
-    public transient ICollectionManager collectionManager;
+    @Inject
+    private ICollectionManager collectionManager;
 
     private WebMarkupContainer widgetModal;
 

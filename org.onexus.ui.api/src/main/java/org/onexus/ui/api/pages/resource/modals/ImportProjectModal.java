@@ -24,15 +24,17 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class ImportProjectModal extends Panel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImportProjectModal.class);
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     public IResourceManager resourceManager;
 
     private String projectURL;

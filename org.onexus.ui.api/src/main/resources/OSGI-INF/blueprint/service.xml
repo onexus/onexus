@@ -32,12 +32,11 @@
             <entry key="pax.wicket.applicationname" value="onexus.ui"/>
             <entry key="pax.wicket.mountpoint" value="ws"/>
         </service-properties>
-        <bean class="org.ops4j.pax.wicket.util.SimpleWebApplicationFactory">
+        <bean class="org.ops4j.pax.wicket.api.support.SimpleWebApplicationFactory">
             <property name="wicketApplication" value="org.onexus.ui.api.OnexusWebApplication"/>
         </bean>
     </service>
 
     <reference id="resourceManager" interface="org.onexus.resource.api.IResourceManager"/>
     <reference id="progressManager" interface="org.onexus.resource.api.IProgressManager"/>
-
 </blueprint>

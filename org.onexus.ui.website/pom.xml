@@ -94,7 +94,7 @@
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <DynamicImport-Package>*</DynamicImport-Package>
-                        <Import-Package>
+                        <!-- Import-Package>
                             org.apache.wicket,
                             org.apache.wicket.util,
                             org.apache.wicket.event,
@@ -124,7 +124,7 @@
                             org.apache.wicket.core.request.mapper,
                             org.onexus.ui.api.viewers,
                             org.onexus.ui.api.wizards
-                        </Import-Package>
+                        </Import-Package -->
                     </instructions>
                 </configuration>
             </plugin>

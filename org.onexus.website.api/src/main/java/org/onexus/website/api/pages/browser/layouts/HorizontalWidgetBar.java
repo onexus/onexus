@@ -25,13 +25,14 @@ import org.onexus.website.api.widgets.IWidgetManager;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetModel;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 
 public class HorizontalWidgetBar extends Panel {
 
-    @PaxWicketBean(name = "widgetManager")
+    @Inject
     private IWidgetManager widgetManager;
 
     public HorizontalWidgetBar(String componentId, Collection<WidgetConfig> widgets, IModel<BrowserPageStatus> pageModel) {

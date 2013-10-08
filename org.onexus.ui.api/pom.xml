@@ -105,7 +105,7 @@
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <DynamicImport-Package>*</DynamicImport-Package>
-                        <Import-Package>
+                        <!-- Import-Package>
                             org.apache.wicket,
                             org.apache.wicket.util,
                             org.apache.wicket.event,
@@ -134,7 +134,7 @@
                             org.osgi.service.blueprint,
                             org.apache.wicket.core.request.mapper,
                             org.apache.commons.collections
-                        </Import-Package>
+                        </Import-Package -->
                     </instructions>
                 </configuration>
             </plugin>
