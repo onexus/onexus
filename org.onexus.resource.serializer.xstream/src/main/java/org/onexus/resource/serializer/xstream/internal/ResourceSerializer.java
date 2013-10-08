@@ -28,6 +28,9 @@ import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.api.Property;
 import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.resource.api.exceptions.UnserializeException;
 import org.onexus.resource.api.utils.AbstractMetadata;
 import org.slf4j.Logger;
@@ -35,6 +38,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -125,8 +131,55 @@ public class ResourceSerializer implements IResourceSerializer {
 
     @Override
     public void register(Class<?> resourceType) {
-        xstream.processAnnotations(resourceType);
+
+        processAnnotations(resourceType);
         registeredLoaders.add(resourceType.getClassLoader());
+
+        // Register dependent types
+        ResourceRegister resourceRegister = resourceType.getAnnotation(ResourceRegister.class);
+        if (resourceRegister != null) {
+            for (Class type : resourceRegister.value()) {
+                processAnnotations(type);
+            }
+        }
+    }
+
+    private void processAnnotations(Class<?> resourceType) {
+
+        ResourceAlias resourceAlias = resourceType.getAnnotation(ResourceAlias.class);
+        if (resourceAlias != null) {
+           xstream.alias(resourceAlias.value(), resourceType);
+        }
+
+        for (Field field : resourceType.getDeclaredFields()) {
+
+            ResourceAlias resourceFieldAlias = field.getAnnotation(ResourceAlias.class);
+            if (resourceFieldAlias != null) {
+                xstream.aliasField(resourceFieldAlias.value(), resourceType, field.getName());
+            }
+
+            ResourceImplicitList implicitList = field.getAnnotation(ResourceImplicitList.class);
+            if (implicitList != null) {
+                xstream.addImplicitCollection(resourceType, field.getName(), implicitList.value(), getCollectionItemClass(field));
+            }
+        }
+
+    }
+
+    private Class<?> getCollectionItemClass(Field field) {
+
+        Class<?> type = null;
+        final Type genericType = field.getGenericType();
+        if (genericType instanceof ParameterizedType) {
+            final Type typeArgument = ((ParameterizedType)genericType).getActualTypeArguments()[0];
+            if (typeArgument instanceof ParameterizedType) {
+                type = (Class<?>)((ParameterizedType)typeArgument).getRawType();
+            } else if (typeArgument instanceof Class) {
+                type = (Class<?>)typeArgument;
+            }
+        }
+
+        return type;
     }
 
     private class RegisteredClassLoader extends ClassLoader {

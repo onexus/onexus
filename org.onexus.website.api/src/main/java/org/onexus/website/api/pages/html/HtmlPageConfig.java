@@ -17,7 +17,7 @@
  */
 package org.onexus.website.api.pages.html;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.widgets.WidgetConfig;
@@ -25,7 +25,7 @@ import org.onexus.website.api.widgets.WidgetConfig;
 import java.util.Collections;
 import java.util.List;
 
-@XStreamAlias("html")
+@ResourceAlias("html")
 public class HtmlPageConfig extends PageConfig {
 
     private String content;

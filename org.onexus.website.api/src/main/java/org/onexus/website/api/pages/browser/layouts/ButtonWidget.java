@@ -43,7 +43,6 @@ import org.onexus.website.api.widgets.WidgetModel;
 import org.onexus.website.api.widgets.WidgetStatus;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class ButtonWidget extends EventPanel {
 

@@ -17,10 +17,10 @@
  */
 package org.onexus.website.api.widgets.views;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-@XStreamAlias("widget-views")
+@ResourceAlias("widget-views")
 public class ViewsWidgetConfig extends WidgetConfig {
 
     private ViewsWidgetStatus defaultStatus;

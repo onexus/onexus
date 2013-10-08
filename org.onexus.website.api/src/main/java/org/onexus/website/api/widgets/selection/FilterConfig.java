@@ -17,12 +17,12 @@
  */
 package org.onexus.website.api.widgets.selection;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 
 import java.io.Serializable;
 
-@XStreamAlias("filter-config")
+@ResourceAlias("filter-config")
 public class FilterConfig implements Serializable {
 
     private String name;

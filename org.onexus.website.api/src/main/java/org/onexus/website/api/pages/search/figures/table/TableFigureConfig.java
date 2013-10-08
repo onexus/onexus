@@ -17,16 +17,16 @@
  */
 package org.onexus.website.api.pages.search.figures.table;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.search.FigureConfig;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("figure-table")
+@ResourceAlias("figure-table")
 public class TableFigureConfig extends FigureConfig {
 
     private ORI collection;

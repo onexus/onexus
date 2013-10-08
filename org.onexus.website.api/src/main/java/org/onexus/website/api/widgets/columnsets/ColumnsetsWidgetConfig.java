@@ -17,10 +17,10 @@
  */
 package org.onexus.website.api.widgets.columnsets;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-@XStreamAlias("widget-columnsets")
+@ResourceAlias("widget-columnsets")
 public class ColumnsetsWidgetConfig extends WidgetConfig {
 
     private ColumnsetsWidgetStatus defaultStatus;

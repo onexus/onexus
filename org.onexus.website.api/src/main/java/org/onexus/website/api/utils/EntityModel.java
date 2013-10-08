@@ -25,7 +25,6 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class EntityModel implements IModel<IEntity> {
 

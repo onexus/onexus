@@ -43,7 +43,6 @@ import org.onexus.website.api.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.website.api.widgets.tags.tagstore.TagStore;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

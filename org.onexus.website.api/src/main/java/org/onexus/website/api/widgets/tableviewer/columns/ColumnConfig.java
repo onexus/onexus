@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.widgets.tableviewer.columns;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
@@ -28,6 +27,7 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Property;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
@@ -35,13 +35,12 @@ import org.onexus.website.api.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@XStreamAlias("column")
+@ResourceAlias("column")
 public class ColumnConfig implements IColumnConfig {
 
     private String label;

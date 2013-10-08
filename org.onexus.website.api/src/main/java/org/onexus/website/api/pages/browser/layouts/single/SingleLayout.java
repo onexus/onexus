@@ -29,7 +29,6 @@ import org.onexus.website.api.widgets.IWidgetManager;
 import org.onexus.website.api.widgets.WidgetModel;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class SingleLayout extends Panel {
 

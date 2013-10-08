@@ -37,7 +37,6 @@ import org.onexus.website.api.utils.visible.VisibleRule;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.regex.Pattern;
 
 public class SingleEntitySelection implements IEntitySelection {

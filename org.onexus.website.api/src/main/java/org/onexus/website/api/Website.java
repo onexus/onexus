@@ -46,7 +46,6 @@ import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

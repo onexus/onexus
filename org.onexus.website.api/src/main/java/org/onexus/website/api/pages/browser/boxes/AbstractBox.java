@@ -25,7 +25,6 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public abstract class AbstractBox extends Panel {
 

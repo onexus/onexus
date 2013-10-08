@@ -17,18 +17,18 @@
  */
 package org.onexus.website.api.widgets.selection;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.List;
 
-@XStreamAlias("widget-fix-filters")
+@ResourceAlias("widget-fix-filters")
 public class FixFiltersWidgetConfig extends WidgetConfig {
 
     private FixFiltersWidgetStatus defaultStatus;
 
-    @XStreamImplicit(itemFieldName = "filter")
+    @ResourceImplicitList("filter")
     private List<FilterConfig> filters;
 
     public FixFiltersWidgetConfig() {

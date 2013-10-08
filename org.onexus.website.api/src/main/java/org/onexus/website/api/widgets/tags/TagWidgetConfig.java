@@ -17,18 +17,18 @@
  */
 package org.onexus.website.api.widgets.tags;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.List;
 
-@XStreamAlias("widget-tags")
+@ResourceAlias("widget-tags")
 public class TagWidgetConfig extends WidgetConfig {
 
     private TagWidgetStatus defaultStatus;
 
-    @XStreamImplicit(itemFieldName = "tag")
+    @ResourceImplicitList("tag")
     private List<String> tags;
 
     public TagWidgetConfig() {

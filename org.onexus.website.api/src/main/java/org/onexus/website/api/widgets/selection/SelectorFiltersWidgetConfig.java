@@ -17,19 +17,19 @@
  */
 package org.onexus.website.api.widgets.selection;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.List;
 
-@XStreamAlias("widget-selector-filters")
+@ResourceAlias("widget-selector-filters")
 public class SelectorFiltersWidgetConfig extends WidgetConfig {
 
     private SelectorFiltersWidgetStatus defaultStatus;
     private String title;
 
-    @XStreamImplicit(itemFieldName = "filter")
+    @ResourceImplicitList("filter")
     private List<FilterConfig> filters;
 
     public SelectorFiltersWidgetConfig() {

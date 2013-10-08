@@ -56,7 +56,6 @@ import org.onexus.website.api.widgets.download.scripts.Python3Script;
 import org.onexus.website.api.widgets.download.scripts.RScript;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;

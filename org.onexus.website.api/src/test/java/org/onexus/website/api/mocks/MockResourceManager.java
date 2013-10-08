@@ -17,7 +17,13 @@
  */
 package org.onexus.website.api.mocks;
 
-import org.onexus.resource.api.*;
+import org.onexus.resource.api.IResourceListener;
+import org.onexus.resource.api.IResourceManager;
+import org.onexus.resource.api.Loader;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 
 import java.util.HashMap;
 import java.util.List;

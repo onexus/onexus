@@ -47,7 +47,6 @@ import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 import java.util.Set;
 

@@ -38,7 +38,6 @@ import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;

@@ -27,7 +27,6 @@ import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetModel;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collection;
 
 public class HorizontalWidgetBar extends Panel {

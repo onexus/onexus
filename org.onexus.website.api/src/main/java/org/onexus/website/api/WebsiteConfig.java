@@ -17,10 +17,10 @@
  */
 package org.onexus.website.api;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.authorization.IAuthorization;
@@ -28,7 +28,7 @@ import org.onexus.website.api.utils.authorization.IAuthorization;
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("website")
+@ResourceAlias("website")
 public class WebsiteConfig extends Resource implements IAuthorization {
 
     private WebsiteStatus defaultStatus;
@@ -47,7 +47,7 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private String bottom;
 
-    @XStreamImplicit(itemFieldName = "connection")
+    @ResourceImplicitList("connection")
     private List<Connection> connections;
 
     public WebsiteConfig() {

@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.pages.browser;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,7 +28,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
@@ -56,7 +54,6 @@ import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collection;
 
 public class SelectionPanel extends EventPanel {

@@ -36,7 +36,6 @@ import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

@@ -17,18 +17,18 @@
  */
 package org.onexus.website.api.pages.search.figures.bar;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.search.FigureConfig;
 
-@XStreamAlias("figure-bar")
+@ResourceAlias("figure-bar")
 public class BarFigureConfig extends FigureConfig {
 
     private CollectionField value;
 
-    @XStreamAlias("x-axis")
+    @ResourceAlias("x-axis")
     private CollectionField xAxis;
 
-    @XStreamAlias("y-axis")
+    @ResourceAlias("y-axis")
     private CollectionField yAxis;
 
     private String init;

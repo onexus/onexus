@@ -17,11 +17,11 @@
  */
 package org.onexus.website.api.pages.browser.filters;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
-@XStreamAlias("filters-toolbar")
+@ResourceAlias("filters-toolbar")
 public class FiltersToolbarConfig extends WidgetConfig {
 
     private FiltersToolbarStatus defaultStatus;

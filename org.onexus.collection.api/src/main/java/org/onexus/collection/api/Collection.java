@@ -17,15 +17,15 @@
  */
 package org.onexus.collection.api;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamInclude;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceRegister;
 
 import java.util.List;
 
-@XStreamAlias("collection")
-@XStreamInclude({Link.class, Field.class, OrderBy.class})
+@ResourceAlias("collection")
+@ResourceRegister({Link.class, Field.class, OrderBy.class})
 public class Collection extends Resource {
 
     private List<Field> fields;

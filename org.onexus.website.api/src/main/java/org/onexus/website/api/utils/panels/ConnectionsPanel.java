@@ -37,7 +37,6 @@ import org.onexus.website.api.events.EventTabSelected;
 import org.onexus.website.api.events.EventViewChange;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Collections;
 import java.util.List;
 

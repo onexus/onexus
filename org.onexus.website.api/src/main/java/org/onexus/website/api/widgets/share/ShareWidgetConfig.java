@@ -17,10 +17,10 @@
  */
 package org.onexus.website.api.widgets.share;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-@XStreamAlias("widget-share")
+@ResourceAlias("widget-share")
 public class ShareWidgetConfig extends WidgetConfig {
 
     private ShareWidgetStatus defaultStatus;

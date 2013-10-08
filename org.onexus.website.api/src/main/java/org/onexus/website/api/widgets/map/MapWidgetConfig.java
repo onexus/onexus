@@ -17,11 +17,11 @@
  */
 package org.onexus.website.api.widgets.map;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-@XStreamAlias("widget-map")
+@ResourceAlias("widget-map")
 public class MapWidgetConfig extends WidgetConfig {
 
     private MapWidgetStatus defaultStatus;

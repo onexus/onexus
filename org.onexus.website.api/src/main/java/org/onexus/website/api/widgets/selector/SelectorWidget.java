@@ -42,7 +42,6 @@ import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.widgets.Widget;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;

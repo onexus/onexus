@@ -31,7 +31,6 @@ import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.Widget;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.net.URLEncoder;
 
 

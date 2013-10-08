@@ -52,11 +52,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.ops4j.pax.wicket</groupId>
-            <artifactId>org.ops4j.pax.wicket.service</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
@@ -64,11 +59,6 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
         </dependency>
 
         <dependency>

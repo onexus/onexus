@@ -17,10 +17,10 @@
  */
 package org.onexus.website.api.widgets.download;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-@XStreamAlias("widget-download")
+@ResourceAlias("widget-download")
 public class DownloadWidgetConfig extends WidgetConfig {
 
     private DownloadWidgetStatus defaultStatus;

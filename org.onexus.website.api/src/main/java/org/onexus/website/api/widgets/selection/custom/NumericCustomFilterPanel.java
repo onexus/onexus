@@ -42,7 +42,6 @@ import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
 
