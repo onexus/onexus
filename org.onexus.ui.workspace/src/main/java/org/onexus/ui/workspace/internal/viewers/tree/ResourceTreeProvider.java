@@ -28,7 +28,6 @@ import org.onexus.ui.api.OnexusWebApplication;
 import org.onexus.ui.api.pages.resource.ResourceModel;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
