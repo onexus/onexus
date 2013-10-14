@@ -201,5 +201,20 @@ public class MultipleEntitySelection implements IEntitySelection {
         return queryParser;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        MultipleEntitySelection that = (MultipleEntitySelection) o;
+
+        if (config != null ? !config.equals(that.config) : that.config != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return config != null ? config.hashCode() : 0;
+    }
 }
