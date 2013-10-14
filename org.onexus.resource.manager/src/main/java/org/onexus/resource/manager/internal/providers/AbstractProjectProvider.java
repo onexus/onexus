@@ -17,6 +17,11 @@
  */
 package org.onexus.resource.manager.internal.providers;
 
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.Version;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
@@ -33,14 +38,7 @@ import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +65,8 @@ public abstract class AbstractProjectProvider {
     private String projectUrl;
     private File projectFolder;
 
+    // FreeMarker
+    private Configuration cfg = new Configuration();
 
     private FileAlterationObserver observer;
 
@@ -147,6 +147,19 @@ public abstract class AbstractProjectProvider {
         });
 
         monitor.addObserver(observer);
+
+        // Initialize template engine
+        try {
+            cfg.setDirectoryForTemplateLoading(projectFolder);
+        } catch (IOException e) {
+            LOGGER.error("At template engine configuration. Project folder: '" + projectFolder + "'", e);
+            throw new RuntimeException(e);
+        }
+
+        cfg.setObjectWrapper(new DefaultObjectWrapper());
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+        cfg.setIncompatibleImprovements(new Version(2, 3, 20));  // FreeMarker 2.3.20
 
     }
 
@@ -293,13 +306,13 @@ public abstract class AbstractProjectProvider {
 
             try {
 
-                InputStream input = new FileInputStream(resourceFile);
+                String relativePath = projectFolder.toURI().relativize(resourceFile.toURI()).getPath();
+                Template resourceTemplate = cfg.getTemplate(relativePath);
 
-                if (this.projectAlias != null) {
-                    String content = MapVariableInterpolator.interpolate(convertStreamToString(input, "UTF-8"), this.projectAlias);
-                    input = new ByteArrayInputStream(content.getBytes("UTF-8"));
-                }
+                StringWriter out = new StringWriter((int) resourceFile.length() / 4);
+                resourceTemplate.process(projectAlias, out);
 
+                InputStream input = new ByteArrayInputStream(out.toString().getBytes("UTF-8"));
                 resource = serializer.unserialize(Resource.class, input);
 
             } catch (FileNotFoundException e) {

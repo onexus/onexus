@@ -46,6 +46,7 @@
         <jgit.version>2.1.0.201209190230-r</jgit.version>
         <jsch.version>0.1.42.w1</jsch.version>
         <poi.version>3.9</poi.version>
+        <freemarker.version>2.3.20</freemarker.version>
 
         <!-- Project properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -507,6 +508,13 @@
                 <artifactId>poi</artifactId>
                 <version>${poi.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

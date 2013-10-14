@@ -133,7 +133,7 @@ public class BoxEntityPanel extends Panel {
         Collection collection = entity.getCollection();
 
         for (Field field : collection.getFields()) {
-            template = template.replaceAll("\\$\\{" + field.getId() + "\\}", String.valueOf(entity.get(field.getId())));
+            template = template.replaceAll("\\$\\[" + field.getId() + "\\]", String.valueOf(entity.get(field.getId())));
         }
 
         return template;

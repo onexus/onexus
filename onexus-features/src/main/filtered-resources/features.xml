@@ -48,6 +48,9 @@
         <bundle>mvn:org.eclipse.jgit/org.eclipse.jgit/${jgit.version}</bundle>
         <bundle>mvn:org.eclipse.jgit/org.eclipse.jgit.http.server/${jgit.version}</bundle>
 
+        <!-- FreeMarker -->
+        <bundle>mvn:org.freemarker/freemarker/${freemarker.version}</bundle>
+
     </feature>
 
     <!-- Data core -->

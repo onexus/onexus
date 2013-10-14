@@ -191,7 +191,7 @@ public class FieldDecorator implements IDecorator {
     protected String replaceParameters(Field columnField, String columnValue, IEntity entity, String template, boolean format) {
 
 
-        String columnPattern = "#{column.id}";
+        String columnPattern = "$[column.id]";
         if (template.contains(columnPattern)) {
             template = template.replaceAll(Pattern.quote(columnPattern), columnField.getId());
         }
@@ -209,7 +209,7 @@ public class FieldDecorator implements IDecorator {
                 value = columnValue;
             }
 
-            String fieldPattern = "${" + field.getId() + "}";
+            String fieldPattern = "$[" + field.getId() + "]";
             if (template.contains(fieldPattern)) {
                 template = template.replaceAll(Pattern.quote(fieldPattern), value);
             }
