@@ -57,6 +57,7 @@ import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.Collection;
+import java.util.List;
 
 public class SelectionPanel extends EventPanel {
 
@@ -185,19 +186,19 @@ public class SelectionPanel extends EventPanel {
         RepeatingView filterRules = new RepeatingView("filter");
         filtersContainer.add(filterRules);
 
-        Collection<IEntitySelection> filters = getBrowserPage().getEntitySelections();
+        final List<IEntitySelection> selections = getBrowserPage().getEntitySelections();
 
-        if (filters != null && !filters.isEmpty()) {
+        if (selections != null && !selections.isEmpty()) {
 
             Query query = getQuery();
 
-            for (IEntitySelection filter : filters) {
+            for (IEntitySelection selection : selections) {
 
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
 
-                final ORI filterORI = filter.getSelectionCollection();
-                final String filterTitle = filter.getTitle(query);
+                final ORI filterORI = selection.getSelectionCollection();
+                final String filterTitle = selection.getTitle(query);
 
                 // Abbreviate at the 3th comma
                 String abbreviateFilterTitle = filterTitle;
@@ -258,7 +259,7 @@ public class SelectionPanel extends EventPanel {
                 container.add(editLink);
 
                 // Remove link
-                BrowserPageLink<ORI> removeLink = new BrowserPageLink<ORI>("remove", Model.of(filter.getSelectionCollection())) {
+                BrowserPageLink<IEntitySelection> removeLink = new BrowserPageLink<IEntitySelection>("remove", Model.of(selection)) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -268,7 +269,7 @@ public class SelectionPanel extends EventPanel {
 
                 };
 
-                if (filter.isEnable()) {
+                if (selection.isEnable()) {
                     container.add(new AttributeModifier("class", "btn btn-large"));
                 } else {
                     container.add(new AttributeModifier("class", "btn btn-large disabled"));
