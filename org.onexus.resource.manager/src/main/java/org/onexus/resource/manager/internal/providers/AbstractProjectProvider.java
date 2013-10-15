@@ -17,6 +17,7 @@
  */
 package org.onexus.resource.manager.internal.providers;
 
+import freemarker.core.TemplateElement;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -33,15 +34,16 @@ import org.onexus.data.api.Data;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.exceptions.ResourceNotFoundException;
 import org.onexus.resource.api.exceptions.UnserializeException;
-import org.onexus.resource.api.utils.string.MapVariableInterpolator;
 import org.onexus.resource.manager.internal.PluginLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.tree.TreeNode;
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -60,13 +62,14 @@ public abstract class AbstractProjectProvider {
 
     private PluginLoader pluginLoader;
     private Set<Long> bundleDependencies = new HashSet<Long>();
+    private Map<String, Set<File>> includeDependencies = new HashMap<String, Set<File>>();
 
     private String projectName;
     private String projectUrl;
     private File projectFolder;
 
     // FreeMarker
-    private Configuration cfg = new Configuration();
+    private Configuration freemarkerConfig = new Configuration();
 
     private FileAlterationObserver observer;
 
@@ -130,36 +133,22 @@ public abstract class AbstractProjectProvider {
                 onResourceDelete(resources.remove(resourceOri));
             }
 
-            private Resource loadFile(File file) {
-                // Skip project file
-                if (ONEXUS_PROJECT_FILE.equals(file.getName())) {
-                    return null;
-                }
-
-                Resource resource = loadResource(file);
-
-                if (resource != null) {
-                    resources.put(resource.getORI(), resource);
-                }
-
-                return resource;
-            }
         });
 
         monitor.addObserver(observer);
 
         // Initialize template engine
         try {
-            cfg.setDirectoryForTemplateLoading(projectFolder);
+            freemarkerConfig.setDirectoryForTemplateLoading(projectFolder);
         } catch (IOException e) {
             LOGGER.error("At template engine configuration. Project folder: '" + projectFolder + "'", e);
             throw new RuntimeException(e);
         }
 
-        cfg.setObjectWrapper(new DefaultObjectWrapper());
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-        cfg.setIncompatibleImprovements(new Version(2, 3, 20));  // FreeMarker 2.3.20
+        freemarkerConfig.setObjectWrapper(new DefaultObjectWrapper());
+        freemarkerConfig.setDefaultEncoding("UTF-8");
+        freemarkerConfig.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+        freemarkerConfig.setIncompatibleImprovements(new Version(2, 3, 20));  // FreeMarker 2.3.20
 
     }
 
@@ -307,13 +296,17 @@ public abstract class AbstractProjectProvider {
             try {
 
                 String relativePath = projectFolder.toURI().relativize(resourceFile.toURI()).getPath();
-                Template resourceTemplate = cfg.getTemplate(relativePath);
+                Template resourceTemplate = freemarkerConfig.getTemplate(relativePath);
 
                 StringWriter out = new StringWriter((int) resourceFile.length() / 4);
                 resourceTemplate.process(projectAlias, out);
 
                 InputStream input = new ByteArrayInputStream(out.toString().getBytes("UTF-8"));
                 resource = serializer.unserialize(Resource.class, input);
+
+                for (String include : getIncludes(resourceTemplate)) {
+                    addIncludeDependency(include, resourceFile);
+                }
 
             } catch (FileNotFoundException e) {
                 resource = createErrorResource(resourceFile, "File '" + resourceFile.getPath() + "' not found.");
@@ -340,11 +333,6 @@ public abstract class AbstractProjectProvider {
         resource.setORI(convertFileToORI(resourceFile));
         return resource;
 
-    }
-
-    public static String convertStreamToString(java.io.InputStream is, String charsetName) {
-        java.util.Scanner s = new java.util.Scanner(is, charsetName).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
     }
 
     private ORI convertFileToORI(File file) {
@@ -482,6 +470,16 @@ public abstract class AbstractProjectProvider {
         for (IResourceListener listener : listeners) {
             listener.onResourceChange(resource);
         }
+
+        // If it's an include dependency reload parent resources
+        String resourcePath = resource.getORI().getPath().substring(1);
+        if (includeDependencies.containsKey(resourcePath)) {
+            freemarkerConfig.clearTemplateCache();
+            for (File parentResourceFile : includeDependencies.get(resourcePath)) {
+                onResourceChange(loadFile(parentResourceFile));
+            }
+        }
+
     }
 
     protected void onResourceDelete(Resource resource) {
@@ -499,5 +497,53 @@ public abstract class AbstractProjectProvider {
 
     public boolean dependsOnBundle(long bundleId) {
         return bundleDependencies.contains(Long.valueOf(bundleId));
+    }
+
+    private List<String> getIncludes(Template resourceTemplate) {
+
+        List<String> includes = new ArrayList<String>();
+        TemplateElement root = resourceTemplate.getRootTreeNode();
+        for (int i=0; i < root.getChildCount(); i++) {
+            TreeNode node = root.getChildAt(i);
+            if (node instanceof TemplateElement) {
+                String tag = ((TemplateElement) node).getCanonicalForm();
+                if (tag != null && tag.startsWith("<#include")) {
+                    String include = tag.replace("<#include \"", "").replace("\"/>", "");
+                    String templatePath = FilenameUtils.getFullPath(resourceTemplate.getName());
+                    includes.add(templatePath + include);
+                    try {
+                        Template includeTemplate = freemarkerConfig.getTemplate(templatePath + include);
+                        includes.addAll( getIncludes(includeTemplate));
+                    } catch (IOException e) {
+                        LOGGER.error(e.getMessage(), e);
+                    }
+                }
+            }
+        }
+
+        return includes;
+    }
+
+    private void addIncludeDependency(String templateName, File parentResourceFile) {
+        if (!includeDependencies.containsKey(templateName)) {
+            includeDependencies.put(templateName, new HashSet<File>());
+        }
+        includeDependencies.get(templateName).add(parentResourceFile);
+    }
+
+    private Resource loadFile(File file) {
+
+        // Skip project file
+        if (ONEXUS_PROJECT_FILE.equals(file.getName())) {
+            return null;
+        }
+
+        Resource resource = loadResource(file);
+
+        if (resource != null) {
+            resources.put(resource.getORI(), resource);
+        }
+
+        return resource;
     }
 }
