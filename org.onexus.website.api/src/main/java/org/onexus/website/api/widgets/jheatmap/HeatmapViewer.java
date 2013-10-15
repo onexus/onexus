@@ -46,7 +46,6 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
     private static final HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
     private static final HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
-
     private static final ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
 
     @Inject
@@ -89,8 +88,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         code.append(
                 "$('#heatmap').heatmap({\n" +
                         "       data : {\n" +
-                        "                 type : \"tdm\",\n" +
-                        "                 values : '" + getQueryUrl() + "', \n");
+                        "                 values: new jheatmap.readers.TsvMatrixReader({ url: \"" + getQueryUrl() + "\"}), \n");
 
         code.append("\t\t\t\tcols_annotations : [");
         if (config.getColAnnotations() == null) {
@@ -119,6 +117,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
                 "              },\n" +
                 "       init : function(heatmap) {\n");
         code.append(config.getInit());
+        code.append("$('.footer').css( 'position', 'relative');");
         code.append("}});");
 
         return code.toString();
