@@ -37,7 +37,9 @@ import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @ResourceAlias("column")
@@ -280,22 +282,29 @@ public class ColumnConfig implements IColumnConfig {
 
         if (collection != null) {
             List<Field> fields = getFields(collection, query.getOn());
-            List<String> fieldIds = new ArrayList<String>(fields.size());
+            Set<String> fieldIds = new HashSet<String>(fields.size());
             for (Field field : fields) {
                 fieldIds.add(field.getId());
-            }
-            query.addSelect(columnAlias, fieldIds);
-        }
 
-        /* Don't add primary keys by default
-        List<String> currentFields = query.getSelect().get(columnAlias);
-        for (Field field : collection.getFields()) {
-            if (field.isPrimaryKey() != null && field.isPrimaryKey() && !currentFields.contains(field.getId())) {
-                currentFields.add(field.getId());
-            }
-        }
-        */
+                for (IDecorator decorator : createActions(collection, field)) {
+                    addExtraFields(fieldIds, decorator, collection);
+                }
 
+                if (decorator != null) {
+                    IDecorator decorator = getDecoratorManager().getDecorator(this.decorator, collection, field);
+                    addExtraFields(fieldIds, decorator, collection);
+                }
+            }
+            query.addSelect(columnAlias, new ArrayList<String>(fieldIds));
+
+        }
+    }
+
+    private static void addExtraFields(Set<String> fieldIds, IDecorator decorator, Collection collection) {
+        List<String> decoratorExtraFields = decorator.getExtraFields(collection);
+        if (decoratorExtraFields != null && !decoratorExtraFields.isEmpty()) {
+            fieldIds.addAll(decoratorExtraFields);
+        }
     }
 
     @Inject

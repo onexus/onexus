@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.types.Text;
@@ -33,7 +34,10 @@ import org.onexus.website.api.widgets.tableviewer.formaters.ITextFormater;
 import org.onexus.website.api.widgets.tableviewer.formaters.StringFormater;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -149,6 +153,11 @@ public class FieldDecorator implements IDecorator {
     }
 
     @Override
+    public List<String> getExtraFields(Collection collection) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
     public void detach() {
     }
 
@@ -186,6 +195,19 @@ public class FieldDecorator implements IDecorator {
 
     protected String replaceParameters(IEntity entity, String template) {
         return replaceParameters(null, null, entity, template, true);
+    }
+
+    private static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\[(.+?)\\]");
+
+    protected static List<String> extractFields(String template) {
+        List<String> fields = new ArrayList<String>();
+
+        Matcher matcher = PARAMETER_PATTERN.matcher(template);
+        while (matcher.find()) {
+            fields.add(matcher.group(1));
+        }
+        fields.remove("column.id");
+        return fields;
     }
 
     protected String replaceParameters(Field columnField, String columnValue, IEntity entity, String template, boolean format) {

@@ -20,6 +20,7 @@ package org.onexus.website.api.widgets.tableviewer.decorators.box;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.Parameters;
@@ -64,7 +65,7 @@ public class BoxDecorator implements IDecorator {
     private static List<String> getFieldIds(String fields) {
 
         if (Strings.isEmpty(fields)) {
-            return Collections.emptyList();
+            return new ArrayList<String>();
         }
 
         String[] fieldsSplit = fields.split(",");
@@ -104,6 +105,20 @@ public class BoxDecorator implements IDecorator {
     @Override
     public void setTemplate(String template) {
 
+    }
+
+    @Override
+    public List<String> getExtraFields(Collection collection) {
+
+        List<String> fields = getFieldIds(this.fields);
+
+        if (fields.isEmpty()) {
+            for (Field field : collection.getFields()) {
+                fields.add(field.getId());
+            }
+        }
+
+        return fields;
     }
 
     @Override
