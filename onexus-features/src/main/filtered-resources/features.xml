@@ -38,6 +38,7 @@
         <bundle>mvn:org.onexus/org.onexus.resource.authorization/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.progress/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.serializer.xstream/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.resource.profile/${project.version}</bundle>
 
         <!-- xstream -->
         <bundle>mvn:com.thoughtworks.xstream/com.springsource.com.thoughtworks.xstream/${xstream.version}</bundle>
