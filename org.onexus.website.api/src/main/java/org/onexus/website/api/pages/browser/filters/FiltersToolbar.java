@@ -39,6 +39,8 @@ import org.onexus.website.api.pages.browser.filters.panels.StringFilterPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 
+import java.util.Iterator;
+
 public class FiltersToolbar extends Panel {
 
     private WebMarkupContainer widgetModal;
@@ -160,8 +162,9 @@ public class FiltersToolbar extends Panel {
     protected void onBeforeRender() {
 
         RepeatingView filtersView = new RepeatingView("filters");
-        for (FilterConfig filter : statusModel.getObject().getCurrentFilters()) {
-            addFilter(filtersView, filter);
+        Iterator<FilterConfig> itFilters = statusModel.getObject().getCurrentFilters().iterator();
+        while (itFilters.hasNext()) {
+            addFilter(filtersView, itFilters.next(), itFilters.hasNext());
         }
 
         addOrReplace(filtersView);
@@ -169,7 +172,7 @@ public class FiltersToolbar extends Panel {
         super.onBeforeRender();
     }
 
-    private void addFilter(RepeatingView filtersView, final FilterConfig filter) {
+    private void addFilter(RepeatingView filtersView, final FilterConfig filter, boolean hasNext) {
 
         WebMarkupContainer container = new WebMarkupContainer(filtersView.newChildId());
         container.add(new Label("title", filter.getName()));
@@ -182,6 +185,7 @@ public class FiltersToolbar extends Panel {
                 send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
             }
         });
+        container.add(new WebMarkupContainer("operator").setVisible(hasNext));
         filtersView.add(container);
     }
 
