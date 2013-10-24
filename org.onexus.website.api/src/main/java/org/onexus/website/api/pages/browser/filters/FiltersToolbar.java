@@ -17,6 +17,7 @@
  */
 package org.onexus.website.api.pages.browser.filters;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,7 +40,9 @@ import org.onexus.website.api.pages.browser.filters.panels.StringFilterPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 public class FiltersToolbar extends Panel {
 
@@ -129,7 +132,9 @@ public class FiltersToolbar extends Panel {
                 });
             } else if ("CATEGORICAL".equalsIgnoreCase(filterType)) {
 
-                widgetModal.addOrReplace(new CategoricalFilterPanel("widget", e.getHeader(), options) {
+                List<String> values = Arrays.asList(StringUtils.split(options, ','));
+
+                widgetModal.addOrReplace(new CategoricalFilterPanel("widget", e.getHeader(), values) {
 
                     @Override
                     protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
@@ -137,7 +142,6 @@ public class FiltersToolbar extends Panel {
                     }
 
                 });
-
             }
 
             widgetModal.addOrReplace(new Label("modalHeader", "Filter column '" + e.getHeader().getLabel() + "'"));
