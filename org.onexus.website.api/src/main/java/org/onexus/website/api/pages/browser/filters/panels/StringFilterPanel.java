@@ -42,7 +42,7 @@ public abstract class StringFilterPanel extends Panel {
     private static final String EQUAL = "equal";
     private static final String CONTAINS = "contains";
 
-    private static final List<String> OPERATIONS = Arrays.asList(new String[]{EQUAL, CONTAINS});
+    private static final List<String> OPERATIONS = Arrays.asList(new String[]{CONTAINS, EQUAL});
 
     private IModel<FilterOption> option;
     private FieldHeader header;
@@ -51,7 +51,7 @@ public abstract class StringFilterPanel extends Panel {
         super(id);
 
         this.header = fieldHeader;
-        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(new FilterOption(EQUAL)));
+        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(new FilterOption(CONTAINS)));
 
         Form<FilterOption> form = new Form("form", option);
 
