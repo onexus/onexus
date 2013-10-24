@@ -3,6 +3,10 @@ table.table-viewer {
    white-space: nowrap;
 }
 
+table.table-viewer th {
+    padding-left: 10px;
+}
+
 table.table-viewer tr.headers div.wicket_orderDown a {
       background-image: url('images/orderdown.gif');
       background-position: center left;
