@@ -37,12 +37,9 @@ import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
@@ -181,8 +178,13 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         MultipleEntitySelection filterCompiler = new MultipleEntitySelection();
         for (FilterConfig filterConfig : getCurrentFilters()) {
             filterCompiler.setFilterConfig(filterConfig);
-            Filter filter = filterCompiler.buildFilter(query);
-            QueryUtils.and(query, filter);
+            if (getCollectionManager().isLinkable(query, filterConfig.getCollection().toAbsolute(query.getOn()))) {
+                Filter filter = filterCompiler.buildFilter(query);
+                QueryUtils.and(query, filter);
+                filterConfig.setEnable(true);
+            } else {
+                filterConfig.setEnable(false);
+            }
         }
 
     }

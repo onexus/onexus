@@ -18,6 +18,7 @@
 package org.onexus.website.api.pages.browser.filters;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -179,8 +180,9 @@ public class FiltersToolbar extends Panel {
     private void addFilter(RepeatingView filtersView, final FilterConfig filter, boolean hasNext) {
 
         WebMarkupContainer container = new WebMarkupContainer(filtersView.newChildId());
-        container.add(new Label("title", filter.getName()));
-        container.add(new AjaxLink<FilterConfig>("remove") {
+        WebMarkupContainer labelContainer = new WebMarkupContainer("container");
+        labelContainer.add(new Label("title", filter.getName()));
+        labelContainer.add(new AjaxLink<FilterConfig>("remove") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -189,7 +191,16 @@ public class FiltersToolbar extends Panel {
                 send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
             }
         });
+
+        if (filter.isEnable()) {
+            labelContainer.add(new AttributeModifier("class", "label label-important"));
+        } else {
+            labelContainer.add(new AttributeModifier("class", "label"));
+        }
+
+        container.add(labelContainer);
         container.add(new WebMarkupContainer("operator").setVisible(hasNext));
+
         filtersView.add(container);
     }
 
