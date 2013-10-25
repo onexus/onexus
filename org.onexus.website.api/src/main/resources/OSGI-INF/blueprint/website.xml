@@ -14,5 +14,6 @@
         <property name="collectionManager" ref="collectionManager"/>
         <property name="context" ref="blueprintBundleContext"/>
         <property name="signInPages" ref="signInPages"/>
+        <property name="pageManager" ref="pageManager" />
     </bean>
 </blueprint>

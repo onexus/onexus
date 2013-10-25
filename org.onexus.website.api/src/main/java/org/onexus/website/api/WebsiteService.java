@@ -31,6 +31,7 @@ import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.onexus.ui.authentication.jaas.JaasSignInPage;
 import org.onexus.ui.authentication.persona.PersonaSignInPage;
+import org.onexus.website.api.pages.IPageManager;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.BundleContext;
@@ -51,6 +52,7 @@ public class WebsiteService implements IWebsiteService {
 
     private IResourceManager resourceManager;
     private ICollectionManager collectionManager;
+    private IPageManager pageManager;
 
     private List<ISignInPage> signInPages;
 
@@ -162,7 +164,7 @@ public class WebsiteService implements IWebsiteService {
 
         registrations.put(projectUrl, context.registerService(
                 WebApplicationFactory.class.getName(),
-                new WebsiteApplicationFactory(website.getName(), website.getORI().toString(), signInPageClass),
+                new WebsiteApplicationFactory(website.getName(), website.getORI().toString(), signInPageClass, pageManager),
                 props
         ));
 
@@ -241,6 +243,14 @@ public class WebsiteService implements IWebsiteService {
 
     public void setCollectionManager(ICollectionManager collectionManager) {
         this.collectionManager = collectionManager;
+    }
+
+    public IPageManager getPageManager() {
+        return pageManager;
+    }
+
+    public void setPageManager(IPageManager pageManager) {
+        this.pageManager = pageManager;
     }
 
     public List<ISignInPage> getSignInPages() {
