@@ -89,3 +89,12 @@ div.tag {
 div.tag > a {
      padding: 4px;
 }
+
+ul.pager select.rowsxpage {
+	float: left;
+	width: 84px;
+	margin-right: 10px;
+	border-radius: 15px;
+	border: 1px solid #DDD;
+	background-color: #FFF;
+}
