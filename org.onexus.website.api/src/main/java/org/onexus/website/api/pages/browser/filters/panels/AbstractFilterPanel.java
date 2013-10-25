@@ -39,12 +39,21 @@ public abstract class AbstractFilterPanel<T> extends Panel {
 
     private IModel<FilterOption> option;
     private FieldHeader header;
+    private FilterOption<T> defaultOption;
+    private List<FilterOperation> operations;
 
     public AbstractFilterPanel(String id, FieldHeader fieldHeader, FilterOption<T> defaultOption, List<FilterOperation> operations) {
         super(id);
 
         this.header = fieldHeader;
-        option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(defaultOption));
+        this.option = new CompoundPropertyModel<FilterOption>(new Model<FilterOption>(defaultOption));
+        this.defaultOption = defaultOption;
+        this.operations = operations;
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
         Form<FilterOption> form = new Form("form", option);
 
@@ -95,6 +104,7 @@ public abstract class AbstractFilterPanel<T> extends Panel {
         });
 
         add(form);
+
     }
 
     protected abstract FormComponent<T> createValueFormComponent(String componentId);

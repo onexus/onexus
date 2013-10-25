@@ -181,7 +181,7 @@ public class FiltersToolbar extends Panel {
 
         WebMarkupContainer container = new WebMarkupContainer(filtersView.newChildId());
         WebMarkupContainer labelContainer = new WebMarkupContainer("container");
-        labelContainer.add(new Label("title", filter.getName()));
+        labelContainer.add(new Label("title", filter.getName()).setEscapeModelStrings(false));
         labelContainer.add(new AjaxLink<FilterConfig>("remove") {
 
             @Override
