@@ -17,10 +17,12 @@
  */
 package org.onexus.website.api.pages;
 
+import org.apache.wicket.IApplicationListener;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.onexus.resource.api.IResourceRegister;
 
-public interface IPageCreator {
+public interface IPageCreator extends IApplicationListener {
 
     void register(IResourceRegister resourceRegister);
 

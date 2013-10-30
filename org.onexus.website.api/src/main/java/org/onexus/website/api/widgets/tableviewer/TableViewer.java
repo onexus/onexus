@@ -50,7 +50,7 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
     public static final CssResourceReference TABLE_VIEWER_CSS = new CssResourceReference(TableViewer.class,
             "TableViewer.css");
 
-    private static final MetaDataKey<Integer> DEFAULT_ROWS_PER_PAGE = new MetaDataKey<Integer>() {
+    public static final MetaDataKey<Integer> DEFAULT_ROWS_PER_PAGE = new MetaDataKey<Integer>() {
     };
 
     // Model objects

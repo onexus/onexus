@@ -35,6 +35,8 @@ public class FilterConfig implements Serializable {
 
     private String where;
 
+    private transient boolean enable = true;
+
     public FilterConfig() {
         super();
     }
@@ -82,6 +84,14 @@ public class FilterConfig implements Serializable {
 
     public void setDeletable(boolean deletable) {
         this.deletable = deletable;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     @Override
