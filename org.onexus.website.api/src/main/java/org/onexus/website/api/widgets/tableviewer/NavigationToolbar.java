@@ -19,15 +19,30 @@ package org.onexus.website.api.widgets.tableviewer;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.PropertyModel;
+import org.onexus.website.api.events.EventFiltersUpdate;
+import org.onexus.website.api.events.EventQueryUpdate;
+import org.onexus.website.api.events.EventViewChange;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class NavigationToolbar extends AbstractToolbar {
+
+    private Integer rowsPerPage;
+
+    private static List<Integer> PAGE_OPTIONS = Arrays.asList(20, 40, 60, 100);
 
     public NavigationToolbar(final DataTable<?, ?> table) {
         super(table);
@@ -41,6 +56,21 @@ public class NavigationToolbar extends AbstractToolbar {
         WebMarkupContainer span = new WebMarkupContainer("span");
         addOrReplace(span);
         span.add(AttributeModifier.replace("colspan", String.valueOf(getTable().getColumns().size())));
+
+        DropDownChoice<Integer> dropDown = new DropDownChoice<Integer>("rowsxpage",
+                new PropertyModel<Integer>(this, "rowsPerPage"),
+                PAGE_OPTIONS,
+                new RowsPerPageChoiceRenderer()
+        );
+
+        dropDown.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                send(getPage(), Broadcast.BREADTH, EventViewChange.EVENT);
+            }
+        });
+
+        span.add(dropDown);
 
         span.add(new PrevLink("prev"));
 
@@ -93,6 +123,21 @@ public class NavigationToolbar extends AbstractToolbar {
         return (EntitiesRowProvider) getTable().getDataProvider();
     }
 
+    public Integer getRowsPerPage() {
+
+        if (rowsPerPage == null) {
+            Integer sessionRowsPerPage = getSession().getMetaData(TableViewer.DEFAULT_ROWS_PER_PAGE);
+            rowsPerPage = sessionRowsPerPage == null ? 20 : sessionRowsPerPage;
+        }
+
+        return rowsPerPage;
+    }
+
+    public void setRowsPerPage(Integer rowsPerPage) {
+        getSession().setMetaData(TableViewer.DEFAULT_ROWS_PER_PAGE, rowsPerPage);
+        this.rowsPerPage = rowsPerPage;
+    }
+
     private class PrevLink extends AjaxLink<String> {
 
         public PrevLink(String id) {
@@ -138,6 +183,19 @@ public class NavigationToolbar extends AbstractToolbar {
 
             setVisible(size > to);
             super.onBeforeRender();
+        }
+    }
+
+    private class RowsPerPageChoiceRenderer implements IChoiceRenderer<Integer> {
+
+        @Override
+        public Object getDisplayValue(Integer object) {
+            return String.valueOf(object) + " rows";
+        }
+
+        @Override
+        public String getIdValue(Integer object, int index) {
+            return String.valueOf(object);
         }
     }
 

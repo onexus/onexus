@@ -17,6 +17,8 @@
  */
 package org.onexus.website.api.pages.browser.filters;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -38,6 +40,10 @@ import org.onexus.website.api.pages.browser.filters.panels.IntegerFilterPanel;
 import org.onexus.website.api.pages.browser.filters.panels.StringFilterPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class FiltersToolbar extends Panel {
 
@@ -127,7 +133,9 @@ public class FiltersToolbar extends Panel {
                 });
             } else if ("CATEGORICAL".equalsIgnoreCase(filterType)) {
 
-                widgetModal.addOrReplace(new CategoricalFilterPanel("widget", e.getHeader(), options) {
+                List<String> values = Arrays.asList(StringUtils.split(options, ','));
+
+                widgetModal.addOrReplace(new CategoricalFilterPanel("widget", e.getHeader(), values) {
 
                     @Override
                     protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
@@ -135,7 +143,6 @@ public class FiltersToolbar extends Panel {
                     }
 
                 });
-
             }
 
             widgetModal.addOrReplace(new Label("modalHeader", "Filter column '" + e.getHeader().getLabel() + "'"));
@@ -160,8 +167,9 @@ public class FiltersToolbar extends Panel {
     protected void onBeforeRender() {
 
         RepeatingView filtersView = new RepeatingView("filters");
-        for (FilterConfig filter : statusModel.getObject().getCurrentFilters()) {
-            addFilter(filtersView, filter);
+        Iterator<FilterConfig> itFilters = statusModel.getObject().getCurrentFilters().iterator();
+        while (itFilters.hasNext()) {
+            addFilter(filtersView, itFilters.next(), itFilters.hasNext());
         }
 
         addOrReplace(filtersView);
@@ -169,11 +177,12 @@ public class FiltersToolbar extends Panel {
         super.onBeforeRender();
     }
 
-    private void addFilter(RepeatingView filtersView, final FilterConfig filter) {
+    private void addFilter(RepeatingView filtersView, final FilterConfig filter, boolean hasNext) {
 
         WebMarkupContainer container = new WebMarkupContainer(filtersView.newChildId());
-        container.add(new Label("title", filter.getName()));
-        container.add(new AjaxLink<FilterConfig>("remove") {
+        WebMarkupContainer labelContainer = new WebMarkupContainer("container");
+        labelContainer.add(new Label("title", filter.getName()).setEscapeModelStrings(false));
+        labelContainer.add(new AjaxLink<FilterConfig>("remove") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -182,6 +191,16 @@ public class FiltersToolbar extends Panel {
                 send(getPage(), Broadcast.BREADTH, EventRemoveFilter.EVENT);
             }
         });
+
+        if (filter.isEnable()) {
+            labelContainer.add(new AttributeModifier("class", "label label-important"));
+        } else {
+            labelContainer.add(new AttributeModifier("class", "label"));
+        }
+
+        container.add(labelContainer);
+        container.add(new WebMarkupContainer("operator").setVisible(hasNext));
+
         filtersView.add(container);
     }
 

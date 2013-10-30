@@ -35,6 +35,8 @@ public class FilterConfig implements Serializable {
 
     private String where;
 
+    private transient boolean enable = true;
+
     public FilterConfig() {
         super();
     }
@@ -84,35 +86,31 @@ public class FilterConfig implements Serializable {
         this.deletable = deletable;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj){
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        FilterConfig other = (FilterConfig) obj;
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FilterConfig that = (FilterConfig) o;
+
+        if (!collection.equals(that.collection)) return false;
+        if (!name.equals(that.name)) return false;
 
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + collection.hashCode();
+        return result;
+    }
 }

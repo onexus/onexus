@@ -37,13 +37,9 @@ import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
@@ -53,7 +49,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private String currentView;
 
-    private Map<ORI, IEntitySelection> selectionMap = new LinkedHashMap<ORI, IEntitySelection>();
+    private List<IEntitySelection> selections = new ArrayList<IEntitySelection>();
 
     private List<FilterConfig> currentFilters = new ArrayList<FilterConfig>();
 
@@ -137,12 +133,8 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         this.base = baseURI;
     }
 
-    public Set<ORI> getFilteredCollections() {
-        return selectionMap.keySet();
-    }
-
-    public Collection<IEntitySelection> getEntitySelections() {
-        return selectionMap.values();
+    public List<IEntitySelection> getEntitySelections() {
+        return selections;
     }
 
     public List<FilterConfig> getCurrentFilters() {
@@ -150,11 +142,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     public void addEntitySelection(IEntitySelection selection) {
-        selectionMap.put(selection.getSelectionCollection(), selection);
+        selections.add(selection);
     }
 
-    public void removeEntitySelection(ORI selectionCollection) {
-        selectionMap.remove(selectionCollection);
+    public void removeEntitySelection(IEntitySelection selection) {
+        selections.remove(selection);
     }
 
     @Override
@@ -186,8 +178,13 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         MultipleEntitySelection filterCompiler = new MultipleEntitySelection();
         for (FilterConfig filterConfig : getCurrentFilters()) {
             filterCompiler.setFilterConfig(filterConfig);
-            Filter filter = filterCompiler.buildFilter(query);
-            QueryUtils.and(query, filter);
+            if (getCollectionManager().isLinkable(query, filterConfig.getCollection().toAbsolute(query.getOn()))) {
+                Filter filter = filterCompiler.buildFilter(query);
+                QueryUtils.and(query, filter);
+                filterConfig.setEnable(true);
+            } else {
+                filterConfig.setEnable(false);
+            }
         }
 
     }
@@ -302,7 +299,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             }
         }
 
-        selectionMap = new LinkedHashMap<ORI, IEntitySelection>();
+        selections = new ArrayList<IEntitySelection>();
         List<StringValue> values = parameters.getValues(keyPrefix + "f");
         if (!values.isEmpty()) {
             for (StringValue value : values) {
