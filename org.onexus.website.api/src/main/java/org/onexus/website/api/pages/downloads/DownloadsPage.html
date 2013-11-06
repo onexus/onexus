@@ -1,0 +1,26 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <section id="content">
+        <div id="boxes" class="row-fluid accordion">
+            <div class="accordion-group" wicket:id="downloads">
+                <div class="accordion-heading" wicket:id="heading">
+                    <a wicket:id="toggle" href="#" class="accordion-toggle" data-toggle="collapse"><span wicket:id="title">Download title</span></a>
+                </div>
+                <div class="accordion-body in" wicket:id="body">
+                    <div class="figure" wicket:id="description"></div>
+                    <div><a class="btn btn-primary" style="margin: 20px 30px;" href="#" wicket:id="download">Download</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal hide" wicket:id="modal">
+            <div class="modal-header">
+                <h3 wicket:id="header"></h3>
+            </div>
+            <div wicket:id="content" class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" wicket:id="close" class="btn">Close</a>
+            </div>
+        </div>
+    </section>
+</wicket:panel>
+</html>
