@@ -18,11 +18,7 @@
 package org.onexus.resource.manager.internal.providers;
 
 import freemarker.core.TemplateElement;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.Version;
+import freemarker.template.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
@@ -41,14 +37,7 @@ import org.slf4j.LoggerFactory;
 import javax.swing.tree.TreeNode;
 import java.io.*;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class AbstractProjectProvider {
@@ -293,12 +282,14 @@ public abstract class AbstractProjectProvider {
 
         if (ONEXUS_EXTENSION.equalsIgnoreCase(FilenameUtils.getExtension(resourceFile.getName()))) {
 
+            StringWriter out = null;
+
             try {
 
                 String relativePath = projectFolder.toURI().relativize(resourceFile.toURI()).getPath();
                 Template resourceTemplate = freemarkerConfig.getTemplate(relativePath);
 
-                StringWriter out = new StringWriter((int) resourceFile.length() / 4);
+                out = new StringWriter((int) resourceFile.length() / 4);
                 resourceTemplate.process(projectAlias, out);
 
                 InputStream input = new ByteArrayInputStream(out.toString().getBytes("UTF-8"));
@@ -311,7 +302,22 @@ public abstract class AbstractProjectProvider {
             } catch (FileNotFoundException e) {
                 resource = createErrorResource(resourceFile, "File '" + resourceFile.getPath() + "' not found.");
             } catch (UnserializeException e) {
-                resource = createErrorResource(resourceFile, "Parsing file " + resourceFile.getPath() + " at line " + e.getLine() + " on " + e.getPath());
+
+                String msg = "Parsing file " + resourceFile.getPath() + " at line " + e.getLine() + " on " + e.getPath();
+
+                if (out != null) {
+                    String[] lines = out.toString().split(System.getProperty("line.separator"));
+
+                    int error = Integer.valueOf(e.getLine());
+                    int from = (error-1 > 0 ? error-1 : 0);
+                    int to = (error+1 < lines.length ? error+1 : lines.length);
+
+                    for (int i=from ; i <= to; i++) {
+                        msg = msg + "\n " + i + " >> " + lines[i];
+                    }
+                }
+
+                resource = createErrorResource(resourceFile, msg);
             } catch (Exception e) {
                 resource = createErrorResource(resourceFile, e.getMessage());
             }
