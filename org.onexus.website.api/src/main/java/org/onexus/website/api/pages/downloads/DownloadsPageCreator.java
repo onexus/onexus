@@ -18,6 +18,7 @@
 package org.onexus.website.api.pages.downloads;
 
 import org.apache.wicket.model.IModel;
+import org.onexus.resource.api.IResourceRegister;
 import org.onexus.website.api.pages.AbstractPageCreator;
 import org.onexus.website.api.pages.Page;
 
@@ -30,6 +31,14 @@ public class DownloadsPageCreator extends AbstractPageCreator<DownloadsPageConfi
     @Override
     protected Page<?, ?> build(String componentId, IModel<DownloadsPageStatus> statusModel) {
         return new DownloadsPage(componentId, statusModel);
+    }
+
+    @Override
+    public void register(IResourceRegister resourceRegister) {
+        super.register(resourceRegister);
+
+        resourceRegister.register(DownloadsPageStatus.class);
+        resourceRegister.register(Download.class);
     }
 
 }

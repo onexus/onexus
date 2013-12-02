@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 @ResourceAlias("downloads")
-@ResourceRegister(Download.class)
+@ResourceRegister({ Download.class, DownloadsPageStatus.class })
 public class DownloadsPageConfig extends PageConfig {
 
     @ResourceImplicitList("download")

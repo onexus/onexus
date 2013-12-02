@@ -30,7 +30,6 @@ import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.widgets.Widget;
-import org.onexus.website.api.widgets.WidgetModel;
 import org.onexus.website.api.widgets.download.DownloadWidget;
 import org.onexus.website.api.widgets.download.DownloadWidgetConfig;
 import org.onexus.website.api.widgets.download.DownloadWidgetStatus;
@@ -65,7 +64,7 @@ public class DownloadsPage extends Page<DownloadsPageConfig, DownloadsPageStatus
 
             WebMarkupContainer body = new WebMarkupContainer("body");
             item.add(body);
-            body.add(new Label("description", download.getDescription()));
+            body.add(new Label("description", download.getDescription()).setEscapeModelStrings(false));
             body.add(new AjaxLink<Download>("download", Model.of(download)) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
