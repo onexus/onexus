@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>org.onexus.collection.store.sql - Checkstyle report</title>
+    <link>http://www.onexus.org/org.onexus.collection.store.sql</link>
+    <description>org.onexus.collection.store.sql - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2013 Onexus</copyright>
+    <item>
+      <title>File: 24,
+             Errors: 617,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.SqlDialect.java">org/onexus/collection/store/sql/SqlDialect.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  100
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.SqlEntity.java">org/onexus/collection/store/sql/SqlEntity.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.IsNullFilterBuilder.java">org/onexus/collection/store/sql/filters/IsNullFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.SqlAdapter.java">org/onexus/collection/store/sql/adapters/SqlAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.IntegerAdapter.java">org/onexus/collection/store/sql/adapters/IntegerAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.FilterBuilder.java">org/onexus/collection/store/sql/filters/FilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.NotFilterBuilder.java">org/onexus/collection/store/sql/filters/NotFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.LinksNetworkComparator.java">org/onexus/collection/store/sql/LinksNetworkComparator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.EqualIdFilterBuilder.java">org/onexus/collection/store/sql/filters/EqualIdFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.SqlCollectionStore.java">org/onexus/collection/store/sql/SqlCollectionStore.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  58
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.AbstractFilterBuilder.java">org/onexus/collection/store/sql/filters/AbstractFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.DoubleAdapter.java">org/onexus/collection/store/sql/adapters/DoubleAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.InFilterBuilder.java">org/onexus/collection/store/sql/filters/InFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.SqlCollectionDDL.java">org/onexus/collection/store/sql/SqlCollectionDDL.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  75
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.SqlQuery.java">org/onexus/collection/store/sql/SqlQuery.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  94
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.AtomicFilterBuilder.java">org/onexus/collection/store/sql/filters/AtomicFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.TextAdapter.java">org/onexus/collection/store/sql/adapters/TextAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  13
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.UnknownFilterBuilder.java">org/onexus/collection/store/sql/filters/UnknownFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.LongAdapter.java">org/onexus/collection/store/sql/adapters/LongAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.SqlEntityTable.java">org/onexus/collection/store/sql/SqlEntityTable.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.StringAdapter.java">org/onexus/collection/store/sql/adapters/StringAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  17
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.NumericTools.java">org/onexus/collection/store/sql/adapters/NumericTools.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.adapters.BooleanAdapter.java">org/onexus/collection/store/sql/adapters/BooleanAdapter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.collection.store.sql/checkstyle.html#org.onexus.collection.store.sql.filters.BinaryFilterBuilder.java">org/onexus/collection/store/sql/filters/BinaryFilterBuilder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+

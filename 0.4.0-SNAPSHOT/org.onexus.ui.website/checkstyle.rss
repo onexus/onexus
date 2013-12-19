@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>org.onexus.ui.website - Checkstyle report</title>
+    <link>http://www.onexus.org/org.onexus.ui.website</link>
+    <description>org.onexus.ui.website - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2013 Onexus</copyright>
+    <item>
+      <title>File: 8,
+             Errors: 166,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://www.onexus.org/org.onexus.ui.website/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.workspace.CollectionViewer.java">org/onexus/ui/website/internal/workspace/CollectionViewer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  7
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.wizards.AbstractNewResourceWizard.java">org/onexus/ui/website/internal/wizards/AbstractNewResourceWizard.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  36
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.workspace.CollectionViewerCreator.java">org/onexus/ui/website/internal/workspace/CollectionViewerCreator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.workspace.WebsiteViewer.java">org/onexus/ui/website/internal/workspace/WebsiteViewer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.wizards.NewWebsiteWizardCreator.java">org/onexus/ui/website/internal/wizards/NewWebsiteWizardCreator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  11
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.wizards.NewWebsiteWizard.java">org/onexus/ui/website/internal/wizards/NewWebsiteWizard.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  66
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.workspace.WebsiteViewerCreator.java">org/onexus/ui/website/internal/workspace/WebsiteViewerCreator.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  9
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.ui.website/checkstyle.html#org.onexus.ui.website.internal.wizards.AbstractWizard.java">org/onexus/ui/website/internal/wizards/AbstractWizard.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  19
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
