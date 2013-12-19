@@ -12,6 +12,7 @@
 
 # Maven files
 target/
+site/
 
 # ANTLR3 files
 org.onexus.collection.query.parser/src/main/antlr3/org/onexus/collection/query/parser/internal/output/

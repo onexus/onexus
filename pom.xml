@@ -220,7 +220,6 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <skipDeploy>true</skipDeploy>
                     <reportPlugins>
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
@@ -308,12 +307,13 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-project-info-reports-plugin</artifactId>
-                            <version>2.3.1</version>
+                            <version>2.6</version>
                             <reportSets>
                                 <reportSet>
                                     <reports>
                                         <report>summary</report>
                                         <report>license</report>
+                                        <report>dependencies</report>
                                     </reports>
                                 </reportSet>
                             </reportSets>
@@ -322,27 +322,6 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>0.7</version>
-                <configuration>
-                    <message>Creating site for ${project.artifactId}, ${project.version}</message>
-                    <path>${project.distributionManagement.site.url}</path>
-                    <merge>true</merge>
-                    <server>github</server>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
 
         <pluginManagement>
@@ -520,9 +499,9 @@
 
     <distributionManagement>
         <site>
-            <id>github-pages-site</id>
-            <name>Deployment through GitHub's site deployment plugin</name>
-            <url>site/${project.version}</url>
+            <id>site</id>
+            <name>Onexus Github ghpages checkout</name>
+            <url>file://${basedir}/site/${project.version}</url>
         </site>
     </distributionManagement>
 
