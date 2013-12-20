@@ -87,44 +87,47 @@ public abstract class AbstractProjectProvider {
                 )
         );
 
-        observer = new FileAlterationObserver(projectFolder, notHiddenDirectoryFilter);
-        observer.addListener(new FileAlterationListenerAdaptor() {
+        String MONITOR_PROJECTS = System.getProperty("onexus.monitor.projects");
+        if (MONITOR_PROJECTS == null || Boolean.valueOf(MONITOR_PROJECTS)) {
+            observer = new FileAlterationObserver(projectFolder, notHiddenDirectoryFilter);
+            observer.addListener(new FileAlterationListenerAdaptor() {
 
-            @Override
-            public void onDirectoryCreate(File directory) {
-                LOGGER.info("Creating folder '" + directory.getName() + "'");
-                onResourceCreate(loadFile(directory));
-            }
+                @Override
+                public void onDirectoryCreate(File directory) {
+                    LOGGER.info("Creating folder '" + directory.getName() + "'");
+                    onResourceCreate(loadFile(directory));
+                }
 
-            @Override
-            public void onDirectoryDelete(File directory) {
-                LOGGER.info("Deleting folder '" + directory.getName() + "'");
-                ORI resourceOri = convertFileToORI(directory);
-                onResourceDelete(resources.remove(resourceOri));
-            }
+                @Override
+                public void onDirectoryDelete(File directory) {
+                    LOGGER.info("Deleting folder '" + directory.getName() + "'");
+                    ORI resourceOri = convertFileToORI(directory);
+                    onResourceDelete(resources.remove(resourceOri));
+                }
 
-            @Override
-            public void onFileChange(File file) {
-                LOGGER.info("Reloading file '" + file.getName() + "'");
-                onResourceChange(loadFile(file));
-            }
+                @Override
+                public void onFileChange(File file) {
+                    LOGGER.info("Reloading file '" + file.getName() + "'");
+                    onResourceChange(loadFile(file));
+                }
 
-            @Override
-            public void onFileCreate(File file) {
-                LOGGER.info("Creating file '" + file.getName() + "'");
-                onResourceCreate(loadFile(file));
-            }
+                @Override
+                public void onFileCreate(File file) {
+                    LOGGER.info("Creating file '" + file.getName() + "'");
+                    onResourceCreate(loadFile(file));
+                }
 
-            @Override
-            public void onFileDelete(File file) {
-                LOGGER.info("Deleting file '" + file.getName() + "'");
-                ORI resourceOri = convertFileToORI(file);
-                onResourceDelete(resources.remove(resourceOri));
-            }
+                @Override
+                public void onFileDelete(File file) {
+                    LOGGER.info("Deleting file '" + file.getName() + "'");
+                    ORI resourceOri = convertFileToORI(file);
+                    onResourceDelete(resources.remove(resourceOri));
+                }
 
-        });
+            });
 
-        monitor.addObserver(observer);
+            monitor.addObserver(observer);
+        }
 
         // Initialize template engine
         try {
