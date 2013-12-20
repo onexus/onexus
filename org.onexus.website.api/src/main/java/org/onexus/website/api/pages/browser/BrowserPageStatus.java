@@ -141,6 +141,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
     }
 
     public List<FilterConfig> getCurrentFilters() {
+
+        if (currentFilters == null) {
+            currentFilters = new ArrayList<FilterConfig>(0);
+        }
+
         return currentFilters;
     }
 

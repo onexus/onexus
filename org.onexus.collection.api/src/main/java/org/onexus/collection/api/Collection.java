@@ -47,11 +47,6 @@ public class Collection extends Resource {
         this.links = links;
     }
 
-    @Override
-    public String toString() {
-        return "Collection [getORI()=" + getORI() + ", fields=" + fields + ", links=" + links + "]";
-    }
-
     public Field getField(String fieldId) {
         if (fieldId != null) {
             for (Field field : fields) {

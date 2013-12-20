@@ -105,4 +105,9 @@ public abstract class Resource implements IMetadata, Serializable {
     public void setProperties(List<Property> properties) {
         this.properties = properties;
     }
+
+    @Override
+    public String toString() {
+        return ori.toString();
+    }
 }
