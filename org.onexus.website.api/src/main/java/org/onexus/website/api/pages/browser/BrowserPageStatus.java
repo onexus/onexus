@@ -20,6 +20,8 @@ package org.onexus.website.api.pages.browser;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.ICollectionManager;
@@ -28,6 +30,7 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
+import org.onexus.website.api.pages.ISelectionContributor;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
@@ -44,7 +47,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
+public class BrowserPageStatus extends PageStatus<BrowserPageConfig> implements ISelectionContributor {
 
     private String base;
 
@@ -157,8 +160,12 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         selections.remove(selection);
     }
 
+    public static MetaDataKey<ISelectionContributor> SELECTIONS = new MetaDataKey<ISelectionContributor>() {};
+
     @Override
     public void beforeQueryBuild(Query query) {
+
+        RequestCycle.get().setMetaData(SELECTIONS, this);
 
         if (!StringUtils.isEmpty(getBase())) {
             query.setOn(new ORI(query.getOn(), getBase()));
