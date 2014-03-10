@@ -221,10 +221,12 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
                 target.add(SearchPage.this.get("container").get("form").get("examplesContainer"));
                 target.add(SearchPage.this.get("boxes"));
 
-                if (getStatus().getType().getFilters() == null) {
+                FiltersWidgetConfig filters = getStatus().getType().getFilters();
+                if (filters == null) {
                     list.setVisible(false);
                 } else {
                     list.setVisible(true);
+                    list.add(new AttributeModifier("title", filters.getTitle()));
                 }
                 setFiltersStatus(null);
                 target.add(list);
