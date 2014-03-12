@@ -44,8 +44,8 @@ import org.onexus.website.api.utils.panels.ConnectionsPanel;
 import org.onexus.website.api.utils.panels.LoginPanel;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +55,7 @@ public class Website extends WebPage {
     // Parameters
     public static final String PARAMETER_CURRENT_PAGE = "c";
 
-    @PaxWicketBean(name = "pageManager")
+    @Inject
     private IPageManager pageManager;
 
     public Website(PageParameters pageParameters) {

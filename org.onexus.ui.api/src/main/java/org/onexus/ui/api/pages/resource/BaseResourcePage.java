@@ -40,14 +40,15 @@ import org.onexus.ui.api.pages.resource.modals.ImportProjectModal;
 import org.onexus.ui.api.pages.theme.DefaultTheme;
 import org.onexus.ui.api.progressbar.ProgressBar;
 import org.onexus.ui.authentication.persona.SignOutBehavior;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 
 public class BaseResourcePage extends WebPage {
 
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public BaseResourcePage(IModel<Resource> resourceModel) {

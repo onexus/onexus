@@ -20,6 +20,7 @@ package org.onexus.resource.manager.internal.ws.git;
 import org.eclipse.jgit.util.Base64;
 import org.eclipse.jgit.util.StringUtils;
 import org.onexus.resource.api.IAuthorizationManager;
+import org.onexus.resource.api.IProfileManager;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
@@ -27,13 +28,6 @@ import org.onexus.resource.api.session.LoginContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.Subject;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.security.auth.login.LoginException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -53,7 +47,6 @@ public class GitSecurityFilter implements Filter {
 
     private static final String BASIC = "Basic";
     private static final String CHALLENGE = BASIC + " realm=\"karaf\"";
-    private static final String APPLICATION_POLICY_NAME = "karaf";
 
     private static final String gitReceivePack = "/git-receive-pack";
     private static final String gitUploadPack = "/git-upload-pack";
@@ -61,6 +54,7 @@ public class GitSecurityFilter implements Filter {
 
     private IAuthorizationManager authorizationManager;
     private IResourceManager resourceManager;
+    private IProfileManager profileManager;
 
 
     @Override
@@ -80,9 +74,27 @@ public class GitSecurityFilter implements Filter {
         String fullSuffix = fullUrl.substring(repository.length());
         String requestPrivilege = getUrlRequestAction(fullSuffix);
         String user = getUser(httpRequest);
-        String serverUrl = getServerUrl(httpRequest);
 
-        ORI resource = new ORI(serverUrl + '/' + repository);
+        if (IAuthorizationManager.WRITE.equals(requestPrivilege) && user == null) {
+            httpResponse.setHeader("WWW-Authenticate", CHALLENGE);
+            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        // Find a project with this name
+        ORI resource = null;
+        for (Project project : resourceManager.getProjects()) {
+            if (repository.equals(project.getName())) {
+                resource = project.getORI();
+                break;
+            }
+        }
+
+        if (resource == null) {
+            httpResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         if (!authorizationManager.check(requestPrivilege, resource) && user == null) {
             httpResponse.setHeader("WWW-Authenticate", CHALLENGE);
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
@@ -110,11 +122,6 @@ public class GitSecurityFilter implements Filter {
 
     }
 
-    private String getServerUrl(HttpServletRequest httpRequest) {
-        //TODO
-        return "http://localhost:8181/git";
-    }
-
     protected String getUser(HttpServletRequest httpRequest) {
 
         final String authorization = httpRequest.getHeader("Authorization");
@@ -130,11 +137,26 @@ public class GitSecurityFilter implements Filter {
 
             if (values.length == 2) {
                 String username = values[0];
-                char[] password = values[1].toCharArray();
-                boolean valid = authenticate(username, new String(password));
+                String password = values[1];
+
+                LoginContext.set(new LoginContext(username), httpRequest.getRequestedSessionId());
+
+                boolean valid = false;
+                String[] tokens = profileManager.getValueArray("tokens");
+                if (tokens != null) {
+                    for (String token : tokens) {
+                        if (password.equals(token)) {
+                            valid = true;
+                            break;
+                        }
+                    }
+                }
+
                 if (valid) {
                     return username;
                 }
+
+                LoginContext.get().logout();
             }
             LOGGER.info(MessageFormat.format("AUTH: invalid credentials ({0})", credentials));
         }
@@ -184,30 +206,6 @@ public class GitSecurityFilter implements Filter {
         return null;
     }
 
-    public boolean authenticate(String username, String password) {
-        boolean authenticated;
-        LoginCallbackHandler handler = new LoginCallbackHandler(username, password);
-        try {
-            javax.security.auth.login.LoginContext javaCtx = new javax.security.auth.login.LoginContext(APPLICATION_POLICY_NAME, handler);
-            javaCtx.login();
-            authenticated = true;
-
-            LoginContext ctx = new LoginContext(username);
-
-            Subject subject = javaCtx.getSubject();
-            if (subject != null) {
-                for (Principal p : subject.getPrincipals()) {
-                    ctx.addRole(p.getName());
-                }
-            }
-            LoginContext.set(ctx, null);
-
-        } catch (LoginException e) {
-            authenticated = false;
-        }
-        return authenticated;
-    }
-
     public IAuthorizationManager getAuthorizationManager() {
         return authorizationManager;
     }
@@ -224,29 +222,12 @@ public class GitSecurityFilter implements Filter {
         this.resourceManager = resourceManager;
     }
 
-    private class LoginCallbackHandler implements CallbackHandler {
+    public IProfileManager getProfileManager() {
+        return profileManager;
+    }
 
-        private String username;
-        private String password;
-
-        public LoginCallbackHandler(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-        public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-            for (int i = 0; i < callbacks.length; i++) {
-                Callback callback = callbacks[i];
-                if (callback instanceof NameCallback) {
-                    ((NameCallback) callback).setName(username);
-                } else if (callback instanceof PasswordCallback) {
-                    PasswordCallback pwCallback = (PasswordCallback) callback;
-                    pwCallback.setPassword(password.toCharArray());
-                } else {
-                    throw new UnsupportedCallbackException(callbacks[i], "Callback type not supported");
-                }
-            }
-        }
+    public void setProfileManager(IProfileManager profileManager) {
+        this.profileManager = profileManager;
     }
 
     /**

@@ -45,14 +45,14 @@ import org.onexus.website.api.pages.search.figures.FigureBox;
 import org.onexus.website.api.pages.search.figures.LinksBox;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 
 public class BoxesPanel extends Panel {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     private boolean quickList;

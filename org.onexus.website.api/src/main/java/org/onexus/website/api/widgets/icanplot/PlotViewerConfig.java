@@ -17,8 +17,8 @@
  */
 package org.onexus.website.api.widgets.icanplot;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
@@ -26,7 +26,7 @@ import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("viewer-plot")
+@ResourceAlias("viewer-plot")
 public class PlotViewerConfig extends WidgetConfig {
 
     private PlotViewerStatus defaultStatus;

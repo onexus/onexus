@@ -23,7 +23,8 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
 
 public class EntityModel implements IModel<IEntity> {
 
@@ -32,7 +33,7 @@ public class EntityModel implements IModel<IEntity> {
 
     private transient IEntity entity;
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public EntityModel() {

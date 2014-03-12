@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
@@ -37,6 +38,9 @@ import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.LinkPanel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilterDecorator extends FieldDecorator {
 
@@ -119,5 +123,14 @@ public class FilterDecorator extends FieldDecorator {
         return new AbstractEvent[]{EventAddFilter.EVENT};
     }
 
-
+    @Override
+    public List<String> getExtraFields(Collection collection) {
+        List<String> fields = new ArrayList<String>();
+        for (Field field : collection.getFields()) {
+            if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
+                fields.add(field.getId());
+            }
+        }
+        return fields;
+    }
 }

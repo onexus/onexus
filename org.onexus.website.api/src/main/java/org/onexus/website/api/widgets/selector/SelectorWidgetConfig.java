@@ -17,11 +17,11 @@
  */
 package org.onexus.website.api.widgets.selector;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
-@XStreamAlias("widget-selector")
+@ResourceAlias("widget-selector")
 public class SelectorWidgetConfig extends WidgetConfig {
 
     private SelectorWidgetStatus defaultStatus;

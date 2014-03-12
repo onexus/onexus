@@ -26,10 +26,10 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 import org.onexus.website.api.WebsiteApplication;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,10 +37,10 @@ public class HtmlDataResourceModel extends LoadableDetachableModel<String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HtmlDataResourceModel.class);
 
-    @PaxWicketBean(name = "dataManager")
+    @Inject
     private IDataManager dataManager;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     private ORI contentUri;

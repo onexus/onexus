@@ -17,10 +17,10 @@
  */
 package org.onexus.website.api.pages.search.figures.html;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.search.FigureConfig;
 
-@XStreamAlias("figure-html")
+@ResourceAlias("figure-html")
 public class HtmlFigureConfig extends FigureConfig {
 
     private String text;

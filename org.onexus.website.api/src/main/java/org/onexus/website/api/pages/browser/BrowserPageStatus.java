@@ -20,6 +20,8 @@ package org.onexus.website.api.pages.browser;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.ICollectionManager;
@@ -28,24 +30,24 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
+import org.onexus.website.api.pages.ISelectionContributor;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
+public class BrowserPageStatus extends PageStatus<BrowserPageConfig> implements ISelectionContributor {
 
     private String base;
 
@@ -53,11 +55,11 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
 
     private String currentView;
 
-    private Map<ORI, IEntitySelection> selectionMap = new LinkedHashMap<ORI, IEntitySelection>();
+    private List<IEntitySelection> selections = new ArrayList<IEntitySelection>();
 
     private List<FilterConfig> currentFilters = new ArrayList<FilterConfig>();
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public BrowserPageStatus() {
@@ -137,28 +139,33 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
         this.base = baseURI;
     }
 
-    public Set<ORI> getFilteredCollections() {
-        return selectionMap.keySet();
-    }
-
-    public Collection<IEntitySelection> getEntitySelections() {
-        return selectionMap.values();
+    public List<IEntitySelection> getEntitySelections() {
+        return selections;
     }
 
     public List<FilterConfig> getCurrentFilters() {
+
+        if (currentFilters == null) {
+            currentFilters = new ArrayList<FilterConfig>(0);
+        }
+
         return currentFilters;
     }
 
     public void addEntitySelection(IEntitySelection selection) {
-        selectionMap.put(selection.getSelectionCollection(), selection);
+        selections.add(selection);
     }
 
-    public void removeEntitySelection(ORI selectionCollection) {
-        selectionMap.remove(selectionCollection);
+    public void removeEntitySelection(IEntitySelection selection) {
+        selections.remove(selection);
     }
+
+    public static MetaDataKey<ISelectionContributor> SELECTIONS = new MetaDataKey<ISelectionContributor>() {};
 
     @Override
     public void beforeQueryBuild(Query query) {
+
+        RequestCycle.get().setMetaData(SELECTIONS, this);
 
         if (!StringUtils.isEmpty(getBase())) {
             query.setOn(new ORI(query.getOn(), getBase()));
@@ -302,7 +309,7 @@ public class BrowserPageStatus extends PageStatus<BrowserPageConfig> {
             }
         }
 
-        selectionMap = new LinkedHashMap<ORI, IEntitySelection>();
+        selections = new ArrayList<IEntitySelection>();
         List<StringValue> values = parameters.getValues(keyPrefix + "f");
         if (!values.isEmpty()) {
             for (StringValue value : values) {

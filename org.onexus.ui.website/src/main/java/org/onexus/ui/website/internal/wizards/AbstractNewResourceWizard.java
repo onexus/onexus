@@ -34,12 +34,14 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.website.api.WebsiteApplication;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 
 public abstract class AbstractNewResourceWizard<T extends Resource> extends AbstractWizard {
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private transient IResourceManager resourceManager;
 
     private T resource;

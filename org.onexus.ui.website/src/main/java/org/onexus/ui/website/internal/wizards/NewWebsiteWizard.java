@@ -50,8 +50,9 @@ import org.onexus.website.api.widgets.tableviewer.ColumnSet;
 import org.onexus.website.api.widgets.tableviewer.TableViewerConfig;
 import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,7 +65,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
     private List<ORI> linkCollections = new ArrayList<ORI>();
     private TabConfig currentTab;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public NewWebsiteWizard(String id, IModel<? extends Resource> resourceModel) {

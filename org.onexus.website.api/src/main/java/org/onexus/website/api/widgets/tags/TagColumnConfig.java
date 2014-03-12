@@ -17,16 +17,16 @@
  */
 package org.onexus.website.api.widgets.tags;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.List;
 
-@XStreamAlias("column-tags")
+@ResourceAlias("column-tags")
 public class TagColumnConfig implements IColumnConfig {
 
     private ORI collection;

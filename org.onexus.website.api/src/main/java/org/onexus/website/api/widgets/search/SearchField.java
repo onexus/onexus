@@ -17,12 +17,12 @@
  */
 package org.onexus.website.api.widgets.search;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
 
 import java.io.Serializable;
 
-@XStreamAlias("search-field")
+@ResourceAlias("search-field")
 public class SearchField implements Serializable {
 
     private ORI collection;

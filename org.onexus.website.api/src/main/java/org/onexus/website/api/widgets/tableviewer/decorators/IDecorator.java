@@ -21,7 +21,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.io.IClusterable;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.IEntity;
+
+import java.util.List;
 
 /**
  * A IDecorator creates the panel for a given Field and a IEntity instance.
@@ -41,5 +44,6 @@ public interface IDecorator extends IClusterable, IDetachable {
 
     void setTemplate(String template);
 
+    List<String> getExtraFields(Collection collection);
 
 }

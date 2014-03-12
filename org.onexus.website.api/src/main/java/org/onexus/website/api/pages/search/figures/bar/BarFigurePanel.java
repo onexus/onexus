@@ -34,8 +34,8 @@ import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class BarFigurePanel extends Panel {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     private ORI parentOri;

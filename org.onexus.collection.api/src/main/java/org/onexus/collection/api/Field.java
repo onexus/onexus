@@ -17,16 +17,16 @@
  */
 package org.onexus.collection.api;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.utils.AbstractMetadata;
 
-@XStreamAlias("field")
+@ResourceAlias("field")
 public class Field extends AbstractMetadata {
 
     private String id;
     private Class<?> type;
 
-    @XStreamAlias("primary-key")
+    @ResourceAlias("primary-key")
     private Boolean primaryKey;
 
     public Field() {

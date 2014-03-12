@@ -54,8 +54,8 @@ import org.onexus.website.api.widgets.download.scripts.PerlScript;
 import org.onexus.website.api.widgets.download.scripts.Python2Script;
 import org.onexus.website.api.widgets.download.scripts.Python3Script;
 import org.onexus.website.api.widgets.download.scripts.RScript;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class DownloadWidget extends Widget<DownloadWidgetConfig, DownloadWidgetS
     public static final ResourceReference JS = new JavaScriptResourceReference(DownloadWidget.class, "prettify/prettify.js");
     private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public static final Map<String, IQueryScript> SCRIPTS_MAP = new LinkedHashMap<String, IQueryScript>();

@@ -35,8 +35,8 @@ import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventTabSelected;
 import org.onexus.website.api.events.EventViewChange;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class ConnectionsPanel extends EventPanel {
 
     private List<Connection> connections;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public ConnectionsPanel(String id, List<Connection> connections) {

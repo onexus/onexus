@@ -18,22 +18,34 @@
 package org.onexus.website.api.widgets.tableviewer.decorators.utils;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.util.encoding.UrlEncoder;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.types.Text;
+import org.onexus.website.api.pages.ISelectionContributor;
+import org.onexus.website.api.pages.browser.BrowserPageStatus;
+import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
 import org.onexus.website.api.widgets.tableviewer.formaters.ITextFormater;
 import org.onexus.website.api.widgets.tableviewer.formaters.StringFormater;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -149,6 +161,11 @@ public class FieldDecorator implements IDecorator {
     }
 
     @Override
+    public List<String> getExtraFields(Collection collection) {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
     public void detach() {
     }
 
@@ -188,12 +205,31 @@ public class FieldDecorator implements IDecorator {
         return replaceParameters(null, null, entity, template, true);
     }
 
+    private static Pattern PARAMETER_PATTERN = Pattern.compile("\\$\\[(.+?)\\]");
+
+    protected static List<String> extractFields(String template) {
+        List<String> fields = new ArrayList<String>();
+
+        Matcher matcher = PARAMETER_PATTERN.matcher(template);
+        while (matcher.find()) {
+            fields.add(matcher.group(1));
+        }
+        fields.remove("column.id");
+        fields.remove("page.selection");
+        return fields;
+    }
+
     protected String replaceParameters(Field columnField, String columnValue, IEntity entity, String template, boolean format) {
 
 
-        String columnPattern = "#{column.id}";
+        String columnPattern = "$[column.id]";
         if (template.contains(columnPattern)) {
             template = template.replaceAll(Pattern.quote(columnPattern), columnField.getId());
+        }
+
+        String filterPattern = "$[page.selection]";
+        if (template.contains(filterPattern)) {
+            template = template.replaceAll(Pattern.quote(filterPattern), getPageSelectionParameter());
         }
 
         for (Field field : entity.getCollection().getFields()) {
@@ -209,12 +245,48 @@ public class FieldDecorator implements IDecorator {
                 value = columnValue;
             }
 
-            String fieldPattern = "${" + field.getId() + "}";
+            String fieldPattern = "$[" + field.getId() + "]";
             if (template.contains(fieldPattern)) {
                 template = template.replaceAll(Pattern.quote(fieldPattern), value);
             }
         }
         return template;
     }
+
+
+    public static MetaDataKey<String> FILTER_PARAMETER = new MetaDataKey<String>() {};
+
+    private static String getPageSelectionParameter() {
+
+        String cache = RequestCycle.get().getMetaData(FILTER_PARAMETER);
+
+        if (cache == null) {
+            ISelectionContributor selectionContributor = RequestCycle.get().getMetaData(BrowserPageStatus.SELECTIONS);
+            Iterator<IEntitySelection> selectionIt = selectionContributor.getEntitySelections().iterator();
+
+            StringBuilder filterParameter = new StringBuilder();
+            while(selectionIt.hasNext()) {
+
+                IEntitySelection selection = selectionIt.next();
+                if (selection instanceof SingleEntitySelection) {
+                    filterParameter.append("pf=");
+                } else {
+                    filterParameter.append("pfc=");
+                }
+
+                filterParameter.append(UrlEncoder.QUERY_INSTANCE.encode(selection.toUrlParameter(false, null), "UTF-8"));
+
+                if (selectionIt.hasNext()) {
+                    filterParameter.append("&");
+                }
+            }
+
+            cache = filterParameter.toString();
+            RequestCycle.get().setMetaData(FILTER_PARAMETER, cache);
+        }
+
+        return cache;
+    }
+
 
 }

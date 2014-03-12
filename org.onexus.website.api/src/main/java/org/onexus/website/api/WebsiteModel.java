@@ -26,7 +26,8 @@ import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
 
 public class WebsiteModel implements IModel<WebsiteStatus> {
 
@@ -34,7 +35,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
 
     private transient WebsiteConfig websiteConfig;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     public WebsiteModel(PageParameters pageParameters) {

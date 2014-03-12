@@ -35,8 +35,8 @@ import org.onexus.website.api.utils.EntityModel;
 import org.onexus.website.api.utils.SingleEntityQuery;
 import org.onexus.website.api.utils.visible.VisibleRule;
 import org.onexus.website.api.widgets.selection.FilterConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.regex.Pattern;
 
 public class SingleEntitySelection implements IEntitySelection {
@@ -46,10 +46,10 @@ public class SingleEntitySelection implements IEntitySelection {
     private boolean deletable;
     private boolean enable;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public SingleEntitySelection() {

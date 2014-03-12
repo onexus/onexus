@@ -41,12 +41,12 @@ import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetModel;
 import org.onexus.website.api.widgets.WidgetStatus;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 
 public class ButtonWidget extends EventPanel {
 
-    @PaxWicketBean(name = "widgetManager")
+    @Inject
     private IWidgetManager widgetManager;
 
     private WidgetConfig widgetConfig;

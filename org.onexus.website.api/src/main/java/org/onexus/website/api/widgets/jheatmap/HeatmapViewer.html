@@ -4,25 +4,18 @@
       xml:lang="en"
       lang="en">
 <head>
-    <!-- meta name="viewport" content="width=device-width, initial-scale=1" / -->
-
-    <!-- link href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" rel="stylesheet" type="text/css" / -->
-    <link rel="stylesheet" type="text/css" href="../../theme/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/jheatmap-1.0.0-alpha.css"/>
 
-    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-    <!-- script type="text/javascript" src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script -->
-
-    <script src="../../theme/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="js/jheatmap-1.0.0-alpha.js"></script>
+
     <script type="text/javascript">
         window.onload = function() {
 
         $('#heatmap').heatmap({
 
         data : {
-        type : "tdm",
-        values : 'sample-data.tsv',
+        values : new jheatmap.readers.TsvMatrixReader({ url: "sample-data.tsv"}),
 
         rows_annotations : [1, 0],
         cols_annotations : [2, 3]

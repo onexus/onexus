@@ -36,8 +36,8 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +46,9 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
     private static final HeaderItem CSS = CssHeaderItem.forReference(new CssResourceReference(HeatmapViewer.class, "css/jheatmap-1.0.0-alpha.css"));
     private static final HeaderItem JS_JHEATMAP = JavaScriptHeaderItem.forReference(new JQueryPluginResourceReference(HeatmapViewer.class, "js/jheatmap-1.0.0-alpha.js"));
-
     private static final ResourceReference LOADING_IMG = new PackageResourceReference(HeatmapViewer.class, "images/loading.gif");
 
-
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public HeatmapViewer(String componentId, IModel<HeatmapViewerStatus> status) {
@@ -90,8 +88,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
         code.append(
                 "$('#heatmap').heatmap({\n" +
                         "       data : {\n" +
-                        "                 type : \"tdm\",\n" +
-                        "                 values : '" + getQueryUrl() + "', \n");
+                        "                 values: new jheatmap.readers.TsvMatrixReader({ url: \"" + getQueryUrl() + "\"}), \n");
 
         code.append("\t\t\t\tcols_annotations : [");
         if (config.getColAnnotations() == null) {
@@ -120,6 +117,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
                 "              },\n" +
                 "       init : function(heatmap) {\n");
         code.append(config.getInit());
+        code.append("$('.footer').css( 'position', 'relative');");
         code.append("}});");
 
         return code.toString();

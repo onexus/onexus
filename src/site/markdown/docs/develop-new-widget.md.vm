@@ -7,14 +7,13 @@ Creating a new widget using the basic widget Maven archetype:
     mvn archetype:generate \
         -DarchetypeGroupId=org.onexus \
         -DarchetypeArtifactId=onexus-archetype-widget \
-        -DarchetypeVersion=0.2 \
+        -DarchetypeVersion=${project.version} \
         -DgroupId=my.groupid \
         -DartifactId=helloworld \
-        -Dversion=1.0-SNAPSHOT \
-        -DarchetypeRepository=http://repo.onexus.org/nexus/content/groups/public
+        -Dversion=1.0-SNAPSHOT
 
 You need to change goupdId "my.groupid" and artifactId "helloworld" to
-deseried ones.
+custom ones.
 
 ## Compile, package and install
 

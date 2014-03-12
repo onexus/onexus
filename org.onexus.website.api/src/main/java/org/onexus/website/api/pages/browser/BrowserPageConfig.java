@@ -17,14 +17,16 @@
  */
 package org.onexus.website.api.pages.browser;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("browser")
+@ResourceAlias("browser")
+@ResourceRegister({ TabConfig.class })
 public class BrowserPageConfig extends PageConfig {
 
     private BrowserPageStatus defaultStatus;

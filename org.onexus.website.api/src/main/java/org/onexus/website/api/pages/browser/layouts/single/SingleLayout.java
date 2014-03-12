@@ -27,7 +27,8 @@ import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.pages.browser.ViewConfig;
 import org.onexus.website.api.widgets.IWidgetManager;
 import org.onexus.website.api.widgets.WidgetModel;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
 
 public class SingleLayout extends Panel {
 
@@ -36,7 +37,7 @@ public class SingleLayout extends Panel {
     public static final String REGION_MAIN = "main";
     public static final CssResourceReference CSS = new CssResourceReference(SingleLayout.class, "SingleLayout.css");
 
-    @PaxWicketBean(name = "widgetManager")
+    @Inject
     private IWidgetManager widgetManager;
 
     public SingleLayout(String panelId, ViewConfig viewConfig, IModel<BrowserPageStatus> statusModel) {

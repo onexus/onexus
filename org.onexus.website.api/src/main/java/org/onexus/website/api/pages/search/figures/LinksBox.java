@@ -266,9 +266,15 @@ public class LinksBox extends Panel {
     public static String createLink(String url, ORI collection, String varEntity, String varFilter) {
 
         String link = url;
+
+        //TODO Remove deprecated variables
         link = link.replace("$collection", collection.toString());
         link = link.replace("$entity", varEntity);
         link = link.replace("$filter", varFilter);
+
+        link = link.replace("$[collection]", collection.toString());
+        link = link.replace("$[entity]", varEntity);
+        link = link.replace("$[filter]", varFilter);
 
         return link;
     }
@@ -278,7 +284,7 @@ public class LinksBox extends Panel {
         Collection collection = entity.getCollection();
 
         for (Field field : collection.getFields()) {
-            template = template.replaceAll("\\$" + field.getId(), String.valueOf(entity.get(field.getId())));
+            template = template.replaceAll("\\$\\[" + field.getId() + "\\]", String.valueOf(entity.get(field.getId())));
         }
 
         return template;

@@ -17,9 +17,9 @@
  */
 package org.onexus.website.api.pages.search;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 
 import java.io.Serializable;
@@ -38,10 +38,10 @@ public class SearchType implements Serializable {
 
     private FiltersWidgetConfig filters;
 
-    @XStreamImplicit(itemFieldName = "link")
+    @ResourceImplicitList("link")
     private List<SearchLink> links = new ArrayList<SearchLink>();
 
-    @XStreamImplicit(itemFieldName = "fix-link")
+    @ResourceImplicitList("fix-link")
     private List<SearchLink> fixLinks = new ArrayList<SearchLink>();
 
     private List<FigureConfig> figures = new ArrayList<FigureConfig>();

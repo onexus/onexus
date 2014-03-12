@@ -132,6 +132,7 @@ public class TsvEntity implements IEntity {
         } catch (Exception e) {
             LOGGER.warn("The value '" + value
                     + "' for the field '" + fieldId
+                    + "' at collection '" + collection
                     + "' is malformed on line '" + line + "'. Loading as NULL value.");
 
             return null;

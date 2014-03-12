@@ -29,14 +29,14 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.Progress;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.Iterator;
 
 public class EntitiesRowProvider implements
         ISortableDataProvider<IEntityTable, String> {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     private IModel<TableViewerStatus> statusModel;

@@ -17,7 +17,6 @@
  */
 package org.onexus.website.api.pages.browser;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,7 +28,6 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
@@ -54,17 +52,18 @@ import org.onexus.website.api.pages.search.boxes.BoxesPanel;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.Collection;
+import java.util.List;
 
 public class SelectionPanel extends EventPanel {
 
-    @PaxWicketBean(name = "resourceManager")
-    public transient IResourceManager resourceManager;
+    @Inject
+    private IResourceManager resourceManager;
 
-    @PaxWicketBean(name = "collectionManager")
-    public transient ICollectionManager collectionManager;
+    @Inject
+    private ICollectionManager collectionManager;
 
     private WebMarkupContainer widgetModal;
 
@@ -185,19 +184,19 @@ public class SelectionPanel extends EventPanel {
         RepeatingView filterRules = new RepeatingView("filter");
         filtersContainer.add(filterRules);
 
-        Collection<IEntitySelection> filters = getBrowserPage().getEntitySelections();
+        final List<IEntitySelection> selections = getBrowserPage().getEntitySelections();
 
-        if (filters != null && !filters.isEmpty()) {
+        if (selections != null && !selections.isEmpty()) {
 
             Query query = getQuery();
 
-            for (IEntitySelection filter : filters) {
+            for (IEntitySelection selection : selections) {
 
                 WebMarkupContainer container = new WebMarkupContainer(filterRules.newChildId());
 
 
-                final ORI filterORI = filter.getSelectionCollection();
-                final String filterTitle = filter.getTitle(query);
+                final ORI filterORI = selection.getSelectionCollection();
+                final String filterTitle = selection.getTitle(query);
 
                 // Abbreviate at the 3th comma
                 String abbreviateFilterTitle = filterTitle;
@@ -258,7 +257,7 @@ public class SelectionPanel extends EventPanel {
                 container.add(editLink);
 
                 // Remove link
-                BrowserPageLink<ORI> removeLink = new BrowserPageLink<ORI>("remove", Model.of(filter.getSelectionCollection())) {
+                BrowserPageLink<IEntitySelection> removeLink = new BrowserPageLink<IEntitySelection>("remove", Model.of(selection)) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -268,7 +267,7 @@ public class SelectionPanel extends EventPanel {
 
                 };
 
-                if (filter.isEnable()) {
+                if (selection.isEnable()) {
                     container.add(new AttributeModifier("class", "btn btn-large"));
                 } else {
                     container.add(new AttributeModifier("class", "btn btn-large disabled"));

@@ -3,6 +3,10 @@ table.table-viewer {
    white-space: nowrap;
 }
 
+table.table-viewer th {
+    padding-left: 10px;
+}
+
 table.table-viewer tr.headers div.wicket_orderDown a {
       background-image: url('images/orderdown.gif');
       background-position: center left;
@@ -84,4 +88,13 @@ div.tag {
 
 div.tag > a {
      padding: 4px;
+}
+
+ul.pager select.rowsxpage {
+	float: left;
+	width: 84px;
+	margin-right: 10px;
+	border-radius: 15px;
+	border: 1px solid #DDD;
+	background-color: #FFF;
 }

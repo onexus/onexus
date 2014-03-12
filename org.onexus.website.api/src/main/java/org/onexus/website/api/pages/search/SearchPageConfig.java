@@ -17,9 +17,9 @@
  */
 package org.onexus.website.api.pages.search;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.annotations.XStreamInclude;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.pages.search.figures.bar.BarFigureConfig;
@@ -31,13 +31,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@XStreamAlias("search")
-@XStreamInclude({HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class})
+@ResourceAlias("search")
+@ResourceRegister({HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class})
 public class SearchPageConfig extends PageConfig {
 
     private SearchPageStatus defaultStatus;
 
-    @XStreamImplicit(itemFieldName = "type")
+    @ResourceImplicitList("type")
     private List<SearchType> types = new ArrayList<SearchType>();
 
     public SearchPageConfig() {

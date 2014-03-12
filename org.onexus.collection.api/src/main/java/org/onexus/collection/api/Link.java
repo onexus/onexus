@@ -17,21 +17,21 @@
  */
 package org.onexus.collection.api;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@XStreamAlias("link")
+@ResourceAlias("link")
 public class Link implements Serializable {
 
     private ORI collection;
 
-    @XStreamImplicit(itemFieldName = "field")
+    @ResourceImplicitList("field")
     private List<String> fields = new ArrayList<String>();
 
     public Link() {

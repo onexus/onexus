@@ -40,8 +40,9 @@ import org.onexus.ui.api.events.EventResourceSelect;
 import org.onexus.ui.api.viewers.EmptyPanelViewerCreator;
 import org.onexus.ui.api.viewers.IViewerCreator;
 import org.onexus.ui.api.viewers.IViewersManager;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +53,7 @@ public class ResourcesPage extends BaseResourcePage {
 
     public static final String PARAMETER_RESOURCE = "ori";
 
-    @PaxWicketBean(name = "viewersManager")
+    @Inject
     private IViewersManager viewersManager;
 
     public ResourcesPage(PageParameters parameters) {

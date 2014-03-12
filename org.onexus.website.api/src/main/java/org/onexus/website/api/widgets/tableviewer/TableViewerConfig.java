@@ -17,15 +17,15 @@
  */
 package org.onexus.website.api.widgets.tableviewer;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("viewer-table")
+@ResourceAlias("viewer-table")
 public class TableViewerConfig extends WidgetConfig {
 
     private ORI collection;
@@ -34,10 +34,10 @@ public class TableViewerConfig extends WidgetConfig {
 
     private String sortable;
 
-    @XStreamAlias("force-count")
+    @ResourceAlias("force-count")
     private Boolean forceCount;
 
-    @XStreamImplicit(itemFieldName = "columnset")
+    @ResourceImplicitList("columnset")
     private List<ColumnSet> columnSets = new ArrayList<ColumnSet>();
 
     public TableViewerConfig() {

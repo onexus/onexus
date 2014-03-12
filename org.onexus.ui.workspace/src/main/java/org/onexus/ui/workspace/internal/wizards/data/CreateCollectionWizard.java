@@ -40,8 +40,9 @@ import org.onexus.resource.api.Property;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.wizards.AbstractWizard;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,11 +58,11 @@ import java.util.Set;
 
 public class CreateCollectionWizard extends AbstractWizard {
 
-    @PaxWicketBean(name = "dataManager")
-    public transient IDataManager dataManager;
+    @Inject
+    private IDataManager dataManager;
 
-    @PaxWicketBean(name = "resourceManager")
-    public transient IResourceManager resourceManager;
+    @Inject
+    private IResourceManager resourceManager;
 
     // Formats
     private static final String CSV = "Comma separated values";

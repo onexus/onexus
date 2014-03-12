@@ -24,12 +24,17 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.encoding.UrlEncoder;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ParameterKey;
+import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +113,19 @@ public class LinkDecorator extends FieldDecorator {
 
         cellContainer.add(new AttributeModifier("title", new Model<String>(description == null ? "No data" : description.toString())));
     }
+
+    @Override
+    public List<String> getExtraFields(Collection collection) {
+
+        String href = parameters.get(LinkDecoratorParameters.URL);
+
+        if (href != null) {
+            return extractFields(href);
+        }
+
+        return Collections.EMPTY_LIST;
+    }
+
 
 
 }

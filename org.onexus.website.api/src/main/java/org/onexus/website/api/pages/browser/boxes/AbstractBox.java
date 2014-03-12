@@ -23,14 +23,16 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
+
+import javax.inject.Inject;
 
 public abstract class AbstractBox extends Panel {
 
     public static final String COMPONENT_ID = "box";
 
-    @PaxWicketBean(name = "resourceManger")
+    @Inject
     private IResourceManager resourceManager;
+
     private ORI collectionId;
 
     public AbstractBox(ORI collectionId, IModel<IEntity> entityModel) {

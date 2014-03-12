@@ -17,7 +17,9 @@
  */
 package org.onexus.website.api.pages;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.onexus.resource.api.IResourceRegister;
 
 public abstract class AbstractPageCreator<C extends PageConfig, S extends PageStatus> implements IPageCreator {
@@ -69,6 +71,15 @@ public abstract class AbstractPageCreator<C extends PageConfig, S extends PageSt
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public void onAfterInitialized(Application application) {
+
+    }
+
+    @Override
+    public void onBeforeDestroyed(Application application) {
     }
 
     protected abstract Page<?, ?> build(String componentId, IModel<S> statusModel);

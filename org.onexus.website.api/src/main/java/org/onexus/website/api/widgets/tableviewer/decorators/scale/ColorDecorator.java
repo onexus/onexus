@@ -23,14 +23,16 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.*;
+import org.onexus.collection.api.Collection;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.ColorUtils;
 import org.onexus.website.api.widgets.tableviewer.decorators.scale.scales.IColorScaleHtml;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.formaters.ITextFormater;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class ColorDecorator extends FieldDecorator {
 
@@ -115,6 +117,15 @@ public class ColorDecorator extends FieldDecorator {
         return colorScale.valueColor(value);
     }
 
+    @Override
+    public List<String> getExtraFields(Collection collection) {
+
+        if (this.urlLink != null) {
+            return extractFields(this.urlLink);
+        }
+
+        return Collections.EMPTY_LIST;
+    }
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer,

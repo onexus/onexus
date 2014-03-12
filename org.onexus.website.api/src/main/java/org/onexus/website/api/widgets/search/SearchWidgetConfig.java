@@ -17,19 +17,19 @@
  */
 package org.onexus.website.api.widgets.search;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("widget-search")
+@ResourceAlias("widget-search")
 public class SearchWidgetConfig extends WidgetConfig {
 
     private SearchWidgetStatus defaultStatus;
 
-    @XStreamImplicit(itemFieldName = "column")
+    @ResourceImplicitList("column")
     private List<SearchField> fields;
 
     public SearchWidgetConfig() {

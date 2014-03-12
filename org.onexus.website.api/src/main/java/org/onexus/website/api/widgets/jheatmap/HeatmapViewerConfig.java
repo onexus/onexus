@@ -17,16 +17,16 @@
  */
 package org.onexus.website.api.widgets.jheatmap;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.tableviewer.columns.ColumnConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("viewer-heatmap")
+@ResourceAlias("viewer-heatmap")
 public class HeatmapViewerConfig extends WidgetConfig {
 
     private HeatmapViewerStatus defaultStatus;
@@ -39,13 +39,13 @@ public class HeatmapViewerConfig extends WidgetConfig {
 
     private String rowAnnotations;
 
-    @XStreamImplicit(itemFieldName = "column")
+    @ResourceImplicitList("column")
     private List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 
-    @XStreamImplicit(itemFieldName = "row")
+    @ResourceImplicitList("row")
     private List<ColumnConfig> rows = new ArrayList<ColumnConfig>();
 
-    @XStreamImplicit(itemFieldName = "cell")
+    @ResourceImplicitList("cell")
     private List<ColumnConfig> cells = new ArrayList<ColumnConfig>();
 
 

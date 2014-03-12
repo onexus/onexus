@@ -10,9 +10,9 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <onexus.version>${version}</onexus.version>
+        <onexus.version>${onexusVersion}</onexus.version>
         #literal()
-        <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
+        <bundle.symbolicName>${project.groupId}.${project.artifactId}</bundle.symbolicName>
     </properties>
 
     <name>${bundle.symbolicName}</name>
@@ -21,7 +21,7 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.ui.website</artifactId>
+            <artifactId>org.onexus.website.api</artifactId>
             <version>${onexus.version}</version>
         </dependency>
 
@@ -83,15 +83,5 @@
         </plugins>
 
     </build>
-
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>onexus-public</id>
-            <url>http://repo.onexus.org/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
     #end
 </project>

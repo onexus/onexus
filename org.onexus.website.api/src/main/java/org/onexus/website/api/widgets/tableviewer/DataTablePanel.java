@@ -36,7 +36,7 @@ public class DataTablePanel extends Panel implements IAjaxIndicatorAware {
     private transient EntitiesRowProvider dataProvider;
 
     public DataTablePanel(String id, final List<? extends IColumn<IEntityTable, String>> columns,
-                          final EntitiesRowProvider dataProvider, final long rowsPerPage) {
+                          final EntitiesRowProvider dataProvider, final long defaultRowsPerPage) {
         super(id);
 
         this.dataProvider = dataProvider;
@@ -46,7 +46,7 @@ public class DataTablePanel extends Panel implements IAjaxIndicatorAware {
         indicator.add(new Image("loading", OnDomReadyPanel.LOADING_IMAGE));
         add(indicator);
 
-        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, rowsPerPage);
+        DataTable<IEntityTable, String> resultTable = new DataTable<IEntityTable, String>("datatable", columns, dataProvider, defaultRowsPerPage);
         resultTable.setOutputMarkupId(true);
         resultTable.setVersioned(false);
         resultTable.addTopToolbar(new HeadersToolbar(resultTable, dataProvider));

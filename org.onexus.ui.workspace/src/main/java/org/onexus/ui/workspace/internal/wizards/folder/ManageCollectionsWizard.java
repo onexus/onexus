@@ -30,8 +30,9 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.progressbar.ProgressBar;
 import org.onexus.ui.api.wizards.AbstractWizard;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,10 +46,10 @@ public class ManageCollectionsWizard extends AbstractWizard {
     private String selected;
     private ORI resourceURI;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public ManageCollectionsWizard(String id, IModel<? extends Resource> resourceModel) {

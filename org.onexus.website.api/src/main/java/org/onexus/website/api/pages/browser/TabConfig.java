@@ -17,15 +17,15 @@
  */
 package org.onexus.website.api.pages.browser;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.utils.visible.IVisible;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@XStreamAlias("tab")
+@ResourceAlias("tab")
 public class TabConfig implements Serializable, IVisible {
 
     private String id;
@@ -34,10 +34,10 @@ public class TabConfig implements Serializable, IVisible {
     private String visible;
     private String group;
 
-    @XStreamImplicit(itemFieldName = "view")
+    @ResourceImplicitList("view")
     private List<ViewConfig> views = new ArrayList<ViewConfig>();
 
-    @XStreamImplicit(itemFieldName = "map")
+    @ResourceImplicitList("map")
     private List<String> maps = new ArrayList<String>();
 
     public String getId() {

@@ -34,13 +34,13 @@ import org.onexus.website.api.pages.browser.BrowserPage;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.website.api.widgets.tags.tagstore.TagStore;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class TagColumnItem extends Panel {
 
-    @PaxWicketBean(name = "tagStoreManager")
+    @Inject
     private ITagStoreManager tagStoreManager;
 
     private WebMarkupContainer checkbox;

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.onexus</groupId>
         <artifactId>onexus</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>onexus-archetype-widget</artifactId>
@@ -17,6 +17,16 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>META-INF/maven/archetype-metadata.xml</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>META-INF/maven/archetype-metadata.xml</include>
                 </includes>
             </resource>
         </resources>
@@ -33,4 +43,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <site>
+            <id>site</id>
+            <name>Onexus Github ghpages checkout</name>
+            <url>file://${basedir}/../site/${project.version}/${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 </project>

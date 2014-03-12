@@ -59,8 +59,8 @@ import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetStatus;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,10 +69,10 @@ import java.util.List;
 
 public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> implements IAjaxIndicatorAware {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
-    @PaxWicketBean(name = "resourceManager")
+    @Inject
     private IResourceManager resourceManager;
 
     private transient FiltersWidgetStatus filtersStatus;
@@ -221,10 +221,12 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> impleme
                 target.add(SearchPage.this.get("container").get("form").get("examplesContainer"));
                 target.add(SearchPage.this.get("boxes"));
 
-                if (getStatus().getType().getFilters() == null) {
+                FiltersWidgetConfig filters = getStatus().getType().getFilters();
+                if (filters == null) {
                     list.setVisible(false);
                 } else {
                     list.setVisible(true);
+                    list.add(new AttributeModifier("title", filters.getTitle()));
                 }
                 setFiltersStatus(null);
                 target.add(list);
