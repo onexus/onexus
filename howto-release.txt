@@ -47,7 +47,7 @@ find . -name pom.xml | awk '{ system("sed 0,/0.4.0/s//0.5.0-SNAPSHOT/ "$0)}' | g
 find . -name pom.xml | awk '{ system("sed -i 0,/0.4.0/s//0.5.0-SNAPSHOT/ "$0)}'
 
 # Check other possible updates
-grep -r 0.4.0 . | grep -v target | grep -v classes | grep -v .idea | grep -v repository | grep -v .git
+grep -r 0.4.0 . | grep -v target | grep -v classes | grep -v .idea | grep -v repository | grep -v .git | grep -v .site
 
 # Test it
 mvn clean install
@@ -56,7 +56,7 @@ mvn clean install
 git commit -a -m "Next iteration version 0.5.0-SNAPSHOT"
 
 # Push develop
-git push
+git push --all --tags
 
 
 
