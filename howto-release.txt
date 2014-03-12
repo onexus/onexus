@@ -32,9 +32,6 @@ karaf@root> features:install -v onexus-mysql
 # Commit the changes
 git commit -a -m "Release version 0.4.0"
 
-# Push the release commit 
-git push
-
 # Finish the release 
 git flow release finish onexus-0.4.0
 
