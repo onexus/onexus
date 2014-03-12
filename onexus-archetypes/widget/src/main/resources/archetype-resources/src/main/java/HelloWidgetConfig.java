@@ -15,12 +15,10 @@
  *
  *
  */
-package $
-
-{package};
+package ${package};
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import org.onexus.ui.website.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.lang.String;
 

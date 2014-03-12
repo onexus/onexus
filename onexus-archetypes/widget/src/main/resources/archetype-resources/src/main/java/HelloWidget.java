@@ -15,13 +15,11 @@
  *
  *
  */
-package $
-
-{package};
+package ${package};
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.widgets.Widget;
+import org.onexus.website.api.widgets.Widget;
 
 public class HelloWidget extends Widget<HelloWidgetConfig, HelloWidgetStatus> {
 

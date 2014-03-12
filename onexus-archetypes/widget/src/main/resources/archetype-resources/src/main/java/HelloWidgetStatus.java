@@ -15,11 +15,9 @@
  *
  *
  */
-package $
+package ${package};
 
-{package};
-
-import org.onexus.ui.website.widgets.WidgetStatus;
+import org.onexus.website.api.widgets.WidgetStatus;
 
 public class HelloWidgetStatus extends WidgetStatus {
 

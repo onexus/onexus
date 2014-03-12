@@ -15,14 +15,12 @@
  *
  *
  */
-package $
-
-{package};
+package ${package};
 
 import org.apache.wicket.model.IModel;
-import org.onexus.ui.website.WebsiteConfig;
-import org.onexus.ui.website.widgets.AbstractWidgetCreator;
-import org.onexus.ui.website.widgets.Widget;
+import org.onexus.website.api.WebsiteConfig;
+import org.onexus.website.api.widgets.AbstractWidgetCreator;
+import org.onexus.website.api.widgets.Widget;
 
 public class HelloWidgetCreator extends AbstractWidgetCreator<HelloWidgetConfig, HelloWidgetStatus> {
 
