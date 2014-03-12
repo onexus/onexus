@@ -29,6 +29,14 @@ mvn clean install
 karaf@root> features:addurl mvn:org.onexus/onexus-features/0.4.0/xml/features
 karaf@root> features:install -v onexus-mysql
 
+# Release site
+mvn site-deploy
+cd site
+git add .
+git commit -a -m "Release site version 0.4.0"
+git push
+cd ..
+
 # Commit the changes
 git commit -a -m "Release version 0.4.0"
 
