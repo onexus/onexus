@@ -10,33 +10,30 @@ git pull
 git push
 
 # Start a new release
-git-flow release start onexus-0.3.0
+git flow release start onexus-0.4.0
 
 # Update pom.xml version
 # Check that you are going to update only the correct versions:
-find . -name pom.xml | awk '{ system("sed 0,/0.3.0-SNAPSHOT/s//0.3.0/ "$0)}' | grep -A2 -B3 0.3.0
+find . -name pom.xml | awk '{ system("sed 0,/0.4.0-SNAPSHOT/s//0.4.0/ "$0)}' | grep -A2 -B3 0.4.0
 
 # Update all like this:
-find . -name pom.xml | awk '{ system("sed -i 0,/0.3.0-SNAPSHOT/s//0.3.0/ "$0)}'
+find . -name pom.xml | awk '{ system("sed -i 0,/0.4.0-SNAPSHOT/s//0.4.0/ "$0)}'
 
 # Check other possible manual updates
-grep -r 0.3.0-SNAPSHOT . | grep -v target | grep -v classes | grep -v .idea
+grep -r 0.4.0-SNAPSHOT . | grep -v target | grep -v classes | grep -v .idea | grep -v .site
 
 # Compile and package 
 mvn clean install
 
 # Test the version
-karaf@root> features:addurl mvn:org.onexus/onexus-features/0.3.0/xml/features
+karaf@root> features:addurl mvn:org.onexus/onexus-features/0.4.0/xml/features
 karaf@root> features:install -v onexus-mysql
 
 # Commit the changes
-git commit -a -m "Set version to 0.3.0"
-
-# Push the release commit 
-git push
+git commit -a -m "Release version 0.4.0"
 
 # Finish the release 
-git flow release finish onexus-0.3.0
+git flow release finish onexus-0.4.0
 
 # Check that you are on develop branch
 git branch
@@ -44,19 +41,19 @@ git branch
 # Update pom.xml versions to new SNAPSHOT version
 
 # Check that you are going to update only the correct versions:
-find . -name pom.xml | awk '{ system("sed 0,/0.3.0/s//0.4.0-SNAPSHOT/ "$0)}' | grep -A2 -B3 0.4.0-SNAPSHOT
+find . -name pom.xml | awk '{ system("sed 0,/0.4.0/s//0.5.0-SNAPSHOT/ "$0)}' | grep -A2 -B3 0.5.0-SNAPSHOT
 
 # Update all like this:
-find . -name pom.xml | awk '{ system("sed -i 0,/0.3.0/s//0.4.0-SNAPSHOT/ "$0)}'
+find . -name pom.xml | awk '{ system("sed -i 0,/0.4.0/s//0.5.0-SNAPSHOT/ "$0)}'
 
 # Check other possible updates
-grep -r 0.3.0 . | grep -v target | grep -v classes | grep -v .idea | grep -v repository | grep -v .git
+grep -r 0.4.0 . | grep -v target | grep -v classes | grep -v .idea | grep -v repository | grep -v .git
 
 # Test it
 mvn clean install
 
 # Commit
-git commit -a -m "Next iteration version 0.4.0-SNAPSHOT"
+git commit -a -m "Next iteration version 0.5.0-SNAPSHOT"
 
 # Push develop
 git push
