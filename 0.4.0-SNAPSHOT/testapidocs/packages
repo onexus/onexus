@@ -1,7 +1,0 @@
-org.onexus.collection.api
-org.onexus.collection.query.parser.internal
-org.onexus.resource.manger.internal
-org.onexus.website.api
-org.onexus.website.api.utils.parser
-org.onexus.website.api.utils.visible
-org.onexus.website.api.mocks
