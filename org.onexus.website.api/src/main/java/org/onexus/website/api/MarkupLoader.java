@@ -37,6 +37,8 @@ import javax.inject.Inject;
 
 public class MarkupLoader {
 
+    private static final String NAMESPACE = "onexus";
+
     @Inject
     private IDataManager dataManager;
 
@@ -77,6 +79,7 @@ public class MarkupLoader {
 
                     IResourceStream resourceStream = new DataResourceStream(dataStreams);
                     markupResourceStream = new MarkupResourceStream(resourceStream, new ContainerInfo(container), containerClass);
+                    markupResourceStream.setWicketNamespace(NAMESPACE);
 
                     return markupResourceStream;
                 }
