@@ -17,24 +17,34 @@
  */
 package org.onexus.website.api.widgets;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.MarkupLoader;
 import org.onexus.website.api.WebsiteStatus;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.pages.browser.BrowserPageStatus;
+import org.onexus.website.api.utils.CustomCssBehavior;
 
-public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel {
+public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel implements IMarkupResourceStreamProvider {
 
     private IModel<S> statusModel;
 
+    private transient MarkupLoader markupLoader;
+
     public Widget(String componentId, IModel<S> statusModel) {
         super(componentId);
-
         this.statusModel = statusModel;
+
+        WidgetConfig config = getConfig();
+        ORI parentOri = config.getPageConfig().getWebsiteConfig().getORI().getParent();
+        add(new CustomCssBehavior(parentOri, config.getCss()));
     }
 
     public S getStatus() {
@@ -84,5 +94,14 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     }
 
+    @Override
+    public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
+
+        if (markupLoader == null) {
+            markupLoader = new MarkupLoader(getConfig().getPageConfig().getWebsiteConfig().getORI(), getConfig().getMarkup());
+        }
+
+        return markupLoader.getMarkupResourceStream(container, containerClass);
+    }
 
 }

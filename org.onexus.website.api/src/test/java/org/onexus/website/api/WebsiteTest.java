@@ -96,7 +96,6 @@ public class WebsiteTest {
     public void renderPage(){
         tester.startPage(new Website(new PageParameters()));
         tester.assertRenderedPage(Website.class);
-        //tester.dumpPage();
     }
 
 }

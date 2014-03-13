@@ -45,6 +45,8 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private String css;
 
+    private String markup;
+
     private String bottom;
 
     @ResourceImplicitList("connection")
@@ -93,6 +95,14 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     public void setCss(String css) {
         this.css = css;
+    }
+
+    public String getMarkup() {
+        return markup;
+    }
+
+    public void setMarkup(String markup) {
+        this.markup = markup;
     }
 
     public String getBottom() {

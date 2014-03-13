@@ -17,14 +17,20 @@
  */
 package org.onexus.website.api.pages;
 
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.MarkupLoader;
 import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.utils.CustomCssBehavior;
 
-public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel {
+public abstract class Page<C extends PageConfig, S extends PageStatus> extends EventPanel implements IMarkupResourceStreamProvider {
+
+    private transient MarkupLoader markupLoader;
 
     public Page(String componentId, IModel<S> pageModel) {
         super(componentId, pageModel);
@@ -54,6 +60,17 @@ public abstract class Page<C extends PageConfig, S extends PageStatus> extends E
     protected boolean isEmbed() {
         StringValue embed = getPage().getPageParameters().get("embed");
         return embed.toBoolean(false);
+    }
+
+
+    @Override
+    public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
+
+        if (markupLoader == null) {
+            markupLoader = new MarkupLoader(getConfig().getWebsiteConfig().getORI(), getConfig().getMarkup());
+        }
+
+        return markupLoader.getMarkupResourceStream(container, containerClass);
     }
 
 }

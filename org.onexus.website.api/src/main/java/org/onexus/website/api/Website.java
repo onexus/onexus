@@ -18,6 +18,8 @@
 package org.onexus.website.api;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,6 +32,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.session.LoginContext;
@@ -50,13 +53,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Website extends WebPage {
+public class Website extends WebPage implements IMarkupResourceStreamProvider {
 
     // Parameters
     public static final String PARAMETER_CURRENT_PAGE = "c";
 
     @Inject
     private IPageManager pageManager;
+
+    private transient MarkupLoader markupLoader;
 
     public Website(PageParameters pageParameters) {
         super(new WebsiteModel(pageParameters));
@@ -209,4 +214,13 @@ public class Website extends WebPage {
         return pages;
     }
 
+    @Override
+    public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
+
+        if (markupLoader == null) {
+            markupLoader = new MarkupLoader(getConfig().getORI(), getConfig().getMarkup());
+        }
+
+        return markupLoader.getMarkupResourceStream(container, containerClass);
+    }
 }

@@ -38,6 +38,7 @@ public abstract class PageConfig implements IVisible, Serializable, IAuthorizati
     private String visible;
 
     private String css;
+    private String markup;
 
     private transient WebsiteConfig websiteConfig;
 
@@ -83,6 +84,14 @@ public abstract class PageConfig implements IVisible, Serializable, IAuthorizati
 
     public void setCss(String css) {
         this.css = css;
+    }
+
+    public String getMarkup() {
+        return markup;
+    }
+
+    public void setMarkup(String markup) {
+        this.markup = markup;
     }
 
     @Override
@@ -143,6 +152,7 @@ public abstract class PageConfig implements IVisible, Serializable, IAuthorizati
         List<WidgetConfig> widgets = getWidgets();
         List<WidgetStatus> statuses = new ArrayList<WidgetStatus>(widgets.size());
         for (WidgetConfig widgetConfig : getWidgets()) {
+            widgetConfig.setPageConfig(this);
             statuses.add(widgetConfig.newStatus());
         }
         status.setWidgetStatuses(statuses);

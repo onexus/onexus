@@ -25,6 +25,8 @@ import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSessio
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.markup.DefaultMarkupResourceStreamProvider;
+import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.IRequestHandler;
@@ -47,6 +49,7 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
     private String webPath;
     private ORI websiteOri;
     private Class<? extends WebPage> signInPageClass;
+    private IMarkupResourceStreamProvider defaultMarkupResourceProvider;
 
     public WebsiteApplication() {
         super();
@@ -136,6 +139,15 @@ public class WebsiteApplication extends AuthenticatedWebApplication {
 
     public String getWebPath() {
         return webPath;
+    }
+
+    public IMarkupResourceStreamProvider getDefaultMarkupResourceProvider() {
+
+        if (defaultMarkupResourceProvider == null) {
+            defaultMarkupResourceProvider = new DefaultMarkupResourceStreamProvider();
+        }
+
+        return defaultMarkupResourceProvider;
     }
 
     public void setWebPath(String webPath) {

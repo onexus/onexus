@@ -83,6 +83,6 @@ public class MockResourceManager implements IResourceManager {
 
     @Override
     public void addResourceListener(IResourceListener resourceListener) {
-        throw new UnsupportedOperationException("Read only ResourceManager");
+        // Ignore
     }
 }

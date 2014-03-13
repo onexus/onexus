@@ -39,6 +39,10 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
 
     private String visible;
 
+    private String css;
+
+    private String markup;
+
     private transient PageConfig pageConfig;
 
     public WidgetConfig() {
@@ -101,6 +105,22 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
 
     public PageConfig getPageConfig() {
         return pageConfig;
+    }
+
+    public String getCss() {
+        return css;
+    }
+
+    public void setCss(String css) {
+        this.css = css;
+    }
+
+    public String getMarkup() {
+        return markup;
+    }
+
+    public void setMarkup(String markup) {
+        this.markup = markup;
     }
 
     public void setPageConfig(PageConfig pageConfig) {
