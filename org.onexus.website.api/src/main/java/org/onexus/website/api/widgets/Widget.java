@@ -29,7 +29,6 @@ import org.onexus.website.api.MarkupLoader;
 import org.onexus.website.api.WebsiteStatus;
 import org.onexus.website.api.events.EventPanel;
 import org.onexus.website.api.pages.PageStatus;
-import org.onexus.website.api.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.utils.CustomCssBehavior;
 
 public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel implements IMarkupResourceStreamProvider {
@@ -66,7 +65,7 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
     }
 
     protected ORI getPageBaseOri() {
-        BrowserPageStatus pageStatus = findParentStatus(BrowserPageStatus.class);
+        PageStatus pageStatus = findParentStatus(PageStatus.class);
         return pageStatus == null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase());
     }
 

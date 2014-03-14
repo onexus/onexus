@@ -20,7 +20,7 @@ package org.onexus.website.api.utils.visible;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.IEntitySelection;
 import org.onexus.website.api.utils.parser.BooleanExpressionEvaluator;
 
 import java.util.Collection;

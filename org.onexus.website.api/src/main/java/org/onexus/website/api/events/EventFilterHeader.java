@@ -18,14 +18,14 @@
 package org.onexus.website.api.events;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
+import org.onexus.website.api.IFilter;
 
 public class EventFilterHeader extends AbstractEvent {
 
     private AjaxRequestTarget target;
-    private FieldHeader header;
+    private IFilter header;
 
-    public EventFilterHeader(AjaxRequestTarget target, FieldHeader header) {
+    public EventFilterHeader(AjaxRequestTarget target, IFilter header) {
         this.target = target;
         this.header = header;
     }
@@ -34,7 +34,7 @@ public class EventFilterHeader extends AbstractEvent {
         return target;
     }
 
-    public FieldHeader getHeader() {
+    public IFilter getHeader() {
         return header;
     }
 }

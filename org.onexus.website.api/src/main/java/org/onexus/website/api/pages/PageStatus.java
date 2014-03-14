@@ -32,6 +32,8 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
     private String id;
 
+    private String base;
+
     private transient C config;
 
     private List<WidgetStatus> widgetStatuses = new ArrayList<WidgetStatus>();
@@ -59,6 +61,19 @@ public abstract class PageStatus<C extends PageConfig> implements Serializable {
 
     public void setConfig(C config) {
         this.config = config;
+    }
+
+    public String getBase() {
+
+        if (base == null) {
+            base = getConfig().getBase();
+        }
+
+        return base;
+    }
+
+    public void setBase(String baseURI) {
+        this.base = baseURI;
     }
 
     public WidgetStatus getWidgetStatus(String id) {

@@ -7,13 +7,13 @@
         <bundle>mvn:org.onexus/org.onexus.resource.api/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.data.api/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.collection.api/${project.version}</bundle>
-        <bundle>mvn:org.onexus/org.onexus.website.api/${project.version}</bundle>
 
         <feature version="${project.version}">org.onexus.resource</feature>
         <feature version="${project.version}">org.onexus.data</feature>
         <feature version="${project.version}">org.onexus.collection</feature>
         <feature version="${project.version}">org.onexus.collection.store.h2sql</feature>
         <feature version="${project.version}">org.onexus.ui</feature>
+        <feature version="${project.version}">org.onexus.website</feature>
     </feature>
 
     <!-- Onexus MySQL -->
@@ -21,13 +21,13 @@
         <bundle>mvn:org.onexus/org.onexus.resource.api/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.data.api/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.collection.api/${project.version}</bundle>
-        <bundle>mvn:org.onexus/org.onexus.website.api/${project.version}</bundle>
 
         <feature version="${project.version}">org.onexus.resource</feature>
         <feature version="${project.version}">org.onexus.data</feature>
         <feature version="${project.version}">org.onexus.collection</feature>
         <feature version="${project.version}">org.onexus.collection.store.mysql</feature>
         <feature version="${project.version}">org.onexus.ui</feature>
+        <feature version="${project.version}">org.onexus.website</feature>
     </feature>
 
     <!-- Onexus core -->
@@ -100,6 +100,12 @@
     <!-- Collection loaders -->
     <feature name="org.onexus.collection.loader.tsv" version="${project.version}">
         <bundle>mvn:org.onexus/org.onexus.collection.loader.tsv/${project.version}</bundle>
+    </feature>
+
+    <!-- Onexus Website -->
+    <feature name="org.onexus.website" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.website.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.website.widgets/${project.version}</bundle>
     </feature>
 
     <!-- Onexus UI -->

@@ -17,7 +17,7 @@
  */
 package org.onexus.website.api.pages;
 
-import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.IEntitySelection;
 
 import java.io.Serializable;
 import java.util.List;

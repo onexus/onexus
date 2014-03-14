@@ -2,34 +2,13 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         >
 
-
     <!-- Resource activation -->
     <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister">
         <reference-listener bind-method="bind" unbind-method="unbind" ref="resourceActivator"/>
         <reference-listener bind-method="bindResourceRegister" ref="widgetManager"/>
         <reference-listener bind-method="bindResourceRegister" ref="pageManager"/>
-
-        <reference-listener bind-method="register" ref="browserPage"/>
-        <reference-listener bind-method="register" ref="htmlPage"/>
-        <reference-listener bind-method="register" ref="searchPage"/>
-
-        <reference-listener bind-method="register" ref="DownloadWidget"/>
-        <reference-listener bind-method="register" ref="ViewsWidget"/>
-        <reference-listener bind-method="register" ref="TableWidget"/>
-        <reference-listener bind-method="register" ref="HeatmapWidget"/>
-        <reference-listener bind-method="register" ref="PlotWidget"/>
-        <reference-listener bind-method="register" ref="ShareWidget"/>
-        <reference-listener bind-method="register" ref="FiltersWidget"/>
-        <reference-listener bind-method="register" ref="FixFiltersWidget"/>
-        <reference-listener bind-method="register" ref="SelectorFiltersWidget"/>
-        <reference-listener bind-method="register" ref="SearchWidget"/>
-        <reference-listener bind-method="register" ref="SelectorWidget"/>
-        <reference-listener bind-method="register" ref="TagWidget"/>
-        <reference-listener bind-method="register" ref="TextWidget"/>
-        <reference-listener bind-method="register" ref="ColumnsetsWidget"/>
-        <reference-listener bind-method="register" ref="MapWidget"/>
-
     </reference>
+
     <bean id="resourceActivator" class="org.onexus.resource.api.ResourceActivator">
         <property name="resourceRegister" ref="resourceRegister"/>
         <property name="resourceType" value="org.onexus.website.api.WebsiteConfig"/>
@@ -43,5 +22,43 @@
     <reference id="dataManager" interface="org.onexus.data.api.IDataManager"/>
     <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
     <reference id="queryParser" interface="org.onexus.collection.api.query.IQueryParser"/>
+
+    <!-- SignInPages -->
+    <reference-list id="signInPages"
+                    interface="org.onexus.website.api.ISignInPage"
+                    availability="optional"/>
+
+    <!-- WidgetManager -->
+    <reference-list id="widgetCreatorsRef" interface="org.onexus.website.api.widgets.IWidgetCreator"
+                    availability="optional">
+        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="widgetManager"/>
+    </reference-list>
+    <service interface="org.onexus.website.api.widgets.IWidgetManager" ref="widgetManager"/>
+    <bean id="widgetManager"
+          class="org.onexus.website.api.widgets.DefaultWidgetManager">
+        <property name="resourceRegister" ref="resourceRegister"/>
+        <property name="creators" ref="widgetCreatorsRef"/>
+    </bean>
+
+    <!-- PageManager -->
+    <reference-list id="pageCreatorsRef" interface="org.onexus.website.api.pages.IPageCreator" availability="optional">
+        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="pageManager"/>
+    </reference-list>
+    <service interface="org.onexus.website.api.pages.IPageManager" ref="pageManager"/>
+    <bean id="pageManager"
+          class="org.onexus.website.api.pages.DefaultPageManager">
+        <property name="resourceRegister" ref="resourceRegister"/>
+        <property name="creators" ref="pageCreatorsRef"/>
+    </bean>
+
+    <!-- WebsiteService -->
+    <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
+    <bean id="websiteService" class="org.onexus.website.api.WebsiteService">
+        <property name="resourceManager" ref="resourceManager"/>
+        <property name="collectionManager" ref="collectionManager"/>
+        <property name="context" ref="blueprintBundleContext"/>
+        <property name="signInPages" ref="signInPages"/>
+        <property name="pageManager" ref="pageManager" />
+    </bean>
 
 </blueprint>

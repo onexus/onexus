@@ -133,14 +133,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Test -->
-        <dependency>
-            <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.resource.serializer.xstream</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>

@@ -50,6 +50,8 @@ public abstract class PageConfig implements IVisible, Serializable, IAuthorizati
 
     private String markup;
 
+    private String base;
+
     private transient WebsiteConfig websiteConfig;
 
     public PageConfig() {
@@ -127,6 +129,14 @@ public abstract class PageConfig implements IVisible, Serializable, IAuthorizati
 
     public void setWebsiteConfig(WebsiteConfig websiteConfig) {
         this.websiteConfig = websiteConfig;
+    }
+
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
     }
 
     public WidgetConfig getWidget(String id) {

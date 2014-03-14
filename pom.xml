@@ -108,6 +108,7 @@
         <module>org.onexus.ui.website</module>
         <module>onexus-archetypes/widget</module>
         <module>onexus-features</module>
+        <module>org.onexus.website.widgets</module>
     </modules>
 
     <dependencies>
