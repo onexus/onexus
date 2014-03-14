@@ -27,6 +27,8 @@ import org.onexus.website.api.pages.search.figures.html.HtmlFigureConfig;
 import org.onexus.website.api.pages.search.figures.table.TableFigureConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,8 +37,10 @@ import java.util.List;
 @ResourceRegister({HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class})
 public class SearchPageConfig extends PageConfig {
 
+    @Valid
     private SearchPageStatus defaultStatus;
 
+    @NotNull @Valid
     @ResourceImplicitList("type")
     private List<SearchType> types = new ArrayList<SearchType>();
 

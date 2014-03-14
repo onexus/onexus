@@ -19,9 +19,15 @@ package org.onexus.website.api.pages.search;
 
 import org.onexus.website.api.pages.PageStatus;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 public class SearchPageStatus extends PageStatus<SearchPageConfig> {
 
+    @Valid
     private SearchType type;
+
+    @NotNull
     private String search;
 
     public SearchPageStatus() {

@@ -17,13 +17,24 @@
  */
 package org.onexus.website.api.widgets.icanplot;
 
+import org.onexus.resource.api.Resource;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public class PlotFields implements Serializable {
 
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String x;
+
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String y;
+
+    @NotNull
     private String color;
+
+    @NotNull
     private String size;
 
     public PlotFields() {

@@ -22,13 +22,18 @@ import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceRegister;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ResourceAlias("collection")
 @ResourceRegister({Link.class, Field.class, OrderBy.class})
 public class Collection extends Resource {
 
+    @NotNull @Valid
     private List<Field> fields;
+
+    @NotNull @Valid
     private List<Link> links;
 
     public Collection() {

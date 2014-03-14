@@ -20,9 +20,12 @@ package org.onexus.website.api.widgets.download;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+
 @ResourceAlias("widget-download")
 public class DownloadWidgetConfig extends WidgetConfig {
 
+    @Valid
     private DownloadWidgetStatus defaultStatus;
 
     private String formats;

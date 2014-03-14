@@ -22,6 +22,8 @@ import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.selection.custom.CustomFilter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,12 +31,17 @@ import java.util.List;
 @ResourceAlias("widget-filters")
 public class FiltersWidgetConfig extends WidgetConfig {
 
+    @Valid
     private FiltersWidgetStatus defaultStatus;
+
+    @NotNull
     private String title;
 
+    @Valid
     @ResourceImplicitList("custom-filter")
     private List<CustomFilter> customFilters;
 
+    @Valid
     @ResourceImplicitList("filter")
     private List<FilterConfig> filters;
 

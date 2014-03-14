@@ -21,14 +21,19 @@ import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ResourceAlias("widget-selector-filters")
 public class SelectorFiltersWidgetConfig extends WidgetConfig {
 
+    @Valid
     private SelectorFiltersWidgetStatus defaultStatus;
+
     private String title;
 
+    @NotNull @Valid
     @ResourceImplicitList("filter")
     private List<FilterConfig> filters;
 

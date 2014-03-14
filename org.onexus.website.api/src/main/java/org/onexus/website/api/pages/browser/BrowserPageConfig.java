@@ -22,6 +22,8 @@ import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +31,16 @@ import java.util.List;
 @ResourceRegister({ TabConfig.class })
 public class BrowserPageConfig extends PageConfig {
 
+    @Valid
     private BrowserPageStatus defaultStatus;
 
     private String base;
 
+    @NotNull @Valid
     private List<TabConfig> tabs = new ArrayList<TabConfig>();
 
+    @NotNull @Valid
     private List<WidgetConfig> widgets = new ArrayList<WidgetConfig>();
-
 
     public BrowserPageConfig() {
         super();

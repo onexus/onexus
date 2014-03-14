@@ -19,15 +19,21 @@ package org.onexus.resource.api;
 
 import org.onexus.resource.api.utils.AbstractMetadata;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Plugin extends AbstractMetadata {
 
+    @NotNull @Pattern(regexp=Resource.PATTERN_ID)
     private String id;
 
+    @NotNull
     private String location;
 
+    @Valid
     private List<Parameter> parameters;
 
     public Plugin() {

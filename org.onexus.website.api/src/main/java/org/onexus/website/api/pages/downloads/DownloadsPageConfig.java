@@ -24,6 +24,8 @@ import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +34,7 @@ import java.util.List;
 @ResourceRegister({ Download.class, DownloadsPageStatus.class })
 public class DownloadsPageConfig extends PageConfig {
 
+    @NotNull @Valid
     @ResourceImplicitList("download")
     private List<Download> downloads = new ArrayList<Download>();
 

@@ -22,11 +22,14 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.website.api.widgets.WidgetStatus;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectorFiltersWidgetStatus extends WidgetStatus<FiltersWidgetConfig> {
 
+    @NotNull @Valid
     private List<FilterConfig> selectedFilters;
 
     public SelectorFiltersWidgetStatus() {

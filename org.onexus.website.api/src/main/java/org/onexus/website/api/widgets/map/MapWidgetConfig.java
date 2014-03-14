@@ -21,13 +21,18 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @ResourceAlias("widget-map")
 public class MapWidgetConfig extends WidgetConfig {
 
+    @Valid
     private MapWidgetStatus defaultStatus;
 
     private String warning;
 
+    @NotNull
     private ORI collection;
 
     public MapWidgetConfig() {

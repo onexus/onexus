@@ -18,18 +18,25 @@
 package org.onexus.website.api.widgets.selection.custom;
 
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @ResourceAlias("custom-filter")
 public class CustomFilter implements Serializable {
 
+    @NotNull
     private String title;
+
+    @NotNull
     private ORI collection;
 
     private String type;
 
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String field;
 
     public CustomFilter() {

@@ -17,14 +17,18 @@
  */
 package org.onexus.resource.api;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Loader implements Serializable {
 
+    @NotNull
     private String plugin;
 
+    @NotNull @Valid
     private List<Parameter> parameters;
 
     public Loader() {

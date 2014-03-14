@@ -19,12 +19,17 @@ package org.onexus.website.api.pages.search;
 
 import org.onexus.website.api.utils.visible.IVisible;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class SearchLink implements IVisible, Serializable {
 
+    @NotNull
     private String title;
+
+    @NotNull
     private String url;
+
     private String visible;
 
     public SearchLink() {

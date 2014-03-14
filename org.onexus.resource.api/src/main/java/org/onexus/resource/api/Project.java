@@ -18,14 +18,19 @@
 package org.onexus.resource.api;
 
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 public class Project extends Resource {
 
+    @Pattern(regexp = PATTERN_ID)
     private String name;
 
     private String alias;
 
+    @Valid
     private List<Plugin> plugins;
 
     public Project() {

@@ -17,11 +17,15 @@
  */
 package org.onexus.resource.api;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 public class Property implements Serializable {
 
+    @NotNull @Size(min=1, max=100)
     private String key;
+
     private String value;
 
     public Property() {

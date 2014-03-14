@@ -305,22 +305,7 @@ public abstract class AbstractProjectProvider {
             } catch (FileNotFoundException e) {
                 resource = createErrorResource(resourceFile, "File '" + resourceFile.getPath() + "' not found.");
             } catch (UnserializeException e) {
-
-                String msg = "Parsing file " + resourceFile.getPath() + " at line " + e.getLine() + " on " + e.getPath();
-
-                if (out != null) {
-                    String[] lines = out.toString().split(System.getProperty("line.separator"));
-
-                    int error = Integer.valueOf(e.getLine());
-                    int from = (error-1 > 0 ? error-1 : 0);
-                    int to = (error+1 < lines.length ? error+1 : lines.length);
-
-                    for (int i=from ; i <= to; i++) {
-                        msg = msg + "\n " + i + " >> " + lines[i];
-                    }
-                }
-
-                resource = createErrorResource(resourceFile, msg);
+                resource = createErrorResource(resourceFile, e.getMessage(resourceFile.getPath(), out.toString()));
             } catch (Exception e) {
                 resource = createErrorResource(resourceFile, e.getMessage());
             }

@@ -19,17 +19,27 @@ package org.onexus.resource.api;
 
 import org.onexus.resource.api.utils.IMetadata;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 
 
 public abstract class Resource implements IMetadata, Serializable {
 
+    public final static String PATTERN_ID = "[-A-Za-z0-9+&@#%?=~_|!:,.;]+";
+
     private ORI ori;
+
     private String label;
+
     private String title;
+
     private String description;
+
+    @Valid
     private List<Property> properties;
+
+    @Valid
     private Loader loader;
 
     public Resource() {

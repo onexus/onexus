@@ -20,12 +20,21 @@ package org.onexus.website.api.widgets.text;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @ResourceAlias("widget-text")
 public class TextWidgetConfig extends WidgetConfig {
 
+    @Valid
     private TextWidgetStatus defaultStatus;
+
+    @NotNull
     private String title;
+
+    @NotNull
     private String text;
+
     private String details;
 
     public TextWidgetConfig() {

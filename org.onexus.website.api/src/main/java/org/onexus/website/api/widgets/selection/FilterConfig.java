@@ -18,22 +18,29 @@
 package org.onexus.website.api.widgets.selection;
 
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @ResourceAlias("filter-config")
 public class FilterConfig implements Serializable {
 
+    @NotNull
     private String name;
 
-    private boolean deletable = false;
-
+    @NotNull
     private ORI collection;
 
+    @NotNull
     private String define;
 
+    @NotNull
     private String where;
+
+    private boolean deletable = false;
 
     private transient boolean enable = true;
 

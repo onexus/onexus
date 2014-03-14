@@ -20,9 +20,12 @@ package org.onexus.website.api.pages.search.figures.html;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.search.FigureConfig;
 
+import javax.validation.constraints.NotNull;
+
 @ResourceAlias("figure-html")
 public class HtmlFigureConfig extends FigureConfig {
 
+    @NotNull
     private String text;
 
     public HtmlFigureConfig() {

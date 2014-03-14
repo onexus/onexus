@@ -20,14 +20,20 @@ package org.onexus.website.api.pages.search.figures.bar;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.search.FigureConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @ResourceAlias("figure-bar")
 public class BarFigureConfig extends FigureConfig {
 
+    @NotNull @Valid
     private CollectionField value;
 
+    @NotNull @Valid
     @ResourceAlias("x-axis")
     private CollectionField xAxis;
 
+    @NotNull @Valid
     @ResourceAlias("y-axis")
     private CollectionField yAxis;
 

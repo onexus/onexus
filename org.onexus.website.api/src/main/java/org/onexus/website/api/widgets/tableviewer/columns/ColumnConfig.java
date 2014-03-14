@@ -35,6 +35,7 @@ import org.onexus.website.api.widgets.tableviewer.headers.CollectionHeader;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -47,9 +48,10 @@ public class ColumnConfig implements IColumnConfig {
 
     private String label;
 
-    private String title;
-
+    @NotNull
     private ORI collection;
+
+    private String title;
 
     private String fields;
 

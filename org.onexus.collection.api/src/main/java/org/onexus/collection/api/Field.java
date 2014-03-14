@@ -17,13 +17,20 @@
  */
 package org.onexus.collection.api;
 
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.utils.AbstractMetadata;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @ResourceAlias("field")
 public class Field extends AbstractMetadata {
 
+    @NotNull @Pattern(regexp=Resource.PATTERN_ID)
     private String id;
+
+    @NotNull
     private Class<?> type;
 
     @ResourceAlias("primary-key")

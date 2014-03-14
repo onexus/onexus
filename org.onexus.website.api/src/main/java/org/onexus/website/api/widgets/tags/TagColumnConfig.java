@@ -24,11 +24,13 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @ResourceAlias("column-tags")
 public class TagColumnConfig implements IColumnConfig {
 
+    @NotNull
     private ORI collection;
 
     private String visible;

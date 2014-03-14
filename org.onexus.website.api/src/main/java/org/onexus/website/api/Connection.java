@@ -17,12 +17,17 @@
  */
 package org.onexus.website.api;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class Connection implements Serializable {
 
+    @NotNull
     private String url;
+
+    @NotNull
     private String title;
+
     private Boolean active;
 
     public String getTitle() {

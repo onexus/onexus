@@ -25,6 +25,8 @@ import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.authorization.IAuthorization;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private String signInPage;
 
+    @NotNull @Valid
     private List<PageConfig> pages;
 
     private String header;
@@ -49,6 +52,7 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
     private String bottom;
 
+    @Valid
     @ResourceImplicitList("connection")
     private List<Connection> connections;
 

@@ -19,10 +19,12 @@ package org.onexus.website.api.pages.search;
 
 import org.onexus.website.api.utils.visible.IVisible;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public abstract class FigureConfig implements Serializable, IVisible {
 
+    @NotNull
     private String title;
 
     private String description;

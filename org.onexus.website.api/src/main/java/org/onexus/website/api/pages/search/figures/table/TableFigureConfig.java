@@ -23,18 +23,23 @@ import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.pages.search.FigureConfig;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @ResourceAlias("figure-table")
 public class TableFigureConfig extends FigureConfig {
 
+    @NotNull
     private ORI collection;
 
+    @Valid
     private OrderBy order;
 
     private Integer limit;
 
+    @NotNull @Valid
     private List<IColumnConfig> columns = new ArrayList<IColumnConfig>();
 
     private String define;

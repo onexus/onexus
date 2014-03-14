@@ -23,18 +23,24 @@ import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @ResourceAlias("viewer-plot")
 public class PlotViewerConfig extends WidgetConfig {
 
+    @Valid
     private PlotViewerStatus defaultStatus;
 
+    @NotNull
     private ORI collection;
 
+    @NotNull @Valid
     private List<IColumnConfig> columns = new ArrayList<IColumnConfig>();
 
+    @NotNull @Valid
     private PlotFields fields;
 
     @Override

@@ -23,8 +23,12 @@ import org.onexus.resource.api.ORI;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.tableviewer.columns.IColumnConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 public class PlotViewerStatus extends WidgetStatus<PlotViewerConfig> {
 
+    @NotNull @Valid
     private PlotFields fields;
 
     public PlotViewerStatus() {

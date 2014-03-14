@@ -21,10 +21,13 @@ import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class FiltersToolbarStatus extends WidgetStatus<FiltersWidgetConfig> {
 
+    @NotNull @Valid
     private List<FilterConfig> filters;
 
     public FiltersToolbarStatus() {

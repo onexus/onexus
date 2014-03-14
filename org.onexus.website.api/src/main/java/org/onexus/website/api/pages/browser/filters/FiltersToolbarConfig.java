@@ -21,9 +21,12 @@ import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
+import javax.validation.Valid;
+
 @ResourceAlias("filters-toolbar")
 public class FiltersToolbarConfig extends WidgetConfig {
 
+    @Valid
     private FiltersToolbarStatus defaultStatus;
 
     public FiltersToolbarConfig() {

@@ -19,14 +19,18 @@ package org.onexus.website.api.widgets;
 
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.onexus.resource.api.Resource;
 import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.utils.authorization.IAuthorization;
 import org.onexus.website.api.utils.visible.IVisible;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public abstract class WidgetConfig implements Serializable, IAuthorization, IVisible {
 
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String id;
 
     private String button;

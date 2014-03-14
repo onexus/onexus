@@ -18,13 +18,18 @@
 package org.onexus.website.api.pages.search.figures.bar;
 
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Resource;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public class CollectionField implements Serializable {
 
+    @NotNull
     private ORI collection;
 
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String field;
 
     public CollectionField() {

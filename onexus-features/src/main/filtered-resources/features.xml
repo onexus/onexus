@@ -44,6 +44,11 @@
         <bundle>mvn:com.thoughtworks.xstream/com.springsource.com.thoughtworks.xstream/${xstream.version}</bundle>
         <bundle>mvn:org.xmlpull/com.springsource.org.xmlpull/${xmlpull.version}</bundle>
 
+        <!-- hibernate validation -->
+        <bundle>mvn:org.hibernate/hibernate-validator/${hibernate-validator.version}</bundle>
+        <bundle>mvn:javax.validation/validation-api/${validation-api.version}</bundle>
+        <bundle>mvn:org.jboss.logging/jboss-logging/3.1.4.GA</bundle>
+
         <!-- git -->
         <bundle>mvn:org.openengsb.wrapped/com.jcraft.jsch-all/${jsch.version}</bundle>
         <bundle>mvn:org.eclipse.jgit/org.eclipse.jgit/${jgit.version}</bundle>

@@ -17,12 +17,17 @@
  */
 package org.onexus.website.api.pages.downloads;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class Download implements Serializable {
 
+    @NotNull
     private String title;
+
     private String description;
+
+    @NotNull
     private String query;
 
     public String getTitle() {

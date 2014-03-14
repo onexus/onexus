@@ -17,12 +17,18 @@
  */
 package org.onexus.collection.api.query;
 
+import org.onexus.resource.api.Resource;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public class OrderBy implements Serializable {
 
+    @NotNull
     private String collection;
 
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String field;
 
     private boolean ascendent = true;

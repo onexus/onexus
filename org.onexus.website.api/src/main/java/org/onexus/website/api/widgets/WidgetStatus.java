@@ -19,11 +19,15 @@ package org.onexus.website.api.widgets;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.Resource;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public abstract class WidgetStatus<C extends WidgetConfig> implements Serializable {
 
+    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String id;
 
     private transient C config;

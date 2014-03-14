@@ -22,6 +22,8 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widgets.selection.FiltersWidgetConfig;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,21 +31,32 @@ import java.util.List;
 
 public class SearchType implements Serializable {
 
+    @NotNull
     private ORI collection;
+
+    @NotNull
     private String fields;
+
     private String keys;
+
     private String examples;
+
     private String template;
+
     private String placeholder;
 
+    @Valid
     private FiltersWidgetConfig filters;
 
+    @NotNull @Valid
     @ResourceImplicitList("link")
     private List<SearchLink> links = new ArrayList<SearchLink>();
 
+    @NotNull @Valid
     @ResourceImplicitList("fix-link")
     private List<SearchLink> fixLinks = new ArrayList<SearchLink>();
 
+    @NotNull @Valid
     private List<FigureConfig> figures = new ArrayList<FigureConfig>();
 
     public ORI getCollection() {
