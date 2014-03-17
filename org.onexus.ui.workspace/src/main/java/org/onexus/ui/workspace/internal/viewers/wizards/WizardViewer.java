@@ -34,7 +34,6 @@ import org.onexus.ui.api.wizards.IWizardCreator;
 import org.onexus.ui.api.wizards.IWizardsManager;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
 public class WizardViewer extends Panel {

@@ -25,30 +25,21 @@ import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.events.EventViewChange;
-import org.onexus.website.widgets.pages.browser.BrowserPage;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.widgets.browser.BrowserPage;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 import org.onexus.website.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.website.widgets.tags.tagstore.TagStore;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class TagWidget extends Widget<TagWidgetConfig, TagWidgetStatus> {
 

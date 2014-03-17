@@ -17,10 +17,13 @@
  */
 package org.onexus.resource.api;
 
+import org.onexus.resource.api.annotations.ResourceAlias;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+@ResourceAlias("property")
 public class Property implements Serializable {
 
     @NotNull @Size(min=1, max=100)

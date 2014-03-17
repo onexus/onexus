@@ -17,12 +17,7 @@
  */
 package org.onexus.collection.store.sql;
 
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.ICollectionStore;
-import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntitySet;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;

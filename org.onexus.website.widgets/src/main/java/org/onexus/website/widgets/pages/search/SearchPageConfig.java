@@ -20,12 +20,11 @@ package org.onexus.website.widgets.pages.search;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.resource.api.annotations.ResourceRegister;
-import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.widgets.pages.search.figures.bar.BarFigureConfig;
 import org.onexus.website.widgets.pages.search.figures.html.HtmlFigureConfig;
 import org.onexus.website.widgets.pages.search.figures.table.TableFigureConfig;
-import org.onexus.website.api.widgets.WidgetConfig;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -34,8 +33,8 @@ import java.util.Collections;
 import java.util.List;
 
 @ResourceAlias("search")
-@ResourceRegister({HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class})
-public class SearchPageConfig extends PageConfig {
+@ResourceRegister({HtmlFigureConfig.class, BarFigureConfig.class, TableFigureConfig.class, SearchPageStatus.class, SearchType.class, SearchLink.class})
+public class SearchPageConfig extends WidgetConfig {
 
     @Valid
     private SearchPageStatus defaultStatus;
@@ -57,17 +56,17 @@ public class SearchPageConfig extends PageConfig {
     }
 
     @Override
-    public List<WidgetConfig> getWidgets() {
+    public List<WidgetConfig> getChildren() {
         return Collections.emptyList();
     }
 
     @Override
-    public PageStatus createEmptyStatus() {
+    public WidgetStatus createEmptyStatus() {
         return new SearchPageStatus();
     }
 
     @Override
-    public PageStatus getDefaultStatus() {
+    public WidgetStatus getDefaultStatus() {
         return defaultStatus;
     }
 

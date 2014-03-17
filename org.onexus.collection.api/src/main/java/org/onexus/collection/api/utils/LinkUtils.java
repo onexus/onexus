@@ -22,11 +22,7 @@ import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
 import org.onexus.resource.api.ORI;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class LinkUtils {
 

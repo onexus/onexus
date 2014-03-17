@@ -36,13 +36,12 @@ import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.website.api.WebsiteConfig;
-import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.widgets.pages.browser.BrowserPageConfig;
-import org.onexus.website.widgets.pages.browser.TabConfig;
-import org.onexus.website.widgets.pages.browser.ViewConfig;
-import org.onexus.website.widgets.pages.html.HtmlPageConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.widgets.download.DownloadWidgetConfig;
+import org.onexus.website.widgets.browser.BrowserPageConfig;
+import org.onexus.website.widgets.browser.TabConfig;
+import org.onexus.website.widgets.browser.ViewConfig;
+import org.onexus.website.widgets.html.HtmlPageConfig;
 import org.onexus.website.widgets.search.SearchField;
 import org.onexus.website.widgets.search.SearchWidgetConfig;
 import org.onexus.website.widgets.share.ShareWidgetConfig;
@@ -86,7 +85,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
     protected WebsiteConfig getDefaultResource() {
 
         WebsiteConfig website = new WebsiteConfig();
-        website.setPages(new ArrayList<PageConfig>());
+        website.setPages(new ArrayList<WidgetConfig>());
         website.setLabel("website");
         website.setTitle("Website title");
 
@@ -99,11 +98,11 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
 
         WidgetConfig downloadWidget = new DownloadWidgetConfig("download");
         downloadWidget.setButton("download");
-        browserPage.getWidgets().add(downloadWidget);
+        browserPage.getChildren().add(downloadWidget);
 
         WidgetConfig shareWidget = new ShareWidgetConfig("share");
         shareWidget.setButton("share");
-        browserPage.getWidgets().add(shareWidget);
+        browserPage.getChildren().add(shareWidget);
 
         website.getPages().add(browserPage);
 
@@ -191,7 +190,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             SearchWidgetConfig searchWidget = new SearchWidgetConfig(searchWidgetId);
             List<SearchField> searchFields = new ArrayList<SearchField>();
             searchWidget.setFields(searchFields);
-            browserPage.getWidgets().add(searchWidget);
+            browserPage.getChildren().add(searchWidget);
 
             // Create table widget
             TableViewerConfig tableWidget = new TableViewerConfig(tableWidgetId, mainTabCollection);
@@ -232,7 +231,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             }
 
             tableWidget.getColumnSets().add(columnSet);
-            browserPage.getWidgets().add(tableWidget);
+            browserPage.getChildren().add(tableWidget);
 
             // Add view
             currentTab.setViews(new ArrayList<ViewConfig>());
@@ -293,7 +292,7 @@ public class NewWebsiteWizard extends AbstractNewResourceWizard<WebsiteConfig> {
             if (!linkCollections.isEmpty()) {
 
                 String tableWidgetId = currentTab.getId() + "-table";
-                TableViewerConfig tableWidget = (TableViewerConfig) browserPage.getWidget(tableWidgetId);
+                TableViewerConfig tableWidget = (TableViewerConfig) browserPage.getChild(tableWidgetId);
                 ColumnSet columnSet = tableWidget.getColumnSets().get(0);
 
                 for (ORI linkCollection : linkCollections) {

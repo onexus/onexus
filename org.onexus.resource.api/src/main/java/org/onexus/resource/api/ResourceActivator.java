@@ -21,7 +21,7 @@ public class ResourceActivator {
 
     private IResourceRegister resourceRegister;
 
-    private Class<?> resourceType;
+    private Class<? extends Resource> resourceType;
 
     public void bind(IResourceRegister resourceRegister) {
         resourceRegister.register(resourceType);
@@ -31,11 +31,11 @@ public class ResourceActivator {
         resourceRegister.unregister(resourceType);
     }
 
-    public Class<?> getResourceType() {
+    public Class<? extends Resource> getResourceType() {
         return resourceType;
     }
 
-    public void setResourceType(Class<?> resourceType) {
+    public void setResourceType(Class<? extends Resource> resourceType) {
         this.resourceType = resourceType;
     }
 

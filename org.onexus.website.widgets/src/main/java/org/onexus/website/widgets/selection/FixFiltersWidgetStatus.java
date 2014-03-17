@@ -20,9 +20,9 @@ package org.onexus.website.widgets.selection;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
+import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.IEntitySelection;
 import org.onexus.website.api.MultipleEntitySelection;
-import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
 public class FixFiltersWidgetStatus extends WidgetStatus<FixFiltersWidgetConfig> {

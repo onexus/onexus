@@ -17,12 +17,11 @@
  */
 package org.onexus.website.widgets.utils.parser;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.onexus.website.api.utils.parser.BooleanExpressionEvaluator;
 import org.onexus.website.api.utils.parser.StringTokenizer;
+
+import static org.junit.Assert.*;
 
 public class ParserTest {
 

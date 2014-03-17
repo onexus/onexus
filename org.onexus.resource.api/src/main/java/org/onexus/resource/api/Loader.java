@@ -17,18 +17,23 @@
  */
 package org.onexus.resource.api;
 
+import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ResourceRegister({Parameter.class})
 public class Loader implements Serializable {
 
     @NotNull
     private String plugin;
 
-    @NotNull @Valid
+    @Valid
+    @ResourceImplicitList("parameter")
     private List<Parameter> parameters;
 
     public Loader() {

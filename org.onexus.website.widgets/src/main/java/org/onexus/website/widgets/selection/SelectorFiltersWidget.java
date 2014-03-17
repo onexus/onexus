@@ -25,9 +25,9 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.events.EventFiltersUpdate;
 import org.onexus.website.api.events.EventQueryUpdate;
-import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.widgets.Widget;
 
 import java.util.List;

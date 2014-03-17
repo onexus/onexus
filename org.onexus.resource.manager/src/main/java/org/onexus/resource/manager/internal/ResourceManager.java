@@ -17,24 +17,9 @@
  */
 package org.onexus.resource.manager.internal;
 
-import org.onexus.resource.api.IAuthorizationManager;
-import static org.onexus.resource.api.IAuthorizationManager.READ;
-import static org.onexus.resource.api.IAuthorizationManager.WRITE;
-import org.onexus.resource.api.IResourceListener;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.resource.api.Loader;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Project;
-import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.*;
 import org.onexus.resource.manager.internal.providers.AbstractProjectProvider;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.osgi.service.blueprint.container.BlueprintEvent;
 import org.osgi.service.blueprint.container.BlueprintListener;
 import org.slf4j.Logger;
@@ -43,6 +28,9 @@ import org.slf4j.LoggerFactory;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.onexus.resource.api.IAuthorizationManager.READ;
+import static org.onexus.resource.api.IAuthorizationManager.WRITE;
 
 public class ResourceManager implements IResourceManager, BlueprintListener, BundleListener {
 

@@ -20,11 +20,7 @@ package org.onexus.collection.api.query;
 import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Query implements Serializable {
 

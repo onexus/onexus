@@ -19,11 +19,13 @@ package org.onexus.website.widgets.tags;
 
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.List;
 
 @ResourceAlias("widget-tags")
+@ResourceRegister({TagColumnConfig.class})
 public class TagWidgetConfig extends WidgetConfig {
 
     private TagWidgetStatus defaultStatus;

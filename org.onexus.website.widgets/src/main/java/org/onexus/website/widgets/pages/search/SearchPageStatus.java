@@ -17,12 +17,12 @@
  */
 package org.onexus.website.widgets.pages.search;
 
-import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.widgets.WidgetStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class SearchPageStatus extends PageStatus<SearchPageConfig> {
+public class SearchPageStatus extends WidgetStatus<SearchPageConfig> {
 
     @Valid
     private SearchType type;

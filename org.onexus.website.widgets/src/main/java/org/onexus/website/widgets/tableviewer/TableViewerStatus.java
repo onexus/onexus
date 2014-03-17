@@ -24,7 +24,6 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteConfig;
-import org.onexus.website.api.pages.PageConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 import org.onexus.website.widgets.tableviewer.columns.IColumnConfig;
 
@@ -65,15 +64,8 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
 
     @Override
     public void beforeQueryBuild(Query query) {
-
         String collectionAlias = QueryUtils.newCollectionAlias(query, getConfig().getCollection());
         query.setFrom(collectionAlias);
-
-    }
-
-    @Override
-    public void afterQueryBuild(Query query) {
-
     }
 
     @Override
@@ -93,14 +85,12 @@ public class TableViewerStatus extends WidgetStatus<TableViewerConfig> {
             OrderBy orderWithAlias = new OrderBy(collectionAlias, orderWithCollection.getField(), orderWithCollection.isAscendent());
             query.addOrderBy(orderWithAlias);
         }
-
     }
 
     @Override
     public void encodeParameters(PageParameters parameters, String keyPrefix) {
 
-        PageConfig pageConfig = getConfig().getPageConfig();
-        WebsiteConfig websiteConfig = pageConfig == null ? null : pageConfig.getWebsiteConfig();
+        WebsiteConfig websiteConfig = getConfig().getWebsiteConfig();
         ORI projectUri = websiteConfig == null ? null : websiteConfig.getORI().getParent();
 
         TableViewerStatus defaultStatus = getConfig().getDefaultStatus();

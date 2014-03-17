@@ -6,7 +6,6 @@
     <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister">
         <reference-listener bind-method="bind" unbind-method="unbind" ref="resourceActivator"/>
         <reference-listener bind-method="bindResourceRegister" ref="widgetManager"/>
-        <reference-listener bind-method="bindResourceRegister" ref="pageManager"/>
     </reference>
 
     <bean id="resourceActivator" class="org.onexus.resource.api.ResourceActivator">
@@ -40,16 +39,6 @@
         <property name="creators" ref="widgetCreatorsRef"/>
     </bean>
 
-    <!-- PageManager -->
-    <reference-list id="pageCreatorsRef" interface="org.onexus.website.api.pages.IPageCreator" availability="optional">
-        <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="pageManager"/>
-    </reference-list>
-    <service interface="org.onexus.website.api.pages.IPageManager" ref="pageManager"/>
-    <bean id="pageManager"
-          class="org.onexus.website.api.pages.DefaultPageManager">
-        <property name="resourceRegister" ref="resourceRegister"/>
-        <property name="creators" ref="pageCreatorsRef"/>
-    </bean>
 
     <!-- WebsiteService -->
     <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
@@ -58,7 +47,7 @@
         <property name="collectionManager" ref="collectionManager"/>
         <property name="context" ref="blueprintBundleContext"/>
         <property name="signInPages" ref="signInPages"/>
-        <property name="pageManager" ref="pageManager" />
+        <property name="widgetManager" ref="widgetManager" />
     </bean>
 
 </blueprint>

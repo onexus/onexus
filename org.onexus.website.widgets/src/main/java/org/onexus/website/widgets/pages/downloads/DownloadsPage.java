@@ -28,7 +28,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
-import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.widgets.download.DownloadWidget;
 import org.onexus.website.widgets.download.DownloadWidgetConfig;
@@ -36,7 +35,7 @@ import org.onexus.website.widgets.download.DownloadWidgetStatus;
 
 import javax.inject.Inject;
 
-public class DownloadsPage extends Page<DownloadsPageConfig, DownloadsPageStatus> {
+public class DownloadsPage extends Widget<DownloadsPageConfig, DownloadsPageStatus> {
 
     private WebMarkupContainer modal;
 

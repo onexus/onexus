@@ -36,7 +36,6 @@ import org.onexus.resource.api.Resource;
 import org.onexus.website.api.WebsiteApplication;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 
 public abstract class AbstractNewResourceWizard<T extends Resource> extends AbstractWizard {

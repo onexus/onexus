@@ -18,12 +18,11 @@
 package org.onexus.website.api;
 
 import org.apache.commons.lang3.SerializationUtils;
-import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
-import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.authorization.IAuthorization;
+import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.WidgetStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ResourceAlias("website")
-public class WebsiteConfig extends Resource implements IAuthorization {
+public class WebsiteConfig extends WidgetConfig implements IAuthorization {
 
     private WebsiteStatus defaultStatus;
 
@@ -42,7 +41,7 @@ public class WebsiteConfig extends Resource implements IAuthorization {
     private String signInPage;
 
     @NotNull @Valid
-    private List<PageConfig> pages;
+    private List<WidgetConfig> pages;
 
     private String header;
 
@@ -125,13 +124,13 @@ public class WebsiteConfig extends Resource implements IAuthorization {
         this.signInPage = signInPage;
     }
 
-    public List<PageConfig> getPages() {
+    public List<WidgetConfig> getPages() {
         return pages;
     }
 
-    public PageConfig getPage(String pageId) {
+    public WidgetConfig getPage(String pageId) {
         if (pages != null) {
-            for (PageConfig page : pages) {
+            for (WidgetConfig page : pages) {
                 if (pageId.equals(page.getId())) {
                     return page;
                 }
@@ -141,7 +140,7 @@ public class WebsiteConfig extends Resource implements IAuthorization {
         return null;
     }
 
-    public void setPages(List<PageConfig> pages) {
+    public void setPages(List<WidgetConfig> pages) {
         this.pages = pages;
     }
 
@@ -171,12 +170,12 @@ public class WebsiteConfig extends Resource implements IAuthorization {
 
         // Add page status
         if (getPages() != null) {
-            List<PageStatus> pageStatuses = new ArrayList<PageStatus>();
-            for (PageConfig page : getPages()) {
+            List<WidgetStatus> pageStatuses = new ArrayList<WidgetStatus>();
+            for (WidgetConfig page : getPages()) {
                 page.setWebsiteConfig(this);
                 pageStatuses.add(page.newStatus());
             }
-            status.setPageStatuses(pageStatuses);
+            status.setChildren(pageStatuses);
         }
 
         return status;

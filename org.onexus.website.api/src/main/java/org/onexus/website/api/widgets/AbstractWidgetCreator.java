@@ -17,6 +17,7 @@
  */
 package org.onexus.website.api.widgets;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceRegister;
 
@@ -62,6 +63,15 @@ public abstract class AbstractWidgetCreator<C extends WidgetConfig, S extends Wi
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public void onAfterInitialized(Application application) {
+
+    }
+
+    @Override
+    public void onBeforeDestroyed(Application application) {
     }
 
     @SuppressWarnings("unchecked")

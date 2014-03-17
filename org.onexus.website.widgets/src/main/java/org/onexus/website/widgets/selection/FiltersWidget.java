@@ -31,13 +31,13 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.onexus.website.api.FilterConfig;
+import org.onexus.website.api.MultipleEntitySelection;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventCloseModal;
-import org.onexus.website.widgets.pages.browser.BrowserPage;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.MultipleEntitySelection;
-import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.widgets.browser.BrowserPage;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 import org.onexus.website.widgets.selection.custom.CustomFilter;
 import org.onexus.website.widgets.selection.custom.ListCustomFilterPanel;
 import org.onexus.website.widgets.selection.custom.NumericCustomFilterPanel;
@@ -105,7 +105,7 @@ public class FiltersWidget extends Widget<FiltersWidgetConfig, FiltersWidgetStat
                         }
                     });
                 } else if (customFilter.getType().equalsIgnoreCase("numeric")) {
-                    FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter, FiltersWidget.this.getPageBaseOri()) {
+                    FiltersWidget.this.addOrReplace(new NumericCustomFilterPanel("customPanel", customFilter, FiltersWidget.this.getBaseOri()) {
                         @Override
                         protected void addFilter(AjaxRequestTarget target, FilterConfig filterConfig) {
                             addCustomFilter(target, filterConfig);

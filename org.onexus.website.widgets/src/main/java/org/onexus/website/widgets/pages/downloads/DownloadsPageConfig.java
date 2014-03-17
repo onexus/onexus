@@ -20,9 +20,8 @@ package org.onexus.website.widgets.pages.downloads;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.resource.api.annotations.ResourceRegister;
-import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.WidgetStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -32,7 +31,7 @@ import java.util.List;
 
 @ResourceAlias("downloads")
 @ResourceRegister({ Download.class, DownloadsPageStatus.class })
-public class DownloadsPageConfig extends PageConfig {
+public class DownloadsPageConfig extends WidgetConfig {
 
     @NotNull @Valid
     @ResourceImplicitList("download")
@@ -51,17 +50,17 @@ public class DownloadsPageConfig extends PageConfig {
     }
 
     @Override
-    public List<WidgetConfig> getWidgets() {
+    public List<WidgetConfig> getChildren() {
         return Collections.EMPTY_LIST;
     }
 
     @Override
-    public PageStatus createEmptyStatus() {
+    public WidgetStatus createEmptyStatus() {
         return new DownloadsPageStatus();
     }
 
     @Override
-    public PageStatus getDefaultStatus() {
+    public WidgetStatus getDefaultStatus() {
         return null;
     }
 

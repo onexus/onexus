@@ -19,25 +19,28 @@ package org.onexus.website.api.widgets;
 
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
-import org.onexus.website.api.pages.PageConfig;
+import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.utils.authorization.IAuthorization;
 import org.onexus.website.api.utils.visible.IVisible;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public abstract class WidgetConfig implements Serializable, IAuthorization, IVisible {
+public abstract class WidgetConfig extends Resource implements Serializable, IAuthorization, IVisible {
 
-    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
+    @Pattern(regexp = Resource.PATTERN_ID)
     private String id;
 
-    private String button;
-
-    private String width;
+    private String label;
 
     private String title;
+
+    private String description;
 
     private String authorization;
 
@@ -47,7 +50,15 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
 
     private String markup;
 
-    private transient PageConfig pageConfig;
+    private String button;
+
+    private String width;
+
+    private String base;
+
+    private transient WidgetConfig parentConfig;
+
+    private transient WebsiteConfig websiteConfig;
 
     public WidgetConfig() {
         super();
@@ -59,12 +70,39 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
 
     }
 
+    @Override
+    public ORI getORI() {
+        ORI ownOri = super.getORI();
+
+        if (ownOri == null) {
+            return getWebsiteConfig().getORI();
+        }
+
+        return ownOri;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getButton() {
@@ -107,8 +145,16 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
         this.visible = visible;
     }
 
-    public PageConfig getPageConfig() {
-        return pageConfig;
+    public WidgetConfig getParentConfig() {
+        return parentConfig;
+    }
+
+    public WebsiteConfig getWebsiteConfig() {
+        return websiteConfig;
+    }
+
+    public void setWebsiteConfig(WebsiteConfig websiteConfig) {
+        this.websiteConfig = websiteConfig;
     }
 
     public String getCss() {
@@ -127,8 +173,32 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
         this.markup = markup;
     }
 
-    public void setPageConfig(PageConfig pageConfig) {
-        this.pageConfig = pageConfig;
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
+    }
+
+    public void setParentConfig(WidgetConfig parentConfig) {
+        this.parentConfig = parentConfig;
+    }
+
+    public WidgetConfig getChild(String id) {
+
+        if (id != null) {
+            for (WidgetConfig config : getChildren()) {
+                if (id.equals(config.getId())) {
+                    return config;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<WidgetConfig> getChildren() {
+        return Collections.emptyList();
     }
 
     public abstract WidgetStatus getDefaultStatus();
@@ -147,6 +217,16 @@ public abstract class WidgetConfig implements Serializable, IAuthorization, IVis
 
         status.setId(getId());
         status.setConfig(this);
+
+        // Add children widget status
+        List<WidgetConfig> widgets = getChildren();
+        List<WidgetStatus> statuses = new ArrayList<WidgetStatus>(widgets.size());
+        for (WidgetConfig widgetConfig : getChildren()) {
+            widgetConfig.setParentConfig(this);
+            widgetConfig.setWebsiteConfig(getWebsiteConfig());
+            statuses.add(widgetConfig.newStatus());
+        }
+        status.setChildren(statuses);
 
         return status;
     }

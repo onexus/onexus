@@ -17,9 +17,9 @@
  */
 package org.onexus.website.widgets.pages.downloads;
 
-import org.onexus.website.api.pages.PageStatus;
+import org.onexus.website.api.widgets.WidgetStatus;
 
-public class DownloadsPageStatus extends PageStatus<DownloadsPageConfig> {
+public class DownloadsPageStatus extends WidgetStatus<DownloadsPageConfig> {
 
     public DownloadsPageStatus() {
         super();

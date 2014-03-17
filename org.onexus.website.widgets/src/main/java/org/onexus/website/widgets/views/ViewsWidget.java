@@ -28,12 +28,12 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.website.api.events.EventViewChange;
-import org.onexus.website.widgets.pages.browser.BrowserPage;
-import org.onexus.website.widgets.pages.browser.BrowserPageConfig;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
-import org.onexus.website.widgets.pages.browser.ViewConfig;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.widgets.browser.BrowserPage;
+import org.onexus.website.widgets.browser.BrowserPageConfig;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
+import org.onexus.website.widgets.browser.ViewConfig;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class ViewsWidget extends Widget<ViewsWidgetConfig, ViewsWidgetStatus> {
 
             List<ViewConfig> views = browserConfig.getTab(browserStatus.getCurrentTabId()).getViews();
 
-            VisiblePredicate predicate = new VisiblePredicate(getPageBaseOri().getParent(), getPageStatus().getEntitySelections());
+            VisiblePredicate predicate = new VisiblePredicate(getBaseOri().getParent(), getPageStatus().getEntitySelections());
 
             if (views != null && !views.isEmpty()) {
                 for (ViewConfig view : views) {

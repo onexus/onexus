@@ -20,12 +20,7 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.resource.api.ORI;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class LinksNetworkComparator implements Comparator<ORI> {
 

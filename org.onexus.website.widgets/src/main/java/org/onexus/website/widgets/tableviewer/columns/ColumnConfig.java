@@ -36,11 +36,7 @@ import org.onexus.website.widgets.tableviewer.headers.FieldHeader;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @ResourceAlias("column")

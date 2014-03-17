@@ -25,11 +25,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventViewChange;
-import org.onexus.website.widgets.pages.browser.BrowserPage;
-import org.onexus.website.widgets.pages.browser.BrowserPageConfig;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.widgets.Widget;
 import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.widgets.browser.BrowserPage;
+import org.onexus.website.widgets.browser.BrowserPageConfig;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 import org.onexus.website.widgets.tableviewer.ColumnSet;
 import org.onexus.website.widgets.tableviewer.TableViewerConfig;
 import org.onexus.website.widgets.tableviewer.TableViewerStatus;
@@ -67,7 +67,7 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
     private TableViewerStatus getTableViewerStatus() {
 
         String widgetId = getTableViewerConfig().getId();
-        return (TableViewerStatus) (widgetId == null ? null : getPageStatus().getWidgetStatus(widgetId));
+        return (TableViewerStatus) (widgetId == null ? null : getPageStatus().getChild(widgetId));
 
     }
 
@@ -76,7 +76,7 @@ public class ColumnsetsWidget extends Widget<ColumnsetsWidgetConfig, ColumnsetsW
         String currentTab = getPageStatus().getCurrentTabId();
         String currentView = getPageStatus().getCurrentView();
         String mainWidgetId = getPageConfig().getTab(currentTab).getView(currentView).getMain().trim();
-        WidgetConfig widgetConfig = getPageConfig().getWidget(mainWidgetId);
+        WidgetConfig widgetConfig = getPageConfig().getChild(mainWidgetId);
 
         if (widgetConfig instanceof TableViewerConfig) {
             return (TableViewerConfig) widgetConfig;

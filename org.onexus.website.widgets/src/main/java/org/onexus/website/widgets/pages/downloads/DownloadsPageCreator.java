@@ -18,27 +18,18 @@
 package org.onexus.website.widgets.pages.downloads;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.IResourceRegister;
-import org.onexus.website.api.pages.AbstractPageCreator;
-import org.onexus.website.api.pages.Page;
+import org.onexus.website.api.widgets.AbstractWidgetCreator;
+import org.onexus.website.api.widgets.Widget;
 
-public class DownloadsPageCreator extends AbstractPageCreator<DownloadsPageConfig, DownloadsPageStatus> {
+public class DownloadsPageCreator extends AbstractWidgetCreator<DownloadsPageConfig, DownloadsPageStatus> {
 
     public DownloadsPageCreator() {
         super(DownloadsPageConfig.class, "download", "A download page");
     }
 
     @Override
-    protected Page<?, ?> build(String componentId, IModel<DownloadsPageStatus> statusModel) {
+    protected Widget<?, ?> build(String componentId, IModel<DownloadsPageStatus> statusModel) {
         return new DownloadsPage(componentId, statusModel);
-    }
-
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        super.register(resourceRegister);
-
-        resourceRegister.register(DownloadsPageStatus.class);
-        resourceRegister.register(Download.class);
     }
 
 }

@@ -19,12 +19,14 @@ package org.onexus.website.widgets.selection;
 
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 
 import java.util.List;
 
 @ResourceAlias("widget-fix-filters")
+@ResourceRegister({FilterConfig.class})
 public class FixFiltersWidgetConfig extends WidgetConfig {
 
     private FixFiltersWidgetStatus defaultStatus;

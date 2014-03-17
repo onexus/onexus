@@ -31,30 +31,16 @@ import org.onexus.collection.api.Link;
 import org.onexus.collection.api.types.Text;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.data.api.IDataManager;
-import org.onexus.resource.api.Folder;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.Loader;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Parameter;
-import org.onexus.resource.api.Property;
-import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.*;
 import org.onexus.ui.api.pages.resource.ResourcesPage;
 import org.onexus.ui.api.wizards.AbstractWizard;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CreateCollectionWizard extends AbstractWizard {
 

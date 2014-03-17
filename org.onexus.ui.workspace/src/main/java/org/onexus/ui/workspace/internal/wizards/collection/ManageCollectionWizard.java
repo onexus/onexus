@@ -30,7 +30,6 @@ import org.onexus.ui.api.progressbar.ProgressBar;
 import org.onexus.ui.api.wizards.AbstractWizard;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
 

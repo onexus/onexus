@@ -20,11 +20,7 @@ package org.onexus.collection.store.sql;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
-import org.onexus.collection.api.query.And;
-import org.onexus.collection.api.query.EqualId;
-import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.OrderBy;
-import org.onexus.collection.api.query.Query;
+import org.onexus.collection.api.query.*;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.collection.api.utils.QueryUtils;
@@ -35,11 +31,7 @@ import org.onexus.resource.api.exceptions.OnexusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlQuery {
 

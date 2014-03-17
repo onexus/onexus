@@ -42,7 +42,6 @@ import org.onexus.ui.api.progressbar.ProgressBar;
 import org.onexus.ui.authentication.persona.SignOutBehavior;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 
 public class BaseResourcePage extends WebPage {

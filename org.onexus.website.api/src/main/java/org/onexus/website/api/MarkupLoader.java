@@ -31,7 +31,6 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.exceptions.ResourceNotFoundException;
 import org.onexus.resource.api.utils.ResourceListener;
-import org.onexus.website.api.pages.DataResourceStream;
 
 import javax.inject.Inject;
 

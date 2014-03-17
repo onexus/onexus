@@ -18,11 +18,7 @@
 package org.onexus.website.api;
 
 import org.h2.util.StringUtils;
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.ICollectionManager;
-import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.EqualId;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Query;

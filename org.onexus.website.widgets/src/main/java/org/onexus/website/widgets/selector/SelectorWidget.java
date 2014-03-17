@@ -35,11 +35,11 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
+import org.onexus.website.api.SingleEntitySelection;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventFiltersUpdate;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.SingleEntitySelection;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 
 import javax.inject.Inject;
 import java.io.Serializable;

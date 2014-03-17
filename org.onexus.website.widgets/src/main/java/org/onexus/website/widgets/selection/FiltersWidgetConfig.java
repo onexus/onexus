@@ -19,6 +19,7 @@ package org.onexus.website.widgets.selection;
 
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.widgets.selection.custom.CustomFilter;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ResourceAlias("widget-filters")
+@ResourceRegister({CustomFilter.class, FilterConfig.class})
 public class FiltersWidgetConfig extends WidgetConfig {
 
     @Valid

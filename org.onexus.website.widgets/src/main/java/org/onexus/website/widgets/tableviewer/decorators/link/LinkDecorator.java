@@ -30,11 +30,7 @@ import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ParameterKey;
 import org.onexus.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LinkDecorator extends FieldDecorator {
 

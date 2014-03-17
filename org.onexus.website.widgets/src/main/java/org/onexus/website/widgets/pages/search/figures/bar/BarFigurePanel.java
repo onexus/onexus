@@ -36,12 +36,7 @@ import org.onexus.website.api.IEntitySelection;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BarFigurePanel extends Panel {
 

@@ -19,8 +19,8 @@ package org.onexus.website.api;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.pages.IPageCreator;
-import org.onexus.website.api.pages.IPageManager;
+import org.onexus.website.api.widgets.IWidgetCreator;
+import org.onexus.website.api.widgets.IWidgetManager;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 
 public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteApplication> {
@@ -28,12 +28,12 @@ public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteA
     private String webPath;
     private String website;
     private Class<? extends WebPage> signInPageClass;
-    private IPageManager pageManager;
+    private IWidgetManager pageManager;
 
     public WebsiteApplicationFactory() {
     }
 
-    public WebsiteApplicationFactory(String webPath, String website, Class<? extends WebPage> signInPageClass, IPageManager pageManager) {
+    public WebsiteApplicationFactory(String webPath, String website, Class<? extends WebPage> signInPageClass, IWidgetManager pageManager) {
         this.webPath = webPath;
         this.website = website;
         this.signInPageClass = signInPageClass;
@@ -76,7 +76,7 @@ public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteA
         application.setWebPath(webPath);
         application.setSignInPageClass(signInPageClass);
 
-        for (IPageCreator pageCreator : pageManager.getCreators()) {
+        for (IWidgetCreator pageCreator : pageManager.getCreators()) {
             application.getApplicationListeners().add(pageCreator);
         }
     }

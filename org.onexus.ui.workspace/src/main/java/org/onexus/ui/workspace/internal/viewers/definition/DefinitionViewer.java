@@ -25,7 +25,6 @@ import org.onexus.resource.api.Resource;
 import org.onexus.ui.workspace.internal.viewers.utils.PrettifyBehavior;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.ByteArrayOutputStream;
 
 

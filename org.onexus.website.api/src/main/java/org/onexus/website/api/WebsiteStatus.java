@@ -17,46 +17,21 @@
  */
 package org.onexus.website.api;
 
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.query.Query;
-import org.onexus.website.api.pages.PageStatus;
+import org.onexus.resource.api.ORI;
+import org.onexus.website.api.widgets.WidgetStatus;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
-public class WebsiteStatus implements Serializable {
+public class WebsiteStatus extends WidgetStatus<WebsiteConfig> implements Serializable {
 
     private String currentPage;
-
-    private List<PageStatus> pageStatuses;
-
-    private transient WebsiteConfig config;
-
-    public WebsiteConfig getConfig() {
-        return config;
-    }
-
-    public void setConfig(WebsiteConfig config) {
-        this.config = config;
-    }
-
-    public PageStatus getPageStatus(String id) {
-        if (getPageStatuses() != null) {
-            for (PageStatus status : getPageStatuses()) {
-                if (status.getId().equals(id)) {
-                    return status;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void setPageStatus(PageStatus pageStatus) {
-        PageStatus oldStatus = getPageStatus(pageStatus.getId());
-        pageStatuses.add(pageStatus);
-        pageStatuses.remove(oldStatus);
-    }
 
     public String getCurrentPage() {
         return currentPage;
@@ -66,44 +41,66 @@ public class WebsiteStatus implements Serializable {
         this.currentPage = currentPage;
     }
 
-    public List<PageStatus> getPageStatuses() {
-        return pageStatuses;
-    }
-
-    public void setPageStatuses(List<PageStatus> pageStatuses) {
-        this.pageStatuses = pageStatuses;
+    @Override
+    public List<WidgetStatus> getActiveChildren(ORI parentOri) {
+        return Arrays.asList(getChild(currentPage));
     }
 
     public void onQueryBuild(Query query) {
         query.setOn(getConfig().getORI());
+
+        super.onQueryBuild(query);
     }
 
-    public void encodeParameters(PageParameters parameters, boolean global) {
+    public static MetaDataKey<Query> queryKey = new MetaDataKey<Query>() {
+    };
 
-        if (pageStatuses != null) {
+    public Query buildQuery(ORI resourceUri) {
+
+        Query query = RequestCycle.get().getMetaData(queryKey);
+
+        if (query != null) {
+            return query;
+        } else {
+            query = new Query();
+        }
+
+        query.setOn(resourceUri);
+
+        beforeQueryBuild(query);
+        onQueryBuild(query);
+        afterQueryBuild(query);
+
+        RequestCycle.get().setMetaData(queryKey, query);
+
+        return query;
+    }
+
+    public void encodeParameters(PageParameters parameters, String prefix, boolean global) {
+
+        if (getChildren() != null) {
             parameters.add(Website.PARAMETER_CURRENT_PAGE, currentPage);
-            PageStatus status = getPageStatus(currentPage);
+            WidgetStatus status = getChild(currentPage);
             status.encodeParameters(parameters, "p", global);
         }
 
     }
 
-    public void decodeParameters(PageParameters parameters) {
+    public void decodeParameters(PageParameters parameters, String prefix) {
 
-        if (pageStatuses != null) {
+        if (getChildren() != null) {
 
             StringValue c = parameters.get(Website.PARAMETER_CURRENT_PAGE);
             if (!c.isEmpty()) {
                 currentPage = c.toString();
             }
 
-            PageStatus status = getPageStatus(currentPage);
+            WidgetStatus status = getChild(currentPage);
             if (status != null) {
                 status.decodeParameters(parameters, "p");
             }
         }
 
     }
-
 
 }

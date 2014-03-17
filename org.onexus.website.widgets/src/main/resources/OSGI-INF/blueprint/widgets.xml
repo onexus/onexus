@@ -2,6 +2,27 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         >
 
+    <!-- Pages -->
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="browserPage"/>
+    <bean id="browserPage" class="org.onexus.website.widgets.browser.BrowserPageCreator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+    </bean>
+
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="htmlPage"/>
+    <bean id="htmlPage" class="org.onexus.website.widgets.html.HtmlPageCreator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+    </bean>
+
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="searchPage"/>
+    <bean id="searchPage" class="org.onexus.website.widgets.pages.search.SearchPageCreator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+    </bean>
+
+    <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="downloadsPage"/>
+    <bean id="downloadsPage" class="org.onexus.website.widgets.pages.downloads.DownloadsPageCreator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+    </bean>
+
     <!-- Default widget resource -->
     <service interface="org.onexus.website.api.widgets.IWidgetCreator" ref="ViewsWidget"/>
     <bean id="ViewsWidget" class="org.onexus.website.widgets.views.ViewsWidgetCreator">

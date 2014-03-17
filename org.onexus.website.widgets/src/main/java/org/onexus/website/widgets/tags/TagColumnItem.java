@@ -30,8 +30,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.onexus.website.api.events.EventViewChange;
-import org.onexus.website.widgets.pages.browser.BrowserPage;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
+import org.onexus.website.widgets.browser.BrowserPage;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 import org.onexus.website.widgets.tags.tagstore.ITagStoreManager;
 import org.onexus.website.widgets.tags.tagstore.TagStore;
 

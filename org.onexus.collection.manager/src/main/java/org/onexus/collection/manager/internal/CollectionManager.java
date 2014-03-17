@@ -18,33 +18,17 @@
 package org.onexus.collection.manager.internal;
 
 import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.ICollectionLoader;
-import org.onexus.collection.api.ICollectionManager;
-import org.onexus.collection.api.ICollectionStore;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.FieldLink;
 import org.onexus.collection.api.utils.LinkUtils;
-import org.onexus.resource.api.Folder;
-import org.onexus.resource.api.IProgressManager;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.Loader;
-import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Plugin;
-import org.onexus.resource.api.Progress;
-import org.onexus.resource.api.Project;
-import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.*;
 import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

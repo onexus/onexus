@@ -17,13 +17,15 @@
  */
 package org.onexus.resource.api;
 
+import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.resource.api.utils.IMetadata;
 
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
 
-
+@ResourceRegister({Loader.class, Property.class})
 public abstract class Resource implements IMetadata, Serializable {
 
     public final static String PATTERN_ID = "[-A-Za-z0-9+&@#%?=~_|!:,.;]+";
@@ -37,6 +39,7 @@ public abstract class Resource implements IMetadata, Serializable {
     private String description;
 
     @Valid
+    @ResourceImplicitList("property")
     private List<Property> properties;
 
     @Valid

@@ -18,11 +18,7 @@
 package org.onexus.website.widgets.jheatmap;
 
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.HeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -71,7 +67,7 @@ public class HeatmapViewer extends Widget<HeatmapViewerConfig, HeatmapViewerStat
 
         List<IColumn<IEntityTable, String>> columns = new ArrayList<IColumn<IEntityTable, String>>();
 
-        ORI parentUri = getPageBaseOri();
+        ORI parentUri = getBaseOri();
         for (ColumnConfig column : getConfig().getColumns()) {
             column.addColumns(columns, parentUri, false);
         }

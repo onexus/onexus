@@ -19,9 +19,12 @@ package org.onexus.website.widgets.icanplot;
 
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
+import org.onexus.website.widgets.tableviewer.columns.ColumnConfig;
 import org.onexus.website.widgets.tableviewer.columns.IColumnConfig;
+import org.onexus.website.widgets.tags.TagColumnConfig;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ResourceAlias("viewer-plot")
+@ResourceRegister({ColumnConfig.class, TagColumnConfig.class})
 public class PlotViewerConfig extends WidgetConfig {
 
     @Valid

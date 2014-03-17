@@ -4,6 +4,7 @@
 
     <!-- Resource activation -->
     <reference id="resourceRegister" interface="org.onexus.resource.api.IResourceRegister">
+
         <reference-listener bind-method="register" ref="browserPage"/>
         <reference-listener bind-method="register" ref="htmlPage"/>
         <reference-listener bind-method="register" ref="searchPage"/>

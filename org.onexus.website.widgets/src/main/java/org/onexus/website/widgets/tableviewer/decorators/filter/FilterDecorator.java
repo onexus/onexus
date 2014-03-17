@@ -30,12 +30,12 @@ import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
+import org.onexus.website.api.SingleEntitySelection;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.events.AbstractEvent;
 import org.onexus.website.api.events.EventAddFilter;
-import org.onexus.website.widgets.pages.browser.BrowserPageLink;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
-import org.onexus.website.api.SingleEntitySelection;
+import org.onexus.website.widgets.browser.BrowserPageLink;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 import org.onexus.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.widgets.tableviewer.decorators.utils.LinkPanel;
 

@@ -18,14 +18,15 @@
 package org.onexus.website.widgets.utils.visible;
 
 import org.apache.commons.collections.Predicate;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.IEntitySelection;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 
 import java.util.Arrays;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class VisibleTest {
 

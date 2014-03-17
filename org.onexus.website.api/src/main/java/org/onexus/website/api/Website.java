@@ -29,16 +29,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.session.LoginContext;
-import org.onexus.website.api.pages.IPageManager;
-import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.api.pages.PageModel;
 import org.onexus.website.api.theme.DefaultTheme;
 import org.onexus.website.api.utils.CustomCssBehavior;
 import org.onexus.website.api.utils.HtmlDataResourceModel;
@@ -47,11 +43,15 @@ import org.onexus.website.api.utils.panels.ConnectionsPanel;
 import org.onexus.website.api.utils.panels.LoginPanel;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
+import org.onexus.website.api.widgets.IWidgetManager;
+import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.api.widgets.WidgetModel;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 public class Website extends WebPage implements IMarkupResourceStreamProvider {
 
@@ -59,7 +59,7 @@ public class Website extends WebPage implements IMarkupResourceStreamProvider {
     public static final String PARAMETER_CURRENT_PAGE = "c";
 
     @Inject
-    private IPageManager pageManager;
+    private IWidgetManager pageManager;
 
     private transient MarkupLoader markupLoader;
 
@@ -93,7 +93,7 @@ public class Website extends WebPage implements IMarkupResourceStreamProvider {
                     config.getPage(status.getCurrentPage()) == null ||
                     !visiblePredicate.evaluate(config.getPage(status.getCurrentPage())
                     )) {
-                List<PageConfig> visiblePages = getPageConfigList();
+                List<WidgetConfig> visiblePages = getPageConfigList();
                 if (!visiblePages.isEmpty()) {
                     String currentPage = visiblePages.get(0).getId();
                     status.setCurrentPage(currentPage);
@@ -113,12 +113,12 @@ public class Website extends WebPage implements IMarkupResourceStreamProvider {
             add(headerLabel);
 
             WebMarkupContainer menuSection = new WebMarkupContainer("menuSection");
-            menuSection.add(new ListView<PageConfig>("menu", new PropertyModel<List<PageConfig>>(this, "pageConfigList")) {
+            menuSection.add(new ListView<WidgetConfig>("menu", new PropertyModel<List<WidgetConfig>>(this, "pageConfigList")) {
 
                 @Override
-                protected void populateItem(ListItem<PageConfig> item) {
+                protected void populateItem(ListItem<WidgetConfig> item) {
 
-                    PageConfig pageConfig = item.getModelObject();
+                    WidgetConfig pageConfig = item.getModelObject();
 
                     PageParameters parameters = new PageParameters();
                     parameters.add(PARAMETER_CURRENT_PAGE, pageConfig.getId());
@@ -157,7 +157,7 @@ public class Website extends WebPage implements IMarkupResourceStreamProvider {
 
             String currentPage = status.getCurrentPage();
 
-            add(pageManager.create("page", new PageModel(currentPage, (IModel<WebsiteStatus>) getDefaultModel())));
+            add(pageManager.create("page", new WidgetModel(currentPage, getDefaultModel())));
 
             String bottom = config.getBottom();
             Label bottomLabel = new Label("bottom", new HtmlDataResourceModel(parentUri, bottom));
@@ -199,12 +199,12 @@ public class Website extends WebPage implements IMarkupResourceStreamProvider {
         return getStatus().getConfig();
     }
 
-    public List<PageConfig> getPageConfigList() {
-        List<PageConfig> pages = new ArrayList<PageConfig>();
+    public List<WidgetConfig> getPageConfigList() {
+        List<WidgetConfig> pages = new ArrayList<WidgetConfig>();
 
         VisiblePredicate visiblePredicate = new VisiblePredicate(getConfig().getORI(), Collections.EMPTY_LIST);
 
-        for (PageConfig page : getConfig().getPages()) {
+        for (WidgetConfig page : getConfig().getPages()) {
 
             if (Authorization.authorize(page) && visiblePredicate.evaluate(page)) {
                 pages.add(page);

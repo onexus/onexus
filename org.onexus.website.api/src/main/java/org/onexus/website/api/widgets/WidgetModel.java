@@ -19,23 +19,22 @@ package org.onexus.website.api.widgets;
 
 import org.apache.wicket.model.AbstractWrapModel;
 import org.apache.wicket.model.IModel;
-import org.onexus.website.api.pages.PageStatus;
 
 public class WidgetModel<S extends WidgetStatus> extends AbstractWrapModel<S> {
 
     private String widgetId;
-    private IModel<? extends PageStatus> pageModel;
+    private IModel<? extends WidgetStatus> parentModel;
 
-    public WidgetModel(String widgetId, IModel<? extends PageStatus> pageModel) {
+    public WidgetModel(String widgetId, IModel<? extends WidgetStatus> parentModel) {
         super();
         this.widgetId = widgetId;
-        this.pageModel = pageModel;
+        this.parentModel = parentModel;
     }
 
     @Override
     public S getObject() {
 
-        S status = (S) getPageStatus().getWidgetStatus(widgetId);
+        S status = (S) getParentStatus().getChild(widgetId);
 
         if (status == null) {
             status = (S) getConfig().newStatus();
@@ -50,17 +49,20 @@ public class WidgetModel<S extends WidgetStatus> extends AbstractWrapModel<S> {
         return status;
     }
 
-    private PageStatus getPageStatus() {
-        return pageModel.getObject();
+    private WidgetStatus getParentStatus() {
+        return parentModel.getObject();
     }
 
     private WidgetConfig getConfig() {
 
-        WidgetConfig config = getPageStatus().getConfig().getWidget(widgetId);
+        WidgetConfig parentConfig = getParentStatus().getConfig();
+
+        WidgetConfig config = parentConfig.getChild(widgetId);
 
         // Check pageConfig is set
-        if (config.getPageConfig() == null) {
-            config.setPageConfig(getPageStatus().getConfig());
+        if (config.getParentConfig() == null) {
+            config.setParentConfig(parentConfig);
+            config.setWebsiteConfig(parentConfig.getWebsiteConfig());
         }
 
         return config;
@@ -68,11 +70,11 @@ public class WidgetModel<S extends WidgetStatus> extends AbstractWrapModel<S> {
 
     @Override
     public void setObject(S object) {
-        pageModel.getObject().setWidgetStatus(object);
+        parentModel.getObject().setWidgetStatus(object);
     }
 
     @Override
     public IModel<?> getWrappedModel() {
-        return pageModel;
+        return parentModel;
     }
 }

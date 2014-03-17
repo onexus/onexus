@@ -29,11 +29,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.onexus.resource.api.session.LoginContext;
-import org.onexus.ui.authentication.persona.BrowserId;
-import org.onexus.ui.authentication.persona.GuestPanel;
-import org.onexus.ui.authentication.persona.SessionHelper;
-import org.onexus.ui.authentication.persona.SignOutBehavior;
-import org.onexus.ui.authentication.persona.VerifyBehavior;
+import org.onexus.ui.authentication.persona.*;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteSession;
 

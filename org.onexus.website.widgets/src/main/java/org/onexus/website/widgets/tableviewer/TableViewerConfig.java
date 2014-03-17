@@ -20,12 +20,15 @@ package org.onexus.website.widgets.tableviewer;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.api.widgets.WidgetConfig;
+import org.onexus.website.widgets.tableviewer.columns.ColumnConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ResourceAlias("viewer-table")
+@ResourceRegister({ColumnSet.class, ColumnConfig.class})
 public class TableViewerConfig extends WidgetConfig {
 
     private ORI collection;

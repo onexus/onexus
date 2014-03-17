@@ -29,7 +29,6 @@ import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteConfig;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class WebsiteViewer extends Panel {
 

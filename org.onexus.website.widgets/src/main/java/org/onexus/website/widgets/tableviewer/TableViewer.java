@@ -35,10 +35,10 @@ import org.onexus.resource.api.Progress;
 import org.onexus.website.api.events.EventAddFilter;
 import org.onexus.website.api.events.EventQueryUpdate;
 import org.onexus.website.api.events.EventRemoveFilter;
-import org.onexus.website.widgets.pages.browser.BrowserPageStatus;
 import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
 import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.widgets.browser.BrowserPageStatus;
 import org.onexus.website.widgets.tableviewer.columns.IColumnConfig;
 
 import java.util.ArrayList;
@@ -94,11 +94,11 @@ public class TableViewer extends Widget<TableViewerConfig, TableViewerStatus> {
 
         Predicate sortablePredicate;
         if (pageStatus != null) {
-            sortablePredicate = new VisiblePredicate(getPageBaseOri(), pageStatus.getEntitySelections());
-            Predicate filter = new VisiblePredicate(getPageBaseOri(), pageStatus.getEntitySelections());
+            sortablePredicate = new VisiblePredicate(getBaseOri(), pageStatus.getEntitySelections());
+            Predicate filter = new VisiblePredicate(getBaseOri(), pageStatus.getEntitySelections());
             CollectionUtils.select(columnsConfig, filter, visibleColumnsConfig);
         } else {
-            sortablePredicate = new VisiblePredicate(getPageBaseOri(), Collections.EMPTY_LIST);
+            sortablePredicate = new VisiblePredicate(getBaseOri(), Collections.EMPTY_LIST);
             visibleColumnsConfig = columnsConfig;
         }
 

@@ -24,7 +24,6 @@ import org.onexus.resource.api.Resource;
 import org.onexus.ui.api.OnexusWebApplication;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class ResourceModel extends LoadableDetachableModel<Resource> {
 

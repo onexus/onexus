@@ -18,7 +18,6 @@
 package org.onexus.website.widgets.tags;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.IResourceRegister;
 import org.onexus.website.api.widgets.AbstractWidgetCreator;
 import org.onexus.website.api.widgets.Widget;
 
@@ -33,9 +32,4 @@ public class TagWidgetCreator extends AbstractWidgetCreator<TagWidgetConfig, Tag
         return new TagWidget(componentId, statusModel);
     }
 
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        resourceRegister.register(TagWidgetConfig.class);
-        resourceRegister.register(TagColumnConfig.class);
-    }
 }

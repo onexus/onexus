@@ -18,8 +18,6 @@
 package org.onexus.website.widgets.selection;
 
 import org.apache.wicket.model.IModel;
-import org.onexus.resource.api.IResourceRegister;
-import org.onexus.website.api.FilterConfig;
 import org.onexus.website.api.widgets.AbstractWidgetCreator;
 import org.onexus.website.api.widgets.Widget;
 
@@ -32,12 +30,6 @@ public class FixFiltersWidgetCreator extends AbstractWidgetCreator<FixFiltersWid
     @Override
     protected Widget<?, ?> build(String componentId, IModel<FixFiltersWidgetStatus> statusModel) {
         return new FixFiltersWidget(componentId, statusModel);
-    }
-
-    @Override
-    public void register(IResourceRegister resourceRegister) {
-        resourceRegister.register(FixFiltersWidgetConfig.class);
-        resourceRegister.register(FilterConfig.class);
     }
 
 }

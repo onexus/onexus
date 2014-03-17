@@ -30,14 +30,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
 import org.onexus.collection.api.query.In;
-import org.onexus.website.api.events.EventCloseModal;
 import org.onexus.website.api.FilterConfig;
+import org.onexus.website.api.events.EventCloseModal;
 
-import java.io.BufferedReader;
-import java.io.CharArrayReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 

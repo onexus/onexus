@@ -21,23 +21,17 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
-import org.onexus.resource.api.DefaultResourceRegister;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.IResourceRegister;
-import org.onexus.resource.api.IResourceSerializer;
-import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.*;
 import org.onexus.resource.serializer.xstream.internal.ResourceSerializer;
 import org.onexus.ui.authentication.jaas.JaasSignInPage;
 import org.onexus.website.api.Website;
 import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.WebsiteConfig;
-import org.onexus.website.widgets.mocks.MockPaxWicketInjector;
-import org.onexus.website.widgets.mocks.MockResourceManager;
-import org.onexus.website.api.pages.DefaultPageManager;
-import org.onexus.website.api.pages.IPageManager;
-import org.onexus.website.widgets.pages.browser.BrowserPageCreator;
 import org.onexus.website.api.widgets.DefaultWidgetManager;
 import org.onexus.website.api.widgets.IWidgetManager;
+import org.onexus.website.widgets.mocks.MockPaxWicketInjector;
+import org.onexus.website.widgets.mocks.MockResourceManager;
+import org.onexus.website.widgets.browser.BrowserPageCreator;
 import org.onexus.website.widgets.text.TextWidgetCreator;
 import org.ops4j.pax.wicket.api.InjectorHolder;
 
@@ -57,23 +51,20 @@ public class WebsiteTest {
         IResourceRegister resourceRegister = new DefaultResourceRegister(resourceSerializer);
         IResourceManager resourceManager = new MockResourceManager();
 
-        IPageManager pageManager = new DefaultPageManager(
-                Arrays.asList(
-                    new BrowserPageCreator()
-                ),
-                resourceRegister
-        );
-
         IWidgetManager widgetManager = new DefaultWidgetManager(
                 Arrays.asList(
-                        new TextWidgetCreator()
+                        new TextWidgetCreator(),
+                        new BrowserPageCreator()
                 ),
                 resourceRegister
         );
 
         // Create a Website resource
-        WebsiteConfig website = resourceSerializer.unserialize(WebsiteConfig.class, getClass().getResourceAsStream("test1.onx"));
-        website.setORI(new ORI("http://localhost/test?website"));
+        WebsiteConfig website = resourceSerializer.unserialize(
+                WebsiteConfig.class,
+                new ORI("http://localhost/test?website"),
+                getClass().getResourceAsStream("test1.onx")
+        );
         resourceManager.save(website);
 
         // Create and initialize a Wicket application
@@ -87,7 +78,6 @@ public class WebsiteTest {
         // Create an injector
         MockPaxWicketInjector injector = new MockPaxWicketInjector();
         injector.addBean(IResourceManager.class, resourceManager);
-        injector.addBean(IPageManager.class, pageManager);
         injector.addBean(IWidgetManager.class, widgetManager);
 
         InjectorHolder.setInjector(application.getApplicationKey(), injector);
@@ -98,6 +88,9 @@ public class WebsiteTest {
     @Test
     public void renderPage(){
         tester.startPage(new Website(new PageParameters()));
+        if (tester.isRenderedPage(Website.class).wasFailed()) {
+            tester.dumpPage();
+        }
         tester.assertRenderedPage(Website.class);
     }
 

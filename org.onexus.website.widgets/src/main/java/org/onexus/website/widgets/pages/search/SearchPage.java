@@ -52,11 +52,11 @@ import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.WebsiteApplication;
-import org.onexus.website.api.pages.Page;
 import org.onexus.website.api.FilterConfig;
-import org.onexus.website.widgets.pages.search.boxes.BoxesPanel;
+import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.utils.panels.ondomready.OnDomReadyPanel;
+import org.onexus.website.api.widgets.Widget;
+import org.onexus.website.widgets.pages.search.boxes.BoxesPanel;
 import org.onexus.website.widgets.selection.FiltersWidgetConfig;
 import org.onexus.website.widgets.selection.FiltersWidgetStatus;
 
@@ -67,7 +67,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> implements IAjaxIndicatorAware {
+public class SearchPage extends Widget<SearchPageConfig, SearchPageStatus> implements IAjaxIndicatorAware {
 
     @Inject
     private ICollectionManager collectionManager;

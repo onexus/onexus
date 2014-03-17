@@ -29,12 +29,12 @@ public class DefaultResourceRegister implements IResourceRegister {
     }
 
     @Override
-    public void register(Class<?> resourceType) {
+    public void register(Class<? extends Resource> resourceType) {
         serializer.register(resourceType);
     }
 
     @Override
-    public void unregister(Class<?> resourceType) {
+    public void unregister(Class<? extends Resource> resourceType) {
 
     }
 

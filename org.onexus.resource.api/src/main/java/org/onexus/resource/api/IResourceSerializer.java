@@ -26,11 +26,11 @@ public interface IResourceSerializer {
 
     String getMediaType();
 
-    void serialize(Object resource, OutputStream output);
+    void serialize(Resource resource, OutputStream output);
 
-    <T> T unserialize(Class<T> resourceType, InputStream input) throws UnserializeException;
+    <T extends Resource> T unserialize(Class<T> resourceType, ORI resourceOri, InputStream input) throws UnserializeException;
 
-    void register(Class<?> type);
+    void register(Class<? extends Resource> type);
 
 
 }

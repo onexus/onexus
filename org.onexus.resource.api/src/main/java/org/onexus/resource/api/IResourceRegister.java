@@ -19,8 +19,8 @@ package org.onexus.resource.api;
 
 public interface IResourceRegister {
 
-    void register(Class<?> resourceType);
+    void register(Class<? extends Resource> resourceType);
 
-    void unregister(Class<?> resourceType);
+    void unregister(Class<? extends Resource> resourceType);
 
 }

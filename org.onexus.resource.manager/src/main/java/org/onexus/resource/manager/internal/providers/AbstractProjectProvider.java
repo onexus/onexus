@@ -283,6 +283,8 @@ public abstract class AbstractProjectProvider {
 
         Resource resource;
 
+        ORI ori = convertFileToORI(resourceFile);
+
         if (ONEXUS_EXTENSION.equalsIgnoreCase(FilenameUtils.getExtension(resourceFile.getName()))) {
 
             StringWriter out = null;
@@ -296,7 +298,8 @@ public abstract class AbstractProjectProvider {
                 resourceTemplate.process(projectAlias, out);
 
                 InputStream input = new ByteArrayInputStream(out.toString().getBytes("UTF-8"));
-                resource = serializer.unserialize(Resource.class, input);
+
+                resource = serializer.unserialize(Resource.class, ori, input);
 
                 for (String include : getIncludes(resourceTemplate)) {
                     addIncludeDependency(include, resourceFile);
@@ -320,13 +323,8 @@ public abstract class AbstractProjectProvider {
 
         }
 
-        if (resource == null) {
-            return null;
-        }
-
-        resource.setORI(convertFileToORI(resourceFile));
+        resource.setORI(ori);
         return resource;
-
     }
 
     private ORI convertFileToORI(File file) {

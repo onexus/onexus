@@ -17,6 +17,9 @@
  */
 package org.onexus.resource.api;
 
+import org.onexus.resource.api.annotations.ResourceAlias;
+
+@ResourceAlias("folder")
 public class Folder extends Resource {
 
     public Folder() {

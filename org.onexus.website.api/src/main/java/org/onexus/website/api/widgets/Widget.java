@@ -23,18 +23,17 @@ import org.apache.wicket.markup.IMarkupResourceStreamProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.IWrapModel;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.MarkupLoader;
 import org.onexus.website.api.WebsiteStatus;
 import org.onexus.website.api.events.EventPanel;
-import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.utils.CustomCssBehavior;
 
 public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> extends EventPanel implements IMarkupResourceStreamProvider {
 
     private IModel<S> statusModel;
-
     private transient MarkupLoader markupLoader;
 
     public Widget(String componentId, IModel<S> statusModel) {
@@ -42,8 +41,12 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
         this.statusModel = statusModel;
 
         WidgetConfig config = getConfig();
-        ORI parentOri = config.getPageConfig().getWebsiteConfig().getORI().getParent();
+        ORI parentOri = config.getWebsiteConfig().getORI().getParent();
         add(new CustomCssBehavior(parentOri, config.getCss()));
+    }
+
+    public IModel<S> getModel() {
+        return statusModel;
     }
 
     public S getStatus() {
@@ -55,7 +58,7 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
     }
 
     protected Query getQuery() {
-        PageStatus pageStatus = findParentStatus(statusModel, PageStatus.class);
+        WebsiteStatus pageStatus = findParentStatus(statusModel, WebsiteStatus.class);
         return pageStatus == null ? null : pageStatus.buildQuery(getWebsiteOri());
     }
 
@@ -64,9 +67,8 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
         return websiteStatus == null ? null : websiteStatus.getConfig().getORI().getParent();
     }
 
-    protected ORI getPageBaseOri() {
-        PageStatus pageStatus = findParentStatus(PageStatus.class);
-        return pageStatus == null ? getWebsiteOri() : new ORI(getWebsiteOri(), pageStatus.getBase());
+    protected ORI getBaseOri() {
+        return new ORI(getWebsiteOri(), getConfig().getBase());
     }
 
     protected <T> T findParentStatus(Class<T> statusClass) {
@@ -93,11 +95,16 @@ public abstract class Widget<C extends WidgetConfig, S extends WidgetStatus> ext
 
     }
 
+    protected boolean isEmbed() {
+        StringValue embed = getPage().getPageParameters().get("embed");
+        return embed.toBoolean(false);
+    }
+
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
 
         if (markupLoader == null) {
-            markupLoader = new MarkupLoader(getConfig().getPageConfig().getWebsiteConfig().getORI(), getConfig().getMarkup());
+            markupLoader = new MarkupLoader(getConfig().getORI(), getConfig().getMarkup());
         }
 
         return markupLoader.getMarkupResourceStream(container, containerClass);

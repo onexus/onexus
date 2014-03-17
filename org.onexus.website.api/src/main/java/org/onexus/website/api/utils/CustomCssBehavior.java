@@ -22,6 +22,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.PackageResource;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.IResourceManager;
@@ -73,13 +74,22 @@ public class CustomCssBehavior extends Behavior {
                     url = resourceUri.toString();
                 }
                 cssHeaderItem = CssHeaderItem.forUrl(url);
+                response.render(cssHeaderItem);
 
             } else {
-                cssHeaderItem = CssHeaderItem.forReference(new CssResourceReference(component.getClass(), component.getClass().getSimpleName() + ".css"));
+                Class scope = component.getClass();
+                String name = scope.getSimpleName() + ".css";
+                if (PackageResource.exists(scope, name, null, null, null)) {
+                    cssHeaderItem = CssHeaderItem.forReference(new CssResourceReference(scope, name));
+                    response.render(cssHeaderItem);
+                }
             }
-        }
 
-        response.render(cssHeaderItem);
+        } else {
+
+            response.render(cssHeaderItem);
+
+        }
     }
 
     private IDataManager getDataManager() {

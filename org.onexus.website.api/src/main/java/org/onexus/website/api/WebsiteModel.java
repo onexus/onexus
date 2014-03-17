@@ -18,16 +18,10 @@
 package org.onexus.website.api;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.session.LoginContext;
-import org.onexus.resource.api.utils.ResourceListener;
-import org.onexus.website.api.pages.PageConfig;
-import org.onexus.website.api.pages.PageStatus;
 import org.onexus.website.api.widgets.WidgetConfig;
 import org.onexus.website.api.widgets.WidgetStatus;
 
@@ -98,16 +92,16 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
     private void attachConfigs() {
 
         // Attach pages
-        if (status.getPageStatuses() != null) {
-            for (PageStatus pageStatus : status.getPageStatuses()) {
-                PageConfig pageConfig = websiteConfig.getPage(pageStatus.getId());
+        if (status.getChildren() != null) {
+            for (WidgetStatus pageStatus : status.getChildren()) {
+                WidgetConfig pageConfig = websiteConfig.getPage(pageStatus.getId());
                 pageStatus.setConfig(pageConfig);
 
                 // Attach widgets
-                if (pageStatus.getWidgetStatuses() != null) {
-                    for (Object obj : pageStatus.getWidgetStatuses()) {
+                if (pageStatus.getChildren() != null) {
+                    for (Object obj : pageStatus.getChildren()) {
                         WidgetStatus widgetStatus = (WidgetStatus) obj;
-                        WidgetConfig widgetConfig = pageConfig.getWidget(widgetStatus.getId());
+                        WidgetConfig widgetConfig = pageConfig.getChild(widgetStatus.getId());
                         widgetStatus.setConfig(widgetConfig);
                     }
                 }
@@ -131,7 +125,7 @@ public class WebsiteModel implements IModel<WebsiteStatus> {
         getObject();
 
         // Update status
-        status.decodeParameters(pageParameters);
+        status.decodeParameters(pageParameters, "");
 
     }
 

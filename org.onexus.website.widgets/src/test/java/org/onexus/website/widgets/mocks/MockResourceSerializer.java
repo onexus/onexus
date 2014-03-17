@@ -18,6 +18,8 @@
 package org.onexus.website.widgets.mocks;
 
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.exceptions.UnserializeException;
 
 import java.io.InputStream;
@@ -31,17 +33,17 @@ public class MockResourceSerializer implements IResourceSerializer {
     }
 
     @Override
-    public void serialize(Object resource, OutputStream output) {
+    public void serialize(Resource resource, OutputStream output) {
 
     }
 
     @Override
-    public <T> T unserialize(Class<T> resourceType, InputStream input) throws UnserializeException {
+    public <T extends Resource> T unserialize(Class<T> resourceType, ORI resourceOri, InputStream input) throws UnserializeException {
         return null;
     }
 
     @Override
-    public void register(Class<?> type) {
+    public void register(Class<? extends Resource> type) {
 
     }
 }

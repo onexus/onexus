@@ -18,15 +18,19 @@
 package org.onexus.resource.api;
 
 
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceRegister;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
+@ResourceAlias("project")
+@ResourceRegister({Plugin.class})
 public class Project extends Resource {
 
     @Pattern(regexp = PATTERN_ID)
-    private String name;
+    private transient String name;
 
     private String alias;
 

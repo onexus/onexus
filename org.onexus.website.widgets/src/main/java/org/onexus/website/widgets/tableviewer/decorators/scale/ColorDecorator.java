@@ -23,15 +23,16 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.collection.api.*;
 import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
 import org.onexus.website.widgets.tableviewer.decorators.scale.scales.ColorUtils;
 import org.onexus.website.widgets.tableviewer.decorators.scale.scales.IColorScaleHtml;
 import org.onexus.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.widgets.tableviewer.formaters.ITextFormater;
 
 import java.awt.*;
-import java.util.*;
+import java.util.Collections;
 import java.util.List;
 
 public class ColorDecorator extends FieldDecorator {

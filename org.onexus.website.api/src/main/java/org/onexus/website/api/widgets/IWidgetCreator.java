@@ -17,10 +17,11 @@
  */
 package org.onexus.website.api.widgets;
 
+import org.apache.wicket.IApplicationListener;
 import org.apache.wicket.model.IModel;
 import org.onexus.resource.api.IResourceRegister;
 
-public interface IWidgetCreator {
+public interface IWidgetCreator extends IApplicationListener {
 
     void register(IResourceRegister resourceRegister);
 

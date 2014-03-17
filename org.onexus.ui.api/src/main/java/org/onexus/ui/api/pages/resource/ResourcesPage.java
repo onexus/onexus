@@ -42,7 +42,6 @@ import org.onexus.ui.api.viewers.IViewerCreator;
 import org.onexus.ui.api.viewers.IViewersManager;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

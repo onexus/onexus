@@ -73,7 +73,7 @@ public class ConnectionsPanel extends EventPanel {
 
             if (website != null) {
                 WebsiteStatus status = website.getStatus();
-                status.encodeParameters(params, true);
+                status.encodeParameters(params, "", true);
             }
 
             Url url = getRequestCycle().mapUrlFor(getPage().getClass(), params);

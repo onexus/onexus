@@ -17,6 +17,8 @@
  */
 package org.onexus.resource.api;
 
+import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.resource.api.utils.AbstractMetadata;
 
 import javax.validation.Valid;
@@ -25,6 +27,7 @@ import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
+@ResourceAlias("plugin")
 public class Plugin extends AbstractMetadata {
 
     @NotNull @Pattern(regexp=Resource.PATTERN_ID)
@@ -34,6 +37,7 @@ public class Plugin extends AbstractMetadata {
     private String location;
 
     @Valid
+    @ResourceImplicitList("parameter")
     private List<Parameter> parameters;
 
     public Plugin() {

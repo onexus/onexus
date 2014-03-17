@@ -18,6 +18,7 @@
 package org.onexus.resource.api.utils;
 
 import org.onexus.resource.api.Property;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class AbstractMetadata implements IMetadata {
     private String label;
     private String title;
     private String description;
+
+    @ResourceImplicitList("property")
     private List<Property> properties;
 
     public AbstractMetadata() {

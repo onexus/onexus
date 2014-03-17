@@ -19,18 +19,25 @@ package org.onexus.website.api.widgets;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class WidgetStatus<C extends WidgetConfig> implements Serializable {
 
     @NotNull @Pattern(regexp = Resource.PATTERN_ID)
     private String id;
 
+    private String base;
+
     private transient C config;
+
+    private List<WidgetStatus> children = new ArrayList<WidgetStatus>();
 
     public WidgetStatus() {
         super();
@@ -61,23 +68,98 @@ public abstract class WidgetStatus<C extends WidgetConfig> implements Serializab
         this.config = config;
     }
 
+    public String getBase() {
+        if (base == null) {
+            base = getConfig().getBase();
+        }
+        return base;
+    }
+
+    public void setBase(String baseURI) {
+        this.base = baseURI;
+    }
+
+    public WidgetStatus getChild(String id) {
+
+        if (id == null) {
+            return null;
+        }
+
+        for (WidgetStatus status : getChildren()) {
+            if (id.equals(status.getId())) {
+                return status;
+            }
+        }
+
+        return null;
+    }
+
+    public void setWidgetStatus(WidgetStatus status) {
+        WidgetStatus oldStatus = getChild(status.getId());
+        children.add(status);
+        children.remove(oldStatus);
+    }
+
+    public List<WidgetStatus> getChildren() {
+        return children;
+    }
+
+    public List<WidgetStatus> getActiveChildren(ORI parentOri) {
+        return getChildren();
+    }
+
+    public void setChildren(List<WidgetStatus> children) {
+        this.children = children;
+    }
+
+
     public void beforeQueryBuild(Query query) {
         // Override this method if this widget contributes to the query
+        // but call super at the end to let children widgets contribute
+        for (WidgetStatus status : getActiveChildren(query.getOn())) {
+            status.beforeQueryBuild(query);
+        }
     }
 
     public void onQueryBuild(Query query) {
         // Override this method if this widget contributes to the query
+        // but call super at the end to let children widgets contribute
+        for (WidgetStatus status : getActiveChildren(query.getOn())) {
+            status.onQueryBuild(query);
+        }
     }
 
     public void afterQueryBuild(Query query) {
         // Override this method if this widget contributes to the query
+        // but call super at the end to let children widgets contribute
+        for (WidgetStatus status : getActiveChildren(query.getOn())) {
+            status.afterQueryBuild(query);
+        }
+    }
+
+    public void encodeParameters(PageParameters parameters, String keyPrefix, boolean global) {
+
+        if (children != null && !global) {
+
+            for (WidgetStatus status : children) {
+                status.getConfig().setParentConfig(getConfig());
+                status.encodeParameters(parameters, keyPrefix + "w" + status.getId());
+            }
+        }
+
     }
 
     public void encodeParameters(PageParameters parameters, String keyPrefix) {
-
+        encodeParameters(parameters, keyPrefix, false);
     }
 
     public void decodeParameters(PageParameters parameters, String keyPrefix) {
+
+        if (children != null) {
+            for (WidgetStatus status : children) {
+                status.decodeParameters(parameters, keyPrefix + "w" + status.getId());
+            }
+        }
 
     }
 

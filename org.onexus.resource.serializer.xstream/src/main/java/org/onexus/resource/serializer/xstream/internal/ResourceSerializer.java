@@ -26,12 +26,13 @@ import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.resource.api.exceptions.UnserializeException;
-import org.onexus.resource.api.utils.AbstractMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.*;
 import javax.validation.spi.ValidationProvider;
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
@@ -42,61 +43,25 @@ import java.util.*;
 public class ResourceSerializer implements IResourceSerializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceSerializer.class);
+    public static final int MAX_FIRST_TAG_SIZE = 300;
 
     private Set<ClassLoader> registeredLoaders = new HashSet<ClassLoader>();
 
-    private XStream xstream;
+    private Map<String, XStream> xstreamMap = new HashMap<String, XStream>();
+    private Map<Class, String> typeToAlias = new HashMap<Class, String>();
 
     private Validator validator;
+    private ThreadLocal<ResourceConverter.ResourceRef> resourceRef = new ThreadLocal<ResourceConverter.ResourceRef>();
 
     public ResourceSerializer() {
         super();
-        this.xstream = new XStream() {
-            @Override
-            protected MapperWrapper wrapMapper(MapperWrapper next) {
-                return new MapperWrapper(next) {
-                    @Override
-                    public boolean shouldSerializeMember(Class definedIn,
-                                                         String fieldName) {
-                        if (definedIn == Object.class) {
-                            LOGGER.warn("Tag '" + fieldName + "' not defined.");
-                            return false;
-                        }
-                        return super.shouldSerializeMember(definedIn, fieldName);
-                    }
-                };
-            }
-        };
 
-        this.xstream.setClassLoader(new RegisteredClassLoader());
-
-        // Resource
-        xstream.addImplicitCollection(Resource.class, "properties", "property", Property.class);
-        xstream.addImplicitCollection(AbstractMetadata.class, "properties", "property", Property.class);
-
-        // Project
-        alias("project", Project.class);
-        xstream.addImplicitCollection(Plugin.class, "parameters", "parameter", Parameter.class);
-        xstream.omitField(Project.class, "name");
-
-        // Plugin
-        alias("plugin", Plugin.class);
-
-        // Folder
-        alias("folder", Folder.class);
-
-        // Loader
-        alias("parameter", Parameter.class);
-        xstream.addImplicitCollection(Loader.class, "parameters", "parameter", Parameter.class);
-
-        alias("property", Property.class);
-
-        xstream.registerConverter(new ClassConverter());
-        xstream.registerConverter(new ORIConverter());
+        register(Project.class);
+        register(Folder.class);
 
         // Set up Hibernate validator
         Configuration<?> config = Validation.byDefaultProvider()
-                .providerResolver( new ValidationProviderResolver() {
+                .providerResolver(new ValidationProviderResolver() {
                     @Override
                     public List<ValidationProvider<?>> getValidationProviders() {
                         return (List) Arrays.asList(new HibernateValidator());
@@ -114,11 +79,47 @@ public class ResourceSerializer implements IResourceSerializer {
         return "text/xml";
     }
 
+    private String readFirstTag(InputStream in) throws IOException {
+        int c;
+        StringBuilder firstTag = new StringBuilder(MAX_FIRST_TAG_SIZE);
+        while (in.read() != '<') {
+        }
+        while ((c = in.read()) != '>') {
+            firstTag.append((char) c);
+        }
+
+        return firstTag.toString();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T unserialize(Class<T> resourceType, InputStream input) throws UnserializeException {
+    public <T extends Resource> T unserialize(Class<T> resourceType, ORI resourceOri, InputStream in) throws UnserializeException {
 
         T resource;
+        XStream xstream;
+        BufferedInputStream input = new BufferedInputStream(in, MAX_FIRST_TAG_SIZE);
+
+        try {
+            input.mark(MAX_FIRST_TAG_SIZE);
+            String alias = readFirstTag(input);
+            input.reset();
+
+            Class<? extends Resource> type = getType(alias);
+
+            if (type == null) {
+                throw new UnsupportedOperationException("The tag '" + alias + "' is not a registered resource.");
+            }
+
+            if (!resourceType.isAssignableFrom(type)) {
+                throw new UnsupportedOperationException("The resource of type '" + type.getCanonicalName() + " is not a valid '" + resourceType.getCanonicalName() + "' resource.");
+            }
+
+            resourceRef.set(new ResourceConverter.ResourceRef(resourceOri, type));
+            xstream = getXStream(type);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             resource = (T) xstream.fromXML(input);
@@ -130,7 +131,7 @@ public class ResourceSerializer implements IResourceSerializer {
             throw new UnserializeException(path, line, e);
         }
 
-        Set<ConstraintViolation<T>> constraintViolations = validator.validate( resource );
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(resource);
 
         if (!constraintViolations.isEmpty()) {
             Set<String> errors = new LinkedHashSet<String>(constraintViolations.size());
@@ -140,39 +141,68 @@ public class ResourceSerializer implements IResourceSerializer {
             throw new UnserializeException(errors);
         }
 
+        resource.setORI(resourceOri);
+
         return resource;
     }
 
     @Override
-    public void serialize(Object resource, OutputStream output) {
+    public void serialize(Resource resource, OutputStream output) {
+        XStream xstream = getXStream(resource.getClass());
+        resourceRef.set(new ResourceConverter.ResourceRef(resource));
         xstream.toXML(resource, output);
     }
 
-    private void alias(String alias, Class<?> resourceType) {
-        xstream.alias(alias, resourceType);
-        register(resourceType);
-    }
-
     @Override
-    public void register(Class<?> resourceType) {
+    public void register(Class<? extends Resource> resourceType) {
 
-        processAnnotations(resourceType);
+        // Register only once
+        if (typeToAlias.containsKey(resourceType)) {
+            return;
+        }
+
+        // Create a new XStream serializator
+        XStream xstream = new CustomXStream();
+        String alias = getAlias(resourceType);
+        if (alias == null) {
+            alias = resourceType.getCanonicalName();
+        }
+
+        // Report duplicated resource alias
+        if (xstreamMap.containsKey(alias)) {
+            LOGGER.error("The resource alias '" + alias + "' for '" + resourceType.getCanonicalName() + " it already in use for '" + getType(alias).getCanonicalName() + "'");
+        }
+
+        // Store the serializer
+        xstreamMap.put(alias, xstream);
+        typeToAlias.put(resourceType, alias);
         registeredLoaders.add(resourceType.getClassLoader());
 
-        // Register dependent types
-        ResourceRegister resourceRegister = resourceType.getAnnotation(ResourceRegister.class);
-        if (resourceRegister != null) {
-            for (Class type : resourceRegister.value()) {
-                processAnnotations(type);
-            }
-        }
+        // Process type and all dependent types
+        processAnnotations(xstream, resourceType);
+
+
     }
 
-    private void processAnnotations(Class<?> resourceType) {
-
+    private String getAlias(Class<?> resourceType) {
         ResourceAlias resourceAlias = resourceType.getAnnotation(ResourceAlias.class);
-        if (resourceAlias != null) {
-           xstream.alias(resourceAlias.value(), resourceType);
+        return resourceAlias != null ? resourceAlias.value() : null;
+    }
+
+    Class<? extends Resource> getType(String alias) {
+        for (Map.Entry<Class, String> entry : typeToAlias.entrySet()) {
+            if (entry.getValue().equals(alias)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    private void processAnnotations(XStream xstream, Class<?> resourceType) {
+
+        String alias = getAlias(resourceType);
+        if (alias != null) {
+            xstream.alias(alias, resourceType);
         }
 
         for (Field field : resourceType.getDeclaredFields()) {
@@ -188,6 +218,26 @@ public class ResourceSerializer implements IResourceSerializer {
             }
         }
 
+        ResourceRegister resourceRegister = resourceType.getAnnotation(ResourceRegister.class);
+        if (resourceRegister != null) {
+            for (Class type : resourceRegister.value()) {
+                processAnnotations(xstream, type);
+            }
+        }
+
+        if (resourceType.getSuperclass() != null) {
+            processAnnotations(xstream, resourceType.getSuperclass());
+        }
+
+    }
+
+    XStream getXStream(Class<?> resourceType) {
+
+        if (!typeToAlias.containsKey(resourceType)) {
+            throw new UnsupportedOperationException("Resource type '" + resourceType.getCanonicalName() + "' not registered.");
+        }
+
+        return xstreamMap.get(typeToAlias.get(resourceType));
     }
 
     private Class<?> getCollectionItemClass(Field field) {
@@ -195,11 +245,11 @@ public class ResourceSerializer implements IResourceSerializer {
         Class<?> type = null;
         final Type genericType = field.getGenericType();
         if (genericType instanceof ParameterizedType) {
-            final Type typeArgument = ((ParameterizedType)genericType).getActualTypeArguments()[0];
+            final Type typeArgument = ((ParameterizedType) genericType).getActualTypeArguments()[0];
             if (typeArgument instanceof ParameterizedType) {
-                type = (Class<?>)((ParameterizedType)typeArgument).getRawType();
+                type = (Class<?>) ((ParameterizedType) typeArgument).getRawType();
             } else if (typeArgument instanceof Class) {
-                type = (Class<?>)typeArgument;
+                type = (Class<?>) typeArgument;
             }
         }
 
@@ -210,6 +260,11 @@ public class ResourceSerializer implements IResourceSerializer {
 
         @SuppressWarnings({"rawtypes", "unchecked"})
         public Class loadClass(String name) throws ClassNotFoundException {
+
+            Class type = getType(name);
+            if (type != null) {
+                return type;
+            }
 
             for (ClassLoader loader : registeredLoaders) {
                 try {
@@ -224,6 +279,31 @@ public class ResourceSerializer implements IResourceSerializer {
 
     }
 
+    private class CustomXStream extends XStream {
+
+        public CustomXStream() {
+            super();
+            setClassLoader(new RegisteredClassLoader());
+            registerConverter(new ClassConverter());
+            registerConverter(new ORIConverter());
+            registerConverter(new ResourceConverter(ResourceSerializer.this.resourceRef, ResourceSerializer.this));
+        }
+
+        @Override
+        protected MapperWrapper wrapMapper(MapperWrapper next) {
+            return new MapperWrapper(next) {
+                @Override
+                public boolean shouldSerializeMember(Class definedIn,
+                                                     String fieldName) {
+                    if (definedIn == Object.class) {
+                        LOGGER.warn("Tag '" + fieldName + "' not defined in '" + ResourceSerializer.this.resourceRef.get().getOri() + "'");
+                        return false;
+                    }
+                    return super.shouldSerializeMember(definedIn, fieldName);
+                }
+            };
+        }
+    }
 
 
 }
