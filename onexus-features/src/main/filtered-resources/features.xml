@@ -105,7 +105,7 @@
     <!-- Onexus Website -->
     <feature name="org.onexus.website" version="${project.version}">
         <bundle>mvn:org.onexus/org.onexus.website.api/${project.version}</bundle>
-        <bundle>mvn:org.onexus/org.onexus.website.widgets/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.website.widget/${project.version}</bundle>
     </feature>
 
     <!-- Onexus UI -->

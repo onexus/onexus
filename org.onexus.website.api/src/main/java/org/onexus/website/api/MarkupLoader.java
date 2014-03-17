@@ -19,9 +19,7 @@ package org.onexus.website.api;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.ContainerInfo;
-import org.apache.wicket.markup.IMarkupCache;
-import org.apache.wicket.markup.MarkupResourceStream;
+import org.apache.wicket.markup.*;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
@@ -37,6 +35,7 @@ import javax.inject.Inject;
 public class MarkupLoader {
 
     private static final String NAMESPACE = "onexus";
+    private static final IMarkupResourceStreamProvider defaultMarkupResourceProvider = new DefaultMarkupResourceStreamProvider();
 
     @Inject
     private IDataManager dataManager;
@@ -87,7 +86,7 @@ public class MarkupLoader {
             }
         }
 
-        IResourceStream stream = WebsiteApplication.get().getDefaultMarkupResourceProvider().getMarkupResourceStream(container, containerClass);
+        IResourceStream stream = defaultMarkupResourceProvider.getMarkupResourceStream(container, containerClass);
 
         if (stream instanceof MarkupResourceStream) {
             markupResourceStream = (MarkupResourceStream) stream;

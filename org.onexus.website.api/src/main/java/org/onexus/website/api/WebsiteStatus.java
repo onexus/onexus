@@ -23,7 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.widgets.WidgetStatus;
+import org.onexus.website.api.widget.WidgetStatus;
 
 import java.io.Serializable;
 import java.util.Arrays;

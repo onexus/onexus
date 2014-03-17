@@ -19,8 +19,8 @@ package org.onexus.website.api;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.widgets.IWidgetCreator;
-import org.onexus.website.api.widgets.IWidgetManager;
+import org.onexus.website.api.widget.IWidgetCreator;
+import org.onexus.website.api.widget.IWidgetManager;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 
 public class WebsiteApplicationFactory implements WebApplicationFactory<WebsiteApplication> {

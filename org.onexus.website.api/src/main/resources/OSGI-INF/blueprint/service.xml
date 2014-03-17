@@ -28,13 +28,13 @@
                     availability="optional"/>
 
     <!-- WidgetManager -->
-    <reference-list id="widgetCreatorsRef" interface="org.onexus.website.api.widgets.IWidgetCreator"
+    <reference-list id="widgetCreatorsRef" interface="org.onexus.website.api.widget.IWidgetCreator"
                     availability="optional">
         <reference-listener bind-method="bindCreators" unbind-method="unbindCreators" ref="widgetManager"/>
     </reference-list>
-    <service interface="org.onexus.website.api.widgets.IWidgetManager" ref="widgetManager"/>
+    <service interface="org.onexus.website.api.widget.IWidgetManager" ref="widgetManager"/>
     <bean id="widgetManager"
-          class="org.onexus.website.api.widgets.DefaultWidgetManager">
+          class="org.onexus.website.api.widget.DefaultWidgetManager">
         <property name="resourceRegister" ref="resourceRegister"/>
         <property name="creators" ref="widgetCreatorsRef"/>
     </bean>

@@ -43,9 +43,9 @@ import org.onexus.website.api.utils.panels.ConnectionsPanel;
 import org.onexus.website.api.utils.panels.LoginPanel;
 import org.onexus.website.api.utils.panels.NotAuthorizedPage;
 import org.onexus.website.api.utils.visible.VisiblePredicate;
-import org.onexus.website.api.widgets.IWidgetManager;
-import org.onexus.website.api.widgets.WidgetConfig;
-import org.onexus.website.api.widgets.WidgetModel;
+import org.onexus.website.api.widget.IWidgetManager;
+import org.onexus.website.api.widget.WidgetConfig;
+import org.onexus.website.api.widget.WidgetModel;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

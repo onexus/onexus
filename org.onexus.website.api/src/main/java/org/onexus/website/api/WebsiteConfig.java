@@ -21,8 +21,8 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.utils.authorization.IAuthorization;
-import org.onexus.website.api.widgets.WidgetConfig;
-import org.onexus.website.api.widgets.WidgetStatus;
+import org.onexus.website.api.widget.WidgetConfig;
+import org.onexus.website.api.widget.WidgetStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

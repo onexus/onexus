@@ -22,8 +22,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.session.LoginContext;
-import org.onexus.website.api.widgets.WidgetConfig;
-import org.onexus.website.api.widgets.WidgetStatus;
+import org.onexus.website.api.widget.WidgetConfig;
+import org.onexus.website.api.widget.WidgetStatus;
 
 import javax.inject.Inject;
 

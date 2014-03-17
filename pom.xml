@@ -101,6 +101,7 @@
         <module>org.onexus.data.manager</module>
         <module>org.onexus.data.loader.file</module>
         <module>org.onexus.website.api</module>
+        <module>org.onexus.website.widget</module>
         <module>org.onexus.ui.authentication.persona</module>
         <module>org.onexus.ui.authentication.jaas</module>
         <module>org.onexus.ui.api</module>
@@ -108,7 +109,6 @@
         <module>org.onexus.ui.website</module>
         <module>onexus-archetypes/widget</module>
         <module>onexus-features</module>
-        <module>org.onexus.website.widgets</module>
     </modules>
 
     <dependencies>

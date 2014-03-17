@@ -31,7 +31,7 @@ import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.onexus.ui.authentication.jaas.JaasSignInPage;
 import org.onexus.ui.authentication.persona.PersonaSignInPage;
-import org.onexus.website.api.widgets.IWidgetManager;
+import org.onexus.website.api.widget.IWidgetManager;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
 import org.osgi.framework.BundleContext;
