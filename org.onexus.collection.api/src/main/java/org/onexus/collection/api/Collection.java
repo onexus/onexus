@@ -33,7 +33,7 @@ public class Collection extends Resource {
     @NotNull @Valid
     private List<Field> fields;
 
-    @NotNull @Valid
+    @Valid
     private List<Link> links;
 
     public Collection() {

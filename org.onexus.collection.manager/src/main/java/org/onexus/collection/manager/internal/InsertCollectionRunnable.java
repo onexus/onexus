@@ -17,10 +17,8 @@
  */
 package org.onexus.collection.manager.internal;
 
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.ICollectionLoader;
-import org.onexus.collection.api.ICollectionStore;
-import org.onexus.collection.api.IEntitySet;
+import org.onexus.collection.api.*;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Progress;
 import org.onexus.resource.api.session.LoginContext;
@@ -53,6 +51,14 @@ class InsertCollectionRunnable implements Runnable {
 
     @Override
     public void run() {
+
+        // Wait all dependencies to finish
+        while(isAnyDependencyRunning()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+        }
 
         String taskId = Integer.toHexString(collection.getORI().hashCode());
 
@@ -91,6 +97,22 @@ class InsertCollectionRunnable implements Runnable {
 
             tasks.remove(taskId);
         }
+    }
+
+    private boolean isAnyDependencyRunning() {
+
+        if (collection.getLinks() != null) {
+            for (Link link : collection.getLinks()) {
+                ORI ori = link.getCollection().toAbsolute(collection.getORI());
+                String taskId = Integer.toHexString(ori.hashCode());
+                if (tasks.containsKey(taskId)) {
+                    LOGGER.debug("'" + collection.getORI() + "' stalled waiting for '" + ori + "'");
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

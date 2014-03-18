@@ -146,41 +146,10 @@ public class CollectionManager implements ICollectionManager {
             progress = new Progress(taskId, "Loading collections");
 
             LOGGER.info("Starting task {}", taskId);
-            for (ORI collectionURI : notRegisteredCollections) {
-
-                Project project = resourceManager.getProject(collectionURI.getProjectUrl());
-                Collection collection = resourceManager.load(Collection.class, collectionURI);
-
-                if (collection == null) {
-                    progress.error("Unknown collection '" + collectionURI + "'");
-                    progress.fail();
-                } else {
-
-                    String subTaskId = Integer.toHexString(collectionURI.hashCode());
-
-                    if (!runningCollections.containsKey(subTaskId)) {
-
-                        Progress subProgress = new Progress(subTaskId, "Load '" + collectionURI.getPath() + "'");
-                        progressManager.addProgress(subProgress);
-                        runningCollections.put(subTaskId, subProgress);
-
-                        LOGGER.info("Registering {}", collectionURI);
-                        collectionStore.register(collectionURI);
-
-                        LOGGER.info("Submiting store collection '{}'", collectionURI);
-
-                        Loader loader = collection.getLoader();
-                        Plugin plugin = project.getPlugin(loader.getPlugin());
-                        ICollectionLoader collectionLoader = resourceManager.getLoader(ICollectionLoader.class, plugin, loader);
-
-                        Runnable command = new InsertCollectionRunnable(LoginContext.get(), runningCollections, plugin, collection, collectionLoader, collectionStore);
-                        executorService.submit(command);
-
-                    }
-
-                    progress.addSubTask(runningCollections.get(subTaskId));
+            for (ORI collectionOri : notRegisteredCollections) {
+                if (!collectionStore.isRegistered(collectionOri)) {
+                     store(progress, collectionOri);
                 }
-
             }
         }
 
@@ -191,6 +160,54 @@ public class CollectionManager implements ICollectionManager {
         }
 
         return partialResults;
+    }
+
+    private void store(Progress progress, ORI collectionURI) {
+
+        Project project = resourceManager.getProject(collectionURI.getProjectUrl());
+        Collection collection = resourceManager.load(Collection.class, collectionURI);
+
+        if (collection == null) {
+            progress.error("Unknown collection '" + collectionURI + "'");
+            progress.fail();
+        } else {
+
+            // First load linked collections
+            if (collection.getLinks() != null) {
+                for (Link link : collection.getLinks()) {
+                    ORI ori = link.getCollection().toAbsolute(collectionURI);
+
+                    if (!collectionStore.isRegistered(ori)) {
+                        //TODO detect and abort cyclic links
+                        store(progress, ori);
+                    }
+                }
+            }
+
+            String subTaskId = Integer.toHexString(collectionURI.hashCode());
+
+            if (!runningCollections.containsKey(subTaskId)) {
+
+                Progress subProgress = new Progress(subTaskId, "Load '" + collectionURI.getPath() + "'");
+                progressManager.addProgress(subProgress);
+                runningCollections.put(subTaskId, subProgress);
+
+                LOGGER.info("Registering {}", collectionURI);
+                collectionStore.register(collectionURI);
+
+                LOGGER.info("Submiting store collection '{}'", collectionURI);
+
+                Loader loader = collection.getLoader();
+                Plugin plugin = project.getPlugin(loader.getPlugin());
+                ICollectionLoader collectionLoader = resourceManager.getLoader(ICollectionLoader.class, plugin, loader);
+
+                Runnable command = new InsertCollectionRunnable(LoginContext.get(), runningCollections, plugin, collection, collectionLoader, collectionStore);
+                executorService.submit(command);
+
+            }
+
+            progress.addSubTask(runningCollections.get(subTaskId));
+        }
     }
 
     private Set<ORI> getQueryCollections(Query query) {

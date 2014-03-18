@@ -102,7 +102,7 @@ public class TagStoreManager implements ITagStoreManager {
                 conn.close();
             }
         } catch (Exception e) {
-            LOGGER.error("Closing tag store connection", e);
+            LOGGER.warn("Exception closing tag store connection");
         }
 
     }

@@ -30,6 +30,20 @@
         <feature version="${project.version}">org.onexus.website</feature>
     </feature>
 
+    <!-- Onexus Elastic Search -->
+    <feature name="onexus-elasticsearch" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.resource.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.data.api/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.collection.api/${project.version}</bundle>
+
+        <feature version="${project.version}">org.onexus.resource</feature>
+        <feature version="${project.version}">org.onexus.data</feature>
+        <feature version="${project.version}">org.onexus.collection</feature>
+        <feature version="${project.version}">org.onexus.collection.store.elasticsearch</feature>
+        <feature version="${project.version}">org.onexus.ui</feature>
+        <feature version="${project.version}">org.onexus.website</feature>
+    </feature>
+
     <!-- Onexus core -->
     <feature name="org.onexus.resource" version="${project.version}">
         <feature>war</feature>
@@ -95,6 +109,15 @@
 
         <!-- dependencies -->
         <bundle>mvn:com.h2database/h2/${h2.version}</bundle>
+    </feature>
+
+    <feature name="org.onexus.collection.store.elasticsearch" version="${project.version}">
+        <bundle>mvn:org.onexus/org.onexus.collection.store.elasticsearch/${project.version}</bundle>
+
+        <!-- dependencies -->
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.elasticsearch/${elasticsearch.version}_2</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.lucene/4.4.0_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.lucene-analyzers-common/4.4.0_1</bundle>
     </feature>
 
     <!-- Collection loaders -->

@@ -49,6 +49,7 @@
         <jsch.version>0.1.42.w1</jsch.version>
         <poi.version>3.9</poi.version>
         <freemarker.version>2.3.20</freemarker.version>
+        <elasticsearch.version>0.90.5</elasticsearch.version>
 
         <!-- Project properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -109,6 +110,7 @@
         <module>org.onexus.ui.website</module>
         <module>onexus-archetypes/widget</module>
         <module>onexus-features</module>
+        <module>org.onexus.collection.store.elasticsearch</module>
     </modules>
 
     <dependencies>
@@ -513,6 +515,12 @@
                 <groupId>org.freemarker</groupId>
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.version}</version>
             </dependency>
 
         </dependencies>

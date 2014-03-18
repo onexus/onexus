@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>onexus</artifactId>
+        <groupId>org.onexus</groupId>
+        <version>0.5.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>org.onexus.collection.store.elasticsearch</artifactId>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.symbolicName>org.onexus.collection.store.elasticsearch</bundle.symbolicName>
+        <bundle.namespace>org.onexus.collection.store.elasticsearch</bundle.namespace>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.guava-osgi</groupId>
+            <artifactId>guava-osgi</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+
+</project>
