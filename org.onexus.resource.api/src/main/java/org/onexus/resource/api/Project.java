@@ -41,6 +41,12 @@ public class Project extends Resource {
         super();
     }
 
+    public Project(String projectUrl, String name) {
+        super(new ORI(projectUrl, null));
+
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

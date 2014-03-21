@@ -20,12 +20,11 @@ package org.onexus.collection.store.elasticsearch.internal.filters;
 
 import org.elasticsearch.index.query.FilterBuilder;
 import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.IResourceManager;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 
 public interface FilterAdapter {
 
     boolean canBuild(Filter filter);
 
-    FilterBuilder build(IResourceManager resourceManager, Query query, Filter filter);
+    FilterBuilder build(ElasticSearchQuery query, Filter filter);
 }

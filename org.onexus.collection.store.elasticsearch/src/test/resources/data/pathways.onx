@@ -1,0 +1,25 @@
+<collection>
+    <title>Pathways</title>
+    <loader>
+        <plugin>tsv-loader</plugin>
+        <parameter>
+            <key>data</key>
+            <value>/data/pathways.tsv</value>
+        </parameter>
+    </loader>
+    <fields>
+        <field>
+            <label>identifier</label>
+            <title>KEGG pathway identifier</title>
+            <id>PATHWAY_ID</id>
+            <type>string</type>
+            <primary-key>true</primary-key>
+        </field>
+        <field>
+            <label>description</label>
+            <title>Human readable name of the KEGG pathway</title>
+            <id>DESCRIPTION</id>
+            <type>string</type>
+        </field>
+    </fields>
+</collection>

@@ -1,0 +1,124 @@
+<collection>
+    <title>Expression</title>
+    <loader>
+        <plugin>tsv-loader</plugin>
+        <parameter>
+            <key>data</key>
+            <value>/data/pathway-expression.tsv</value>
+        </parameter>
+    </loader>
+    <fields>
+        <field>
+            <label>project-name</label>
+            <title>Name of the project. Usually associated to a publication and involving the analysis of a set of samples with the same platform</title>
+            <id>PROJECT_ID</id>
+            <type>string</type>
+            <primary-key>true</primary-key>
+        </field>
+        <field>
+            <label>pathwayid</label>
+            <title>Pathwayid</title>
+            <id>PATHWAY_ID</id>
+            <type>string</type>
+            <primary-key>true</primary-key>
+        </field>
+        <field>
+            <label>Expected</label>
+            <title>expected number of  genes in the pathway up-regulated in a significant number of samples in this experiment</title>
+            <id>UPREG_MEAN</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>Samples</label>
+            <title>number of samples analyzed in this project</title>
+            <id>UPREG_N</id>
+            <type>integer</type>
+        </field>
+        <field>
+            <label>Observed</label>
+            <title>observed number of genes in the pathway up-regulated in a significant number of samples</title>
+            <id>UPREG_OBSERVED</id>
+            <type>integer</type>
+        </field>
+        <field>
+            <label>up-pvalue</label>
+            <title>Pvalue indicating if the set of genes in the pathway is enriched for genes up-regulated in a significant number of samples</title>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+            <id>UPREG_PVALUE</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>up</label>
+            <title>Qvalue indicating if the set of genes in the pathway is enriched for genes up-regulated in a significant number of samples</title>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+            <id>UPREG_QVALUE</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>Deviation</label>
+            <title>standard deviation on the expected number of genes up-regulated in a significant number of samples</title>
+            <id>UPREG_STDEV</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>Expected</label>
+            <title>expected number of  genes in the pathway down-regulated in a significant number of samples in this experiment</title>
+            <id>DOWNREG_MEAN</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>Samples</label>
+            <title>number of samples analyzed in this project</title>
+            <id>DOWNREG_N</id>
+            <type>integer</type>
+        </field>
+        <field>
+            <label>Observed</label>
+            <title>observed number of genes in the pathway down-regulated in a significant number of samples</title>
+            <id>DOWNREG_OBSERVED</id>
+            <type>integer</type>
+        </field>
+        <field>
+            <label>down-pvalue</label>
+            <title>Pvalue indicating if the set of genes in the pathway is enriched for genes down-regulated in a significant number of samples</title>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+            <id>DOWNREG_PVALUE</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>down</label>
+            <title>Qvalue indicating if the set of genes in the pathway is enriched for genes down-regulated in a significant number of samples</title>
+            <property>
+                <key>BROWSER_DECORATOR</key>
+                <value>PVALUE2</value>
+            </property>
+            <id>DOWNREG_QVALUE</id>
+            <type>double</type>
+        </field>
+        <field>
+            <label>Deviation</label>
+            <title>standard deviation on the expected number of genes down-regulated in a significant number of samples</title>
+            <id>DOWNREG_STDEV</id>
+            <type>double</type>
+        </field>
+    </fields>
+    <links>
+        <link>
+            <collection>/data/projects</collection>
+            <field>PROJECT_ID</field>
+        </link>
+        <link>
+            <collection>/data/pathways</collection>
+            <field>PATHWAY_ID</field>
+        </link>
+    </links>
+</collection>

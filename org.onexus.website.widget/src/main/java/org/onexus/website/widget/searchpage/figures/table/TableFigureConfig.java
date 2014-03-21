@@ -20,7 +20,9 @@ package org.onexus.website.widget.searchpage.figures.table;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.widget.searchpage.FigureConfig;
+import org.onexus.website.widget.tableviewer.columns.ColumnConfig;
 import org.onexus.website.widget.tableviewer.columns.IColumnConfig;
 
 import javax.validation.Valid;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ResourceAlias("figure-table")
+@ResourceRegister({ColumnConfig.class})
 public class TableFigureConfig extends FigureConfig {
 
     @NotNull

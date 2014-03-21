@@ -172,21 +172,20 @@ public class CollectionManager implements ICollectionManager {
             progress.fail();
         } else {
 
-            // First load linked collections
-            if (collection.getLinks() != null) {
-                for (Link link : collection.getLinks()) {
-                    ORI ori = link.getCollection().toAbsolute(collectionURI);
-
-                    if (!collectionStore.isRegistered(ori)) {
-                        //TODO detect and abort cyclic links
-                        store(progress, ori);
-                    }
-                }
-            }
-
             String subTaskId = Integer.toHexString(collectionURI.hashCode());
 
             if (!runningCollections.containsKey(subTaskId)) {
+
+                // First load linked collections
+                if (collection.getLinks() != null) {
+                    for (Link link : collection.getLinks()) {
+                        ORI ori = link.getCollection().toAbsolute(collectionURI);
+
+                        if (!collectionStore.isRegistered(ori)) {
+                            store(progress, ori);
+                        }
+                    }
+                }
 
                 Progress subProgress = new Progress(subTaskId, "Load '" + collectionURI.getPath() + "'");
                 progressManager.addProgress(subProgress);

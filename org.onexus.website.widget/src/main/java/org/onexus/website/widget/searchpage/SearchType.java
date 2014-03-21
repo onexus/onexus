@@ -20,6 +20,7 @@ package org.onexus.website.widget.searchpage;
 import org.apache.commons.lang3.StringUtils;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
+import org.onexus.resource.api.annotations.ResourceRegister;
 import org.onexus.website.widget.selection.FiltersWidgetConfig;
 
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ResourceRegister({FiltersWidgetConfig.class})
 public class SearchType implements Serializable {
 
     @NotNull

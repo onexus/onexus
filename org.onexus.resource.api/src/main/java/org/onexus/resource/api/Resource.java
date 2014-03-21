@@ -49,6 +49,12 @@ public abstract class Resource implements IMetadata, Serializable {
         super();
     }
 
+    public Resource(ORI ori) {
+        super();
+
+        setORI(ori);
+    }
+
     public ORI getORI() {
         return ori;
     }

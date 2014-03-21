@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ProjectsContainer {
 
@@ -75,10 +78,23 @@ public class ProjectsContainer {
             this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader, monitor, listeners);
             this.providers = new ConcurrentHashMap<String, AbstractProjectProvider>();
 
-            init();
         } catch (IOException e) {
-            throw new RuntimeException("Loading projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
+            throw new RuntimeException("Creating projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
         }
+
+        // Schedule the initialization to give time to all the resource creators to register
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LOGGER.info("Start loading projects");
+                    ProjectsContainer.this.init();
+                } catch (IOException e) {
+                    LOGGER.error("Loading projects file '" + ONEXUS_PROJECTS_SETTINGS + "'", e);
+                }
+            }
+        }, 5, TimeUnit.SECONDS);
 
 
         FileAlterationObserver observer = new FileAlterationObserver(onexusFolder, FileFilterUtils.nameFileFilter(ONEXUS_PROJECTS_SETTINGS));

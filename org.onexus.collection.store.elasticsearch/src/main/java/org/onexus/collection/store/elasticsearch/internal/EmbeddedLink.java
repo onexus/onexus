@@ -17,6 +17,7 @@
  */
 package org.onexus.collection.store.elasticsearch.internal;
 
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.utils.LinkUtils;
 
@@ -28,10 +29,20 @@ public class EmbeddedLink {
     private String indexName;
     private List<FieldPair> fields;
 
+    private Collection toCollection;
+    private List<EmbeddedLink> toLinks;
+
     public EmbeddedLink(String indexName, List<String> fields) {
+        this(indexName, fields, null, null);
+    }
+
+    public EmbeddedLink(String indexName, List<String> fields, Collection toCollection, List<EmbeddedLink> toLinks) {
 
         this.indexName = indexName;
         this.fields = new ArrayList<FieldPair>(fields.size());
+
+        this.toCollection = toCollection;
+        this.toLinks = toLinks;
 
         for (String field : fields) {
             this.fields.add(new FieldPair(LinkUtils.getFromFieldName(field), LinkUtils.getToFieldName(field)));
@@ -41,6 +52,14 @@ public class EmbeddedLink {
 
     public String getIndexName() {
         return indexName;
+    }
+
+    public Collection getToCollection() {
+        return toCollection;
+    }
+
+    public List<EmbeddedLink> getToLinks() {
+        return toLinks;
     }
 
     public String buildKey(IEntity entity) {

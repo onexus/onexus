@@ -17,23 +17,33 @@
  */
 package org.onexus.collection.store.elasticsearch.internal;
 
-import org.elasticsearch.action.admin.indices.flush.FlushRequest;
+import com.google.common.base.Joiner;
+import com.google.common.cache.LoadingCache;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.onexus.collection.api.Collection;
+import org.onexus.collection.api.Link;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 
-import static org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils.convertOriToIndexName;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils.refreshIndex;
 import static org.onexus.collection.store.elasticsearch.internal.filters.FilterAdapterFactory.filterAdapter;
 
 public class ElasticSearchQuery {
 
+    private static final Joiner PATH_JOINER = Joiner.on(".");
+
+    private LoadingCache<ORI, String> indexNameCache;
     private IResourceManager resourceManager;
     private Client client;
     private Query query;
@@ -41,15 +51,63 @@ public class ElasticSearchQuery {
     private SearchRequestBuilder searchRequest;
     private String fromIndexName;
     private ORI fromORI;
+    private Map<ORI, List<String>> collectionPathList;
+    private Map<ORI, String> collectionPath;
 
-    public ElasticSearchQuery(IResourceManager resourceManager, Client client, Query query) {
+    public ElasticSearchQuery(IResourceManager resourceManager, LoadingCache<ORI, String> indexNameCache, Client client, Query query) {
         super();
 
+        this.indexNameCache = indexNameCache;
         this.resourceManager = resourceManager;
         this.query = query;
         this.client = client;
 
+        // Create all collections paths. Using the links.
+        this.collectionPathList = new HashMap<ORI, List<String>>();
+        this.collectionPath = new HashMap<ORI, String>();
+        buildPath(getFrom(), new ArrayList<String>(0));
+
+        // Build the query
         build();
+
+    }
+
+    private void buildPath(ORI collectionOri, List<String> prefix) {
+
+        if (collectionPathList.containsKey(collectionOri)) {
+
+            List<String> previousPrefix = collectionPathList.get(collectionOri);
+
+            // If there are to routes to the same collection
+            // we prefer the shorter one.
+            if (previousPrefix.size() < prefix.size()) {
+                return;
+            }
+
+        }
+
+        this.collectionPathList.put(collectionOri, prefix);
+        this.collectionPath.put(collectionOri, PATH_JOINER.join(prefix));
+
+        Collection collection = resourceManager.load(Collection.class, collectionOri);
+        if (collection.getLinks() != null) {
+            for (Link link : collection.getLinks()) {
+                ORI linkOri = link.getCollection().toAbsolute(collectionOri);
+                List<String> linkPrefix = new ArrayList<String>(prefix.size() + 1);
+                linkPrefix.addAll(prefix);
+                linkPrefix.add(indexNameCache.getUnchecked(linkOri));
+                buildPath(linkOri, linkPrefix);
+            }
+        }
+
+    }
+
+    public boolean isLinked(ORI collection) {
+        return collectionPathList.containsKey(collection);
+    }
+
+    public List<String> getPath(ORI collection) {
+        return collectionPathList.get(collection);
     }
 
     private void build() {
@@ -70,16 +128,13 @@ public class ElasticSearchQuery {
         searchRequest.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
         searchRequest.setExplain(false);
 
-        // Flush index
-        client.admin().indices().flush(new FlushRequest(fromIndexName)).actionGet();
-
     }
 
     private void where() {
 
         Filter filter = query.getWhere();
         if (filter != null) {
-            searchRequest.setFilter(filterAdapter(filter).build(resourceManager, query, filter));
+            searchRequest.setFilter(filterAdapter(filter).build(this, filter));
         }
 
     }
@@ -110,10 +165,18 @@ public class ElasticSearchQuery {
         return indexName + "." + fieldId;
     }
 
-    private String convertAliasToIndexName(String alias) {
+    public String convertAliasToIndexName(String alias) {
+        return indexNameCache.getUnchecked(convertAliasToAbsoluteORI(alias));
+    }
+
+    public ORI convertAliasToAbsoluteORI(String alias) {
         ORI ori = query.getDefine().get(alias);
-        ori = ori.toAbsolute( query.getOn() );
-        return convertOriToIndexName(ori);
+
+        if (query.getOn() != null) {
+            ori = ori.toAbsolute(query.getOn());
+        }
+
+        return ori;
     }
 
     public ORI getFrom() {
@@ -125,11 +188,36 @@ public class ElasticSearchQuery {
         return fromORI;
     }
 
+    public String fieldPath(String collectionAlias, String fieldId) {
+
+        if (collectionAlias.equals(query.getFrom())) {
+            return fieldId;
+        }
+
+        return indexPath(collectionAlias) + "." + fieldId;
+    }
+
+    public String indexPath(String collectionAlias) {
+        ORI ori = query.getDefine().get(collectionAlias).toAbsolute(query.getOn());
+        return collectionPath.get(ori);
+    }
+
     public Query getOnexusQuery() {
         return query;
     }
 
     public SearchRequestBuilder getSearchRequest() {
+
+        refreshIndex(client, fromIndexName);
+
         return searchRequest;
+    }
+
+    public IResourceManager getResourceManager() {
+        return resourceManager;
+    }
+
+    public boolean isFromCollection(String collectionAlias) {
+        return query.getFrom().equals(collectionAlias);
     }
 }

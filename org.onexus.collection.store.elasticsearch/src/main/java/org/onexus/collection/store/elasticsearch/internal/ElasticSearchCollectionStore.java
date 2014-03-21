@@ -18,23 +18,34 @@
 package org.onexus.collection.store.elasticsearch.internal;
 
 import com.google.common.cache.LoadingCache;
+import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.bulk.BulkItemResponse;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.node.Node;
 import org.onexus.collection.api.*;
-import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.SingleEntityEntitySet;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils.*;
 
 public class ElasticSearchCollectionStore implements ICollectionStore {
+
+    private static final Logger log = LoggerFactory.getLogger(ElasticSearchCollectionStore.class);
+
+    private static final int INSERT_BULK_SIZE = 1000;
+    private final BulkListener BULK_LISTENER = new BulkListener();
 
     private Node node;
     private Client client;
@@ -51,7 +62,7 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
         client = node.client();
 
         // Create ORI to index name cache
-        indexNameCache = newOriToIndexNameCache(100);
+        indexNameCache = newOriToIndexNameCache(resourceManager, 100);
     }
 
     public void stop(ICollectionStore store, @SuppressWarnings("rawtypes") Map properties) {
@@ -64,7 +75,17 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
 
     @Override
     public boolean isRegistered(ORI collectionOri) {
-        return exists(client, indexNameCache.getUnchecked(collectionOri));
+
+        String indexName = indexNameCache.getUnchecked(collectionOri);
+        boolean result = exists(client, indexName);
+
+        // If exists then double check after a flush
+        if (result) {
+            refreshIndex(client, indexName);
+            result = exists(client, indexName);
+        }
+
+        return result;
     }
 
     @Override
@@ -74,6 +95,30 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
             throw new UnsupportedOperationException("The collection '" + collectionOri + "' is already registered.");
         }
 
+        Collection collection = resourceManager.load(Collection.class, collectionOri);
+
+        if (collection == null) {
+            throw new UnsupportedOperationException("The resource '" + collectionOri + "' don't exists or it's not a collection.");
+        }
+
+        // Prepare embedded links
+        createIndex(client, indexNameCache.getUnchecked(collectionOri), collection, createEmbeddedLinks(collection));
+
+    }
+
+    private List<EmbeddedLink> createEmbeddedLinks(Collection collection) {
+
+        List<Link> links = (collection.getLinks() == null ? Collections.EMPTY_LIST : collection.getLinks());
+        List<EmbeddedLink> embeddedLinks = new ArrayList<EmbeddedLink>(links.size());
+        for (Link link : links) {
+
+            ORI ori = link.getCollection().toAbsolute(collection.getORI());
+            Collection toCollection = resourceManager.load(Collection.class, ori);
+            List<EmbeddedLink> toLinks = createEmbeddedLinks(toCollection);
+
+            embeddedLinks.add(new EmbeddedLink(indexNameCache.getUnchecked(ori), link.getFields(), toCollection, toLinks));
+        }
+        return embeddedLinks;
     }
 
     @Override
@@ -93,20 +138,46 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
 
     @Override
     public void insert(IEntitySet dataSet) {
+
+        Collection collection = dataSet.getCollection();
+
+        if (!isRegistered( collection.getORI() )) {
+            throw new UnsupportedOperationException("The collection '" + collection.getORI() + "' is not registered.");
+        }
+
         try {
-            Collection collection = dataSet.getCollection();
+
             String mainIndex = indexNameCache.getUnchecked(dataSet.getCollection().getORI());
+
+            refreshIndex(client, mainIndex);
 
             // Prepare embedded links
             List<Link> links = (collection.getLinks() == null ? Collections.EMPTY_LIST : collection.getLinks());
             List<EmbeddedLink> embeddedLinks = new ArrayList<EmbeddedLink>(links.size());
             for (Link link : links) {
                 ORI ori = link.getCollection().toAbsolute(collection.getORI());
-                embeddedLinks.add(new EmbeddedLink( indexNameCache.getUnchecked(ori), link.getFields()));
+                String indexName = indexNameCache.getUnchecked(ori);
+                refreshIndex(client, indexName);
+                embeddedLinks.add(new EmbeddedLink( indexName, link.getFields()));
             }
 
+            int bulkSize = 0;
+            BulkRequestBuilder bulkRequest = client.prepareBulk();
             while (dataSet.next()) {
-                insertEntity(client, mainIndex, dataSet, embeddedLinks);
+
+                if (bulkSize == INSERT_BULK_SIZE) {
+                    bulkRequest.execute(BULK_LISTENER);
+                    bulkRequest = client.prepareBulk();
+                    bulkSize=0;
+                }
+
+                bulkRequest.add(insertEntity(client, mainIndex, dataSet, embeddedLinks));
+                bulkSize++;
+
+            }
+
+            if (bulkRequest.numberOfActions() > 0) {
+                logErrors( bulkRequest.execute().actionGet() );
             }
 
         } catch (IOException e) {
@@ -114,9 +185,10 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
         }
     }
 
+
     @Override
     public IEntityTable load(Query query) {
-        return new ElasticSearchEntityTable(resourceManager, client, query);
+        return new ElasticSearchEntityTable(resourceManager, indexNameCache, client, query);
     }
 
     @Override
@@ -135,6 +207,27 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
 
     public void setResourceManager(IResourceManager resourceManager) {
         this.resourceManager = resourceManager;
+    }
+
+    private class BulkListener implements ActionListener<BulkResponse> {
+
+        @Override
+        public void onResponse(BulkResponse bulkItemResponses) {
+            logErrors(bulkItemResponses);
+        }
+
+        @Override
+        public void onFailure(Throwable e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private static void logErrors(BulkResponse bulkItemResponses) {
+        if (bulkItemResponses.hasFailures()) {
+            for (BulkItemResponse response : bulkItemResponses) {
+                log.error("Error inserting. " + response.getFailureMessage());
+            }
+        }
     }
 
 }

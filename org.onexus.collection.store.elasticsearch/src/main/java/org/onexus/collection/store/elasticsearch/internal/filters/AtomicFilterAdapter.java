@@ -19,7 +19,7 @@ package org.onexus.collection.store.elasticsearch.internal.filters;
 
 import org.elasticsearch.index.query.FilterBuilder;
 import org.onexus.collection.api.query.AtomicFilter;
-import org.onexus.collection.api.query.Query;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 
 public abstract class AtomicFilterAdapter<T extends AtomicFilter> extends AbstractFilterAdapter<T> {
 
@@ -28,9 +28,9 @@ public abstract class AtomicFilterAdapter<T extends AtomicFilter> extends Abstra
     }
 
     @Override
-    protected FilterBuilder innerBuild(Query query, T filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, T filter) {
         return innerBuild(
-                fieldName(query, filter.getCollectionAlias(), filter.getFieldId()),
+                query.fieldPath(filter.getCollectionAlias(), filter.getFieldId()),
                 filter
         );
     }

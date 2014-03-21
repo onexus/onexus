@@ -18,11 +18,9 @@
 package org.onexus.collection.store.elasticsearch.internal.filters;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.onexus.collection.api.query.In;
-import org.onexus.collection.api.query.Query;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 
 import static com.google.common.collect.Iterables.transform;
 import static org.elasticsearch.index.query.FilterBuilders.termsFilter;
@@ -44,9 +42,9 @@ public class InFilterAdapter extends AbstractFilterAdapter<In> {
     }
 
     @Override
-    protected FilterBuilder innerBuild(Query query, In filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, In filter) {
         return termsFilter(
-                fieldName(query, filter.getCollectionAlias(), filter.getFieldId()),
+                query.fieldPath(filter.getCollectionAlias(), filter.getFieldId()),
                 transform(filter.getValues(), TO_LOWER_CASE)
         );
     }

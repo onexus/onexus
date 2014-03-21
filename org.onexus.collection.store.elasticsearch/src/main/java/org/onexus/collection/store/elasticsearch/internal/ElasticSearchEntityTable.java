@@ -17,6 +17,7 @@
  */
 package org.onexus.collection.store.elasticsearch.internal;
 
+import com.google.common.cache.LoadingCache;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.search.SearchHit;
@@ -28,36 +29,36 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Progress;
-import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Logger;
-
-import static org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils.convertOriToIndexName;
+import java.util.*;
 
 public class ElasticSearchEntityTable implements IEntityTable {
 
+    public static final HashMap<String, Object> EMPTY_VALUES = new HashMap<String, Object>(0);
+    private LoadingCache<ORI, String> indexNameCache;
     private IResourceManager resourceManager;
     private ElasticSearchQuery query;
 
     private long size = -1;
     private Iterator<SearchHit> hits;
-    private SearchHit currentHit;
 
-    public ElasticSearchEntityTable(IResourceManager resourceManager, Client client, Query query) {
+    private SearchHit currentHit;
+    private Map<ORI, IEntity> currentHitEntityCache;
+
+    public ElasticSearchEntityTable(IResourceManager resourceManager, LoadingCache<ORI, String> indexNameCache, Client client, Query query) {
         super();
 
+        this.indexNameCache = indexNameCache;
         this.resourceManager = resourceManager;
 
         try {
-            this.query = new ElasticSearchQuery(resourceManager, client, query);
+            this.query = new ElasticSearchQuery(resourceManager, indexNameCache, client, query);
         } catch (IndexMissingException e) {
             this.hits = Collections.EMPTY_LIST.iterator();
             this.size = 0;
         }
+
+        this.currentHitEntityCache = new HashMap<ORI, IEntity>();
     }
 
     @Override
@@ -72,19 +73,38 @@ public class ElasticSearchEntityTable implements IEntityTable {
             return null;
         }
 
+        collectionOri = collectionOri.toAbsolute(query.getOnexusQuery().getOn());
+
+        if (currentHitEntityCache.containsKey(collectionOri)) {
+            return currentHitEntityCache.get(collectionOri);
+        }
+
         Collection collection = resourceManager.load(Collection.class, collectionOri);
 
-        if (collectionOri.equals( query.getFrom() )) {
-            return new HashEntity(collection, currentHit.sourceAsMap());
+        if (!query.isLinked(collectionOri)) {
+            return new HashEntity(collection, EMPTY_VALUES);
         }
 
-        Map<String, Object> values = (Map<String, Object>) currentHit.sourceAsMap().get(convertOriToIndexName(collectionOri));
+        Map<String, Object> values = currentHit.sourceAsMap();
+        List<String> prefixes = query.getPath(collectionOri);
+        for (String prefix : prefixes) {
+
+            values = (Map<String, Object>) values.get(prefix);
+
+            if (values == null) {
+                values = EMPTY_VALUES;
+            }
+
+        }
 
         if (values == null) {
-            values = new HashMap<String, Object>(0);
+            values = EMPTY_VALUES;
         }
 
-        return new HashEntity(collection, values);
+        IEntity entity = new HashEntity(collection, values);
+        this.currentHitEntityCache.put(collectionOri, entity);
+
+        return entity;
     }
 
     @Override
@@ -100,6 +120,8 @@ public class ElasticSearchEntityTable implements IEntityTable {
         }
 
         currentHit = hits.next();
+        currentHitEntityCache.clear();
+        
         return true;
     }
 
@@ -118,7 +140,6 @@ public class ElasticSearchEntityTable implements IEntityTable {
     }
 
     private void init() {
-
         SearchHits hits = this.query.getSearchRequest().execute().actionGet().getHits();
         this.size = hits.totalHits();
         this.hits = hits.iterator();

@@ -1,0 +1,67 @@
+<collection>
+    <title>Projects</title>
+    <loader>
+        <plugin>tsv-loader</plugin>
+        <parameter>
+            <key>data</key>
+            <value>/data/projects.tsv</value>
+        </parameter>
+    </loader>
+    <fields>
+        <field>
+            <label>project-id</label>
+            <title>Project identifier</title>
+            <id>PROJECT_ID</id>
+            <type>string</type>
+            <primary-key>true</primary-key>
+        </field>
+        <field>
+            <label>project-name</label>
+            <title>Name given to the cancer sequencing project within the pipeline execution</title>
+            <id>PROJECT_NAME</id>
+            <type>string</type>
+        </field>
+        <field>
+            <label>authors</label>
+            <title>Authors</title>
+            <id>AUTHORS</id>
+            <type>string</type>
+        </field>
+        <field>
+            <label>source</label>
+            <title>Source</title>
+            <id>SOURCE</id>
+            <type>string</type>
+        </field>
+        <field>
+            <label>country</label>
+            <title>Country</title>
+            <id>COUNTRY</id>
+            <type>string</type>
+        </field>
+        <field>
+            <label>pubmed</label>
+            <title>Pubmed identifier</title>
+            <id>PUBMED_ID</id>
+            <type>string</type>
+        </field>
+        <field>
+            <label>topography</label>
+            <title>ICD-O topography identifying the anatomical site where the tumor occurs</title>
+            <id>TOPOGRAPHY</id>
+            <type>string</type>
+        </field>
+        <field>
+            <label>topoid</label>
+            <title>Topoid</title>
+            <id>SITE_ID</id>
+            <type>integer</type>
+        </field>
+        <field>
+            <label>type</label>
+            <title>Type</title>
+            <id>TYPE</id>
+            <type>string</type>
+        </field>
+    </fields>
+</collection>

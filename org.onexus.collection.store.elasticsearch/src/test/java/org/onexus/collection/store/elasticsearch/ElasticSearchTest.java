@@ -18,61 +18,89 @@
 package org.onexus.collection.store.elasticsearch;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
-import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.IEntityTable;
+import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.store.elasticsearch.internal.ElasticSearchCollectionStore;
 import org.onexus.collection.store.elasticsearch.internal.HashEntity;
 import org.onexus.collection.store.elasticsearch.mocks.MockResourceManager;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
+import org.onexus.resource.api.Project;
 
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ElasticSearchTest {
+public class ElasticSearchTest extends AbstractCollectionTest {
 
-    public static final ORI COLLECTION_ORI = new ORI("http://test?collection");
+    private static final String PROJECT_URL = "http://test.onexus.org";
 
-    private Collection collection;
+    private Collection collection01;
+
+    private Collection pathways;
+    private Collection projects;
+    private Collection expression;
+
     private ElasticSearchCollectionStore store;
+
+    public ElasticSearchTest() {
+        super(ElasticSearchTest.class, PROJECT_URL);
+    }
 
     @Before
     public void start() {
 
-        // Initialize resource manager
+        // Create resource manager and collection store
         IResourceManager resourceManager = new MockResourceManager();
-        collection = getCollection();
-        resourceManager.save(collection);
-
-        // Initialize collection store
         store = new ElasticSearchCollectionStore();
         store.setResourceManager(resourceManager);
         store.start();
+
+        // Save project
+        resourceManager.save(new Project(PROJECT_URL, "test.onexus.org"));
+
+        // Load definitions
+        collection01 = getCollection01();
+        pathways = getCollection("/data/pathways.onx");
+        projects = getCollection("/data/projects.onx");
+        expression = getCollection("/data/pathway-expression.onx");
+
+        // Save to resource manager
+        resourceManager.save(collection01);
+        resourceManager.save(pathways);
+        resourceManager.save(projects);
+        resourceManager.save(expression);
+
+        // Register collections
+        forceRegister(collection01);
+        forceRegister(pathways);
+        forceRegister(projects);
+        forceRegister(expression);
+
+    }
+
+    private void forceRegister(Collection collection) {
+        ORI ori = collection.getORI();
+        if (store.isRegistered(ori)) {
+            store.deregister(ori);
+        }
+        store.register(ori);
     }
 
     @Test
-    public void insert() {
+    public void insert01() {
 
-        if (store.isRegistered(collection.getORI())) {
-            store.deregister(collection.getORI());
-        }
-
-        IEntity entity = getEntity(collection);
+        IEntity entity = getEntity(collection01);
 
         store.insert(entity);
 
-        assertTrue(store.isRegistered(collection.getORI()));
+        assertTrue(store.isRegistered(collection01.getORI()));
 
         Query query = new Query();
-        query.addDefine("e", COLLECTION_ORI);
+        query.addDefine("e", collection01.getORI());
         query.setFrom("e");
 
         IEntityTable result = store.load(query);
@@ -80,11 +108,39 @@ public class ElasticSearchTest {
         assertTrue(result.next());
         assertEquals(1, result.size());
 
-        IEntity e = result.getEntity(COLLECTION_ORI);
+        IEntity e = result.getEntity(collection01.getORI());
 
         assertEquals("testid", e.get("id"));
         assertEquals("testvalue", e.get("value"));
 
+    }
+
+    @Test
+    public void insert02() {
+        insertCollectionAndAssertSize(projects, 310);
+        insertCollectionAndAssertSize(pathways, 260);
+        insertCollectionAndAssertSize(expression, 19986);
+    }
+
+    private void insertCollectionAndAssertSize(Collection collection, int size) {
+        long start = System.currentTimeMillis();
+
+        IEntitySet entity = readCollection(collection);
+
+        store.insert(entity);
+
+        assertTrue(store.isRegistered(collection.getORI()));
+
+        Query query = new Query();
+        query.addDefine("e", collection.getORI());
+        query.setFrom("e");
+
+        IEntityTable result = store.load(query);
+
+        assertTrue(collection.toString(), result.next());
+        assertEquals(collection.toString(), size, result.size());
+
+        System.out.println(collection.getORI().toString() + " in " + (System.currentTimeMillis() - start) + " ms");
     }
 
     @After
@@ -99,9 +155,9 @@ public class ElasticSearchTest {
         return entity;
     }
 
-    private Collection getCollection() {
+    private Collection getCollection01() {
         Collection collection = new Collection();
-        collection.setORI(COLLECTION_ORI);
+        collection.setORI(new ORI(PROJECT_URL, "collection"));
         collection.setFields(Arrays.asList(
                 new Field("id", "identifier", null, String.class, true),
                 new Field("value", "value", null, String.class)

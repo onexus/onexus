@@ -18,6 +18,7 @@
 package org.onexus.website.widget.searchpage;
 
 import org.onexus.website.api.utils.visible.IVisible;
+import org.onexus.website.api.widget.WidgetConfig;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

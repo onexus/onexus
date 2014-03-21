@@ -18,9 +18,8 @@
 package org.onexus.collection.store.elasticsearch.internal.filters;
 
 import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.onexus.collection.api.query.IsNull;
-import org.onexus.collection.api.query.Query;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 
 import static org.elasticsearch.index.query.FilterBuilders.missingFilter;
 
@@ -32,9 +31,9 @@ public class IsNullFilterAdapter extends AbstractFilterAdapter<IsNull> {
     }
 
     @Override
-    protected FilterBuilder innerBuild(Query query, IsNull filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, IsNull filter) {
         return missingFilter(
-                fieldName(query, filter.getCollectionAlias(), filter.getFieldId())
+                query.fieldPath(filter.getCollectionAlias(), filter.getFieldId())
         );
     }
 }

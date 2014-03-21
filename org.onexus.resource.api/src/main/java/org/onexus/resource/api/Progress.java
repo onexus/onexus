@@ -35,6 +35,9 @@ public class Progress implements Serializable {
     private List<LogMsg> logs = new LinkedList<LogMsg>();
     private LinkedList<Progress> subProgresses = new LinkedList<Progress>();
 
+    public Progress() {
+    }
+
     public Progress(String id, String title) {
         this.id = id;
         this.title = title;

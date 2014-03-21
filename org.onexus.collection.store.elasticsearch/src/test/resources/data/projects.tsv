@@ -1,0 +1,311 @@
+PROJECT_ID	PROJECT_NAME	AUTHORS	SOURCE	COUNTRY	PUBMED_ID	TOPOGRAPHY	SITE_ID	TYPE
+1	aCGH / Rousseau A 	Rousseau A et al	Progenetix	-	19865800	brain [C71]	5	genomic
+2	CGH / Tremmel SC 	Tremmel SC et al	Progenetix	-	12850380	pharynx, nos [C14]	143	genomic
+3	CGH / Szymanska J 	Szymanska J et al	Progenetix	-	9790501	connective, subcutaneous and other soft tissues [C49]	20	genomic
+4	Affymetrix / Dodd LE 	Dodd LE et al	GEO	-	17119049	nasopharynx [C11]	25	RNA
+5	Affymetrix / Paoloni M 	Paoloni M et al	GEO	-	20028558	bones, joints and articular cartilage of other and unspecified sites [C41]	146	RNA
+6	Affymetrix / Bommer GT 	Bommer GT et al	GEO	-	19843521	ovary [C56]	31	RNA
+7	Agilent-012391 / Biewenga P 	Biewenga P et al	GEO	-	18191186	cervix uteri [C53]	132	RNA
+8	CGH / Hwang ES 	Hwang ES et al	Progenetix	-	15197797	breast [C50]	78	genomic
+9	Agilent-012097 / Weigelt B 	Weigelt B et al	GEO	-	16230372	breast [C50]	78	RNA
+10	CGH / Schick B 	Schick B et al	Progenetix	-	17120309	nasal cavity and middle ear [C30]	91	genomic
+11	CGH / Homayounfar K 	Homayounfar K et al	Progenetix	-	19200581	liver and hepatic bile ducts [C22]	2	genomic
+12	CGH / Tarkkanen M 	Tarkkanen M et al	Progenetix	-	10398425	connective, subcutaneous and other soft tissues [C49]	20	genomic
+13	CGH / Ribeiro FR 	Ribeiro FR et al	Progenetix	-	16818693	prostate gland [C61]	125	genomic
+14	Affymetrix / Sabates-Bellver J 	Sabates-Bellver J et al	GEO	-	18171984	colon [C18]	9	RNA
+15	CGH / Salaverria I 	Salaverria I et al	Progenetix	-	18698080	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+16	CGH / Plantaz D 	Plantaz D et al	Progenetix	-	9006325	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+17	Affymetrix / Kort EJ 	Kort EJ et al	GEO	-	18519660	kidney [C64]	75	RNA
+18	Affymetrix / Ooi CH 	Ooi CH et al	GEO	-	19798449	stomach [C16]	127	RNA
+19	Affymetrix / Yu YP 	Yu YP et al	GEO	-	15254046	prostate gland [C61]	125	RNA
+20	Agilent / Delys L 	Delys L et al	GEO	-	17621275	thyroid and other endocrine glands [C73]	18	RNA
+21	Center / Kim SY 	Kim SY et al	GEO	-	17978572	stomach [C16]	127	RNA
+22	Affymetrix / Yoon SS 	Yoon SS et al	GEO	-	16603191	connective, subcutaneous and other soft tissues [C49]	20	RNA
+23	CGH / Harada T 	Harada T et al	Progenetix	-	11830540	pancreas [C25]	135	genomic
+24	CGH / De Bortoli M 	De Bortoli M et al	Progenetix	-	16968546	brain [C71]	5	genomic
+25	CGH / Tai AL 	Tai AL et al	Progenetix	-	15112273	lung and bronchus [C34]	65	genomic
+26	Human / Ki DH 	Ki DH et al	GEO	-	17640062	colon [C18]	9	RNA
+27	aCGH / Lenz G 	Lenz G et al	Progenetix	-	18765795	lymph nodes [C77]	51	genomic
+28	aCGH / The Cancer Genome At	The Cancer Genome Atlas Research Network	Progenetix	-	18772890	brain [C71]	5	genomic
+29	aCGH / Pfister S 	Pfister S et al	Progenetix	-	18398503	brain [C71]	5	genomic
+30	Affymetrix / Landi MT 	Landi MT et al	GEO	-	18297132	lung and bronchus [C34]	65	RNA
+31	Affymetrix / Stirewalt DL 	Stirewalt DL et al	GEO	-	17910043	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+32	CGH / D'Haese JG 	D'Haese JG et al	Progenetix	-	16213357	lymph nodes [C77]	51	genomic
+33	CGH / Jarosov� M 	Jarosov� M et al	Progenetix	-	11441283	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+34	Affymetrix / Richardson AL 	Richardson AL et al	GEO	-	16473279	breast [C50]	78	RNA
+35	aCGH / Schwaenen C 	Schwaenen C et al	Progenetix	-	18828156	lymph nodes [C77]	51	genomic
+36	KRIBB_Human_14K / Kim BY 	Kim BY et al	GEO	-	15607117	liver and hepatic bile ducts [C22]	2	RNA
+37	aCGH / Fattet S 	Fattet S et al	Progenetix	-	19197950	brain [C71]	5	genomic
+38	CGH / Riegman PH 	Riegman PH et al	Progenetix	-	11306503	esophagus [C15]	60	genomic
+39	NCI / Balleine RL 	Balleine RL et al	GEO	-	19088042	breast [C50]	78	RNA
+40	CGH / Stokke T 	Stokke T et al	Progenetix	-	11747333	lymph nodes [C77]	51	genomic
+41	Human / Balagurunathan Y 	Balagurunathan Y et al	GEO	-	18765825	pancreas [C25]	135	RNA
+42	CGH / Garc�a JL 	Garc�a JL et al	Progenetix	-	14513052	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+43	Affymetrix / Jhavar S 	Jhavar S et al	GEO	-	19040532	prostate gland [C61]	125	RNA
+44	CGH / Scholz I 	Scholz I et al	Progenetix	-	11172898	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+45	Hitachisoft / Yasumitsu Moriya	Yasumitsu Moriya	GEO	-	NULL	lung and bronchus [C34]	65	RNA
+46	Affymetrix / Wallace TA 	Wallace TA et al	GEO	-	18245496	prostate gland [C61]	125	RNA
+47	aCGH / Rinaldi A 	Rinaldi A et al	Progenetix	-	16803564	lymph nodes [C77]	51	genomic
+48	SHBD / Leung SY 	Leung SY et al	GEO	-	15300578	stomach [C16]	127	RNA
+49	aCGH / Wozniak A 	Wozniak A et al	Progenetix	-	17171690	stomach [C16]	127	genomic
+50	Affymetrix / Pellagatti A 	Pellagatti A et al	GEO	-	16527891	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+51	CGH / Svarvar C 	Svarvar C et al	Progenetix	-	16648866	connective, subcutaneous and other soft tissues [C49]	20	genomic
+52	CGH / Be� S 	Be� S et al	Progenetix	-	15337798	lymph nodes [C77]	51	genomic
+53	Homo / Renato David Puga	Renato David Puga	GEO	-	NULL	thyroid and other endocrine glands [C73]	18	RNA
+54	aCGH / Cardoso J 	Cardoso J et al	Progenetix	-	16510566	colon [C18]	9	genomic
+55	aCGH / Korshunov A 	Korshunov A et al	Progenetix	-	20479417	brain [C71]	5	genomic
+56	aCGH / Steinemann D 	Steinemann D et al	Progenetix	-	18311775	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+57	CGH / Qin SL 	Qin SL et al	Progenetix	-	16125302	bladder [C67]	115	genomic
+58	CGH / Bea S 	Bea S et al	Progenetix	-	16046532	lymph nodes [C77]	51	genomic
+59	Novachip / Baty F 	Baty F et al	GEO	-	19833826	lung and bronchus [C34]	65	RNA
+60	Affymetrix / Mills KI 	Mills KI et al	GEO	-	19443663	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+61	UHN / Bianchini M 	Bianchini M et al	GEO	-	16773188	colon [C18]	9	RNA
+62	Affymetrix / Pedraza V 	Pedraza V et al	GEO	-	20029976	breast [C50]	78	RNA
+63	CGH / Larramendy ML 	Larramendy ML et al	Progenetix	-	10534175	bones, joints and articular cartilage of limbs [C40]	103	genomic
+64	Center / Kim JC 	Kim JC et al	GEO	-	19034969	colon [C18]	9	RNA
+65	CGH / Weber-Mangal S 	Weber-Mangal S et al	Progenetix	-	14520696	breast [C50]	78	genomic
+66	Affymetrix / Murat A 	Murat A et al	GEO	-	18565887	brain [C71]	5	RNA
+67	aCGH / Vincent-Salomon A 	Vincent-Salomon A et al	Progenetix	-	17417968	breast [C50]	78	genomic
+68	Hitachisoft / Shimizu S 	Shimizu S et al	GEO	-	18661521	other and unspecified parts of mouth [C06]	79	RNA
+69	CGH / G�m�s-Akay G 	G�m�s-Akay G et al	Progenetix	-	20082868	stomach [C16]	127	genomic
+70	aCGH / Michels E 	Michels E et al	Progenetix	-	17823929	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+71	CGH / Tsukasaki K 	Tsukasaki K et al	Progenetix	-	11389029	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+72	Affymetrix / Beroukhim R 	Beroukhim R et al	GEO	-	19470766	kidney [C64]	75	RNA
+73	Affymetrix / Wurmbach E 	Wurmbach E et al	GEO	-	17393520	liver and hepatic bile ducts [C22]	2	RNA
+74	CGH / Du Plessis L 	Du Plessis L et al	Progenetix	-	10213495	esophagus [C15]	60	genomic
+75	Affymetrix / Galamb O 	Galamb O et al	GEO	-	20087348	colon [C18]	9	RNA
+76	aCGH / Fridlyand J 	Fridlyand J et al	Progenetix	-	16620391	breast [C50]	78	genomic
+77	SHCQ / Lapointe J 	Lapointe J et al	GEO	-	14711987	prostate gland [C61]	125	RNA
+78	Affymetrix / Spira A 	Spira A et al	GEO	-	17334370	lung and bronchus [C34]	65	RNA
+79	aCGH / Beroukhim R 	Beroukhim R et al	Progenetix	-	20164920	brain [C71]	5	genomic
+80	aCGH / Stransky N 	Stransky N et al	Progenetix	-	17099711	bladder [C67]	115	genomic
+81	Agilent-012097 / Kunderfranco P 	Kunderfranco P et al	GEO	-	20479932	prostate gland [C61]	125	RNA
+82	CGH / van Beers EH 	van Beers EH et al	Progenetix	-	15705879	breast [C50]	78	genomic
+83	CGH / Thelander EF 	Thelander EF et al	Progenetix	-	15257315	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+84	CGH / Zettl A 	Zettl A et al	Progenetix	-	12414511	unspecified digest. organs [C26]	32	genomic
+85	aCGH / Northcott PA 	Northcott PA et al	Progenetix	-	19270706	brain [C71]	5	genomic
+86	LC-8 / Brune V 	Brune V et al	GEO	-	18794340	lymph nodes [C77]	51	RNA
+87	Affymetrix / Piccaluga PP 	Piccaluga PP et al	GEO	-	17304354	lymph nodes [C77]	51	RNA
+88	CGH / Marchio A 	Marchio A et al	Progenetix	-	8993981	liver and hepatic bile ducts [C22]	2	genomic
+89	LC-4b / Alizadeh AA 	Alizadeh AA et al	GEO	-	10676951	lymph nodes [C77]	51	RNA
+90	CGH / Partheen K 	Partheen K et al	Progenetix	-	15188458	ovary [C56]	31	genomic
+91	CGH / Kowalczyk JR 	Kowalczyk JR et al	Progenetix	-	20620600	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+92	Affymetrix / Scotto L 	Scotto L et al	GEO	-	18506748	cervix uteri [C53]	132	RNA
+93	CGH / Levan K 	Levan K et al	Progenetix	-	16974079	corpus uteri [C54]	100	genomic
+94	CGH / Chen D 	Chen D et al	Progenetix	-	11520568	eye and adnexa [C69]	59	genomic
+95	CGH / Jiang F 	Jiang F et al	Progenetix	-	11103820	kidney [C64]	75	genomic
+96	CGH / Yakut T 	Yakut T et al	Progenetix	-	17390041	brain [C71]	5	genomic
+97	CGH / Jin S 	Jin S et al	Progenetix	-	20591577	brain [C71]	5	genomic
+98	PC / Merritt MA 	Merritt MA et al	GEO	-	19849863	ovary [C56]	31	RNA
+99	Affymetrix / The Cancer Genome At	The Cancer Genome Atlas Research Network	TCGA	-	NULL	brain [C71]	5	RNA
+100	aCGH / Li M 	Li M et al	Progenetix	-	19962671	brain [C71]	5	genomic
+101	Affymetrix / Rohrbeck A 	Rohrbeck A et al	GEO	-	18992152	lung and bronchus [C34]	65	RNA
+102	Affymetrix / Jones J 	Jones J et al	GEO	-	16115910	kidney [C64]	75	RNA
+103	Affymetrix / Zhai Y 	Zhai Y et al	GEO	-	17974957	cervix uteri [C53]	132	RNA
+104	SHBW / Lapointe J 	Lapointe J et al	GEO	-	14711987	prostate gland [C61]	125	RNA
+105	Affymetrix / Zahra Bahrani Mostaf	Zahra Bahrani Mostafavi	GEO	-	NULL	ovary [C56]	31	RNA
+106	Affymetrix / Barretina J 	Barretina J et al	GEO	-	20601955	connective, subcutaneous and other soft tissues [C49]	20	RNA
+107	CGH / Bastian BC 	Bastian BC et al	Progenetix	-	14578177	skin [C44]	123	genomic
+108	CGH / Zudaire I 	Zudaire I et al	Progenetix	-	12047766	breast [C50]	78	genomic
+109	Affymetrix / Li Z 	Li Z et al	GEO	-	19755675	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+110	CGH / Wong N 	Wong N et al	Progenetix	-	11051249	liver and hepatic bile ducts [C22]	2	genomic
+111	CGH / Arslantas A 	Arslantas A et al	Progenetix	-	17387387	brain [C71]	5	genomic
+112	CGH / Ozaki T 	Ozaki T et al	Progenetix	-	12402305	bones, joints and articular cartilage of limbs [C40]	103	genomic
+113	aCGH / Lo KC 	Lo KC et al	Progenetix	-	17620294	brain [C71]	5	genomic
+114	Illumina / Kim WJ 	Kim WJ et al	GEO	-	20059769	bladder [C67]	115	RNA
+115	UGI / xuping fu	xuping fu	GEO	-	NULL	liver and hepatic bile ducts [C22]	2	RNA
+116	aCGH / R�cker FG 	R�cker FG et al	Progenetix	-	16864856	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+117	aCGH / Strefford JC 	Strefford JC et al	Progenetix	-	17237825	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+118	CGH / McArdle L 	McArdle L et al	Progenetix	-	15090470	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+119	CGH / Hauptmann S 	Hauptmann S et al	Progenetix	-	12152163	ovary [C56]	31	genomic
+120	CNIO / Angulo B 	Angulo B et al	GEO	-	17992665	lung and bronchus [C34]	65	RNA
+121	aCGH / Ferreira BI 	Ferreira BI et al	Progenetix	-	18367492	lymph nodes [C77]	51	genomic
+122	CGH / McIntyre A 	McIntyre A et al	Progenetix	-	18059402	testis [C62]	61	genomic
+123	Affymetrix / Pau Ni IB 	Pau Ni IB et al	GEO	-	20097481	breast [C50]	78	RNA
+124	CGH / Vandesompele J 	Vandesompele J et al	Progenetix	-	11464905	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+125	CGH / Allen JE 	Allen JE et al	Progenetix	-	11841429	lymph nodes [C77]	51	genomic
+126	aCGH / Flordal Thelander E 	Flordal Thelander E et al	Progenetix	-	17161458	lymph nodes [C77]	51	genomic
+127	aCGH / Patil MA 	Patil MA et al	Progenetix	-	16000397	liver and hepatic bile ducts [C22]	2	genomic
+128	CGH / Gronwald J 	Gronwald J et al	Progenetix	-	15540206	breast [C50]	78	genomic
+129	aCGH / Schwaenen C 	Schwaenen C et al	Progenetix	-	14730057	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+130	CGH / Yakut T 	Yakut T et al	Progenetix	-	17011066	lung and bronchus [C34]	65	genomic
+131	Affymetrix / Agnelli L 	Agnelli L et al	GEO	-	19396863	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+132	aCGH / Nobusawa S 	Nobusawa S et al	Progenetix	-	20406234	brain [C71]	5	genomic
+133	CGH / Karlsson E 	Karlsson E et al	Progenetix	-	17213022	breast [C50]	78	genomic
+134	Affymetrix / Sun L 	Sun L et al	GEO	-	16616334	brain [C71]	5	RNA
+135	Affymetrix / Tirode F 	Tirode F et al	GEO	-	17482132	bones, joints and articular cartilage of other and unspecified sites [C41]	146	RNA
+136	CGH / Russo C 	Russo C et al	Progenetix	-	10421270	brain [C71]	5	genomic
+137	Affymetrix / Mas VR 	Mas VR et al	GEO	-	19098997	liver and hepatic bile ducts [C22]	2	RNA
+138	CGH / Schlomm T 	Schlomm T et al	Progenetix	-	15958621	kidney [C64]	75	genomic
+139	CGH / Andersen CL 	Andersen CL et al	Progenetix	-	15128417	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+140	aCGH / Hwang KT 	Hwang KT et al	Progenetix	-	18649361	breast [C50]	78	genomic
+141	CHUGAI / Yuichi Ishikawa	Yuichi Ishikawa	GEO	-	NULL	lung and bronchus [C34]	65	RNA
+142	CGH / Mart�nez-Ram�rez A 	Mart�nez-Ram�rez A et al	Progenetix	-	15611930	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+143	CGH / Trautmann K 	Trautmann K et al	Progenetix	-	11275984	other endocrine glands and related structures [C75]	35	genomic
+144	Affymetrix / Kuriakose MA 	Kuriakose MA et al	GEO	-	15170515	other and unspecified parts of mouth [C06]	79	RNA
+145	Affymetrix / Hou J 	Hou J et al	GEO	-	20421987	lung and bronchus [C34]	65	RNA
+146	Affymetrix / Stransky N 	Stransky N et al	AE	-	17099711	bladder [C67]	115	RNA
+147	CGH / Weber RG 	Weber RG et al	Progenetix	-	9405679	meninges [C70]	97	genomic
+148	CGH / Chibon F 	Chibon F et al	Progenetix	-	12547153	connective, subcutaneous and other soft tissues [C49]	20	genomic
+149	Affymetrix / Talantov D 	Talantov D et al	GEO	-	16243793	skin [C44]	123	RNA
+150	aCGH / Buckley PG 	Buckley PG et al	Progenetix	-	20406844	peripheral nerves and autonomic nervous system [C47]	71	genomic
+151	NCI/ATC / Lee JS 	Lee JS et al	GEO	-	16532004	liver and hepatic bile ducts [C22]	2	RNA
+152	aCGH / Scaruffi P 	Scaruffi P et al	Progenetix	-	20003513	peripheral nerves and autonomic nervous system [C47]	71	genomic
+153	CGH / Alers JC 	Alers JC et al	Progenetix	-	11159178	prostate gland [C61]	125	genomic
+154	CGH / Weber RG 	Weber RG et al	Progenetix	-	8806688	brain [C71]	5	genomic
+155	Affymetrix / Korkola JE 	Korkola JE et al	GEO	-	16424014	testis [C62]	61	RNA
+156	CGH / Junker K 	Junker K et al	Progenetix	-	12792766	kidney [C64]	75	genomic
+157	CGH / Israeli O 	Israeli O et al	Progenetix	-	13678737	ovary [C56]	31	genomic
+158	CGH / Leich E 	Leich E et al	Progenetix	-	19471018	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+159	CGH / Jung V 	Jung V et al	Progenetix	-	10499441	brain [C71]	5	genomic
+160	CGH / Dahlback HS 	Dahlback HS et al	Progenetix	-	19603525	brain [C71]	5	genomic
+161	SVC / S�rlie T 	S�rlie T et al	GEO	-	11553815	breast [C50]	78	RNA
+162	CGH / Nicholson JC 	Nicholson JC et al	Progenetix	-	10424732	brain [C71]	5	genomic
+163	CGH / zur Hausen A 	zur Hausen A et al	Progenetix	-	11522745	stomach [C16]	127	genomic
+164	CGH / Kirchhoff M 	Kirchhoff M et al	Progenetix	-	9885981	cervix uteri [C53]	132	genomic
+165	Affymetrix / Pyeon D 	Pyeon D et al	GEO	-	17510386	cervix uteri [C53]	132	RNA
+166	aCGH / Scotto L 	Scotto L et al	Progenetix	-	18506748	cervix uteri [C53]	132	genomic
+167	CGH / Weber RG 	Weber RG et al	Progenetix	-	16909113	brain [C71]	5	genomic
+168	CGH / Peng DF 	Peng DF et al	Progenetix	-	14595756	stomach [C16]	127	genomic
+169	CGH / Huhn SL 	Huhn SL et al	Progenetix	-	10389929	brain [C71]	5	genomic
+170	CGH / Alcock HE 	Alcock HE et al	Progenetix	-	12800148	colon [C18]	9	genomic
+171	aCGH / Lo KC 	Lo KC et al	Progenetix	-	18557744	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+172	NCI_UniGEM2_HCC / Ye QH 	Ye QH et al	GEO	-	12640447	liver and hepatic bile ducts [C22]	2	RNA
+173	Affymetrix / Cutcliffe C 	Cutcliffe C et al		-	16299227	kidney [C64]	75	RNA
+174	aCGH / Ronald J deLeeuw	Ronald J deLeeuw	Progenetix	-	NULL	lymph nodes [C77]	51	genomic
+175	Affymetrix / Mok SC 	Mok SC et al	GEO	-	19962670	ovary [C56]	31	RNA
+176	Agilent / Takeuchi T 	Takeuchi T et al	GEO	-	16549822	lung and bronchus [C34]	65	RNA
+177	SVL_SVM_SVN_SVO / S�rlie T 	S�rlie T et al	GEO	-	11553815	breast [C50]	78	RNA
+178	aCGH / Pfister S 	Pfister S et al	Progenetix	-	19255330	brain [C71]	5	genomic
+179	CGH / Zheng PP 	Zheng PP et al	Progenetix	-	11104027	brain [C71]	5	genomic
+180	CGH / Larramendy ML 	Larramendy ML et al	Progenetix	-	9830797	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+181	CGH / Vranova V 	Vranova V et al	Progenetix	-	18190236	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+182	Affymetrix / Galamb O 	Galamb O et al	GEO	-	18843029	colon [C18]	9	RNA
+183	CGH / Kujawski M 	Kujawski M et al	Progenetix	-	10502324	larynx [C32]	104	genomic
+184	CGH / Pan E 	Pan E et al	Progenetix	-	16000568	brain [C71]	5	genomic
+185	Agilent / Weigelt B 	Weigelt B et al	GEO	-	16230372	breast [C50]	78	RNA
+186	CGH / Noguera Salv� R 	Noguera Salv� R et al	Progenetix	-	16756886	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+187	CGH / Reardon DA 	Reardon DA et al	Progenetix	-	9307291	brain [C71]	5	genomic
+188	aCGH / Grubor V 	Grubor V et al	Progenetix	-	18922857	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+189	aCGH / Beroukhim R 	Beroukhim R et al	Progenetix	-	19470766	kidney [C64]	75	genomic
+190	CGH / Zhang X 	Zhang X et al	Progenetix	-	15504248	lymph nodes [C77]	51	genomic
+191	Agilent-012391 / Mirjam Boelens	Mirjam Boelens	GEO	-	NULL	lung and bronchus [C34]	65	RNA
+192	Affymetrix / Yagi T 	Yagi T et al	GEO	-	12738660	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+193	CGH / Poeaim S 	Poeaim S et al	Progenetix	-	15993271	colon [C18]	9	genomic
+194	aCGH / Yau C 	Yau C et al	Progenetix	-	17850661	breast [C50]	78	genomic
+195	CGH / Be� S 	Be� S et al	Progenetix	-	12213724	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+196	CGH / Parente F 	Parente F et al	Progenetix	-	10598139	connective, subcutaneous and other soft tissues [C49]	20	genomic
+197	Affymetrix / Giordano TJ 	Giordano TJ et al	GEO	-	19147773	adrenal glands [C74]	122	RNA
+198	Affymetrix / Wong KK 	Wong KK et al	GEO	-	15665281	brain [C71]	5	RNA
+199	aCGH / Han W 	Han W et al	Progenetix	-	18314908	breast [C50]	78	genomic
+200	Affymetrix / Kaiser S 	Kaiser S et al	GEO	-	17615082	colon [C18]	9	RNA
+201	GeneChip / Furge KA 	Furge KA et al	GEO	-	17409424	kidney [C64]	75	RNA
+202	CGH / Zhao J 	Zhao J et al	Progenetix	-	11746977	pancreas [C25]	135	genomic
+203	CGH / Harada T 	Harada T et al	Progenetix	-	12065873	pancreas [C25]	135	genomic
+204	CGH / Larramendy ML 	Larramendy ML et al	Progenetix	-	9327749	connective, subcutaneous and other soft tissues [C49]	20	genomic
+205	aCGH / Kumps C 	Kumps C et al	Progenetix	-	20459859	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+206	Affymetrix / The Cancer Genome At	The Cancer Genome Atlas Research Network	TCGA	-	NULL	ovary [C56]	31	RNA
+207	aCGH / Kitange G 	Kitange G et al	Progenetix	-	15472895	brain [C71]	5	genomic
+208	CGH / Gunawan B 	Gunawan B et al	Progenetix	-	17226762	stomach [C16]	127	genomic
+209	CGH / Plantaz D 	Plantaz D et al	Progenetix	-	11267980	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+210	CGH / Rickert CH 	Rickert CH et al	Progenetix	-	11891207	brain [C71]	5	genomic
+211	CGH / Berglund M 	Berglund M et al	Progenetix	-	12181265	lymph nodes [C77]	51	genomic
+212	CGH / Zettl A 	Zettl A et al	Progenetix	-	15111330	lymph nodes [C77]	51	genomic
+213	aCGH / Shao L 	Shao L et al	Progenetix	-	20724749	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+214	Affymetrix / Sircoulomb F 	Sircoulomb F et al	GEO	-	20932292	breast [C50]	78	RNA
+215	NKI/CMF / Booman M 	Booman M et al	GEO	-	16675561	testis [C62]	61	RNA
+216	CGH / Diep CB 	Diep CB et al	Progenetix	-	14977426	colon [C18]	9	genomic
+217	CGH / Rienstein S 	Rienstein S et al	Progenetix	-	11750053	meninges [C70]	97	genomic
+218	CGH / Pathare S 	Pathare S et al	Progenetix	-	19267402	floor of mouth [C04]	67	genomic
+219	VUMC / Muris JJ 	Muris JJ et al	GEO	-	17062006	lymph nodes [C77]	51	RNA
+220	CGH / Chen YJ 	Chen YJ et al	Progenetix	-	10930378	liver and hepatic bile ducts [C22]	2	genomic
+221	SWEGENE / Lindgren D 	Lindgren D et al	GEO	-	20406976	bladder [C67]	115	RNA
+222	Affymetrix / Hippo Y 	Hippo Y et al	GEO	-	11782383	stomach [C16]	127	RNA
+223	aCGH / Thorns C 	Thorns C et al	Progenetix	-	17044049	lymph nodes [C77]	51	genomic
+224	SHBG / Leung SY 	Leung SY et al	GEO	-	15300578	stomach [C16]	127	RNA
+225	aCGH / Starczynowski DT 	Starczynowski DT et al	Progenetix	-	18663149	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+226	aCGH / Wessendorf S 	Wessendorf S et al	Progenetix	-	17728785	heart, mediastinum and pleura [C38]	147	genomic
+227	CGH / Fung LF 	Fung LF et al	Progenetix	-	11165323	breast [C50]	78	genomic
+228	CGH / Koga T 	Koga T et al	Progenetix	-	12081210	peripheral nerves and autonomic nervous system [C47]	71	genomic
+229	CGH / Kusano N 	Kusano N et al	Progenetix	-	10347130	liver and hepatic bile ducts [C22]	2	genomic
+230	Affymetrix / Yu K 	Yu K et al	GEO	-	18636107	thyroid and other endocrine glands [C73]	18	RNA
+231	aCGH / Blaveri E 	Blaveri E et al	Progenetix	-	16203795	bladder [C67]	115	genomic
+232	NCI/ATC / Lee JS 	Lee JS et al	GEO	-	16532004	liver and hepatic bile ducts [C22]	2	RNA
+233	Agilent-012097 / Yoshihara K 	Yoshihara K et al	GEO	-	19486012	ovary [C56]	31	RNA
+234	Affymetrix / Soon PS 	Soon PS et al	GEO	-	19218281	adrenal glands [C74]	122	RNA
+235	SHFK / Bredel M 	Bredel M et al	GEO	-	16204036	brain [C71]	5	RNA
+236	Agilent-012097 / Hsin-Chieh Yao	Hsin-Chieh Yao	GEO	-	NULL	breast [C50]	78	RNA
+237	CGH / Hemmer S 	Hemmer S et al	Progenetix	-	10329606	thyroid and other endocrine glands [C73]	18	genomic
+238	Affymetrix / Su LJ 	Su LJ et al	GEO	-	17540040	lung and bronchus [C34]	65	RNA
+239	aCGH / Stallings RL 	Stallings RL et al	Progenetix	-	16585193	spinal cord, cranial nerves and other parts of central nervous system [C72]	155	genomic
+240	aCGH / Salgado R 	Salgado R et al	Progenetix	-	19759554	skin [C44]	123	genomic
+241	Affymetrix / Gashaw I 	Gashaw I et al	GEO	-	16158187	testis [C62]	61	RNA
+242	CGH / Be� S 	Be� S et al	Progenetix	-	10361135	lymph nodes [C77]	51	genomic
+243	CGH / Schmidt H 	Schmidt H et al	Progenetix	-	11921284	connective, subcutaneous and other soft tissues [C49]	20	genomic
+244	CGH / Martinez-Climent JA 	Martinez-Climent JA et al	Progenetix	-	11719392	lymph nodes [C77]	51	genomic
+245	CGH / Qin YR 	Qin YR et al	Progenetix	-	18350619	esophagus [C15]	60	genomic
+246	aCGH / Snijders AM 	Snijders AM et al	Progenetix	-	15824737	other and unspecified parts of mouth [C06]	79	genomic
+247	Affymetrix / Taylor BS 	Taylor BS et al	GEO	-	20579941	prostate gland [C61]	125	RNA
+248	CGH / Reutzel D 	Reutzel D et al	Progenetix	-	11528115	kidney [C64]	75	genomic
+249	CGH / Joos S 	Joos S et al	Progenetix	-	11830490	lymph nodes [C77]	51	genomic
+250	aCGH / Chanudet E 	Chanudet E et al	Progenetix	-	19006194	eye and adnexa [C69]	59	genomic
+251	CGH / Kristensen TD 	Kristensen TD et al	Progenetix	-	12756018	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+252	CGH / Matteucci C 	Matteucci C et al	Progenetix	-	20067559	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+253	CGH / Karnan S 	Karnan S et al	Progenetix	-	14603444	lymph nodes [C77]	51	genomic
+254	Affymetrix / Ishikawa M 	Ishikawa M et al	GEO	-	16053509	pancreas [C25]	135	RNA
+255	CGH / Jarosov� M 	Jarosov� M et al	Progenetix	-	11156736	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+256	Affymetrix / Guti�rrez NC 	Guti�rrez NC et al	GEO	-	17252022	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+257	CGH / Schmidt H 	Schmidt H et al	Progenetix	-	10379866	peripheral nerves and autonomic nervous system [C47]	71	genomic
+258	CGH / Salaverria I 	Salaverria I et al	Progenetix	-	17296973	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+259	Affymetrix / Dyrskj�t L 	Dyrskj�t L et al	GEO	-	15173019	bladder [C67]	115	RNA
+260	Affymetrix / Wang K 	Wang K et al	GEO	-	21124317	peripheral nerves and autonomic nervous system [C47]	71	RNA
+261	CGH / Wu CW 	Wu CW et al	Progenetix	-	12353264	stomach [C16]	127	genomic
+262	aCGH / McCabe MG 	McCabe MG et al	Progenetix	-	16783165	brain [C71]	5	genomic
+263	TAGC_H.Sapiens_9K_20041223 / Fontaine JF 	Fontaine JF et al	GEO	-	17968324	thyroid and other endocrine glands [C73]	18	RNA
+264	CGH / Casas S 	Casas S et al	Progenetix	-	15325089	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+265	CGH / Lui WO 	Lui WO et al	Progenetix	-	11850829	adrenal glands [C74]	122	genomic
+266	aCGH / Horlings HM 	Horlings HM et al	Progenetix	-	20068109	breast [C50]	78	genomic
+267	Agilent-014850 / Tsuchiya M 	Tsuchiya M et al	GEO	-	20380719	liver and hepatic bile ducts [C22]	2	RNA
+268	NCI/ATC / Cairo S 	Cairo S et al	GEO	-	19061838	liver and hepatic bile ducts [C22]	2	RNA
+269	CGH / el-Rifai W 	el-Rifai W et al	Progenetix	-	8764113	connective, subcutaneous and other soft tissues [C49]	20	genomic
+270	CGH / Bauer VL 	Bauer VL et al	Progenetix	-	18810378	oropharynx [C10]	114	genomic
+271	Affymetrix / Brune V 	Brune V et al	GEO	-	18794340	lymph nodes [C77]	51	RNA
+272	UGI / Mei Jiang	Mei Jiang	GEO	-	NULL	prostate gland [C61]	125	RNA
+273	aCGH / Luan SL 	Luan SL et al	Progenetix	-	20690162	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+274	aCGH / Fitzgibbon J 	Fitzgibbon J et al	Progenetix	-	17495976	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+275	Agilent / Chung CH 	Chung CH et al	GEO	-	15144956	other and unspecified parts of mouth [C06]	79	RNA
+276	CGH / Berglund M 	Berglund M et al	Progenetix	-	17170743	lymph nodes [C77]	51	genomic
+277	aCGH / Kuiper RP 	Kuiper RP et al	Progenetix	-	17443227	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+278	Protein / Radvanyi L 	Radvanyi L et al	GEO	-	16043716	breast [C50]	78	RNA
+279	CGH / Mao X 	Mao X et al	Progenetix	-	12207585	skin [C44]	123	genomic
+280	Affymetrix / Skrzypczak M 	Skrzypczak M et al	GEO	-	20957034	colon [C18]	9	RNA
+281	Affymetrix / Stearman RS 	Stearman RS et al	GEO	-	16314486	lung and bronchus [C34]	65	RNA
+282	aCGH / Beroukhim R 	Beroukhim R et al	Progenetix	-	18077431	brain [C71]	5	genomic
+283	Illumina / Jiang X 	Jiang X et al	GEO	-	18538736	colon [C18]	9	RNA
+284	Affymetrix / Boyault S 	Boyault S et al	AE	-	17187432	liver and hepatic bile ducts [C22]	2	RNA
+285	Homo / Castro NP 	Castro NP et al	GEO	-	18928525	breast [C50]	78	RNA
+286	CGH / Trost D 	Trost D et al	Progenetix	-	17285580	brain [C71]	5	genomic
+287	aCGH / Lo KC 	Lo KC et al	Progenetix	-	18056178	brain [C71]	5	genomic
+288	CGH / Carter M 	Carter M et al	Progenetix	-	11953826	brain [C71]	5	genomic
+289	CGH / Rao PH 	Rao PH et al	Progenetix	-	15018632	cervix uteri [C53]	132	genomic
+290	Human / Pellagatti A 	Pellagatti A et al	GEO	-	15147372	hematopoietic and reticuloendothelial systems [C42]	6	RNA
+291	Affymetrix / Pei H 	Pei H et al	GEO	-	19732725	pancreas [C25]	135	RNA
+292	CGH / Clausen OP 	Clausen OP et al	Progenetix	-	16728973	skin [C44]	123	genomic
+293	CGH / Krismann M 	Krismann M et al	Progenetix	-	12115883	heart, mediastinum and pleura [C38]	147	genomic
+294	aCGH / Chin SF 	Chin SF et al	Progenetix	-	17925008	breast [C50]	78	genomic
+295	Affymetrix / Yusenko MV 	Yusenko MV et al	GEO	-	19445733	kidney [C64]	75	RNA
+296	Affymetrix / Badea L 	Badea L et al	GEO	-	19260470	pancreas [C25]	135	RNA
+297	CGH / Monni O 	Monni O et al	Progenetix	-	9559341	lymph nodes [C77]	51	genomic
+298	CGH / Jeuken JW 	Jeuken JW et al	Progenetix	-	11329145	brain [C71]	5	genomic
+299	aCGH / Oudejans JJ 	Oudejans JJ et al	Progenetix	-	19051311	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+300	Affymetrix / Riker AI 	Riker AI et al	GEO	-	18442402	skin [C44]	123	RNA
+301	CGH / Junker K 	Junker K et al	Progenetix	-	18231634	bladder [C67]	115	genomic
+302	BioStarH-141s / xuping fu	xuping fu	GEO	-	NULL	prostate gland [C61]	125	RNA
+303	CGH / Larramendy ML 	Larramendy ML et al	Progenetix	-	9766511	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+304	DKFZ/Operon / Sticht C 	Sticht C et al	GEO	-	18472963	other and unspecified parts of mouth [C06]	79	RNA
+305	CGH / Eberhart CG 	Eberhart CG et al	Progenetix	-	11770900	brain [C71]	5	genomic
+306	Affymetrix / Cairo S 	Cairo S et al	AE	-	19061838	liver and hepatic bile ducts [C22]	2	RNA
+307	CGH / Salaverria I 	Salaverria I et al	Progenetix	-	18275429	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+308	aCGH / Chin K 	Chin K et al	Progenetix	-	17157792	breast [C50]	78	genomic
+309	aCGH / Remke M 	Remke M et al	Progenetix	-	19406988	hematopoietic and reticuloendothelial systems [C42]	6	genomic
+310	Affymetrix / Casey T 	Casey T et al	GEO	-	18373191	breast [C50]	78	RNA

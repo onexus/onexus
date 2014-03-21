@@ -18,11 +18,9 @@
 package org.onexus.collection.store.elasticsearch.internal.filters;
 
 import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
 import org.onexus.collection.api.query.Filter;
 import org.onexus.collection.api.query.Not;
-import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.IResourceManager;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 
 import static org.elasticsearch.index.query.FilterBuilders.notFilter;
 import static org.onexus.collection.store.elasticsearch.internal.filters.FilterAdapterFactory.filterAdapter;
@@ -35,8 +33,8 @@ public class NotFilterAdapter extends AbstractFilterAdapter<Not> {
     }
 
     @Override
-    protected FilterBuilder innerBuild(IResourceManager resourceManager, Query query, Not filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, Not filter) {
         Filter toNegate = filter.getNegatedFilter();
-        return notFilter(filterAdapter(toNegate).build(resourceManager, query, toNegate));
+        return notFilter(filterAdapter(toNegate).build(query, toNegate));
     }
 }

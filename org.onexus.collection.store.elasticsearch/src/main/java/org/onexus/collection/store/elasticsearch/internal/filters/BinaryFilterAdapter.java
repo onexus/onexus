@@ -20,8 +20,7 @@ package org.onexus.collection.store.elasticsearch.internal.filters;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.onexus.collection.api.query.BinaryFilter;
 import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.IResourceManager;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 
 import static org.onexus.collection.store.elasticsearch.internal.filters.FilterAdapterFactory.filterAdapter;
 
@@ -32,7 +31,7 @@ public abstract class BinaryFilterAdapter<T extends BinaryFilter> extends Abstra
     }
 
     @Override
-    protected FilterBuilder innerBuild(IResourceManager resourceManager, Query query, T filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, T filter) {
 
         Filter leftFilter = filter.getLeft();
         Filter rightFilter = filter.getRight();
@@ -40,8 +39,8 @@ public abstract class BinaryFilterAdapter<T extends BinaryFilter> extends Abstra
         FilterAdapter leftAdapter = filterAdapter(leftFilter);
         FilterAdapter rightAdapter = filterAdapter(rightFilter);
 
-        FilterBuilder leftBuilder = leftAdapter.build(resourceManager, query, leftFilter);
-        FilterBuilder rightBuilder = rightAdapter.build(resourceManager, query, rightFilter);
+        FilterBuilder leftBuilder = leftAdapter.build(query, leftFilter);
+        FilterBuilder rightBuilder = rightAdapter.build(query, rightFilter);
 
         return innerBuild(leftBuilder, rightBuilder, filter);
     }

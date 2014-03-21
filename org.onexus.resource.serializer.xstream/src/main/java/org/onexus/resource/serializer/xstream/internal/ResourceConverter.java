@@ -18,6 +18,7 @@
 package org.onexus.resource.serializer.xstream.internal;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -25,6 +26,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Resource;
+import org.onexus.resource.api.exceptions.UnserializeException;
 
 public class ResourceConverter implements Converter {
 
@@ -60,17 +62,27 @@ public class ResourceConverter implements Converter {
 
         if (reader.hasMoreChildren()) {
 
-            String alias = reader.getNodeName();
-            Class<? extends Resource> type = serializer.getType(alias);
+            Class<? extends Resource> type = context.getRequiredType();
             XStream xstream = serializer.getXStream(type);
+
+            if (xstream == null) {
+                throw new ConversionException("No '" + type + "' XStream serializer found");
+            }
 
             ResourceRef ref = resourceRef.get();
             Class parentType = ref.getType();
             ref.type = type;
-            Object result = xstream.unmarshal(reader);
-            ref.type = parentType;
-
-            return result;
+            try {
+                xstream.alias(reader.getNodeName(), type);
+                Object result = xstream.unmarshal(reader);
+                return result;
+            } catch (ConversionException e) {
+                String path = e.get("path");
+                String line = e.get("line number");
+                throw new UnserializeException(path, line, e);
+            } finally {
+                ref.type = parentType;
+            }
         }
 
         //TODO

@@ -30,7 +30,7 @@ import java.util.List;
 
 public abstract class WidgetStatus<C extends WidgetConfig> implements Serializable {
 
-    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
+    @Pattern(regexp = Resource.PATTERN_ID)
     private String id;
 
     private transient C config;

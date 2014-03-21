@@ -20,13 +20,9 @@ package org.onexus.collection.store.elasticsearch.internal.filters;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.onexus.collection.api.query.Filter;
-import org.onexus.collection.api.query.Query;
-import org.onexus.resource.api.IResourceManager;
-import org.onexus.resource.api.ORI;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils.convertOriToIndexName;
 
 public abstract class AbstractFilterAdapter<T extends Filter> implements FilterAdapter {
 
@@ -48,34 +44,12 @@ public abstract class AbstractFilterAdapter<T extends Filter> implements FilterA
     }
 
     @Override
-    public FilterBuilder build(IResourceManager resourceManager, Query query, Filter filter) {
-        return innerBuild(resourceManager, query, (T) filter);
+    public FilterBuilder build(ElasticSearchQuery query, Filter filter) {
+        return innerBuild(query, (T) filter);
     }
 
-    protected FilterBuilder innerBuild(IResourceManager resourceManager, Query query, T filter) {
-        return innerBuild(query, filter);
-    }
-
-    protected FilterBuilder innerBuild(Query query, T filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, T filter) {
         return FilterBuilders.matchAllFilter();
-    }
-
-    protected boolean isFromCollection(Query query, String collectionAlias) {
-        return query.getFrom().equals(collectionAlias);
-    }
-
-    protected String fieldName(Query query, String collectionAlias, String fieldId) {
-
-        if (isFromCollection(query, collectionAlias)) {
-            return fieldId;
-        }
-
-        return indexName(query, collectionAlias) + "." + fieldId;
-    }
-
-    protected String indexName(Query query, String collectionAlias) {
-        ORI ori = query.getDefine().get(collectionAlias).toAbsolute(query.getOn());
-        return convertOriToIndexName(ori);
     }
 
     protected Object toLowerCase(Object value) {

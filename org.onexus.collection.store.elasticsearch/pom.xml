@@ -46,6 +46,20 @@
             <artifactId>guava-osgi</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.collection.loader.tsv</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.serializer.xstream</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 

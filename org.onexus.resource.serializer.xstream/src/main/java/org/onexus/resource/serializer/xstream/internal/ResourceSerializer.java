@@ -232,11 +232,6 @@ public class ResourceSerializer implements IResourceSerializer {
     }
 
     XStream getXStream(Class<?> resourceType) {
-
-        if (!typeToAlias.containsKey(resourceType)) {
-            throw new UnsupportedOperationException("Resource type '" + resourceType.getCanonicalName() + "' not registered.");
-        }
-
         return xstreamMap.get(typeToAlias.get(resourceType));
     }
 
@@ -261,6 +256,28 @@ public class ResourceSerializer implements IResourceSerializer {
         @SuppressWarnings({"rawtypes", "unchecked"})
         public Class loadClass(String name) throws ClassNotFoundException {
 
+            Class clazz = internalLoadClass(name);
+
+            if (clazz == null) {
+                
+                // At startup some classes are slow to load, wait two seconds and repeat
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                }
+
+                clazz = internalLoadClass(name);
+            }
+
+            if (clazz == null) {
+                throw new ClassNotFoundException();
+            }
+
+            return clazz;
+        }
+
+        private Class internalLoadClass(String name) {
+
             Class type = getType(name);
             if (type != null) {
                 return type;
@@ -274,7 +291,7 @@ public class ResourceSerializer implements IResourceSerializer {
                 }
             }
 
-            throw new ClassNotFoundException();
+            return null;
         }
 
     }

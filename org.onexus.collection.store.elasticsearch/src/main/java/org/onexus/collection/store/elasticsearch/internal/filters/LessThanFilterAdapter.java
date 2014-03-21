@@ -18,8 +18,6 @@
 package org.onexus.collection.store.elasticsearch.internal.filters;
 
 import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.LessThan;
 
 import static org.elasticsearch.index.query.FilterBuilders.rangeFilter;

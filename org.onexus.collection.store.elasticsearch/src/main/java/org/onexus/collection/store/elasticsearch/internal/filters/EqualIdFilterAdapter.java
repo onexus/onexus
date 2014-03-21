@@ -22,15 +22,13 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.query.EqualId;
-import org.onexus.collection.api.query.Query;
+import org.onexus.collection.store.elasticsearch.internal.ElasticSearchQuery;
 import org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils;
-import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 
 import java.util.regex.Pattern;
 
 import static org.elasticsearch.index.query.FilterBuilders.idsFilter;
-import static org.elasticsearch.index.query.FilterBuilders.termFilter;
 import static org.onexus.collection.store.elasticsearch.internal.ElasticSearchUtils.ENTITY_TYPE;
 
 public class EqualIdFilterAdapter extends AbstractFilterAdapter<EqualId> {
@@ -42,25 +40,25 @@ public class EqualIdFilterAdapter extends AbstractFilterAdapter<EqualId> {
     }
 
     @Override
-    protected FilterBuilder innerBuild(IResourceManager resourceManager, Query query, EqualId filter) {
+    protected FilterBuilder innerBuild(ElasticSearchQuery query, EqualId filter) {
 
         String id = String.valueOf(filter.getId());
         String collectionAlias = filter.getCollectionAlias();
 
-        if (isFromCollection(query, collectionAlias)) {
+        if (query.isFromCollection(collectionAlias)) {
             return idsFilter(ENTITY_TYPE).ids(id);
         }
 
-        String indexName = indexName(query, collectionAlias);
-        ORI collectionOri = query.getDefine().get(collectionAlias).toAbsolute(query.getOn());
-        Collection collection = resourceManager.load(Collection.class, collectionOri);
+        String indexPath = query.indexPath(collectionAlias);
+        ORI collectionOri = query.convertAliasToAbsoluteORI(collectionAlias);
+        Collection collection = query.getResourceManager().load(Collection.class, collectionOri);
 
         int i = 0;
         FilterBuilder filterBuilder = null;
         String values[] = SEPARATOR_PATTERN.split(id);
         for (Field field : collection.getFields()) {
             if (Boolean.TRUE.equals(field.isPrimaryKey())) {
-                FilterBuilder fieldFilter = FilterBuilders.termFilter(indexName + "." + field.getId(), toLowerCase(values[i]));
+                FilterBuilder fieldFilter = FilterBuilders.termFilter(indexPath + "." + field.getId(), toLowerCase(values[i]));
                 filterBuilder = (filterBuilder == null ? fieldFilter : FilterBuilders.andFilter(filterBuilder, fieldFilter));
                 i++;
             }

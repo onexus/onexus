@@ -17,9 +17,7 @@
  */
 package org.onexus.collection.store.elasticsearch.internal;
 
-import com.google.common.base.Objects;
 import org.onexus.collection.api.Collection;
-import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 
 import java.util.HashMap;

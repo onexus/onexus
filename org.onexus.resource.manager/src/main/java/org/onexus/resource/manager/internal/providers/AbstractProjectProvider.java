@@ -525,6 +525,10 @@ public abstract class AbstractProjectProvider {
 
     private Resource loadFile(File file) {
 
+        if (resources == null) {
+            return null;
+        }
+
         // Skip project file
         if (ONEXUS_PROJECT_FILE.equals(file.getName())) {
             return null;
