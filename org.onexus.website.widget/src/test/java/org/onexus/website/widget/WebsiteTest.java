@@ -30,7 +30,7 @@ import org.onexus.website.api.WebsiteConfig;
 import org.onexus.website.api.widget.DefaultWidgetManager;
 import org.onexus.website.api.widget.IWidgetManager;
 import org.onexus.website.widget.mocks.MockPaxWicketInjector;
-import org.onexus.website.widget.mocks.MockResourceManager;
+import org.onexus.website.widget.mocks.PackageResourceManager;
 import org.onexus.website.widget.browser.BrowserPageCreator;
 import org.onexus.website.widget.text.TextWidgetCreator;
 import org.ops4j.pax.wicket.api.InjectorHolder;
@@ -49,7 +49,7 @@ public class WebsiteTest {
         resourceSerializer.register(WebsiteConfig.class);
 
         IResourceRegister resourceRegister = new DefaultResourceRegister(resourceSerializer);
-        IResourceManager resourceManager = new MockResourceManager();
+        IResourceManager resourceManager = new PackageResourceManager();
 
         IWidgetManager widgetManager = new DefaultWidgetManager(
                 Arrays.asList(

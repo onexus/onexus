@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.tree.TreeNode;
+import javax.validation.ConstraintViolation;
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.*;
@@ -48,6 +49,7 @@ public abstract class AbstractProjectProvider {
     public static final String ONEXUS_PROJECT_FILE = "onexus-project." + ONEXUS_EXTENSION;
 
     private IResourceSerializer serializer;
+    private IResourceValidator validator;
 
     private PluginLoader pluginLoader;
     private Set<Long> bundleDependencies = new HashSet<Long>();
@@ -301,6 +303,17 @@ public abstract class AbstractProjectProvider {
 
                 resource = serializer.unserialize(Resource.class, ori, input);
 
+                Set<ConstraintViolation<Resource>> constraintViolations = validator.validate(resource);
+
+                if (!constraintViolations.isEmpty()) {
+                    Set<String> errors = new LinkedHashSet<String>(constraintViolations.size());
+                    for (ConstraintViolation<Resource> violation : constraintViolations) {
+                        errors.add("Value at " + violation.getPropertyPath() + " " + violation.getMessage());
+                    }
+                    throw new UnserializeException(errors);
+                }
+
+
                 for (String include : getIncludes(resourceTemplate)) {
                     addIncludeDependency(include, resourceFile);
                 }
@@ -436,6 +449,14 @@ public abstract class AbstractProjectProvider {
 
     public void setSerializer(IResourceSerializer serializer) {
         this.serializer = serializer;
+    }
+
+    public IResourceValidator getValidator() {
+        return validator;
+    }
+
+    public void setValidator(IResourceValidator validator) {
+        this.validator = validator;
     }
 
     protected void onResourceCreate(Resource resource) {

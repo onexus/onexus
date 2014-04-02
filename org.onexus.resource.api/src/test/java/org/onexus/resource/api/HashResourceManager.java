@@ -15,26 +15,25 @@
  *
  *
  */
-package org.onexus.website.widget.mocks;
-
-import org.onexus.resource.api.*;
+package org.onexus.resource.api;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MockResourceManager implements IResourceManager {
+public class HashResourceManager implements IResourceManager {
 
+    private Map<String, Project> projects = new HashMap<String, Project>();
     private Map<ORI, Resource> resources = new HashMap<ORI, Resource>();
 
     @Override
     public List<Project> getProjects() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public Project getProject(String projectUrl) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return projects.get(projectUrl);
     }
 
     @Override
@@ -59,20 +58,24 @@ public class MockResourceManager implements IResourceManager {
 
     @Override
     public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentResourceOri) {
-        if (resources.isEmpty()) {
-
-        }
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
     public void save(Resource resource) {
-        resources.put(resource.getORI(), resource);
+
+        ORI ori = resource.getORI();
+
+        if (resource instanceof Project) {
+            projects.put(ori.getProjectUrl(), (Project) resource);
+        }
+
+        resources.put(ori, resource);
     }
 
     @Override
     public <T> T getLoader(Class<T> serviceClass, Plugin plugin, Loader loader) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override

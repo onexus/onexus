@@ -38,7 +38,7 @@ import org.elasticsearch.node.NodeBuilder;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.types.Text;
+import org.onexus.resource.api.types.Text;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
@@ -224,13 +224,10 @@ public class ElasticSearchUtils {
         return id.toLowerCase().trim().replaceAll("[^a-z0-9]", "_");
     }
 
-    public static final String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
-    public static final String ES_FOLDER = ONEXUS_FOLDER + File.separator + "elasticsearch";
-
-    public static Settings buildNodeSettings() {
+    public static Settings buildNodeSettings(String esHome) {
 
         // Create folder if it's the first run
-        File esFolder = new File(ES_FOLDER);
+        File esFolder = new File(esHome);
         if (!esFolder.exists()) {
             esFolder.mkdirs();
         }
@@ -239,13 +236,13 @@ public class ElasticSearchUtils {
         ImmutableSettings.Builder builder = ImmutableSettings.settingsBuilder()
                 .put("cluster.name", "onexus" )
                 .put("node.name", "node-" + NetworkUtils.getLocalAddress().getHostName())
-                .put("path.home", ES_FOLDER);
+                .put("path.home", esHome);
 
         return builder.build();
     }
 
-    public static Node buildNode() {
-        return NodeBuilder.nodeBuilder().settings(buildNodeSettings()).node();
+    public static Node buildNode(String esHome) {
+        return NodeBuilder.nodeBuilder().settings(buildNodeSettings(esHome)).node();
     }
 
 }

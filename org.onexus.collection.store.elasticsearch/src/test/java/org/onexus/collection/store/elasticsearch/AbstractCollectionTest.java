@@ -3,7 +3,7 @@ package org.onexus.collection.store.elasticsearch;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.IEntitySet;
 import org.onexus.collection.loader.tsv.internal.TsvLoader;
-import org.onexus.collection.store.elasticsearch.mocks.MockDataManager;
+import org.onexus.data.api.PackageDataManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Progress;
@@ -27,7 +27,7 @@ public class AbstractCollectionTest {
 
         // Collection loader
         loader = new TsvLoader();
-        loader.setDataManager(new MockDataManager(projectRoot));
+        loader.setDataManager(new PackageDataManager(projectRoot));
 
     }
 

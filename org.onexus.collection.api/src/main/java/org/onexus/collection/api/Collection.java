@@ -17,6 +17,7 @@
  */
 package org.onexus.collection.api;
 
+import org.onexus.collection.api.validations.ValidCollection;
 import org.onexus.collection.api.query.OrderBy;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@ValidCollection
 @ResourceAlias("collection")
 @ResourceRegister({Link.class, Field.class, OrderBy.class})
 public class Collection extends Resource {

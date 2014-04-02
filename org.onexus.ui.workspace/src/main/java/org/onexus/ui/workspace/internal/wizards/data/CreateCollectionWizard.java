@@ -28,7 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
-import org.onexus.collection.api.types.Text;
+import org.onexus.resource.api.types.Text;
 import org.onexus.collection.api.utils.LinkUtils;
 import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.*;

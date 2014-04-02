@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.collection.store.elasticsearch.mocks;
+package org.onexus.website.widget.mocks;
 
 import org.onexus.resource.api.*;
 
@@ -23,19 +23,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MockResourceManager implements IResourceManager {
+public class PackageResourceManager implements IResourceManager {
 
-    private Map<String, Project> projects = new HashMap<String, Project>();
     private Map<ORI, Resource> resources = new HashMap<ORI, Resource>();
 
     @Override
     public List<Project> getProjects() {
-        throw new UnsupportedOperationException("Not implemented");
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public Project getProject(String projectUrl) {
-        return projects.get(projectUrl);
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -60,24 +59,20 @@ public class MockResourceManager implements IResourceManager {
 
     @Override
     public <T extends Resource> List<T> loadChildren(Class<T> resourceType, ORI parentResourceOri) {
-        throw new UnsupportedOperationException("Not implemented");
+        if (resources.isEmpty()) {
+
+        }
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void save(Resource resource) {
-
-        ORI ori = resource.getORI();
-
-        if (resource instanceof Project) {
-            projects.put(ori.getProjectUrl(), (Project) resource);
-        }
-
-        resources.put(ori, resource);
+        resources.put(resource.getORI(), resource);
     }
 
     @Override
     public <T> T getLoader(Class<T> serviceClass, Plugin plugin, Loader loader) {
-        throw new UnsupportedOperationException("Not implemented");
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

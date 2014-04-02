@@ -32,6 +32,8 @@ import org.onexus.resource.api.ORI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.management.MBeanServerConnection;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,10 +54,25 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
     private LoadingCache<ORI, String> indexNameCache;
     private IResourceManager resourceManager;
 
+    public static final String ONEXUS_FOLDER = System.getProperty("user.home") + File.separator + ".onexus";
+    public static final String ES_DEFAULT_FOLDER = ONEXUS_FOLDER + File.separator + "elasticsearch";
+    private String homePath;
+
+    private static MBeanServerConnection TO_FORCE_IMPORT;
+
+    public ElasticSearchCollectionStore() {
+        super();
+    }
+
+    public ElasticSearchCollectionStore(String homePath){
+        super();
+        this.homePath = homePath;
+    }
+
     public void start() {
 
         // Create and start a node
-        node = buildNode();
+        node = buildNode(homePath == null ? ES_DEFAULT_FOLDER : homePath);
         node.start();
 
         // Create a client

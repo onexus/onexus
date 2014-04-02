@@ -134,7 +134,7 @@ public class ElasticSearchQuery {
 
         Filter filter = query.getWhere();
         if (filter != null) {
-            searchRequest.setFilter(filterAdapter(filter).build(this, filter));
+            searchRequest.setPostFilter(filterAdapter(filter).build(this, filter));
         }
 
     }

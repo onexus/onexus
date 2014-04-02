@@ -24,11 +24,12 @@ import org.onexus.collection.api.*;
 import org.onexus.collection.api.query.Query;
 import org.onexus.collection.store.elasticsearch.internal.ElasticSearchCollectionStore;
 import org.onexus.collection.store.elasticsearch.internal.HashEntity;
-import org.onexus.collection.store.elasticsearch.mocks.MockResourceManager;
+import org.onexus.resource.api.HashResourceManager;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
 
+import java.io.File;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -37,6 +38,7 @@ import static org.junit.Assert.assertTrue;
 public class ElasticSearchTest extends AbstractCollectionTest {
 
     private static final String PROJECT_URL = "http://test.onexus.org";
+    public static final String TEST_STORE_FOLDER = System.getProperty("java.io.tmpdir") + File.separator + "onexus-elasticsearch-test";
 
     private Collection collection01;
 
@@ -54,8 +56,9 @@ public class ElasticSearchTest extends AbstractCollectionTest {
     public void start() {
 
         // Create resource manager and collection store
-        IResourceManager resourceManager = new MockResourceManager();
-        store = new ElasticSearchCollectionStore();
+        IResourceManager resourceManager = new HashResourceManager();
+
+        store = new ElasticSearchCollectionStore(TEST_STORE_FOLDER);
         store.setResourceManager(resourceManager);
         store.start();
 

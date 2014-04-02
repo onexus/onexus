@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.collection.api.types;
+package org.onexus.resource.api.types;
 
 public class Text implements CharSequence {
 

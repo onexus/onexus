@@ -20,6 +20,7 @@ package org.onexus.resource.manager.internal.providers;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.onexus.resource.api.IResourceListener;
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.IResourceValidator;
 import org.onexus.resource.manager.internal.PluginLoader;
 
 import java.io.File;
@@ -28,15 +29,17 @@ import java.util.List;
 public class ProjectProviderFactory {
 
     private IResourceSerializer serializer;
+    private IResourceValidator validator;
     private PluginLoader pluginLoader;
     private FileAlterationMonitor monitor;
     private List<IResourceListener> listeners;
 
-    public ProjectProviderFactory(IResourceSerializer serializer, PluginLoader pluginLoader, FileAlterationMonitor monitor, List<IResourceListener> listeners) {
+    public ProjectProviderFactory(IResourceSerializer serializer, IResourceValidator validator, PluginLoader pluginLoader, FileAlterationMonitor monitor, List<IResourceListener> listeners) {
         super();
 
         this.pluginLoader = pluginLoader;
         this.serializer = serializer;
+        this.validator = validator;
         this.monitor = monitor;
         this.listeners = listeners;
     }
@@ -54,6 +57,7 @@ public class ProjectProviderFactory {
         }
 
         provider.setSerializer(serializer);
+        provider.setValidator(validator);
         provider.setPluginLoader(pluginLoader);
 
         return provider;

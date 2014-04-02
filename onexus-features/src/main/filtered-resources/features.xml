@@ -52,6 +52,7 @@
         <bundle>mvn:org.onexus/org.onexus.resource.authorization/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.progress/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.serializer.xstream/${project.version}</bundle>
+        <bundle>mvn:org.onexus/org.onexus.resource.validator.hibernate/${project.version}</bundle>
         <bundle>mvn:org.onexus/org.onexus.resource.profile/${project.version}</bundle>
 
         <!-- xstream -->
@@ -115,9 +116,10 @@
         <bundle>mvn:org.onexus/org.onexus.collection.store.elasticsearch/${project.version}</bundle>
 
         <!-- dependencies -->
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.elasticsearch/${elasticsearch.version}_2</bundle>
+        <!-- bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.elasticsearch/${elasticsearch.version}_2</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.lucene/4.4.0_1</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.lucene-analyzers-common/4.4.0_1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.lucene-analyzers-common/4.4.0_1</bundle
+        <bundle>wrap:mvn:org.elasticsearch/elasticsearch/${elasticsearch.version}</bundle> -->
     </feature>
 
     <!-- Collection loaders -->

@@ -20,7 +20,6 @@ package org.onexus.resource.serializer.xstream.internal;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
-import org.hibernate.validator.HibernateValidator;
 import org.onexus.resource.api.*;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceImplicitList;
@@ -29,8 +28,6 @@ import org.onexus.resource.api.exceptions.UnserializeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.*;
-import javax.validation.spi.ValidationProvider;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +35,10 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ResourceSerializer implements IResourceSerializer {
 
@@ -50,7 +50,6 @@ public class ResourceSerializer implements IResourceSerializer {
     private Map<String, XStream> xstreamMap = new HashMap<String, XStream>();
     private Map<Class, String> typeToAlias = new HashMap<Class, String>();
 
-    private Validator validator;
     private ThreadLocal<ResourceConverter.ResourceRef> resourceRef = new ThreadLocal<ResourceConverter.ResourceRef>();
 
     public ResourceSerializer() {
@@ -58,19 +57,6 @@ public class ResourceSerializer implements IResourceSerializer {
 
         register(Project.class);
         register(Folder.class);
-
-        // Set up Hibernate validator
-        Configuration<?> config = Validation.byDefaultProvider()
-                .providerResolver(new ValidationProviderResolver() {
-                    @Override
-                    public List<ValidationProvider<?>> getValidationProviders() {
-                        return (List) Arrays.asList(new HibernateValidator());
-                    }
-                })
-                .configure();
-
-        ValidatorFactory factory = config.buildValidatorFactory();
-        validator = factory.getValidator();
 
     }
 
@@ -129,16 +115,6 @@ public class ResourceSerializer implements IResourceSerializer {
             String line = e.get("line number");
 
             throw new UnserializeException(path, line, e);
-        }
-
-        Set<ConstraintViolation<T>> constraintViolations = validator.validate(resource);
-
-        if (!constraintViolations.isEmpty()) {
-            Set<String> errors = new LinkedHashSet<String>(constraintViolations.size());
-            for (ConstraintViolation<T> violation : constraintViolations) {
-                errors.add("Value at " + violation.getPropertyPath() + " " + violation.getMessage());
-            }
-            throw new UnserializeException(errors);
         }
 
         resource.setORI(resourceOri);

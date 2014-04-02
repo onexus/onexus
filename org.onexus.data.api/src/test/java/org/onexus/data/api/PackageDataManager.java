@@ -1,15 +1,13 @@
-package org.onexus.collection.store.elasticsearch.mocks;
+package org.onexus.data.api;
 
-import org.onexus.data.api.IDataManager;
-import org.onexus.data.api.IDataStreams;
 import org.onexus.data.api.utils.SingleDataStreams;
 import org.onexus.resource.api.ORI;
 
-public class MockDataManager implements IDataManager {
+public class PackageDataManager implements IDataManager {
 
     private Class rootClass;
 
-    public MockDataManager(Class rootClass) {
+    public PackageDataManager(Class rootClass) {
         this.rootClass = rootClass;
     }
 

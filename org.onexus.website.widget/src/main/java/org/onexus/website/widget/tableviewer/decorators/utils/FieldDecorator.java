@@ -29,7 +29,7 @@ import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.collection.api.types.Text;
+import org.onexus.resource.api.types.Text;
 import org.onexus.website.api.IEntitySelection;
 import org.onexus.website.api.ISelectionContributor;
 import org.onexus.website.api.SingleEntitySelection;

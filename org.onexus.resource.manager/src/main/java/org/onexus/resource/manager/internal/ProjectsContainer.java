@@ -23,6 +23,7 @@ import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 import org.onexus.resource.api.IResourceListener;
 import org.onexus.resource.api.IResourceSerializer;
+import org.onexus.resource.api.IResourceValidator;
 import org.onexus.resource.api.Project;
 import org.onexus.resource.manager.internal.providers.AbstractProjectProvider;
 import org.onexus.resource.manager.internal.providers.ProjectProviderFactory;
@@ -54,7 +55,7 @@ public class ProjectsContainer {
     // Listeners
     private List<IResourceListener> listeners = new ArrayList<IResourceListener>();
 
-    public ProjectsContainer(IResourceSerializer serializer, PluginLoader pluginLoader) {
+    public ProjectsContainer(IResourceSerializer serializer, IResourceValidator validator, PluginLoader pluginLoader) {
         super();
 
         File onexusFolder = new File(ONEXUS_FOLDER);
@@ -75,7 +76,7 @@ public class ProjectsContainer {
                 propertiesFile.createNewFile();
             }
 
-            this.providerFactory = new ProjectProviderFactory(serializer, pluginLoader, monitor, listeners);
+            this.providerFactory = new ProjectProviderFactory(serializer, validator, pluginLoader, monitor, listeners);
             this.providers = new ConcurrentHashMap<String, AbstractProjectProvider>();
 
         } catch (IOException e) {

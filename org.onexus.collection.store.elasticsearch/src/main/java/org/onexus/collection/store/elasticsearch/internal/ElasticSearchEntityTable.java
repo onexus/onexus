@@ -18,6 +18,7 @@
 package org.onexus.collection.store.elasticsearch.internal;
 
 import com.google.common.cache.LoadingCache;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.indices.IndexMissingException;
 import org.elasticsearch.search.SearchHit;
@@ -29,13 +30,15 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Progress;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class ElasticSearchEntityTable implements IEntityTable {
 
+    private static final Logger log = LoggerFactory.getLogger(ElasticSearchEntityTable.class);
     public static final HashMap<String, Object> EMPTY_VALUES = new HashMap<String, Object>(0);
-    private LoadingCache<ORI, String> indexNameCache;
     private IResourceManager resourceManager;
     private ElasticSearchQuery query;
 
@@ -48,9 +51,7 @@ public class ElasticSearchEntityTable implements IEntityTable {
     public ElasticSearchEntityTable(IResourceManager resourceManager, LoadingCache<ORI, String> indexNameCache, Client client, Query query) {
         super();
 
-        this.indexNameCache = indexNameCache;
         this.resourceManager = resourceManager;
-
         try {
             this.query = new ElasticSearchQuery(resourceManager, indexNameCache, client, query);
         } catch (IndexMissingException e) {
@@ -140,9 +141,18 @@ public class ElasticSearchEntityTable implements IEntityTable {
     }
 
     private void init() {
-        SearchHits hits = this.query.getSearchRequest().execute().actionGet().getHits();
+
+        SearchRequestBuilder searchRequest = this.query.getSearchRequest();
+
+        if (log.isDebugEnabled()) {
+            log.debug(searchRequest.toString());
+        }
+
+        SearchHits hits = searchRequest.execute().actionGet().getHits();
+
         this.size = hits.totalHits();
         this.hits = hits.iterator();
+
     }
 
     @Override

@@ -146,6 +146,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.validator.hibernate</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

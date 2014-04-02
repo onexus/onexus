@@ -39,6 +39,8 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
     // Injected OSGi services
     private IResourceSerializer serializer;
 
+    private IResourceValidator validator;
+
     private IAuthorizationManager authorizationManager;
 
     private BundleContext context;
@@ -213,7 +215,8 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
     public void init() {
         // Projects container
         this.pluginLoader = new PluginLoader(context);
-        this.projectsContainer = new ProjectsContainer(serializer, pluginLoader);
+        this.validator.init(this);
+        this.projectsContainer = new ProjectsContainer(serializer, validator, pluginLoader);
 
     }
 
@@ -239,6 +242,14 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
 
     public void setSerializer(IResourceSerializer serializer) {
         this.serializer = serializer;
+    }
+
+    public IResourceValidator getValidator() {
+        return validator;
+    }
+
+    public void setValidator(IResourceValidator validator) {
+        this.validator = validator;
     }
 
     public BundleContext getContext() {

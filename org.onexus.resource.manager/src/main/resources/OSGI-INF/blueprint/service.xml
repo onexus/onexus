@@ -3,6 +3,7 @@
         >
 
     <reference id="resourceSerializer" interface="org.onexus.resource.api.IResourceSerializer"/>
+    <reference id="resourceValidator" interface="org.onexus.resource.api.IResourceValidator"/>
     <reference id="authorizationManager" interface="org.onexus.resource.api.IAuthorizationManager"/>
     <reference id="profileManager" interface="org.onexus.resource.api.IProfileManager"/>
 
@@ -13,6 +14,7 @@
     <bean id="resourceManager" class="org.onexus.resource.manager.internal.ResourceManager" init-method="init"
           destroy-method="destroy">
         <property name="serializer" ref="resourceSerializer"/>
+        <property name="validator" ref="resourceValidator"/>
         <property name="authorizationManager" ref="authorizationManager"/>
         <property name="context" ref="blueprintBundleContext"/>
     </bean>

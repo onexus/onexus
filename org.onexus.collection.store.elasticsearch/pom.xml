@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.onexus.collection.store.elasticsearch</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <bundle.symbolicName>org.onexus.collection.store.elasticsearch</bundle.symbolicName>
@@ -60,7 +60,128 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.data.api</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.resource.api</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.elasticsearch:elasticsearch</include>
+                                    <include>org.apache.lucene:*</include>
+                                </includes>
+                            </artifactSet>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.lucene.codecs.PostingsFormat</resource>
+                                    <!-- resource>META-INF/services/org.apache.lucene.analysis.util.CharFilterFactory</resource>
+                                    <resource>META-INF/services/com.fasterxml.jackson.core.JsonFactory</resource>
+                                    <resource>META-INF/services/org.apache.lucene.analysis.util.TokenFilterFactory</resource>
+                                    <resource>META-INF/services/org.apache.lucene.analysis.util.TokenizerFactory</resource>
+                                    <resource>META-INF/services/org.apache.lucene.codecs.Codec</resource>
+                                    <resource>META-INF/services/org.apache.lucene.codecs.DocValuesFormat</resource -->
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.lucene.codecs.DocValuesFormat</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/org.apache.lucene.codecs.Codec</resource>
+                                </transformer>
+                            </transformers>
+                            <!-- filters>
+                                <filter>
+                                    <artifact>org.elasticsearch:elasticsearch</artifact>
+                                    <includes>
+                                        <include>config/**</include>
+                                    </includes>
+                                </filter>
+                            </filters -->
+                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.3.7</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Import-Package>
+                            org.onexus.*,org.slf4j.*,com.google.*,javax.*
+                        </Import-Package>
+                        <Private-Package>${bundle.namespace}.internal.*</Private-Package>
+                        <Provide-Capability>
+                            osgi.serviceloader; osgi.serviceloader=org.apache.lucene.codecs.Codec,
+                            osgi.serviceloader; osgi.serviceloader=org.apache.lucene.codecs.PostingsFormat,
+                            osgi.serviceloader; osgi.serviceloader=org.apache.lucene.codecs.DocValuesFormat
+                        </Provide-Capability>
+                        <!-- Require-Capability>
+                            osgi.extender; filter:="(osgi.extender=osgi.serviceloader.registrar)"
+                        </Require-Capability -->
+                        <!-- Require-Capability>
+                            osgi.serviceloader; filter:="(osgi.serviceloader=org.apache.lucene.codecs.PostingsFormat)";cardinality:=multiple,
+                            osgi.serviceloader; filter:="(osgi.serviceloader=org.apache.lucene.codecs.DocValuesFormat)";cardinality:=multiple,
+                            osgi.serviceloader; filter:="(osgi.serviceloader=org.apache.lucene.codecs.Codec)";cardinality:=multiple,
+                            osgi.extender; filter:="(osgi.extender=osgi.serviceloader.processor)"
+                        </Require-Capability -->
+                    </instructions>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
 
 
 
