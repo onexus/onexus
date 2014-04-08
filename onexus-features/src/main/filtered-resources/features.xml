@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <features>
-    <repository>mvn:org.ops4j.pax.wicket/features/${pax-wicket.version}/xml/features</repository>
 
     <!-- Onexus H2Sql -->
     <feature name="onexus-h2" version="${project.version}">
