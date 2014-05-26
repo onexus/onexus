@@ -209,7 +209,7 @@ public class ElasticSearchUtils {
                 return convertOriToIndexName(resourceManager, key);
             }
         });
-    };
+    }
 
     public static String convertOriToIndexName(IResourceManager resourceManager, ORI ori) {
 
@@ -221,7 +221,7 @@ public class ElasticSearchUtils {
     }
 
     public static String removeNonValidChars(String id) {
-        return id.toLowerCase().trim().replaceAll("[^a-z0-9]", "_");
+        return (id == null ? null : id.toLowerCase().trim().replaceAll("[^a-z0-9]", "_"));
     }
 
     public static Settings buildNodeSettings(String esHome) {

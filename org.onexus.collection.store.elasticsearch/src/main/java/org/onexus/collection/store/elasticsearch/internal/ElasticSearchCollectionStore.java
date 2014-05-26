@@ -183,7 +183,8 @@ public class ElasticSearchCollectionStore implements ICollectionStore {
             while (dataSet.next()) {
 
                 if (bulkSize == INSERT_BULK_SIZE) {
-                    bulkRequest.execute(BULK_LISTENER);
+                    // bulkRequest.execute(BULK_LISTENER);
+                    logErrors( bulkRequest.execute().actionGet() );
                     bulkRequest = client.prepareBulk();
                     bulkSize=0;
                 }
