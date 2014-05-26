@@ -20,6 +20,7 @@ package org.onexus.website.api.utils;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
+import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.resource.api.ORI;
 import org.onexus.website.api.WebsiteApplication;
@@ -57,10 +58,9 @@ public class EntityModel implements IModel<IEntity> {
     @Override
     public IEntity getObject() {
         if (entity == null && entityId != null && collectionURI != null) {
-            entity = new EntityIterator(
-                    getCollectionManager().load(new SingleEntityQuery(collectionURI, entityId)),
-                    collectionURI
-            ).next();
+            IEntityTable result = getCollectionManager().load(new SingleEntityQuery(collectionURI, entityId));
+            entity = new EntityIterator(result, collectionURI).next();
+            result.close();
         }
         return entity;
     }
