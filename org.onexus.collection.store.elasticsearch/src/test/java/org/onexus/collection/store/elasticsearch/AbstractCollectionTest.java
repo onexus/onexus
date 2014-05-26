@@ -9,7 +9,7 @@ import org.onexus.resource.api.Plugin;
 import org.onexus.resource.api.Progress;
 import org.onexus.resource.serializer.xstream.internal.ResourceSerializer;
 
-public class AbstractCollectionTest {
+public abstract class AbstractCollectionTest {
 
     private Class projectRoot;
     private String projectUrl;
