@@ -32,6 +32,10 @@ import java.util.List;
 @ResourceRegister({ Download.class, DownloadsPageStatus.class })
 public class DownloadsPageConfig extends PageConfig {
 
+    private String header;
+
+    private String bottom;
+
     @ResourceImplicitList("download")
     private List<Download> downloads = new ArrayList<Download>();
 
@@ -62,5 +66,19 @@ public class DownloadsPageConfig extends PageConfig {
         return null;
     }
 
+    public String getHeader() {
+        return header;
+    }
 
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getBottom() {
+        return bottom;
+    }
+
+    public void setBottom(String bottom) {
+        this.bottom = bottom;
+    }
 }
