@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.query.IQueryParser;
 import org.onexus.collection.api.query.Query;
 import org.onexus.website.api.widget.Widget;
@@ -45,6 +46,21 @@ public class DownloadsPage extends Widget<DownloadsPageConfig, DownloadsPageStat
     public DownloadsPage(String componentId, IModel<DownloadsPageStatus> statusModel) {
         super(componentId, statusModel);
 
+        // Header HTML
+        String header = getConfig().getHeader();
+        Label headerLabel = new Label("header", header);
+        headerLabel.setVisible(!Strings.isEmpty(header));
+        headerLabel.setEscapeModelStrings(false);
+        add(headerLabel);
+
+        // Bottom HTML
+        String bottom = getConfig().getBottom();
+        Label bottomLabel = new Label("bottom", bottom);
+        bottomLabel.setVisible(!Strings.isEmpty(bottom));
+        bottomLabel.setEscapeModelStrings(false);
+        add(bottomLabel);
+
+        // Downloads section
         RepeatingView downloads = new RepeatingView("downloads");
         add(downloads);
 

@@ -68,8 +68,8 @@ public class LinkDecorator extends FieldDecorator {
 
                 String href = parameters.get(LinkDecoratorParameters.URL);
 
-                href = fixLinkUrl(href);
                 href = replaceParameters(getField(), columnValue, entity, href, false);
+                href = fixLinkUrl(href);
 
                 content.append("<a href=\"").append(href).append("\"");
                 if (parameters.containsKey(LinkDecoratorParameters.TARGET)) {
