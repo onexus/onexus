@@ -1,12 +1,16 @@
-# Onexus installation
+#set($h1 = '#')
+#set($h2 = '##')
+#set($h3 = '###')
 
-## Note
+$h1 Onexus installation
+
+$h2 Note
 
 Onexus is under development and we still haven't released any final
 version, so you first need to [compile](compilation.html) the source
 code.
 
-## Requirements
+$h2 Requirements
 
 You need to install Karaf server from [http://karaf.apache.org](http://karaf.apache.org):
 
@@ -19,7 +23,7 @@ install **Java SE Development Kit 6** from [Oracle website](http://www.oracle.co
 Once you java Java installed to install  Karaf you only need to extract the
 Karaf distribution on a folder.
 
-## Installation
+$h2 Installation
 
 1. Start Karaf console:
 
@@ -51,9 +55,9 @@ Karaf distribution on a folder.
 
 5. You can stop Onexus closing the Karaf console by pressing Ctrl + D.
 
-## Configuration
+$h2 Configuration
 
-### Config MySQL collection store
+$h3 Config MySQL collection store
 
 Follow this steps to install [MySQL](http://www.mysql.com) as default
 data store.
@@ -83,7 +87,7 @@ data store.
 
 6. Start Karaf.
 
-### Users authentication system
+$h3 Users authentication system
 
 The default configuration stores the users, passwords and roles into
 **/etc/users.properties** file. If you want to use other systems (like
