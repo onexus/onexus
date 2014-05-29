@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>org.onexus.resource.manager - Checkstyle report</title>
+    <link>http://www.onexus.org/org.onexus.resource.manager</link>
+    <description>org.onexus.resource.manager - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2014 Onexus</copyright>
+    <item>
+      <title>File: 12,
+             Errors: 594,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://www.onexus.org/org.onexus.resource.manager/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.providers.ZipProjectProvider.java">org/onexus/resource/manager/internal/providers/ZipProjectProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.providers.GitProjectProvider.java">org/onexus/resource/manager/internal/providers/GitProjectProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  20
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.ResourceManager.java">org/onexus/resource/manager/internal/ResourceManager.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  91
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.ws.git.ServletRequestWrapper.java">org/onexus/resource/manager/internal/ws/git/ServletRequestWrapper.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  78
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.PluginLoader.java">org/onexus/resource/manager/internal/PluginLoader.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.ws.git.GitSecurityFilter.java">org/onexus/resource/manager/internal/ws/git/GitSecurityFilter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  66
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.providers.FolderProjectProvider.java">org/onexus/resource/manager/internal/providers/FolderProjectProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.ws.git.GitServlet.java">org/onexus/resource/manager/internal/ws/git/GitServlet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.providers.AbstractProjectProvider.java">org/onexus/resource/manager/internal/providers/AbstractProjectProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  163
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.ProjectsContainer.java">org/onexus/resource/manager/internal/ProjectsContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  66
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.providers.ProjectProviderFactory.java">org/onexus/resource/manager/internal/providers/ProjectProviderFactory.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.onexus.org/org.onexus.resource.manager/checkstyle.html#org.onexus.resource.manager.internal.ws.git.FileResolver.java">org/onexus/resource/manager/internal/ws/git/FileResolver.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
