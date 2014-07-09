@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.website.api.pages.search.boxes;
+package org.onexus.website.widget.searchpage.boxes;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,17 +35,17 @@ import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.pages.browser.IEntitySelection;
-import org.onexus.website.api.pages.browser.SingleEntitySelection;
-import org.onexus.website.api.pages.search.FigureConfig;
-import org.onexus.website.api.pages.search.SearchLink;
-import org.onexus.website.api.pages.search.SearchPageStatus;
-import org.onexus.website.api.pages.search.SearchType;
-import org.onexus.website.api.pages.search.figures.FigureBox;
-import org.onexus.website.api.pages.search.figures.LinksBox;
+import org.onexus.website.api.FilterConfig;
+import org.onexus.website.api.IEntitySelection;
+import org.onexus.website.api.MultipleEntitySelection;
+import org.onexus.website.api.SingleEntitySelection;
 import org.onexus.website.api.utils.EntityModel;
-import org.onexus.website.api.widgets.selection.FilterConfig;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
+import org.onexus.website.widget.searchpage.FigureConfig;
+import org.onexus.website.widget.searchpage.SearchLink;
+import org.onexus.website.widget.searchpage.SearchPageStatus;
+import org.onexus.website.widget.searchpage.SearchType;
+import org.onexus.website.widget.searchpage.figures.FigureBox;
+import org.onexus.website.widget.searchpage.figures.LinksBox;
 
 import javax.inject.Inject;
 import java.util.List;
