@@ -21,6 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.IWrapModel;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.resource.api.ORI;
@@ -88,7 +89,7 @@ public class CollectionColumn extends AbstractColumn {
         return headerDecorator.isSortable();
     }
 
-    public class ModelAdapter implements IModel<IEntity> {
+    public class ModelAdapter implements IWrapModel<IEntity> {
         private IModel<IEntityTable> rowModel;
 
         public ModelAdapter(IModel<IEntityTable> rowModel) {
@@ -111,6 +112,10 @@ public class CollectionColumn extends AbstractColumn {
         public void detach() {
         }
 
+        @Override
+        public IModel<?> getWrappedModel() {
+            return rowModel;
+        }
     }
 
 }

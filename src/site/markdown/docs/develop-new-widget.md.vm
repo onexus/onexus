@@ -1,6 +1,9 @@
-# New widget development
+#set($h1 = '#')
+#set($h2 = '##')
 
-## Create widget from archetype
+$h1 New widget development
+
+$h2 Create widget from archetype
 
 Creating a new widget using the basic widget Maven archetype:
 
@@ -15,7 +18,7 @@ Creating a new widget using the basic widget Maven archetype:
 You need to change goupdId "my.groupid" and artifactId "helloworld" to
 custom ones.
 
-## Compile, package and install
+$h2 Compile, package and install
 
 Go into the widget folder:
 
