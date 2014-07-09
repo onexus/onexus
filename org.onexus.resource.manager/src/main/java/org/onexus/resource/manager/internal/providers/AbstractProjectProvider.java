@@ -427,7 +427,9 @@ public abstract class AbstractProjectProvider {
             LOGGER.error("Saving resource '" + resource.getORI() + "' in file '" + file.getAbsolutePath() + "'", e);
         }
 
-        observer.checkAndNotify();
+        if (observer != null) {
+            observer.checkAndNotify();
+        }
 
     }
 

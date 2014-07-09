@@ -164,7 +164,7 @@ public class ResourceManager implements IResourceManager, BlueprintListener, Bun
                     continue;
                 }
 
-                if (pluginLocation.equals(bundle.getLocation())) {
+                if (pluginLocation.startsWith(bundle.getLocation())) {
                     return (T) context.getService(service);
                 }
 

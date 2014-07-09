@@ -158,7 +158,8 @@ public class LinksBox extends Panel {
         Set<String> notFound = new HashSet<String>();
         String[] values = status.getSearch().split(",");
         for (String value : values) {
-            if (!labels.contains(value.trim().toUpperCase())) {
+            value = value.trim().toUpperCase();
+            if (!labels.contains(value) && !value.isEmpty()) {
                 notFound.add(value);
             }
         }

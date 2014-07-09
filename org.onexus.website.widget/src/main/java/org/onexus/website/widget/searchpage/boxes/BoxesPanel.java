@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.website.widget.searchpage.boxes;
+package org.onexus.website.api.pages.search.boxes;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,26 +27,33 @@ import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
-import org.onexus.collection.api.query.*;
+import org.onexus.collection.api.query.Contains;
+import org.onexus.collection.api.query.Equal;
+import org.onexus.collection.api.query.In;
+import org.onexus.collection.api.query.OrderBy;
+import org.onexus.collection.api.query.Query;
 import org.onexus.collection.api.utils.EntityIterator;
 import org.onexus.collection.api.utils.QueryUtils;
 import org.onexus.resource.api.ORI;
-import org.onexus.website.api.FilterConfig;
-import org.onexus.website.api.IEntitySelection;
-import org.onexus.website.api.MultipleEntitySelection;
-import org.onexus.website.api.SingleEntitySelection;
-import org.onexus.website.widget.searchpage.FigureConfig;
-import org.onexus.website.widget.searchpage.SearchLink;
-import org.onexus.website.widget.searchpage.SearchPageStatus;
-import org.onexus.website.widget.searchpage.SearchType;
-import org.onexus.website.widget.searchpage.figures.FigureBox;
-import org.onexus.website.widget.searchpage.figures.LinksBox;
+import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
+import org.onexus.website.api.pages.search.FigureConfig;
+import org.onexus.website.api.pages.search.SearchLink;
+import org.onexus.website.api.pages.search.SearchPageStatus;
+import org.onexus.website.api.pages.search.SearchType;
+import org.onexus.website.api.pages.search.figures.FigureBox;
+import org.onexus.website.api.pages.search.figures.LinksBox;
+import org.onexus.website.api.utils.EntityModel;
+import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 
 public class BoxesPanel extends Panel {
+
+
 
     @Inject
     private ICollectionManager collectionManager;
@@ -85,23 +92,35 @@ public class BoxesPanel extends Panel {
             ORI collectionUri = type.getCollection().toAbsolute(baseUri);
             if (filterConfig == null && status.getSearch().indexOf(',') == -1) {
 
-                // Single entity selection
-                IEntityTable table = getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), true);
 
-                boolean found;
-                if (table.next()) {
-                    found = true;
+                IEntity entity = null;
+                IEntityTable table = null;
+                if (status.getSearch().startsWith(DisambiguationPanel.PREFIX)) {
+
+                    String entityId = status.getSearch().replace(DisambiguationPanel.PREFIX, "");
+                    entity = new EntityModel(collectionUri, entityId).getObject();
+
                 } else {
+                    // Single entity selection
+                    table = getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), true);
 
-                    // If we don't found an exact match, look for a similar one
-                    table.close();
-                    table = getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), false);
-                    found = table.next();
+                    boolean found;
+                    if (table.next()) {
+                        found = true;
+                    } else {
+
+                        // If we don't found an exact match, look for a similar one
+                        table.close();
+                        table = getSingleEntityTable(collectionManager, type, collectionUri, baseUri, status.getSearch(), false);
+                        found = table.next();
+                    }
+
+                    if (found) {
+                        entity = table.getEntity(collectionUri);
+                    }
                 }
 
-                if (found) {
-
-                    IEntity entity = table.getEntity(collectionUri);
+                if (entity != null) {
 
                     boxes.add(new LinksBox(boxes.newChildId(), status, entity));
 
@@ -113,7 +132,7 @@ public class BoxesPanel extends Panel {
                         }
                     }
 
-                    if (table.next()) {
+                    if (table != null && table.next()) {
                         add(new DisambiguationPanel("disambiguation", table, collectionUri) {
 
                             @Override
@@ -129,7 +148,10 @@ public class BoxesPanel extends Panel {
                     add(new EmptyPanel("disambiguation").setVisible(false));
                     boxes.add(new Label(boxes.newChildId(), "No results found").add(new AttributeModifier("class", "alert")));
                 }
-                table.close();
+
+                if (table != null) {
+                    table.close();
+                }
 
             } else {
 

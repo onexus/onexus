@@ -17,6 +17,7 @@
  */
 package org.onexus.website.widget.tableviewer.decorators.tooltip;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -52,7 +53,7 @@ public class TooltipDecorator implements IDecorator {
             length = Integer.valueOf(parameters.get(TooltipDecoratorParameters.LENGTH));
         }
 
-        String tooltip = StringUtils.abbreviate(value, length) + "<i class=\"icon-plus\" rel=\"tooltip\" title=\"" + value + "\"></i>";
+        String tooltip = abbreviate(value, length) + "<i class=\"icon-plus\" rel=\"tooltip\" title=\"" + value + "\"></i>";
         cellContainer.add(new Label(componentId, tooltip).setEscapeModelStrings(false).setVisible(value != null));
     }
 
@@ -93,5 +94,48 @@ public class TooltipDecorator implements IDecorator {
 
     @Override
     public void detach() {
+    }
+
+    private static String abbreviate(String value, int length) {
+
+        if (Strings.isNullOrEmpty(value)) {
+            return value;
+        }
+
+        // The real string position
+        int i = 0;
+
+        // The apparent position without HTML tags
+        int h = 0;
+
+        // Maximum position
+        int max = value.length();
+
+        boolean insideTag = false;
+
+        while (i < max) {
+
+            char c = value.charAt(i);
+
+            if (c == '<') {
+                // Skip the tag
+                while (++i < max && value.charAt(i)!='>') {}
+                insideTag = !insideTag;
+            } else {
+                h++;
+            }
+
+            if (!insideTag && h >= length) {
+                break;
+            }
+
+            i++;
+        }
+
+        if (i == max) {
+            return value;
+        }
+
+        return value.substring(0, i) + "...";
     }
 }

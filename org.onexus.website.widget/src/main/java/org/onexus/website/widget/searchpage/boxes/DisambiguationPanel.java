@@ -35,6 +35,8 @@ import java.util.Set;
 
 public abstract class DisambiguationPanel extends Panel {
 
+    public static final String PREFIX = "key:";
+
     public DisambiguationPanel(String id, Set<String> notFoundValues) {
         super(id);
 
@@ -86,7 +88,7 @@ public abstract class DisambiguationPanel extends Panel {
         AjaxLink<String> link = new AjaxLink<String>("link", new Model(entity.getId())) {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onSelection(target, getModelObject());
+                onSelection(target, PREFIX + getModelObject());
             }
         };
 
