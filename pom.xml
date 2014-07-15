@@ -33,7 +33,7 @@
         <mysql.version>5.1.24</mysql.version>
         <servlet.version>2.5</servlet.version>
         <javax.inject.version>1</javax.inject.version>
-        <h2.version>1.3.170</h2.version>
+        <h2.version>1.4.180</h2.version>
         <commons-codec.version>1.7</commons-codec.version>
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
