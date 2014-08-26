@@ -115,6 +115,36 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-runtime</artifactId>
+      <version>3.5</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>stringtemplate</artifactId>
+          <groupId>org.antlr</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>4.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm-commons</artifactId>
+      <version>4.1</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>asm-tree</artifactId>
+          <groupId>org.ow2.asm</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>com.googlecode.guava-osgi</groupId>
       <artifactId>guava-osgi</artifactId>
       <version>11.0.1</version>
