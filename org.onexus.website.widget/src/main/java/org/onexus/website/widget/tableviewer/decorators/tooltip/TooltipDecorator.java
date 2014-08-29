@@ -15,7 +15,7 @@
  *
  *
  */
-package org.onexus.website.widget.tableviewer.decorators.tooltip;
+package org.onexus.website.api.widgets.tableviewer.decorators.tooltip;
 
 import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +26,8 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ParameterKey;
-import org.onexus.website.widget.tableviewer.decorators.IDecorator;
+import org.onexus.resource.api.Parameters;
+import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,9 +36,9 @@ import java.util.Map;
 public class TooltipDecorator implements IDecorator {
 
     private Field field;
-    private Map<ParameterKey, String> parameters;
+    private Parameters parameters;
 
-    public TooltipDecorator(Field field, Map<ParameterKey, String> parameters) {
+    public TooltipDecorator(Field field, Parameters parameters) {
         super();
         this.field = field;
         this.parameters = parameters;
@@ -53,7 +54,17 @@ public class TooltipDecorator implements IDecorator {
             length = Integer.valueOf(parameters.get(TooltipDecoratorParameters.LENGTH));
         }
 
-        String tooltip = abbreviate(value, length) + "<i class=\"icon-plus\" rel=\"tooltip\" title=\"" + value + "\"></i>";
+        String tooltip = value;
+        // Abbreviate only if value is longer than max length
+        if (value != null && value.length() > length) {
+            tooltip = abbreviate(value, length) +
+                    "<i class=\"" + parameters.get(TooltipDecoratorParameters.ICON) +
+                    "\" data-placement=\"" + parameters.get(TooltipDecoratorParameters.PLACEMENT) +
+                    "\" rel=\"tooltip\" title=\"" + value +
+                    "\" style=\"opacity: " + parameters.get(TooltipDecoratorParameters.OPACITY) +
+                    "\"></i>";
+        }
+
         cellContainer.add(new Label(componentId, tooltip).setEscapeModelStrings(false).setVisible(value != null));
     }
 

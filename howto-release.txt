@@ -41,6 +41,19 @@ cd ..
 # Commit the changes
 git commit -a -m "Release version 0.4.0"
 
+# Update the site documentation
+mvn site
+mvn site:deploy
+
+# Edit site main index and add a new link to the new version
+nano site/index.html
+
+# Update github pages
+
+site# git add 0.4.0
+site# git commit -a -m "Release 0.4.0"
+site# git push origin gh-pages
+
 # Finish the release 
 git flow release finish onexus-0.4.0
 
