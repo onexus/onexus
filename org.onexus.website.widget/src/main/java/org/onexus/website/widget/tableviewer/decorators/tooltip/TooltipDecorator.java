@@ -15,19 +15,17 @@
  *
  *
  */
-package org.onexus.website.api.widgets.tableviewer.decorators.tooltip;
+package org.onexus.website.widget.tableviewer.decorators.tooltip;
 
 import com.google.common.base.Strings;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.resource.api.ParameterKey;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
+import org.onexus.website.widget.tableviewer.decorators.IDecorator;
 
 import java.util.Collections;
 import java.util.List;
