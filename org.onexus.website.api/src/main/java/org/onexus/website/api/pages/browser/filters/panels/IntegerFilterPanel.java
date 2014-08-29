@@ -18,6 +18,7 @@
 package org.onexus.website.api.pages.browser.filters.panels;
 
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.onexus.website.api.pages.browser.filters.operations.*;
 import org.onexus.website.api.widgets.tableviewer.headers.FieldHeader;
@@ -44,6 +45,9 @@ public abstract class IntegerFilterPanel extends AbstractFilterPanel<Integer> {
 
     @Override
     protected FormComponent<Integer> createValueFormComponent(String componentId) {
-        return new TextField<Integer>(componentId);
+        NumberTextField<Integer> component = new NumberTextField<Integer>(componentId, null, Integer.class);
+        component.setStep(1);
+        component.setRequired(true);
+        return component;
     }
 }
