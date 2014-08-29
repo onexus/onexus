@@ -101,6 +101,11 @@ public abstract class AbstractFilterPanel<T> extends Panel {
 
                 addFilter(target, fc);
             }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(feedbackPanel);
+            }
         });
 
         add(form);

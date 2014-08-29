@@ -22,7 +22,10 @@ import org.onexus.resource.api.ParameterKey;
 
 public enum TooltipDecoratorParameters implements ParameterKey {
 
-    LENGTH("length", "Number of characters to show", null, false);
+    LENGTH("length", "Number of characters to show", null, false),
+    ICON("icon", "CSS class of the tooltip icon", "icon-chevron-right", true),
+    PLACEMENT("placement", "Tooltip placement. (top, right, bottom, left)", "bottom", true),
+    OPACITY("opacity", "Icon opacity", "0.2", true);
 
     private final String key;
     private final String description;

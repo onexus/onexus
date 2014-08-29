@@ -26,7 +26,7 @@ public class RScript implements IQueryScript {
                         "url <- \"" + url + "\"\n" +
                         "oql <- \"" + query + "\" \n" +
                         "\n" +
-                        "dataTsv <- getURLContent(url, readfunction = charToRaw(oql), upload = TRUE, customrequest = \"POST\") " +
+                        "dataTsv <- rawToChar( getURLContent(url, readfunction =charToRaw(oql), upload = TRUE, customrequest = \"POST\"))\n" +
                         "data <- read.csv(textConnection(dataTsv), header = TRUE, sep=\"\\t\")";
     }
 

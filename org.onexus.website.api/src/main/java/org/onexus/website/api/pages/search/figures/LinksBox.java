@@ -45,11 +45,13 @@ import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class LinksBox extends Panel {
 
 
     private static final int MAX_LABELS = 6;
+
     private transient IEntity entity;
     private transient Iterator<IEntity> entityIterator;
     private transient ORI collection;
@@ -95,6 +97,7 @@ public class LinksBox extends Panel {
 
         // Label
         Set<String> labels = new HashSet<String>();
+        Set<String> founds = new HashSet<String>();
         String labelField = entity.getCollection().getProperty("FIXED_ENTITY_FIELD");
 
         WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
@@ -102,19 +105,27 @@ public class LinksBox extends Panel {
         links.add(item);
 
         WebMarkupContainer activeLink = new WebMarkupContainer("link");
-        activeLink.add(new AttributeModifier("href", "#" + entity.getId()));
+        String anchor = entity.getId().replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        activeLink.add(new AttributeModifier("href", "#" + anchor));
         activeLink.add(new AttributeModifier("data-toggle", "pill"));
         item.add(activeLink);
 
+        // Add first label
         String label = getLabel(entity, labelField);
         labels.add(label.toUpperCase());
         activeLink.add(new Label("label", label).setEscapeModelStrings(false));
+
+        // Add first found key
+        // Search main key
+        String mainField = status.getType().getKeysList().get(0);
+        String found = getLabel(entity, mainField);
+        founds.add(found.toUpperCase());
 
         // Fields values
         RepeatingView fields = new RepeatingView("fields");
         accordionBody.add(fields);
 
-        Component first = newFieldsBox(fields.newChildId(), labelField, entity, true);
+        Component first = newFieldsBox(fields.newChildId(), labelField, anchor, entity, true);
         fields.add(first);
 
         // Complete the label
@@ -130,6 +141,9 @@ public class LinksBox extends Panel {
                 label = getLabel(entity, labelField);
                 labels.add(label.toUpperCase());
 
+                found = getLabel(entity, mainField);
+                founds.add(found.toUpperCase());
+
                 if (count > MAX_LABELS) {
                     remaining++;
                     continue;
@@ -139,12 +153,13 @@ public class LinksBox extends Panel {
                 links.add(item);
 
                 activeLink = new WebMarkupContainer("link");
-                activeLink.add(new AttributeModifier("href", "#" + entity.getId()));
+                anchor = entity.getId().replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+                activeLink.add(new AttributeModifier("href", "#" + anchor));
                 activeLink.add(new AttributeModifier("data-toggle", "pill"));
                 item.add(activeLink);
                 activeLink.add(new Label("label", label));
 
-                fields.add(newFieldsBox(fields.newChildId(), labelField, entity, false));
+                fields.add(newFieldsBox(fields.newChildId(), labelField, anchor, entity, false));
 
             }
 
@@ -163,7 +178,7 @@ public class LinksBox extends Panel {
         String[] values = status.getSearch().split(",");
         for (String value : values) {
             value = value.trim().toUpperCase();
-            if (!labels.contains(value) && !value.isEmpty()) {
+            if (!founds.contains(value) && !value.isEmpty()) {
                 notFound.add(value);
             }
         }
@@ -179,7 +194,7 @@ public class LinksBox extends Panel {
         accordionBody.add(createLinks(collection, searchType, varEntity, varFilter));
     }
 
-    private Component newFieldsBox(String componentId, String labelField, IEntity entity, boolean active) {
+    private Component newFieldsBox(String componentId, String labelField, String anchor, IEntity entity, boolean active) {
 
         Component box;
         if (status.getType().getTemplate() == null || status.getType().getTemplate().isEmpty()) {
@@ -192,7 +207,7 @@ public class LinksBox extends Panel {
             box.add(new AttributeAppender("class", " active"));
         }
 
-        box.setMarkupId(entity.getId());
+        box.setMarkupId(anchor);
         return box;
 
     }
@@ -290,4 +305,5 @@ public class LinksBox extends Panel {
 
         return template;
     }
+
 }
