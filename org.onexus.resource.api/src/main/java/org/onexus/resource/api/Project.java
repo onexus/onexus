@@ -26,7 +26,7 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @ResourceAlias("project")
-@ResourceRegister({Plugin.class})
+@ResourceRegister({Plugin.class, Service.class})
 public class Project extends Resource {
 
     @Pattern(regexp = PATTERN_ID)
@@ -36,6 +36,9 @@ public class Project extends Resource {
 
     @Valid
     private List<Plugin> plugins;
+
+    @Valid
+    private List<Service> services;
 
     public Project() {
         super();
@@ -88,6 +91,29 @@ public class Project extends Resource {
 
     public void setPlugins(List<Plugin> plugins) {
         this.plugins = plugins;
+    }
+
+    public Service getService(String serviceId) {
+
+        if (services == null || serviceId == null) {
+            return null;
+        }
+
+        for (Service service : services) {
+            if (serviceId.equals(service.getId())) {
+                return service;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
     }
 
     @Override
