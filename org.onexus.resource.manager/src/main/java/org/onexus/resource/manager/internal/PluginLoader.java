@@ -17,10 +17,15 @@
  */
 package org.onexus.resource.manager.internal;
 
+import org.onexus.resource.api.IResourceService;
 import org.onexus.resource.api.Plugin;
+import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Service;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,4 +90,5 @@ public class PluginLoader implements Serializable {
 
         return -1;
     }
+
 }

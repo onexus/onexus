@@ -7,35 +7,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @ResourceAlias("service")
-public class Service extends AbstractMetadata {
-
-    @NotNull
-    @Pattern(regexp=Resource.PATTERN_ID)
-    private String id;
-
-    @NotNull
-    private String location;
+public class Service extends Plugin {
 
     @NotNull
     private String mount;
 
     private String config;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public String getConfig() {
         return config;

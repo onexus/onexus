@@ -23,14 +23,17 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.Query;
+import org.onexus.data.api.IDataManager;
 import org.onexus.resource.api.Folder;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Service;
 import org.onexus.resource.api.session.LoginContext;
 import org.onexus.resource.api.utils.ResourceListener;
 import org.onexus.ui.authentication.jaas.JaasSignInPage;
 import org.onexus.ui.authentication.persona.PersonaSignInPage;
+import org.onexus.website.api.servlets.DsServlet;
 import org.onexus.website.api.widget.IWidgetManager;
 import org.ops4j.pax.wicket.api.Constants;
 import org.ops4j.pax.wicket.api.WebApplicationFactory;
@@ -39,6 +42,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.Servlet;
 import java.util.*;
 
 public class WebsiteService implements IWebsiteService {
@@ -50,6 +54,7 @@ public class WebsiteService implements IWebsiteService {
     private IResourceManager resourceManager;
     private ICollectionManager collectionManager;
     private IWidgetManager widgetManager;
+    private IDataManager dataManager;
 
     private List<ISignInPage> signInPages;
 
@@ -136,6 +141,7 @@ public class WebsiteService implements IWebsiteService {
         try {
             LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
 
+            // Register all old style wicket website
             List<WebsiteConfig> websites = resourceManager.loadChildren(WebsiteConfig.class, new ORI(project.getURL(), null));
 
             for (WebsiteConfig website : websites) {
@@ -144,9 +150,25 @@ public class WebsiteService implements IWebsiteService {
                 //TODO Allow multiple websites per project
                 break;
             }
+
+            // Register website services
+            if (project.getServices() != null) {
+
+                String location = context.getBundle().getLocation();
+
+                for (Service service : project.getServices()) {
+                    if (location.startsWith(service.getLocation())) {
+                        registerService(project, service);
+                    }
+                }
+
+            }
+
         } finally {
             LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         }
+
+
     }
 
     private void registerWebsite(String name, WebsiteConfig website) {
@@ -242,6 +264,14 @@ public class WebsiteService implements IWebsiteService {
         this.collectionManager = collectionManager;
     }
 
+    public IDataManager getDataManager() {
+        return dataManager;
+    }
+
+    public void setDataManager(IDataManager dataManager) {
+        this.dataManager = dataManager;
+    }
+
     public IWidgetManager getWidgetManager() {
         return widgetManager;
     }
@@ -256,5 +286,27 @@ public class WebsiteService implements IWebsiteService {
 
     public void setSignInPages(List<ISignInPage> signInPages) {
         this.signInPages = signInPages;
+    }
+
+
+    private void registerService(Project project, Service service) {
+
+        String mount = "/" + project.getName().replaceAll(" ", "_");
+
+        if (!Strings.isEmpty(service.getMount())) {
+            mount = mount + "/" + service.getMount();
+        }
+
+        Dictionary props = new Hashtable();
+        props.put( "alias", mount );
+        props.put("servlet-name", project.getName() + "_" + service.getId());
+
+        registrations.put(
+                project.getURL(),
+                context.registerService( Servlet.class.getName(), new DsServlet(project, dataManager), props )
+        );
+
+        LOGGER.info("Registering website service '" + service.getId() + "' at '" + mount + "'");
+
     }
 }

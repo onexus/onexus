@@ -39,12 +39,12 @@
         <property name="creators" ref="widgetCreatorsRef"/>
     </bean>
 
-
     <!-- WebsiteService -->
     <service interface="org.onexus.website.api.IWebsiteService" ref="websiteService"/>
     <bean id="websiteService" class="org.onexus.website.api.WebsiteService">
         <property name="resourceManager" ref="resourceManager"/>
         <property name="collectionManager" ref="collectionManager"/>
+        <property name="dataManager" ref="dataManager"/>
         <property name="context" ref="blueprintBundleContext"/>
         <property name="signInPages" ref="signInPages"/>
         <property name="widgetManager" ref="widgetManager" />

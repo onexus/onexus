@@ -24,4 +24,5 @@ public interface IResourceService {
         Ex: http://localhost:8181/[service mount]/[service parameters]
      */
     String getMount();
+
 }

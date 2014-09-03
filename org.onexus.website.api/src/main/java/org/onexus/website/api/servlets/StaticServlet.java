@@ -1,4 +1,4 @@
-package org.onexus.website.api;
+package org.onexus.website.api.servlets;
 
 import java.io.File;
 import java.io.IOException;

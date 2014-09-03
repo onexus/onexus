@@ -191,6 +191,18 @@ public abstract class AbstractProjectProvider {
             }
         }
 
+        if (project.getServices() != null) {
+            for (Service service : project.getServices()) {
+
+                try {
+                    long bundleId = pluginLoader.load(service);
+                    bundleDependencies.add(bundleId);
+                } catch (InvalidParameterException e) {
+                    LOGGER.error(e.getMessage());
+                }
+            }
+        }
+
         if (project.getAlias() != null && !project.getAlias().isEmpty()) {
 
             this.projectAlias = new Properties();
