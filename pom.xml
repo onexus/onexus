@@ -17,7 +17,7 @@
         <osgi.version>4.3.1</osgi.version>
 
         <!-- Wicket & Pax-Wicket -->
-        <wicket.version>6.16.0</wicket.version>
+        <wicket.version>6.17.0</wicket.version>
         <pax-wicket.version>3.0.2</pax-wicket.version>
 
         <ops4j.base.version>1.4.0</ops4j.base.version>
