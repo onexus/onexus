@@ -17,11 +17,24 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * This filter, filters out the collection 'collectionAlias' entities that the 'fieldId' don't
+ * contains a full or partial match of the given 'value'.
+ */
 public class Contains extends AtomicFilter {
 
+    @SuppressWarnings("UnusedDeclaration")
     public Contains() {
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a CONTAINS filter.
+     *
+     * @param collectionAlias The collection alias to filter.
+     * @param fieldId The field id to filter.
+     * @param value The value to match.
+     */
     public Contains(String collectionAlias, String fieldId, Object value) {
         super(collectionAlias, fieldId, value);
     }

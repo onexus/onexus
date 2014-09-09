@@ -17,11 +17,24 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * This filter, filters out the collection 'collectionAlias' entities that the 'fieldId'
+ * is not greater than or equal to the given 'value'.
+ */
 public class GreaterThanOrEqual extends AtomicFilter {
 
+    @SuppressWarnings("UnusedDeclaration")
     public GreaterThanOrEqual() {
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a GREATER OR EQUAL THAN filter.
+     *
+     * @param collectionAlias The collection to filter.
+     * @param fieldId The field id to filter.
+     * @param value The value to use when comparing values.
+     */
     public GreaterThanOrEqual(String collectionAlias, String fieldId, Object value) {
         super(collectionAlias, fieldId, value);
     }

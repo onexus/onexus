@@ -22,16 +22,56 @@ import org.onexus.resource.api.ORI;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A IQueryParser can parse a string representation of an OQL
+ * query and return it's java objects representation.
+ */
 public interface IQueryParser {
 
+    /**
+     * Parses a full OQL query.
+     *
+     * @param expression The <code>String</code> representation of the query.
+     * @return A <code>Query</code> object for the given 'expression'. Null if it's not
+     * possible to parse the query.
+     *
+     */
     Query parseQuery(String expression);
 
+    /**
+     * Parses a DEFINE section of a OQL query.
+     *
+     * @param expression The <code>String</code> representation of the define section.
+     * @return A map that maps collection alias to it's collection ORI. Null if it's not
+     * possible to parse the 'expression'.
+     */
     Map<String, ORI> parseDefine(String expression);
 
+    /**
+     * Parses a SELECT section of a OQL query.
+     *
+     * @param expression The <code>String</code> representation of the SELECT section.
+     * @return A map that maps collection alias to a set of collection field ids. Null if it's not
+     * possible to parse the 'expression'.
+     */
     Map<String, List<String>> parserSelect(String expression);
 
+    /**
+     * Parses a WHERE section of a OQL query.
+     *
+     * @param expression The <code>String</code> representation of the WHERE section.
+     * @return A filter that repressent the given 'expression'. Null if it's not
+     * possible to parse the 'expression'
+     */
     Filter parseWhere(String expression);
 
+    /**
+     * Parses a ORDER BY section of a OQL query.
+     *
+     * @param expression The <code>String</code> representation of the ORDER BY section.
+     * @return A list of <code>OrderBy</code> objects that represents the given 'expression'.
+     * Null if it's not possible to parse the 'expression'
+     */
     List<OrderBy> parseOrder(String expression);
 
 }

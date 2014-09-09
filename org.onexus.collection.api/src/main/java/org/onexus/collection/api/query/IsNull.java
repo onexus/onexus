@@ -17,34 +17,66 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * This filter, filters out the collection 'collectionAlias' entities that the 'fieldId' is
+ * not null.
+ */
 public class IsNull extends Filter {
 
     private String collectionAlias;
 
     private String fieldId;
 
+    @SuppressWarnings("UnusedDeclaration")
     public IsNull() {
         super();
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a IS NULL filter.
+     *
+     * @param collectionAlias The collection alias to filter.
+     * @param fieldId The field id to filter.
+     */
     public IsNull(String collectionAlias, String fieldId) {
         super();
         this.collectionAlias = collectionAlias;
         this.fieldId = fieldId;
     }
 
+    /**
+     * The filtering collection.
+     *
+     * @return The collection alias.
+     */
     public String getCollectionAlias() {
         return collectionAlias;
     }
 
+    /**
+     * Sets the collection to filter.
+     *
+     * @param collectionAlias The collection alias to filter.
+     */
     public void setCollectionAlias(String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
+    /**
+     * Gets the filtering field.
+     *
+     * @return The field id.
+     */
     public String getFieldId() {
         return fieldId;
     }
 
+    /**
+     * Sets the filtering field.
+     *
+     * @param fieldId The field id to filter.
+     */
     public void setFieldId(String fieldId) {
         this.fieldId = fieldId;
     }

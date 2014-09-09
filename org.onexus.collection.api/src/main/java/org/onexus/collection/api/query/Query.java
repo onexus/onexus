@@ -22,9 +22,27 @@ import org.onexus.resource.api.ORI;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * An OQL Query.
+ *
+ * <p>
+ *     An OQL query has six main sections:
+ *     <ul>
+ *         <li>DEFINE ... ON ...: The define section maps collection alias to a collection ORI.
+ *         If the collection ORI are not absolut, then the ON clause is used as a base path.</li>
+ *         <li>SELECT: The select section defines with fields of each collection are used.</li>
+ *         <li>FROM: The from section defines a single collection that is the main collection of the query
+ *         (all the other collections used at the select section must have a link to the main collection).</li>
+ *         <li>WHERE: The where section defines one or multiple filters to restrict the selected entitie.</li>
+ *         <li>ORDER BY: The order section defines one or multiple collection sorting directions.</li>
+ *         <li>LIMIT: The limit section defines an 'offset' and a maximum 'count' entities to return.</li>
+ *     </ul>
+ * </p>
+ *
+ */
 public class Query implements Serializable {
 
-    public static final String END_LINE_AND_TAB = "\n\t";
+    private static final String END_LINE_AND_TAB = "\n\t";
 
     private Map<String, ORI> define = new LinkedHashMap<String, ORI>();
 
@@ -42,93 +60,193 @@ public class Query implements Serializable {
 
     private Long count;
 
+    /**
+     * Create an empty query.
+     */
     public Query() {
         super();
     }
 
+    /**
+     * Gets define section.
+     *
+     * @return A map that maps a collection alias to it's collection ORI.
+     */
     public Map<String, ORI> getDefine() {
         return define;
     }
 
-    public void addDefine(String key, ORI resourceURI) {
-        define.put(key, resourceURI.toRelative(on));
+    /**
+     * Adds one collection alias definition.
+     *
+     * @param collectionAlias The collection alias.
+     * @param collectionORI The collection ORI.
+     */
+    public void addDefine(String collectionAlias, ORI collectionORI) {
+        define.put(collectionAlias, collectionORI.toRelative(on));
     }
 
-    public Map<String, List<String>> getSelect() {
-        return select;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public List<OrderBy> getOrders() {
-        return orders;
-    }
-
-    public Long getOffset() {
-        return offset;
-    }
-
-    public Long getCount() {
-        return count;
-    }
-
-    public void addSelect(String key, List<String> fieldNames) {
-        if (select.containsKey(key) && select.get(key) != null) {
-            select.get(key).addAll(fieldNames);
-        } else {
-            select.put(key, fieldNames == null ? null : new ArrayList<String>(fieldNames));
-        }
-    }
-
+    /**
+     * Base ORI that the relative define ORIs are base on.
+     *
+     * @return The define base ORI.
+     */
     public ORI getOn() {
         return this.on;
     }
 
-    public void setOn(ORI resourceURI) {
-        this.on = resourceURI;
+    /**
+     * Sets the ORI that the relative define ORIs are base on.
+     *
+     * @param baseORI The base ORI for the define definitions.
+     */
+    public void setOn(ORI baseORI) {
+        this.on = baseORI;
     }
 
-    public void setFrom(String resourceURI) {
-        this.from = resourceURI;
+    /**
+     * Gets the select section.
+     *
+     * @return A map that maps a collection alias to a list of used field ids.
+     */
+    public Map<String, List<String>> getSelect() {
+        return select;
     }
 
+    /**
+     * Adds a list of selection fields for the given collection.
+     *
+     * @param collectionAlias The collection alias.
+     * @param fieldIds A list of used field ids.
+     */
+    public void addSelect(String collectionAlias, List<String> fieldIds) {
+        if (select.containsKey(collectionAlias) && select.get(collectionAlias) != null) {
+            select.get(collectionAlias).addAll(fieldIds);
+        } else {
+            select.put(collectionAlias, fieldIds == null ? null : new ArrayList<String>(fieldIds));
+        }
+    }
+
+    /**
+     * Gets the main collection used as FROM.
+     *
+     * @return The main collection alias.
+     */
+    public String getFrom() {
+        return from;
+    }
+
+    /**
+     * Sets the main collection used as FROM.
+     *
+     * @param collectionAlias The from collection alias.
+     */
+    public void setFrom(String collectionAlias) {
+        this.from = collectionAlias;
+    }
+
+    /**
+     * Gets the query filter.
+     *
+     * @return The query filter.
+     */
     public Filter getWhere() {
         return where;
     }
 
+    /**
+     * Sets the query filter.
+     *
+     * @param where The query filter.
+     */
     public void setWhere(Filter where) {
         this.where = where;
     }
 
+    /**
+     * Gets the order section.
+     *
+     * @return A list of <code>OrderBy</code> sorting directions.
+     */
+    public List<OrderBy> getOrders() {
+        return orders;
+    }
+
+    /**
+     * Adds an <code>OrderBy</code> sorting direction.
+     *
+     * @param order A <code>OrderBy</code> sorting direction.
+     */
     public void addOrderBy(OrderBy order) {
         this.orders.add(order);
     }
 
-    public void setOffset(Long offset) {
-        this.offset = offset;
+    /**
+     * Gets the initial entities offset.
+     *
+     * @return The number of entities to skip.
+     */
+    public Long getOffset() {
+        return offset;
     }
 
+    /**
+     * Sets the initial entities offset.
+     *
+     * @param offset The number of entities to skip.
+     */
     public void setOffset(int offset) {
         setOffset(Long.valueOf(offset));
     }
 
+    /**
+     * Sets the initial entities offset.
+     *
+     * @param offset The number of entities to skip.
+     */
+    public void setOffset(Long offset) {
+        this.offset = offset;
+    }
 
+    /**
+     * Gets the total entities to return.
+     *
+     * @return The number of entities to return.
+     */
+    public Long getCount() {
+        return count;
+    }
+
+    /**
+     * Sets the total entities to return.
+     *
+     * @param count The number of entities to return.
+     */
     public void setCount(Long count) {
         this.count = count;
     }
 
+    /**
+     * Sets the total entities to return.
+     *
+     * @param count The number of entities to return.
+     */
     public void setCount(int count) {
         setCount(Long.valueOf(count));
     }
-
 
     @Override
     public String toString() {
         return toString(new StringBuilder(), true).toString();
     }
 
+    /**
+     * Returns the input 'oql' StringBuilder after append this filter OQL string.
+     *
+     * @param oql A StringBuilder to append the OQL
+     * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
+     * @return The OQL query
+     */
     public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
 
 
@@ -230,6 +348,12 @@ public class Query implements Serializable {
         return oql;
     }
 
+    /**
+     * Remove escaped characters.
+     *
+     * @param value A escaped string.
+     * @return A decoded string.
+     */
     public static String unescapeString(String value) {
 
         if (value == null) {
@@ -253,7 +377,12 @@ public class Query implements Serializable {
 
     }
 
-
+    /**
+     * Escape quotes characters.
+     *
+     * @param value A string to escape.
+     * @return The escaped string.
+     */
     public static String escapeString(String value) {
         if (value == null) {
             return null;

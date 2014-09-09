@@ -17,12 +17,22 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * Logical AND operator between two OQL filters.
+ */
 public class And extends BinaryFilter {
 
+    @SuppressWarnings("UnusedDeclaration")
     public And() {
-        super();
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a AND filter.
+     *
+     * @param left The left filter.
+     * @param right The right filter.
+     */
     public And(Filter left, Filter right) {
         super(left, right);
     }

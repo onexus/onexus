@@ -17,11 +17,24 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * This filter, filters out the collection 'collectionAlias' entities that the 'fieldId'
+ * is not less than the given 'value'.
+ */
 public class LessThan extends AtomicFilter {
 
+    @SuppressWarnings("UnusedDeclaration")
     public LessThan() {
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a LESS THAN filter.
+     *
+     * @param collectionAlias The collection to filter.
+     * @param fieldId The field id to filter.
+     * @param value The value to use when comparing values.
+     */
     public LessThan(String collectionAlias, String fieldId, Object value) {
         super(collectionAlias, fieldId, value);
     }

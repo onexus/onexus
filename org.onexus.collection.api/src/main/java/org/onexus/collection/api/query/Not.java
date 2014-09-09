@@ -17,19 +17,33 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * A logical filter that negates the given filter.
+ */
 public class Not extends Filter {
 
     private Filter negatedFilter;
 
+    @SuppressWarnings("UnusedDeclaration")
     public Not() {
-        super();
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a NOT filter.
+     *
+     * @param negatedFilter The filter to negate.
+     */
     public Not(Filter negatedFilter) {
         super();
         this.negatedFilter = negatedFilter;
     }
 
+    /**
+     * Get the filter that this filter negates.
+     *
+     * @return The negated filter.
+     */
     public Filter getNegatedFilter() {
         return negatedFilter;
     }

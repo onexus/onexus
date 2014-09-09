@@ -17,6 +17,9 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * This filter select a single entity of a collection using it's primary key.
+ */
 public class EqualId extends Filter {
 
     private String collectionAlias;
@@ -24,27 +27,55 @@ public class EqualId extends Filter {
     private Object id;
 
 
+    @SuppressWarnings("UnusedDeclaration")
     public EqualId() {
         super();
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Creates EQUAL ID filter.
+     *
+     * @param collectionAlias The collection alias to filter.
+     * @param id The primary key of the entity to select.
+     */
     public EqualId(String collectionAlias, Object id) {
         this.collectionAlias = collectionAlias;
         this.id = id;
     }
 
+    /**
+     * The filtering collection.
+     *
+     * @return The alias of the collection.
+     */
     public String getCollectionAlias() {
         return collectionAlias;
     }
 
-    public Object getId() {
-        return id;
-    }
-
+    /**
+     * Sets the collection to filter.
+     *
+     * @param collectionAlias The alias of the collection to filter.
+     */
     public void setCollectionAlias(String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
+    /**
+     * The primary key of the entity to select.
+     *
+     * @return The <code>String</code> representation of the primary key.
+     */
+    public Object getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the primary key to select.
+     *
+     * @param id The primary key value to select.
+     */
     public void setId(Object id) {
         this.id = id;
     }

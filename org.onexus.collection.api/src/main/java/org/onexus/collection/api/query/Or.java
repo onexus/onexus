@@ -17,12 +17,22 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * Logical OR operator between two OQL filters.
+ */
 public class Or extends BinaryFilter {
 
+    @SuppressWarnings("UnusedDeclaration")
     public Or() {
-        super();
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a OR filter.
+     *
+     * @param left The left filter.
+     * @param right The right filter.
+     */
     public Or(Filter left, Filter right) {
         super(left, right);
     }

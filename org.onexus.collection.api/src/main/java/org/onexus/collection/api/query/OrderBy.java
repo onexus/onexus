@@ -23,6 +23,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
+/**
+ * This defines a sort direction in a OQL query.
+ */
 public class OrderBy implements Serializable {
 
     @NotNull
@@ -33,47 +36,100 @@ public class OrderBy implements Serializable {
 
     private boolean ascendent = true;
 
+    @SuppressWarnings("UnusedDeclaration")
     public OrderBy() {
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a <code>OrderBy</code>.
+     *
+     * @param collection The collection alias to order.
+     * @param field The field id to order.
+     */
     public OrderBy(String collection, String field) {
         this(collection, field, true);
     }
 
+    /**
+     * Create a <code>OrderBy</code>.
+     *
+     * @param collection The collection alias to order.
+     * @param field The field id to order.
+     * @param ascendent The sorting direction.
+     */
     public OrderBy(String collection, String field, boolean ascendent) {
         this.collection = collection;
         this.field = field;
         this.ascendent = ascendent;
     }
 
+    /**
+     * The sorted collection
+     *
+     * @return The collection alias.
+     */
     public String getCollection() {
         return collection;
     }
 
+    /**
+     * Sets the sorted collection.
+     *
+     * @param collection The collection alias.
+     */
     public void setCollection(String collection) {
         this.collection = collection;
     }
 
+    /**
+     * The sorted field.
+     *
+     * @return The field id.
+     */
     public String getField() {
         return field;
     }
 
+    /**
+     * Sets the sorted field.
+     *
+     * @param field The field id to order.
+     */
     public void setField(String field) {
         this.field = field;
     }
 
+    /**
+     * Sorting direction.
+     *
+     * @return True if it's ascending, false descending.
+     */
     public boolean isAscendent() {
         return ascendent;
     }
 
+    /**
+     * Sets the sorting direction.
+     *
+     * @param ascendent True if it's ascending, false descending.
+     */
     public void setAscendent(boolean ascendent) {
         this.ascendent = ascendent;
     }
 
+    @Override
     public String toString() {
         return toString(new StringBuilder(), true).toString();
     }
 
+    /**
+     * Returns the input 'oql' StringBuilder after append this filter OQL string.
+     *
+     * @param oql A StringBuilder to append the OQL
+     * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
+     * @return The OQL query
+     */
     public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
         oql.append(collection).append('.').append(field);
         if (!ascendent) {

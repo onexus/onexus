@@ -17,11 +17,24 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * This filter, filters out the collection 'collectionAlias' entities that the 'fieldId'
+ * have a exact match of the given 'value'.
+ */
 public class NotEqual extends AtomicFilter {
 
+    @SuppressWarnings("UnusedDeclaration")
     public NotEqual() {
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     * Create a NOT EQUAL filter.
+     *
+     * @param collectionAlias The collection alias to filter.
+     * @param fieldId The filter id to filter.
+     * @param value The value to use when filtering.
+     */
     public NotEqual(String collectionAlias, String fieldId, Object value) {
         super(collectionAlias, fieldId, value);
     }

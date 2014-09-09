@@ -17,36 +17,60 @@
  */
 package org.onexus.collection.api.query;
 
+/**
+ * BinaryFilter serves as the highest level abstract base class for all OQL
+ * where filters that operate between two predicates. Example: AND and OR filters.
+ */
 public abstract class BinaryFilter extends Filter {
 
     private Filter left;
     private Filter right;
 
     public BinaryFilter() {
-        super();
+        // Keep this constructor for JAXB compatibility
     }
 
+    /**
+     *
+     * @param left A <code>Filter</code> that represents the left predicate
+     * @param right A <code>Filter</code> that represents the right predicate
+     */
     public BinaryFilter(Filter left, Filter right) {
         this.left = left;
         this.right = right;
     }
 
+    /**
+     * @return The left predicate
+     */
     public Filter getLeft() {
         return left;
     }
 
+    /**
+     * @param left The left predicate
+     */
     public void setLeft(Filter left) {
         this.left = left;
     }
 
+    /**
+     * @return The right predicate
+     */
     public Filter getRight() {
         return right;
     }
 
+    /**
+     * @param right The right predicate
+     */
     public void setRight(Filter right) {
         this.right = right;
     }
 
+    /**
+     * @return the OQL string representation of this filter operand.
+     */
     public abstract String getOperandSymbol();
 
     @Override
