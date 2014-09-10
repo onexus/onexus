@@ -19,11 +19,14 @@ package org.onexus.website.api.servlets;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.util.string.Strings;
+import org.onexus.data.api.Data;
 import org.onexus.data.api.IDataManager;
 import org.onexus.data.api.IDataStreams;
+import org.onexus.resource.api.Folder;
 import org.onexus.resource.api.IResourceManager;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Project;
+import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.session.LoginContext;
 
 import javax.servlet.ServletException;
@@ -39,10 +42,12 @@ public class DsServlet extends HttpServlet {
 
     private Project project;
     private IDataManager dataManager;
+    private IResourceManager resourceManager;
 
-    public DsServlet(Project project, IDataManager dataManager) {
+    public DsServlet(Project project, IDataManager dataManager, IResourceManager resourceManager) {
         this.project = project;
         this.dataManager = dataManager;
+        this.resourceManager = resourceManager;
     }
 
     @Override
@@ -65,17 +70,43 @@ public class DsServlet extends HttpServlet {
             LoginContext.set(LoginContext.ANONYMOUS_CONTEXT, null);
         }
 
-        ORI dataResource = requestToORI(req);
+        String uri = req.getRequestURI();
+        String servletPath = req.getServletPath();
 
-        if (dataResource != null) {
+        if (uri.length() <= servletPath.length()) {
+            resp.sendRedirect(req.getRequestURI() + "/");
+            return;
+        }
+
+        ORI ori = requestToORI(uri, servletPath);
+
+        try {
+            Resource resource = resourceManager.load(Resource.class, ori);
+
+            if (resource instanceof Folder || resource instanceof Project) {
+                if (req.getRequestURI().endsWith("/")) {
+                    ori = new ORI(project.getURL(), (ori.getPath() == null ? "" : ori.getPath() + "/") + "index.html");
+                } else {
+                    resp.sendRedirect(req.getRequestURI() + "/");
+                    return;
+                }
+            }
+
+        } catch (Exception e) {
+
+            // Resource not found
+            ori = null;
+        }
+
+        if (ori != null) {
 
             try {
-                IDataStreams streams = dataManager.load(dataResource);
+                IDataStreams streams = dataManager.load(ori);
 
                 // Minimum Response header information (size and MIME type)
-                long size = dataManager.size(dataResource);
+                long size = dataManager.size(ori);
                 resp.setContentLength((int) size);
-                resp.setContentType(getServletContext().getMimeType(dataResource.getPath()));
+                resp.setContentType(getServletContext().getMimeType(ori.getPath()));
 
                 OutputStream out = resp.getOutputStream();
                 for (InputStream in : streams) {
@@ -93,26 +124,8 @@ public class DsServlet extends HttpServlet {
         }
     }
 
-    private ORI requestToORI(HttpServletRequest req) {
-
-        LoginContext ctx = LoginContext.get();
-        try {
-            LoginContext.set(LoginContext.SERVICE_CONTEXT, null);
-
-            String uri = req.getRequestURI();
-            String servletPath = req.getServletPath();
-
-            String resourcePath = uri.substring(servletPath.length() + 1);
-
-            if (Strings.isEmpty(resourcePath)) {
-                resourcePath = "index.html";
-            }
-
-            return new ORI(project.getURL(), resourcePath);
-
-        } finally {
-            LoginContext.set(ctx, null);
-        }
-
+    private ORI requestToORI(String uri, String servletPath) {
+        String resourcePath = uri.substring(servletPath.length() + 1);
+        return new ORI(project.getURL(), (resourcePath.endsWith("/") ? resourcePath.substring(0, resourcePath.length() - 1) : resourcePath));
     }
 }

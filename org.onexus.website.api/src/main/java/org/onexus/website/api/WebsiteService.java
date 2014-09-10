@@ -303,7 +303,7 @@ public class WebsiteService implements IWebsiteService {
 
         registrations.put(
                 project.getURL(),
-                context.registerService( Servlet.class.getName(), new DsServlet(project, dataManager), props )
+                context.registerService( Servlet.class.getName(), new DsServlet(project, dataManager, resourceManager), props )
         );
 
         LOGGER.info("Registering website service '" + service.getId() + "' at '" + mount + "'");
