@@ -17,8 +17,8 @@
  */
 package org.onexus.collection.api;
 
-import org.onexus.collection.api.validations.ValidCollection;
 import org.onexus.collection.api.query.OrderBy;
+import org.onexus.collection.api.validations.ValidCollection;
 import org.onexus.resource.api.Resource;
 import org.onexus.resource.api.annotations.ResourceAlias;
 import org.onexus.resource.api.annotations.ResourceRegister;
@@ -27,12 +27,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * A <code>Collection</code> is a resource that represents a collection of structured data.
+ */
 @ValidCollection
 @ResourceAlias("collection")
 @ResourceRegister({Link.class, Field.class, OrderBy.class})
 public class Collection extends Resource {
 
-    @NotNull @Valid
+    @NotNull
+    @Valid
     private List<Field> fields;
 
     @Valid
@@ -44,6 +48,10 @@ public class Collection extends Resource {
 
     public List<Field> getFields() {
         return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
     }
 
     public List<Link> getLinks() {
@@ -64,10 +72,6 @@ public class Collection extends Resource {
         }
 
         return null;
-    }
-
-    public void setFields(List<Field> fields) {
-        this.fields = fields;
     }
 
 }

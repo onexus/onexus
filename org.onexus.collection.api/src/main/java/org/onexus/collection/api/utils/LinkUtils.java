@@ -22,8 +22,15 @@ import org.onexus.collection.api.Field;
 import org.onexus.collection.api.Link;
 import org.onexus.resource.api.ORI;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Some utils to discover links between two collections, and parse link strings.
+ */
 public final class LinkUtils {
 
     private final static String FIELDS_SEPARATOR = "==";
@@ -31,11 +38,30 @@ public final class LinkUtils {
     private LinkUtils() {
     }
 
-    public static List<FieldLink> getLinkFields(ORI parentURI, Collection a, Collection b) {
-        return getLinkFields(parentURI, a, b, Collections.EMPTY_LIST);
+    /**
+     * Find all possible links between two collections.
+     *
+     * @param parentORI Base ORI to use on relative links.
+     * @param a         First collection.
+     * @param b         Second collection.
+     * @return A list of links that link collection 'a' and 'b'.
+     */
+    public static List<FieldLink> getLinkFields(ORI parentORI, Collection a, Collection b) {
+        return getLinkFields(parentORI, a, b, Collections.EMPTY_LIST);
     }
 
-    public static List<FieldLink> getLinkFields(ORI parentURI, Collection a, Collection b, List<ORI> fixedCollections) {
+    /**
+     * Find all possible links between two collections, with some fixed collections. A fixed collection is a collection
+     * that is fixed to a single entity (that means that the where section of the query is using a EQUAL ID filter to
+     * select a single IEntity for that collection).
+     *
+     * @param parentORI        Base ORI to use on relative links.
+     * @param a                First collection.
+     * @param b                Second collection.
+     * @param fixedCollections A list of fixed collections.
+     * @return A list of links that link collection 'a' and 'b' given that list of fixed collections.
+     */
+    public static List<FieldLink> getLinkFields(ORI parentORI, Collection a, Collection b, List<ORI> fixedCollections) {
 
         List<FieldLink> fieldLinks = new ArrayList<FieldLink>();
 
@@ -110,8 +136,8 @@ public final class LinkUtils {
                 // Look if there is any match with B links
                 for (Link linkB : linksB) {
                     for (Link linkA : keyLinks) {
-                        ORI linkBCollection = linkB.getCollection().toAbsolute(parentURI);
-                        ORI linkACollection = linkA.getCollection().toAbsolute(parentURI);
+                        ORI linkBCollection = linkB.getCollection().toAbsolute(parentORI);
+                        ORI linkACollection = linkA.getCollection().toAbsolute(parentORI);
 
                         if (linkBCollection.equals(linkACollection)) {
 
@@ -166,11 +192,23 @@ public final class LinkUtils {
         return allKeyLinked;
     }
 
+    /**
+     * Get the 'to' (right) field id given a field link expression.
+     *
+     * @param fieldLink A field link expression (ie: 'from_field_id == to_field_id')
+     * @return The 'to' (right) field id. (ie: returns 'to_field_id')
+     */
     public static String getToFieldName(String fieldLink) {
         String values[] = fieldLink.split(FIELDS_SEPARATOR);
         return values.length == 2 ? values[1].trim() : values[0].trim();
     }
 
+    /**
+     * Get the 'to' (right) field id given a field link expression.
+     *
+     * @param fieldLink A field link expression (ie: 'from_field_id == to_field_id')
+     * @return The 'to' (right) field id. (ie: returns 'to_field_id')
+     */
     public static String getFromFieldName(String fieldLink) {
         String values[] = fieldLink.split(FIELDS_SEPARATOR);
         return values[0].trim();

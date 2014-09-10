@@ -31,21 +31,25 @@ public class OrderBy implements Serializable {
     @NotNull
     private String collection;
 
-    @NotNull @Pattern(regexp = Resource.PATTERN_ID)
+    @NotNull
+    @Pattern(regexp = Resource.PATTERN_ID)
     private String field;
 
     private boolean ascendent = true;
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public OrderBy() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
      * Create a <code>OrderBy</code>.
      *
      * @param collection The collection alias to order.
-     * @param field The field id to order.
+     * @param field      The field id to order.
      */
     public OrderBy(String collection, String field) {
         this(collection, field, true);
@@ -55,8 +59,8 @@ public class OrderBy implements Serializable {
      * Create a <code>OrderBy</code>.
      *
      * @param collection The collection alias to order.
-     * @param field The field id to order.
-     * @param ascendent The sorting direction.
+     * @param field      The field id to order.
+     * @param ascendent  The sorting direction.
      */
     public OrderBy(String collection, String field, boolean ascendent) {
         this.collection = collection;
@@ -126,7 +130,7 @@ public class OrderBy implements Serializable {
     /**
      * Returns the input 'oql' StringBuilder after append this filter OQL string.
      *
-     * @param oql A StringBuilder to append the OQL
+     * @param oql         A StringBuilder to append the OQL
      * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
      * @return The OQL query
      */

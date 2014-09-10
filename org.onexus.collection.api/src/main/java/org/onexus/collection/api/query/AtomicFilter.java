@@ -29,15 +29,20 @@ public abstract class AtomicFilter extends Filter {
 
     private Object value;
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     public AtomicFilter() {
         super();
     }
 
     /**
-     * New instance of a
+     * New instance of an atomic filter.
+     *
      * @param collectionAlias The collection alias that filters this filter.
-     * @param fieldId The filter id that filters this filter.
-     * @param value The value that uses this filter to filter the collection.
+     * @param fieldId         The filter id that filters this filter.
+     * @param value           The value that uses this filter to filter the
+     *                        collection.
      */
     public AtomicFilter(String collectionAlias, String fieldId, Object value) {
         this.collectionAlias = collectionAlias;
@@ -46,10 +51,11 @@ public abstract class AtomicFilter extends Filter {
     }
 
     /**
-     * The collection alias that filters this <code>AtomicFilter</code>
+     * The collection alias that filters this <code>AtomicFilter</code>.
+     *
      * @return The alias
      */
-    public String getCollectionAlias() {
+    public final String getCollectionAlias() {
         return collectionAlias;
     }
 
@@ -58,7 +64,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @param collectionAlias
      */
-    public void setCollectionAlias(String collectionAlias) {
+    public final void setCollectionAlias(String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
@@ -67,7 +73,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @return Thie field id.
      */
-    public String getFieldId() {
+    public final String getFieldId() {
         return fieldId;
     }
 
@@ -76,7 +82,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @param fieldId The field id to filter.
      */
-    public void setFieldId(String fieldId) {
+    public final void setFieldId(String fieldId) {
         this.fieldId = fieldId;
     }
 
@@ -85,7 +91,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @return The filter value.
      */
-    public Object getValue() {
+    public final Object getValue() {
         return value;
     }
 
@@ -94,7 +100,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @param value The filter value
      */
-    public void setValue(Object value) {
+    public final void setValue(Object value) {
         this.value = value;
     }
 

@@ -26,13 +26,15 @@ public abstract class BinaryFilter extends Filter {
     private Filter left;
     private Filter right;
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     public BinaryFilter() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
-     *
-     * @param left A <code>Filter</code> that represents the left predicate
+     * @param left  A <code>Filter</code> that represents the left predicate
      * @param right A <code>Filter</code> that represents the right predicate
      */
     public BinaryFilter(Filter left, Filter right) {

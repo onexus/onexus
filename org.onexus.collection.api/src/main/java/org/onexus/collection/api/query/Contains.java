@@ -23,17 +23,20 @@ package org.onexus.collection.api.query;
  */
 public class Contains extends AtomicFilter {
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public Contains() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
      * Create a CONTAINS filter.
      *
      * @param collectionAlias The collection alias to filter.
-     * @param fieldId The field id to filter.
-     * @param value The value to match.
+     * @param fieldId         The field id to filter.
+     * @param value           The value to match.
      */
     public Contains(String collectionAlias, String fieldId, Object value) {
         super(collectionAlias, fieldId, value);

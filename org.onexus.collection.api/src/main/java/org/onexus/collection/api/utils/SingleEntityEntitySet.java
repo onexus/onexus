@@ -24,11 +24,19 @@ import org.onexus.collection.api.IEntitySet;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * A <code>IEntitySet</code> that contains a single <code>IEntity</code>.
+ */
 public class SingleEntityEntitySet implements IEntitySet {
 
     private IEntity entity;
     private boolean next = true;
 
+    /**
+     * Create a entity set with only one entity.
+     *
+     * @param entity The <code>IEntity</code> of the entity set.
+     */
     public SingleEntityEntitySet(IEntity entity) {
         this.entity = entity;
     }

@@ -22,18 +22,20 @@ package org.onexus.collection.api.query;
  */
 public class And extends BinaryFilter {
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public And() {
-        // Keep this constructor for JAXB compatibility
     }
 
     /**
      * Create a AND filter.
      *
-     * @param left The left filter.
+     * @param left  The left filter.
      * @param right The right filter.
      */
-    public And(Filter left, Filter right) {
+    public And(final Filter left, final Filter right) {
         super(left, right);
     }
 

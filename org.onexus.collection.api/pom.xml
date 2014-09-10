@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>onexus</artifactId>
@@ -38,7 +38,9 @@
         <site>
             <id>site</id>
             <name>Onexus Github ghpages checkout</name>
-            <url>file://${basedir}/../site/${project.version}/${project.artifactId}</url>
+            <url>
+                file://${basedir}/../site/${project.version}/${project.artifactId}
+            </url>
         </site>
     </distributionManagement>
 

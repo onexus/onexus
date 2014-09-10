@@ -24,10 +24,18 @@ import org.onexus.collection.api.IEntitySet;
 import java.util.Collections;
 import java.util.Iterator;
 
+/**
+ * A <code>IEntitySet</code> that is always empty.
+ */
 public class EmptyEntitySet implements IEntitySet {
 
     private Collection collection;
 
+    /**
+     * Create a empty IEntitySet
+     *
+     * @param collection
+     */
     public EmptyEntitySet(Collection collection) {
         this.collection = collection;
     }

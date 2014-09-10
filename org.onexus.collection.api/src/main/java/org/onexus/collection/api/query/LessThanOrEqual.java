@@ -23,17 +23,20 @@ package org.onexus.collection.api.query;
  */
 public class LessThanOrEqual extends AtomicFilter {
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public LessThanOrEqual() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
      * Create a LESS THAN OR EQUAL filter.
      *
      * @param collectionAlias The collection to filter.
-     * @param fieldId The field id to filter.
-     * @param value The value to use when comparing values.
+     * @param fieldId         The field id to filter.
+     * @param value           The value to use when comparing values.
      */
     public LessThanOrEqual(String collectionAlias, String fieldId, Object value) {
         super(collectionAlias, fieldId, value);

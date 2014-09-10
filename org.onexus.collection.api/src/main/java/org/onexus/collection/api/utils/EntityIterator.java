@@ -24,6 +24,10 @@ import org.onexus.resource.api.ORI;
 
 import java.util.Iterator;
 
+/**
+ * A <code>IEntity</code> iterator to iterate over a <code>IEntitySet</code> or a
+ * <code>IEntityTable</code>.
+ */
 public class EntityIterator implements Iterator<IEntity> {
 
     private transient IEntitySet entitySet;
@@ -34,6 +38,11 @@ public class EntityIterator implements Iterator<IEntity> {
     private boolean _movedToNext = false;
     private boolean _lastNext = true;
 
+    /**
+     * Create a <code>IEntity</code> iterator that iterates over a <code>IEntitySet</code>
+     *
+     * @param entitySet The <code>IEntitySet</code> to iterate.
+     */
     public EntityIterator(IEntitySet entitySet) {
         super();
 
@@ -42,6 +51,12 @@ public class EntityIterator implements Iterator<IEntity> {
         this.entityTable = null;
     }
 
+    /**
+     * Create a <code>IEntity</code> iterator that iterates over a <code>IEntityTable</code>
+     *
+     * @param entityTable   The <code>IEntityTable</code> to iterate.
+     * @param collectionOri The collection of the table to iterate.
+     */
     public EntityIterator(IEntityTable entityTable, ORI collectionOri) {
         super();
 

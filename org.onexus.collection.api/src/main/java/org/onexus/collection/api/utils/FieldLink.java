@@ -19,6 +19,9 @@ package org.onexus.collection.api.utils;
 
 import org.onexus.resource.api.ORI;
 
+/**
+ * This class represents a link between to field collections.
+ */
 public class FieldLink {
 
     private ORI fromCollection;
@@ -27,6 +30,14 @@ public class FieldLink {
     private String toFieldName;
 
 
+    /**
+     * Create a collection link
+     *
+     * @param fromCollection The 'from' collection of the link.
+     * @param fromFieldName  The 'from' field id.
+     * @param toCollection   The 'to' collection of the link.
+     * @param toFieldName    The 'to' field id.
+     */
     public FieldLink(ORI fromCollection, String fromFieldName,
                      ORI toCollection, String toFieldName) {
         super();
@@ -36,42 +47,74 @@ public class FieldLink {
         this.toFieldName = toFieldName;
     }
 
-
+    /**
+     * Gets the from collection.
+     *
+     * @return Collection ORI.
+     */
     public ORI getFromCollection() {
         return fromCollection;
     }
 
-
+    /**
+     * Sets the from collection.
+     *
+     * @param fromCollection The 'from' collection of the link.
+     */
     public void setFromCollection(ORI fromCollection) {
         this.fromCollection = fromCollection;
     }
 
-
+    /**
+     * Gets the from field id.
+     *
+     * @return Field id.
+     */
     public String getFromFieldName() {
         return fromFieldName;
     }
 
-
+    /**
+     * Sets the from field id.
+     *
+     * @param fromFieldName The 'from' field id.
+     */
     public void setFromFieldName(String fromFieldName) {
         this.fromFieldName = fromFieldName;
     }
 
-
+    /**
+     * Gets the to collection.
+     *
+     * @return Collection ORI.
+     */
     public ORI getToCollection() {
         return toCollection;
     }
 
-
+    /**
+     * Sets the to collection.
+     *
+     * @param toCollection The 'to' collection of the link.
+     */
     public void setToCollection(ORI toCollection) {
         this.toCollection = toCollection;
     }
 
-
+    /**
+     * Gets the to field id.
+     *
+     * @return Field id.
+     */
     public String getToFieldName() {
         return toFieldName;
     }
 
-
+    /**
+     * Sets the to field id.
+     *
+     * @param toFieldName The 'to' field id.
+     */
     public void setToFieldName(String toFieldName) {
         this.toFieldName = toFieldName;
     }

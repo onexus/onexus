@@ -20,25 +20,28 @@ package org.onexus.collection.api.query;
 import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * An OQL Query.
- *
+ * <p/>
  * <p>
- *     An OQL query has six main sections:
- *     <ul>
- *         <li>DEFINE ... ON ...: The define section maps collection alias to a collection ORI.
- *         If the collection ORI are not absolut, then the ON clause is used as a base path.</li>
- *         <li>SELECT: The select section defines with fields of each collection are used.</li>
- *         <li>FROM: The from section defines a single collection that is the main collection of the query
- *         (all the other collections used at the select section must have a link to the main collection).</li>
- *         <li>WHERE: The where section defines one or multiple filters to restrict the selected entitie.</li>
- *         <li>ORDER BY: The order section defines one or multiple collection sorting directions.</li>
- *         <li>LIMIT: The limit section defines an 'offset' and a maximum 'count' entities to return.</li>
- *     </ul>
+ * An OQL query has six main sections:
+ * <ul>
+ * <li>DEFINE ... ON ...: The define section maps collection alias to a collection ORI.
+ * If the collection ORI are not absolut, then the ON clause is used as a base path.</li>
+ * <li>SELECT: The select section defines with fields of each collection are used.</li>
+ * <li>FROM: The from section defines a single collection that is the main collection of the query
+ * (all the other collections used at the select section must have a link to the main collection).</li>
+ * <li>WHERE: The where section defines one or multiple filters to restrict the selected entitie.</li>
+ * <li>ORDER BY: The order section defines one or multiple collection sorting directions.</li>
+ * <li>LIMIT: The limit section defines an 'offset' and a maximum 'count' entities to return.</li>
+ * </ul>
  * </p>
- *
  */
 public class Query implements Serializable {
 
@@ -68,6 +71,49 @@ public class Query implements Serializable {
     }
 
     /**
+     * Remove escaped characters.
+     *
+     * @param value A escaped string.
+     * @return A decoded string.
+     */
+    public static String unescapeString(String value) {
+
+        if (value == null) {
+            return null;
+        }
+
+        if (value.length() < 3) {
+            return "";
+        }
+
+        char quote = value.charAt(0);
+
+        value = value.substring(1, value.length() - 1);
+        if (quote == '"') {
+            value = value.replace("\\\"", "\"");
+        } else {
+            value = value.replace("\\'", "'");
+        }
+
+        return value;
+
+    }
+
+    /**
+     * Escape quotes characters.
+     *
+     * @param value A string to escape.
+     * @return The escaped string.
+     */
+    public static String escapeString(String value) {
+        if (value == null) {
+            return null;
+        }
+        value = "'" + value.replace("'", "\\'") + "'";
+        return value;
+    }
+
+    /**
      * Gets define section.
      *
      * @return A map that maps a collection alias to it's collection ORI.
@@ -80,7 +126,7 @@ public class Query implements Serializable {
      * Adds one collection alias definition.
      *
      * @param collectionAlias The collection alias.
-     * @param collectionORI The collection ORI.
+     * @param collectionORI   The collection ORI.
      */
     public void addDefine(String collectionAlias, ORI collectionORI) {
         define.put(collectionAlias, collectionORI.toRelative(on));
@@ -117,7 +163,7 @@ public class Query implements Serializable {
      * Adds a list of selection fields for the given collection.
      *
      * @param collectionAlias The collection alias.
-     * @param fieldIds A list of used field ids.
+     * @param fieldIds        A list of used field ids.
      */
     public void addSelect(String collectionAlias, List<String> fieldIds) {
         if (select.containsKey(collectionAlias) && select.get(collectionAlias) != null) {
@@ -243,7 +289,7 @@ public class Query implements Serializable {
     /**
      * Returns the input 'oql' StringBuilder after append this filter OQL string.
      *
-     * @param oql A StringBuilder to append the OQL
+     * @param oql         A StringBuilder to append the OQL
      * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
      * @return The OQL query
      */
@@ -346,49 +392,6 @@ public class Query implements Serializable {
         }
 
         return oql;
-    }
-
-    /**
-     * Remove escaped characters.
-     *
-     * @param value A escaped string.
-     * @return A decoded string.
-     */
-    public static String unescapeString(String value) {
-
-        if (value == null) {
-            return null;
-        }
-
-        if (value.length() < 3) {
-            return "";
-        }
-
-        char quote = value.charAt(0);
-
-        value = value.substring(1, value.length() - 1);
-        if (quote == '"') {
-            value = value.replace("\\\"", "\"");
-        } else {
-            value = value.replace("\\'", "'");
-        }
-
-        return value;
-
-    }
-
-    /**
-     * Escape quotes characters.
-     *
-     * @param value A string to escape.
-     * @return The escaped string.
-     */
-    public static String escapeString(String value) {
-        if (value == null) {
-            return null;
-        }
-        value = "'" + value.replace("'", "\\'") + "'";
-        return value;
     }
 
 }

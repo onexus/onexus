@@ -34,7 +34,6 @@ public interface IQueryParser {
      * @param expression The <code>String</code> representation of the query.
      * @return A <code>Query</code> object for the given 'expression'. Null if it's not
      * possible to parse the query.
-     *
      */
     Query parseQuery(String expression);
 

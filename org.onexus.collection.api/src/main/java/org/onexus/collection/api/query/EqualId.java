@@ -27,17 +27,19 @@ public class EqualId extends Filter {
     private Object id;
 
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public EqualId() {
         super();
-        // Keep this constructor for JAXB compatibility
     }
 
     /**
      * Creates EQUAL ID filter.
      *
      * @param collectionAlias The collection alias to filter.
-     * @param id The primary key of the entity to select.
+     * @param id              The primary key of the entity to select.
      */
     public EqualId(String collectionAlias, Object id) {
         this.collectionAlias = collectionAlias;

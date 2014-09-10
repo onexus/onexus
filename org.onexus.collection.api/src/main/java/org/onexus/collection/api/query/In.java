@@ -33,17 +33,19 @@ public class In extends Filter {
 
     private Set<Object> values = new HashSet<Object>();
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public In() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
      * Create a IN filter.
      *
      * @param collectionAlias The collection to filter.
-     * @param fieldId The field id to filter.
-     *
+     * @param fieldId         The field id to filter.
      */
     public In(String collectionAlias, String fieldId) {
         super();

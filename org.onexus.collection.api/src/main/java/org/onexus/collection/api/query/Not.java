@@ -24,9 +24,12 @@ public class Not extends Filter {
 
     private Filter negatedFilter;
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public Not() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
@@ -51,7 +54,7 @@ public class Not extends Filter {
     @Override
     public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
 
-        boolean binaryFilter = prettyPrint && (negatedFilter instanceof BinaryFilter);
+        boolean binaryFilter = prettyPrint && negatedFilter instanceof BinaryFilter;
         String prevTabs = binaryFilter ? endingTabs(oql) : "";
 
         oql.append("NOT");

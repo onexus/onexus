@@ -27,7 +27,8 @@ import javax.validation.constraints.Pattern;
 @ResourceAlias("field")
 public class Field extends AbstractMetadata {
 
-    @NotNull @Pattern(regexp=Resource.PATTERN_ID)
+    @NotNull
+    @Pattern(regexp = Resource.PATTERN_ID)
     private String id;
 
     @NotNull
@@ -61,12 +62,12 @@ public class Field extends AbstractMetadata {
         this.id = id;
     }
 
-    public void setType(Class<?> type) {
-        this.type = type;
-    }
-
     public Class<?> getType() {
         return type;
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
     }
 
     public Boolean isPrimaryKey() {

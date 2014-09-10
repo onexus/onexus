@@ -22,15 +22,18 @@ package org.onexus.collection.api.query;
  */
 public class Or extends BinaryFilter {
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public Or() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
 
     /**
      * Create a OR filter.
      *
-     * @param left The left filter.
+     * @param left  The left filter.
      * @param right The right filter.
      */
     public Or(Filter left, Filter right) {

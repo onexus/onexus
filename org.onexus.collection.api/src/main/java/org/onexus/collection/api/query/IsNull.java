@@ -27,17 +27,19 @@ public class IsNull extends Filter {
 
     private String fieldId;
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     @SuppressWarnings("UnusedDeclaration")
     public IsNull() {
         super();
-        // Keep this constructor for JAXB compatibility
     }
 
     /**
      * Create a IS NULL filter.
      *
      * @param collectionAlias The collection alias to filter.
-     * @param fieldId The field id to filter.
+     * @param fieldId         The field id to filter.
      */
     public IsNull(String collectionAlias, String fieldId) {
         super();

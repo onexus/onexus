@@ -19,7 +19,6 @@ package org.onexus.collection.api.query;
 
 
 import java.io.Serializable;
-import java.sql.Date;
 
 /**
  * Filter serves as the highest level abstract base class for all OQL
@@ -27,25 +26,12 @@ import java.sql.Date;
  */
 public abstract class Filter implements Serializable {
 
+    /**
+     * Keep this constructor for JAXB compatibility.
+     */
     public Filter() {
-        // Keep this constructor for JAXB compatibility
+        super();
     }
-
-    /**
-     * @return A OQL valid string representation for this filter.
-     */
-    public String toString() {
-        return toString(new StringBuilder(), true).toString();
-    }
-
-    /**
-     * Returns the input 'oql' StringBuilder after append this filter OQL string.
-     *
-     * @param oql A StringBuilder to append the OQL
-     * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
-     * @return The OQL query
-     */
-    public abstract StringBuilder toString(StringBuilder oql, boolean prettyPrint);
 
     /**
      * Converts an object to a valid OQL string representation.
@@ -59,6 +45,7 @@ public abstract class Filter implements Serializable {
 
     /**
      * Returns a <code>String</code> with as many tab separators as the last 'oql' line.
+     *
      * @param oql A <code>StringBuilder</code> with the previous OQL code.
      * @return A <code>String</code> with the same number of tab characters as the last line.
      */
@@ -71,5 +58,21 @@ public abstract class Filter implements Serializable {
 
         return prevTabs.toString();
     }
+
+    /**
+     * @return A OQL valid string representation for this filter.
+     */
+    public String toString() {
+        return toString(new StringBuilder(), true).toString();
+    }
+
+    /**
+     * Returns the input 'oql' StringBuilder after append this filter OQL string.
+     *
+     * @param oql         A StringBuilder to append the OQL
+     * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
+     * @return The OQL query
+     */
+    public abstract StringBuilder toString(StringBuilder oql, boolean prettyPrint);
 
 }
