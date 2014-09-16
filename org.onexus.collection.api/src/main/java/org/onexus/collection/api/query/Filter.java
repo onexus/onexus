@@ -39,7 +39,7 @@ public abstract class Filter implements Serializable {
      * @param value The input object value
      * @return A valid OQL string representation
      */
-    public static String convertToOQL(Object value) {
+    protected static String convertToOQL(final Object value) {
         return Query.escapeString(value.toString());
     }
 
@@ -49,7 +49,7 @@ public abstract class Filter implements Serializable {
      * @param oql A <code>StringBuilder</code> with the previous OQL code.
      * @return A <code>String</code> with the same number of tab characters as the last line.
      */
-    public static String endingTabs(StringBuilder oql) {
+    protected static String endingTabs(final StringBuilder oql) {
         StringBuilder prevTabs = new StringBuilder();
         int l = oql.length();
         for (int i = l - 1; oql.charAt(i) == '\t' && i > 0; i--) {
@@ -62,7 +62,7 @@ public abstract class Filter implements Serializable {
     /**
      * @return A OQL valid string representation for this filter.
      */
-    public String toString() {
+    public final String toString() {
         return toString(new StringBuilder(), true).toString();
     }
 
@@ -73,6 +73,6 @@ public abstract class Filter implements Serializable {
      * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
      * @return The OQL query
      */
-    public abstract StringBuilder toString(StringBuilder oql, boolean prettyPrint);
+    public abstract StringBuilder toString(final StringBuilder oql, final boolean prettyPrint);
 
 }

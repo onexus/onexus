@@ -36,12 +36,12 @@ public class Or extends BinaryFilter {
      * @param left  The left filter.
      * @param right The right filter.
      */
-    public Or(Filter left, Filter right) {
+    public Or(final Filter left, final Filter right) {
         super(left, right);
     }
 
     @Override
-    public String getOperandSymbol() {
+    public final String getOperandSymbol() {
         return "OR";
     }
 

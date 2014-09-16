@@ -38,12 +38,12 @@ public class LessThanOrEqual extends AtomicFilter {
      * @param fieldId         The field id to filter.
      * @param value           The value to use when comparing values.
      */
-    public LessThanOrEqual(String collectionAlias, String fieldId, Object value) {
+    public LessThanOrEqual(final String collectionAlias, final String fieldId, final Object value) {
         super(collectionAlias, fieldId, value);
     }
 
     @Override
-    public String getOperandSymbol() {
+    public final String getOperandSymbol() {
         return "<=";
     }
 }

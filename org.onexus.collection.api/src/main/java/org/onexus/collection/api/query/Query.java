@@ -43,7 +43,7 @@ import java.util.Map;
  * </ul>
  * </p>
  */
-public class Query implements Serializable {
+public class Query {
 
     private static final String END_LINE_AND_TAB = "\n\t";
 
@@ -88,15 +88,14 @@ public class Query implements Serializable {
 
         char quote = value.charAt(0);
 
-        value = value.substring(1, value.length() - 1);
+        String result = value.substring(1, value.length() - 1);
         if (quote == '"') {
-            value = value.replace("\\\"", "\"");
+            result = value.replace("\\\"", "\"");
         } else {
-            value = value.replace("\\'", "'");
+            result = value.replace("\\'", "'");
         }
 
-        return value;
-
+        return result;
     }
 
     /**
@@ -109,8 +108,7 @@ public class Query implements Serializable {
         if (value == null) {
             return null;
         }
-        value = "'" + value.replace("'", "\\'") + "'";
-        return value;
+        return "'" + value.replace("'", "\\'") + "'";
     }
 
     /**
@@ -282,7 +280,7 @@ public class Query implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return toString(new StringBuilder(), true).toString();
     }
 
@@ -293,7 +291,7 @@ public class Query implements Serializable {
      * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
      * @return The OQL query
      */
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
 
 
         // Define section

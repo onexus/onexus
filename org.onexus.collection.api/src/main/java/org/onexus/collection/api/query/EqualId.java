@@ -22,10 +22,11 @@ package org.onexus.collection.api.query;
  */
 public class EqualId extends Filter {
 
+    /** The collection alias to filter. **/
     private String collectionAlias;
 
+    /** The primary key of the entity to select. **/
     private Object id;
-
 
     /**
      * Keep this constructor for JAXB compatibility.
@@ -41,7 +42,7 @@ public class EqualId extends Filter {
      * @param collectionAlias The collection alias to filter.
      * @param id              The primary key of the entity to select.
      */
-    public EqualId(String collectionAlias, Object id) {
+    public EqualId(final String collectionAlias, final Object id) {
         this.collectionAlias = collectionAlias;
         this.id = id;
     }
@@ -51,7 +52,7 @@ public class EqualId extends Filter {
      *
      * @return The alias of the collection.
      */
-    public String getCollectionAlias() {
+    public final String getCollectionAlias() {
         return collectionAlias;
     }
 
@@ -60,7 +61,7 @@ public class EqualId extends Filter {
      *
      * @param collectionAlias The alias of the collection to filter.
      */
-    public void setCollectionAlias(String collectionAlias) {
+    public final void setCollectionAlias(final String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
@@ -69,7 +70,7 @@ public class EqualId extends Filter {
      *
      * @return The <code>String</code> representation of the primary key.
      */
-    public Object getId() {
+    public final Object getId() {
         return id;
     }
 
@@ -78,12 +79,12 @@ public class EqualId extends Filter {
      *
      * @param id The primary key value to select.
      */
-    public void setId(Object id) {
+    public final void setId(final Object id) {
         this.id = id;
     }
 
     @Override
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
 
         oql.append(collectionAlias);
         oql.append(" = ");

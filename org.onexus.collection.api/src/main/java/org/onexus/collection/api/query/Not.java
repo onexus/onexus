@@ -37,7 +37,7 @@ public class Not extends Filter {
      *
      * @param negatedFilter The filter to negate.
      */
-    public Not(Filter negatedFilter) {
+    public Not(final Filter negatedFilter) {
         super();
         this.negatedFilter = negatedFilter;
     }
@@ -47,12 +47,12 @@ public class Not extends Filter {
      *
      * @return The negated filter.
      */
-    public Filter getNegatedFilter() {
+    public final Filter getNegatedFilter() {
         return negatedFilter;
     }
 
     @Override
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
 
         boolean binaryFilter = prettyPrint && negatedFilter instanceof BinaryFilter;
         String prevTabs = binaryFilter ? endingTabs(oql) : "";

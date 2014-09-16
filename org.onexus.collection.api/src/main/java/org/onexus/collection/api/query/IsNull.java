@@ -23,8 +23,10 @@ package org.onexus.collection.api.query;
  */
 public class IsNull extends Filter {
 
+    /** The collection to filter. **/
     private String collectionAlias;
 
+    /** The field id to filter. **/
     private String fieldId;
 
     /**
@@ -41,7 +43,7 @@ public class IsNull extends Filter {
      * @param collectionAlias The collection alias to filter.
      * @param fieldId         The field id to filter.
      */
-    public IsNull(String collectionAlias, String fieldId) {
+    public IsNull(final String collectionAlias, final String fieldId) {
         super();
         this.collectionAlias = collectionAlias;
         this.fieldId = fieldId;
@@ -52,7 +54,7 @@ public class IsNull extends Filter {
      *
      * @return The collection alias.
      */
-    public String getCollectionAlias() {
+    public final String getCollectionAlias() {
         return collectionAlias;
     }
 
@@ -61,7 +63,7 @@ public class IsNull extends Filter {
      *
      * @param collectionAlias The collection alias to filter.
      */
-    public void setCollectionAlias(String collectionAlias) {
+    public final void setCollectionAlias(final String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
@@ -70,7 +72,7 @@ public class IsNull extends Filter {
      *
      * @return The field id.
      */
-    public String getFieldId() {
+    public final String getFieldId() {
         return fieldId;
     }
 
@@ -79,12 +81,12 @@ public class IsNull extends Filter {
      *
      * @param fieldId The field id to filter.
      */
-    public void setFieldId(String fieldId) {
+    public final void setFieldId(final String fieldId) {
         this.fieldId = fieldId;
     }
 
     @Override
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
 
         oql.append(collectionAlias);
         oql.append('.');

@@ -28,9 +28,15 @@ import java.io.Serializable;
  */
 public class OrderBy implements Serializable {
 
+    /**
+     * The collection to sort.
+     */
     @NotNull
     private String collection;
 
+    /**
+     * The field to sort.
+     */
     @NotNull
     @Pattern(regexp = Resource.PATTERN_ID)
     private String field;
@@ -51,7 +57,7 @@ public class OrderBy implements Serializable {
      * @param collection The collection alias to order.
      * @param field      The field id to order.
      */
-    public OrderBy(String collection, String field) {
+    public OrderBy(final String collection, final String field) {
         this(collection, field, true);
     }
 
@@ -62,7 +68,7 @@ public class OrderBy implements Serializable {
      * @param field      The field id to order.
      * @param ascendent  The sorting direction.
      */
-    public OrderBy(String collection, String field, boolean ascendent) {
+    public OrderBy(final String collection, final String field, final boolean ascendent) {
         this.collection = collection;
         this.field = field;
         this.ascendent = ascendent;
@@ -73,7 +79,7 @@ public class OrderBy implements Serializable {
      *
      * @return The collection alias.
      */
-    public String getCollection() {
+    public final String getCollection() {
         return collection;
     }
 
@@ -82,7 +88,7 @@ public class OrderBy implements Serializable {
      *
      * @param collection The collection alias.
      */
-    public void setCollection(String collection) {
+    public final void setCollection(String collection) {
         this.collection = collection;
     }
 
@@ -91,7 +97,7 @@ public class OrderBy implements Serializable {
      *
      * @return The field id.
      */
-    public String getField() {
+    public final String getField() {
         return field;
     }
 
@@ -100,7 +106,7 @@ public class OrderBy implements Serializable {
      *
      * @param field The field id to order.
      */
-    public void setField(String field) {
+    public void setField(final String field) {
         this.field = field;
     }
 
@@ -109,7 +115,7 @@ public class OrderBy implements Serializable {
      *
      * @return True if it's ascending, false descending.
      */
-    public boolean isAscendent() {
+    public final boolean isAscendent() {
         return ascendent;
     }
 
@@ -118,12 +124,12 @@ public class OrderBy implements Serializable {
      *
      * @param ascendent True if it's ascending, false descending.
      */
-    public void setAscendent(boolean ascendent) {
+    public void setAscendent(final boolean ascendent) {
         this.ascendent = ascendent;
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return toString(new StringBuilder(), true).toString();
     }
 
@@ -134,7 +140,7 @@ public class OrderBy implements Serializable {
      * @param prettyPrint If true then add tabs and new line characters to format the OQL query.
      * @return The OQL query
      */
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
         oql.append(collection).append('.').append(field);
         if (!ascendent) {
             oql.append(" DESC");

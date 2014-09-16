@@ -38,12 +38,12 @@ public class NotEqual extends AtomicFilter {
      * @param fieldId         The filter id to filter.
      * @param value           The value to use when filtering.
      */
-    public NotEqual(String collectionAlias, String fieldId, Object value) {
+    public NotEqual(final String collectionAlias, final String fieldId, final Object value) {
         super(collectionAlias, fieldId, value);
     }
 
     @Override
-    public String getOperandSymbol() {
+    public final String getOperandSymbol() {
         return "!=";
     }
 }

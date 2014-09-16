@@ -27,10 +27,13 @@ import java.util.Set;
  */
 public class In extends Filter {
 
+    /** The collection to filter. **/
     private String collectionAlias;
 
+    /** The field id to filter. **/
     private String fieldId;
 
+    /** The set of values to compare when filtering. **/
     private Set<Object> values = new HashSet<Object>();
 
     /**
@@ -47,7 +50,7 @@ public class In extends Filter {
      * @param collectionAlias The collection to filter.
      * @param fieldId         The field id to filter.
      */
-    public In(String collectionAlias, String fieldId) {
+    public In(final String collectionAlias, final String fieldId) {
         super();
         this.collectionAlias = collectionAlias;
         this.fieldId = fieldId;
@@ -58,7 +61,7 @@ public class In extends Filter {
      *
      * @return The collection alias.
      */
-    public String getCollectionAlias() {
+    public final String getCollectionAlias() {
         return collectionAlias;
     }
 
@@ -67,16 +70,16 @@ public class In extends Filter {
      *
      * @param collectionAlias The collection alias.
      */
-    public void setCollectionAlias(String collectionAlias) {
+    public final void setCollectionAlias(final String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
     /**
-     * The filtering field
+     * The filtering field.
      *
      * @return The filed id.
      */
-    public String getFieldId() {
+    public final String getFieldId() {
         return fieldId;
     }
 
@@ -85,16 +88,16 @@ public class In extends Filter {
      *
      * @param fieldId The field id.
      */
-    public void setFieldId(String fieldId) {
+    public final void setFieldId(final String fieldId) {
         this.fieldId = fieldId;
     }
 
     /**
-     * Adds one valid value
+     * Adds one valid value.
      *
-     * @param value
+     * @param value A single value
      */
-    public void addValue(Object value) {
+    public final void addValue(final Object value) {
         this.values.add(value);
     }
 
@@ -103,12 +106,12 @@ public class In extends Filter {
      *
      * @return A <code>Set</code> with all the valid values.
      */
-    public Set<Object> getValues() {
+    public final Set<Object> getValues() {
         return values;
     }
 
     @Override
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
 
         oql.append(collectionAlias);
         oql.append('.');

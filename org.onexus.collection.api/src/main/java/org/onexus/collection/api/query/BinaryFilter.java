@@ -23,7 +23,10 @@ package org.onexus.collection.api.query;
  */
 public abstract class BinaryFilter extends Filter {
 
+    /** The left filter predicate. **/
     private Filter left;
+
+    /** The right filter predicate. **/
     private Filter right;
 
     /**
@@ -37,7 +40,7 @@ public abstract class BinaryFilter extends Filter {
      * @param left  A <code>Filter</code> that represents the left predicate
      * @param right A <code>Filter</code> that represents the right predicate
      */
-    public BinaryFilter(Filter left, Filter right) {
+    public BinaryFilter(final Filter left, final Filter right) {
         this.left = left;
         this.right = right;
     }
@@ -45,28 +48,28 @@ public abstract class BinaryFilter extends Filter {
     /**
      * @return The left predicate
      */
-    public Filter getLeft() {
+    public final Filter getLeft() {
         return left;
     }
 
     /**
      * @param left The left predicate
      */
-    public void setLeft(Filter left) {
+    public final void setLeft(final Filter left) {
         this.left = left;
     }
 
     /**
      * @return The right predicate
      */
-    public Filter getRight() {
+    public final Filter getRight() {
         return right;
     }
 
     /**
      * @param right The right predicate
      */
-    public void setRight(Filter right) {
+    public final void setRight(final Filter right) {
         this.right = right;
     }
 
@@ -76,18 +79,27 @@ public abstract class BinaryFilter extends Filter {
     public abstract String getOperandSymbol();
 
     @Override
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
 
         String prevTabs = prettyPrint ? endingTabs(oql) : "";
         oql.append('(');
         oql.append(prettyPrint ? "\n\t" + prevTabs : " ");
+
         if (left != null) {
             left.toString(oql, prettyPrint);
         }
-        oql.append(prettyPrint ? "\n" + prevTabs + getOperandSymbol() + "\n" + prevTabs + "\t" : " " + getOperandSymbol() + " ");
+
+        oql.append(prettyPrint
+                        ?
+                            "\n" + prevTabs + getOperandSymbol() + "\n" + prevTabs + "\t"
+                        :
+                            " " + getOperandSymbol() + " "
+        );
+
         if (right != null) {
             right.toString(oql, prettyPrint);
         }
+
         oql.append(prettyPrint ? "\n" + prevTabs : " ");
         oql.append(')');
 

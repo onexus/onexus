@@ -23,10 +23,13 @@ package org.onexus.collection.api.query;
  */
 public abstract class AtomicFilter extends Filter {
 
+    /** The collection to filter. **/
     private String collectionAlias;
 
+    /** The field to filter. **/
     private String fieldId;
 
+    /** The value to compare and filter. **/
     private Object value;
 
     /**
@@ -44,7 +47,7 @@ public abstract class AtomicFilter extends Filter {
      * @param value           The value that uses this filter to filter the
      *                        collection.
      */
-    public AtomicFilter(String collectionAlias, String fieldId, Object value) {
+    public AtomicFilter(final String collectionAlias, final String fieldId, final Object value) {
         this.collectionAlias = collectionAlias;
         this.fieldId = fieldId;
         this.value = value;
@@ -53,7 +56,7 @@ public abstract class AtomicFilter extends Filter {
     /**
      * The collection alias that filters this <code>AtomicFilter</code>.
      *
-     * @return The alias
+     * @return The collection alias.
      */
     public final String getCollectionAlias() {
         return collectionAlias;
@@ -62,9 +65,9 @@ public abstract class AtomicFilter extends Filter {
     /**
      * Sets the collection alias that filters this filter.
      *
-     * @param collectionAlias
+     * @param collectionAlias The collection to filter.
      */
-    public final void setCollectionAlias(String collectionAlias) {
+    public final void setCollectionAlias(final String collectionAlias) {
         this.collectionAlias = collectionAlias;
     }
 
@@ -82,7 +85,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @param fieldId The field id to filter.
      */
-    public final void setFieldId(String fieldId) {
+    public final void setFieldId(final String fieldId) {
         this.fieldId = fieldId;
     }
 
@@ -100,7 +103,7 @@ public abstract class AtomicFilter extends Filter {
      *
      * @param value The filter value
      */
-    public final void setValue(Object value) {
+    public final void setValue(final Object value) {
         this.value = value;
     }
 
@@ -110,7 +113,7 @@ public abstract class AtomicFilter extends Filter {
     public abstract String getOperandSymbol();
 
     @Override
-    public StringBuilder toString(StringBuilder oql, boolean prettyPrint) {
+    public final StringBuilder toString(final StringBuilder oql, final boolean prettyPrint) {
 
         oql.append(collectionAlias);
         oql.append('.');

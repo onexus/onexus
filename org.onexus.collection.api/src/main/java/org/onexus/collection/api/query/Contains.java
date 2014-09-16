@@ -38,12 +38,12 @@ public class Contains extends AtomicFilter {
      * @param fieldId         The field id to filter.
      * @param value           The value to match.
      */
-    public Contains(String collectionAlias, String fieldId, Object value) {
+    public Contains(final String collectionAlias, final String fieldId, final Object value) {
         super(collectionAlias, fieldId, value);
     }
 
     @Override
-    public String getOperandSymbol() {
+    public final String getOperandSymbol() {
         return "CONTAINS";
     }
 }
