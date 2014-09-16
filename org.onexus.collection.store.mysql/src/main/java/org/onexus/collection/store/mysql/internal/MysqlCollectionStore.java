@@ -96,10 +96,14 @@ public class MysqlCollectionStore extends SqlCollectionStore implements ICollect
 
         // Initialize the DataSource with a connection pool
         ConnectionFactory connectionFactory = new MysqlConnectionFactory();
-        ObjectPool connectionPool = new GenericObjectPool(null,
+        GenericObjectPool connectionPool = new GenericObjectPool(null,
                 maxActive,
                 whenExhausted,
                 maxWait);
+        connectionPool.setTestWhileIdle(true);
+        connectionPool.setTimeBetweenEvictionRunsMillis(3600);
+        connectionPool.setMinEvictableIdleTimeMillis(3600);
+
         @SuppressWarnings("unused")
         PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(
                 connectionFactory, connectionPool, null, null, false, true);
