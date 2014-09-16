@@ -90,9 +90,9 @@ public class Query {
 
         String result = value.substring(1, value.length() - 1);
         if (quote == '"') {
-            result = value.replace("\\\"", "\"");
+            result = result.replace("\\\"", "\"");
         } else {
-            result = value.replace("\\'", "'");
+            result = result.replace("\\'", "'");
         }
 
         return result;
