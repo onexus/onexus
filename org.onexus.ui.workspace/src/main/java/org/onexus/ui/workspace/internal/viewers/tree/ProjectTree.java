@@ -50,7 +50,7 @@ public class ProjectTree extends NestedTree<Resource> {
     public ProjectTree(String id, ITreeProvider<Resource> treeProvider, IModel<? extends Resource> selectedResource) {
         super(id, treeProvider);
 
-        this.state = new InverseSet<Resource>(new ProviderSubset<Resource>(treeProvider));
+        this.state = new ProviderSubset<Resource>(treeProvider, true);
         this.selected = (IModel<Resource>) selectedResource;
 
         setOutputMarkupId(true);
