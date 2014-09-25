@@ -47,6 +47,11 @@
         </dependency>
 
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.collection.loader.tsv</artifactId>
             <version>${project.version}</version>

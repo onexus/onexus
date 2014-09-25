@@ -11,4 +11,13 @@
         <property name="resourceManager" ref="resourceManagerRef"/>
     </bean>
 
+    <service interface="javax.servlet.http.HttpServlet">
+        <service-properties>
+            <entry key="alias" value="/es"/>
+        </service-properties>
+        <bean class="org.onexus.collection.store.elasticsearch.internal.ws.EsServlet">
+            <property name="collectionStore" ref="org.onexus.collection.store.elasticsearch"/>
+        </bean>
+    </service>
+
 </blueprint>
