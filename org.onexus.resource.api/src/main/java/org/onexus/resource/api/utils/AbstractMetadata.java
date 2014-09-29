@@ -75,7 +75,7 @@ public class AbstractMetadata implements IMetadata {
         }
 
         for (Property p : this.properties) {
-            if (p.getKey().equals(key)) {
+            if (p.getKey().equalsIgnoreCase(key)) {
                 return p.getValue();
             }
         }

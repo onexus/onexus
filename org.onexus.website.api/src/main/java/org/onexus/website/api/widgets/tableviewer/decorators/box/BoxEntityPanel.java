@@ -35,11 +35,14 @@ import org.onexus.website.api.WebsiteApplication;
 import org.onexus.website.api.utils.EntityModel;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorManager;
+import org.onexus.website.api.widgets.tableviewer.decorators.link.LinkDecoratorParameters;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class BoxEntityPanel extends Panel {
 
@@ -71,13 +74,45 @@ public class BoxEntityPanel extends Panel {
 
                 allValuesAreNull = false;
 
+                String externalLink = field.getProperty("EXTERNAL_LINK");
+                String separator = field.getProperty("SEPARATOR");
+
+                String val;
+                if (separator != null) {
+                    List<String> values = new ArrayList<String>();
+                    for (String v : value.toString().split(separator.trim())) {
+                        values.add(v.trim());
+                    }
+
+                    StringBuilder content = new StringBuilder();
+                    Iterator<String> columnValueIt = values.iterator();
+
+                    while (columnValueIt.hasNext()) {
+                        String columnValue = columnValueIt.next();
+
+                        String href = replaceParameters(field, columnValue, entity, externalLink, false);
+
+                        content.append("<a href=\"").append(href).append("\"");
+                        content.append(" target=\"_blank\"");
+
+                        content.append(">").append(columnValue).append("</a>");
+
+                        if (columnValueIt.hasNext()) {
+                            content.append(", ");
+                        }
+                    }
+
+                    val = content.toString();
+                } else {
+                    val = StringUtils.abbreviate(value.toString(), 50);
+                }
+
                 WebMarkupContainer fc = new WebMarkupContainer(fieldsView.newChildId());
                 fc.setRenderBodyOnly(true);
                 fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
-                fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
+                fc.add(new Label("value", val).setEscapeModelStrings(false));
 
-                String externalLink = field.getProperty("EXTERNAL_LINK");
-                if (!StringUtils.isEmpty(externalLink)) {
+                if (separator==null && !StringUtils.isEmpty(externalLink)) {
                     fc.add(new ExternalLink("link", replaceEntityValues(externalLink, entity)));
                 } else {
                     fc.add(new WebMarkupContainer("link").setVisible(false));
@@ -126,6 +161,30 @@ public class BoxEntityPanel extends Panel {
             WebsiteApplication.inject(this);
         }
         return decoratorManager;
+    }
+
+    private static String replaceParameters(Field columnField, String columnValue, IEntity entity, String template, boolean format) {
+
+        String columnPattern = "$[column.id]";
+        if (template.contains(columnPattern)) {
+            template = template.replaceAll(Pattern.quote(columnPattern), columnField.getId());
+        }
+
+        for (Field field : entity.getCollection().getFields()) {
+            String value;
+
+            value = String.valueOf(entity.get(field.getId()));
+
+            if (columnField != null && columnField.equals(field)) {
+                value = columnValue;
+            }
+
+            String fieldPattern = "$[" + field.getId() + "]";
+            if (template.contains(fieldPattern)) {
+                template = template.replaceAll(Pattern.quote(fieldPattern), value);
+            }
+        }
+        return template;
     }
 
     private static String replaceEntityValues(String template, IEntity entity) {
