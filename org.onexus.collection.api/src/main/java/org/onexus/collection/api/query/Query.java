@@ -43,7 +43,7 @@ import java.util.Map;
  * </ul>
  * </p>
  */
-public class Query {
+public class Query implements Serializable {
 
     private static final String END_LINE_AND_TAB = "\n\t";
 

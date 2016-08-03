@@ -89,6 +89,11 @@
         <property name="resourceRegister" ref="resourceRegister"/>
     </bean>
 
+    <service interface="org.onexus.website.api.widget.IWidgetCreator" ref="DetailsWidget"/>
+    <bean id="DetailsWidget" class="org.onexus.website.widget.details.DetailsWidgetCreator">
+        <property name="resourceRegister" ref="resourceRegister"/>
+    </bean>
+
     <service interface="org.onexus.website.api.widget.IWidgetCreator" ref="ColumnsetsWidget"/>
     <bean id="ColumnsetsWidget" class="org.onexus.website.widget.columnsets.ColumnsetsWidgetCreator">
         <property name="resourceRegister" ref="resourceRegister"/>

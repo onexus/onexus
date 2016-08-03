@@ -122,6 +122,11 @@ public class SingleEntitySelection implements IEntitySelection {
         return new EqualId(collectionAlias, entityId);
     }
 
+    public IEntity getEntity(ORI parentURI) {
+        ORI collectionUri = filteredCollection.toAbsolute(parentURI);
+        return (new EntityModel(collectionUri, entityId)).getObject();
+    }
+
     @Override
     public boolean match(VisibleRule rule) {
 
@@ -141,9 +146,7 @@ public class SingleEntitySelection implements IEntitySelection {
             return validCollection;
         }
 
-
-        ORI collectionUri = filteredCollection.toAbsolute(rule.getParentURI());
-        IEntity entity = (new EntityModel(collectionUri, entityId)).getObject();
+        IEntity entity = getEntity(rule.getParentURI());
 
         String fieldValue = String.valueOf(entity.get(rule.getField()));
 

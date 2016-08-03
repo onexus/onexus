@@ -4,7 +4,7 @@
 
     <cm:property-placeholder persistent-id="org.onexus.collection.store.h2sql" update-strategy="reload">
         <cm:default-properties>
-            <cm:property name="database" value="onexus-h2-database"/>
+            <cm:property name="database" value="~/.onexus/onexus-h2-database"/>
             <cm:property name="username" value="sa"/>
             <cm:property name="password" value=""/>
         </cm:default-properties>
