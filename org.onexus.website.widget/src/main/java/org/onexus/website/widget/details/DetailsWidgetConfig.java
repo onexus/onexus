@@ -18,17 +18,31 @@
 package org.onexus.website.widget.details;
 
 import org.onexus.resource.api.annotations.ResourceAlias;
+import org.onexus.resource.api.annotations.ResourceImplicitList;
 import org.onexus.website.api.widget.WidgetConfig;
 import org.onexus.website.api.widget.WidgetStatus;
+import org.onexus.website.widget.tableviewer.columns.ColumnConfig;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @ResourceAlias("widget-details")
 public class DetailsWidgetConfig extends WidgetConfig {
 
+    @ResourceImplicitList("entity")
+    private List<DetailsEntity> entities = new ArrayList<DetailsEntity>();
+
     public DetailsWidgetConfig() {
         super();
+    }
+
+    public List<DetailsEntity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(List<DetailsEntity> entities) {
+        this.entities = entities;
     }
 
     @Override
