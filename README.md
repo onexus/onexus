@@ -23,10 +23,6 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit <http://semver.org/>.
 
-Project site
-------------
-
-+ <http://www.onexus.org>
 
 Authors
 -------
