@@ -38,7 +38,7 @@
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
         <commons-pool.version>1.5.4</commons-pool.version>
-        <commons-io.version>2.4</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-compress.version>1.1.0</commons-compress.version>
         <commons-lang.version>3.1</commons-lang.version>
         <guava.version>11.0.1</guava.version>
