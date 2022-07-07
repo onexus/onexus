@@ -24,7 +24,7 @@
         <aopalliance.version>1.0_6</aopalliance.version>
         <cglib.version>2.2.2_1</cglib.version>
         <geronimo.inject.version>1.0</geronimo.inject.version>
-        <hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
+        <hibernate-validator.version>6.0.23.Final</hibernate-validator.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
 
         <!-- Other -->
